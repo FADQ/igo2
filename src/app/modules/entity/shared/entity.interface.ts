@@ -22,3 +22,28 @@ export interface Entity<T = { [key: string]: any }, M = EntityMeta> {
 export interface State {
   [key: string]: boolean;
 }
+
+export interface EntityTableModel {
+  columns: EntityTableColumn[];
+  selection: boolean;
+  rowClassFunc?: (entity: Entity) => {
+    [key: string]: boolean;
+  };
+  cellClassFunc?: (entity: Entity, column: EntityTableColumn) => {
+    [key: string]: boolean;
+  };
+}
+
+export interface EntityTableColumn {
+  name: string;
+  title: string;
+  visible?: boolean;
+  html?: boolean;
+  sortable?: boolean;
+  filterable?: boolean;
+}
+
+export interface EntitySortClause {
+  property: string;
+  direction: string;
+}
