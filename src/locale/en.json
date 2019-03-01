@@ -20,7 +20,9 @@
     "layer.title": "Layer",
     "layer.placeholder": "Search for a layer",
     "client.title": "Client",
-    "client.placeholder": "Search for a  client"
+    "client.placeholder": "Search for a  client",
+    "cadastre_ori.title": "Original cadastre",
+    "cadastre_ori.placeholder": "Search for a original cadastre"
   },
 
   "help": {
@@ -193,5 +195,8 @@
     "numero_civique_suffixe": "Address Suffix",
     "rue": "Street",
     "type": "Type"
+  },
+  "cadastre": {
+    "mun": "Select a municipality"
   }
 }
