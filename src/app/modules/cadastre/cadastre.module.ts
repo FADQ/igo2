@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
-import {FadqMunSelectorModule} from '../mun/mun-selector/mun-selector.module';
-import {CadastreOriSearchToolComponent} from './cadastreOri-search-tool/cadastreOri-search-tool.component';
-import {FadqCadastreOriSearchToolModule} from './cadastreOri-search-tool/cadastreOri-search-tool.module';
+
+import {FadqMunSelectorModule} from 'src/lib/cadastre/mun/mun-selector/mun-selector.module';
+import {FadqCadastreOriSearchToolModule} from './cadastre-ori-search-tool/cadastre-ori-search-tool.module';
+
 
 
 @NgModule({

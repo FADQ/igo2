@@ -1,0 +1,13 @@
+
+<mat-form-field>
+  <mat-select
+    [value]="current$ | async"
+    [placeholder]="'cadastre.mun' | translate"
+    (selectionChange)="onSelectionChange($event)">
+    <ng-template ngFor let-mun [ngForOf]="store.view.all$() | async">
+      <mat-option [value]="mun">
+        {{getNomMun(mun)}}
+      </mat-option>
+    </ng-template>
+  </mat-select>
+</mat-form-field>
