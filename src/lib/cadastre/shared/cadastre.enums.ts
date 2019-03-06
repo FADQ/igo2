@@ -1,1 +1,1 @@
-export const CADASTRE_ORI = 'Cadastre_ori';
+export const CADASTRE = 'Cadastre';

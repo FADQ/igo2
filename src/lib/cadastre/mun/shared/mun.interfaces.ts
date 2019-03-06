@@ -11,38 +11,22 @@ export interface MunApiConfig {
 /**
  * Municipality interface extending feature
  */
-export interface Mun extends Feature {
-  properties: {
-    codeGeographique: string;
-    nomMunicipalite: string;
-    designationMunicipalite: string;
-    nomRegionAdmAppartenance: string;
-  };
+export interface Mun {
+  id: string;
+  codeGeographique: string;
+  nomMunicipalite: string;
+  designationMunicipalite: string;
+  nomRegionAdmAppartenance: string;
 }
 
 /**
  * Municipality interface for the service response
  */
-export interface MunListResponseItem extends Mun {}
+export interface MunResponseItem extends Mun {}
 
 /**
  * List of municipality response service
  */
-export type MunListResponse = MunListResponseItem[];
-
-/**
- * List box municipality interface
- */
-export interface MunNom {
-  id: string;
-  codeGeographique: string;
-  nomMunicipalite: string;
-  current: boolean;
-}
-
-/**
- * List of municipality response service
- */
-export interface MunNomListResponse {
-  data: MunNom[];
+export interface MunListResponse {
+  data: Mun[];
 }

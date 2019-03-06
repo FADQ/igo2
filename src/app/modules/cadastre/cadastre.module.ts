@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 
-import {FadqMunSelectorModule} from 'src/lib/cadastre/mun/mun-selector/mun-selector.module';
-import {FadqCadastreOriSearchToolModule} from './cadastre-ori-search-tool/cadastre-ori-search-tool.module';
-
-
+import { FadqMunSelectorModule } from 'src/lib/cadastre/mun/mun-selector/mun-selector.module';
+import { FadqCadastreSearchToolModule } from './cadastre-search-tool/cadastre-search-tool.module';
 
 @NgModule({
   imports: [
@@ -11,7 +9,7 @@ import {FadqCadastreOriSearchToolModule} from './cadastre-ori-search-tool/cadast
   ],
   declarations: [ ],
   exports: [
-    FadqCadastreOriSearchToolModule
+    FadqCadastreSearchToolModule
   ]
 })
 export class FadqCadastreModule {}

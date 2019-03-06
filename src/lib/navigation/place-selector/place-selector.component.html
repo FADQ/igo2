@@ -1,7 +1,8 @@
 <mat-form-field>
   <mat-select
     placeholder="{{'navigation.placeSelector.category.placeholder' | translate}}"
-    [value]="selectedCategory"
+    [value]="
+    "
     (selectionChange)="onCategorySelect($event.value)">
     <mat-option *ngFor="let category of categories" [value]="category">
       {{category.title | translate}}

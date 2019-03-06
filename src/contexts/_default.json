@@ -210,7 +210,7 @@
     "measurer",
     "print",
     "addressEditor",
-    "cadastreOri"
+    "cadastre"
   ],
   "tools": [
     {
@@ -351,7 +351,7 @@
       "name": "addressEditor"
     },
     {
-      "name": "cadastreOri"
+      "name": "cadastre"
     }
   ]
 }

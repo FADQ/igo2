@@ -20,9 +20,9 @@
     "layer.title": "Layer",
     "layer.placeholder": "Search for a layer",
     "client.title": "Client",
-    "client.placeholder": "Search for a  client",
-    "cadastre_ori.title": "Original cadastre",
-    "cadastre_ori.placeholder": "Search for a original cadastre"
+    "client.placeholder": "Search for a client",
+    "cadastre.title": "Original cadastre",
+    "cadastre.placeholder": "Search for a original cadastre"
   },
 
   "help": {
@@ -50,13 +50,14 @@
     "help": "Help",
     "addressEditor": "Edit Addresses",
     "client": "Client",
-    "map": "Map",
-    "navigation": "Navigation"
+    "measurer": "Measurer",
+    "navigation": "Zoom on a region",
+    "cadastre": "Cadastre originaire"
   },
 
   "client": {
     "error.notfound": "Client number is invalid",
-    "error.noparcel": "No parcel found for this client", 
+    "error.noparcel": "No parcel found for this client",
     "info": {
       "title": "Information",
       "adresseCor": "Address",
@@ -77,7 +78,7 @@
     "parcel": {
       "year.placeholder": "Year",
       "exportToCSV": "Export to CSV",
-      "exportToCSV.tooltip": "Export to CSV" 
+      "exportToCSV.tooltip": "Export to CSV"
     },
     "schema": {
       "placeholder": "Schema",
@@ -197,6 +198,6 @@
     "type": "Type"
   },
   "cadastre": {
-    "mun": "Select a municipality"
+    "mun": "Municipality"
   }
 }

@@ -53,7 +53,7 @@
     "client": "Client",
     "measurer": "Mesurage",
     "navigation": "Zoom sur une région",
-    "cadastreOri": "Cadastre originaire"
+    "cadastre": "Cadastre originaire"
   },
 
   "client": {
@@ -200,6 +200,6 @@
   },
 
   "cadastre": {
-    "mun": "Sélectionner une municipalité"
+    "mun": "Municipalité"
   }
 }

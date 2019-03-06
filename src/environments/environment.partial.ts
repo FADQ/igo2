@@ -27,6 +27,20 @@ export interface IgoEnvironment {
   layer: {
     infoLink: string;
   };
+  cadastre: {
+    mun: {
+      list: string;
+    }
+    cadastre: {
+      list: string;
+    }
+    designationSec: {
+      list: string
+    }
+    lot: {
+      list: string
+    }
+  };
 }
 
 /* tslint:disable */
@@ -108,6 +122,20 @@ export const igoEnvironment: IgoEnvironment = {
           type: '/igoschema/edition_schema/obtenirTypesElementGeometriqueTypeSchema/${schemaType}'
         }
       }
+    }
+  },
+  cadastre : {
+    mun : {
+      list: '/igolocalisation/recherche_cadastre_originaire/obtenirMunicipalites'
+    },
+    cadastre: {
+      list: ''
+    },
+    designationSec: {
+      list: ''
+    },
+    lot: {
+      list: ''
     }
   }
 };
