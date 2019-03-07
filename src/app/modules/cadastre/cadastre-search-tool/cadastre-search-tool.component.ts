@@ -17,7 +17,7 @@ export class CadastreSearchToolComponent {
 
   /**
    * Store that holds all the available Municipalities
-   * @type {EntityStore<Mun>}
+   * @return EntityStore<Mun>
    */
   get munStore(): EntityStore<Mun> {
     return this.cadastreState.munStore;
