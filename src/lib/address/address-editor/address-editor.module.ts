@@ -11,9 +11,7 @@ import {
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoEntityTableModule } from '@igo2/common';
 
-import { FadqLibAddressEditorModule } from 'src/lib/address/address-editor/address-editor.module';
-
-import { AddressEditorToolComponent } from './address-editor-tool.component';
+import { AddressEditorComponent } from './address-editor.component';
 
 /**
  * @ignore
@@ -26,17 +24,13 @@ import { AddressEditorToolComponent } from './address-editor-tool.component';
     MatFormFieldModule,
     MatInputModule,
     IgoLanguageModule,
-    IgoEntityTableModule,
-    FadqLibAddressEditorModule
+    IgoEntityTableModule
   ],
   declarations: [
-    AddressEditorToolComponent
+    AddressEditorComponent
   ],
   exports: [
-    AddressEditorToolComponent
-  ],
-  entryComponents: [
-    AddressEditorToolComponent
+    AddressEditorComponent
   ]
 })
-export class FadqAddressEditorToolModule {}
+export class FadqLibAddressEditorModule {}
