@@ -1,5 +1,6 @@
 
 <div>
-  <fadq-cadastre-mun-selector [store]="munStore"></fadq-cadastre-mun-selector>
+  <fadq-cadastre-mun-selector [store]="munStore" (selectedMunChange)="onSelectionMunChange($event)"></fadq-cadastre-mun-selector>
+  <fadq-cadastre-cadastre-selector [store]="cadastreStore"></fadq-cadastre-cadastre-selector>
 </div>
 

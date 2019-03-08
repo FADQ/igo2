@@ -200,6 +200,7 @@
   },
 
   "cadastre": {
-    "mun": "Municipalité"
+    "mun": "Municipalité",
+    "cadastre": "Cadastre"
   }
 }

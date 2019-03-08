@@ -198,6 +198,7 @@
     "type": "Type"
   },
   "cadastre": {
-    "mun": "Municipality"
+    "mun": "Municipality",
+    "cadastre": "Cadastre"
   }
 }

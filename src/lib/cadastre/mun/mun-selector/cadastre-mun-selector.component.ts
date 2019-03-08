@@ -9,6 +9,7 @@ import {
   OnDestroy
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material';
 
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { map, startWith} from 'rxjs/operators';
@@ -20,7 +21,6 @@ import {
 } from '@igo2/common';
 
 import { Mun, MunResponseItem } from 'src/lib/cadastre/mun/shared/mun.interfaces';
-import {CadastreMunService} from 'src/lib/cadastre/mun/shared/mun.service';
 
 @Component({
   selector: 'fadq-cadastre-mun-selector',
@@ -66,21 +66,17 @@ export class MunSelectorComponent implements OnInit, OnDestroy {
   /**
    * Event emmit on a selected municipality
    */
-  @Output() selectedChange = new EventEmitter<{
-    selected: boolean;
+  @Output() selectedMunChange = new EventEmitter<{
     mun: Mun;
   }>();
 
-  constructor( private munService: CadastreMunService, private cdRef: ChangeDetectorRef) {}
+  constructor( private cdRef: ChangeDetectorRef) {}
 
   /**
    * Initialisation of the component
    */
   ngOnInit() {
     this.controller = new EntityStoreController(this.store, this.cdRef);
-
-    // Load Municipalities
-    this.loadMuns();
 
     // Keep the selected Municipality in a subscription
     this.selectedMun$$ = this.store.stateView
@@ -107,6 +103,7 @@ export class MunSelectorComponent implements OnInit, OnDestroy {
    * @param mun
    */
   getNomMun(mun: Mun): string {
+    if (mun === null || mun === undefined) { return; }
     return  mun.nomMunicipalite;
   }
 
@@ -114,30 +111,14 @@ export class MunSelectorComponent implements OnInit, OnDestroy {
    * Return an event on the municipality selection
    * @param event
    */
-  onSelectionChange(event: {value: Mun | undefined}) {
-    const mun = event.value;
+  onSelectionChange(event: MatAutocompleteSelectedEvent) {
+    const mun = event.option.value;
     if (mun === undefined) {
       this.store.state.updateAll({selected: false});
     } else {
       this.store.state.update(mun, {selected: true}, true);
     }
-    this.selectedChange.emit({selected: true, mun});
-  }
-
-  private loadMuns() {
-
-    if (!this.store.empty) { return; }
-
-    this.munService.getMuns()
-    .subscribe((mun: Mun[]) => {
-
-      this.store.load(mun);
-
-      this.store.view.sort({
-        valueAccessor: (munSort: Mun) => munSort.nomMunicipalite,
-        direction: 'asc'
-      });
-    });
+    this.selectedMunChange.emit({mun});
   }
 
   private initFileredMun() {
@@ -155,6 +136,9 @@ export class MunSelectorComponent implements OnInit, OnDestroy {
 
   private filterMunByName(name: string): MunResponseItem[] {
     const filterValue = name.toLowerCase();
+
+    if (this.store === null || this.store === undefined) { return; }
+
     return this.store.all().filter(mun => {
       return mun.nomMunicipalite.toLowerCase().indexOf(filterValue) === 0;
     });
