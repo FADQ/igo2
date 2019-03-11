@@ -1,18 +1,9 @@
 import { Feature } from '@igo2/geo';
-import { IgoMap } from '@igo2/geo';
-
-export interface Address {
-  buildingNumber?: number;
-  suffix?: String;
+import { FeatureWithAddressProperties } from 'src/app/modules/address';
+export interface Address extends Feature {
+  properties: FeatureWithAddressProperties;
 }
-
-export interface FeatureWithAddress extends Feature<FeatureWithAddressProperties> {}
-
-export interface FeatureWithAddressProperties {
+export interface AddressProperties {
   buildingNumber: number;
-  suffix?: String;
-}
-
-export interface FeatureStoreAddressStrategyOptions {
-  map: IgoMap;
+  suffix?: string;
 }
