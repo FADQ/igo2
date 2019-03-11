@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { IgoMap } from 'src/lib/map';
-import { MapState } from 'src/app/modules/map/map.state';
+import { IgoMap } from '@igo2/geo';
+import { MapState } from '@igo2/integration';
 
 import { ToolComponent } from '@igo2/common';
 
@@ -20,10 +20,6 @@ import { ToolComponent } from '@igo2/common';
 })
 export class AddressEditorToolComponent {
 
-<<<<<<< Updated upstream
-  constructor() {}
-
-=======
   /**
    * Map to edit on
    * @internal
@@ -32,5 +28,4 @@ export class AddressEditorToolComponent {
   constructor(
     private mapState: MapState
   ) {}
->>>>>>> Stashed changes
 }

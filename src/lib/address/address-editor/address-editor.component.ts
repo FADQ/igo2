@@ -1,20 +1,14 @@
 import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-
 import { BehaviorSubject, Subscription } from 'rxjs';
-
 import { EntityRecord } from '@igo2/common';
-
-import { FeatureDataSource } from '@igo2/geo/lib/datasource';
-import {
-  FeatureStore,
+import { FeatureStore,
   FeatureStoreLoadingStrategy,
-  FeatureStoreSelectionStrategy
-} from '@igo2/geo/lib/feature';
-import { VectorLayer } from '@igo2/geo/lib/layer';
-import { IgoMap } from '@igo2/geo/lib/map';
-
+  FeatureStoreSelectionStrategy,
+  FeatureDataSource,
+  VectorLayer,
+  IgoMap
+ } from '@igo2/geo';
 import { Address } from '../shared/address.interface';
-
 
 /**
  * Tool to edit addresses from Adresse Quebec.
