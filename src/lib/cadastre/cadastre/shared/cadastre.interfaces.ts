@@ -6,17 +6,18 @@ import { Feature } from '@igo2/geo';
  */
 export interface CadastreApiConfig {
   list: string;
+  surfaces: string;
 }
 
 /**
  * Cadastre interface
  */
 export interface Cadastre {
-  idCadastreOriginaire: number;
-  nomCadastre: string;
-  noCadastre: string;
-  codeCadastre: string;
-  recherche: string;
+    idCadastreOriginaire: number;
+    nomCadastre: string;
+    noCadastre: string;
+    codeCadastre: string;
+    recherche: string;
 }
 
 export interface CadastreName {
@@ -29,10 +30,27 @@ export interface CadastreName {
  */
 export interface CadastreResponseItem extends Cadastre {}
 
-
 /**
  * List of cadastre response service
  */
 export interface CadastreListResponse {
   data: Cadastre[];
 }
+export interface CadastreFeature extends Feature {
+  properties: {
+    idCadastreOriginaire: number;
+    nomCadastreOriginaire: string;
+    noCadastre: string;
+    codeCadastre: string;
+    recherche: string;
+  };
+}
+
+export interface CadastreFeatureResponseItem extends CadastreFeature {}
+
+// export type CadastreFeatureListResponse = CadastreFeatureResponseItem[];
+
+export interface CadastreFeatureListResponse {
+  data: CadastreFeatureResponseItem;
+}
+

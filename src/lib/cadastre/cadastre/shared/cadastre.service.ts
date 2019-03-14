@@ -10,6 +10,9 @@ import {
   CadastreResponseItem,
   CadastreApiConfig,
   CadastreListResponse,
+  CadastreFeature,
+  CadastreFeatureResponseItem,
+  CadastreFeatureListResponse
 } from 'src/lib/cadastre/cadastre/shared/cadastre.interfaces';
 
 @Injectable()
@@ -21,6 +24,7 @@ export class CadastreCadastreService {
     @Inject('cadastreApiConfig') private apiConfig: CadastreApiConfig
   ) {}
 
+  //#region Cadastre
   /**
    * Get municipalities from service
    * @returns Observable of municipalities
@@ -65,4 +69,43 @@ export class CadastreCadastreService {
       recherche: listItem.recherche
     };
   }
+  //#endregion
+
+//#region CadastreFeature
+
+getCadastreFeatureByNum(idCadastreOriginaire: number): Observable<CadastreFeature[]> {
+  const url = this.apiService.buildUrl(this.apiConfig.surfaces, {idCadastre: idCadastreOriginaire});
+
+  return this.http
+    .get(url)
+    .pipe(
+      map((response: CadastreFeatureListResponse) => {
+        return this.extractCadastreFeatureFromResponse(response);
+      })
+    );
+}
+
+private extractCadastreFeatureFromResponse(
+  response: CadastreFeatureListResponse
+): CadastreFeature[] {
+  return [response].map(item => this.listItemToCadastreFeature(item.data));
+}
+
+private listItemToCadastreFeature(
+  listItem: CadastreFeatureResponseItem
+): CadastreFeature {
+  const properties = Object.assign({}, listItem.properties);
+  return {
+    meta: {
+      id: properties.idCadastreOriginaire,
+      mapTitle: properties.nomCadastreOriginaire
+    },
+    type: listItem.type,
+    projection: 'EPSG:4326',
+    geometry: listItem.geometry,
+    extent: undefined,
+    properties
+  };
+}
+//#endregion
 }

@@ -34,7 +34,7 @@ export class CadastreSelectorComponent implements OnInit, OnDestroy {
    * The current municipality
    * @internal
    */
-  public current$ = new BehaviorSubject<Cadastre>(undefined);
+  @Input() current$ = new BehaviorSubject<Cadastre>(undefined);
 
   /**
    *Form control used to autocomplete the list box of municipalities
@@ -56,7 +56,7 @@ export class CadastreSelectorComponent implements OnInit, OnDestroy {
    * Subscription to the selected municipality
    * @internal
    */
-  private selectedMun$$: Subscription;
+  // private selectedMun$$: Subscription;
 
   /**
    * Store that holds all the available Municipalities
@@ -66,7 +66,7 @@ export class CadastreSelectorComponent implements OnInit, OnDestroy {
   /**
    * Event emmit on a selected municipality
    */
-  @Output() selectedChange = new EventEmitter<{
+  @Output() selectedCadastreChange = new EventEmitter<{
     selected: boolean;
     cadastre: Cadastre;
   }>();
@@ -80,17 +80,6 @@ export class CadastreSelectorComponent implements OnInit, OnDestroy {
    */
   ngOnInit() {
     this.controller = new EntityStoreController(this.store, this.cdRef);
-
-    // Keep the selected Municipality in a subscription
-    /*this.selectedMun$$ = this.store.stateView
-      .firstBy$((record: EntityRecord<Cadastre>) => record.state.selected === true)
-      .subscribe((record: EntityRecord<Cadastre>) => {
-        const mun = record ? record.entity : undefined;
-        this.current$.next(mun);
-      });*/
-
-      // Initialise the filtered municipalities observable
-      // this.initFileredCadastre();
   }
 
   /**
@@ -98,7 +87,6 @@ export class CadastreSelectorComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy() {
     this.controller.destroy();
-    this.selectedMun$$.unsubscribe();
   }
 
   /**
@@ -120,26 +108,6 @@ export class CadastreSelectorComponent implements OnInit, OnDestroy {
     } else {
       this.store.state.update(cadastre, {selected: true}, true);
     }
-    this.selectedChange.emit({selected: true, cadastre});
-  }
-
-  private initFileredCadastre() {
-
-    this.filteredMun$ = this.cadastreControl.valueChanges
-      .pipe(
-        startWith<string | CadastreResponseItem | undefined>(undefined),
-        map(value => {
-          if (value === undefined) { return ''; }
-          return typeof value === 'string' ? value : value.nomCadastre;
-        }),
-        map(cadastreNom => cadastreNom ? this.filterCadastreByName(cadastreNom) : this.store.all())
-      );
-  }
-
-  private filterCadastreByName(name: string): CadastreResponseItem[] {
-    const filterValue = name.toLowerCase();
-    return this.store.all().filter(cadastre => {
-      return cadastre.nomCadastre.toLowerCase().indexOf(filterValue) === 0;
-    });
+    this.selectedCadastreChange.emit({selected: true, cadastre});
   }
 }

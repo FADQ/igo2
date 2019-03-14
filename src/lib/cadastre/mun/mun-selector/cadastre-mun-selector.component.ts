@@ -83,7 +83,7 @@ export class MunSelectorComponent implements OnInit, OnDestroy {
       .firstBy$((record: EntityRecord<Mun>) => record.state.selected === true)
       .subscribe((record: EntityRecord<Mun>) => {
         const mun = record ? record.entity : undefined;
-        this.current$.next(mun);
+        this.munControl.setValue(mun);
       });
 
       // Initialise the filtered municipalities observable
