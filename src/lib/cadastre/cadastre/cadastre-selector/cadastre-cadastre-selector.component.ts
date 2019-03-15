@@ -71,7 +71,7 @@ export class CadastreSelectorComponent implements OnInit, OnDestroy {
     cadastre: Cadastre;
   }>();
 
-  constructor( private cadastreService: CadastreCadastreService, private cdRef: ChangeDetectorRef){
+  constructor( private cadastreService: CadastreCadastreService, private cdRef: ChangeDetectorRef) {
 
   }
 
