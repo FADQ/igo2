@@ -6,7 +6,8 @@ import { Cadastre, CadastreFeature } from '../cadastre/shared/cadastre.interface
 import { VectorLayer, FeatureStore} from '@igo2/geo';
 import * as olstyle from 'ol/style';
 import { MapState } from '@igo2/integration';
-import { crateLayerCadastre } from './cadastre.utils';
+import { crateLayerCadastre, crateLayerConcession } from './cadastre.utils';
+import { Concession, ConcessionUnique } from '../concession/shared/concession.interfaces';
 
 
 /**
@@ -24,6 +25,13 @@ export class CadastreState {
   get currentCadastre$(): BehaviorSubject<Cadastre> { return this._currentCadastre$; }
   private _currentCadastre$ = new BehaviorSubject<Cadastre>(undefined);
 
+   /**
+   *Keep the current selected concession
+   *
+   */
+  get currentConcession$(): BehaviorSubject<ConcessionUnique> { return this._currentConcession$; }
+  private _currentConcession$ = new BehaviorSubject<ConcessionUnique>(undefined);
+
   /**
    * State of map
    * @type MapState
@@ -37,6 +45,14 @@ export class CadastreState {
    */
   get layerCadastre(): VectorLayer { return this._layerCadastre; }
   private _layerCadastre: VectorLayer;
+
+    /**
+   * Layer for the concession feature
+   *
+   * @type VectorLayer
+   */
+  get layerConcession(): VectorLayer { return this._layerConcession; }
+  private _layerConcession: VectorLayer;
 
   /**
    * Store that holds all the available Municipalities
@@ -52,17 +68,19 @@ export class CadastreState {
   get cadastreStore(): EntityStore<Cadastre> { return this._cadastreStore; }
   private _cadastreStore: EntityStore<Cadastre>;
 
-    /**
-   * Store that holds all the selected Cadastre with Feature
+  /**
+   * Store that holds all the available Concession
    * @readonly
-   * @return FeatureStore<Cadastre>
+   * @return EntityStore<Concession>
    */
-  get cadastreFeatureStore(): FeatureStore<CadastreFeature> { return this._cadastreFeatureStore; }
-  private _cadastreFeatureStore: FeatureStore<CadastreFeature>;
+  get concessionStore(): EntityStore<ConcessionUnique> { return this._concessionStore; }
+  private _concessionStore: EntityStore<ConcessionUnique>;
+
 
   constructor(private _mapState: MapState) {
     this.initMun();
     this.initCadastres();
+    this.initConcessions();
   }
 
   /**
@@ -85,6 +103,16 @@ export class CadastreState {
     });
   }
 
+  /**
+   *Initialise a store of concessions
+   *
+   */
+  initConcessions() {
+    this._concessionStore = new EntityStore<ConcessionUnique>([], {
+      getKey: (entity: ConcessionUnique) => entity.nomConcession
+    });
+  }
+
     /**
    * Show the selected cadastre on the map
    * @param CadastreFeature cadastre
@@ -94,6 +122,18 @@ export class CadastreState {
     if (this._layerCadastre === undefined || this._layerCadastre === null) {
       this._layerCadastre = crateLayerCadastre();
       this._mapState.map.addLayer(this._layerCadastre, false );
+    }
+  }
+
+   /**
+   * Show the selected cadastre on the map
+   * @param CadastreFeature cadastre
+   */
+  initConcessionLayer() {
+
+    if (this._layerConcession === undefined || this._layerConcession === null) {
+      this._layerConcession = crateLayerConcession();
+      this._mapState.map.addLayer(this._layerConcession, false );
     }
   }
 }

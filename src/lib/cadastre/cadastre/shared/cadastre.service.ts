@@ -6,13 +6,11 @@ import { map } from 'rxjs/operators';
 
 import { ApiService } from 'src/lib/core/api';
 import {
-  CadastreName,
   CadastreResponseItem,
   CadastreApiConfig,
   CadastreListResponse,
   CadastreFeature,
-  CadastreFeatureResponseItem,
-  CadastreFeatureListResponse
+  CadastreFeatureResponse
 } from 'src/lib/cadastre/cadastre/shared/cadastre.interfaces';
 
 @Injectable()
@@ -73,39 +71,33 @@ export class CadastreCadastreService {
 
 //#region CadastreFeature
 
-getCadastreFeatureByNum(idCadastreOriginaire: number): Observable<CadastreFeature[]> {
-  const url = this.apiService.buildUrl(this.apiConfig.surfaces, {idCadastre: idCadastreOriginaire});
+  getCadastreFeatureByNum(idCadastreOriginaire: number): Observable<CadastreFeature> {
+    const url = this.apiService.buildUrl(this.apiConfig.surfaces, {idCadastre: idCadastreOriginaire});
 
-  return this.http
-    .get(url)
-    .pipe(
-      map((response: CadastreFeatureListResponse) => {
-        return this.extractCadastreFeatureFromResponse(response);
-      })
-    );
-}
+    return this.http
+      .get(url)
+      .pipe(
+        map((response: CadastreFeatureResponse) => {
+          return this.extractCadastreFeatureFromResponse(response);
+        })
+      );
+  }
 
-private extractCadastreFeatureFromResponse(
-  response: CadastreFeatureListResponse
-): CadastreFeature[] {
-  return [response].map(item => this.listItemToCadastreFeature(item.data));
-}
-
-private listItemToCadastreFeature(
-  listItem: CadastreFeatureResponseItem
-): CadastreFeature {
-  const properties = Object.assign({}, listItem.properties);
-  return {
-    meta: {
-      id: properties.idCadastreOriginaire,
-      mapTitle: properties.nomCadastreOriginaire
-    },
-    type: listItem.type,
-    projection: 'EPSG:4326',
-    geometry: listItem.geometry,
-    extent: undefined,
-    properties
-  };
-}
+  private extractCadastreFeatureFromResponse(
+    response: CadastreFeatureResponse
+  ): CadastreFeature {
+    const properties = Object.assign({}, response.data.properties);
+    return {
+      meta: {
+        id: properties.idCadastreOriginaire,
+        mapTitle: properties.nomCadastreOriginaire
+      },
+      type: response.data.type,
+      projection: 'EPSG:4326',
+      geometry: response.data.geometry,
+      extent: undefined,
+      properties
+    };
+  }
 //#endregion
 }

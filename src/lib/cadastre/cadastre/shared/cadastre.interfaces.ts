@@ -50,7 +50,7 @@ export interface CadastreFeatureResponseItem extends CadastreFeature {}
 
 // export type CadastreFeatureListResponse = CadastreFeatureResponseItem[];
 
-export interface CadastreFeatureListResponse {
+export interface CadastreFeatureResponse {
   data: CadastreFeatureResponseItem;
 }
 

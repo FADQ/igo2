@@ -199,6 +199,8 @@
   },
   "cadastre": {
     "mun": "Municipality",
-    "cadastre": "Cadastre"
+    "cadastre": "Cadastre",
+    "concession": "Concession",
+    "lot": "Lot"
   }
 }

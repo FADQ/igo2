@@ -1,5 +1,5 @@
 
-import { FeatureDataSource, VectorLayer } from '@igo2/geo';
+import { FeatureDataSource, VectorLayer, createOverlayMarkerStyle } from '@igo2/geo';
 import * as olstyle from 'ol/style';
 
 /**
@@ -35,4 +35,23 @@ export function crateLayerCadastre(): VectorLayer {
       })
     });
   }
+
+  /**
+ *Create the concession layer to be added to the map.
+ *
+ * @export
+ * @returns VectorLayer
+ */
+export function crateLayerConcession(): VectorLayer {
+
+  const source: FeatureDataSource = new FeatureDataSource();
+  const layer: VectorLayer = new VectorLayer({
+    // id: 'Cadastre',
+    // zIndex: 200,
+    source,
+    style: createOverlayMarkerStyle('yellow')
+  });
+  return layer;
+}
+
 

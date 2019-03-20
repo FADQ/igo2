@@ -20,7 +20,6 @@ import {
 } from '@igo2/common';
 
 import { Cadastre, CadastreResponseItem } from 'src/lib/cadastre/cadastre/shared/cadastre.interfaces';
-import {CadastreCadastreService} from 'src/lib/cadastre/cadastre/shared/cadastre.service';
 
 @Component({
   selector: 'fadq-cadastre-cadastre-selector',
@@ -71,7 +70,7 @@ export class CadastreSelectorComponent implements OnInit, OnDestroy {
     cadastre: Cadastre;
   }>();
 
-  constructor( private cadastreService: CadastreCadastreService, private cdRef: ChangeDetectorRef) {
+  constructor( private cdRef: ChangeDetectorRef) {
 
   }
 
@@ -94,7 +93,7 @@ export class CadastreSelectorComponent implements OnInit, OnDestroy {
    * @param mun
    */
   getNomCadastre(cadastre: Cadastre): string {
-    return  cadastre.nomCadastre;
+    return  cadastre.nomCadastre + ' (' + cadastre.codeCadastre + ')';
   }
 
   /**

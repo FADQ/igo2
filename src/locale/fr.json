@@ -201,6 +201,8 @@
 
   "cadastre": {
     "mun": "Municipalité",
-    "cadastre": "Cadastre"
+    "cadastre": "Cadastre",
+    "concession": "Concession",
+    "lot": "Lot"
   }
 }
