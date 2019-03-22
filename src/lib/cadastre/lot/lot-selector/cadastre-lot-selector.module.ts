@@ -10,7 +10,7 @@ import {
 
 import { IgoLanguageModule } from '@igo2/core';
 
-import { ConcessionSelectorComponent } from './cadastre-concession-selector.component';
+import { LotSelectorComponent } from './cadastre-lot-selector.component';
 
 @NgModule({
   imports: [
@@ -24,7 +24,7 @@ import { ConcessionSelectorComponent } from './cadastre-concession-selector.comp
     MatSelectModule,
     IgoLanguageModule
   ],
-  declarations: [ConcessionSelectorComponent],
-  exports: [ConcessionSelectorComponent]
+  declarations: [LotSelectorComponent],
+  exports: [LotSelectorComponent]
 })
-export class FadqConcessionSelectorModule { }
+export class FadqLotSelectorModule { }

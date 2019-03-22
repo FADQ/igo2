@@ -9,5 +9,26 @@
     [store]="concessionStore"
     [current$]="currentConcession$" (selectedConcessionChange)="onSelectionConcessionChange($event)">
   </fadq-cadastre-concession-selector>
+
+  <fadq-cadastre-lot-selector
+    [store]="lotStore"
+    [current$]="currentLot$" (selectedLotChange)="onSelectionLotChange($event)">
+  </fadq-cadastre-lot-selector>
+</div>
+<div>
+  <div class="igo-form-buttons">
+    <button
+      mat-raised-button
+      (click)="onSearchCancelClick()">
+      {{ 'cadastre.cancel_search' | translate }}
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      (click)="onSearchClick()">
+      {{ 'cadastre.search' | translate }}
+    </button>
+  </div>
 </div>
 

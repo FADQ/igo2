@@ -38,7 +38,8 @@ export interface ConcessionListResponse {
 
 export interface ConcessionUnique {
   nomConcession: string;
-  listeConcession: ConcessionList;
+  noCadastre: string;
+  listeIdConcession: string[];
 }
 
 export type ConcessionList =  ConcessionResponseItem[];
@@ -55,7 +56,9 @@ export interface ConcessionFeature extends Feature {
 
 export interface ConcessionFeatureResponseItem extends ConcessionFeature {}
 
-export interface ConcessionFeatureResponse {
-  data: ConcessionFeatureResponseItem;
+export type ConcessionFeatureList = ConcessionFeatureResponseItem[];
+
+export interface ConcessionFeatureListResponse {
+  data: ConcessionFeatureList;
 }
 

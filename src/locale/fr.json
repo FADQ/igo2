@@ -203,6 +203,8 @@
     "mun": "Municipalité",
     "cadastre": "Cadastre",
     "concession": "Concession",
-    "lot": "Lot"
+    "lot": "Lot",
+    "search": "Rechercher",
+    "cancel_search": "Réinitialiser"
   }
 }

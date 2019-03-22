@@ -30,15 +30,18 @@ export interface IgoEnvironment {
   cadastre: {
     mun: {
       list: string;
-    }
+    };
     cadastre: {
       list: string;
-    }
-    designationSec: {
-      list: string
-    }
+      surfaces: string;
+    };
+    concession: {
+      list: string;
+      points: string;
+    };
     lot: {
-      list: string
+      list: string;
+      points: string;
     }
   };
 }
@@ -129,13 +132,16 @@ export const igoEnvironment: IgoEnvironment = {
       list: '/igolocalisation/recherche_cadastre_originaire/obtenirMunicipalites'
     },
     cadastre: {
-      list: ''
+      list: '/igolocalisation/recherche_cadastre_originaire/obtenirCadastresOriginaires/${codeGeo}',
+      surfaces: '/igolocalisation/recherche_cadastre_originaire/obtenirCadastreOriginaire/${idCadastre}'
     },
-    designationSec: {
-      list: ''
+    concession: {
+      list: '/igolocalisation/recherche_cadastre_originaire/obtenirDesignationSecondaire',
+      points: '/igolocalisation/recherche_cadastre_originaire/obtenirDesDesignationsSecondairesOriginaires'
     },
     lot: {
-      list: ''
+      list: '/igolocalisation/recherche_cadastre_originaire/obtenirLotsOriginaires',
+      points: '/igolocalisation/recherche_cadastre_originaire/obtenirDesLotsOriginaires'
     }
   }
 };

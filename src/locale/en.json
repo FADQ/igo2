@@ -201,6 +201,8 @@
     "mun": "Municipality",
     "cadastre": "Cadastre",
     "concession": "Concession",
-    "lot": "Lot"
+    "lot": "Lot",
+    "search": "Search",
+    "cancel_search": "Cancel"
   }
 }

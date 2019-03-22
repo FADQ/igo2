@@ -6,8 +6,9 @@ import { Cadastre, CadastreFeature } from '../cadastre/shared/cadastre.interface
 import { VectorLayer, FeatureStore} from '@igo2/geo';
 import * as olstyle from 'ol/style';
 import { MapState } from '@igo2/integration';
-import { crateLayerCadastre, crateLayerConcession } from './cadastre.utils';
-import { Concession, ConcessionUnique } from '../concession/shared/concession.interfaces';
+import { cratePolygonLayer, createMarkerLayer } from './cadastre.utils';
+import { Concession, ConcessionUnique, ConcessionFeature } from '../concession/shared/concession.interfaces';
+import { LotUnique, LotFeature } from '../lot/shared/lot.interfaces';
 
 
 /**
@@ -25,12 +26,40 @@ export class CadastreState {
   get currentCadastre$(): BehaviorSubject<Cadastre> { return this._currentCadastre$; }
   private _currentCadastre$ = new BehaviorSubject<Cadastre>(undefined);
 
-   /**
+  /**
+   *Keep the current selected Feature cadastre
+   *
+   */
+  get currentCadastreFeature$(): BehaviorSubject<CadastreFeature> { return this._currentCadastreFeature$; }
+  private _currentCadastreFeature$ = new BehaviorSubject<CadastreFeature>(undefined);
+
+  /**
    *Keep the current selected concession
    *
    */
   get currentConcession$(): BehaviorSubject<ConcessionUnique> { return this._currentConcession$; }
   private _currentConcession$ = new BehaviorSubject<ConcessionUnique>(undefined);
+
+  /**
+   *Keep the current selected Feature list concession
+   *
+   */
+  get currentConcessionFeatures$(): BehaviorSubject<ConcessionFeature[]> { return this._currentConcessionFeatures$; }
+  private _currentConcessionFeatures$ = new BehaviorSubject<ConcessionFeature[]>(undefined);
+
+  /**
+   *Keep the current selected lot
+   *
+   */
+  get currentLot$(): BehaviorSubject<LotUnique> { return this._currentLot$; }
+  private _currentLot$ = new BehaviorSubject<LotUnique>(undefined);
+
+  /**
+   *Keep the current selected Feature list lot
+   *
+   */
+  get currentLotFeatures$(): BehaviorSubject<LotFeature[]> { return this._currentLotFeatures$; }
+  private _currentLotFeatures$ = new BehaviorSubject<LotFeature[]>(undefined);
 
   /**
    * State of map
@@ -54,6 +83,14 @@ export class CadastreState {
   get layerConcession(): VectorLayer { return this._layerConcession; }
   private _layerConcession: VectorLayer;
 
+    /**
+   * Layer for the lot feature
+   *
+   * @type VectorLayer
+   */
+  get layerLot(): VectorLayer { return this._layerLot; }
+  private _layerLot: VectorLayer;
+
   /**
    * Store that holds all the available Municipalities
    */
@@ -76,11 +113,20 @@ export class CadastreState {
   get concessionStore(): EntityStore<ConcessionUnique> { return this._concessionStore; }
   private _concessionStore: EntityStore<ConcessionUnique>;
 
+  /**
+   * Store that holds all the available Lot
+   * @readonly
+   * @return EntityStore<Lot>
+   */
+  get lotStore(): EntityStore<LotUnique> { return this._lotStore; }
+  private _lotStore: EntityStore<LotUnique>;
+
 
   constructor(private _mapState: MapState) {
     this.initMun();
     this.initCadastres();
     this.initConcessions();
+    this.initLots();
   }
 
   /**
@@ -113,6 +159,16 @@ export class CadastreState {
     });
   }
 
+  /**
+   *Initialise a store of lots
+   *
+   */
+  initLots() {
+    this._lotStore = new EntityStore<LotUnique>([], {
+      getKey: (entity: LotUnique) => entity.nomLot
+    });
+  }
+
     /**
    * Show the selected cadastre on the map
    * @param CadastreFeature cadastre
@@ -120,7 +176,7 @@ export class CadastreState {
   initCadastreLayer() {
 
     if (this._layerCadastre === undefined || this._layerCadastre === null) {
-      this._layerCadastre = crateLayerCadastre();
+      this._layerCadastre = cratePolygonLayer('rgba(255, 255, 255, 0.2)', '#6efc02', 4);
       this._mapState.map.addLayer(this._layerCadastre, false );
     }
   }
@@ -132,8 +188,20 @@ export class CadastreState {
   initConcessionLayer() {
 
     if (this._layerConcession === undefined || this._layerConcession === null) {
-      this._layerConcession = crateLayerConcession();
+      this._layerConcession = createMarkerLayer('yellow');
       this._mapState.map.addLayer(this._layerConcession, false );
+    }
+  }
+
+  /**
+   * Show the selected cadastre on the map
+   * @param CadastreFeature cadastre
+   */
+  initLotLayer() {
+
+    if (this._layerLot === undefined || this._layerLot === null) {
+      this._layerLot = createMarkerLayer('blue');
+      this._mapState.map.addLayer(this._layerLot, false );
     }
   }
 }

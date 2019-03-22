@@ -1,11 +1,11 @@
 <mat-form-field>
   <mat-select
     [value]="current$ | async"
-    [placeholder]="'cadastre.concession' | translate"
+    [placeholder]="'cadastre.lot' | translate"
     (selectionChange)="onSelectionChange($event)">
-    <ng-template ngFor let-concession [ngForOf]="store.view.all$() | async">
-      <mat-option [value]="concession">
-        {{getNomConcession(concession)}}
+    <ng-template ngFor let-lot [ngForOf]="store.view.all$() | async">
+      <mat-option [value]="lot">
+        {{getNomLot(lot)}}
       </mat-option>
     </ng-template>
   </mat-select>

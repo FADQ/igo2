@@ -1,0 +1,12 @@
+.cadastre-type-buttons {
+  padding: 10px;
+  text-align: center;
+
+  mat-button-toggle-group {
+    width: 100%;
+
+    mat-button-toggle {
+      width: 50%;
+    }
+  }
+}
