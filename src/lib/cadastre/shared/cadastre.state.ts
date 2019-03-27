@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { EntityStore } from '@igo2/common';
 import { Mun } from 'src/lib/cadastre/mun/shared/mun.interfaces';
 import { Cadastre, CadastreFeature } from '../cadastre/shared/cadastre.interfaces';
-import { VectorLayer, FeatureStore} from '@igo2/geo';
+import { VectorLayer, FeatureStore, ImageLayer} from '@igo2/geo';
 import * as olstyle from 'ol/style';
 import { MapState } from '@igo2/integration';
 import { cratePolygonLayer, createMarkerLayer } from './cadastre.utils';
@@ -91,6 +91,17 @@ export class CadastreState {
   get layerLot(): VectorLayer { return this._layerLot; }
   private _layerLot: VectorLayer;
 
+   /**
+   * Image Layer for the cadastre
+   *
+   * @type VectorLayer
+   */
+  set layerCadastreImage(value: ImageLayer) {
+    this._layerCadastreImage = value;
+  }
+  get layerCadastreImage(): ImageLayer { return this._layerCadastreImage; }
+  private _layerCadastreImage: ImageLayer;
+
   /**
    * Store that holds all the available Municipalities
    */
@@ -120,6 +131,13 @@ export class CadastreState {
    */
   get lotStore(): EntityStore<LotUnique> { return this._lotStore; }
   private _lotStore: EntityStore<LotUnique>;
+
+  /**
+   *Enabled  the search button
+   */
+  private _searchDisabled: boolean = false;
+  get searchDisabled(): boolean { return this._searchDisabled; }
+  set searchDisabled(value: boolean) { this._searchDisabled = value; }
 
 
   constructor(private _mapState: MapState) {
@@ -155,7 +173,7 @@ export class CadastreState {
    */
   initConcessions() {
     this._concessionStore = new EntityStore<ConcessionUnique>([], {
-      getKey: (entity: ConcessionUnique) => entity.nomConcession
+      getKey: (entity: ConcessionUnique) => entity.idConcession
     });
   }
 
@@ -165,7 +183,7 @@ export class CadastreState {
    */
   initLots() {
     this._lotStore = new EntityStore<LotUnique>([], {
-      getKey: (entity: LotUnique) => entity.nomLot
+      getKey: (entity: LotUnique) => entity.idLot
     });
   }
 

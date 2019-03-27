@@ -37,6 +37,7 @@ export interface ConcessionListResponse {
 }
 
 export interface ConcessionUnique {
+  idConcession: string;
   nomConcession: string;
   noCadastre: string;
   listeIdConcession: string[];

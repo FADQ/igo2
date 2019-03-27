@@ -49,15 +49,18 @@ export class CadastreConcessionService {
     const concessionUniqueList: ConcessionUniqueList = [];
     response.data.map((item: ConcessionResponseItem) => {
 
-      if (concessionUniqueList.find(
-        x => x.nomConcession === item.nomDesignationSecondaire ) === undefined) {
+      const idConcessionItem: string = item.noCadastre + ' - ' + item.nomDesignationSecondaire;
+      const concessionUniqueFind: ConcessionUnique = concessionUniqueList.find(
+        x => x.idConcession === idConcessionItem );
+
+      if (concessionUniqueFind === undefined) {
         concessionUniqueList.push({
+          idConcession: idConcessionItem,
           nomConcession: item.nomDesignationSecondaire,
           noCadastre: item.noCadastre,
           listeIdConcession: [item.idDesignationSecondaire]});
       } else {
-        concessionUniqueList.find(x => x.nomConcession === item.nomDesignationSecondaire)
-        .listeIdConcession.push(item.idDesignationSecondaire);
+        concessionUniqueFind.listeIdConcession.push(item.idDesignationSecondaire);
       }
     });
 

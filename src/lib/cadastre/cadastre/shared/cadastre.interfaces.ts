@@ -20,6 +20,8 @@ export interface Cadastre {
     recherche: string;
 }
 
+export type CadastreList = Cadastre[];
+
 export interface CadastreName {
   idCadastreOriginaire: number;
   nomCadastre: string;

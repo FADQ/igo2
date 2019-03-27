@@ -37,7 +37,8 @@ export interface LotListResponse {
 }
 
 export interface LotUnique {
-  nomLot: string;
+  idLot: string;
+  noLot: string;
   noCadastre: string;
   listeIdLot: string[];
 }

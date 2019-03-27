@@ -50,17 +50,18 @@ export class CadastreLotService {
     response.data.map((item: LotResponseItem) => {
 
       if (lotUniqueList.find(
-        x => x.nomLot === item.noLotOriginaire ) === undefined) {
+        x => x.idLot === item.noCadastre + ' - ' + item.noLotOriginaire ) === undefined) {
         lotUniqueList.push({
-          nomLot: item.noLotOriginaire,
+          idLot: item.noCadastre + ' - ' + item.noLotOriginaire,
+          noLot: item.noLotOriginaire,
           noCadastre: item.noCadastre,
           listeIdLot: [item.idLotOriginaire]});
       } else {
-        lotUniqueList.find(x => x.nomLot === item.noLotOriginaire)
+        lotUniqueList.find(x => x.noCadastre === item.noCadastre && x.noLot === item.noLotOriginaire )
         .listeIdLot.push(item.idLotOriginaire);
       }
     });
-    console.log('COMPTE: ' + lotUniqueList.length);
+
     return lotUniqueList;
   }
 

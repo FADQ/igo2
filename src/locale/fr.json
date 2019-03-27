@@ -22,8 +22,8 @@
     "client.title": "Client",
     "client.placeholder": "Rechercher un client",
     "layer.placeholder": "Rechercher une couche de données",
-    "cadastre_ori.title": "Cadastre originaire",
-    "cadastre_ori.placeholder": "Rechercher un cadastre originaire"
+    "cadastre.title": "Cadastre originaire",
+    "cadastre.placeholder": "Rechercher un cadastre originaire"
   },
 
   "help": {

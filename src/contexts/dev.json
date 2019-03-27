@@ -216,7 +216,27 @@
       "name": "addressEditor"
     },
     {
-      "name": "cadastre"
+      "name": "cadastre",
+      "options": {
+        "layerOptions": {
+          "id": "cadastre",
+          "title": "Compilation cadastrale",
+          "visible": false,
+          "sourceOptions": {
+            "type": "wms",
+            "optionsFromCapabilities": true,
+            "url": "http://danlav01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_geoservpro_compil_cadas",
+            "layer": "compil_cadas",
+            "style": "default",
+            "projection": "EPSG:32198",
+            "params": {
+              "version": "1.1.1",
+              "layers": "compil_cadas",
+              "srs": "EPSG:32198"
+            }
+          }
+        }
+      }
     }
   ]
 }

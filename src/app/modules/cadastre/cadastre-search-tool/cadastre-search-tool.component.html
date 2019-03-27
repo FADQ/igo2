@@ -25,6 +25,7 @@
     <button
       mat-raised-button
       color="primary"
+      [disabled]="searchDisabled"
       type="button"
       (click)="onSearchClick()">
       {{ 'cadastre.search' | translate }}
