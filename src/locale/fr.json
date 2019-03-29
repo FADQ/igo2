@@ -48,6 +48,7 @@
   },
 
   "tools": {
+    "map": "Carte",
     "help": "Aide",
     "addressEditor": "Édition d'adresses",
     "client": "Client",
@@ -202,7 +203,7 @@
   "cadastre": {
     "mun": "Municipalité",
     "cadastre": "Cadastre",
-    "concession": "Concession",
+    "concession": "Désignation secondaire",
     "lot": "Lot",
     "search": "Rechercher",
     "cancel_search": "Réinitialiser"

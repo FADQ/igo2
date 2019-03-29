@@ -116,6 +116,135 @@ export class CadastreSearchToolComponent implements OnInit {
   }
 
   /**
+   * Reaction on a selected cadastre
+   * @param cadastre: Cadastre event
+   */
+  onSelectionCadastreChange(event: {cadastre: Cadastre}) {
+    const cadastre = event.cadastre;
+
+    // get the cadastre Feature
+    this.cadastreService.getCadastreFeatureByNum(cadastre.idCadastreOriginaire)
+    .subscribe((cadastreList: CadastreFeature) => {
+
+      // intialise the cadastre layer
+      this.cadastreState.initCadastreLayer();
+      this.cadastreLayer = this.cadastreState.layerCadastre;
+      // keep the current Features selected list
+      this.cadastreState.currentCadastreFeature$.next(cadastreList);
+    });
+    // keep the current cadastre selected
+    this.cadastreState.currentCadastre$.next(cadastre);
+
+    // load the concessions related to the selected cadastre
+    // this.reloadConcessions(cadastre.noCadastre);
+    this.loadConcessions(cadastre.idCadastreOriginaire);
+
+    // reload the lots related to the selected cadastre
+    // this.reloadLots(cadastre.noCadastre);
+    this.loadLots(cadastre.idCadastreOriginaire);
+
+    // enabled the search button
+    this.cadastreState.searchDisabled = false;
+  }
+
+  /**
+   * Reaction on a selected cadastre
+   * @param concession: ConcessionUnique event
+   */
+  onSelectionConcessionChange(event: {concession: ConcessionUnique}) {
+    const concession = event.concession;
+
+    this.concessionService.getConcessionFeatureByNum(concession.listeIdConcession)
+    .subscribe((concessionList: ConcessionFeature[]) => {
+
+      this.cadastreState.initConcessionLayer();
+      this.concessionLayer = this.cadastreState.layerConcession;
+      this.cadastreState.currentConcessionFeatures$.next(concessionList);
+
+    });
+    this.cadastreState.currentConcession$.next(concession);
+  }
+
+  /**
+   * Reaction on a selected cadastre
+   * @param lot: LotUnique event
+   */
+  onSelectionLotChange(event: {lot: LotUnique}) {
+    const lot = event.lot;
+
+    this.lotService.getLotFeatureByNum(lot.listeIdLot)
+    .subscribe((lotList: LotFeature[]) => {
+
+      this.cadastreState.initLotLayer();
+      this.lotLayer = this.cadastreState.layerLot;
+      this.cadastreState.currentLotFeatures$.next(lotList);
+
+    });
+    this.cadastreState.currentLot$.next(lot);
+  }
+
+   /**
+   * Reaction on a search click
+   *
+   * @param {{mun: Mun}} event
+   */
+  onSearchClick() {
+
+    if (this.cadastreState.currentCadastreFeature$.value !== undefined) {
+      this.showUnCadastre(this.cadastreState.currentCadastreFeature$.value as CadastreFeature);
+    }
+
+    if (this.cadastreState.currentConcessionFeatures$.value !== undefined) {
+      this.showConcessions(this.cadastreState.currentConcessionFeatures$.value as ConcessionFeature[]);
+    }
+
+    if (this.cadastreState.currentLotFeatures$.value !== undefined) {
+      this.showLots(this.cadastreState.currentLotFeatures$.value as LotFeature[]);
+    }
+
+    // adjust the zoom depending of the Features
+    this.adjustZoom();
+
+    if (this.layerId && this.layerOptions === undefined) {
+
+      const layerCadastreImage: Layer = this.cadastreState.mapState.map.getLayerById(this.layerId);
+      if (layerCadastreImage !== undefined) { layerCadastreImage.visible = true; }
+
+    } else if (this.layerOptions !== undefined) {
+
+      this.layerService.createAsyncLayer(this.layerOptions).subscribe((imageLayer: ImageLayer) => {
+        imageLayer.visible = true;
+        this.cadastreState.layerCadastreImage = imageLayer;
+        this.cadastreState.mapState.map.addLayer(imageLayer);
+      } );
+    }
+  }
+
+  /**
+   *Reaction on a cancel search click
+   *
+   */
+  onSearchCancelClick() {
+    // Clear the cadastre
+    this.clearCadastres();
+
+    // Clear the concessions
+    this.clearConcessions();
+
+    // Clear the Lots
+    this.clearLots();
+
+    // Clear the selected mun
+    this.munStore.state.updateAll({selected: false});
+
+    // Clear the layers
+    if (this.cadastreLayer !== undefined) { this.cadastreLayer.dataSource.ol.clear(); }
+    if (this.concessionLayer !== undefined) { this.concessionLayer.dataSource.ol.clear(); }
+    if (this.lotLayer !== undefined) { this.lotLayer.dataSource.ol.clear(); }
+
+  }
+
+  /**
    *Load the list of municipalities
    *
    */
@@ -144,11 +273,6 @@ export class CadastreSearchToolComponent implements OnInit {
     .subscribe((cadastreList: CadastreList) => {
 
       this.cadastreStore.load(cadastreList);
-
-      cadastreList.map((cadastre: Cadastre) => {
-        this.loadConcessions(cadastre.idCadastreOriginaire);
-        this.loadLots(cadastre.idCadastreOriginaire);
-       } );
     });
   }
 
@@ -225,173 +349,48 @@ export class CadastreSearchToolComponent implements OnInit {
   }
 
   /**
-   * Reload the concessions related to the selected cadastre
-   * @param {string} noCadastre
-   */
-  private reloadConcessions(noCadastre: string) {
-    const filterClause = function(concession: ConcessionUnique): boolean {
-      return concession.noCadastre === noCadastre;
-    };
-    this.cadastreState.concessionStore.view.filter(filterClause);
-    this.sortConcessions();
-  }
-
-  /**
-   *Reload the lots related to the selected cadastre
-   *
-   * @param Cadastre cadastre
-   */
-  private reloadLots(noCadastre: string) {
-    // reload the lots related to the selected cadastre
-    const filterClause = function(lot: LotUnique): boolean {
-      return lot.noCadastre === noCadastre;
-    };
-    this.cadastreState.lotStore.view.filter(filterClause);
-    this.sortLots();
-  }
-
-  /**
    * Reaction on a selected municipality
    *
    * @param mun: Mun event
    */
   onSelectionMunChange(event: {mun: Mun}) {
     const mun = event.mun;
+
+    // Clear the cadastre
+    this.clearCadastres();
+
+    // Clear the concessions
+    this.clearConcessions();
+
+    // Clear the Lots
+    this.clearLots();
+
     this.loadCadastres(mun.codeGeographique);
     this.sortCadastres();
   }
 
-  /**
-   * Reaction on a selected cadastre
-   * @param cadastre: Cadastre event
-   */
-  onSelectionCadastreChange(event: {cadastre: Cadastre}) {
-    const cadastre = event.cadastre;
-
-    // get the cadastre Feature
-    this.cadastreService.getCadastreFeatureByNum(cadastre.idCadastreOriginaire)
-    .subscribe((cadastreList: CadastreFeature) => {
-
-      // intialise the cadastre layer
-      this.cadastreState.initCadastreLayer();
-      this.cadastreLayer = this.cadastreState.layerCadastre;
-      // keep the current Features selected list
-      this.cadastreState.currentCadastreFeature$.next(cadastreList);
-    });
-    // keep the current cadastre selected
-    this.cadastreState.currentCadastre$.next(cadastre);
-
-    // reload the concessions related to the selected cadastre
-    this.reloadConcessions(cadastre.noCadastre);
-
-    // reload the lots related to the selected cadastre
-    this.reloadLots(cadastre.noCadastre);
-
-    // enabled the search button
-    this.cadastreState.searchDisabled = false;
-  }
-
-  /**
-   * Reaction on a selected cadastre
-   * @param concession: ConcessionUnique event
-   */
-  onSelectionConcessionChange(event: {concession: ConcessionUnique}) {
-    const concession = event.concession;
-
-    this.concessionService.getConcessionFeatureByNum(concession.listeIdConcession)
-    .subscribe((concessionList: ConcessionFeature[]) => {
-
-      this.cadastreState.initConcessionLayer();
-      this.concessionLayer = this.cadastreState.layerConcession;
-      this.cadastreState.currentConcessionFeatures$.next(concessionList);
-      // this.showConcessions(concessionList);
-
-    });
-    this.cadastreState.currentConcession$.next(concession);
-    this.reloadLots(concession.noCadastre);
-  }
-
-  /**
-   * Reaction on a selected cadastre
-   * @param lot: LotUnique event
-   */
-  onSelectionLotChange(event: {lot: LotUnique}) {
-    const lot = event.lot;
-
-    this.lotService.getLotFeatureByNum(lot.listeIdLot)
-    .subscribe((lotList: LotFeature[]) => {
-
-      this.cadastreState.initLotLayer();
-      this.lotLayer = this.cadastreState.layerLot;
-      this.cadastreState.currentLotFeatures$.next(lotList);
-      // this.showLots(lotList);
-
-    });
-    this.cadastreState.currentLot$.next(lot);
-  }
-
-   /**
-   * Reaction on a search click
-   *
-   * @param {{mun: Mun}} event
-   */
-  onSearchClick() {
-    // if (this.cadastreState.currentCadastre$ === undefined) { return; }
-
-    if (this.cadastreState.currentCadastreFeature$.value !== undefined) {
-      this.showUnCadastre(this.cadastreState.currentCadastreFeature$.value as CadastreFeature);
-    }
-
-    if (this.cadastreState.currentConcessionFeatures$.value !== undefined) {
-      this.showConcessions(this.cadastreState.currentConcessionFeatures$.value as ConcessionFeature[]);
-    }
-
-    if (this.cadastreState.currentLotFeatures$.value !== undefined) {
-      this.showLots(this.cadastreState.currentLotFeatures$.value as LotFeature[]);
-    }
-
-    // adjust the zoom depending of the Features
-    this.adjustZoom();
-
-    if (this.layerId && this.layerOptions === undefined) {
-
-      const layerCadastreImage: Layer = this.cadastreState.mapState.map.getLayerById(this.layerId);
-      if (layerCadastreImage !== undefined) { layerCadastreImage.visible = true; }
-
-    } else if (this.layerOptions !== undefined) {
-
-      this.layerService.createAsyncLayer(this.layerOptions).subscribe((imageLayer: ImageLayer) => {
-        imageLayer.visible = true;
-        this.cadastreState.layerCadastreImage = imageLayer;
-        this.cadastreState.mapState.map.addLayer(imageLayer);
-      } );
-    }
-  }
-
-  /**
-   *Reaction on a cancel search click
-   *
-   */
-  onSearchCancelClick() {
-    // Clear the stores
+  private clearCadastres() {
+    // Clear the store
     this.cadastreStore.clear();
-    this.concessionStore.clear();
-    this.lotStore.clear();
-
-    // clear the selected mun
-    this.munStore.state.updateAll({selected: false});
 
     // clear the current features
     this.cadastreState.currentCadastreFeature$.next(undefined);
-    this.cadastreState.currentConcessionFeatures$.next(undefined);
-    this.cadastreState.currentLotFeatures$.next(undefined);
-
-    // Clear the layers
-    if (this.cadastreLayer !== undefined) { this.cadastreLayer.dataSource.ol.clear(); }
-    if (this.concessionLayer !== undefined) { this.concessionLayer.dataSource.ol.clear(); }
-    if (this.lotLayer !== undefined) { this.lotLayer.dataSource.ol.clear(); }
-
   }
+
+  private clearConcessions() {
+    // Clear the store
+    this.concessionStore.clear();
+    // clear the current features
+    this.cadastreState.currentConcessionFeatures$.next(undefined);
+  }
+
+  private clearLots() {
+    // Clear the store
+    this.lotStore.clear();
+    // clear the current features
+    this.cadastreState.currentLotFeatures$.next(undefined);
+  }
+
 
     /**
    * Show the selected cadastre on the map
@@ -449,7 +448,7 @@ export class CadastreSearchToolComponent implements OnInit {
     else if a concession is selected, zoom on it
     else if a lot is selected, zoom on it.
     */
-    if (this.cadastreState.currentCadastreFeature$.value !== undefined){ //
+    if (this.cadastreState.currentCadastreFeature$.value !== undefined) {
       moveToFeatures(this.cadastreState.mapState.map,
          this.featureListToOl([this.cadastreState.currentCadastreFeature$.value]));
     } else if (this.cadastreState.currentConcessionFeatures$.value !== undefined &&

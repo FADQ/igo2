@@ -33,7 +33,7 @@ import { AppComponent } from './app.component';
     FadqHelpModule,
     FadqAddressModule,
     FadqCadastreModule,
-    FadqClientModule.forRoot(),
+    FadqClientModule,
     FadqNavigationModule,
     FadqSearchModule.forRoot(),
     FadqPortalModule

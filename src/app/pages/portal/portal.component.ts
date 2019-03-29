@@ -42,6 +42,8 @@ import {
   CLIENT
 } from 'src/lib/client';
 
+import { CADASTRE } from 'src/lib/cadastre/shared/cadastre.enums';
+
 @Component({
   selector: 'app-portal',
   templateUrl: './portal.component.html',
@@ -56,7 +58,11 @@ export class PortalComponent implements OnInit, OnDestroy {
   public expansionPanelExpanded = false;
   public sidenavOpened = false;
 
+  public disabledSearch: boolean = false;
+
   private focusedSearchResult$$: Subscription;
+  private currentTerm: string;
+  private currentTypeSearch: string;
 
   get map(): IgoMap {
     return this.mapState.map;
@@ -194,19 +200,14 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   onSearchTermChange(term?: string) {
-    if (term === undefined || term === '') {
-      this.onClearSearch();
-      return;
-    }
+    this.currentTerm = term;
     if (term.length < this.minSearchTermLength) { return; }
+    this.onBeforeSearch();
+  }
 
-    if (this.searchState.searchTypes.indexOf(CLIENT) >= 0) {
-      if (term.length >= 3) {
-        this.onBeforeSearchClient();
-      }
-    } else {
-      this.onBeforeSearch();
-    }
+  onSearchTypeChange(type?: string) {
+    this.currentTypeSearch = type;
+    this.onBeforeSearch();
   }
 
   onSearch(event: {research: Research, results: SearchResult[]}) {
@@ -272,23 +273,73 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.sidenavOpened ? this.closeSidenav() : this.openSidenav();
   }
 
+  private verifyNullTerm(): boolean {
+    if (this.currentTerm === undefined || this.currentTerm === '') {
+      this.onClearSearch();
+      return true;
+    } else { return false;}
+  }
+
   private onBeforeSearch() {
+
+    switch (this.currentTypeSearch) {
+      case CLIENT: {
+        this.onBeforeSearchClient();
+        break;
+      }
+      case CADASTRE: {
+        this.onBeforeSearchCadastre();
+        break;
+      }
+      default: {
+        this.onBeforeSearchOthers();
+        break;
+      }
+    }
+  }
+
+  private onBeforeSearchOthers() {
+    this.disabledSearch = false;
+
+    if (this.verifyNullTerm()) {
+      return;
+    }
+
     if (this.mediaService.media$.value === Media.Mobile) {
       this.closeToastPanel();
     }
-
     this.toolState.toolbox.activateTool('searchResults');
     this.openSidenav();
   }
 
   private onBeforeSearchClient() {
+
+    this.disabledSearch = false;
+
+    if (this.verifyNullTerm()) {
+      return;
+    }
+
     if (this.mediaService.media$.value === Media.Mobile) {
       this.closeExpansionPanel();
     } else {
       this.openExpansionPanel();
     }
 
-    this.toolState.toolbox.activateTool('client');
+    if (this.currentTerm.length >= 3) {
+      this.toolState.toolbox.activateTool('client');
+      this.openSidenav();
+    }
+  }
+
+  private onBeforeSearchCadastre() {
+    if (this.mediaService.media$.value === Media.Mobile) {
+      this.closeExpansionPanel();
+    } else {
+      this.openExpansionPanel();
+    }
+    this.disabledSearch = true;
+    this.toolState.toolbox.activateTool('cadastre');
     this.openSidenav();
   }
 
