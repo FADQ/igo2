@@ -3,7 +3,7 @@ import { ConfigService } from '@igo2/core';
 import { SearchSource } from '@igo2/geo';
 
 import { HttpClient } from '@angular/common/http';
-import { CadastreRenoSearchSource, CadastreRenoSearchResultFormatter } from './cadastre-reno.service';
+import { CadastreRenoSearchSource } from './cadastre-reno';
 
 /**
  * CadastreReno search source factory
@@ -11,13 +11,11 @@ import { CadastreRenoSearchSource, CadastreRenoSearchResultFormatter } from './c
  */
 export function cadastreRenoSearchSourceFactory(
   http: HttpClient,
-  config: ConfigService,
-  formatter: CadastreRenoSearchResultFormatter
+  config: ConfigService
 ) {
   return new CadastreRenoSearchSource(
     http,
-    config.getConfig(`searchSources.${CadastreRenoSearchSource.id}`),
-    formatter
+    config.getConfig(`searchSources.${CadastreRenoSearchSource.id}`)
   );
 }
 
@@ -29,6 +27,6 @@ export function provideCadastreRenoSearchSource() {
     provide: SearchSource,
     useFactory: cadastreRenoSearchSourceFactory,
     multi: true,
-    deps: [ConfigService]
+    deps: [HttpClient, ConfigService]
   };
 }
