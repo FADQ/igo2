@@ -135,7 +135,7 @@ export class CadastreState {
   /**
    *Enabled  the search button
    */
-  private _searchDisabled: boolean = false;
+  private _searchDisabled: boolean = true;
   get searchDisabled(): boolean { return this._searchDisabled; }
   set searchDisabled(value: boolean) { this._searchDisabled = value; }
 

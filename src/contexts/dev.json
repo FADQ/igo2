@@ -219,7 +219,7 @@
       "name": "cadastre",
       "options": {
         "layerOptions": {
-          "id": "cadastre",
+          "Id": "cadastre",
           "title": "Compilation cadastrale",
           "visible": false,
           "sourceOptions": {

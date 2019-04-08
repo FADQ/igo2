@@ -205,19 +205,8 @@ export class CadastreSearchToolComponent implements OnInit {
     // adjust the zoom depending of the Features
     this.adjustZoom();
 
-    if (this.layerId && this.layerOptions === undefined) {
-
-      const layerCadastreImage: Layer = this.cadastreState.mapState.map.getLayerById(this.layerId);
-      if (layerCadastreImage !== undefined) { layerCadastreImage.visible = true; }
-
-    } else if (this.layerOptions !== undefined) {
-
-      this.layerService.createAsyncLayer(this.layerOptions).subscribe((imageLayer: ImageLayer) => {
-        imageLayer.visible = true;
-        this.cadastreState.layerCadastreImage = imageLayer;
-        this.cadastreState.mapState.map.addLayer(imageLayer);
-      } );
-    }
+    // Show the Image layer of cadastre
+    this.showCadastreImageLayer(true);
   }
 
   /**
@@ -242,6 +231,11 @@ export class CadastreSearchToolComponent implements OnInit {
     if (this.concessionLayer !== undefined) { this.concessionLayer.dataSource.ol.clear(); }
     if (this.lotLayer !== undefined) { this.lotLayer.dataSource.ol.clear(); }
 
+    // Hide the Image layer of cadastre
+    this.showCadastreImageLayer(false);
+
+    // disable the search button
+    this.cadastreState.searchDisabled = true;
   }
 
   /**
@@ -290,6 +284,8 @@ export class CadastreSearchToolComponent implements OnInit {
       this.concessionStore.insertMany(concessionList);
 
     });
+
+    this.sortConcessions();
   }
 
   /**
@@ -307,6 +303,8 @@ export class CadastreSearchToolComponent implements OnInit {
       this.lotStore.insertMany(lotList);
 
     });
+
+    this.sortLots();
   }
 
   private sortMuns() {
@@ -435,6 +433,21 @@ export class CadastreSearchToolComponent implements OnInit {
     this.lotLayer.dataSource.ol.addFeatures(this.featureListToOl(lotList));
 
     // moveToFeatures(this.cadastreState.mapState.map, listLotFeature);
+  }
+
+  private showCadastreImageLayer(visibility: boolean ) {
+    if (this.layerId && this.layerOptions === undefined) {
+
+      const layerCadastreImage: Layer = this.cadastreState.mapState.map.getLayerById(this.layerId);
+      if (layerCadastreImage !== undefined) { layerCadastreImage.visible = visibility; }
+
+    } else if (this.layerOptions !== undefined) {
+      this.layerService.createAsyncLayer(this.layerOptions).subscribe((imageLayer: ImageLayer) => {
+        imageLayer.visible = visibility;
+        this.cadastreState.layerCadastreImage = imageLayer;
+        this.cadastreState.mapState.map.addLayer(imageLayer);
+      } );
+    }
   }
 
   /**
