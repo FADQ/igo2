@@ -1,8 +1,9 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { IgoMap } from '@igo2/geo';
+import { IgoMap, FeatureStore } from '@igo2/geo';
 import { MapState } from '@igo2/integration';
 
 import { ToolComponent } from '@igo2/common';
+import { Address } from 'src/lib/address';
 
 /**
  * Tool to edit addresses from Adresses Quebec.
@@ -19,6 +20,11 @@ import { ToolComponent } from '@igo2/common';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddressEditorToolComponent {
+  /**
+   * Store Address
+   * @internal
+   */
+  get store(): FeatureStore<Address> { return this.store; }
 
   /**
    * Map to edit on
