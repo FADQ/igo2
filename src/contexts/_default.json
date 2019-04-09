@@ -146,6 +146,7 @@
       }
     },
     {
+      "id": "cadastre",
       "title": "Compilation cadastrale",
       "visible": false,
       "sourceOptions": {
@@ -181,8 +182,7 @@
       }
     },
     {
-      "id": "cadastre",
-      "title": "Compilation cadastrale",
+      "title": "Stations météo foin (année courante)",
       "visible": false,
       "sourceOptions": {
         "type": "wms",
@@ -211,7 +211,8 @@
     "measurer",
     "print",
     "addressEditor",
-    "cadastre"
+    "cadastre",
+    "help"
   ],
   "tools": [
     {
@@ -356,6 +357,9 @@
       "options": {
         "layerId": "cadastre"
       }
+    },
+    {
+      "name": "help"
     }
   ]
 }
