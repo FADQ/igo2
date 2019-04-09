@@ -6,7 +6,7 @@ import { Cadastre, CadastreFeature } from '../cadastre/shared/cadastre.interface
 import { VectorLayer, FeatureStore, ImageLayer} from '@igo2/geo';
 import * as olstyle from 'ol/style';
 import { MapState } from '@igo2/integration';
-import { cratePolygonLayer, createMarkerLayer } from './cadastre.utils';
+import { createPolygonLayer, createMarkerLayer } from './cadastre.utils';
 import { Concession, ConcessionUnique, ConcessionFeature } from '../concession/shared/concession.interfaces';
 import { LotUnique, LotFeature } from '../lot/shared/lot.interfaces';
 
@@ -20,81 +20,54 @@ import { LotUnique, LotFeature } from '../lot/shared/lot.interfaces';
 export class CadastreState {
 
   /**
-   *Keep the current selected cadastre
-   *
-   */
-  get currentCadastre$(): BehaviorSubject<Cadastre> { return this._currentCadastre$; }
-  private _currentCadastre$ = new BehaviorSubject<Cadastre>(undefined);
-
-  /**
    *Keep the current selected Feature cadastre
-   *
    */
   get currentCadastreFeature$(): BehaviorSubject<CadastreFeature> { return this._currentCadastreFeature$; }
   private _currentCadastreFeature$ = new BehaviorSubject<CadastreFeature>(undefined);
 
   /**
-   *Keep the current selected concession
-   *
-   */
-  get currentConcession$(): BehaviorSubject<ConcessionUnique> { return this._currentConcession$; }
-  private _currentConcession$ = new BehaviorSubject<ConcessionUnique>(undefined);
-
-  /**
    *Keep the current selected Feature list concession
-   *
    */
   get currentConcessionFeatures$(): BehaviorSubject<ConcessionFeature[]> { return this._currentConcessionFeatures$; }
   private _currentConcessionFeatures$ = new BehaviorSubject<ConcessionFeature[]>(undefined);
 
-  /**
-   *Keep the current selected lot
-   *
-   */
-  get currentLot$(): BehaviorSubject<LotUnique> { return this._currentLot$; }
-  private _currentLot$ = new BehaviorSubject<LotUnique>(undefined);
 
   /**
    *Keep the current selected Feature list lot
-   *
    */
   get currentLotFeatures$(): BehaviorSubject<LotFeature[]> { return this._currentLotFeatures$; }
   private _currentLotFeatures$ = new BehaviorSubject<LotFeature[]>(undefined);
 
   /**
    * State of map
-   * @type MapState
+   * @return MapState
    */
   get mapState(): MapState { return this._mapState; }
 
   /**
    * Layer for the cadastre feature
-   *
-   * @type VectorLayer
+   * @return VectorLayer
    */
   get layerCadastre(): VectorLayer { return this._layerCadastre; }
   private _layerCadastre: VectorLayer;
 
     /**
    * Layer for the concession feature
-   *
-   * @type VectorLayer
+   * @return VectorLayer
    */
   get layerConcession(): VectorLayer { return this._layerConcession; }
   private _layerConcession: VectorLayer;
 
     /**
    * Layer for the lot feature
-   *
-   * @type VectorLayer
+   * @return VectorLayer
    */
   get layerLot(): VectorLayer { return this._layerLot; }
   private _layerLot: VectorLayer;
 
    /**
    * Image Layer for the cadastre
-   *
-   * @type VectorLayer
+   * @return VectorLayer
    */
   set layerCadastreImage(value: ImageLayer) {
     this._layerCadastreImage = value;
@@ -149,7 +122,6 @@ export class CadastreState {
 
   /**
    *Initialise a store of municipalities
-   *
    */
   initMun() {
     this._munStore = new EntityStore<Mun>([], {
@@ -159,7 +131,6 @@ export class CadastreState {
 
   /**
    *Initialise a store of cadastres
-   *
    */
   initCadastres() {
     this._cadastreStore = new EntityStore<Cadastre>([], {
@@ -169,7 +140,6 @@ export class CadastreState {
 
   /**
    *Initialise a store of concessions
-   *
    */
   initConcessions() {
     this._concessionStore = new EntityStore<ConcessionUnique>([], {
@@ -179,7 +149,6 @@ export class CadastreState {
 
   /**
    *Initialise a store of lots
-   *
    */
   initLots() {
     this._lotStore = new EntityStore<LotUnique>([], {
@@ -194,7 +163,7 @@ export class CadastreState {
   initCadastreLayer() {
 
     if (this._layerCadastre === undefined || this._layerCadastre === null) {
-      this._layerCadastre = cratePolygonLayer('rgba(255, 255, 255, 0.2)', '#6efc02', 4);
+      this._layerCadastre = createPolygonLayer('rgba(255, 255, 255, 0.2)', '#6efc02', 4);
       this._mapState.map.addLayer(this._layerCadastre, false );
     }
   }

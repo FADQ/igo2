@@ -33,7 +33,12 @@ export class CadastreSelectorComponent implements OnInit, OnDestroy {
    * The current municipality
    * @internal
    */
-  @Input() current$ = new BehaviorSubject<Cadastre>(undefined);
+  selected$ = new BehaviorSubject<Cadastre>(undefined);
+
+  /**
+   * Subscription to the selected entity
+   */
+  private selected$$: Subscription;
 
   /**
    *Form control used to autocomplete the list box of municipalities
@@ -79,6 +84,11 @@ export class CadastreSelectorComponent implements OnInit, OnDestroy {
    */
   ngOnInit() {
     this.controller = new EntityStoreController(this.store, this.cdRef);
+    this.selected$$ = this.store.stateView
+      .firstBy$((record: EntityRecord<Cadastre>) => record.state.selected === true)
+      .subscribe((record: EntityRecord<Cadastre>) => {
+        this.selected$.next(record ? record.entity : undefined);
+      });
   }
 
   /**
@@ -86,6 +96,7 @@ export class CadastreSelectorComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy() {
     this.controller.destroy();
+    this.selected$$.unsubscribe();
   }
 
   /**

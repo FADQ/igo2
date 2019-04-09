@@ -33,7 +33,12 @@ export class ConcessionSelectorComponent implements OnInit, OnDestroy {
    * The current concession
    * @internal
    */
-  @Input() current$ = new BehaviorSubject<Concession>(undefined);
+  selected$ = new BehaviorSubject<Concession>(undefined);
+
+  /**
+   * Subscription to the selected entity
+   */
+  private selected$$: Subscription;
 
   /**
    *Form control used to autocomplete the list box of concessions
@@ -73,6 +78,11 @@ export class ConcessionSelectorComponent implements OnInit, OnDestroy {
    */
   ngOnInit() {
     this.controller = new EntityStoreController(this.store, this.cdRef);
+    this.selected$$ = this.store.stateView
+      .firstBy$((record: EntityRecord<Concession>) => record.state.selected === true)
+      .subscribe((record: EntityRecord<Concession>) => {
+        this.selected$.next(record ? record.entity : undefined);
+      });
   }
 
   /**
@@ -80,6 +90,7 @@ export class ConcessionSelectorComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy() {
     this.controller.destroy();
+    this.selected$$.unsubscribe();
   }
 
   /**

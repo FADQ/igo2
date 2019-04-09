@@ -18,12 +18,6 @@ export interface Lot {
   noCadastre: string;
 }
 
-export interface LotName {
-  idLotOriginaire: string;
-  noLotOriginaire: string;
-  noCadastre: string;
-}
-
 /**
  * Lot interface for the service response
  */

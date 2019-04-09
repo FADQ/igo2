@@ -11,15 +11,16 @@ import * as olstyle from 'ol/style';
  * @param strokeWidth
  * @returns VectorLayer
  */
-export function cratePolygonLayer(fillColor: string, strokeColor: string, strokeWidth: number): VectorLayer {
+export function createPolygonLayer(fillColor: string, strokeColor: string, strokeWidth: number): VectorLayer {
 
-  const source: FeatureDataSource = new FeatureDataSource();
-  const layer: VectorLayer = new VectorLayer({
+  const source = new FeatureDataSource();
+  const layer = new VectorLayer({
     // id: 'Cadastre',
     // zIndex: 200,
     source,
     style: createPolygonLayerStyle(fillColor, strokeColor, strokeWidth)
   });
+  layer.options.showInLayerList = false;
   return layer;
 }
 
@@ -51,13 +52,12 @@ export function cratePolygonLayer(fillColor: string, strokeColor: string, stroke
  */
 export function createMarkerLayer(colorMarker: string): VectorLayer {
 
-  const source: FeatureDataSource = new FeatureDataSource();
-  const layer: VectorLayer = new VectorLayer({
-    // id: 'Cadastre',
-    // zIndex: 200,
+  const source = new FeatureDataSource();
+  const layer = new VectorLayer({
     source,
     style: createOverlayMarkerStyle(colorMarker)
   });
+  layer.options.showInLayerList = false;
   return layer;
 }
 

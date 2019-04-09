@@ -1,6 +1,4 @@
 
-import { Feature } from '@igo2/geo';
-
 /**
  * Api config municipality interface
  */

@@ -58,11 +58,11 @@ export class PortalComponent implements OnInit, OnDestroy {
   public expansionPanelExpanded = false;
   public sidenavOpened = false;
 
-  public disabledSearch: boolean = false;
+  public searchbarDisabled: boolean = false;
 
   private focusedSearchResult$$: Subscription;
-  private currentTerm: string;
-  private currentTypeSearch: string;
+  private currentSearchTerm: string;
+  private currentSearchType: string;
 
   get map(): IgoMap {
     return this.mapState.map;
@@ -200,13 +200,13 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   onSearchTermChange(term?: string) {
-    this.currentTerm = term;
+    this.currentSearchTerm = term;
     if (term.length < this.minSearchTermLength) { return; }
     this.onBeforeSearch();
   }
 
   onSearchTypeChange(type?: string) {
-    this.currentTypeSearch = type;
+    this.currentSearchType = type;
     this.onBeforeSearch();
   }
 
@@ -274,15 +274,15 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   private verifyNullTerm(): boolean {
-    if (this.currentTerm === undefined || this.currentTerm === '') {
-      this.onClearSearch();
+    if (this.currentSearchTerm === undefined || this.currentSearchTerm === '') {
       return true;
-    } else { return false;}
+    }
+    return false;
   }
 
   private onBeforeSearch() {
 
-    switch (this.currentTypeSearch) {
+    switch (this.currentSearchType) {
       case CLIENT: {
         this.onBeforeSearchClient();
         break;
@@ -299,9 +299,10 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   private onBeforeSearchOthers() {
-    this.disabledSearch = false;
+    this.searchbarDisabled = false;
 
     if (this.verifyNullTerm()) {
+      this.onClearSearch();
       return;
     }
 
@@ -314,9 +315,10 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   private onBeforeSearchClient() {
 
-    this.disabledSearch = false;
+    this.searchbarDisabled = false;
 
     if (this.verifyNullTerm()) {
+      this.onClearSearch();
       return;
     }
 
@@ -326,7 +328,7 @@ export class PortalComponent implements OnInit, OnDestroy {
       this.openExpansionPanel();
     }
 
-    if (this.currentTerm.length >= 3) {
+    if (this.currentSearchTerm.length >= 3) {
       this.toolState.toolbox.activateTool('client');
       this.openSidenav();
     }
@@ -338,7 +340,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     } else {
       this.openExpansionPanel();
     }
-    this.disabledSearch = true;
+    this.searchbarDisabled = true;
     this.toolState.toolbox.activateTool('cadastre');
     this.openSidenav();
   }

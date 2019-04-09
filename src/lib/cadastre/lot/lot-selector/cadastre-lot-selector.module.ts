@@ -6,7 +6,8 @@ import {
   MatFormFieldModule,
   MatInputModule,
   MatAutocompleteModule,
-  MatSelectModule} from '@angular/material';
+  MatSelectModule
+} from '@angular/material';
 
 import { IgoLanguageModule } from '@igo2/core';
 

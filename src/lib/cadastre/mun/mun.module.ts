@@ -5,7 +5,7 @@ import { MatSelectModule} from '@angular/material';
 
 import { IgoLanguageModule } from '@igo2/core';
 
-import {provideMunService} from 'src/lib/cadastre/mun/shared/mun.providers';
+import { provideMunService } from 'src/lib/cadastre/mun/shared/mun.providers';
 import { FadqMunSelectorModule } from './mun-selector/cadastre-mun-selector.module';
 
 @NgModule({
@@ -18,10 +18,10 @@ import { FadqMunSelectorModule } from './mun-selector/cadastre-mun-selector.modu
   declarations: [],
   exports: [FadqMunSelectorModule]
 })
-export class FadqMunModule {
+export class FadqCadastreMunModule {
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: FadqMunModule,
+      ngModule: FadqCadastreMunModule,
       providers: [
         provideMunService()
       ]

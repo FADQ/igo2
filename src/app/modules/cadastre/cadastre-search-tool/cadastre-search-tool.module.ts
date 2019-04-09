@@ -4,9 +4,9 @@ import {
   MatButtonToggleModule
 } from '@angular/material';
 import { IgoLanguageModule} from '@igo2/core';
-import { CadastreSearchToolComponent } from 'src/app/modules/cadastre/cadastre-search-tool/cadastre-search-tool.component';
-import { FadqMunModule } from 'src/lib/cadastre/mun/mun.module';
-import {FadqCadastreCadastreModule} from '../../../../lib/cadastre/cadastre/cadastre.cadastre.module';
+import { CadastreSearchToolComponent } from './cadastre-search-tool.component';
+import { FadqCadastreMunModule } from 'src/lib/cadastre/mun/mun.module';
+import { FadqCadastreCadastreModule } from 'src/lib/cadastre/cadastre/cadastre-cadastre.module';
 import { FadqCadastreConcessionModule } from 'src/lib/cadastre/concession/cadastre.concession.module';
 import { FadqCadastreLotModule } from 'src/lib/cadastre/lot/cadastre.lot.module';
 
@@ -15,7 +15,7 @@ import { FadqCadastreLotModule } from 'src/lib/cadastre/lot/cadastre.lot.module'
     MatButtonModule,
     MatButtonToggleModule,
     IgoLanguageModule,
-    FadqMunModule,
+    FadqCadastreMunModule,
     FadqCadastreCadastreModule,
     FadqCadastreConcessionModule,
     FadqCadastreLotModule],

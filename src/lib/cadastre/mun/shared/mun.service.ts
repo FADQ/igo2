@@ -9,7 +9,7 @@ import {
   MunResponseItem,
   MunApiConfig,
   MunListResponse,
-} from 'src/lib/cadastre/mun/shared/mun.interfaces';
+} from './mun.interfaces';
 
 @Injectable()
 export class CadastreMunService {

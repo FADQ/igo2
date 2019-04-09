@@ -20,7 +20,7 @@ import {
   EntityRecord
 } from '@igo2/common';
 
-import { Mun, MunResponseItem } from 'src/lib/cadastre/mun/shared/mun.interfaces';
+import { Mun, MunResponseItem } from '../shared/mun.interfaces';
 
 @Component({
   selector: 'fadq-cadastre-mun-selector',
@@ -136,8 +136,6 @@ export class MunSelectorComponent implements OnInit, OnDestroy {
 
   private filterMunByName(name: string): MunResponseItem[] {
     const filterValue = name.toLowerCase();
-
-    if (this.store === null || this.store === undefined) { return; }
 
     return this.store.all().filter(mun => {
       return mun.nomMunicipalite.toLowerCase().indexOf(filterValue) === 0;

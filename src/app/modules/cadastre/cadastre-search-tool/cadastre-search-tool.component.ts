@@ -83,24 +83,6 @@ export class CadastreSearchToolComponent implements OnInit {
     return this.cadastreState.lotStore;
   }
 
-  /**
-   * Keep the current selected cadastre
-   * @internal
-   */
-  get currentCadastre$(): BehaviorSubject<Cadastre> { return this.cadastreState.currentCadastre$; }
-
-   /**
-   * Keep the current selected concession
-   * @internal
-   */
-  get currentConcession$(): BehaviorSubject<ConcessionUnique> { return this.cadastreState.currentConcession$; }
-
-  /**
-   * Keep the current selected lot
-   * @internal
-   */
-  get currentLot$(): BehaviorSubject<LotUnique> { return this.cadastreState.currentLot$; }
-
   constructor(
     private cadastreState: CadastreState,
     private munService: CadastreMunService,
@@ -132,15 +114,12 @@ export class CadastreSearchToolComponent implements OnInit {
       // keep the current Features selected list
       this.cadastreState.currentCadastreFeature$.next(cadastreList);
     });
-    // keep the current cadastre selected
-    this.cadastreState.currentCadastre$.next(cadastre);
 
     // load the concessions related to the selected cadastre
     // this.reloadConcessions(cadastre.noCadastre);
     this.loadConcessions(cadastre.idCadastreOriginaire);
 
     // reload the lots related to the selected cadastre
-    // this.reloadLots(cadastre.noCadastre);
     this.loadLots(cadastre.idCadastreOriginaire);
 
     // enabled the search button
@@ -162,7 +141,6 @@ export class CadastreSearchToolComponent implements OnInit {
       this.cadastreState.currentConcessionFeatures$.next(concessionList);
 
     });
-    this.cadastreState.currentConcession$.next(concession);
   }
 
   /**
@@ -180,7 +158,6 @@ export class CadastreSearchToolComponent implements OnInit {
       this.cadastreState.currentLotFeatures$.next(lotList);
 
     });
-    this.cadastreState.currentLot$.next(lot);
   }
 
    /**

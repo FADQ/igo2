@@ -16,7 +16,7 @@ import {
   Lot,
   LotFeatureResponseItem,
   LotFeatureListResponse
-} from 'src/lib/cadastre/lot/shared/lot.interfaces';
+} from './lot.interfaces';
 
 @Injectable()
 export class CadastreLotService {
@@ -47,10 +47,10 @@ export class CadastreLotService {
   private convertResponseToListLotUnique(response: LotListResponse): LotUniqueList {
 
     const lotUniqueList: LotUniqueList = [];
-    response.data.map((item: LotResponseItem) => {
+    response.data.forEach((item: LotResponseItem) => {
 
-      if (lotUniqueList.find(
-        x => x.idLot === item.noCadastre + ' - ' + item.noLotOriginaire ) === undefined) {
+      const idLotItem = item.noCadastre + ' - ' + item.noLotOriginaire;
+      if (lotUniqueList.find(x => x.idLot === idLotItem ) === undefined) {
         lotUniqueList.push({
           idLot: item.noCadastre + ' - ' + item.noLotOriginaire,
           noLot: item.noLotOriginaire,
