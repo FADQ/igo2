@@ -6,7 +6,10 @@ import { FeatureStore,
   FeatureStoreSelectionStrategy,
   FeatureDataSource,
   VectorLayer,
-  IgoMap
+  IgoMap,
+  Layer,
+  LayerService,
+  LayerOptions
  } from '@igo2/geo';
 import { Address } from '../shared/address.interface';
 
@@ -21,7 +24,7 @@ import { Address } from '../shared/address.interface';
 })
 export class AddressEditorComponent implements OnInit, OnDestroy {
 
-  selectedAddress$: BehaviorSubject<Address> = new BehaviorSubject(undefined);
+  selectedAddress$: BehaviorSubject<Address> = new BehaviorSubject<Address>(undefined);
 
   private selectedAddress$$: Subscription;
 
@@ -33,14 +36,38 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
   /**
    * The store
    */
-  @Input() store: FeatureStore;
+  @Input() store: FeatureStore<Address>;
 
-  @Input() inEdition: boolean;
+  @Input() layerIdBuildings: string;
+  @Input() layerIdBuildingsCorrected: string;
+  @Input() layerOptions: LayerOptions[];
+
+  inEdition: boolean;
+
+  disabled: boolean = false;
+
+  constructor(private layerService: LayerService) {}
+
+  /**
+   * Add draw controls and activate one
+   * @internal
+   */
+  ngOnInit() {
+    this.initStore();
+  }
+   /**
+   * Toggle the clear buildingNumber and suffix
+   * @internal
+   */
+  ngOnDestroy() {
+    this.selectedAddress$$.unsubscribe();
+  }
 
   handleFormEdit(isClick: boolean) {
     // this.submitted = true;
     if (isClick) {
       this.inEdition = true;
+      this.initEdition();
     }    else {
       this.inEdition = false;
     }
@@ -62,23 +89,6 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  constructor() {}
-
-  /**
-   * Add draw controls and activate one
-   * @internal
-   */
-  ngOnInit() {
-    this.initStore();
-  }
-   /**
-   * Toggle the clear buildingNumber and suffix
-   * @internal
-   */
-  ngOnDestroy() {
-    this.selectedAddress$$.unsubscribe();
-  }
-
   /**
    * Initialize the measure store and set up some listeners
    * @internal
@@ -91,6 +101,7 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
         zIndex: 200,
         source: new FeatureDataSource()
       });
+      layer.options.showInLayerList = false;
       store.bindLayer(layer);
     }
 
@@ -99,7 +110,7 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
     }
 
     if (store.getStrategyOfType(FeatureStoreLoadingStrategy) === undefined) {
-      store.addStrategy(new FeatureStoreLoadingStrategy());
+      store.addStrategy(new FeatureStoreLoadingStrategy({}));
     }
     store.activateStrategyOfType(FeatureStoreLoadingStrategy);
 
@@ -116,5 +127,40 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
       const address = record === undefined ? undefined : record.entity;
       this.selectedAddress$.next(address);
     });
+  }
+
+  private initEdition() {
+    this.map.viewController.zoomTo(14);
+    this.showLayers();
+  }
+
+  private showLayers() {
+    this.showLayer('buildings');
+    this.showLayer('buildingsCorrected');
+    this.showLayer('municipality');
+    this.showLayer('renovatedCadastre');
+  }
+
+  private showLayer(layerId: string) {
+    if (layerId) {
+      console.log('TEST: ', layerId);
+      const layer: Layer = this.map.getLayerById(layerId);
+      if (layer !== undefined) { layer.visible = true; }
+
+    } else if (this.layerOptions !== undefined) {
+      console.log('layerOptions: ', layerId);
+      this.layerService.createAsyncLayer(this.getLayer(layerId)).subscribe((layer: Layer) => {
+        layer.visible = true;
+        // this.cadastreState.layerCadastreImage = layer;
+        this.map.addLayer(layer);
+      } );
+    }
+  }
+
+  private getLayer(layerId: string): LayerOptions {
+    this.layerOptions.forEach((layerOption: LayerOptions) => {
+      if (layerOption.id = layerId) { return layerOption; }
+    });
+    return undefined;
   }
 }

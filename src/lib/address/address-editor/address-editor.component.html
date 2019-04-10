@@ -4,8 +4,8 @@
             <input
             matInput
             [readonly]="true"
-            placeholder="{{'addressEditor.buildingNumber.placeholder' | translate}}"
-            [value]="((selectedAddress$ | async).buildingNumber || '')">
+            [placeholder]="'addressEditor.buildingNumber.placeholder' | translate"
+            [value]="selectedAddress$ | async">
         </mat-form-field>
     </div>
     <div>
@@ -13,8 +13,8 @@
             <input
             matInput
             [readonly]="true"
-            placeholder="{{'addressEditor.suffix.placeholder' | translate}}"
-            [value]="((selectedAddress$ | async).suffix || '')">
+            [placeholder]="'addressEditor.suffix.placeholder' | translate"
+            [value]="selectedAddress$ | async">
         </mat-form-field>
     </div>
     <div class="igo-form-button-group">
