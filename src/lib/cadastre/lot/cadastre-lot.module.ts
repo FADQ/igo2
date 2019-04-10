@@ -5,8 +5,8 @@ import { MatSelectModule} from '@angular/material';
 
 import { IgoLanguageModule } from '@igo2/core';
 
-import {provideConcessionService} from 'src/lib/cadastre/concession/shared/concession.providers';
-import { FadqConcessionSelectorModule } from './concession-selector/cadastre-concession-selector.module';
+import { provideLotService } from './shared/lot.providers';
+import { FadqLotSelectorModule } from './lot-selector/cadastre-lot-selector.module';
 
 @NgModule({
   imports: [
@@ -16,14 +16,14 @@ import { FadqConcessionSelectorModule } from './concession-selector/cadastre-con
     IgoLanguageModule
   ],
   declarations: [],
-  exports: [FadqConcessionSelectorModule]
+  exports: [FadqLotSelectorModule]
 })
-export class FadqCadastreConcessionModule {
+export class FadqLibCadastreLotModule {
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: FadqCadastreConcessionModule,
+      ngModule: FadqLibCadastreLotModule,
       providers: [
-        provideConcessionService()
+        provideLotService()
       ]
     };
   }

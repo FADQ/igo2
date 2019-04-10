@@ -5,7 +5,7 @@ import { MatSelectModule} from '@angular/material';
 
 import { IgoLanguageModule } from '@igo2/core';
 
-import {provideCadastreService} from 'src/lib/cadastre/cadastre/shared/cadastre.providers';
+import { provideCadastreService } from './shared/cadastre.providers';
 import { FadqCadastreSelectorModule } from './cadastre-selector/cadastre-cadastre-selector.module';
 
 @NgModule({
@@ -18,10 +18,10 @@ import { FadqCadastreSelectorModule } from './cadastre-selector/cadastre-cadastr
   declarations: [],
   exports: [FadqCadastreSelectorModule]
 })
-export class FadqCadastreCadastreModule {
+export class FadqLibCadastreCadastreModule {
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: FadqCadastreCadastreModule,
+      ngModule: FadqLibCadastreCadastreModule,
       providers: [
         provideCadastreService()
       ]

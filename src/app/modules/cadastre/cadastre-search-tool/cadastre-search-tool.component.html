@@ -1,5 +1,5 @@
 
-<div>
+<div class="fadq-cadastre-selectors">
   <fadq-cadastre-mun-selector
     [store]="munStore" (selectedMunChange)="onSelectionMunChange($event)">
   </fadq-cadastre-mun-selector>
@@ -17,21 +17,18 @@
     (selectedLotChange)="onSelectionLotChange($event)">
   </fadq-cadastre-lot-selector>
 </div>
-<div>
-  <div class="igo-form-buttons">
-    <button
-      mat-raised-button
-      (click)="onSearchCancelClick()">
-      {{ 'cadastre.cancel_search' | translate }}
-    </button>
-    <button
-      mat-raised-button
-      color="primary"
-      [disabled]="searchDisabled"
-      type="button"
-      (click)="onSearchClick()">
-      {{ 'cadastre.search' | translate }}
-    </button>
-  </div>
+<div class="igo-form-buttons">
+  <button
+    mat-raised-button
+    (click)="onSearchCancelClick()">
+    {{ 'cadastre.cancel_search' | translate }}
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    [disabled]="searchDisabled"
+    type="button"
+    (click)="onSearchClick()">
+    {{ 'cadastre.search' | translate }}
+  </button>
 </div>
-

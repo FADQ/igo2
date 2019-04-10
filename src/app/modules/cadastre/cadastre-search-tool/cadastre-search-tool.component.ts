@@ -1,17 +1,33 @@
 import { Component, ChangeDetectionStrategy, OnInit, Input } from '@angular/core';
-import { ToolComponent, EntityStore } from '@igo2/common';
-import { CadastreState } from '../../../../lib/cadastre/shared/cadastre.state';
-import { Mun } from 'src/lib/cadastre/mun/shared/mun.interfaces';
-import { CadastreMunService } from 'src/lib/cadastre/mun/shared/mun.service';
-import { Cadastre, CadastreFeature, CadastreList } from 'src/lib/cadastre/cadastre/shared/cadastre.interfaces';
-import { CadastreCadastreService } from 'src/lib/cadastre/cadastre/shared/cadastre.service';
-import { BehaviorSubject } from 'rxjs';
-import { VectorLayer, featureToOl, Feature, moveToFeatures, Layer, ImageLayer, ImageLayerOptions, LayerService, FeatureMotion } from '@igo2/geo';
-import { ConcessionFeature, ConcessionUnique } from 'src/lib/cadastre/concession/shared/concession.interfaces';
-import { CadastreConcessionService } from 'src/lib/cadastre/concession/shared/concession.service';
-import { LotUnique, LotFeature } from 'src/lib/cadastre/lot/shared/lot.interfaces';
-import { CadastreLotService } from 'src/lib/cadastre/lot/shared/lot.service';
 
+import { ToolComponent, EntityStore } from '@igo2/common';
+import {
+  VectorLayer,
+  featureToOl,
+  Feature,
+  moveToFeatures,
+  Layer,
+  ImageLayer,
+  ImageLayerOptions,
+  LayerService
+} from '@igo2/geo';
+import { MapState } from '@igo2/integration';
+
+import { Mun, CadastreMunService } from 'src/lib/cadastre/mun';
+import {
+  Cadastre,
+  CadastreFeature,
+  CadastreList,
+  CadastreCadastreService
+} from 'src/lib/cadastre/cadastre';
+import {
+  ConcessionFeature,
+  ConcessionUnique,
+  CadastreConcessionService
+} from 'src/lib/cadastre/concession';
+import { LotUnique, LotFeature, CadastreLotService } from 'src/lib/cadastre/lot';
+
+import { CadastreState } from '../cadastre.state';
 
 @ToolComponent({
   name: 'cadastre',
@@ -21,6 +37,7 @@ import { CadastreLotService } from 'src/lib/cadastre/lot/shared/lot.service';
 @Component({
   selector: 'fadq-cadastre-search-tool',
   templateUrl: './cadastre-search-tool.component.html',
+  styleUrls: ['./cadastre-search-tool.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CadastreSearchToolComponent implements OnInit {
@@ -84,13 +101,14 @@ export class CadastreSearchToolComponent implements OnInit {
   }
 
   constructor(
+    private mapState: MapState,
     private cadastreState: CadastreState,
     private munService: CadastreMunService,
     private cadastreService: CadastreCadastreService,
     private concessionService: CadastreConcessionService,
     private lotService: CadastreLotService,
     private layerService: LayerService
-     ) { }
+  ) { }
 
   ngOnInit() {
     this.loadMuns();
@@ -108,7 +126,7 @@ export class CadastreSearchToolComponent implements OnInit {
     this.cadastreService.getCadastreFeatureByNum(cadastre.idCadastreOriginaire)
     .subscribe((cadastreList: CadastreFeature) => {
 
-      // intialise the cadastre layer
+      // intialize the cadastre layer
       this.cadastreState.initCadastreLayer();
       this.cadastreLayer = this.cadastreState.layerCadastre;
       // keep the current Features selected list
@@ -135,11 +153,9 @@ export class CadastreSearchToolComponent implements OnInit {
 
     this.concessionService.getConcessionFeatureByNum(concession.listeIdConcession)
     .subscribe((concessionList: ConcessionFeature[]) => {
-
       this.cadastreState.initConcessionLayer();
       this.concessionLayer = this.cadastreState.layerConcession;
       this.cadastreState.currentConcessionFeatures$.next(concessionList);
-
     });
   }
 
@@ -152,15 +168,13 @@ export class CadastreSearchToolComponent implements OnInit {
 
     this.lotService.getLotFeatureByNum(lot.listeIdLot)
     .subscribe((lotList: LotFeature[]) => {
-
       this.cadastreState.initLotLayer();
       this.lotLayer = this.cadastreState.layerLot;
       this.cadastreState.currentLotFeatures$.next(lotList);
-
     });
   }
 
-   /**
+  /**
    * Reaction on a search click
    *
    * @param {{mun: Mun}} event
@@ -187,7 +201,7 @@ export class CadastreSearchToolComponent implements OnInit {
   }
 
   /**
-   *Reaction on a cancel search click
+   * Reaction on a cancel search click
    *
    */
   onSearchCancelClick() {
@@ -216,18 +230,15 @@ export class CadastreSearchToolComponent implements OnInit {
   }
 
   /**
-   *Load the list of municipalities
+   * Load the list of municipalities
    *
    */
   private loadMuns() {
-
     if (!this.munStore.empty) { return; }
 
     this.munService.getMuns()
     .subscribe((munList: Mun[]) => {
-
       this.munStore.load(munList);
-
     });
   }
 
@@ -237,29 +248,25 @@ export class CadastreSearchToolComponent implements OnInit {
    * @param string codeGeographique
    */
   private loadCadastres(codeGeographique: string) {
-
     if (!this.cadastreStore.empty) { this.cadastreStore.clear(); }
 
     this.cadastreService.getCadastres(codeGeographique)
     .subscribe((cadastreList: CadastreList) => {
-
       this.cadastreStore.load(cadastreList);
     });
   }
 
   /**
-   *Load the of concession related to a cadastre
+   * Load the of concession related to a cadastre
    *
    * @param string codeGeographique
    */
   private loadConcessions(idCadastreOriginaire: number) {
-
     if (!this.concessionStore.empty) { this.concessionStore.clear(); }
 
     this.concessionService.getConcessions(idCadastreOriginaire)
     .subscribe((concessionList: ConcessionUnique[]) => {
       this.concessionStore.insertMany(concessionList);
-
     });
 
     this.sortConcessions();
@@ -271,14 +278,11 @@ export class CadastreSearchToolComponent implements OnInit {
    * @param string codeGeographique
    */
   private loadLots(idCadastreOriginaire: number) {
-
     if (!this.lotStore.empty) { this.lotStore.clear(); }
 
     this.lotService.getLots(idCadastreOriginaire)
     .subscribe((lotList: LotUnique[]) => {
-
       this.lotStore.insertMany(lotList);
-
     });
 
     this.sortLots();
@@ -367,34 +371,28 @@ export class CadastreSearchToolComponent implements OnInit {
   }
 
 
-    /**
+  /**
    * Show the selected cadastre on the map
    * @param CadastreFeature cadastre
    */
   private showUnCadastre(cadastre: CadastreFeature) {
-
     if (this.cadastreLayer === undefined || this.cadastreLayer.dataSource === undefined) { return; }
 
     this.cadastreLayer.dataSource.ol.clear();
 
     this.cadastreLayer.dataSource.ol.addFeatures(this.featureListToOl([cadastre]));
-    // moveToFeatures(this.cadastreState.mapState.map, [feature]);
-
   }
 
-   /**
+  /**
    * Show the selected cadastre on the map
    * @param CadastreFeature cadastre
    */
   private showConcessions(concessionList: ConcessionFeature[]) {
-
     if (this.concessionLayer === undefined || this.concessionLayer.dataSource === undefined) { return; }
 
     this.concessionLayer.dataSource.ol.clear();
 
     this.concessionLayer.dataSource.ol.addFeatures(this.featureListToOl(concessionList));
-
-    // moveToFeatures(this.cadastreState.mapState.map, listConcessionFeature, FeatureMotion.Default);
   }
 
   /**
@@ -402,34 +400,30 @@ export class CadastreSearchToolComponent implements OnInit {
    * @param CadastreFeature cadastre
    */
   private showLots(lotList: LotFeature[]) {
-
     if (this.lotLayer === undefined || this.lotLayer.dataSource === undefined) { return; }
 
     this.lotLayer.dataSource.ol.clear();
 
     this.lotLayer.dataSource.ol.addFeatures(this.featureListToOl(lotList));
-
-    // moveToFeatures(this.cadastreState.mapState.map, listLotFeature);
   }
 
   private showCadastreImageLayer(visibility: boolean ) {
     if (this.layerId && this.layerOptions === undefined) {
 
-      const layerCadastreImage: Layer = this.cadastreState.mapState.map.getLayerById(this.layerId);
+      const layerCadastreImage: Layer = this.mapState.map.getLayerById(this.layerId);
       if (layerCadastreImage !== undefined) { layerCadastreImage.visible = visibility; }
 
     } else if (this.layerOptions !== undefined) {
       this.layerService.createAsyncLayer(this.layerOptions).subscribe((imageLayer: ImageLayer) => {
         imageLayer.visible = visibility;
         this.cadastreState.layerCadastreImage = imageLayer;
-        this.cadastreState.mapState.map.addLayer(imageLayer);
+        this.mapState.map.addLayer(imageLayer);
       } );
     }
   }
 
   /**
-   *Adjust the zoom upon the selected features
-   *
+   * Adjust the zoom upon the selected features
    */
   private adjustZoom() {
     /*
@@ -438,37 +432,34 @@ export class CadastreSearchToolComponent implements OnInit {
     else if a concession is selected, zoom on it
     else if a lot is selected, zoom on it.
     */
-    if (this.cadastreState.currentCadastreFeature$.value !== undefined) {
-      moveToFeatures(this.cadastreState.mapState.map,
-         this.featureListToOl([this.cadastreState.currentCadastreFeature$.value]));
-    } else if (this.cadastreState.currentConcessionFeatures$.value !== undefined &&
-       this.cadastreState.currentLotFeatures$.value !== undefined) {
-        moveToFeatures(this.cadastreState.mapState.map,
-        this.featureListToOl(this.cadastreState.currentConcessionFeatures$.value)
-        .concat(this.featureListToOl(this.cadastreState.currentLotFeatures$.value)));
-    } else if (this.cadastreState.currentConcessionFeatures$.value !== undefined) {
-      moveToFeatures(this.cadastreState.mapState.map,
-        this.featureListToOl(this.cadastreState.currentConcessionFeatures$.value));
-    } else if (this.cadastreState.currentLotFeatures$.value !== undefined) {
-      moveToFeatures(this.cadastreState.mapState.map,
-        this.featureListToOl(this.cadastreState.currentLotFeatures$.value));
+   const cadastre = this.cadastreState.currentCadastreFeature$.value;
+   const concessions = this.cadastreState.currentConcessionFeatures$.value;
+   const lots = this.cadastreState.currentConcessionFeatures$.value;
+
+   let features;
+    if (cadastre !== undefined) {
+      features =  this.featureListToOl([cadastre]);
+    } else if (concessions !== undefined && lots !== undefined) {
+      features = this.featureListToOl(concessions).concat(this.featureListToOl(lots));
+    } else if (concessions !== undefined) {
+      features = this.featureListToOl(concessions);
+    } else if (lots !== undefined) {
+      features = this.featureListToOl(lots);
+    }
+
+    if (features !== undefined) {
+      moveToFeatures(this.mapState.map, features);
     }
   }
 
   /**
-   *Convert a Feature list to an Ol list
+   * Convert a Feature list to an Ol list
    * @param Feature[] featureList
    * @returns List of Ol Feature
    */
   private featureListToOl(featureList: Feature[]) {
-    const listFeatureOl: Feature[] = [];
-
-    featureList.map((feature: Feature) => {
-      // Feature conversion to OL Feature
-      const featureOl = featureToOl(feature, this.cadastreState.mapState.map.projection);
-      listFeatureOl.push(featureOl);
-
+    return featureList.map((feature: Feature) => {
+      return featureToOl(feature, this.mapState.map.projection);
     });
-    return listFeatureOl;
   }
 }

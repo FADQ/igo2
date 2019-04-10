@@ -1,15 +1,16 @@
-import { Injectable, Input } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { EntityStore } from '@igo2/common';
-import { Mun } from 'src/lib/cadastre/mun/shared/mun.interfaces';
-import { Cadastre, CadastreFeature } from '../cadastre/shared/cadastre.interfaces';
-import { VectorLayer, FeatureStore, ImageLayer} from '@igo2/geo';
-import * as olstyle from 'ol/style';
-import { MapState } from '@igo2/integration';
-import { createPolygonLayer, createMarkerLayer } from './cadastre.utils';
-import { Concession, ConcessionUnique, ConcessionFeature } from '../concession/shared/concession.interfaces';
-import { LotUnique, LotFeature } from '../lot/shared/lot.interfaces';
+import { Injectable } from '@angular/core';
 
+import { BehaviorSubject } from 'rxjs';
+
+import { EntityStore } from '@igo2/common';
+import { VectorLayer, ImageLayer} from '@igo2/geo';
+import { MapState } from '@igo2/integration';
+
+import { createPolygonLayer, createMarkerLayer } from 'src/lib/cadastre';
+import { Mun } from 'src/lib/cadastre/mun';
+import { Cadastre, CadastreFeature } from 'src/lib/cadastre/cadastre';
+import { ConcessionUnique, ConcessionFeature } from 'src/lib/cadastre/concession';
+import { LotUnique, LotFeature } from 'src/lib/cadastre/lot';
 
 /**
  * Service that holds the state of the edition module
@@ -20,29 +21,23 @@ import { LotUnique, LotFeature } from '../lot/shared/lot.interfaces';
 export class CadastreState {
 
   /**
-   *Keep the current selected Feature cadastre
+   * Keep the current selected Feature cadastre
    */
   get currentCadastreFeature$(): BehaviorSubject<CadastreFeature> { return this._currentCadastreFeature$; }
   private _currentCadastreFeature$ = new BehaviorSubject<CadastreFeature>(undefined);
 
   /**
-   *Keep the current selected Feature list concession
+   * Keep the current selected Feature list concession
    */
   get currentConcessionFeatures$(): BehaviorSubject<ConcessionFeature[]> { return this._currentConcessionFeatures$; }
   private _currentConcessionFeatures$ = new BehaviorSubject<ConcessionFeature[]>(undefined);
 
 
   /**
-   *Keep the current selected Feature list lot
+   * Keep the current selected Feature list lot
    */
   get currentLotFeatures$(): BehaviorSubject<LotFeature[]> { return this._currentLotFeatures$; }
   private _currentLotFeatures$ = new BehaviorSubject<LotFeature[]>(undefined);
-
-  /**
-   * State of map
-   * @return MapState
-   */
-  get mapState(): MapState { return this._mapState; }
 
   /**
    * Layer for the cadastre feature
@@ -51,21 +46,21 @@ export class CadastreState {
   get layerCadastre(): VectorLayer { return this._layerCadastre; }
   private _layerCadastre: VectorLayer;
 
-    /**
+  /**
    * Layer for the concession feature
    * @return VectorLayer
    */
   get layerConcession(): VectorLayer { return this._layerConcession; }
   private _layerConcession: VectorLayer;
 
-    /**
+  /**
    * Layer for the lot feature
    * @return VectorLayer
    */
   get layerLot(): VectorLayer { return this._layerLot; }
   private _layerLot: VectorLayer;
 
-   /**
+  /**
    * Image Layer for the cadastre
    * @return VectorLayer
    */
@@ -106,14 +101,13 @@ export class CadastreState {
   private _lotStore: EntityStore<LotUnique>;
 
   /**
-   *Enabled  the search button
+   * Enabled  the search button
    */
   private _searchDisabled: boolean = true;
   get searchDisabled(): boolean { return this._searchDisabled; }
   set searchDisabled(value: boolean) { this._searchDisabled = value; }
 
-
-  constructor(private _mapState: MapState) {
+  constructor(private mapState: MapState) {
     this.initMun();
     this.initCadastres();
     this.initConcessions();
@@ -121,7 +115,7 @@ export class CadastreState {
   }
 
   /**
-   *Initialise a store of municipalities
+   * Initialize a store of municipalities
    */
   initMun() {
     this._munStore = new EntityStore<Mun>([], {
@@ -130,7 +124,7 @@ export class CadastreState {
   }
 
   /**
-   *Initialise a store of cadastres
+   *Initialize a store of cadastres
    */
   initCadastres() {
     this._cadastreStore = new EntityStore<Cadastre>([], {
@@ -139,7 +133,7 @@ export class CadastreState {
   }
 
   /**
-   *Initialise a store of concessions
+   *Initialize a store of concessions
    */
   initConcessions() {
     this._concessionStore = new EntityStore<ConcessionUnique>([], {
@@ -148,7 +142,7 @@ export class CadastreState {
   }
 
   /**
-   *Initialise a store of lots
+   *Initialize a store of lots
    */
   initLots() {
     this._lotStore = new EntityStore<LotUnique>([], {
@@ -156,27 +150,25 @@ export class CadastreState {
     });
   }
 
-    /**
+  /**
    * Show the selected cadastre on the map
    * @param CadastreFeature cadastre
    */
   initCadastreLayer() {
-
     if (this._layerCadastre === undefined || this._layerCadastre === null) {
       this._layerCadastre = createPolygonLayer('rgba(255, 255, 255, 0.2)', '#6efc02', 4);
-      this._mapState.map.addLayer(this._layerCadastre, false );
+      this.mapState.map.addLayer(this._layerCadastre, false );
     }
   }
 
-   /**
+  /**
    * Show the selected cadastre on the map
    * @param CadastreFeature cadastre
    */
   initConcessionLayer() {
-
     if (this._layerConcession === undefined || this._layerConcession === null) {
       this._layerConcession = createMarkerLayer('yellow');
-      this._mapState.map.addLayer(this._layerConcession, false );
+      this.mapState.map.addLayer(this._layerConcession, false );
     }
   }
 
@@ -185,10 +177,9 @@ export class CadastreState {
    * @param CadastreFeature cadastre
    */
   initLotLayer() {
-
     if (this._layerLot === undefined || this._layerLot === null) {
       this._layerLot = createMarkerLayer('blue');
-      this._mapState.map.addLayer(this._layerLot, false );
+      this.mapState.map.addLayer(this._layerLot, false );
     }
   }
 }

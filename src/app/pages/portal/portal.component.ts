@@ -62,7 +62,7 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   private focusedSearchResult$$: Subscription;
   private currentSearchTerm: string;
-  private currentSearchType: string;
+  private currentSearchType: string = CLIENT;
 
   get map(): IgoMap {
     return this.mapState.map;
@@ -281,7 +281,6 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   private onBeforeSearch() {
-
     switch (this.currentSearchType) {
       case CLIENT: {
         this.onBeforeSearchClient();
@@ -355,10 +354,13 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   private onSearchMap(results: SearchResult<Feature>[]) {
-    if (results.length > 0) {
-      this.onBeforeSearch();
-      this.searchStore.state.update(results[0], {selected: true}, true);
+    if (results.length === 0) { return; }
+    if (this.mediaService.media$.value === Media.Mobile) {
+      this.closeToastPanel();
     }
+    this.toolState.toolbox.activateTool('searchResults');
+    this.openSidenav();
+    this.searchStore.state.update(results[0], {selected: true}, true);
   }
 
   private onFocusSearchResult(result: SearchResult) {

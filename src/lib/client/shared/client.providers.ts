@@ -9,14 +9,12 @@ import { ClientService } from './client.service';
 export function clientServiceFactory(
   clientInfoService: ClientInfoService,
   clientParcelService: ClientParcelService,
-  clientSchemaService: ClientSchemaService,
-  configService: ConfigService
+  clientSchemaService: ClientSchemaService
 ) {
   return new ClientService(
     clientInfoService,
     clientParcelService,
-    clientSchemaService,
-    configService
+    clientSchemaService
   );
 }
 

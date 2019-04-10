@@ -5,8 +5,8 @@ import { MatSelectModule} from '@angular/material';
 
 import { IgoLanguageModule } from '@igo2/core';
 
-import { provideMunService } from 'src/lib/cadastre/mun/shared/mun.providers';
-import { FadqMunSelectorModule } from './mun-selector/cadastre-mun-selector.module';
+import { provideConcessionService } from './shared/concession.providers';
+import { FadqConcessionSelectorModule } from './concession-selector/cadastre-concession-selector.module';
 
 @NgModule({
   imports: [
@@ -16,14 +16,14 @@ import { FadqMunSelectorModule } from './mun-selector/cadastre-mun-selector.modu
     IgoLanguageModule
   ],
   declarations: [],
-  exports: [FadqMunSelectorModule]
+  exports: [FadqConcessionSelectorModule]
 })
-export class FadqCadastreMunModule {
+export class FadqLibCadastreConcessionModule {
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: FadqCadastreMunModule,
+      ngModule: FadqLibCadastreConcessionModule,
       providers: [
-        provideMunService()
+        provideConcessionService()
       ]
     };
   }

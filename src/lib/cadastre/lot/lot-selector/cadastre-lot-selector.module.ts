@@ -28,4 +28,4 @@ import { LotSelectorComponent } from './cadastre-lot-selector.component';
   declarations: [LotSelectorComponent],
   exports: [LotSelectorComponent]
 })
-export class FadqLotSelectorModule { }
+export class FadqLotSelectorModule {}

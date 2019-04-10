@@ -1,4 +1,4 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -8,7 +8,6 @@ import {
   MatAutocompleteModule,
   MatSelectModule
 } from '@angular/material';
-
 
 import { IgoLanguageModule } from '@igo2/core';
 
@@ -29,4 +28,4 @@ import { MunSelectorComponent } from './cadastre-mun-selector.component';
   declarations: [MunSelectorComponent],
   exports: [MunSelectorComponent]
 })
-export class FadqMunSelectorModule { }
+export class FadqMunSelectorModule {}

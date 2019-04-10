@@ -27,4 +27,4 @@ import { ConcessionSelectorComponent } from './cadastre-concession-selector.comp
   declarations: [ConcessionSelectorComponent],
   exports: [ConcessionSelectorComponent]
 })
-export class FadqConcessionSelectorModule { }
+export class FadqConcessionSelectorModule {}

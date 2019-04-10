@@ -3,7 +3,7 @@ import { FeatureDataSource, VectorLayer, createOverlayMarkerStyle } from '@igo2/
 import * as olstyle from 'ol/style';
 
 /**
- *Create a polygon layer to be added to the map.
+ * Create a polygon layer to be added to the map.
  *
  * @export
  * @param fillColor
@@ -12,16 +12,12 @@ import * as olstyle from 'ol/style';
  * @returns VectorLayer
  */
 export function createPolygonLayer(fillColor: string, strokeColor: string, strokeWidth: number): VectorLayer {
-
   const source = new FeatureDataSource();
-  const layer = new VectorLayer({
-    // id: 'Cadastre',
-    // zIndex: 200,
+  return new VectorLayer({
     source,
+    showInLayerList: false,
     style: createPolygonLayerStyle(fillColor, strokeColor, strokeWidth)
   });
-  layer.options.showInLayerList = false;
-  return layer;
 }
 
   /**
@@ -51,14 +47,10 @@ export function createPolygonLayer(fillColor: string, strokeColor: string, strok
  * @returns VectorLayer
  */
 export function createMarkerLayer(colorMarker: string): VectorLayer {
-
   const source = new FeatureDataSource();
-  const layer = new VectorLayer({
+  return new VectorLayer({
     source,
+    showInLayerList: false,
     style: createOverlayMarkerStyle(colorMarker)
   });
-  layer.options.showInLayerList = false;
-  return layer;
 }
-
-
