@@ -16,7 +16,6 @@ import {
   ClientParcelDiagram,
   ClientParcel,
   ClientParcelYear,
-  ClientParcelYearService,
   ClientSchema,
   ClientSchemaElement,
   createParcelLayer,
