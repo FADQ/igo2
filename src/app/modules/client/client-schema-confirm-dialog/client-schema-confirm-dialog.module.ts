@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatButtonModule, MatDialogModule } from '@angular/material';
+
+import { IgoLanguageModule } from '@igo2/core';
 
 import { ClientSchemaConfirmDialogComponent } from './client-schema-confirm-dialog.component';
 
@@ -8,9 +11,13 @@ import { ClientSchemaConfirmDialogComponent } from './client-schema-confirm-dial
  */
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    MatButtonModule,
+    MatDialogModule,
+    IgoLanguageModule
   ],
   declarations: [ClientSchemaConfirmDialogComponent],
-  exports: [ClientSchemaConfirmDialogComponent]
+  exports: [ClientSchemaConfirmDialogComponent],
+  entryComponents: [ClientSchemaConfirmDialogComponent]
 })
 export class FadqClientSchemaConfirmDialogModule {}

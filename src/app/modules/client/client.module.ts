@@ -11,7 +11,8 @@ import { FadqClientSchemaConfirmDialogModule } from './client-schema-confirm-dia
     FadqClientSchemaConfirmDialogModule
   ],
   exports: [
-    FadqLibClientModule
+    FadqLibClientModule,
+    FadqClientSchemaConfirmDialogModule
   ],
   declarations: []
 })
