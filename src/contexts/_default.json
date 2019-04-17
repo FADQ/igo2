@@ -111,7 +111,7 @@
       }
     },
     {
-      "id": "municipality",
+      "id": "mun",
       "title": "Municipalités",
       "visible": false,
       "sourceOptions": {
@@ -129,7 +129,7 @@
       }
     },
     {
-      "id": "renovatedCadastre",
+      "id": "cadastre_reno",
       "title": "Cadastre rénové",
       "visible": false,
       "sourceOptions": {
@@ -355,8 +355,8 @@
       "options": {
         "layerIdBuildings": "buildings",
         "layerIdBuildingsCorrected": "buildingsCorrected",
-        "layerCadastre": "renovatedCadastre",
-        "layerMun": "municipality"
+        "layerIdCadastre": "cadastre_reno",
+        "layerIdMun": "mun"
       }
     },
     {

@@ -1,5 +1,7 @@
 import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { fromExtent } from 'ol/geom/Polygon';
+import OlGeoJSON from 'ol/format/GeoJSON';
 import { EntityRecord } from '@igo2/common';
 import { FeatureStore,
   FeatureStoreLoadingStrategy,
@@ -11,7 +13,8 @@ import { FeatureStore,
   LayerService,
   LayerOptions
  } from '@igo2/geo';
-import { Address } from '../shared/address.interface';
+import { Address, AddressFeatureList, AddressFeature } from '../shared/address.interface';
+import { AddressService } from '../shared/address.service';
 
 /**
  * Tool to edit addresses from Adresse Quebec.
@@ -24,7 +27,7 @@ import { Address } from '../shared/address.interface';
 })
 export class AddressEditorComponent implements OnInit, OnDestroy {
 
-  selectedAddress$: BehaviorSubject<Address> = new BehaviorSubject<Address>(undefined);
+  selectedAddress$: BehaviorSubject<AddressFeature> = new BehaviorSubject<AddressFeature>(undefined);
 
   private selectedAddress$$: Subscription;
 
@@ -36,24 +39,43 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
   /**
    * The store
    */
-  @Input() store: FeatureStore<Address>;
-
+  @Input() store: FeatureStore<AddressFeature>;
   @Input() layerIdBuildings: string;
   @Input() layerIdBuildingsCorrected: string;
+  @Input() layerIdCadastre: string;
+  @Input() layerIdMun: string;
   @Input() layerOptions: LayerOptions[];
 
-  inEdition: boolean;
+  inEdition: boolean = false;
 
   disabled: boolean = false;
 
-  constructor(private layerService: LayerService) {}
+  get buildingNumber(): number {
+    if (this.selectedAddress$.getValue() === undefined) { return null; }
+    return this.selectedAddress$.getValue().properties.noAdresse;
+  }
+
+  get buildingSuffix(): string {
+    if (this.selectedAddress$.getValue() === undefined) { return null; }
+    return this.selectedAddress$.getValue().properties.suffixeNoCivique;
+  }
+
+  constructor(
+    private layerService: LayerService,
+    private addressService: AddressService,
+    ) {}
 
   /**
    * Add draw controls and activate one
    * @internal
    */
   ngOnInit() {
-    this.initStore();
+    this.selectedAddress$$ = this.store.stateView
+      .firstBy$((record: EntityRecord<AddressFeature>) => record.state.selected === true)
+      .subscribe((record: EntityRecord<AddressFeature>) => {
+        this.selectedAddress$.next(record ? record.entity : undefined);
+      });
+    this.map.viewController.zoomTo(14);
   }
    /**
    * Toggle the clear buildingNumber and suffix
@@ -63,104 +85,87 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
     this.selectedAddress$$.unsubscribe();
   }
 
-  handleFormEdit(isClick: boolean) {
-    // this.submitted = true;
-    if (isClick) {
-      this.inEdition = true;
-      this.initEdition();
-    }    else {
-      this.inEdition = false;
-    }
+  /**
+   * Handles form edit
+   */
+  handleFormEdit() {
+    this.inEdition = true;
+    this.initEdition();
   }
-  handleFormSave(isClick: boolean) {
-    // this.submitted = true;
-    if (isClick) {
-      this.inEdition = true;
-    }    else {
-      this.inEdition = false;
-    }
+
+
+  /**
+   * Handles form save
+   */
+  handleFormSave() {
+    this.inEdition = false;
   }
-  handleFormCancel(isClick: boolean) {
-    // this.submitted = true;
-    if (isClick) {
-      this.inEdition = true;
-    }    else {
-      this.inEdition = false;
+
+
+  /**
+   * Handles form cancel
+   */
+  handleFormCancel() {
+    this.inEdition = false;
+  }
+
+  /**
+   * Inits the edition
+   */
+  private initEdition() {
+    const olGeoJSON = new OlGeoJSON();
+
+    this.showLayers();
+    const extentGeometry = this.getMapExtentPolygon('EPSG:4326');
+    this.addressService.getAddressesByGeometry(extentGeometry)
+    .subscribe((addressList: AddressFeatureList) => {
+      this.store.load(addressList);
+    });
+  }
+
+  private getMapExtentPolygon(projection: string) {
+    const olGeoJSON = new OlGeoJSON();
+    return olGeoJSON.writeGeometryObject(fromExtent(this.map.viewController.getExtent(projection)));
+  }
+
+  /**
+   * Shows all layers related to this tool
+   */
+  private showLayers() {
+    this.showLayer('buildings', this.layerIdBuildings === 'buildings');
+    this.showLayer('buildingsCorrected', this.layerIdBuildingsCorrected === 'buildingsCorrected');
+    this.showLayer('mun', this.layerIdMun === 'mun');
+    // this.showLayer('cadastre_reno', this.layerIdCadastre === 'cadastre_reno');
+  }
+/**
+ * Shows layer
+ * @param layerId Layer id
+ * @param layerExist Indicates if the layer already exists on the map
+ */
+private showLayer(layerId: string, layerExist: boolean) {
+    if (layerExist) {
+      const layer: Layer = this.map.getLayerById(layerId);
+      if (layer !== undefined) { layer.visible = true; }
+    } else if (this.layerOptions !== undefined) {
+      const layerOptions = this.getLayerOptions(layerId);
+      if (layerOptions !== undefined) {
+        this.layerService.createAsyncLayer(Object.assign({}, layerOptions, {
+          visible: true,
+          showInLayerList: false
+        })).subscribe((layer: Layer) => this.map.addLayer(layer));
+      }
     }
   }
 
   /**
-   * Initialize the measure store and set up some listeners
-   * @internal
+   * Gets layer options from the layerOptions list received from the context
+   * @param layerId Layer id
+   * @returns The layer options
    */
-  private initStore() {
-    const store = this.store;
-
-    if (store.layer === undefined) {
-      const layer = new VectorLayer({
-        zIndex: 200,
-        source: new FeatureDataSource()
-      });
-      layer.options.showInLayerList = false;
-      store.bindLayer(layer);
+  private getLayerOptions(layerId: string): LayerOptions {
+    for (const layerOptions of this.layerOptions) {
+      if (layerOptions.id === layerId) { return layerOptions; }
     }
-
-    if (store.layer.map === undefined) {
-      this.map.addLayer(store.layer);
-    }
-
-    if (store.getStrategyOfType(FeatureStoreLoadingStrategy) === undefined) {
-      store.addStrategy(new FeatureStoreLoadingStrategy({}));
-    }
-    store.activateStrategyOfType(FeatureStoreLoadingStrategy);
-
-    if (store.getStrategyOfType(FeatureStoreSelectionStrategy) === undefined) {
-      store.addStrategy(new FeatureStoreSelectionStrategy({
-        map: this.map
-      }));
-    }
-    store.activateStrategyOfType(FeatureStoreSelectionStrategy);
-
-    this.selectedAddress$$ = store.stateView.firstBy$((record: EntityRecord<Address>) => {
-      return record.state.selected === true;
-    }).subscribe((record: EntityRecord<Address>) => {
-      const address = record === undefined ? undefined : record.entity;
-      this.selectedAddress$.next(address);
-    });
-  }
-
-  private initEdition() {
-    this.map.viewController.zoomTo(14);
-    this.showLayers();
-  }
-
-  private showLayers() {
-    this.showLayer('buildings');
-    this.showLayer('buildingsCorrected');
-    this.showLayer('municipality');
-    this.showLayer('renovatedCadastre');
-  }
-
-  private showLayer(layerId: string) {
-    if (layerId) {
-      console.log('TEST: ', layerId);
-      const layer: Layer = this.map.getLayerById(layerId);
-      if (layer !== undefined) { layer.visible = true; }
-
-    } else if (this.layerOptions !== undefined) {
-      console.log('layerOptions: ', layerId);
-      this.layerService.createAsyncLayer(this.getLayer(layerId)).subscribe((layer: Layer) => {
-        layer.visible = true;
-        // this.cadastreState.layerCadastreImage = layer;
-        this.map.addLayer(layer);
-      } );
-    }
-  }
-
-  private getLayer(layerId: string): LayerOptions {
-    this.layerOptions.forEach((layerOption: LayerOptions) => {
-      if (layerOption.id = layerId) { return layerOption; }
-    });
     return undefined;
   }
 }

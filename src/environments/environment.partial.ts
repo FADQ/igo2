@@ -44,6 +44,9 @@ export interface IgoEnvironment {
       points: string;
     }
   };
+  address: {
+    list: string;
+  };
 }
 
 /* tslint:disable */
@@ -142,5 +145,8 @@ export const igoEnvironment: IgoEnvironment = {
       list: '/igolocalisation/recherche_cadastre_originaire/obtenirLotsOriginaires',
       points: '/igolocalisation/recherche_cadastre_originaire/obtenirDesLotsOriginaires'
     }
+  },
+  address : {
+    list: '/igodonneesgeospatiales/edition_point_adresse/obtenirAdressesAQ'
   }
 };

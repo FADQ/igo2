@@ -40,6 +40,7 @@
       }
     },
     {
+      "id": "mun",
       "title": "Municipalités",
       "visible": true,
       "sourceOptions": {
@@ -214,14 +215,14 @@
     {
       "name": "addressEditor",
       "options": {
-        "layerOptions": {
+        "layerOptions": [{
           "id": "buildings",
           "title": "Numéro d'immeubles",
-          "visible": false,
+          "visible": true,
           "sourceOptions": {
             "type": "wms",
             "optionsFromCapabilities": true,
-            "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_geoservpro_swwf",
+            "url": "http://danlav01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_geoservpro_swwf",
             "style": "default",
             "matrixSet": "LAMBERT",
             "projection": "EPSG:32198",
@@ -235,11 +236,11 @@
         {
           "id": "buildingsCorrected",
           "title": "Numéro d'immeubles corrigés",
-          "visible": false,
+          "visible": true,
           "sourceOptions": {
             "type": "wms",
             "optionsFromCapabilities": true,
-            "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_geoservpro_swwea",
+            "url": "http://danlav01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_geoservpro_swwea",
             "style": "default",
             "matrixSet": "LAMBERT",
             "projection": "EPSG:32198",
@@ -251,13 +252,13 @@
           }
         },
         {
-          "id": "renovatedCadastre",
+          "id": "cadastre_reno",
           "title": "Cadastre rénové",
-          "visible": false,
+          "visible": true,
           "sourceOptions": {
             "type": "wms",
             "optionsFromCapabilities": true,
-            "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_geoservpro_swwf",
+            "url": "http://danlav01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_geoservpro_swwf",
             "style": "default",
             "matrixSet": "LAMBERT",
             "projection": "EPSG:32198",
@@ -267,26 +268,7 @@
               "srs": "EPSG:32198"
             }
           }
-        },
-        {
-          "id": "municipality",
-          "title": "Municipalités",
-          "visible": false,
-          "sourceOptions": {
-            "type": "wms",
-            "optionsFromCapabilities": true,
-            "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_geoservpro_swwf",
-            "style": "default",
-            "matrixSet": "LAMBERT",
-            "projection": "EPSG:32198",
-            "params": {
-              "version": "1.1.1",
-              "layers": "SDA_MUNIC_S",
-              "srs": "EPSG:32198"
-            },
-            "queryable": false
-          }
-        }
+        }]
       }
     }
   ]

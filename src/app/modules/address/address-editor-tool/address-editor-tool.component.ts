@@ -1,10 +1,11 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
-import { IgoMap, FeatureStore, ImageLayerOptions } from '@igo2/geo';
+import { Component, ChangeDetectionStrategy, Input} from '@angular/core';
+import { IgoMap, FeatureStore, ImageLayerOptions, VectorLayer, FeatureDataSource, FeatureStoreLoadingStrategy, FeatureStoreSelectionStrategy } from '@igo2/geo';
 import { MapState } from '@igo2/integration';
 
-import { ToolComponent } from '@igo2/common';
-import { Address } from 'src/lib/address';
+import { ToolComponent, EntityRecord } from '@igo2/common';
+import { Address, AddressFeature } from 'src/lib/address';
 import { AddressState } from '../address.state';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 /**
  * Tool to edit addresses from Adresses Quebec.
@@ -24,12 +25,14 @@ export class AddressEditorToolComponent {
 
   @Input() layerIdBuildings: string;
   @Input() layerIdBuildingsCorrected: string;
+  @Input() layerIdCadastre: string;
+  @Input() layerIdMun: string;
   @Input() layerOptions: ImageLayerOptions[];
   /**
    * Store Address
    * @internal
    */
-  get store(): FeatureStore<Address> { return this.adressState.adressStore; }
+  get store(): FeatureStore<AddressFeature> { return this.adressState.adressStore; }
 
   /**
    * Map to edit on
@@ -40,4 +43,5 @@ export class AddressEditorToolComponent {
     private mapState: MapState,
     private adressState: AddressState
   ) {}
+
 }
