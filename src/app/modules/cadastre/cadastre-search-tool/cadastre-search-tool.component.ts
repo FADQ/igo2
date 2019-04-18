@@ -84,6 +84,24 @@ export class CadastreSearchToolComponent implements OnInit {
     return this.cadastreState.lotStore;
   }
 
+  /**
+   * Layer for the cadastre feature
+   * @return VectorLayer
+   */
+  get layerCadastre(): VectorLayer { return this.cadastreState.layerCadastre; }
+
+  /**
+   * Layer for the concession feature
+   * @return VectorLayer
+   */
+  get layerConcession(): VectorLayer { return this.cadastreState.layerConcession; }
+
+  /**
+   * Layer for the lot feature
+   * @return VectorLayer
+   */
+  get layerLot(): VectorLayer { return this.cadastreState.layerLot; }
+
   constructor(
     private mapState: MapState,
     private cadastreState: CadastreState,
@@ -199,9 +217,9 @@ export class CadastreSearchToolComponent implements OnInit {
     this.munStore.state.updateAll({selected: false});
 
     // Clear the layers
-    if (this.cadastreState.layerCadastre !== undefined) { this.cadastreState.layerCadastre.dataSource.ol.clear(); }
-    if (this.cadastreState.layerConcession !== undefined) { this.cadastreState.layerConcession.dataSource.ol.clear(); }
-    if (this.cadastreState.layerLot !== undefined) { this.cadastreState.layerLot.dataSource.ol.clear(); }
+    if (this.layerCadastre !== undefined) { this.layerCadastre.dataSource.ol.clear(); }
+    if (this.layerConcession !== undefined) { this.layerConcession.dataSource.ol.clear(); }
+    if (this.layerLot !== undefined) { this.layerLot.dataSource.ol.clear(); }
 
     // Hide the Image layer of cadastre
     this.showCadastreImageLayer(false);
@@ -357,11 +375,11 @@ export class CadastreSearchToolComponent implements OnInit {
    * @param CadastreFeature cadastre
    */
   private showUnCadastre(cadastre: CadastreFeature) {
-    if (this.cadastreState.layerCadastre === undefined || this.cadastreState.layerCadastre === undefined) { return; }
+    if (this.layerCadastre === undefined || this.layerCadastre === undefined) { return; }
 
-    this.cadastreState.layerCadastre.dataSource.ol.clear();
+    this.layerCadastre.dataSource.ol.clear();
 
-    this.cadastreState.layerCadastre.dataSource.ol.addFeatures(this.featureListToOl([cadastre]));
+    this.layerCadastre.dataSource.ol.addFeatures(this.featureListToOl([cadastre]));
   }
 
   /**
@@ -369,12 +387,12 @@ export class CadastreSearchToolComponent implements OnInit {
    * @param CadastreFeature cadastre
    */
   private showConcessions(concessionList: ConcessionFeature[]) {
-    if (this.cadastreState.layerConcession === undefined ||
-       this.cadastreState.layerConcession.dataSource === undefined) { return; }
+    if (this.layerConcession === undefined ||
+       this.layerConcession.dataSource === undefined) { return; }
 
-    this.cadastreState.layerConcession.dataSource.ol.clear();
+    this.layerConcession.dataSource.ol.clear();
 
-    this.cadastreState.layerConcession.dataSource.ol.addFeatures(this.featureListToOl(concessionList));
+    this.layerConcession.dataSource.ol.addFeatures(this.featureListToOl(concessionList));
   }
 
   /**
@@ -382,11 +400,11 @@ export class CadastreSearchToolComponent implements OnInit {
    * @param CadastreFeature cadastre
    */
   private showLots(lotList: LotFeature[]) {
-    if (this.cadastreState.layerLot === undefined || this.cadastreState.layerLot.dataSource === undefined) { return; }
+    if (this.layerLot === undefined || this.layerLot.dataSource === undefined) { return; }
 
-    this.cadastreState.layerLot.dataSource.ol.clear();
+    this.layerLot.dataSource.ol.clear();
 
-    this.cadastreState.layerLot.dataSource.ol.addFeatures(this.featureListToOl(lotList));
+    this.layerLot.dataSource.ol.addFeatures(this.featureListToOl(lotList));
   }
 
   private showCadastreImageLayer(visibility: boolean ) {
