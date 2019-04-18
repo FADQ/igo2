@@ -1,7 +1,21 @@
 import { Injectable } from '@angular/core';
 import * as olstyle from 'ol/style';
 
-import { FeatureStore, VectorLayer, FeatureDataSource, FeatureStoreLoadingStrategy, FeatureStoreSelectionStrategy, IgoMap, createOverlayMarkerStyle } from '@igo2/geo';
+import {
+  FeatureStore,
+  VectorLayer,
+  FeatureDataSource,
+  FeatureStoreLoadingStrategy,
+  FeatureStoreSelectionStrategy,
+  IgoMap,
+  createOverlayMarkerStyle,
+  tryBindStoreLayer,
+  tryAddLoadingStrategy,
+  FeatureStoreLoadingStrategyOptions,
+  FeatureMotion,
+  tryAddSelectionStrategy,
+  FeatureStoreStrategy
+} from '@igo2/geo';
 import { MapState } from '@igo2/integration';
 import { Address, AddressFeature } from 'src/lib/address';
 
@@ -45,42 +59,21 @@ export class AddressState {
     this._adressStore = new FeatureStore<AddressFeature>([], {
       getKey: (entity: AddressFeature) => entity.properties.idAdresseLocalisee,
       map: this._mapState.map });
-    this._adressStore = this.initStore(this._adressStore) as FeatureStore<AddressFeature> ;
+
+    this.trybindStoreLayer(this._adressStore);
+    tryAddLoadingStrategy(this._adressStore, new FeatureStoreLoadingStrategy({motion: FeatureMotion.None}));
+    tryAddSelectionStrategy(this._adressStore);
   }
 
-  /**
-   * Initialize the measure store and set up some listeners
-   * @internal
-   */
-  private initStore(store: FeatureStore) {
+  private trybindStoreLayer(store: FeatureStore) {
+    const layer = new VectorLayer({
+      zIndex: 200,
+      source: new FeatureDataSource(),
+      style: this.createOverlayDefaultStyle(),
+      showInLayerList: false
+    });
 
-    if (store.layer === undefined) {
-      const layer = new VectorLayer({
-        zIndex: 200,
-        source: new FeatureDataSource(),
-        style: this.createOverlayDefaultStyle()
-      });
-      layer.options.showInLayerList = false;
-      store.bindLayer(layer);
-    }
-
-    if (store.layer.map === undefined) {
-      this.mapState.map.addLayer(store.layer);
-    }
-
-    if (store.getStrategyOfType(FeatureStoreLoadingStrategy) === undefined) {
-      store.addStrategy(new FeatureStoreLoadingStrategy({}));
-    }
-    store.activateStrategyOfType(FeatureStoreLoadingStrategy);
-
-    if (store.getStrategyOfType(FeatureStoreSelectionStrategy) === undefined) {
-      store.addStrategy(new FeatureStoreSelectionStrategy({
-        map: this.mapState.map
-      }));
-    }
-    store.activateStrategyOfType(FeatureStoreSelectionStrategy);
-
-    return store;
+    tryBindStoreLayer(store, layer);
   }
 
   private createOverlayDefaultStyle(): olstyle.Style {
