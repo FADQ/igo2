@@ -1,18 +1,18 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import olFormat from 'ol/format';
+import * as olFormat from 'ol/format';
 
 import {
+  FEATURE,
+  GeoJSONGeometry,
   SearchResult,
   SearchSource,
   SearchSourceOptions,
-  TextSearch,
-  Feature,
-  FeatureGeometry
+  TextSearch
 } from '@igo2/geo';
 
 import { CadastreRenoFeature } from './cadastre-reno.interfaces';
@@ -47,7 +47,7 @@ export class CadastreRenoSearchSource extends SearchSource implements TextSearch
     return new HttpParams({
       fromObject: Object.assign(
         {
-          numero: term,
+          numero: term.replace(/;/g, ','),
           epsg: '4326'
         },
         this.params
@@ -63,8 +63,8 @@ export class CadastreRenoSearchSource extends SearchSource implements TextSearch
   search(term?: string): Observable<SearchResult<CadastreRenoFeature>[]> {
     const params = this.computeRequestParams(term);
 
-    if (term.length < 7) { return; }
-    console.log('SEARCH < 7');
+    if (term.length < 7) { return of([]); }
+
     return this.http
     .get(this.searchUrl, {
       params,
@@ -74,39 +74,35 @@ export class CadastreRenoSearchSource extends SearchSource implements TextSearch
   }
 
   private extractResults(response: string): SearchResult<CadastreRenoFeature>[] {
-    console.log('RESPONSE: ' + response);
-
-    const temp: string[] = response.split('<br />');
-    const resultSearch: SearchResult<CadastreRenoFeature>[] = [];
-
-    for (const cadastreRenoFeature of temp) {
-      resultSearch.push(this.dataToResult(cadastreRenoFeature));
-    }
-
-    /*  .map((cadastre: string) => { this.dataToResult(cadastre); });*/
-    // return [this.dataToResult(response)];
-
-    return resultSearch;
+    const textResults = response.split('<br />');
+    return textResults
+      .map((textResult: string) => this.dataToResult(textResult))
+      .filter((result:  SearchResult<CadastreRenoFeature>) => result !== undefined);
   }
 
   private dataToResult(cadastre: string): SearchResult<CadastreRenoFeature> {
     const propertiesCadastre = cadastre.split(';');
+    if (propertiesCadastre.length < 7) {
+      return undefined;
+    }
 
     return {
       source: this,
       data: {
-        type: CADASTRE_RENO,
+        type: FEATURE,
         projection: 'EPSG:4326',
         geometry: this.convertWKTtoGeojson(propertiesCadastre[7]),
-        extent: null,
-        properties: null,
+        extent: undefined,
+        properties: {
+          noCadastre: propertiesCadastre[0]
+        },
         meta: {
           id: this.getId(),
           title: 'data.properties.recherche'
         }
       },
       meta: {
-        dataType: CADASTRE_RENO,
+        dataType: FEATURE,
         id: propertiesCadastre[0],
         title: propertiesCadastre[0],
         icon: 'grid_on'
@@ -114,17 +110,10 @@ export class CadastreRenoSearchSource extends SearchSource implements TextSearch
     };
   }
 
-  private convertWKTtoGeojson(featureWKT: string) {
-    console.log('TEST:' + featureWKT);
-    const  olFormatWKT = new olFormat.WKT();
-    const  olFormatGeoJson = new olFormat.GeoJSON();
-
-    // const wkt_format = new olFormat().Format.WKT();
-    const feature = olFormatWKT.readFeature(featureWKT);
-    // const wkt_options = {};
-    // const geojson_format = new olFormat().Format.GeoJSON(wkt_options);
-
-    return olFormatGeoJson().writeFeature(feature);
-
+  private convertWKTtoGeojson(wkt: string): GeoJSONGeometry {
+    const olFormatWKT = new olFormat.WKT();
+    const olFormatGeoJson = new olFormat.GeoJSON();
+    const olGeometry = olFormatWKT.readGeometry(wkt);
+    return olFormatGeoJson.writeGeometryObject(olGeometry);
   }
 }
