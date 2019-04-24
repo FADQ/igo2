@@ -30,7 +30,6 @@ export class AddressService {
    * @returns address All features addresses in relation with the extent
    */
   getAddressesByGeometry(geometry: GeoJSONGeometry): Observable<AddressFeatureList> {
-    console.log(geometry.coordinates);
     const url = this.apiService.buildUrl(this.apiConfig.list);
     return this.http
       .post(url, geometry)

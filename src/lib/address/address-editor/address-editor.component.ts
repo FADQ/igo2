@@ -1,20 +1,33 @@
-import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef
+} from '@angular/core';
+
 import { BehaviorSubject, Subscription } from 'rxjs';
+
 import { fromExtent } from 'ol/geom/Polygon';
 import OlGeoJSON from 'ol/format/GeoJSON';
+import OlGeometry from 'ol/geom/Geometry';
+import OlFeature from 'ol/Feature';
+import OlVectorSource from 'ol/source/Vector';
+import OlVectorLayer from 'ol/layer/Vector';
+
 import { EntityRecord } from '@igo2/common';
 import { FeatureStore,
-  FeatureStoreLoadingStrategy,
-  FeatureStoreSelectionStrategy,
-  FeatureDataSource,
-  VectorLayer,
   IgoMap,
   Layer,
   LayerService,
-  LayerOptions
+  LayerOptions,
+  ModifyControl,
+  GeoJSONGeometry
  } from '@igo2/geo';
-import { Address, AddressFeatureList, AddressFeature } from '../shared/address.interface';
+
+import { AddressFeatureList, AddressFeature } from '../shared/address.interface';
 import { AddressService } from '../shared/address.service';
+
 
 /**
  * Tool to edit addresses from Adresse Quebec.
@@ -27,9 +40,30 @@ import { AddressService } from '../shared/address.service';
 })
 export class AddressEditorComponent implements OnInit, OnDestroy {
 
-  selectedAddress$: BehaviorSubject<AddressFeature> = new BehaviorSubject<AddressFeature>(undefined);
-
   private selectedAddress$$: Subscription;
+  private olGeometry$: Subscription;
+  private modifyControl: ModifyControl;
+  private olGeoJSON = new OlGeoJSON();
+  private ready = false;
+  private selectedAddressFeature: AddressFeature;
+
+  /**
+   * Selected address$ of address editor component
+   */
+  // selectedAddress$: BehaviorSubject<AddressFeature> = new BehaviorSubject<AddressFeature>(undefined);
+
+  /**
+   * Selected address of address editor component
+   */
+  buildingNumber$: BehaviorSubject<number> = new BehaviorSubject(undefined);
+
+
+  /**
+   * Building suffix of address editor component
+   */
+  buildingSuffix$: BehaviorSubject<string> = new BehaviorSubject(undefined);
+
+  selectedAddressFeature$: BehaviorSubject<AddressFeature> = new BehaviorSubject(undefined);
 
   /**
    * The map to measure on
@@ -46,21 +80,33 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
   @Input() layerIdMun: string;
   @Input() layerOptions: LayerOptions[];
 
+  /**
+   * Determines whether edition in
+   */
   inEdition: boolean = false;
 
+
+  /**
+   * Disabled  of address editor component
+   */
   disabled: boolean = false;
 
-  get buildingNumber(): number {
+
+  /**
+   * Gets building number
+   */
+  /*get buildingNumber(): number {
     if (this.selectedAddress$.getValue() === undefined) { return null; }
     return this.selectedAddress$.getValue().properties.noAdresse;
-  }
+  }*/
 
-  get buildingSuffix(): string {
+  /*get buildingSuffix(): string {
     if (this.selectedAddress$.getValue() === undefined) { return null; }
     return this.selectedAddress$.getValue().properties.suffixeNoCivique;
-  }
+  }*/
 
   constructor(
+    private cdRef: ChangeDetectorRef,
     private layerService: LayerService,
     private addressService: AddressService,
     ) {}
@@ -73,7 +119,12 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
     this.selectedAddress$$ = this.store.stateView
       .firstBy$((record: EntityRecord<AddressFeature>) => record.state.selected === true)
       .subscribe((record: EntityRecord<AddressFeature>) => {
-        this.selectedAddress$.next(record ? record.entity : undefined);
+        this.manageSelectedAddress(record);
+        if (record !== undefined && record.entity !== undefined) {
+          this.activateControl();
+          const olFeature = this.store.layer.ol.getSource().getFeatureById(record.entity.properties.idAdresseLocalisee);
+          this.modifyControl.setOlGeometry(olFeature.getGeometry());
+        }
       });
     this.map.viewController.zoomTo(14);
   }
@@ -83,6 +134,7 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy() {
     this.selectedAddress$$.unsubscribe();
+    this.deactivateControl();
   }
 
   /**
@@ -107,14 +159,31 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    */
   handleFormCancel() {
     this.inEdition = false;
+    this.deactivateControl();
+    this.store.layer.dataSource = null;
+  }
+
+  private manageSelectedAddress(record: EntityRecord<AddressFeature>) {
+    if (record === undefined) { 
+      this.buildingNumber$.next(null);
+      this.buildingSuffix$.next(null);
+      return;
+    }
+
+    const address = record ? record.entity : undefined;
+    const buildingNumber = address ? address.properties.noAdresse : null;
+    const buildingSuffix = address ? address.properties.suffixeNoCivique : null;
+    this.buildingNumber$.next(buildingNumber);
+    this.buildingSuffix$.next(buildingSuffix);
+    if (record.entity !== undefined) {
+      this.selectedAddressFeature$.next(record.entity);
+    }
   }
 
   /**
    * Inits the edition
    */
   private initEdition() {
-    const olGeoJSON = new OlGeoJSON();
-
     this.showLayers();
     const extentGeometry = this.getMapExtentPolygon('EPSG:4326');
     this.addressService.getAddressesByGeometry(extentGeometry)
@@ -124,8 +193,7 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
   }
 
   private getMapExtentPolygon(projection: string) {
-    const olGeoJSON = new OlGeoJSON();
-    return olGeoJSON.writeGeometryObject(fromExtent(this.map.viewController.getExtent(projection)));
+    return this.olGeoJSON.writeGeometryObject(fromExtent(this.map.viewController.getExtent(projection)));
   }
 
   /**
@@ -168,4 +236,70 @@ private showLayer(layerId: string, layerExist: boolean) {
     }
     return undefined;
   }
+
+  /**
+   * Create a modify control and subscribe to it's geometry
+   */
+  private createModifyControl() {
+    this.modifyControl = new ModifyControl({});
+  }
+
+  /**
+   * Activate a given control
+   * @param control Control
+   */
+  private activateControl() {
+    this.createModifyControl();
+    this.olGeometry$ = this.modifyControl.end$
+      .subscribe((olGeometry: OlGeometry) => this.setOlGeometry(olGeometry));
+    this.modifyControl.setOlMap(this.map.ol);
+  }
+
+  /**
+   * Deactivate the active control
+   */
+  private deactivateControl() {
+    if (this.modifyControl !== undefined) {
+      this.modifyControl.setOlMap(undefined);
+    }
+    if (this.olGeometry$ !== undefined) {
+      this.olGeometry$.unsubscribe();
+    }
+    this.modifyControl = undefined;
+  }
+
+  /**
+   * When drawing ends, convert the output value to GeoJSON and keep it.
+   * Restore the double click interaction.
+   * @param olGeometry OL geometry
+   */
+  private setOlGeometry(olGeometry: OlGeometry | undefined) {
+    const olGeoJSON = new OlGeoJSON();
+    console.log(this.selectedAddressFeature$.value.geometry, this.selectedAddressFeature$.value.projection);
+    this.selectedAddressFeature$.value.geometry = olGeoJSON.writeGeometryObject(olGeometry, {
+      dataProjection: 'EPSG:4326',
+      featureProjection: this.map.projection
+    });
+    this.selectedAddressFeature$.value.projection = olGeometry;
+    console.log(this.selectedAddressFeature$.value.geometry, this.selectedAddressFeature$.value.projection);
+
+
+    /*const meta = Object.assign({}, baseElement.meta, {
+      id: uuid()
+    });
+    const properties = Object.assign({}, baseElement.properties, {
+      idElementGeometrique: undefined,
+      description: undefined,
+      etiquette: undefined
+    });
+    this.selectedAddressFeature = Object.assign({}, baseElement, {
+      meta,
+      properties,
+      geometry: olGeoJSON.writeGeometryObject(olGeometry, {
+        dataProjection: baseElement.projection,
+        featureProjection: this.map.projection
+      })
+    });*/
+  }
+
 }
