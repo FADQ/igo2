@@ -1,4 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -14,10 +15,8 @@ import {
   FeatureGeometry
 } from '@igo2/geo';
 
-import { CadastreRenoFeature } from 'src/lib/cadastre-reno/shared/cadastre-reno.interfaces';
-import { CADASTRE_RENO } from '../cadastre-reno.enum';
-import { HttpClient, HttpParams } from '@angular/common/http';
-
+import { CadastreRenoFeature } from './cadastre-reno.interfaces';
+import { CADASTRE_RENO } from './cadastre-reno.enums';
 
 /**
  * Cadastre search source
