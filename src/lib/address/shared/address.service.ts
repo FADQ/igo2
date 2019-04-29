@@ -68,4 +68,21 @@ export class AddressService {
       properties
     };
   }
+
+  /**
+   * Gets address features by extent
+   * @param featureExtent A feature of the extent of the view map
+   * @returns address All features addresses in relation with the extent
+   */
+  modifyAddresseGeometry(idAdresseLocalisee: number, geometry: GeoJSONGeometry): Observable<AddressFeatureList> {
+    const url = this.apiService.buildUrl(this.apiConfig.save, {idAdresseAQ: idAdresseLocalisee});
+    return this.http
+      .put(url, geometry)
+      .pipe(
+        map((response: AddressFeatureResponseItem[]) => {
+          // TODO: traiter la réponse
+          return this.extractAddressesFromListResponse(response);
+        })
+      );
+  }
 }

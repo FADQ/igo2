@@ -62,7 +62,10 @@
     "suffix.placeholder": "Suffix",
     "edit": "Edit",
     "save": "Save",
+    "save.title": "Confirmation",
     "save.confirm": "This object will be saved in your name. Are you sure you want to save this change?",
+    "zoom.title": "Interrogative message",
+    "zoom.confirm": "The scale of the map should be between 1 and 2500. Do you want to zoom in on this scale?",
     "cancel": "Cancel"
   },
   "client": {

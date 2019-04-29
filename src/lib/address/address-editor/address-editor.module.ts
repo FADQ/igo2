@@ -10,6 +10,9 @@ import {
 import { IgoLanguageModule } from '@igo2/core';
 
 import { AddressEditorComponent } from './address-editor.component';
+import { FadqAddressEditorSaveDialogModule } from '../address-editor-save-dialog/address-editor-save-dialog.module';
+import { FadqAddressEditorZoomDialogModule } from '../address-editor-zoom-dialog/address-editor-zoom-dialog.module';
+
 
 /**
  * @ignore
@@ -20,7 +23,9 @@ import { AddressEditorComponent } from './address-editor.component';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    IgoLanguageModule
+    IgoLanguageModule,
+    FadqAddressEditorSaveDialogModule,
+    FadqAddressEditorZoomDialogModule
   ],
   declarations: [
     AddressEditorComponent

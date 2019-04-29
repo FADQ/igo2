@@ -2,7 +2,7 @@ import { Feature } from '@igo2/geo';
 import { FeatureWithAddressProperties } from 'src/app/modules/address';
 export interface AddressApiConfig {
   list: string;
-  points: string;
+  save: string;
 }
 
 export interface Address extends Feature {

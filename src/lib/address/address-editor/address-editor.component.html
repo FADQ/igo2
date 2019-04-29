@@ -5,7 +5,7 @@
             matInput
             [readonly]="true"
             [placeholder]="'addressEditor.buildingNumber.placeholder' | translate"
-            [value]="buildingNumber$ | async">
+            [value]="(buildingNumber$ | async) || ''">
         </mat-form-field>
     </div>
     <div>
@@ -14,14 +14,14 @@
             matInput
             [readonly]="true"
             [placeholder]="'addressEditor.suffix.placeholder' | translate"
-            [value]="buildingSuffix$ | async">
+            [value]="(buildingSuffix$ | async) || ''">
         </mat-form-field>
     </div>
     <div class="igo-form-button-group">
         <button
             mat-raised-button
             type="button"
-            [disabled]="inEdition || disabled"
+            [disabled]="inEdition"
             (click)="handleFormEdit()"
         >
         {{'addressEditor.edit' | translate}}
@@ -29,7 +29,7 @@
         <button
             mat-raised-button
             type="button"
-            [disabled]="!inEdition || disabled"
+            [disabled]="!inEdition"
             (click)="handleFormSave()"
         >
         {{'addressEditor.save' | translate}}
@@ -37,7 +37,7 @@
         <button
             mat-raised-button
             type="button"
-            [disabled]="!inEdition || disabled"
+            [disabled]="!inEdition"
             (click)="handleFormCancel()"
         >
         {{'addressEditor.cancel' | translate}}

@@ -68,7 +68,10 @@
     "suffix.placeholder": "Suffixe",
     "edit": "Éditer",
     "save": "Enregistrer",
+    "save.title": "Confirmation",
     "save.confirm": "Cet objet sera enregistré à votre nom. Êtes-vous certain de vouloir sauvegarder cette modification?",
+    "zoom.title": "Message d'interrogation",
+    "zoom.confirm": "L'échelle de la carte doit se trouver entre 1 et 2500. Désirez-vous zoomer à cette échelle?",
     "cancel": "Annuler"
   },
   "client": {

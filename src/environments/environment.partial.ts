@@ -46,6 +46,7 @@ export interface IgoEnvironment {
   };
   address: {
     list: string;
+    save: string
   };
 }
 
@@ -147,6 +148,7 @@ export const igoEnvironment: IgoEnvironment = {
     }
   },
   address : {
-    list: '/igodonneesgeospatiales/edition_point_adresse/obtenirAdressesAQ'
+    list: '/igodonneesgeospatiales/edition_point_adresse/obtenirAdressesAQ',
+    save: '/igodonneesgeospatiales/edition_point_adresse/obtenirAdressesAQ'
   }
 };
