@@ -149,6 +149,6 @@ export const igoEnvironment: IgoEnvironment = {
   },
   address : {
     list: '/igodonneesgeospatiales/edition_point_adresse/obtenirAdressesAQ',
-    save: '/igodonneesgeospatiales/edition_point_adresse/obtenirAdressesAQ'
+    save: '/igodonneesgeospatiales/edition_point_adresse/modifierGeometrieAdresseQuebec/${idAdresseAQ}'
   }
 };

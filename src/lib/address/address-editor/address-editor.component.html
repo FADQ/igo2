@@ -21,7 +21,7 @@
         <button
             mat-raised-button
             type="button"
-            [disabled]="inEdition"
+            [disabled]="(inEdition$ | async)"
             (click)="handleFormEdit()"
         >
         {{'addressEditor.edit' | translate}}
@@ -29,7 +29,7 @@
         <button
             mat-raised-button
             type="button"
-            [disabled]="!inEdition"
+            [disabled]="!(inEdition$ | async)"
             (click)="handleFormSave()"
         >
         {{'addressEditor.save' | translate}}
@@ -37,7 +37,7 @@
         <button
             mat-raised-button
             type="button"
-            [disabled]="!inEdition"
+            [disabled]="!(inEdition$ | async)"
             (click)="handleFormCancel()"
         >
         {{'addressEditor.cancel' | translate}}

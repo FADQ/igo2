@@ -4,15 +4,16 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { GeoJSONGeometry } from '@igo2/geo';
+
 import { ApiService } from 'src/lib/core/api';
+
 import {
-    AddressApiConfig,
-    AddressFeature,
-    AddressFeatureResponseItem,
-    AddressFeatureListResponse,
-    AddressFeatureList
-  } from './address.interface';
-import { Feature, GeoJSONGeometry } from '@igo2/geo';
+  AddressApiConfig,
+  AddressFeature,
+  AddressFeatureResponseItem,
+  AddressFeatureList
+} from './address.interface';
 
 @Injectable()
 export class AddressService {
@@ -69,20 +70,19 @@ export class AddressService {
     };
   }
 
+
+
   /**
-   * Gets address features by extent
-   * @param featureExtent A feature of the extent of the view map
-   * @returns address All features addresses in relation with the extent
+   * Modify the geometry of an address
+   * @param idAdresseLocalisee id of the address to modify
+   * @param addressModified modified geometry of the address
+   * @returns An observable
    */
-  modifyAddresseGeometry(idAdresseLocalisee: number, geometry: GeoJSONGeometry): Observable<AddressFeatureList> {
+  modifyAddressGeometry(idAdresseLocalisee: string, addressModified: AddressFeature): Observable<object> {
     const url = this.apiService.buildUrl(this.apiConfig.save, {idAdresseAQ: idAdresseLocalisee});
-    return this.http
-      .put(url, geometry)
-      .pipe(
-        map((response: AddressFeatureResponseItem[]) => {
-          // TODO: traiter la réponse
-          return this.extractAddressesFromListResponse(response);
-        })
-      );
+    return this.http.put(url, {geometriePoint: {
+      type: addressModified.type,
+      properties: addressModified.properties,
+      geometry: addressModified.geometry}});
   }
 }

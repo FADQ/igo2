@@ -1,18 +1,16 @@
 import { Feature } from '@igo2/geo';
-import { FeatureWithAddressProperties } from 'src/app/modules/address';
+
+/**
+ * Address api config
+ */
 export interface AddressApiConfig {
   list: string;
   save: string;
 }
 
-export interface Address extends Feature {
-  properties: FeatureWithAddressProperties;
-}
-export interface AddressProperties {
-  buildingNumber: number;
-  suffix?: string;
-}
-
+/**
+ * Address feature interface extending Feature
+ */
 export interface AddressFeature extends Feature {
   properties: {
     idAdresseLocalisee: string;
@@ -21,9 +19,14 @@ export interface AddressFeature extends Feature {
   };
 }
 
+
+/**
+ * Address feature response item
+ */
 export interface AddressFeatureResponseItem extends AddressFeature {}
 
+/**
+ * Address feature list response item
+ */
 export type AddressFeatureList = AddressFeatureResponseItem[];
-export interface AddressFeatureListResponse {
-  data: AddressFeatureList;
-}
+

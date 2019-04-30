@@ -2,10 +2,9 @@ import { Component,
   Input,
   OnInit,
   OnDestroy,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectionStrategy
 } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
 
@@ -46,16 +45,24 @@ import { AddressEditorZoomDialogComponent } from '../address-editor-zoom-dialog/
 export class AddressEditorComponent implements OnInit, OnDestroy {
 
   /**
+   * Zoom level edition of address editor component
+   */
+  static zoomLevelEdition = 13;
+
+  /**
    * Selected address of address editor component
    */
   buildingNumber$: BehaviorSubject<number> = new BehaviorSubject(undefined);
-
 
   /**
    * Building suffix of address editor component
    */
   buildingSuffix$: BehaviorSubject<string> = new BehaviorSubject(undefined);
 
+  /**
+   * Determines whether edition$ in
+   */
+  inEdition$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   /**
    * Selected address feature of address editor component
@@ -103,12 +110,13 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
   private olGeometry$$: Subscription;
   private modifyControl: ModifyControl;
   private olGeoJSON = new OlGeoJSON();
+  private dialogZoom$$: Subscription;
+  private dialogSave$$: Subscription;
 
   /**
    * Determines whether edition in (if something is in the store)
    */
-  get inEdition(): boolean { return this.store.count > 0; }
-
+  get storeIsFilled(): boolean { return this.store.count > 0; }
 
   /**
    * informs if an address is selected
@@ -127,6 +135,8 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    * @internal
    */
   ngOnInit() {
+    // If there's something in the store, it means we were in edition mode
+    this.inEdition$.next(this.storeIsFilled);
     this.initModifyControl();
     this.listenAddressSelection();
   }
@@ -139,6 +149,8 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
     if (this.selectedAddress$$ !== undefined) { this.selectedAddress$$.unsubscribe(); }
     if (this.buildingNumber$ !== undefined) { this.buildingNumber$.unsubscribe(); }
     if (this.buildingSuffix$ !== undefined) { this.buildingSuffix$.unsubscribe(); }
+    if (this.dialogZoom$$ !== undefined) { this.dialogZoom$$.unsubscribe(); }
+    if (this.dialogSave$$ !== undefined) { this.dialogSave$$.unsubscribe(); }
     this.deactivateModifyControl();
    }
 
@@ -146,7 +158,11 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    * Handles form edit
    */
   handleFormEdit() {
-    this.initEdition();
+    if (this.map.viewController.getZoom() < AddressEditorComponent.zoomLevelEdition) {
+      this.manageZoom();
+    } else {
+      this.initEdition();
+    }
   }
 
   /**
@@ -168,8 +184,8 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
     this.store.clear();
     this.listenAddressSelection();
     this.store.activateStrategyOfType(FeatureStoreSelectionStrategy);
+    this.inEdition$.next(false);
   }
-
 
   /**
    * Listens the address selection
@@ -186,25 +202,35 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    * Manages an address save
    */
   private manageZoom() {
-
     const dialogZoomRef = this.dialogZoom.open(AddressEditorZoomDialogComponent);
-    const sub = dialogZoomRef.componentInstance.addressZoom.subscribe(() => {
-      this.map.viewController.zoomTo(14);
+    this.dialogZoom$$ = dialogZoomRef.componentInstance.addressZoom.subscribe((response: boolean) => {
+      // Do not use the zoomTo function of the view because there's an animation with delay.
+      // In our case, it must be direct because we use the extent of the zoomed view.
+      this.map.ol.getView().setZoom(AddressEditorComponent.zoomLevelEdition);
+      this.initEdition();
+    });
+    // unsubscribe
+    dialogZoomRef.afterClosed().subscribe(() => {
+      this.dialogZoom$$.unsubscribe();
     });
   }
-
 
   /**
    * Manages an address save
    */
   private manageSave() {
-
     const dialogSaveRef = this.dialogSave.open(AddressEditorSaveDialogComponent);
-    const sub = dialogSaveRef.componentInstance.addressSave.subscribe(() => {
-      console.log('YES');
+    this.dialogSave$$ = dialogSaveRef.componentInstance.addressSave.subscribe(() => {
+      this.addressService.modifyAddressGeometry(
+        this.selectedAddressFeature.properties.idAdresseLocalisee,
+        this.selectedAddressFeature
+        ).subscribe();
+    });
+    // unsubscribe
+    dialogSaveRef.afterClosed().subscribe(() => {
+      this.dialogSave$$.unsubscribe();
     });
   }
-
 
   /**
    * Manages a selected address
@@ -213,7 +239,7 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
   private manageSelectedAddress(record: EntityRecord<AddressFeature>) {
     if (record === undefined) { return; }
 
-    if (this.inEdition && !this.addressIsSelected) {
+    if (this.storeIsFilled && !this.addressIsSelected) {
       // Restore the selected address. Only one address at a time could be selected
       this.store.load([record.entity]);
       return;
@@ -237,8 +263,7 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    * Inits the edition
    */
   private initEdition() {
-    this.manageZoom();
-
+    this.inEdition$.next(true);
     this.showLayers();
     const extentGeometry = this.getMapExtentPolygon('EPSG:4326');
     this.addressService.getAddressesByGeometry(extentGeometry)
@@ -246,7 +271,6 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
       this.store.load(addressList);
     });
   }
-
 
   /**
    * Gets map extent polygon of the view
