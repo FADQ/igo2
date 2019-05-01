@@ -33,16 +33,17 @@ export class AddressEditorToolComponent {
    * Store Address
    * @internal
    */
-  get store(): FeatureStore<AddressFeature> { return this.adressState.adressStore; }
+  get store(): FeatureStore<AddressFeature> { return this.addressState.adressStore; }
 
   /**
    * Map to edit on
    * @internal
    */
   get map(): IgoMap { return this.mapState.map; }
+
   constructor(
     private mapState: MapState,
-    private adressState: AddressState
+    private addressState: AddressState
   ) {}
 
 }

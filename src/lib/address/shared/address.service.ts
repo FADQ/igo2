@@ -11,8 +11,7 @@ import { ApiService } from 'src/lib/core/api';
 import {
   AddressApiConfig,
   AddressFeature,
-  AddressFeatureResponseItem,
-  AddressFeatureList
+  AddressFeatureResponseItem
 } from './address.interface';
 
 @Injectable()
@@ -30,7 +29,7 @@ export class AddressService {
    * @param featureExtent A feature of the extent of the view map
    * @returns address All features addresses in relation with the extent
    */
-  getAddressesByGeometry(geometry: GeoJSONGeometry): Observable<AddressFeatureList> {
+  getAddressesByGeometry(geometry: GeoJSONGeometry): Observable<AddressFeature[]> {
     const url = this.apiService.buildUrl(this.apiConfig.list);
     return this.http
       .post(url, geometry)
@@ -80,6 +79,7 @@ export class AddressService {
    */
   modifyAddressGeometry(idAdresseLocalisee: string, addressModified: AddressFeature): Observable<object> {
     const url = this.apiService.buildUrl(this.apiConfig.save, {idAdresseAQ: idAdresseLocalisee});
+    console.log(addressModified.properties.idAdresseLocalisee);
     return this.http.put(url, {geometriePoint: {
       type: addressModified.type,
       properties: addressModified.properties,

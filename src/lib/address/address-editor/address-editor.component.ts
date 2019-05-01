@@ -1,4 +1,5 @@
-import { Component,
+import {
+  Component,
   Input,
   OnInit,
   OnDestroy,
@@ -16,15 +17,21 @@ import { EntityRecord } from '@igo2/common';
 import {
   FeatureStore,
   IgoMap,
+  FeatureStoreSelectionStrategy,
+  FeatureDataSource,
+  FeatureStoreLoadingStrategy,
+  FeatureMotion,
   Layer,
   LayerService,
   LayerOptions,
   ModifyControl,
-  FeatureStoreSelectionStrategy
+  tryBindStoreLayer,
+  tryAddLoadingStrategy,
+  tryAddSelectionStrategy,
+  VectorLayer,
  } from '@igo2/geo';
 
 import {
-  AddressFeatureList,
   AddressFeature,
   AddressService,
   createAddressStyle
@@ -126,8 +133,7 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
   constructor(
     private layerService: LayerService,
     private addressService: AddressService,
-    private dialogSave: MatDialog,
-    private dialogZoom: MatDialog
+    private dialog: MatDialog
     ) {}
 
   /**
@@ -135,10 +141,11 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    * @internal
    */
   ngOnInit() {
+    this.initStore();
     // If there's something in the store, it means we were in edition mode
     this.inEdition$.next(this.storeIsFilled);
     this.initModifyControl();
-    this.listenAddressSelection();
+    this.subscribeToAddressSelection();
   }
 
    /**
@@ -182,15 +189,37 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
     this.deactivateModifyControl();
     this.store.layer.dataSource.ol.clear();
     this.store.clear();
-    this.listenAddressSelection();
+    this.subscribeToAddressSelection();
     this.store.activateStrategyOfType(FeatureStoreSelectionStrategy);
     this.inEdition$.next(false);
+  }
+
+  private initStore() {
+    this.trybindStoreLayer();
+    tryAddLoadingStrategy(this.store, new FeatureStoreLoadingStrategy({motion: FeatureMotion.None}));
+    tryAddSelectionStrategy(this.store, new FeatureStoreSelectionStrategy({
+      map: this.map,
+      motion: FeatureMotion.None
+    }));
+  }
+
+  /**
+   * Try to bind a layer to the store
+   */
+  private trybindStoreLayer() {
+    const layer = new VectorLayer({
+      zIndex: 200,
+      source: new FeatureDataSource(),
+      style: createAddressStyle('#f7ef0e'),
+      showInLayerList: false
+    });
+    tryBindStoreLayer(this.store, layer);
   }
 
   /**
    * Listens the address selection
    */
-  private listenAddressSelection () {
+  private subscribeToAddressSelection () {
       this.selectedAddress$$ = this.store.stateView
         .firstBy$((record: EntityRecord<AddressFeature>) => record.state.selected === true)
         .subscribe((record: EntityRecord<AddressFeature>) => {
@@ -202,7 +231,7 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    * Manages an address save
    */
   private manageZoom() {
-    const dialogZoomRef = this.dialogZoom.open(AddressEditorZoomDialogComponent);
+    const dialogZoomRef = this.dialog.open(AddressEditorZoomDialogComponent);
     this.dialogZoom$$ = dialogZoomRef.componentInstance.addressZoom.subscribe((response: boolean) => {
       // Do not use the zoomTo function of the view because there's an animation with delay.
       // In our case, it must be direct because we use the extent of the zoomed view.
@@ -219,7 +248,7 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    * Manages an address save
    */
   private manageSave() {
-    const dialogSaveRef = this.dialogSave.open(AddressEditorSaveDialogComponent);
+    const dialogSaveRef = this.dialog.open(AddressEditorSaveDialogComponent);
     this.dialogSave$$ = dialogSaveRef.componentInstance.addressSave.subscribe(() => {
       this.addressService.modifyAddressGeometry(
         this.selectedAddressFeature.properties.idAdresseLocalisee,
@@ -242,8 +271,9 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
     if (this.storeIsFilled && !this.addressIsSelected) {
       // Restore the selected address. Only one address at a time could be selected
       this.store.load([record.entity]);
-      return;
-    } else if (this.addressIsSelected) {
+    }
+
+    if (this.addressIsSelected) {
       // Deactivate the selection strategy when an address is selected
       this.store.deactivateStrategyOfType(FeatureStoreSelectionStrategy);
       if (this.selectedAddress$$ !== undefined) {
@@ -267,9 +297,9 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
     this.showLayers();
     const extentGeometry = this.getMapExtentPolygon('EPSG:4326');
     this.addressService.getAddressesByGeometry(extentGeometry)
-    .subscribe((addressList: AddressFeatureList) => {
-      this.store.load(addressList);
-    });
+      .subscribe((addressList: AddressFeature[]) => {
+        this.store.load(addressList);
+      });
   }
 
   /**
@@ -288,7 +318,7 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
     this.showLayer('buildings', this.layerIdBuildings === 'buildings');
     this.showLayer('buildingsCorrected', this.layerIdBuildingsCorrected === 'buildingsCorrected');
     this.showLayer('mun', this.layerIdMun === 'mun');
-    // this.showLayer('cadastre_reno', this.layerIdCadastre === 'cadastre_reno');
+    this.showLayer('cadastre_reno', this.layerIdCadastre === 'cadastre_reno');
   }
 /**
  * Shows layer

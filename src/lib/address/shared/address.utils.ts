@@ -1,6 +1,6 @@
 
 import * as olstyle from 'ol/style';
-// color: [224, 38, 13, 1]
+
 export function createAddressStyle(strokeColor: string): olstyle.Style {
   const stroke = new olstyle.Stroke({
     width: 2,

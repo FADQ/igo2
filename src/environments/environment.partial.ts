@@ -46,7 +46,7 @@ export interface IgoEnvironment {
   };
   address: {
     list: string;
-    save: string
+    save: string;
   };
 }
 
