@@ -33,6 +33,9 @@ export class ClientState implements OnDestroy {
   /** Observable of the active client */
   public client$ = new BehaviorSubject<Client>(undefined);
 
+  /** Observable of the active clienst */
+  public clients$ = new BehaviorSubject<Client[]>([]);
+
   /** Observable of the client error, if any */
   public clientError$ = new BehaviorSubject<string>(undefined);
 
@@ -154,6 +157,13 @@ export class ClientState implements OnDestroy {
     } else {
       this.clientError$.next(undefined);
     }
+  }
+
+  addClient(client: Client | undefined) {
+    this.parcelState.addClient(client);
+    this.schemaState.addClient(client);
+
+    this.clients$.next(this.clients$.value.slice().concat([client]));
   }
 
   setClientNotFound() {

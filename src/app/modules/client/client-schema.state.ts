@@ -1,6 +1,6 @@
 import { Inject, Injectable} from '@angular/core';
 
-import { Action, ActionStore, EntityStore, Editor, Widget } from '@igo2/common';
+import { Action, ActionStore, EntityStore, Editor, Widget, WidgetComponent } from '@igo2/common';
 
 import {
   Client,
@@ -61,6 +61,12 @@ export class ClientSchemaState {
       this.schemaStore.clear();
       this.editor.deactivate();
     }
+  }
+
+  addClient(client: Client) {
+
+    this.schemaStore.load(client.schemas);
+
   }
 
   private createStore(): EntityStore<ClientSchema> {
@@ -163,6 +169,112 @@ export class ClientSchemaState {
         conditions: [schemaIsDefined, schemaIsOfTypeLSE, () => false]
       }
     ];
+  }
+
+  private _buildActions(client: Client, schema: ClientSchema, editor: Editor): Action[] {
+    const clientIsDefined = () => client !== undefined;
+    const schemaIsDefined = () => schema !== undefined;
+    const schemaIsOfTypeLSE = () => schema !== undefined && schema.type === ClientSchemaType.LSE;
+    const schemaIsNotOfTypeLSE = () => schema !== undefined && schema.type !== ClientSchemaType.LSE;
+
+    return [
+      {
+        id: 'create',
+        icon: 'add',
+        title: 'client.schema.create',
+        tooltip: 'client.schema.create.tooltip',
+        handler: (
+          widget: Widget,
+          client: Client,
+          schema: ClientSchema,
+          editor: Editor
+        ) => editor.activateWidget(widget, {client, schema, store: editor.entityStore}),
+        args: [this.clientSchemaCreateWidget, client, schema, editor.entityStore]
+      },
+      {
+        id: 'update',
+        icon: 'edit',
+        title: 'client.schema.update',
+        tooltip: 'client.schema.update.tooltip',
+        handler: () => this.editor.activateWidget(this.clientSchemaUpdateWidget, {
+          schema: this.schema,
+          client: this.client,
+          store: this.schemaStore
+        }),
+        conditionArgs = [editor],
+        conditions: [
+          (editor: Editor) => editor.entity !== undefined
+        ]
+      },
+      {
+        id: 'delete',
+        icon: 'delete',
+        title: 'client.schema.delete',
+        tooltip: 'client.schema.delete.tooltip',
+        handler: () => this.editor.activateWidget(this.clientSchemaDeleteWidget, {
+          schema: this.schema,
+          store: this.schemaStore
+        }),
+        conditions: [schemaIsDefined]
+      },
+      {
+        id: 'duplicate',
+        icon: 'queue',
+        title: 'client.schema.duplicate',
+        tooltip: 'client.schema.duplicate.tooltip',
+        handler: () => this.editor.activateWidget(this.clientSchemaDuplicateWidget, {
+          schema: this.schema,
+          store: this.schemaStore
+        }),
+        conditions: [schemaIsDefined, schemaIsNotOfTypeLSE]
+      },
+      {
+        id: 'manageFiles',
+        icon: 'attach_file',
+        title: 'client.schema.manageFiles',
+        tooltip: 'client.schema.manageFiles.tooltip',
+        handler: () => this.editor.activateWidget(this.clientSchemaFileManagerWidget, {
+          schema: this.schema
+        }, {
+          complete: (count: number) => {
+            this.schemaStore.update(Object.assign({}, this.schema, {nbDocuments: count}));
+          }
+        }),
+        conditions: [schemaIsDefined]
+      },
+      {
+        id: 'transfer',
+        icon: 'swap_horiz',
+        title: 'client.schema.transfer',
+        tooltip: 'client.schema.transfer.tooltip',
+        handler: () => this.editor.activateWidget(this.clientSchemaTransferWidget, {
+          schema: this.schema,
+          store: this.schemaStore
+        }),
+        conditions: [schemaIsDefined, schemaIsOfTypeLSE]
+      },
+      {
+        id: 'createMap',
+        icon: 'image',
+        title: 'client.schema.createMap',
+        tooltip: 'client.schema.createMap.tooltip',
+        handler: () => {},
+        conditions: [schemaIsDefined, schemaIsOfTypeLSE, () => false]
+      }
+    ];
+  }
+
+  private createEditor(client: Client, entityStore: EntityStore<ClientSchema>, actionStore: ActionStore): Editor {
+    const editor = new Editor({
+      id: 'fadq.client-schema-editor',
+      title: `Schémas du client ${client.info.numero}`,
+      tableTemplate: this.clientSchemaTableService.buildTable(),
+      entityStore: entityStore,
+      actionStore: actionStore
+    });
+    editor.actionStore.load(this._buildActions(client, editor));
+
+    return editor;
   }
 
 }

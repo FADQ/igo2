@@ -17,7 +17,7 @@ import {
   entitiesToRowData,
   exportToCSV
 } from '@igo2/geo';
-import { MapState } from '@igo2/integration';
+import { MapState, EditionState } from '@igo2/integration';
 
 import {
   Client,
@@ -55,6 +55,7 @@ export class ClientParcelState {
 
   constructor(
     private mapState: MapState,
+    private editionState: EditionState,
     private clientParcelTableService: ClientParcelTableService,
     private clientParcelYearService: ClientParcelYearService
   ) {
@@ -97,6 +98,27 @@ export class ClientParcelState {
     }
   }
 
+  addClient(client: Client): Editor {
+    const entityStore = this.createStore();
+    const actionStore = new ActionStore([]);
+    const diagramStore = new EntityStore<ClientParcelDiagram>([]);
+    const editor = this.createEditor(client, entityStore, actionStore);
+    this.map.addLayer(entityStore.layer);
+    diagramStore.load(client.diagrams);
+    diagramStore.view.sort({
+      valueAccessor: (diagram: ClientParcelDiagram) => diagram.id,
+      direction: 'asc'
+    });
+
+    entityStore.load(client.parcels);
+    entityStore.view.sort({
+      valueAccessor: (parcel: ClientParcel) => parcel.properties.noParcelleAgricole,
+      direction: 'asc'
+    });
+
+    return editor;
+  }
+
   setDiagram(diagram: ClientParcelDiagram) {
     this.parcelStore.state.clear();
     if (diagram === undefined) {
@@ -123,6 +145,19 @@ export class ClientParcelState {
       this.parcelStore.deactivateStrategyOfType(FeatureStoreSelectionStrategy);
       this.map.removeLayer(this.parcelStore.layer);
     }
+  }
+
+  private createEditor(client: Client, entityStore: FeatureStore<ClientParcel>, actionStore: ActionStore): Editor {
+    const editor = new Editor({
+      id: 'fadq.client-parcel-editor',
+      title: `Parcelles du client ${client.info.numero}`,
+      tableTemplate: this.clientParcelTableService.buildTable(),
+      entityStore: entityStore,
+      actionStore: actionStore
+    });
+    editor.actionStore.load(this._buildActions(client, editor));
+
+    return editor;
   }
 
   private createStore(): FeatureStore<ClientParcel> {
@@ -160,6 +195,26 @@ export class ClientParcelState {
     return store;
   }
 
+  private _buildActions(client: Client, editor: Editor): Action[] {
+    return [
+      {
+        id: 'export',
+        icon: 'file_download',
+        title: 'client.parcel.exportToCSV',
+        tooltip: 'client.parcel.exportToCSV.tooltip',
+        handler: (_client: Client, _editor: Editor) => {
+          const columns = _editor.tableTemplate.columns;
+          const headers = columns.map((column: EntityTableColumn) => column.title);
+          const rows = entitiesToRowData(editor.entityStore.view.all(), columns);
+
+          const fileName = `Parcelles du client ${_client.info.numero}.csv`;
+          exportToCSV([headers].concat(rows), fileName, ';');
+        },
+        args: [client, editor]
+      }
+    ];
+  }
+
   private buildActions(): Action[] {
     return [
       {
@@ -170,7 +225,7 @@ export class ClientParcelState {
         handler: () => {
           const columns = this.editor.tableTemplate.columns;
           const headers = columns.map((column: EntityTableColumn) => column.title);
-          const rows = entitiesToRowData(this.parcelStore.view.all(), columns);
+          const rows = entitiesToRowData(this.editor.entityStore.view.all(), columns);
 
           const fileName = `Parcelles du client ${this.client.info.numero}.csv`;
           exportToCSV([headers].concat(rows), fileName, ';');
