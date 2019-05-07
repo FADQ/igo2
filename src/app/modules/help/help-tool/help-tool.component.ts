@@ -1,4 +1,4 @@
-import { Component,Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 import { ToolComponent } from '@igo2/common';
 import { ConfigService } from '@igo2/core';

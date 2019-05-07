@@ -102,7 +102,7 @@ export class ClientInfoService {
 
   private extractAddressFromGetResponseData(data: ClientInfoAddressData) {
     if (data === undefined) { return undefined; }
- 
+
     const no = data[`noAdresse`];
     const suite = data[`suiteAdresse`];
     const mun = data[`municipaliteAdresse`];
