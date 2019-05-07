@@ -30,6 +30,7 @@
     "url": "http://plssisigdev1.fadq.qc:3000"
   },
   "context": {
-    "url": "/app/interne/igovisualisation/contexte_catalogue"
+    "url": "/app/interne/igovisualisation/contexte_catalogue",
+    "defaultContextUri": "default"
   }
 }
