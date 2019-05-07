@@ -446,7 +446,7 @@ export class PortalComponent implements OnInit, OnDestroy {
       if (layerInfo instanceof Layer) {
         this.addSearchLayer(layerInfo, searchType);
       } else if (typeof layerInfo === 'string') {
-        this.makeSearchLayerVisible(layerInfo,searchType);
+        this.makeSearchLayerVisible(layerInfo, searchType);
       } else {
         this.layerService
           .createAsyncLayer(layerInfo)
