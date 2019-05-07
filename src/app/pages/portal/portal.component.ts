@@ -438,9 +438,9 @@ export class PortalComponent implements OnInit, OnDestroy {
 
     if (this.contextState.context$.value === undefined || result === undefined ) { return; }
 
-    const searchLayers = (this.contextState.context$.value as any).searchLayers;
-    const  searchType = (result.source.constructor as typeof SearchSource).type;
-    const layers = searchLayers[searchType];
+    const searchLayers = (this.contextState.context$.value as any).searchLayers || {};
+    const searchType = (result.source.constructor as typeof SearchSource).type;
+    const layers = searchLayers[searchType] || [];
 
     layers.forEach((layerInfo: string | LayerOptions | Layer) => {
       if (layerInfo instanceof Layer) {
@@ -450,9 +450,7 @@ export class PortalComponent implements OnInit, OnDestroy {
       } else {
         this.layerService
           .createAsyncLayer(layerInfo)
-          .subscribe(layer => {
-            this.addSearchLayer(layer, searchType);
-          });
+          .subscribe(layer => this.addSearchLayer(layer, searchType));
       }
     });
     this.clearOtherSearchLayers(result);
