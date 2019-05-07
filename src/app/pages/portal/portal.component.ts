@@ -45,8 +45,7 @@ import {
 import { CLIENT, Client } from 'src/lib/client';
 
 import { CADASTRE } from 'src/lib/cadastre/shared/cadastre.enums';
-import { ContextService, DetailedContext } from '@igo2/context';
-import { ConsoleReporter } from 'jasmine';
+import { DetailedContext } from '@igo2/context';
 
 @Component({
   selector: 'app-portal',
@@ -68,9 +67,8 @@ export class PortalComponent implements OnInit, OnDestroy {
   private currentSearchTerm: string;
   private currentSearchType: string = CLIENT;
 
-  private searchLayers: {[key: string]: Array<string | LayerOptions | Layer>} ;
-  private searchRelatedAddedLayers: Map<string, Layer[]> = new Map();
-  private searchRelatedVisibledLayers: Map<string, Layer[]> = new Map();
+  private searchAddedLayers: Map<string, Layer[]> = new Map();
+  private searchVisibledLayers: Map<string, Layer[]> = new Map();
   private context$$: Subscription;
 
   get map(): IgoMap {
@@ -179,7 +177,7 @@ export class PortalComponent implements OnInit, OnDestroy {
         this.updateSearchLayers(result);
       });
 
-      this.context$$ = this.contextState.context$.subscribe((context: DetailedContext) => {
+    this.context$$ = this.contextState.context$.subscribe((context: DetailedContext) => {
       if (context !== undefined) {
         this.updateSearchLayers(undefined);
       }
@@ -427,62 +425,72 @@ export class PortalComponent implements OnInit, OnDestroy {
     });
   }
 
+
+  /**
+   * Updates search layers
+   * @param result Result search to update layers
+   */
   private updateSearchLayers(result: SearchResult) {
     if (result === undefined) {
       this.clearAllSearchLayers();
       return;
     }
 
-    if (this.contextState.context$.value === undefined ||
-      result === undefined ) { return; }
+    if (this.contextState.context$.value === undefined || result === undefined ) { return; }
 
-    this.searchLayers = (this.contextState.context$.value as any).searchLayers;
+    const searchLayers = (this.contextState.context$.value as any).searchLayers;
     const  searchType = (result.source.constructor as typeof SearchSource).type;
-    const layers = this.searchLayers[searchType];
+    const layers = searchLayers[searchType];
 
     layers.forEach((layerInfo: string | LayerOptions | Layer) => {
       if (layerInfo instanceof Layer) {
-        if (this.searchRelatedAddedLayers.has(searchType)) {
-          this.searchRelatedAddedLayers.get(searchType).push(layerInfo);
-        } else {
-          this.searchRelatedAddedLayers.set(searchType, [layerInfo]);
-        }
-        this.map.addLayer(layerInfo);
+        this.addSearchLayer(layerInfo, searchType);
       } else if (typeof layerInfo === 'string') {
-        const layer: Layer = this.map.getLayerByAlias(layerInfo);
-        if (this.searchRelatedVisibledLayers.has(searchType)) {
-          this.searchRelatedVisibledLayers.get(searchType).push(layer);
-        } else {
-          this.searchRelatedVisibledLayers.set(searchType, [layer]);
-        }
-        layer.visible = true;
+        this.makeSearchLayerVisible(layerInfo,searchType);
       } else {
         this.layerService
           .createAsyncLayer(layerInfo)
           .subscribe(layer => {
-            if (this.searchRelatedAddedLayers.has(searchType)) {
-              this.searchRelatedAddedLayers.get(searchType).push(layer);
-            } else {
-              this.searchRelatedAddedLayers.set(searchType, [layer]);
-            }
-            this.map.addLayer(layer);
+            this.addSearchLayer(layer, searchType);
           });
       }
     });
-    this.clearOthersSearchLayers(result);
+    this.clearOtherSearchLayers(result);
+  }
+
+  /**
+   * Adds search layer
+   * @param layer Layer to be added
+   * @param searchType The search type
+   */
+  private addSearchLayer(layer: Layer, searchType: string) {
+    if (this.searchAddedLayers.has(searchType)) {
+      this.searchAddedLayers.get(searchType).push(layer);
+    } else {
+      this.searchAddedLayers.set(searchType, [layer]);
+    }
+    this.map.addLayer(layer);
+  }
+
+  private makeSearchLayerVisible(layerId: string, searchType: string) {
+    const layer: Layer = this.map.getLayerByAlias(layerId);
+    if (this.searchVisibledLayers.has(searchType)) {
+      this.searchVisibledLayers.get(searchType).push(layer);
+    } else {
+      this.searchVisibledLayers.set(searchType, [layer]);
+    }
+    layer.visible = true;
   }
 
   /**
    * Clears all search layers
    */
   private clearAllSearchLayers() {
-    this.searchRelatedAddedLayers.forEach((layers: Layer[]) => {
-      layers.forEach((layer: Layer) => {
-        this.map.removeLayer(layer);
-      });
+    this.searchAddedLayers.forEach((layers: Layer[]) => {
+      this.map.removeLayers(layers);
     });
 
-    this.searchRelatedVisibledLayers.forEach((layers: Layer[]) => {
+    this.searchVisibledLayers.forEach((layers: Layer[]) => {
       layers.forEach((layer: Layer) => {
         layer.visible = false;
       });
@@ -493,10 +501,10 @@ export class PortalComponent implements OnInit, OnDestroy {
    * Clears others search layers there are not the current SearchResult layers.
    * @param result The SearchResult
    */
-  private clearOthersSearchLayers(result: SearchResult) {
+  private clearOtherSearchLayers(result: SearchResult) {
     const  searchType = (result.source.constructor as typeof SearchSource).type;
 
-    this.searchRelatedAddedLayers.forEach((layers: Layer[], key: string) => {
+    this.searchAddedLayers.forEach((layers: Layer[], key: string) => {
       if (key !== searchType) {
         layers.forEach((layer: Layer) => {
           layer.visible = false;
@@ -504,7 +512,7 @@ export class PortalComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.searchRelatedVisibledLayers.forEach((layers: Layer[], key: string) => {
+    this.searchVisibledLayers.forEach((layers: Layer[], key: string) => {
       if (key !== searchType) {
         layers.forEach((layer: Layer) => {
           layer.visible = false;
