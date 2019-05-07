@@ -40,7 +40,12 @@ export class ClientInfoService {
     );
 
     return client$.pipe(
-      map((results: [ClientInfo, ClientInfoAddresses]) => Object.assign(...results))
+      map((results: [ClientInfo, ClientInfoAddresses]) => {
+        if (results[0] === undefined) {
+          return undefined;
+        }
+        return Object.assign(...results);
+      })
     );
   }
 
@@ -76,7 +81,7 @@ export class ClientInfoService {
       nom: data.nomClient,
       adresseCor: undefined,
       adresseExp: undefined,
-      adressePro: undefined
+      adressePro: []
     };
   }
 
@@ -89,9 +94,9 @@ export class ClientInfoService {
       adresseExp: this.extractAddressFromGetResponseData(
         data.find((address: ClientInfoAddressData) => address.typeAdresse === 'EXP')
       ),
-      adressePro: this.extractAddressFromGetResponseData(
-        data.find((address: ClientInfoAddressData) => address.typeAdresse === 'PRO')
-      )
+      adressePro: data
+        .filter((address: ClientInfoAddressData) => address.typeAdresse === 'SPR')
+        .map((address: ClientInfoAddressData) => this.extractAddressFromGetResponseData(address))
     };
   }
 

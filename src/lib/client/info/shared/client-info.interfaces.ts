@@ -7,7 +7,7 @@ export interface ClientInfoApiConfig {
 export interface ClientInfoAddresses {
   adresseCor: string;
   adresseExp: string;
-  adressePro: string;
+  adressePro: string[];
 }
 
 export interface ClientInfo extends ClientInfoAddresses {
@@ -29,7 +29,7 @@ export interface ClientInfoAddressesResponse {
 }
 
 export interface ClientInfoAddressData {
-  typeAdresse: 'COR' | 'EXP' | 'PRO';
+  typeAdresse: 'COR' | 'EXP' | 'SPR';
   adresse: string;
   suiteAdresse?: string;
   municipaliteAdresse: string;

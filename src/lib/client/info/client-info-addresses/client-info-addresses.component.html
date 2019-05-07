@@ -16,8 +16,8 @@
       <tr>
         <td>{{'client.info.adressePro' | translate}}</td>
       </tr>
-      <tr>
-        <ng-container *ngTemplateOutlet="address; context: {$implicit: client.info.adressePro}"></ng-container>
+      <tr *ngFor="let addressPro of client.info.adressePro">
+        <ng-container *ngTemplateOutlet="address; context: {$implicit: addressPro}"></ng-container>
       </tr>
     </tbody>
   </table>
