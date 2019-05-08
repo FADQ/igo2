@@ -15,8 +15,8 @@
   "informations": "Informations",
 
   "search": {
-    "feature.title": "Adresse, lieu ou coordonnée",
-    "feature.placeholder": "Rechercher une adresse, un lieu, une coordonnée",
+    "feature.title": "Adresse, lieu ou coordonnées",
+    "feature.placeholder": "Rechercher une adresse, un lieu, des coordonnées",
     "layer.title": "Couche de données",
     "layer.placeholder": "Rechercher une couche de données.",
     "client.title": "Client",
@@ -100,6 +100,7 @@
       "all": "Tous"
     },
     "schema": {
+      "none": "Aucun",
       "confirmDialog.title": "Informations non sauvegardées", 
       "error.anneeRequired": "Un plan de production ou un avis de dommage doit obligatoirement être associé à une année",
       "error.invalidAnnee": "Format d'année invalide",

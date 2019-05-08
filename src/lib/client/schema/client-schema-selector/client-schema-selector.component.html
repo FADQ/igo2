@@ -1,6 +1,7 @@
 <igo-entity-selector
   [store]="store"
   [placeholder]="'client.schema.placeholder' | translate"
+  [emptyText]="'client.schema.none' | translate"
   [titleAccessor]="getSchemaTitle"
   (selectedChange)="selectedChange.emit($event)">
 </igo-entity-selector>

@@ -170,13 +170,13 @@ export class ClientState implements OnDestroy {
 
     if (this.client === undefined) { return; }
 
-    this.clearSchema();
-
     this.parcelState.setClient(undefined);
     this.schemaState.setClient(undefined);
 
-    this.editionState.register(this.parcelState.editor);
-    this.editionState.register(this.schemaState.editor);
+    this.editionState.unregister(this.parcelState.editor);
+    this.editionState.unregister(this.schemaState.editor);
+
+    this.clearSchema();
 
     this.client$.next(undefined);
   }
@@ -227,6 +227,8 @@ export class ClientState implements OnDestroy {
 
     this.elementState.setSchema(undefined);
     this.editionState.unregister(this.elementState.editor);
+    this.editionState.setEditor(this.schemaState.editor);
+
     this.schema$.next(undefined);
   }
 

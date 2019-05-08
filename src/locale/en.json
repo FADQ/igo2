@@ -94,6 +94,7 @@
       "exportToCSV.tooltip": "Export to CSV"
     },
     "schema": {
+      "none": "None",
       "confirmDialog.title": "Informations non sauvegardées", 
       "error.anneeRequired": "Un plan de production ou un avis de dommage doit obligatoirement être associé à une année",
       "error.invalidAnnee": "Format d'année invalide",
