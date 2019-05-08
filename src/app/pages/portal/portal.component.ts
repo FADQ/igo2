@@ -436,7 +436,7 @@ export class PortalComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.contextState.context$.value === undefined || result === undefined ) { return; }
+    if (this.contextState.context$.value === undefined) { return; }
 
     const searchLayers = (this.contextState.context$.value as any).searchLayers || {};
     const searchType = (result.source.constructor as typeof SearchSource).type;
@@ -470,8 +470,10 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.map.addLayer(layer);
   }
 
-  private makeSearchLayerVisible(layerId: string, searchType: string) {
-    const layer: Layer = this.map.getLayerByAlias(layerId);
+  private makeSearchLayerVisible(layerAlias: string, searchType: string) {
+    const layer = this.map.getLayerByAlias(layerAlias);
+    if (layer === undefined) { return; }
+
     if (this.searchVisibledLayers.has(searchType)) {
       this.searchVisibledLayers.get(searchType).push(layer);
     } else {
