@@ -23,6 +23,7 @@ export class AddressEditorSaveDialogComponent {
   }
 
   onCancelClick() {
+    this.addressSave.emit(false);
     this.dialogRef.close();
   }
 
