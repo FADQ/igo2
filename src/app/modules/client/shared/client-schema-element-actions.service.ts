@@ -43,28 +43,28 @@ export class ClientSchemaElementActionsService {
     }
 
     function elementIsDefined(ws: ClientWorkspace): boolean {
-      return ws.element !== undefined;
+      return ws.schemaElement !== undefined;
     }
 
     function transactionIsNotEmpty(ws: ClientWorkspace): boolean {
       return ws.transaction.empty === false;
-    };
-  
+    }
+
     function transactionIsNotInCommitPhase(ws: ClientWorkspace): boolean {
       return ws.transaction.inCommitPhase === false;
-    };
-  
+    }
+
     function elementIsAPolygon(ws: ClientWorkspace): boolean {
-      const element = ws.element;
+      const element = ws.schemaElement;
       const geometry = element === undefined ? undefined : element.geometry;
       return geometry !== undefined && geometry.type === 'Polygon';
-    };
-  
+    }
+
     function elementCanBeFilled(ws: ClientWorkspace): boolean {
-      const element = ws.element;
+      const element = ws.schemaElement;
       const geometry = element === undefined ? undefined : element.geometry;
       return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length > 1;
-    };
+    }
 
     const conditionArgs = [workspace];
 
@@ -93,7 +93,7 @@ export class ClientSchemaElementActionsService {
         tooltip: 'client.schemaElement.update.tooltip',
         handler: (widget: Widget, ws: ClientWorkspace) => {
           ws.schemaElementEditor.activateWidget(widget, {
-            element: ws.element,
+            element: ws.schemaElement,
             schema: ws.schema,
             transaction: ws.transaction,
             map: ws.map,
@@ -110,8 +110,8 @@ export class ClientSchemaElementActionsService {
         title: 'client.schemaElement.delete',
         tooltip: 'client.schemaElement.delete.tooltip',
         handler: (ws: ClientWorkspace) => {
-          ws.transaction.delete(ws.element, ws.schemaElementStore, {
-            title: generateOperationTitle(ws.element)
+          ws.transaction.delete(ws.schemaElement, ws.schemaElementStore, {
+            title: generateOperationTitle(ws.schemaElement)
           });
         },
         args: [workspace],
@@ -125,7 +125,7 @@ export class ClientSchemaElementActionsService {
         tooltip: 'client.schemaElement.reinclude.tooltip',
         handler: (widget: Widget, ws: ClientWorkspace) => {
           ws.schemaElementEditor.activateWidget(widget, {
-            element: ws.element,
+            element: ws.schemaElement,
             schema: ws.schema,
             transaction: ws.transaction,
             map: ws.map,
@@ -143,7 +143,7 @@ export class ClientSchemaElementActionsService {
         tooltip: 'client.schemaElement.slice.tooltip',
         handler: (widget: Widget, ws: ClientWorkspace) => {
           ws.schemaElementEditor.activateWidget(widget, {
-            element: ws.element,
+            element: ws.schemaElement,
             schema: ws.schema,
             transaction: ws.transaction,
             map: ws.map,
@@ -191,7 +191,7 @@ export class ClientSchemaElementActionsService {
         tooltip: 'client.schemaElement.importData.tooltip',
         handler: (widget: Widget, ws: ClientWorkspace) => {
           ws.schemaElementEditor.activateWidget(widget, {
-            element: ws.element,
+            element: ws.schemaElement,
             schema: ws.schema,
             transaction: ws.transaction,
             map: ws.map,

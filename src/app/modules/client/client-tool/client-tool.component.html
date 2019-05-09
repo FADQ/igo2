@@ -3,13 +3,17 @@
     <fadq-client-parcel-year-selector [store]="parcelYearStore"></fadq-client-parcel-year-selector>
   </div>
 
-  <div *ngIf="clientError$ | async as error" class="fadq-error-text">
-    {{error | translate}}
+  <div *ngIf="message$ | async as message" class="fadq-error-text">
+    {{message | translate}}
   </div>
 
   <div *ngIf="(workspace$ | async) as ws" class="fadq-client-tool-bottom-section">
     <fadq-client-parcel-diagram-selector [store]="ws.diagramStore"></fadq-client-parcel-diagram-selector>
     <fadq-client-schema-selector [store]="ws.schemaStore"></fadq-client-schema-selector>
+
+    <div *ngIf="ws.message$ | async as message" class="fadq-error-text">
+      {{message | translate}}
+    </div>
 
     <a
       href=""

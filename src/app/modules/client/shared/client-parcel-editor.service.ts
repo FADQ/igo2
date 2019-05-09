@@ -27,8 +27,8 @@ export class ClientParcelEditorService {
 
   createParcelEditor(client: Client, map: IgoMap): Editor<ClientParcel> {
     return new Editor<ClientParcel>({
-      id: `fadq.client-parcel-editor-${client.info.numero}`,
-      title: `Parcelles du client ${client.info.numero}`,
+      id: `fadq.client-parcel-editor-1-${client.info.numero}`,
+      title: `${client.info.numero} - Parcelles`,
       tableTemplate: this.clientParcelTableService.buildTable(),
       entityStore: this.createParcelStore(client, map),
       actionStore: this.createParcelActionStore()
@@ -57,7 +57,7 @@ export class ClientParcelEditorService {
     const selectionStrategy = new FeatureStoreSelectionStrategy({
       map: map,
       layer: new VectorLayer({
-        title: `Parcelles sélectionnées du client ${client.info.numero}`,
+        title: `${client.info.numero} - Parcelles sélectionnées`,
         zIndex: 102,
         source: new FeatureDataSource(),
         style: createClientDefaultSelectionStyle(),

@@ -14,6 +14,7 @@ import { ClientSchemaEditorService } from './client-schema-editor.service';
 import { ClientSchemaActionsService } from './client-schema-actions.service';
 import { ClientSchemaElementEditorService } from './client-schema-element-editor.service';
 import { ClientSchemaElementActionsService } from './client-schema-element-actions.service';
+import { ClientResolutionService } from './client-resolution.service';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,8 @@ export class ClientWorkspaceService {
     private clientSchemaActionsService: ClientSchemaActionsService,
     private clientSchemaElementEditorService: ClientSchemaElementEditorService,
     private clientSchemaElementActionsService: ClientSchemaElementActionsService,
-    private clientSchemaElementService: ClientSchemaElementService
+    private clientSchemaElementService: ClientSchemaElementService,
+    private clientResolutionService: ClientResolutionService
   ) {}
 
   createClientWorkspace(client: Client): ClientWorkspace {
@@ -38,6 +40,7 @@ export class ClientWorkspaceService {
     const schemaEditor = this.clientSchemaEditorService.createSchemaEditor(client);
     const schemaElementEditor = this.clientSchemaElementEditorService.createSchemaElementEditor(client, map);
     const schemaElementService = this.clientSchemaElementService;
+    const resolutionService = this.clientResolutionService;
 
     const workspace = new ClientWorkspace({
       map,
@@ -46,7 +49,8 @@ export class ClientWorkspaceService {
       parcelEditor,
       schemaEditor,
       schemaElementEditor,
-      schemaElementService
+      schemaElementService,
+      resolutionService
     });
 
     this.clientParcelActionsService.loadParcelActions(workspace);

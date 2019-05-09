@@ -17,8 +17,8 @@ export class ClientSchemaEditorService {
 
   createSchemaEditor(client: Client): Editor<ClientSchema> {
     return new Editor<ClientSchema>({
-      id: `fadq.client-schema-editor-${client.info.numero}`,
-      title: `Schémas du client ${client.info.numero}`,
+      id: `fadq.client-schema-editor-2-${client.info.numero}`,
+      title: `${client.info.numero} - Schémas`,
       tableTemplate: this.clientSchemaTableService.buildTable(),
       entityStore: this.createSchemaStore(client),
       actionStore: this.createSchemaActionStore()
