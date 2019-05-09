@@ -1,10 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { MatDialog } from '@angular/material';
+
 import { Observable, BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { skip } from 'rxjs/operators';
 
-import { EntityRecord, EntityStore, EntityTransaction } from '@igo2/common';
-import { IgoMap } from '@igo2/geo';
-import { EditionState, MapState } from '@igo2/integration';
+import { EntityRecord, EntityStore, EntityTransaction, Editor } from '@igo2/common';
+import { EditionState } from '@igo2/integration';
 
 import {
   Client,
@@ -15,6 +16,8 @@ import {
 
 import { ClientWorkspace } from './shared/client-workspace';
 import { ClientWorkspaceService } from './shared/client-workspace.service';
+import { ClientResolutionService } from './shared/client-resolution.service';
+import { ClientSchemaConfirmDialogComponent } from './client-schema-confirm-dialog/client-schema-confirm-dialog.component';
 
 /**
  * Service that holds the state of the client module
@@ -24,19 +27,17 @@ import { ClientWorkspaceService } from './shared/client-workspace.service';
 })
 export class ClientState implements OnDestroy {
 
-  /** Observable of the current workspace, if any */
+  /** Observable of the current workspace */
   readonly workspace$ = new BehaviorSubject<ClientWorkspace>(undefined);
 
-  readonly resolution$ = new Subject<{confirm: () => void; abort?: () => void;}>();
+  /** Observable of a message or error */
+  readonly message$ = new BehaviorSubject<string>(undefined);
 
-  /** Observable of the client error, if any */
-  readonly clientError$ = new BehaviorSubject<string>(undefined);
-
+  /** Current parcel year */
   private parcelYear: ClientParcelYear;
-  
-  private parcelYear$$: Subscription;
 
-  get map(): IgoMap { return this.mapState.map; }
+  /** Subscription to the parcel year changes */
+  private parcelYear$$: Subscription;
 
   get transaction(): EntityTransaction {
     return this.workspace ? this.workspace.transaction : undefined;
@@ -50,18 +51,76 @@ export class ClientState implements OnDestroy {
   get workspace(): ClientWorkspace { return this.workspace$.value; }
 
   constructor(
-    private mapState: MapState,
     private editionState: EditionState,
     private clientService: ClientService,
     private clientParcelYearService: ClientParcelYearService,
-    private clientWorkspaceService: ClientWorkspaceService
+    private clientWorkspaceService: ClientWorkspaceService,
+    private clientResolutionService: ClientResolutionService,
+    private dialog: MatDialog
   ) {
+    this.editionState.store.view.sort({
+      valueAccessor: (editor: Editor) => editor.id,
+      direction: 'asc'
+    });
+
     this.initParcelYears();
   }
 
   ngOnDestroy() {
     this.clearClient();
     this.teardownParcelYears();
+  }
+
+  getClientByNum(clientNum: string): Observable<Client> {
+    const annee = this.parcelYear ? this.parcelYear.annee : undefined;
+    return this.clientService.getClientByNum(clientNum, annee);
+  }
+
+  setClient(client: Client | undefined) {
+    if (this.transaction !== undefined && !this.transaction.empty) {
+      this.clientResolutionService.enqueue({
+        proceed: () => this.setClient(client),
+        workspace: this.workspace
+      });
+      return;
+    }
+
+    this.clearClient();
+
+    if (client === undefined) {
+      return;
+    }
+
+    this.initClientWorkspace(client);
+  }
+
+  setClientNotFound() {
+    if (!this.transaction.empty) {
+      this.clientResolutionService.enqueue({
+        proceed: () => this.setClientNotFound(),
+        workspace: this.workspace
+      });
+      return;
+    }
+    this.clearClient();
+    this.message$.next('client.error.notfound');
+  }
+
+  private initClientWorkspace(client: Client) {
+    const workspace = this.clientWorkspaceService.createClientWorkspace(client);
+    this.workspace$.next(workspace);
+  }
+
+  private destroyClientWorkspace() {
+    if (this.workspace !== undefined) {
+      this.workspace.destroy();
+      this.workspace$.next(undefined);
+    }
+  }
+
+  private clearClient() {
+    this.message$.next(undefined);
+    this.destroyClientWorkspace();
   }
 
   private initParcelYears() {
@@ -88,61 +147,6 @@ export class ClientState implements OnDestroy {
     this.parcelYearStore.clear();
   }
 
-  getClientByNum(clientNum: string): Observable<Client> {
-    const annee = this.parcelYear ? this.parcelYear.annee : undefined;
-    return this.clientService.getClientByNum(clientNum, annee);
-  }
-
-  setClient(client: Client | undefined) {
-    if (this.transaction !== undefined && !this.transaction.empty) {
-      this.resolution$.next({confirm: () => this.setClient(client)});
-      return;
-    }
-
-    this.clearClient();
-
-    if (client === undefined) {
-      return;
-    }
-
-    const workspace = this.clientWorkspaceService.createClientWorkspace(client, this.map);
-
-    this.editionState.register(workspace.parcelEditor);
-    this.editionState.register(workspace.schemaEditor);
-    this.editionState.setEditor(workspace.parcelEditor);
-
-    if (client.parcels.length === 0) {
-      this.clientError$.next('client.error.noparcel');
-    } else {
-      this.clientError$.next(undefined);
-    }
-
-    this.workspace$.next(workspace);
-  }
-
-  setClientNotFound() {
-    if (!this.transaction.empty) {
-      this.resolution$.next({confirm: () => this.setClientNotFound()});
-      return;
-    }
-    this.clearClient();
-    this.clientError$.next('client.error.notfound');
-  }
-
-  private clearClient() {
-    this.clientError$.next(undefined);
-
-    if (this.workspace === undefined) { return; }
-
-    const workspace = this.workspace;
-
-    this.editionState.unregister(workspace.parcelEditor);
-    this.editionState.unregister(workspace.schemaEditor);
-
-    workspace.destroy();
-    this.workspace$.next(undefined);
-  }
-
   private onSelectParcelYear(parcelYear: ClientParcelYear) {
     this.parcelYear = parcelYear;
     if (this.workspace !== undefined) {
@@ -150,45 +154,6 @@ export class ClientState implements OnDestroy {
         .subscribe((client?: Client) => this.setClient(client));
     }
   }
-  /*
-  private onSelectSchema(schema: ClientSchema) {
-    if (schema !== undefined && this.schema !== undefined && schema.id === this.schema.id) {
-      return;
-    }
-    this.setSchema(schema);
-  }
-
-  private setSchema(schema: ClientSchema) {
-    if (!this.transaction.empty) {
-      this.resolve$.next({
-        confirm: () => this.setSchema(schema),
-        abort: () => this.schemaStore.state.update(this.schema, {selected: true}, true)
-      });
-      return;
-    }
-
-    this.clearSchema();
-
-    if (schema === undefined) { return; }
-
-    this.parcelStore.state.updateAll({selected: false});
-    this.elementState.setSchema(schema);
-
-    this.editionState.store.register(this.elementState.editor);
-    this.editionState.store.activateEditor(this.schemaState.editor);
-
-    this.schema$.next(schema);
-  }
-
-  private clearSchema() {
-    if (this.schema === undefined) { return; }
-
-    this.elementState.setSchema(undefined);
-    this.editionState.store.unregister(this.elementState.editor);
-    this.editionState.store.activateEditor(this.schemaState.editor);
-
-    this.schema$.next(undefined);
-  }*/
 
   /**
    * Load the parcel years
@@ -204,6 +169,12 @@ export class ClientState implements OnDestroy {
           this.parcelYearStore.state.update(current, {selected: true});
         }
       });
+  }
+
+  private openSchemaConfirmDialog(confirm: () => void, abort?: () => void): void {
+    this.dialog.open(ClientSchemaConfirmDialogComponent, {
+      data: {confirm, abort}
+    });
   }
 
 }

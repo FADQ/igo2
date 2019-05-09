@@ -38,7 +38,7 @@ export class ClientToolComponent {
    * Observable of the client error, if any
    * @internal
    */
-  get clientError$(): BehaviorSubject<string> { return this.clientState.clientError$; }
+  get message$(): BehaviorSubject<string> { return this.clientState.message$; }
 
   /**
    * Store holding all the avaiables "parcel years"

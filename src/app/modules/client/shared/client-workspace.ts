@@ -20,6 +20,8 @@ import {
   createSchemaElementLayerStyle
 } from 'src/lib/client';
 
+import { ClientResolutionService } from './client-resolution.service';
+
 export interface ClientWorkspaceOptions {
   map: IgoMap;
   client: Client;
@@ -28,13 +30,12 @@ export interface ClientWorkspaceOptions {
   schemaEditor: Editor<ClientSchema>;
   schemaElementEditor: Editor<ClientSchemaElement>;
   schemaElementService: ClientSchemaElementService;
-};
+  resolutionService: ClientResolutionService;
+}
 
 export class ClientWorkspace {
 
-  readonly error$ = new BehaviorSubject<string>(undefined);
-
-  readonly resolution$ = new Subject<{confirm: () => void; abort?: () => void; }>();
+  readonly message$ = new BehaviorSubject<string>(undefined);
 
   /** Subscription to the selected diagram  */
   private diagram$$: Subscription;
@@ -42,17 +43,26 @@ export class ClientWorkspace {
   /** Subscription to the selected schema  */
   private schema$$: Subscription;
 
+  /** Subscription to the selected schema element  */
+  private schemaElement$$: Subscription;
+
   /** Map */
-  get map(): IgoMap { return this.options.map; }
+  get map(): IgoMap {
+    return this.options.map;
+  }
 
   /** Active client */
-  get client(): Client { return this.options.client; }
+  get client(): Client {
+    return this.options.client;
+  }
 
   /** Active schema */
-  get schema(): ClientSchema { return this.schemaEditor.entity; }
+  get schema(): ClientSchema { return this._schema; }
+  private _schema: ClientSchema;
 
-  /** Active element*/
-  get element(): ClientSchemaElement { return this.schemaElementEditor.entity; }
+  /** Active schema element */
+  get schemaElement(): ClientSchemaElement { return this._schemaElement; }
+  private _schemaElement: ClientSchemaElement;
 
   /** Parcel editor */
   get editorStore(): EditorStore {
@@ -79,8 +89,8 @@ export class ClientWorkspace {
     return this.schemaEditor.entityStore as EntityStore<ClientSchema>;
   }
 
-   /** Element editor */
-   get schemaElementEditor(): Editor<ClientSchemaElement> {
+  /** Element editor */
+  get schemaElementEditor(): Editor<ClientSchemaElement> {
     return this.options.schemaElementEditor;
   }
 
@@ -94,6 +104,11 @@ export class ClientWorkspace {
     return this.options.schemaElementService;
   }
 
+  get resolutionService(): ClientResolutionService {
+    return this.options.resolutionService;
+  }
+
+  /** Element transaction */
   get transaction(): EntityTransaction { return this._transaction; }
   private _transaction: EntityTransaction = new EntityTransaction();
 
@@ -108,6 +123,7 @@ export class ClientWorkspace {
   }
 
   destroy() {
+    this.message$.next(undefined);
     this.teardownDiagrams();
     this.teardownParcels();
     this.teardownSchemas();
@@ -139,9 +155,9 @@ export class ClientWorkspace {
     this.editorStore.activateEditor(this.parcelEditor);
 
     if (this.client.parcels.length === 0) {
-      this.error$.next('client.error.noparcel');
+      this.message$.next('client.error.noparcel');
     } else {
-      this.error$.next(undefined);
+      this.message$.next(undefined);
     }
   }
 
@@ -153,8 +169,13 @@ export class ClientWorkspace {
   }
 
   private initSchemas() {
-    this.schema$$ = this.schemaEditor.entity$
-      .subscribe((schema: ClientSchema) => this.onSelectSchema(schema));
+    this.schema$$ = this.schemaStore
+      .stateView.firstBy$((record: EntityRecord<ClientSchema>) => record.state.selected === true)
+      .subscribe((record: EntityRecord<ClientSchema>) => {
+        const schema = record ? record.entity : undefined;
+        this.onSelectSchema(schema);
+      });
+
     this.editorStore.update(this.schemaEditor);
   }
 
@@ -166,6 +187,13 @@ export class ClientWorkspace {
   }
 
   private initSchemaElements(schema: ClientSchema) {
+    this.schemaElement$$ = this.schemaElementStore
+      .stateView.firstBy$((record: EntityRecord<ClientSchemaElement>) => record.state.selected === true)
+      .subscribe((record: EntityRecord<ClientSchemaElement>) => {
+        const schemaElement = record ? record.entity : undefined;
+        this.onSelectSchemaElement(schemaElement);
+      });
+
     this.parcelStore.state.updateAll({selected: false});
     this.addSchemaElementLayer();
     this.loadSchemaElements(schema);
@@ -173,6 +201,9 @@ export class ClientWorkspace {
   }
 
   private teardownSchemaElements() {
+    if ( this.schemaElement$$ !== undefined) {
+      this.schemaElement$$.unsubscribe();
+    }
     this.removeSchemaElementLayer();
     this.schemaElementEditor.deactivate();
     this.schemaElementStore.clear();
@@ -205,9 +236,10 @@ export class ClientWorkspace {
 
   private setSchema(schema: ClientSchema) {
     if (!this.transaction.empty) {
-      this.resolution$.next({
-        confirm: () => this.setSchema(schema),
-        abort: () => this.schemaStore.state.update(this.schema, {selected: true}, true)
+      this.resolutionService.enqueue({
+        proceed: () => this.setSchema(schema),
+        abort: () => this.schemaStore.state.update(this.schema, {selected: true}, true),
+        workspace: this
       });
       return;
     }
@@ -217,12 +249,18 @@ export class ClientWorkspace {
     if (schema !== undefined) {
       this.initSchemaElements(schema);
     }
+    this._schema = schema;
   }
 
   private clearSchema() {
     if (this.schema === undefined) { return; }
 
     this.teardownSchemaElements();
+    this._schema = undefined;
+  }
+
+  private onSelectSchemaElement(schemaElement: ClientSchemaElement) {
+    this._schemaElement = schemaElement;
   }
 
   private addParcelLayer() {
@@ -246,7 +284,7 @@ export class ClientWorkspace {
       this.schemaElementStore.activateStrategyOfType(FeatureStoreLoadingStrategy);
       this.schemaElementStore.activateStrategyOfType(FeatureStoreSelectionStrategy);
       this.map.addLayer(this.schemaElementStore.layer);
-    }   
+    }
   }
 
   private removeSchemaElementLayer() {

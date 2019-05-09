@@ -27,8 +27,8 @@ export class ClientSchemaElementEditorService {
 
   createSchemaElementEditor(client: Client,  map: IgoMap): Editor<ClientSchemaElement> {
     return new Editor<ClientSchemaElement>({
-      id: `fadq.client-schema-element-editor-${client.info.numero}`,
-      title: `Éléments géométriques du client ${client.info.numero}`,
+      id: `fadq.client-schema-element-editor-3-${client.info.numero}`,
+      title: `${client.info.numero} - Éléments géométriques`,
       tableTemplate: this.clientSchemaElementTableService.buildTable(),
       entityStore: this.createSchemaElementStore(client, map),
       actionStore: this.createSchemaElementActionStore()
@@ -55,7 +55,7 @@ export class ClientSchemaElementEditorService {
     const selectionStrategy = new FeatureStoreSelectionStrategy({
       map: map,
       layer: new VectorLayer({
-        title: `Éléments géométriques sélectionnés de client ${client.info.numero}`,
+        title: `${client.info.numero} - Éléments géométriques sélectionnés`,
         zIndex: 104,
         source: new FeatureDataSource(),
         style: createClientDefaultSelectionStyle(),

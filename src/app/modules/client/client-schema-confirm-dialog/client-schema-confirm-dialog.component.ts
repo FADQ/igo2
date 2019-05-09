@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 import { ClientSchemaElementService } from 'src/lib/client';
 
-import { ClientState} from '../client.state';
+import { ClientResolution } from '../shared/client-resolution.service';
 
 @Component({
   selector: 'fadq-client-schema-confirm-dialog',
@@ -12,38 +12,37 @@ import { ClientState} from '../client.state';
 })
 export class ClientSchemaConfirmDialogComponent {
 
-  get confirm(): () => void { return this.data.confirm; }
-
-  get abort(): () => void { return this.data.abort; }
+  get resolution(): ClientResolution { return this.data.resolution; }
 
   constructor(
-    private clientState: ClientState,
     private clientSchemaElementService: ClientSchemaElementService,
     public dialogRef: MatDialogRef<ClientSchemaConfirmDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {confirm: () => void, abort: () => void}
+    @Inject(MAT_DIALOG_DATA) public data: {resolution: ClientResolution}
   ) {}
 
   onYesClick() {
-    const schema = this.clientState.workspace.schema;
-    const transaction = this.clientState.transaction;
+    const workspace = this.resolution.workspace;
+    const schema = workspace.schema;
+    const transaction = workspace.transaction;
     this.clientSchemaElementService
       .commitTransaction(schema, transaction)
       .subscribe(() => {
-        this.confirm();
+        this.resolution.proceed();
         this.dialogRef.close();
       });
   }
 
   onNoClick() {
-    this.clientState.transaction.clear();
-    this.confirm();
+    this.resolution.workspace.transaction.clear();
+    this.resolution.proceed();
     this.dialogRef.close();
   }
 
   onCancelClick() {
     this.dialogRef.close();
-    if (this.abort !== undefined) {
-      this.abort();
+    const abort = this.resolution.abort;
+    if (abort !== undefined) {
+      abort();
     }
   }
 

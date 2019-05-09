@@ -33,6 +33,6 @@ export class ClientParcelActionsService {
         },
         args: [workspace]
       }
-    ]  
+    ];
   }
 }

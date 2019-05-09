@@ -30,22 +30,22 @@ export class ClientSchemaActionsService {
 
   loadSchemaActions(workspace: ClientWorkspace) {
     const actions = this.buildSchemaActions(workspace);
-    workspace.schemaEditor.actionStore.load(actions); 
+    workspace.schemaEditor.actionStore.load(actions);
   }
 
   private buildSchemaActions(workspace: ClientWorkspace): Action[] {
 
     function schemaIsDefined(ws: ClientWorkspace): boolean {
       return ws.schema !== undefined;
-    };
+    }
 
     function schemaIsOfTypeLSE(ws: ClientWorkspace): boolean {
       return schemaIsDefined(ws) && ws.schema.type === ClientSchemaType.LSE;
-    };
+    }
 
     function schemaIsNotOfTypeLSE(ws: ClientWorkspace): boolean {
       return schemaIsDefined(ws) && ws.schema.type !== ClientSchemaType.LSE;
-    };
+    }
 
     const conditionArgs = [workspace];
 
@@ -87,6 +87,7 @@ export class ClientSchemaActionsService {
         tooltip: 'client.schema.delete.tooltip',
         handler: function(widget: Widget, ws: ClientWorkspace) {
           ws.schemaEditor.activateWidget(widget, {
+            client: ws.client,
             schema: ws.schema,
             store: ws.schemaEditor.entityStore
           });
@@ -102,6 +103,7 @@ export class ClientSchemaActionsService {
         tooltip: 'client.schema.duplicate.tooltip',
         handler: function(widget: Widget, ws: ClientWorkspace) {
           ws.schemaEditor.activateWidget(widget, {
+            client: ws.client,
             schema: ws.schema,
             store: ws.schemaEditor.entityStore
           });
@@ -133,6 +135,7 @@ export class ClientSchemaActionsService {
         tooltip: 'client.schema.transfer.tooltip',
         handler: function(widget: Widget, ws: ClientWorkspace) {
           ws.schemaEditor.activateWidget(widget, {
+            client: ws.client,
             schema: ws.schema,
             store: ws.schemaEditor.entityStore
           });
