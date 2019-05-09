@@ -3,8 +3,11 @@ import {
   Input,
   OnInit,
   OnDestroy,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  ViewChild,
+  ElementRef
 } from '@angular/core';
+
 import { MatDialog } from '@angular/material';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -38,7 +41,6 @@ import {
 } from '../shared';
 import { AddressEditorSaveDialogComponent } from '../address-editor-save-dialog/address-editor-save-dialog.component';
 import { AddressEditorZoomDialogComponent } from '../address-editor-zoom-dialog/address-editor-zoom-dialog.component';
-
 
 /**
  * Tool to edit addresses from Adresse Quebec.
@@ -113,6 +115,8 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    */
   @Input() layerOptions: LayerOptions[];
 
+  @ViewChild('save', {read: ElementRef}) saveElement: ElementRef;
+
   private selectedAddress$$: Subscription;
   private olGeometry$$: Subscription;
   private modifyControl: ModifyControl;
@@ -176,6 +180,7 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    * Handles form save
    */
   handleFormSave() {
+    this.blurSave();
     this.manageSave();
   }
 
@@ -183,17 +188,20 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    * Handles form cancel
    */
   handleFormCancel() {
-    if (this.selectedAddress$$ !== undefined) { this.selectedAddress$$.unsubscribe(); }
-    if (this.buildingNumber$ !== undefined) { this.buildingNumber$.next(undefined); }
-    if (this.buildingSuffix$ !== undefined) { this.buildingSuffix$.next(undefined); }
-    this.deactivateModifyControl();
-    this.store.layer.dataSource.ol.clear();
-    this.store.clear();
-    this.subscribeToAddressSelection();
-    this.store.activateStrategyOfType(FeatureStoreSelectionStrategy);
-    this.inEdition$.next(false);
+    this.closeEdition();
   }
 
+
+  /**
+   * Blurs the save button
+   */
+  blurSave() {
+    this.saveElement.nativeElement.blur();
+  }
+
+  /**
+   * Inits the store
+   */
   private initStore() {
     this.trybindStoreLayer();
     tryAddLoadingStrategy(this.store, new FeatureStoreLoadingStrategy({motion: FeatureMotion.None}));
@@ -249,16 +257,34 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    */
   private manageSave() {
     const dialogSaveRef = this.dialog.open(AddressEditorSaveDialogComponent);
-    this.dialogSave$$ = dialogSaveRef.componentInstance.addressSave.subscribe(() => {
-      this.addressService.modifyAddressGeometry(
-        this.selectedAddressFeature.properties.idAdresseLocalisee,
-        this.selectedAddressFeature
-        ).subscribe();
+    this.dialogSave$$ = dialogSaveRef.componentInstance.addressSave.subscribe((response: boolean) => {
+      if (response === true) {
+        this.addressService.modifyAddressGeometry(
+          this.selectedAddressFeature.properties.idAdresseLocalisee,
+          this.selectedAddressFeature
+          ).subscribe(() => { this.closeEdition(); });
+      }
     });
     // unsubscribe
     dialogSaveRef.afterClosed().subscribe(() => {
       this.dialogSave$$.unsubscribe();
     });
+  }
+
+
+  /**
+   * Close the edition mode
+   */
+  private closeEdition() {
+    if (this.selectedAddress$$ !== undefined) { this.selectedAddress$$.unsubscribe(); }
+    if (this.buildingNumber$ !== undefined) { this.buildingNumber$.next(undefined); }
+    if (this.buildingSuffix$ !== undefined) { this.buildingSuffix$.next(undefined); }
+    this.deactivateModifyControl();
+    this.store.layer.dataSource.ol.clear();
+    this.store.clear();
+    this.subscribeToAddressSelection();
+    this.store.activateStrategyOfType(FeatureStoreSelectionStrategy);
+    this.inEdition$.next(false);
   }
 
   /**

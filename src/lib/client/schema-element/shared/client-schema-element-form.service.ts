@@ -80,7 +80,7 @@ export class ClientSchemaElementFormService {
   private createEtiquetteField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
     return of(this.createField({
       name: 'properties.etiquette',
-      title: 'Etiquette',
+      title: 'Étiquette',
       options:  {
         cols: 1,
         validator: Validators.maxLength(25),

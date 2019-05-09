@@ -29,7 +29,12 @@
 
   "help": {
     "guide": "Help guide",
-    "news": "What's new?"
+    "news": "What's new?",
+    "layer.placeholder": "Rechercher une couche de données",
+    "cadastre.title": "Cadastre",
+    "cadastre.placeholder": "Rechercher un cadastre",
+    "cadastre.renov.title": "Cadastre rénové",
+    "cadastre.renov.placeholder": "Rechercher un cadastre rénové"
   },
 
   "navigation": {
@@ -96,19 +101,19 @@
     "schema": {
       "none": "None",
       "confirmDialog.title": "Informations non sauvegardées", 
-      "error.anneeRequired": "Un plan de production ou un avis de dommage doit obligatoirement être associé à une année",
+      "error.anneeRequired": "Vous devez saisir une année pour un plan de production ou un avis de dommage",
       "error.invalidAnnee": "Format d'année invalide",
-      "error.onlyOneLSE": "Un seul schéma de type « Structure d’entreposage » par client",
-      "error.onlyOneEPA": "Un seul schéma de type « Édition de parcelles agricoles» par client, dont l’état est « en traitement » ou « valide »",
-      "error.etatRequiredByEPA": "Seul le schéma de type « Édition de parcelles agricoles » doit contenir un état de schéma.",
-      "placeholder": "Schema",
+      "error.onlyOneLSE": "Impossible d’avoir plus d’un schéma de type « Structure d’entreposage »",
+      "error.onlyOneEPA": "Impossible d’avoir plus d’un schéma de type « Édition de parcelles agricoles »",
+      "error.etatRequiredByEPA": "Seul le schéma de type « Édition de parcelles agricoles » doit contenir un état de schéma",
+      "placeholder": "Schéma",
       "create": "Créer",
       "create.tooltip": "Créer un schéma",
       "update": "Modifier",
       "update.tooltip": "Modifier un schéma",
       "delete": "Supprimer",
       "delete.tooltip": "Supprimer le schéma sélectionné",
-      "delete.confirm": "Êtes-vous certain de vouloir supprimer ce schéma?",
+      "delete.confirm": "Désirez-vous supprimer le schéma?",
       "duplicate": "Dupliquer",
       "duplicate.tooltip": "Dupliquer le schéma sélectionné",
       "duplicate.confirm": "Désirez-vous dupliquer ce schéma?",
@@ -121,7 +126,7 @@
       "createMap.tooltip": "Créer carte(s) de structure d'entreposage"
     },
     "schemaFile": {
-      "error.size": "Le document numérisé doit avoir une taille plus grande que 0 octet et au plus 10 mégaoctets.",
+      "error.size": "Vous devez sélectionner un document numérisé qui contient des données et avoir au plus une taille de 10 mo.",
       "add": "Ajouter",
       "add.tooltip": "Ajouter un document",
       "delete": "Supprimer",
@@ -130,9 +135,9 @@
       "download.tooltip": "Télécharger un document"
     },
     "schemaElement": {
-      "error.etiquetteMaxLength": "Une étiquette ne doit pas être plus grande que 25 caractères",
-      "error.descriptionMaxLength": "Une description ne doit pas être plus grande que 250 caractères",
-      "error.area": "La superficie doit être plus grande que 50m² et plus petite que 999999999m².",
+      "error.etiquetteMaxLength": "Vous devez saisir une étiquette de moins de 25 caractères.",
+      "error.descriptionMaxLength": "Vous devez saisir une étiquette de moins de 250 caractères.",
+      "error.area": "La superficie doit être plus grande que 50m² et plus petite que 999 999 999 m².",
       "create": "Créer",
       "create.tooltip": "Créer un élément",
       "create.apply": "Créer",
@@ -214,7 +219,7 @@
   },
 
   "geometry": {
-    "geometry": "Géométry",
+    "geometry": "Geometry",
     "slice.error.tooManyIntersection": "L'élément ne peut qu'être coupé en 2.",
     "slice.error.multiPolygon": "Impossible de couper un élément contenant des exclusions",
     "slice.error.lineString": "La ligne de coupe doit contenir seulement 2 points"
