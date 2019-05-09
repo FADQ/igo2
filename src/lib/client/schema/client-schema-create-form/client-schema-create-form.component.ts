@@ -83,6 +83,7 @@ export class ClientSchemaCreateFormComponent implements OnInit, OnUpdateInputs, 
 
   private onSubmitSuccess(schema: ClientSchema) {
     this.store.insert(schema);
+    this.client.schemas = this.store.all();
     this.complete.emit();
   }
 

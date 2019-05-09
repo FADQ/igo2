@@ -1,19 +1,24 @@
-import { FormControl, FormGroup, ValidationErrors } from '@angular/forms';
+import { FormGroup, ValidationErrors } from '@angular/forms';
 
 import { Client } from '../../shared/client.interfaces';
 import { ClientSchemaEtat, ClientSchemaType } from './client-schema.enums';
 import { ClientSchema } from './client-schema.interfaces';
 
-export function validateOnlyOneLSE(control: FormControl, client: Client): ValidationErrors | null {
+export function validateOnlyOneLSE(control: FormGroup, client: Client): ValidationErrors | null {
+  const schemaTypeControl = control.controls['type'];
+  const schemaId = control.controls['id'].value;
   const schemaType = control.value;
   if (schemaType !== ClientSchemaType.LSE) { return null; }
 
   const otherLSESchema = client.schemas.find((schema: ClientSchema) => {
-    return schema.type === ClientSchemaType.LSE;
+    return schema.type === ClientSchemaType.LSE && schema.id !== schemaId;
   });
-  return otherLSESchema === undefined ? null : {
-    onlyOneLSE: ''
-  };
+
+  if (otherLSESchema !== undefined) {
+    schemaTypeControl.setErrors({onlyOneLSE: ''});
+  }
+
+  return null;
 }
 
 export function validateAnnee(control: FormGroup): null {
@@ -35,6 +40,7 @@ export function validateAnnee(control: FormGroup): null {
 }
 
 export function validateEtatEPA(control: FormGroup, client: Client): null {
+  const schemaId = control.controls['id'].value;
   const schemaEtatControl = control.controls['etat'];
   const schemaEtat = schemaEtatControl.value;
 
@@ -60,7 +66,7 @@ export function validateEtatEPA(control: FormGroup, client: Client): null {
   if (onlyOneOf.indexOf(schemaEtat) < 0) { return null; }
 
   const otherSchema = client.schemas.find((schema: ClientSchema) => {
-    return onlyOneOf.indexOf(schema.etat) >= 0;
+    return onlyOneOf.indexOf(schema.etat) >= 0 && schema.id !== schemaId;
   });
 
   if (otherSchema !== undefined) {

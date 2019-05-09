@@ -111,6 +111,7 @@ export class ClientSchemaState {
         tooltip: 'client.schema.delete.tooltip',
         handler: () => this.editor.activateWidget(this.clientSchemaDeleteWidget, {
           schema: this.schema,
+          client: this.client,
           store: this.schemaStore
         }),
         conditions: [schemaIsDefined]
@@ -122,6 +123,7 @@ export class ClientSchemaState {
         tooltip: 'client.schema.duplicate.tooltip',
         handler: () => this.editor.activateWidget(this.clientSchemaDuplicateWidget, {
           schema: this.schema,
+          client: this.client,
           store: this.schemaStore
         }),
         conditions: [schemaIsDefined, schemaIsNotOfTypeLSE]
@@ -147,6 +149,7 @@ export class ClientSchemaState {
         tooltip: 'client.schema.transfer.tooltip',
         handler: () => this.editor.activateWidget(this.clientSchemaTransferWidget, {
           schema: this.schema,
+          client: this.client,
           store: this.schemaStore
         }),
         conditions: [schemaIsDefined, schemaIsOfTypeLSE]

@@ -425,7 +425,6 @@ export class PortalComponent implements OnInit, OnDestroy {
     });
   }
 
-
   /**
    * Updates search layers
    * @param result Result search to update layers

@@ -60,6 +60,7 @@ export class ClientSchemaFormService {
               validator: Validators.compose([
                 (control: FormGroup) => validateEtatEPA(control, client),
                 (control: FormGroup) => validateAnnee(control),
+                (control: FormGroup) => validateOnlyOneLSE(control, client)
               ])
             }
           }, fields)
@@ -121,8 +122,7 @@ export class ClientSchemaFormService {
             options:  {
               cols: 1,
               validator: Validators.compose([
-                Validators.required,
-                (control: FormControl) => validateOnlyOneLSE(control, client)
+                Validators.required
               ]),
               errors: {
                 onlyOneLSE: 'client.schema.error.onlyOneLSE'

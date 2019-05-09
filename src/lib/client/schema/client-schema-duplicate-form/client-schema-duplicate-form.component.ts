@@ -9,6 +9,7 @@ import {
 
 import { EntityStore, WidgetComponent, OnUpdateInputs } from '@igo2/common';
 
+import { Client } from '../../shared/client.interfaces';
 import { ClientSchema } from '../shared/client-schema.interfaces';
 import { ClientSchemaService } from '../shared/client-schema.service';
 
@@ -19,6 +20,11 @@ import { ClientSchemaService } from '../shared/client-schema.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientSchemaDuplicateFormComponent implements OnUpdateInputs, WidgetComponent {
+
+  /**
+   * Client
+   */
+  @Input() client: Client;
 
   /**
    * Schema store
@@ -63,6 +69,7 @@ export class ClientSchemaDuplicateFormComponent implements OnUpdateInputs, Widge
 
   private onSubmitSuccess(schema: ClientSchema) {
     this.store.insert(schema);
+    this.client.schemas = this.store.all();
     this.complete.emit();
   }
 

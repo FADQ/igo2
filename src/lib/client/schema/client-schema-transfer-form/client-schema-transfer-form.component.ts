@@ -12,6 +12,8 @@ import { Subject } from 'rxjs';
 
 import { EntityStore, Form, WidgetComponent, OnUpdateInputs } from '@igo2/common';
 
+import { Client } from '../../shared/client.interfaces';
+
 import { ClientSchema } from '../shared/client-schema.interfaces';
 import { ClientSchemaService } from '../shared/client-schema.service';
 import { ClientSchemaFormService } from '../shared/client-schema-form.service';
@@ -35,6 +37,11 @@ export class ClientSchemaTransferFormComponent implements OnInit, OnUpdateInputs
    * @internal
    */
   errorMessage$: Subject<string> = new Subject();
+
+  /**
+   * Client
+   */
+  @Input() client: Client;
 
   /**
    * Schema store
@@ -103,6 +110,7 @@ export class ClientSchemaTransferFormComponent implements OnInit, OnUpdateInputs
   private onSubmitSuccess() {
     this.errorMessage$.next(undefined);
     this.store.delete(this.schema);
+    this.client.schemas = this.store.all();
     this.complete.emit();
   }
 
