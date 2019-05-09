@@ -1,0 +1,544 @@
+{
+  "uri": "mesurage",
+  "title": "Mesurage",
+  "map": {
+    "view": {
+      "projection": "EPSG:32198",
+      "center": [-68, 48],
+      "zoom": 3
+    }
+  },
+  "layers": [
+    {
+      "title": "Images les plus récentes",
+      "baseLayer": true,
+      "visible": true,
+      "sourceOptions": {
+        "type": "wmts",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/mern_imagerie_continue",
+        "layer": "Imagerie_GQ",
+        "matrixSet": "Lambert:epsg:32198",
+        "requestEncoding": "KVP",
+        "params": {
+          "version": "1.0.0"
+        }
+      }
+    },
+    {
+      "title": "Carte de base du Canada - Transport",
+      "baseLayer": true,
+      "visible": false,
+      "sourceOptions": {
+        "type": "wms",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/canada_transport",
+        "style": "default",
+        "matrixSet": "LAMBERT",
+        "projection": "EPSG:32198",
+        "params": {
+          "version": "1.3.0",
+          "layers": "cbct",
+          "srs": "EPSG:32198"
+        }
+      }
+    },
+    {
+      "title": "Gouvernement du Québec",
+      "baseLayer": true,
+      "visible": false,
+      "sourceOptions": {
+        "type": "wmts",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_geoservpro_wmts",
+        "layer": "carte_gouv_qc",
+        "matrixSet": "LAMBERT",
+        "requestEncoding": "KVP",
+        "params": {
+          "version": "1.0.0"
+        }
+      }
+    },
+    {
+      "title": "Images historiques 2012",
+      "baseLayer": true,
+      "visible": false,
+      "sourceOptions": {
+        "type": "wmts",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/mern_imagerie_aeroportee_continue_annee",
+        "layer": "Mosaiques-orthophotos_2012",
+        "matrixSet": "Lambert:epsg:32198",
+        "requestEncoding": "KVP",
+        "params": {
+          "version": "1.0.0"
+        }
+      }
+    },
+    {
+      "title": "Images historiques 2013",
+      "baseLayer": true,
+      "visible": false,
+      "sourceOptions": {
+        "type": "wmts",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/mern_imagerie_aeroportee_continue_annee",
+        "layer": "Mosaiques-orthophotos_2013",
+        "matrixSet": "Lambert:epsg:32198",
+        "requestEncoding": "KVP",
+        "params": {
+          "version": "1.0.0"
+        }
+      }
+    },
+    {
+      "title": "Images historiques 2014",
+      "baseLayer": true,
+      "visible": false,
+      "sourceOptions": {
+        "type": "wmts",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/mern_imagerie_aeroportee_continue_annee",
+        "layer": "Mosaiques-orthophotos_2014",
+        "matrixSet": "Lambert:epsg:32198",
+        "requestEncoding": "KVP",
+        "params": {
+          "version": "1.0.0"
+        }
+      }
+    },
+    {
+      "title": "Images historiques 2015",
+      "baseLayer": true,
+      "visible": false,
+      "sourceOptions": {
+        "type": "wmts",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/mern_imagerie_aeroportee_continue_annee",
+        "layer": "Mosaiques-orthophotos_2015",
+        "matrixSet": "Lambert:epsg:32198",
+        "requestEncoding": "KVP",
+        "params": {
+          "version": "1.0.0"
+        }
+      }
+    },
+    {
+      "title": "Images historiques 2016",
+      "baseLayer": true,
+      "visible": false,
+      "sourceOptions": {
+        "type": "wmts",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/mern_imagerie_aeroportee_continue_annee",
+        "layer": "Mosaiques-orthophotos_2016",
+        "matrixSet": "Lambert:epsg:32198",
+        "requestEncoding": "KVP",
+        "params": {
+          "version": "1.0.0"
+        }
+      }
+    },
+    {
+      "title": "Images historiques 2017",
+      "baseLayer": true,
+      "visible": false,
+      "sourceOptions": {
+        "type": "wmts",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/mern_imagerie_aeroportee_continue_annee",
+        "layer": "Mosaiques-orthophotos_2017",
+        "matrixSet": "Lambert:epsg:32198",
+        "requestEncoding": "KVP",
+        "params": {
+          "version": "1.0.0"
+        }
+      }
+    },
+    {
+      "title": "Images historiques 2018",
+      "baseLayer": true,
+      "visible": false,
+      "sourceOptions": {
+        "type": "wmts",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/mern_imagerie_aeroportee_continue_annee",
+        "layer": "Mosaiques-orthophotos_2018",
+        "matrixSet": "Lambert:epsg:32198",
+        "requestEncoding": "KVP",
+        "params": {
+          "version": "1.0.0"
+        }
+      }
+    },
+    {
+      "visible": false,
+      "sourceOptions": {
+        "type": "wms",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_index_lies",
+        "projection": "EPSG:32198",
+        "params": {
+          "version": "1.3.0",
+          "layers": "PROJ_PART_DGIG_MERN"
+        }
+      }
+    },
+    {
+      "visible": false,
+      "sourceOptions": {
+        "type": "wms",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_index_lies",
+        "projection": "EPSG:32198",
+        "params": {
+          "version": "1.3.0",
+          "layers": "PROJ_DECE_FORE_MERN"
+        }
+      }
+    },
+    {
+      "visible": false,
+      "sourceOptions": {
+        "type": "wms",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_index_lies",
+        "projection": "EPSG:32198",
+        "params": {
+          "version": "1.3.0",
+          "layers": "IMAG_CONT_MERN"
+        }
+      }
+    },
+    {
+      "id": "buildings",
+      "visible": false,
+      "sourceOptions": {
+        "type": "wms",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_adresses_quebec",
+        "projection": "EPSG:32198",
+        "params": {
+          "version": "1.3.0",
+          "layers": "AQ_MSP_ADRESSE_GEO"
+        }
+      }
+    },
+    {
+      "visible": false,
+      "sourceOptions": {
+        "type": "wms",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_adresses_quebec",
+        "projection": "EPSG:32198",
+        "params": {
+          "version": "1.3.0",
+          "layers": "ADRESSES_QC_REGR_IGO2"
+        }
+      }
+    },
+    {
+      "visible": false,
+      "sourceOptions": {
+        "type": "wms",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_adresses_fadq",
+        "projection": "EPSG:32198",
+        "params": {
+          "version": "1.3.0",
+          "layers": "LOCTP_MODI_ADR_AQ_BDTAG"
+        }
+      }
+    },
+    {
+      "id": "buildingsCorrected",
+      "visible": false,
+      "sourceOptions": {
+        "type": "wms",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_adresses_fadq",
+        "projection": "EPSG:32198",
+        "params": {
+          "version": "1.3.0",
+          "layers": "LOCTP_MODI_ADR_AQ"
+        }
+      }
+    },
+    {
+      "visible": false,
+      "sourceOptions": {
+        "type": "wms",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_ecocondition",
+        "projection": "EPSG:32198",
+        "params": {
+          "version": "1.3.0",
+          "layers": "SDA_MUNIC_S_IASC"
+        }
+      }
+    },
+    {
+      "visible": false,
+      "sourceOptions": {
+        "type": "wms",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_limite_admin",
+        "projection": "EPSG:32198",
+        "params": {
+          "version": "1.3.0",
+          "layers": "SDA_MUNIC_S"
+        }
+      }
+    },
+    {
+      "id": "cadastre",
+      "visible": false,
+      "sourceOptions": {
+        "type": "wms",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_info_fonciere",
+        "projection": "EPSG:32198",
+        "params": {
+          "version": "1.3.0",
+          "layers": "COMPIL_CADAS_IGO2"
+        }
+      }
+    },
+    {
+      "visible": false,
+      "sourceOptions": {
+        "type": "wms",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_info_fonciere",
+        "projection": "EPSG:32198",
+        "params": {
+          "version": "1.3.0",
+          "layers": "CADASTRE_RENO_MERN"
+        }
+      }
+    },
+    {
+      "visible": false,
+      "sourceOptions": {
+        "type": "wms",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_parcelles_agri",
+        "projection": "EPSG:32198",
+        "params": {
+          "version": "1.3.0",
+          "layers": "LOCTS_PARC_AGRI_AN_PREC"
+        },
+        "queryFormat": "html",
+        "queryHtmlTarget": "innerhtml"
+      }
+    },
+    {
+      "visible": false,
+      "sourceOptions": {
+        "type": "wms",
+        "optionsFromCapabilities": true,
+        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_parcelles_agri",
+        "projection": "EPSG:32198",
+        "params": {
+          "version": "1.3.0",
+          "layers": "LOCTS_PARC_AGRI_AN_COUR"
+        },
+        "queryFormat": "html",
+        "queryHtmlTarget": "innerhtml"
+      }
+    }
+  ],
+  "toolbar": [
+    "client",
+    "searchResults",
+    "fadqMap",
+    "catalog",
+    "navigation",
+    "importExport",
+    "measurer",
+    "print",
+    "addressEditor",
+    "cadastre",
+    "help"
+  ],
+  "tools": [
+    {
+      "name": "client"
+    },
+    {
+      "name": "searchResults"
+    },
+    {
+      "name": "fadqMap"
+    },
+    {
+      "name": "catalog"
+    },
+    {
+      "name": "catalogBrowser"
+    },
+    {
+      "name": "navigation",
+      "options": {
+        "pois": [],
+        "categories": [
+          {
+            "title": "navigation.categories.mun",
+            "collection": {
+              "uri": "/igonavigation/zoom_selection/obtenirMunicipalites",
+              "idProperty": "codeGeographique",
+              "titleProperty": "nomMunicipalite"
+            },
+            "feature": {
+              "uri": "/igonavigation/zoom_selection/obtenirMunicipalite/${id}"
+            }
+          },
+          {
+            "title": "navigation.categories.mrc",
+            "collection": {
+              "uri": "/igonavigation/zoom_selection/obtenirMunicipalitesRegionalesComte",
+              "idProperty": "code",
+              "titleProperty": "nom"
+            },
+            "feature": {
+              "uri": "/igonavigation/zoom_selection/obtenirMunicipaliteRegionaleComte/${id}"
+            }
+          },
+          {
+            "title": "navigation.categories.ra",
+            "collection": {
+              "uri": "/igonavigation/zoom_selection/obtenirRegionsAdministratives",
+              "idProperty": "codeRegionAdministrative",
+              "title": "${nomRegionAdministrative} (${codeRegionAdministrative})"
+            },
+            "feature": {
+              "uri": "/igonavigation/zoom_selection/obtenirRegionAdministrative/${id}"
+            }
+          },
+          {
+            "title": "navigation.categories.tcs",
+            "collection": {
+              "uri": "/igonavigation/zoom_selection/obtenirTerritoiresCentresServices",
+              "idProperty": "idTerritoireCentreServices",
+              "titleProperty": "nomCentreServices"
+            },
+            "feature": {
+              "uri": "/igonavigation/zoom_selection/obtenirTerritoireCentreServices/${id}"
+            }
+          },
+          {
+            "title": "navigation.categories.smf",
+            "collection": {
+              "uri": "/igonavigation/zoom_selection/obtenirStationsMeteoAnneeAssurance/2018",
+              "idProperty": "idStationMeteo",
+              "title": "${noStationFADQ}-${nomStation}"
+            },
+            "feature": {
+              "uri": "/igonavigation/zoom_selection/obtenirStationMeteo/${id}"
+            }
+          },
+          {
+            "title": "navigation.categories.smd",
+            "collection": {
+              "uri": "/igonavigation/zoom_selection/obtenirStationsMeteoDisponibles",
+              "idProperty": "idStationMeteo",
+              "title": "${noStationFADQ}-${nomStation}"
+            },
+            "feature": {
+              "uri": "/igonavigation/zoom_selection/obtenirStationMeteo/${id}"
+            }
+          },
+          {
+            "title": "navigation.categories.zc2",
+            "collection": {
+              "uri": "/igonavigation/zoom_selection/obtenirZonagesCollectifsAnneeActive/2",
+              "resultsProperty": "lstZonageCollectif",
+              "idProperty": "idZonageCollectif",
+              "title": "${regionZonage}-${noZone}"
+            },
+            "feature": {
+              "uri": "/igonavigation/zoom_selection/obtenirZonageCollectifAnneeActive/2/${id}"
+            }
+          },
+          {
+            "title": "navigation.categories.zc1",
+            "collection": {
+              "uri": "/igonavigation/zoom_selection/obtenirZonagesCollectifsAnneeActive/1",
+              "resultsProperty": "lstZonageCollectif",
+              "idProperty": "idZonageCollectif",
+              "title": "${regionZonage}-${noZone}"
+            },
+            "feature": {
+              "uri": "/igonavigation/zoom_selection/obtenirZonageCollectifAnneeActive/1/${id}"
+            }
+          },
+          {
+            "title": "navigation.categories.rzc",
+            "collection": {
+              "uri": "/igonavigation/zoom_selection/obtenirRegionsZonageCollectif",
+              "resultsProperty": "lstRegionZonageCollectif",
+              "idProperty": "idRegionZonageCollectif",
+              "title": "${noRegionZonageCollectif}-${nomRegionZonageCollectif}"
+            },
+            "feature": {
+              "uri": "/igonavigation/zoom_selection/obtenirRegionZonageCollectif/${id}"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "importExport"
+    },
+    {
+      "name": "measurer"
+    },
+    {
+      "name": "print"
+    },
+    {
+      "name": "addressEditor",
+      "options": {
+        "layerOptions": [{
+          "id": "buildings",
+          "title": "Numéro d'immeubles",
+          "visible": true,
+          "sourceOptions": {
+            "type": "wms",
+            "optionsFromCapabilities": true,
+            "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_adresses_quebec",
+            "projection": "EPSG:32198",
+            "params": {
+              "version": "1.3.0",
+              "layers": "AQ_MSP_ADRESSE_GEO"
+            }
+          }
+        },
+        {
+          "id": "buildingsCorrected",
+          "title": "Numéro d'immeubles corrigés",
+          "visible": true,
+          "sourceOptions": {
+            "type": "wms",
+            "optionsFromCapabilities": true,
+            "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_adresses_fadq",
+            "projection": "EPSG:32198",
+            "params": {
+              "version": "1.3.0",
+              "layers": "LOCTP_MODI_ADR_AQ"
+            }
+          }
+        }]
+      }
+    },
+    {
+      "name": "cadastre",
+      "options": {
+        "layerId": "cadastre"
+      }
+    },
+    {
+      "name": "help"
+    }
+  ]
+}

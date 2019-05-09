@@ -201,7 +201,6 @@ export class ClientSchemaState {
           client: this.client,
           store: this.schemaStore
         }),
-        conditionArgs = [editor],
         conditions: [
           (editor: Editor) => editor.entity !== undefined
         ]
@@ -262,19 +261,6 @@ export class ClientSchemaState {
         conditions: [schemaIsDefined, schemaIsOfTypeLSE, () => false]
       }
     ];
-  }
-
-  private createEditor(client: Client, entityStore: EntityStore<ClientSchema>, actionStore: ActionStore): Editor {
-    const editor = new Editor({
-      id: 'fadq.client-schema-editor',
-      title: `Schémas du client ${client.info.numero}`,
-      tableTemplate: this.clientSchemaTableService.buildTable(),
-      entityStore: entityStore,
-      actionStore: actionStore
-    });
-    editor.actionStore.load(this._buildActions(client, editor));
-
-    return editor;
   }
 
 }

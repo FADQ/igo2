@@ -2,19 +2,15 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { ToolComponent, EntityStore } from '@igo2/common';
-import { ConfigService } from '@igo2/core';
-import { IgoMap } from '@igo2/geo';
-import { MapState } from '@igo2/integration';
 
 import {
   Client,
-  ClientParcelDiagram,
   ClientParcelYear,
-  ClientSchema,
   ClientInfoService
 } from 'src/lib/client';
 
 import { ClientState } from '../client.state';
+import { ClientWorkspace } from '../shared/client-workspace';
 
 /**
  * Tool to display a client's info
@@ -36,7 +32,7 @@ export class ClientToolComponent {
    * Observable of the active client
    * @internal
    */
-  get client$(): BehaviorSubject<Client> { return this.clientState.client$; }
+  get workspace$(): BehaviorSubject<ClientWorkspace> { return this.clientState.workspace$; }
 
   /**
    * Observable of the client error, if any
@@ -52,28 +48,9 @@ export class ClientToolComponent {
     return this.clientState.parcelYearStore;
   }
 
-  /**
-   * Store holding the active client's diagrams
-   * @internal
-   */
-  get diagramStore(): EntityStore<ClientParcelDiagram> {
-    return this.clientState.diagramStore;
-  }
-
-  /**
-   * Store holding the active client's schemas
-   * @internal
-   */
-  get schemaStore(): EntityStore<ClientSchema> {
-    return this.clientState.schemaStore;
-  }
-
-  get map(): IgoMap { return this.mapState.map; }
-
   constructor(
     private clientInfoService: ClientInfoService,
-    private clientState: ClientState,
-    private mapState: MapState
+    private clientState: ClientState
   ) {}
 
   /**
