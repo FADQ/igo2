@@ -61,7 +61,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   public expansionPanelExpanded = false;
   public sidenavOpened = false;
 
-  private clientResolve$$: Subscription;
+  private clientResolution$$: Subscription;
 
   private focusedSearchResult$$: Subscription;
   private currentSearchTerm: string;
@@ -162,7 +162,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.clientResolve$$ = this.clientState.resolve$
+    this.clientResolution$$ = this.clientState.resolution$
       .subscribe((actions: {confirm: () => void; abort: () => void}) => {
         if (actions !== undefined) {
           this.openSchemaConfirmDialog(actions.confirm, actions.abort);
@@ -186,7 +186,7 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.context$$.unsubscribe();
-    this.clientResolve$$.unsubscribe();
+    this.clientResolution$$.unsubscribe();
     this.focusedSearchResult$$.unsubscribe();
   }
 

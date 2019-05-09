@@ -24,7 +24,7 @@ export class ClientSchemaConfirmDialogComponent {
   ) {}
 
   onYesClick() {
-    const schema = this.clientState.schema;
+    const schema = this.clientState.workspace.schema;
     const transaction = this.clientState.transaction;
     this.clientSchemaElementService
       .commitTransaction(schema, transaction)

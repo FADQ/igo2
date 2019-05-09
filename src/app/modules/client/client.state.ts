@@ -1,24 +1,20 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Observable, BehaviorSubject, Subscription } from 'rxjs';
+import { Observable, BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { skip } from 'rxjs/operators';
 
 import { EntityRecord, EntityStore, EntityTransaction } from '@igo2/common';
-import { FeatureStore } from '@igo2/geo';
+import { IgoMap } from '@igo2/geo';
 import { EditionState, MapState } from '@igo2/integration';
 
 import {
   Client,
   ClientService,
-  ClientParcelDiagram,
-  ClientParcel,
   ClientParcelYear,
-  ClientSchema,
-  ClientSchemaElement
+  ClientParcelYearService
 } from 'src/lib/client';
 
-import { ClientParcelState} from './client-parcel.state';
-import { ClientSchemaState} from './client-schema.state';
-import { ClientSchemaElementState } from './client-schema-element.state';
+import { ClientWorkspace } from './shared/client-workspace';
+import { ClientWorkspaceService } from './shared/client-workspace.service';
 
 /**
  * Service that holds the state of the client module
@@ -28,83 +24,56 @@ import { ClientSchemaElementState } from './client-schema-element.state';
 })
 export class ClientState implements OnDestroy {
 
-  public resolve$ = new BehaviorSubject<{confirm: () => void; abort?: () => void; }>(undefined);
+  /** Observable of the current workspace, if any */
+  readonly workspace$ = new BehaviorSubject<ClientWorkspace>(undefined);
 
-  /** Observable of the active client */
-  public client$ = new BehaviorSubject<Client>(undefined);
-
-  /** Observable of the active clienst */
-  public clients$ = new BehaviorSubject<Client[]>([]);
+  readonly resolution$ = new Subject<{confirm: () => void; abort?: () => void;}>();
 
   /** Observable of the client error, if any */
-  public clientError$ = new BehaviorSubject<string>(undefined);
+  readonly clientError$ = new BehaviorSubject<string>(undefined);
 
-  /** Observable of the active schema */
-  public schema$ = new BehaviorSubject<ClientSchema>(undefined);
+  private parcelYear: ClientParcelYear;
+  
+  private parcelYear$$: Subscription;
 
-  /** Subscription to the selected diagram  */
-  private selectedDiagram$$: Subscription;
+  get map(): IgoMap { return this.mapState.map; }
 
-  /** Subscription to the selected parcel year  */
-  private selectedParcelYear$$: Subscription;
-
-  /** Subscription to the selected schema  */
-  private selectedSchema$$: Subscription;
-
-  /** Current parcel year  */
-  private parcelYear: ClientParcelYear = undefined;
-
-  /** Active client */
-  get client(): Client { return this.client$.value; }
-
-  /** Active schema */
-  get schema(): ClientSchema { return this.schema$.value; }
-
-  /** Store that holds the diagrams of the active client */
-  get diagramStore(): EntityStore<ClientParcelDiagram> {
-    return this.parcelState.diagramStore;
+  get transaction(): EntityTransaction {
+    return this.workspace ? this.workspace.transaction : undefined;
   }
 
   /** Store that holds all the "parcel years". This is not on a per client basis. */
-  get parcelYearStore(): EntityStore<ClientParcelYear> {
-    return this.parcelState.parcelYearStore;
-  }
+  get parcelYearStore(): EntityStore<ClientParcelYear> { return this._parcelYearStore; }
+  _parcelYearStore: EntityStore<ClientParcelYear>;
 
-  /** Store that holds the parcels of the active client */
-  get parcelStore(): FeatureStore<ClientParcel> {
-    return this.parcelState.parcelStore;
-  }
-
-  /** Store that holds the schemas of the active client */
-  get schemaStore(): EntityStore<ClientSchema> {
-    return this.schemaState.schemaStore;
-  }
-
-  /** Store that holds the elements of the active schema */
-  get schemaElementStore(): FeatureStore<ClientSchemaElement> {
-    return this.elementState.elementStore;
-  }
-
-  get transaction(): EntityTransaction {
-    return this.elementState.transaction;
-  }
+  /** Current client workspace */
+  get workspace(): ClientWorkspace { return this.workspace$.value; }
 
   constructor(
-    private parcelState: ClientParcelState,
-    private schemaState: ClientSchemaState,
-    private elementState: ClientSchemaElementState,
-    private editionState: EditionState,
     private mapState: MapState,
-    private clientService: ClientService
+    private editionState: EditionState,
+    private clientService: ClientService,
+    private clientParcelYearService: ClientParcelYearService,
+    private clientWorkspaceService: ClientWorkspaceService
   ) {
-    this.selectedDiagram$$ = this.diagramStore.stateView
-      .firstBy$((record: EntityRecord<ClientParcelDiagram>) => record.state.selected === true)
-      .subscribe((record: EntityRecord<ClientParcelDiagram>) => {
-        const diagram = record ? record.entity : undefined;
-        this.onSelectDiagram(diagram);
-      });
+    this.initParcelYears();
+  }
 
-    this.selectedParcelYear$$ = this.parcelYearStore.stateView
+  ngOnDestroy() {
+    this.clearClient();
+    this.teardownParcelYears();
+  }
+
+  private initParcelYears() {
+    this._parcelYearStore = new EntityStore<ClientParcelYear>([]);
+    this._parcelYearStore.view.sort({
+      valueAccessor: (year: ClientParcelYear) => year.annee,
+      direction: 'desc'
+    });
+
+    this.loadParcelYears();
+
+    this.parcelYear$$ = this.parcelYearStore.stateView
       .firstBy$((record: EntityRecord<ClientParcelYear>) => record.state.selected === true)
       .pipe(skip(1))
       .subscribe((record: EntityRecord<ClientParcelYear>) => {
@@ -112,18 +81,11 @@ export class ClientState implements OnDestroy {
         this.onSelectParcelYear(parcelYear);
       });
 
-    this.selectedSchema$$ = this.schemaStore.stateView
-      .firstBy$((record: EntityRecord<ClientSchema>) => record.state.selected === true)
-      .subscribe((record: EntityRecord<ClientSchema>) => {
-        const schema = record ? record.entity : undefined;
-        this.onSelectSchema(schema);
-      });
   }
 
-  ngOnDestroy() {
-    this.selectedDiagram$$.unsubscribe();
-    this.selectedParcelYear$$.unsubscribe();
-    this.selectedSchema$$.unsubscribe();
+  private teardownParcelYears() {
+    this.parcelYear$$.unsubscribe();
+    this.parcelYearStore.clear();
   }
 
   getClientByNum(clientNum: string): Observable<Client> {
@@ -132,8 +94,8 @@ export class ClientState implements OnDestroy {
   }
 
   setClient(client: Client | undefined) {
-    if (!this.transaction.empty) {
-      this.resolve$.next({confirm: () => this.setClient(client)});
+    if (this.transaction !== undefined && !this.transaction.empty) {
+      this.resolution$.next({confirm: () => this.setClient(client)});
       return;
     }
 
@@ -143,32 +105,24 @@ export class ClientState implements OnDestroy {
       return;
     }
 
-    this.parcelState.setClient(client);
-    this.schemaState.setClient(client);
+    const workspace = this.clientWorkspaceService.createClientWorkspace(client, this.map);
 
-    this.editionState.store.register(this.parcelState.editor);
-    this.editionState.store.register(this.schemaState.editor);
-    this.editionState.store.activateEditor(this.parcelState.editor);
-
-    this.client$.next(client);
+    this.editionState.register(workspace.parcelEditor);
+    this.editionState.register(workspace.schemaEditor);
+    this.editionState.setEditor(workspace.parcelEditor);
 
     if (client.parcels.length === 0) {
       this.clientError$.next('client.error.noparcel');
     } else {
       this.clientError$.next(undefined);
     }
-  }
 
-  addClient(client: Client | undefined) {
-    this.parcelState.addClient(client);
-    this.schemaState.addClient(client);
-
-    this.clients$.next(this.clients$.value.slice().concat([client]));
+    this.workspace$.next(workspace);
   }
 
   setClientNotFound() {
     if (!this.transaction.empty) {
-      this.resolve$.next({confirm: () => this.setClientNotFound()});
+      this.resolution$.next({confirm: () => this.setClientNotFound()});
       return;
     }
     this.clearClient();
@@ -178,31 +132,25 @@ export class ClientState implements OnDestroy {
   private clearClient() {
     this.clientError$.next(undefined);
 
-    if (this.client === undefined) { return; }
+    if (this.workspace === undefined) { return; }
 
-    this.parcelState.setClient(undefined);
-    this.schemaState.setClient(undefined);
+    const workspace = this.workspace;
 
-    this.editionState.store.unregister(this.parcelState.editor);
-    this.editionState.store.unregister(this.schemaState.editor);
+    this.editionState.unregister(workspace.parcelEditor);
+    this.editionState.unregister(workspace.schemaEditor);
 
-    this.clearSchema();
-
-    this.client$.next(undefined);
-  }
-
-  private onSelectDiagram(diagram: ClientParcelDiagram) {
-    this.parcelState.setDiagram(diagram);
+    workspace.destroy();
+    this.workspace$.next(undefined);
   }
 
   private onSelectParcelYear(parcelYear: ClientParcelYear) {
     this.parcelYear = parcelYear;
-    if (this.client !== undefined) {
-      this.getClientByNum(this.client.info.numero)
+    if (this.workspace !== undefined) {
+      this.getClientByNum(this.workspace.client.info.numero)
         .subscribe((client?: Client) => this.setClient(client));
     }
   }
-
+  /*
   private onSelectSchema(schema: ClientSchema) {
     if (schema !== undefined && this.schema !== undefined && schema.id === this.schema.id) {
       return;
@@ -240,6 +188,22 @@ export class ClientState implements OnDestroy {
     this.editionState.store.activateEditor(this.schemaState.editor);
 
     this.schema$.next(undefined);
+  }*/
+
+  /**
+   * Load the parcel years
+   */
+  private loadParcelYears() {
+    this.clientParcelYearService.getParcelYears()
+      .subscribe((parcelYears: ClientParcelYear[]) => {
+        const current = parcelYears.find((parcelYear: ClientParcelYear) => {
+          return parcelYear.current === true;
+        });
+        this.parcelYearStore.load(parcelYears);
+        if (current !== undefined) {
+          this.parcelYearStore.state.update(current, {selected: true});
+        }
+      });
   }
 
 }

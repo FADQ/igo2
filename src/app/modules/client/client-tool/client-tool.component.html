@@ -1,20 +1,21 @@
 <div>
   <div class="fadq-client-tool-top-section">
     <fadq-client-parcel-year-selector [store]="parcelYearStore"></fadq-client-parcel-year-selector>
-    <fadq-client-parcel-diagram-selector [store]="diagramStore"></fadq-client-parcel-diagram-selector>
-    <fadq-client-schema-selector [store]="schemaStore"></fadq-client-schema-selector>
   </div>
 
   <div *ngIf="clientError$ | async as error" class="fadq-error-text">
     {{error | translate}}
   </div>
 
-  <div *ngIf="(client$ | async) as client" class="fadq-client-tool-bottom-section">
+  <div *ngIf="(workspace$ | async) as ws" class="fadq-client-tool-bottom-section">
+    <fadq-client-parcel-diagram-selector [store]="ws.diagramStore"></fadq-client-parcel-diagram-selector>
+    <fadq-client-schema-selector [store]="ws.schemaStore"></fadq-client-schema-selector>
+
     <a
       href=""
       target="popup"
-      (click)="openClientInfoLink(client)">
-      {{client.info.nom}}
+      (click)="openClientInfoLink(ws.client)">
+      {{ws.client.info.nom}}
     </a>
 
     <igo-list [navigation]="false">
@@ -26,8 +27,8 @@
 
       <igo-collapsible [title]="'client.info.title' | translate">
         <fadq-client-info-addresses
-          [client]="client"
-          [map]="map">
+          [client]="ws.client"
+          [map]="ws.map">
         </fadq-client-info-addresses>
       </igo-collapsible>
     </igo-list>
