@@ -3,8 +3,11 @@ import {
   Input,
   OnInit,
   OnDestroy,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  ViewChild,
+  ElementRef
 } from '@angular/core';
+
 import { MatDialog } from '@angular/material';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -38,7 +41,6 @@ import {
 } from '../shared';
 import { AddressEditorSaveDialogComponent } from '../address-editor-save-dialog/address-editor-save-dialog.component';
 import { AddressEditorZoomDialogComponent } from '../address-editor-zoom-dialog/address-editor-zoom-dialog.component';
-
 
 /**
  * Tool to edit addresses from Adresse Quebec.
@@ -113,6 +115,8 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    */
   @Input() layerOptions: LayerOptions[];
 
+  @ViewChild('save', {read: ElementRef}) saveElement: ElementRef;
+
   private selectedAddress$$: Subscription;
   private olGeometry$$: Subscription;
   private modifyControl: ModifyControl;
@@ -176,6 +180,7 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    * Handles form save
    */
   handleFormSave() {
+    this.blurSave();
     this.manageSave();
   }
 
@@ -184,6 +189,14 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    */
   handleFormCancel() {
     this.closeEdition();
+  }
+
+
+  /**
+   * Blurs the save button
+   */
+  blurSave() {
+    this.saveElement.nativeElement.blur();
   }
 
   /**
