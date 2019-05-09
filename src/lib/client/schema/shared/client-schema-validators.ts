@@ -5,9 +5,10 @@ import { ClientSchemaEtat, ClientSchemaType } from './client-schema.enums';
 import { ClientSchema } from './client-schema.interfaces';
 
 export function validateOnlyOneLSE(control: FormGroup, client: Client): ValidationErrors | null {
-  const schemaTypeControl = control.controls['type'];
   const schemaId = control.controls['id'].value;
-  const schemaType = control.value;
+  const schemaTypeControl = control.controls['type'];
+  const schemaType = schemaTypeControl.value;
+
   if (schemaType !== ClientSchemaType.LSE) { return null; }
 
   const otherLSESchema = client.schemas.find((schema: ClientSchema) => {
