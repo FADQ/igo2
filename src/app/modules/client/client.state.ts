@@ -143,9 +143,9 @@ export class ClientState implements OnDestroy {
     this.parcelState.setClient(client);
     this.schemaState.setClient(client);
 
-    this.editionState.register(this.parcelState.editor);
-    this.editionState.register(this.schemaState.editor);
-    this.editionState.setEditor(this.parcelState.editor);
+    this.editionState.store.register(this.parcelState.editor);
+    this.editionState.store.register(this.schemaState.editor);
+    this.editionState.store.activateEditor(this.parcelState.editor);
 
     this.client$.next(client);
 
@@ -173,8 +173,8 @@ export class ClientState implements OnDestroy {
     this.parcelState.setClient(undefined);
     this.schemaState.setClient(undefined);
 
-    this.editionState.unregister(this.parcelState.editor);
-    this.editionState.unregister(this.schemaState.editor);
+    this.editionState.store.unregister(this.parcelState.editor);
+    this.editionState.store.unregister(this.schemaState.editor);
 
     this.clearSchema();
 
@@ -216,8 +216,8 @@ export class ClientState implements OnDestroy {
     this.parcelStore.state.updateAll({selected: false});
     this.elementState.setSchema(schema);
 
-    this.editionState.register(this.elementState.editor);
-    this.editionState.setEditor(this.schemaState.editor);
+    this.editionState.store.register(this.elementState.editor);
+    this.editionState.store.activateEditor(this.schemaState.editor);
 
     this.schema$.next(schema);
   }
@@ -226,8 +226,8 @@ export class ClientState implements OnDestroy {
     if (this.schema === undefined) { return; }
 
     this.elementState.setSchema(undefined);
-    this.editionState.unregister(this.elementState.editor);
-    this.editionState.setEditor(this.schemaState.editor);
+    this.editionState.store.unregister(this.elementState.editor);
+    this.editionState.store.activateEditor(this.schemaState.editor);
 
     this.schema$.next(undefined);
   }
