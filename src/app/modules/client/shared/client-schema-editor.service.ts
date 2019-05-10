@@ -17,7 +17,7 @@ export class ClientSchemaEditorService {
 
   createSchemaEditor(client: Client): Editor<ClientSchema> {
     return new Editor<ClientSchema>({
-      id: `fadq.client-schema-editor-2-${client.info.numero}`,
+      id: `fadq.${client.info.numero}-2-schema-editor`,
       title: `${client.info.numero} - Schémas`,
       tableTemplate: this.clientSchemaTableService.buildTable(),
       entityStore: this.createSchemaStore(client),
@@ -26,7 +26,7 @@ export class ClientSchemaEditorService {
   }
 
   private createSchemaStore(client: Client): EntityStore<ClientSchema> {
-    const store = new EntityStore<ClientSchema>(client.schemas);
+    const store = new EntityStore<ClientSchema>([]);
     store.view.sort({
       valueAccessor: (schema: ClientSchema) => schema.id,
       direction: 'desc'

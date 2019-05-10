@@ -17,7 +17,9 @@ import {
   ClientSchemaElement,
   ClientSchemaElementTypes,
   ClientSchemaElementService,
-  createSchemaElementLayerStyle
+  createSchemaElementLayerStyle,
+  createPerClientParcelLayerStyle,
+  createParcelLayerStyle
 } from 'src/lib/client';
 
 import { ClientResolutionService } from './client-resolution.service';
@@ -31,11 +33,15 @@ export interface ClientWorkspaceOptions {
   schemaElementEditor: Editor<ClientSchemaElement>;
   schemaElementService: ClientSchemaElementService;
   resolutionService: ClientResolutionService;
+  color?: [number, number, number];
+  // moveToParcels?: boolean;
 }
 
 export class ClientWorkspace {
 
   readonly message$ = new BehaviorSubject<string>(undefined);
+
+  readonly color$ = new BehaviorSubject<[number, number, number]>(undefined);
 
   /** Subscription to the selected diagram  */
   private diagram$$: Subscription;
@@ -116,10 +122,14 @@ export class ClientWorkspace {
   get diagramStore(): EntityStore<ClientParcelDiagram> { return this._diagramStore; }
   private _diagramStore: EntityStore<ClientParcelDiagram>;
 
+  /** Client color */
+  get color(): [number, number, number] { return this.color$.value; }
+
   constructor(private options: ClientWorkspaceOptions) {
     this.initDiagrams();
     this.initParcels();
     this.initSchemas();
+    this.setColor(options.color);
   }
 
   destroy() {
@@ -127,6 +137,17 @@ export class ClientWorkspace {
     this.teardownDiagrams();
     this.teardownParcels();
     this.teardownSchemas();
+  }
+
+  setColor(color: [number, number, number] | undefined) {
+    let olLayerStyle;
+    if (color === undefined) {
+      olLayerStyle = createParcelLayerStyle();
+    } else {
+      olLayerStyle = createPerClientParcelLayerStyle(color);
+    }
+    this.parcelStore.layer.ol.setStyle(olLayerStyle);
+    this.color$.next(color);
   }
 
   private initDiagrams() {
@@ -150,6 +171,9 @@ export class ClientWorkspace {
   }
 
   private initParcels() {
+    // const moveToParcels = this.options.moveToParcels !== false;
+    // this.parcelStore.load(this.client.parcels, moveToParcels);
+    this.parcelStore.load(this.client.parcels);
     this.addParcelLayer();
     this.editorStore.update(this.parcelEditor);
     this.editorStore.activateEditor(this.parcelEditor);
@@ -162,6 +186,11 @@ export class ClientWorkspace {
   }
 
   private teardownParcels() {
+    const loading = this.parcelStore.getStrategyOfType(FeatureStoreLoadingStrategy);
+    loading.unbindStore(this.parcelStore);
+    const selection = this.parcelStore.getStrategyOfType(FeatureStoreSelectionStrategy);
+    selection.unbindStore(this.parcelStore);
+
     this.removeParcelLayer();
     this.parcelEditor.deactivate();
     this.parcelStore.clear();
@@ -169,6 +198,7 @@ export class ClientWorkspace {
   }
 
   private initSchemas() {
+    this.schemaStore.load(this.client.schemas);
     this.schema$$ = this.schemaStore
       .stateView.firstBy$((record: EntityRecord<ClientSchema>) => record.state.selected === true)
       .subscribe((record: EntityRecord<ClientSchema>) => {
@@ -184,6 +214,7 @@ export class ClientWorkspace {
     this.schemaEditor.deactivate();
     this.schemaStore.clear();
     this.editorStore.delete(this.schemaEditor);
+    this.clearSchema();
   }
 
   private initSchemaElements(schema: ClientSchema) {
@@ -204,6 +235,12 @@ export class ClientWorkspace {
     if ( this.schemaElement$$ !== undefined) {
       this.schemaElement$$.unsubscribe();
     }
+
+    const loading = this.schemaElementStore.getStrategyOfType(FeatureStoreLoadingStrategy);
+    loading.unbindStore(this.schemaElementStore);
+    const selection = this.schemaElementStore.getStrategyOfType(FeatureStoreSelectionStrategy);
+    selection.unbindStore(this.schemaElementStore);
+
     this.removeSchemaElementLayer();
     this.schemaElementEditor.deactivate();
     this.schemaElementStore.clear();
@@ -265,32 +302,24 @@ export class ClientWorkspace {
 
   private addParcelLayer() {
     if (this.parcelStore.layer.map === undefined) {
-      this.parcelStore.activateStrategyOfType(FeatureStoreLoadingStrategy);
-      this.parcelStore.activateStrategyOfType(FeatureStoreSelectionStrategy);
       this.map.addLayer(this.parcelStore.layer);
     }
   }
 
   private removeParcelLayer() {
     if (this.parcelStore.layer.map !== undefined) {
-      this.parcelStore.deactivateStrategyOfType(FeatureStoreLoadingStrategy);
-      this.parcelStore.deactivateStrategyOfType(FeatureStoreSelectionStrategy);
       this.map.removeLayer(this.parcelStore.layer);
     }
   }
 
   private addSchemaElementLayer() {
     if (this.schemaElementStore.layer.map === undefined) {
-      this.schemaElementStore.activateStrategyOfType(FeatureStoreLoadingStrategy);
-      this.schemaElementStore.activateStrategyOfType(FeatureStoreSelectionStrategy);
       this.map.addLayer(this.schemaElementStore.layer);
     }
   }
 
   private removeSchemaElementLayer() {
     if (this.schemaElementStore.layer.map !== undefined) {
-      this.schemaElementStore.deactivateStrategyOfType(FeatureStoreLoadingStrategy);
-      this.schemaElementStore.deactivateStrategyOfType(FeatureStoreSelectionStrategy);
       this.map.removeLayer(this.schemaElementStore.layer);
     }
   }

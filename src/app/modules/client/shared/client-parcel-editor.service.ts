@@ -23,11 +23,25 @@ import {
 })
 export class ClientParcelEditorService {
 
+  static viewScale: [number, number, number, number] = [0, 0, 0.8, 0.6];
+
+  private sharedLoadingStrategy: FeatureStoreLoadingStrategy;
+
+  private sharedSelectionStrategy: FeatureStoreSelectionStrategy;
+
   constructor(private clientParcelTableService: ClientParcelTableService) {}
 
-  createParcelEditor(client: Client, map: IgoMap): Editor<ClientParcel> {
+  createParcelEditor(client: Client,  map: IgoMap): Editor<ClientParcel> {
+    if (this.sharedLoadingStrategy === undefined) {
+      this.sharedLoadingStrategy = this.createSharedLoadingStrategy();
+    }
+
+    if (this.sharedSelectionStrategy === undefined) {
+      this.sharedSelectionStrategy = this.createSharedSelectionStrategy(map);
+    }
+
     return new Editor<ClientParcel>({
-      id: `fadq.client-parcel-editor-1-${client.info.numero}`,
+      id: `fadq.${client.info.numero}-1-parcel-editor`,
       title: `${client.info.numero} - Parcelles`,
       tableTemplate: this.clientParcelTableService.buildTable(),
       entityStore: this.createParcelStore(client, map),
@@ -36,7 +50,7 @@ export class ClientParcelEditorService {
   }
 
   private createParcelStore(client: Client, map: IgoMap): FeatureStore<ClientParcel> {
-    const store = new FeatureStore<ClientParcel>(client.parcels, {
+    const store = new FeatureStore<ClientParcel>([], {
       getKey: (entity: ClientParcel) => entity.properties.id,
       map
     });
@@ -45,19 +59,30 @@ export class ClientParcelEditorService {
       direction: 'asc'
     });
 
-    const layer = createParcelLayer();
+    const layer = createParcelLayer(client);
     store.bindLayer(layer);
 
-    const viewScale: [number, number, number, number] = [0, 0, 0.8, 0.6];
-    const loadingStrategy = new FeatureStoreLoadingStrategy({
-      viewScale
-    });
-    store.addStrategy(loadingStrategy, true);
+    store.addStrategy(this.sharedLoadingStrategy, true);
+    store.addStrategy(this.sharedSelectionStrategy, true);
 
-    const selectionStrategy = new FeatureStoreSelectionStrategy({
+    return store;
+  }
+
+  private createParcelActionStore(): ActionStore {
+    return new ActionStore([]);
+  }
+
+  private createSharedLoadingStrategy(): FeatureStoreLoadingStrategy {
+    return new FeatureStoreLoadingStrategy({
+      viewScale: ClientParcelEditorService.viewScale
+    });
+  }
+
+  private createSharedSelectionStrategy(map: IgoMap): FeatureStoreSelectionStrategy {
+    return new FeatureStoreSelectionStrategy({
       map: map,
       layer: new VectorLayer({
-        title: `${client.info.numero} - Parcelles sélectionnées`,
+        title: `Parcelles sélectionnées`,
         zIndex: 102,
         source: new FeatureDataSource(),
         style: createClientDefaultSelectionStyle(),
@@ -66,15 +91,8 @@ export class ClientParcelEditorService {
         browsable: false
       }),
       many: true,
-      viewScale,
+      viewScale: ClientParcelEditorService.viewScale,
       areaRatio: 0.004
     });
-    store.addStrategy(selectionStrategy, true);
-
-    return store;
-  }
-
-  private createParcelActionStore(): ActionStore {
-    return new ActionStore([]);
   }
 }

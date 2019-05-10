@@ -23,11 +23,25 @@ import {
 })
 export class ClientSchemaElementEditorService {
 
+  static viewScale: [number, number, number, number] = [0, 0, 0.8, 0.6];
+
+  private sharedLoadingStrategy: FeatureStoreLoadingStrategy;
+
+  private sharedSelectionStrategy: FeatureStoreSelectionStrategy;
+
   constructor(private clientSchemaElementTableService: ClientSchemaElementTableService) {}
 
   createSchemaElementEditor(client: Client,  map: IgoMap): Editor<ClientSchemaElement> {
+    if (this.sharedLoadingStrategy === undefined) {
+      this.sharedLoadingStrategy = this.createSharedLoadingStrategy();
+    }
+
+    if (this.sharedSelectionStrategy === undefined) {
+      this.sharedSelectionStrategy = this.createSharedSelectionStrategy(map);
+    }
+
     return new Editor<ClientSchemaElement>({
-      id: `fadq.client-schema-element-editor-3-${client.info.numero}`,
+      id: `fadq.${client.info.numero}-3-schema-element-editor`,
       title: `${client.info.numero} - Éléments géométriques`,
       tableTemplate: this.clientSchemaElementTableService.buildTable(),
       entityStore: this.createSchemaElementStore(client, map),
@@ -43,19 +57,30 @@ export class ClientSchemaElementEditorService {
       map
     });
 
-    const layer = createSchemaElementLayer();
+    const layer = createSchemaElementLayer(client);
     store.bindLayer(layer);
 
-    const viewScale: [number, number, number, number] = [0, 0, 0.8, 0.6];
-    const loadingStrategy = new FeatureStoreLoadingStrategy({
-      viewScale
-    });
-    store.addStrategy(loadingStrategy);
+    store.addStrategy(this.sharedLoadingStrategy, true);
+    store.addStrategy(this.sharedSelectionStrategy, true);
 
-    const selectionStrategy = new FeatureStoreSelectionStrategy({
+    return store;
+  }
+
+  private createSchemaElementActionStore(): ActionStore {
+    return new ActionStore([]);
+  }
+
+  private createSharedLoadingStrategy(): FeatureStoreLoadingStrategy {
+    return new FeatureStoreLoadingStrategy({
+      viewScale: ClientSchemaElementEditorService.viewScale
+    });
+  }
+
+  private createSharedSelectionStrategy(map: IgoMap): FeatureStoreSelectionStrategy {
+    return new FeatureStoreSelectionStrategy({
       map: map,
       layer: new VectorLayer({
-        title: `${client.info.numero} - Éléments géométriques sélectionnés`,
+        title: `Éléments géométriques sélectionnés`,
         zIndex: 104,
         source: new FeatureDataSource(),
         style: createClientDefaultSelectionStyle(),
@@ -64,16 +89,9 @@ export class ClientSchemaElementEditorService {
         browsable: false
       }),
       many: true,
-      viewScale,
+      viewScale: ClientSchemaElementEditorService.viewScale,
       areaRatio: 0.004
     });
-    store.addStrategy(selectionStrategy, true);
-
-    return store;
-  }
-
-  private createSchemaElementActionStore(): ActionStore {
-    return new ActionStore([]);
   }
 
 }

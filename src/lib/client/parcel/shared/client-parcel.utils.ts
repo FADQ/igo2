@@ -65,12 +65,24 @@ export function generateParcelColor(index: number): [number, number, number] {
 export function createParcelLayer(client: Client): VectorLayer {
   const parcelDataSource = new FeatureDataSource();
   return new VectorLayer({
-    title: 'Parcelles du client',
+    title: `${client.info.numero} - Parcelles`,
     zIndex: 100,
     source: parcelDataSource,
-    style: createParcelLayerStyle(),
     removable: false,
     browsable: false
+  });
+}
+
+export function createPerClientParcelLayerStyle(color: [number, number, number]): olstyle.Style {
+  return new olstyle.Style({
+    stroke: new olstyle.Stroke({
+      width: 2,
+      color
+    }),
+    fill:  new olstyle.Fill({
+      color: [...color].concat([0.15])
+    }),
+    text: createParcelLayerTextStyle()
   });
 }
 
