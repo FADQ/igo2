@@ -32,6 +32,7 @@ import {
   tryAddLoadingStrategy,
   tryAddSelectionStrategy,
   VectorLayer,
+  WMSDataSource,
  } from '@igo2/geo';
 
 import {
@@ -157,12 +158,9 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    * @internal
    */
   ngOnDestroy() {
-    if (this.selectedAddress$$ !== undefined) { this.selectedAddress$$.unsubscribe(); }
-    if (this.buildingNumber$ !== undefined) { this.buildingNumber$.unsubscribe(); }
-    if (this.buildingSuffix$ !== undefined) { this.buildingSuffix$.unsubscribe(); }
     if (this.dialogZoom$$ !== undefined) { this.dialogZoom$$.unsubscribe(); }
     if (this.dialogSave$$ !== undefined) { this.dialogSave$$.unsubscribe(); }
-    this.deactivateModifyControl();
+    this.closeEdition(true);
    }
 
   /**
@@ -188,7 +186,7 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    * Handles form cancel
    */
   handleFormCancel() {
-    this.closeEdition();
+    this.closeEdition(true);
   }
 
 
@@ -256,26 +254,32 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    * Manages an address save
    */
   private manageSave() {
-    const dialogSaveRef = this.dialog.open(AddressEditorSaveDialogComponent);
-    this.dialogSave$$ = dialogSaveRef.componentInstance.addressSave.subscribe((response: boolean) => {
-      if (response === true) {
-        this.addressService.modifyAddressGeometry(
-          this.selectedAddressFeature.properties.idAdresseLocalisee,
-          this.selectedAddressFeature
-          ).subscribe(() => { this.closeEdition(); });
-      }
-    });
-    // unsubscribe
-    dialogSaveRef.afterClosed().subscribe(() => {
-      this.dialogSave$$.unsubscribe();
-    });
+    if (this.addressIsSelected) {
+      const dialogSaveRef = this.dialog.open(AddressEditorSaveDialogComponent);
+      this.dialogSave$$ = dialogSaveRef.componentInstance.addressSave.subscribe((response: boolean) => {
+        if (response === true) {
+          this.addressService.modifyAddressGeometry(
+            this.selectedAddressFeature.properties.idAdresseLocalisee,
+            this.selectedAddressFeature
+            ).subscribe(() => {
+              this.closeEdition(false);
+              const layer: Layer = this.map.getLayerByAlias('buildingsCorrected');
+              (layer.dataSource as WMSDataSource).refresh();
+            });
+        }
+      });
+      // unsubscribe
+      dialogSaveRef.afterClosed().subscribe(() => {
+        this.dialogSave$$.unsubscribe();
+      });
+    }
   }
 
 
   /**
    * Close the edition mode
    */
-  private closeEdition() {
+  private closeEdition(hideLayers: boolean) {
     if (this.selectedAddress$$ !== undefined) { this.selectedAddress$$.unsubscribe(); }
     if (this.buildingNumber$ !== undefined) { this.buildingNumber$.next(undefined); }
     if (this.buildingSuffix$ !== undefined) { this.buildingSuffix$.next(undefined); }
@@ -285,6 +289,7 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
     this.subscribeToAddressSelection();
     this.store.activateStrategyOfType(FeatureStoreSelectionStrategy);
     this.inEdition$.next(false);
+    if (hideLayers) { this.hideLayers(); }
   }
 
   /**
@@ -346,24 +351,48 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
     this.showLayer('mun', this.layerAliasMun === 'mun');
     this.showLayer('cadastre_reno', this.layerAliasCadastre === 'cadastre_reno');
   }
+  /**
+   * Shows layer
+   * @param layerAlias Layer alias
+   * @param layerExist Indicates if the layer already exists on the map
+   */
+  private showLayer(layerAlias: string, layerExist: boolean) {
+    const layer: Layer = this.map.getLayerByAlias(layerAlias);
+    if (layerExist || layer !== undefined) {
+      if (layer !== undefined) { layer.visible = true; }
+    } else if (this.layerOptions !== undefined) {
+      const layerOptions = this.getLayerOptions(layerAlias);
+      if (layerOptions !== undefined) {
+        this.layerService.createAsyncLayer(Object.assign({}, layerOptions, {
+          visible: true,
+          showInLayerList: false
+        })).subscribe((layerCreated: Layer) => this.map.addLayer(layerCreated));
+      }
+    }
+  }
+
+  /**
+   * Hides all layers related to this tool
+   */
+  private hideLayers() {
+    this.hideLayer(this.layerAliasBuildings);
+    this.hideLayer(this.layerAliasBuildingsCorrected);
+    this.hideLayer(this.layerAliasMun);
+    this.hideLayer(this.layerAliasCadastre);
+  }
 /**
  * Shows layer
  * @param layerAlias Layer alias
  * @param layerExist Indicates if the layer already exists on the map
  */
-private showLayer(layerAlias: string, layerExist: boolean) {
-  const layer: Layer = this.map.getLayerByAlias(layerAlias);
-  if (layerExist || layer !== undefined) {
-    if (layer !== undefined) { layer.visible = true; }
-  } else if (this.layerOptions !== undefined) {
-    const layerOptions = this.getLayerOptions(layerAlias);
-    if (layerOptions !== undefined) {
-      this.layerService.createAsyncLayer(Object.assign({}, layerOptions, {
-        visible: true,
-        showInLayerList: false
-      })).subscribe((layerCreated: Layer) => this.map.addLayer(layerCreated));
+  private hideLayer(layerAlias: string) {
+    let layer: Layer;
+    if (layerAlias !== undefined) {
+      layer = this.map.getLayerByAlias(layerAlias);
+    } else {
+      layer = this.map.getLayerByAlias(this.getLayerOptions(layerAlias).alias);
     }
-  }
+    if (layer !== undefined) { layer.visible = false; }
   }
 
   /**
@@ -382,9 +411,11 @@ private showLayer(layerAlias: string, layerExist: boolean) {
    * Create a modify control and subscribe to it's geometry
    */
   private initModifyControl() {
-    this.modifyControl = new ModifyControl({
-      drawStyle: createAddressStyle('#336cc6')
-    });
+    if (this.modifyControl === undefined) {
+      this.modifyControl = new ModifyControl({
+        drawStyle: createAddressStyle('#336cc6')
+      });
+    }
   }
 
   /**
@@ -392,6 +423,7 @@ private showLayer(layerAlias: string, layerExist: boolean) {
    * @param control Control
    */
   private activateModifyControl() {
+    this.initModifyControl();
     this.olGeometry$$ = this.modifyControl.end$
       .subscribe((olGeometry: OlGeometry) => this.setOlGeometry(olGeometry));
     this.modifyControl.setOlMap(this.map.ol);
@@ -403,6 +435,7 @@ private showLayer(layerAlias: string, layerExist: boolean) {
   private deactivateModifyControl() {
     if (this.modifyControl !== undefined) {
       this.modifyControl.setOlMap(undefined);
+      this.modifyControl = undefined;
     }
 
     if (this.olGeometry$$ !== undefined) {
