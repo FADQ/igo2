@@ -189,7 +189,6 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
     this.closeEdition(true);
   }
 
-
   /**
    * Blurs the save button
    */
@@ -263,8 +262,11 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
             this.selectedAddressFeature
             ).subscribe(() => {
               this.closeEdition(false);
+              // Refresh the buildingCorrected layer
               const layer: Layer = this.map.getLayerByAlias('buildingsCorrected');
-              (layer.dataSource as WMSDataSource).refresh();
+              if (layer.dataSource instanceof WMSDataSource ) {
+                (layer.dataSource as WMSDataSource).refresh();
+              }
             });
         }
       });
@@ -274,7 +276,6 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
       });
     }
   }
-
 
   /**
    * Close the edition mode
@@ -304,20 +305,20 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
       this.store.load([record.entity]);
     }
 
-    if (this.addressIsSelected) {
-      // Deactivate the selection strategy when an address is selected
-      this.store.deactivateStrategyOfType(FeatureStoreSelectionStrategy);
-      if (this.selectedAddress$$ !== undefined) {
-        this.selectedAddress$$.unsubscribe();
-      }
-      this.buildingNumber$.next(record.entity.properties.noAdresse);
-      this.buildingSuffix$.next(record.entity.properties.suffixeNoCivique);
-      this.selectedAddressFeature = record.entity;
-      this.activateModifyControl();
-      // Add the geometry to the modify control
-      const olFeature = this.store.layer.ol.getSource().getFeatureById(record.entity.properties.idAdresseLocalisee);
-      this.modifyControl.setOlGeometry(olFeature.getGeometry());
+    if (!this.addressIsSelected) { return; }
+
+    // Deactivate the selection strategy when an address is selected
+    this.store.deactivateStrategyOfType(FeatureStoreSelectionStrategy);
+    if (this.selectedAddress$$ !== undefined) {
+      this.selectedAddress$$.unsubscribe();
     }
+    this.buildingNumber$.next(record.entity.properties.noAdresse);
+    this.buildingSuffix$.next(record.entity.properties.suffixeNoCivique);
+    this.selectedAddressFeature = record.entity;
+    this.activateModifyControl();
+    // Add the geometry to the modify control
+    const olFeature = this.store.layer.ol.getSource().getFeatureById(record.entity.properties.idAdresseLocalisee);
+    this.modifyControl.setOlGeometry(olFeature.getGeometry());
   }
 
   /**
