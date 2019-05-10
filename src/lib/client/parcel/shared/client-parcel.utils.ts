@@ -73,8 +73,11 @@ export function createParcelLayer(client: Client): VectorLayer {
   });
 }
 
-export function createPerClientParcelLayerStyle(color: [number, number, number]): olstyle.Style {
-  return new olstyle.Style({
+export function createPerClientParcelLayerStyle(
+  color: [number, number, number]
+): (olFeature: OlFeature) => olstyle.Style {
+
+  const style = new olstyle.Style({
     stroke: new olstyle.Stroke({
       width: 2,
       color
@@ -83,6 +86,11 @@ export function createPerClientParcelLayerStyle(color: [number, number, number])
       color: [...color].concat([0.15])
     }),
     text: createParcelLayerTextStyle()
+  });
+
+  return (function(feature: OlFeature) {
+    style.getText().setText(feature.get('_mapTitle'));
+    return style;
   });
 }
 
