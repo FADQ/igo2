@@ -253,28 +253,29 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    * Manages an address save
    */
   private manageSave() {
-    if (this.addressIsSelected) {
-      const dialogSaveRef = this.dialog.open(AddressEditorSaveDialogComponent);
-      this.dialogSave$$ = dialogSaveRef.componentInstance.addressSave.subscribe((response: boolean) => {
-        if (response === true) {
-          this.addressService.modifyAddressGeometry(
-            this.selectedAddressFeature.properties.idAdresseLocalisee,
-            this.selectedAddressFeature
-            ).subscribe(() => {
-              this.closeEdition(false);
-              // Refresh the buildingCorrected layer
-              const layer: Layer = this.map.getLayerByAlias('buildingsCorrected');
-              if (layer.dataSource instanceof WMSDataSource ) {
-                (layer.dataSource as WMSDataSource).refresh();
-              }
-            });
-        }
-      });
-      // unsubscribe
-      dialogSaveRef.afterClosed().subscribe(() => {
-        this.dialogSave$$.unsubscribe();
-      });
-    }
+    // Only one address could be saved
+    if (!this.addressIsSelected) { return; }
+
+    const dialogSaveRef = this.dialog.open(AddressEditorSaveDialogComponent);
+    this.dialogSave$$ = dialogSaveRef.componentInstance.addressSave.subscribe((response: boolean) => {
+      if (response === true) {
+        this.addressService.modifyAddressGeometry(
+          this.selectedAddressFeature.properties.idAdresseLocalisee,
+          this.selectedAddressFeature
+          ).subscribe(() => {
+            this.closeEdition(false);
+            // Refresh the buildingCorrected layer
+            const layer: Layer = this.map.getLayerByAlias('buildingsCorrected');
+            if (layer.dataSource instanceof WMSDataSource ) {
+              (layer.dataSource as WMSDataSource).refresh();
+            }
+          });
+      }
+    });
+    // unsubscribe
+    dialogSaveRef.afterClosed().subscribe(() => {
+      this.dialogSave$$.unsubscribe();
+    });
   }
 
   /**
