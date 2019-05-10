@@ -7,7 +7,7 @@ import {
   ClientSchemaElementService
 } from 'src/lib/client';
 
-import { ClientWorkspace } from './client-workspace';
+import { ClientWorkspace, ClientWorkspaceOptions } from './client-workspace';
 import { ClientParcelEditorService } from './client-parcel-editor.service';
 import { ClientParcelActionsService } from './client-parcel-actions.service';
 import { ClientSchemaEditorService } from './client-schema-editor.service';
@@ -34,7 +34,7 @@ export class ClientWorkspaceService {
     private clientResolutionService: ClientResolutionService
   ) {}
 
-  createClientWorkspace(client: Client): ClientWorkspace {
+  createClientWorkspace(client: Client, options: Partial<ClientWorkspaceOptions> = {}): ClientWorkspace {
     const map = this.mapState.map;
     const parcelEditor = this.clientParcelEditorService.createParcelEditor(client, map);
     const schemaEditor = this.clientSchemaEditorService.createSchemaEditor(client);
@@ -50,7 +50,8 @@ export class ClientWorkspaceService {
       schemaEditor,
       schemaElementEditor,
       schemaElementService,
-      resolutionService
+      resolutionService,
+      // moveToParcels: options.moveToParcels
     });
 
     this.clientParcelActionsService.loadParcelActions(workspace);
@@ -59,4 +60,5 @@ export class ClientWorkspaceService {
 
     return workspace;
   }
+
 }

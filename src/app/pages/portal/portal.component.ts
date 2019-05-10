@@ -351,11 +351,11 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   private onSearchClient(result: SearchResult<Client>) {
     this.closeToastPanel();
-    this.clientState.setClient(result.data);
+    this.clientState.addClient(result.data);
   }
 
   private onClientNotFound() {
-    this.clientState.setClientNotFound();
+    this.clientState.setClientNotFound(true);
   }
 
   private onSearchMap(results: SearchResult<Feature>[]) {
@@ -395,7 +395,8 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.searchStore.clear();
     this.map.overlay.clear();
     this.closeToastPanel();
-    this.clientState.setClient(undefined);
+    this.clientState.setClientNotFound(false);
+    // this.clientState.clearAllClients();
   }
 
   private getQuerySearchSource(): SearchSource {

@@ -1,0 +1,29 @@
+:host {
+  display: block;
+  overflow: hidden;
+}
+
+.fadq-client-content {
+  padding: 0 20px;
+} 
+
+fadq-client-addresses,
+fadq-client-parcel-legend {
+  display: block;
+  margin-left: 15px;
+}
+
+.fadq-per-client-legend-thumbnail-container {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+}
+
+.fadq-per-client-legend-thumbnail {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border-width: 2px;
+  border-style: solid;
+}

@@ -10,6 +10,7 @@ import {
   VectorLayer
 } from '@igo2/geo';
 
+import { Client } from '../../shared/client.interfaces';
 import {
   ClientSchemaElement,
   ClientSchemaElementType,
@@ -114,10 +115,10 @@ export function generateOperationTitle(element: ClientSchemaElement): string {
   return terms.filter((term: string) => term !== undefined).join(' - ');
 }
 
-export function createSchemaElementLayer(): VectorLayer {
+export function createSchemaElementLayer(client: Client): VectorLayer {
   const schemaElementDataSource = new FeatureDataSource();
   return new VectorLayer({
-    title: 'Éléments géométriques du schéma',
+    title: `${client.info.numero} - Éléments géométriques`,
     zIndex: 102,
     source: schemaElementDataSource,
     removable: false,
