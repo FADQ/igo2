@@ -11,6 +11,7 @@ import {
   ClientParcelListResponse,
   ClientParcelListResponseItem
 } from './client-parcel.interfaces';
+import { padClientNum } from '../../shared/client.utils';
 
 @Injectable()
 export class ClientParcelService {
@@ -48,7 +49,7 @@ export class ClientParcelService {
     clientNum: string
   ): ClientParcel {
     const properties = Object.assign({}, listItem.properties, {
-      noClientRecherche: parseInt(clientNum, 10)
+      noClientRecherche: padClientNum(clientNum)
     });
     return {
       meta: {

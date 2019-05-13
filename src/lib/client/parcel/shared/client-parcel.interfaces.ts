@@ -13,9 +13,9 @@ export interface ClientParcel extends Feature {
     descriptionProduction: string;
     id: string;
     infoLocateur: string;
-    noClientDetenteur: number;
-    noClientExploitant: number;
-    noClientRecherche: number;
+    noClientDetenteur: string;
+    noClientExploitant: string;
+    noClientRecherche: string;
     noConfirmation: number;
     noDiagramme: number;
     noParcelleAgricole: string;

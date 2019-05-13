@@ -124,7 +124,7 @@ export class ClientParcelTableService {
     };
   }
 
-  private computeClientNumAnchor(clientNum: number): string {
+  private computeClientNumAnchor(clientNum: string): string {
     const link = this.clientInfoService.getClientInfoLink(padClientNum(clientNum));
     const onClick = `window.open('${link}', 'Client', 'width=800, height=600'); return false;`;
     return `<a target="popup" href="${link}" onClick="${onClick}">${clientNum}</a>`;
