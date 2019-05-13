@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy,
+  HostBinding
+} from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
@@ -20,14 +27,38 @@ export class ClientToolItemComponent {
 
   @Input() workspace: ClientWorkspace;
 
+  /**
+   * Whether a row is selected
+   */
+  @Input()
+  set selected(value: boolean) {
+    if (value === this._selected) { return; }
+    this._selected = value;
+  }
+  get selected(): boolean { return this._selected; }
+  private _selected = false;
+
   @Output() clear = new EventEmitter<ClientWorkspace>();
+
+  @Output() select = new EventEmitter<ClientWorkspace>();
+
+  /**
+   * @ignore
+   */
+  @HostBinding('class.fadq-client-tool-item-selected')
+  get withSelectedClass() { return this.selected; }
 
   constructor(
     private clientInfoService: ClientInfoService
   ) {}
 
-  onClearButtonClick() {
+  onClear() {
     this.clear.emit(this.workspace);
+  }
+
+  onSelect() {
+    this.selected = true;
+    this.select.emit(this.workspace);
   }
 
   /**

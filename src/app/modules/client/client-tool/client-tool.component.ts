@@ -41,6 +41,12 @@ export class ClientToolComponent implements OnInit, OnDestroy {
    * Observable of the client error, if any
    * @internal
    */
+  get activeWorkspace$(): BehaviorSubject<ClientWorkspace> { return this.clientState.activeWorkspace$; }
+
+  /**
+   * Observable of the client error, if any
+   * @internal
+   */
   get message$(): BehaviorSubject<string> { return this.clientState.message$; }
 
   /**
@@ -71,6 +77,11 @@ export class ClientToolComponent implements OnInit, OnDestroy {
   }
 
   onClearWorkspace(workspace: ClientWorkspace) {
-    this.clientState.clearClient(workspace.client);
+    this.clientState.clearWorkspace(workspace);
   }
+
+  onSelectWorkspace(workspace: ClientWorkspace) {
+    this.clientState.setActiveWorkspace(workspace);
+  }
+
 }

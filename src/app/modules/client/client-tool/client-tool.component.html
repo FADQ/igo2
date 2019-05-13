@@ -11,7 +11,9 @@
     <ng-template ngFor let-workspace [ngForOf]="workspaces.view.all$() | async">
       <fadq-client-tool-item
         [workspace]="workspace"
-        (clear)="onClearWorkspace($event)">
+        [selected]="(activeWorkspace$ | async) === workspace"
+        (clear)="onClearWorkspace($event)"
+        (select)="onSelectWorkspace($event)">
       </fadq-client-tool-item>
     </ng-template>
 

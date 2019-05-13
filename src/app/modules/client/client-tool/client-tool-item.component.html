@@ -7,21 +7,14 @@
     [collapsed]="!(showContent$ | async)"
     (toggle)="toggleContent($event)">
   </mat-icon>
-  <h4 matLine>
-    <a
-      href=""
-      target="popup"
-      (click)="openClientInfoLink(workspace.client)">
-      {{workspace.client.info.nom}}
-    </a>
-  </h4>
 
-  <button mat-icon-button (click)="onClearButtonClick()">
+  <div matLine class="fadq-client-name" (click)="onSelect()">
+    {{workspace.client.info.nom}}
+  </div>
+
+  <button mat-icon-button (click)="onClear()">
     <mat-icon>clear_outline</mat-icon>
   </button>
-    <!--button mat-icon-button [style.color]="'#' + color">
-      <mat-icon>brightness_1</mat-icon>
-    </button-->
   <div *ngIf="workspace.color$ | async as color" class="fadq-per-client-legend-thumbnail-container">
     <div
       class="fadq-per-client-legend-thumbnail"
@@ -39,6 +32,12 @@
   <fadq-client-parcel-diagram-selector [store]="workspace.diagramStore"></fadq-client-parcel-diagram-selector>
   <fadq-client-schema-selector [store]="workspace.schemaStore"></fadq-client-schema-selector>
 
+  <a
+    href=""
+    target="popup"
+    (click)="openClientInfoLink(workspace.client)">
+    Information détaillée
+  </a>
   <fadq-client-info-addresses
     [client]="workspace.client"
     [map]="workspace.map">

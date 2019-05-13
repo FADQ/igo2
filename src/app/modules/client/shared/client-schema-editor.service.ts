@@ -21,7 +21,8 @@ export class ClientSchemaEditorService {
       title: `${client.info.numero} - Schémas`,
       tableTemplate: this.clientSchemaTableService.buildTable(),
       entityStore: this.createSchemaStore(client),
-      actionStore: this.createSchemaActionStore()
+      actionStore: this.createSchemaActionStore(),
+      meta: {client, type: 'schema'}
     });
   }
 

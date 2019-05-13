@@ -176,7 +176,6 @@ export class ClientWorkspace {
     this.parcelStore.load(this.client.parcels);
     this.addParcelLayer();
     this.editorStore.update(this.parcelEditor);
-    this.editorStore.activateEditor(this.parcelEditor);
 
     if (this.client.parcels.length === 0) {
       this.message$.next('client.error.noparcel');
