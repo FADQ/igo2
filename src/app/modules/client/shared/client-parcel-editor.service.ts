@@ -45,7 +45,8 @@ export class ClientParcelEditorService {
       title: `${client.info.numero} - Parcelles`,
       tableTemplate: this.clientParcelTableService.buildTable(),
       entityStore: this.createParcelStore(client, map),
-      actionStore: this.createParcelActionStore()
+      actionStore: this.createParcelActionStore(),
+      meta: {client, type: 'parcel'}
     });
   }
 

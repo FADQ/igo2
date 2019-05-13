@@ -3,9 +3,13 @@
   overflow: hidden;
 }
 
+.fadq-client-name:hover {
+  cursor: pointer;
+}
+
 .fadq-client-content {
   padding: 0 20px;
-} 
+}
 
 fadq-client-addresses,
 fadq-client-parcel-legend {
@@ -26,4 +30,9 @@ fadq-client-parcel-legend {
   border-radius: 5px;
   border-width: 2px;
   border-style: solid;
+}
+
+:host.fadq-client-tool-item-selected {
+  background-color: #eee;
+  border: 1px solid #ddd;
 }

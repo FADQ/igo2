@@ -45,7 +45,8 @@ export class ClientSchemaElementEditorService {
       title: `${client.info.numero} - Éléments géométriques`,
       tableTemplate: this.clientSchemaElementTableService.buildTable(),
       entityStore: this.createSchemaElementStore(client, map),
-      actionStore: this.createSchemaElementActionStore()
+      actionStore: this.createSchemaElementActionStore(),
+      meta: {client, type: 'schemaElement'}
     });
   }
 

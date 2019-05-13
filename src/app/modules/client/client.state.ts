@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material';
 import { Observable, BehaviorSubject, Subscription, zip } from 'rxjs';
 import { skip, map } from 'rxjs/operators';
 
-import { EntityRecord, EntityStore,  Editor } from '@igo2/common';
+import { EntityRecord, EntityStore,  Editor, EditorStore } from '@igo2/common';
 import { EditionState } from '@igo2/integration';
 
 import {
@@ -30,6 +30,10 @@ import { FeatureStoreSelectionStrategy } from '@igo2/geo';
 })
 export class ClientState implements OnDestroy {
 
+  activeWorkspace$: BehaviorSubject<ClientWorkspace> = new BehaviorSubject(undefined);
+
+  get activeWorkspace(): ClientWorkspace { return this.activeWorkspace$.value }
+
   /** Observable of the current workspace */
   get workspaceStore(): EntityStore<ClientWorkspace> { return this._workspaceStore; }
   _workspaceStore: EntityStore<ClientWorkspace>;
@@ -50,6 +54,8 @@ export class ClientState implements OnDestroy {
   get parcelYearStore(): EntityStore<ClientParcelYear> { return this._parcelYearStore; }
   _parcelYearStore: EntityStore<ClientParcelYear>;
 
+  get editorStore(): EditorStore { return this.editionState.store; }
+
   constructor(
     private editionState: EditionState,
     private clientService: ClientService,
@@ -58,7 +64,7 @@ export class ClientState implements OnDestroy {
     private clientResolutionService: ClientResolutionService,
     private dialog: MatDialog
   ) {
-    this.editionState.store.view.sort({
+    this.editorStore.view.sort({
       valueAccessor: (editor: Editor) => editor.id,
       direction: 'asc'
     });
@@ -89,6 +95,9 @@ export class ClientState implements OnDestroy {
       // moveToParcels: this.shouldMoveToParcels()
     });
     this.workspaceStore.insert(workspace);
+    if (this.activeWorkspace === undefined) {
+      this.editorStore.activateEditor(workspace.parcelEditor);
+    }
   }
 
   setClientNotFound(notFound: boolean) {
@@ -99,18 +108,46 @@ export class ClientState implements OnDestroy {
     }
   }
 
-  clearClient(client: Client) {
-    const workspace = this.workspaceStore.get(client.info.numero);
+  clearWorkspace(workspace: ClientWorkspace) {
     if (!workspace.transaction.empty) {
       this.clientResolutionService.enqueue({
-        proceed: () => this.clearClient(client),
+        proceed: () => this.clearWorkspace(workspace),
         workspace
       });
       return;
     }
 
+    if (workspace === this.activeWorkspace) {
+      this.setActiveWorkspace(undefined);
+    }
     workspace.destroy();
     this.workspaceStore.delete(workspace);
+  }
+
+  setActiveWorkspace(workspace: ClientWorkspace) {
+    if (workspace === undefined) {
+      this.workspaceStore.state.update(workspace, {selected: false, active: false});
+      this.editorStore.view.filter(undefined);
+      this.activeWorkspace$.next(undefined);
+      return;
+    }
+
+    this.workspaceStore.state.update(workspace, {selected: true, active: true}, true);
+    this.setWorkspaceActiveEditor(workspace);
+    this.activeWorkspace$.next(workspace);
+  }
+
+  private setWorkspaceActiveEditor(workspace: ClientWorkspace) {
+    const cliNum = workspace.client.info.numero;
+    const currentEditor = this.editionState.editor$.value;
+    if (currentEditor !== undefined && currentEditor.meta.client.info.numero !== cliNum) {
+      const editors = [workspace.parcelEditor, workspace.schemaEditor, workspace.schemaElementEditor];
+      const editor = editors.find((editor: Editor) => editor.meta.type === currentEditor.meta.type);
+      this.editorStore.activateEditor(editor.isActive() ? editor : workspace.parcelEditor);
+    }
+    this.editorStore.view.filter((editor: Editor) => {
+      return editor.meta.client.info.numero === cliNum;
+    });  
   }
 
   private initWorkspaces() {
