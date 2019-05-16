@@ -52,6 +52,10 @@ export class ClientWorkspace {
   /** Subscription to the selected schema element  */
   private schemaElement$$: Subscription;
 
+  private schemaElementLoadingStrategy: FeatureStoreLoadingStrategy;
+
+  private schemaElementSelectionStrategy: FeatureStoreSelectionStrategy;
+
   /** Map */
   get map(): IgoMap {
     return this.options.map;
@@ -186,12 +190,13 @@ export class ClientWorkspace {
 
   private teardownParcels() {
     const loading = this.parcelStore.getStrategyOfType(FeatureStoreLoadingStrategy);
-    loading.unbindStore(this.parcelStore);
     const selection = this.parcelStore.getStrategyOfType(FeatureStoreSelectionStrategy);
-    selection.unbindStore(this.parcelStore);
+    this.parcelStore.removeStrategy(loading);
+    this.parcelStore.removeStrategy(selection);
 
     this.removeParcelLayer();
     this.parcelEditor.deactivate();
+    this.parcelStore.layer.ol.getSource().clear();
     this.parcelStore.clear();
     this.editorStore.delete(this.parcelEditor);
   }
@@ -206,6 +211,11 @@ export class ClientWorkspace {
       });
 
     this.editorStore.update(this.schemaEditor);
+
+    this.schemaElementLoadingStrategy =
+      this.schemaElementStore.getStrategyOfType(FeatureStoreLoadingStrategy) as FeatureStoreLoadingStrategy;
+    this.schemaElementSelectionStrategy =
+      this.schemaElementStore.getStrategyOfType(FeatureStoreSelectionStrategy) as FeatureStoreSelectionStrategy;
   }
 
   private teardownSchemas() {
@@ -226,22 +236,29 @@ export class ClientWorkspace {
 
     this.parcelStore.state.updateAll({selected: false});
     this.addSchemaElementLayer();
+
+    if (this.schemaElementStore.getStrategyOfType(FeatureStoreLoadingStrategy) === undefined) {
+      this.schemaElementStore.addStrategy(this.schemaElementLoadingStrategy, true);
+    }
+    if (this.schemaElementStore.getStrategyOfType(FeatureStoreSelectionStrategy) === undefined) {
+      this.schemaElementStore.addStrategy(this.schemaElementSelectionStrategy, true);
+    }
+
     this.loadSchemaElements(schema);
     this.editorStore.update(this.schemaElementEditor);
   }
 
   private teardownSchemaElements() {
-    if ( this.schemaElement$$ !== undefined) {
+    if (this.schemaElement$$ !== undefined) {
       this.schemaElement$$.unsubscribe();
     }
 
-    const loading = this.schemaElementStore.getStrategyOfType(FeatureStoreLoadingStrategy);
-    loading.unbindStore(this.schemaElementStore);
-    const selection = this.schemaElementStore.getStrategyOfType(FeatureStoreSelectionStrategy);
-    selection.unbindStore(this.schemaElementStore);
+    this.schemaElementStore.removeStrategy(this.schemaElementLoadingStrategy);
+    this.schemaElementStore.removeStrategy(this.schemaElementSelectionStrategy);
 
     this.removeSchemaElementLayer();
     this.schemaElementEditor.deactivate();
+    this.schemaElementStore.layer.ol.getSource().clear();
     this.schemaElementStore.clear();
     this.transaction.clear();
     this.editorStore.delete(this.schemaElementEditor);

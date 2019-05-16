@@ -29,8 +29,8 @@ export interface ClientSchemaElementProperties {
   superficie?: number;
 }
 
-export interface ClientSchemaElement extends Feature {
-  properties: ClientSchemaElementProperties;
+export interface ClientSchemaElement<P = ClientSchemaElementProperties> extends Feature {
+  properties: P;
 }
 
 export interface ClientSchemaElementListResponseItem extends ClientSchemaElement {}

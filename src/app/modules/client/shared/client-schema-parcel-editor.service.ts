@@ -1,4 +1,4 @@
-import { Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { ActionStore, Editor } from '@igo2/common';
 import {
@@ -12,16 +12,16 @@ import {
 
 import {
   Client,
-  ClientParcel,
-  ClientParcelTableService,
-  createParcelLayer,
+  ClientSchemaElement,
+  ClientSchemaElementTableService,
+  createSchemaElementLayer,
   createClientDefaultSelectionStyle
 } from 'src/lib/client';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ClientParcelEditorService {
+export class ClientSchemaParcelEditorService {
 
   static viewScale: [number, number, number, number] = [0, 0, 0.8, 0.6];
 
@@ -29,9 +29,9 @@ export class ClientParcelEditorService {
 
   private sharedSelectionStrategy: FeatureStoreSelectionStrategy;
 
-  constructor(private clientParcelTableService: ClientParcelTableService) {}
+  constructor(private clientSchemaParcelTableService: ClientSchemaParcelTableService) {}
 
-  createParcelEditor(client: Client,  map: IgoMap): Editor<ClientParcel> {
+  createSchemaParcelEditor(client: Client,  map: IgoMap): Editor<ClientSchemaParcel> {
     if (this.sharedLoadingStrategy === undefined) {
       this.sharedLoadingStrategy = this.createSharedLoadingStrategy();
     }
@@ -40,27 +40,25 @@ export class ClientParcelEditorService {
       this.sharedSelectionStrategy = this.createSharedSelectionStrategy(map);
     }
 
-    return new Editor<ClientParcel>({
-      id: `fadq.${client.info.numero}-1-parcel-editor`,
-      title: `${client.info.numero} - Parcelles`,
-      tableTemplate: this.clientParcelTableService.buildTable(),
-      entityStore: this.createParcelStore(client, map),
-      actionStore: this.createParcelActionStore(),
-      meta: {client, type: 'parcel'}
+    return new Editor<ClientSchemaParcel>({
+      id: `fadq.${client.info.numero}-3-schema-element-editor`,
+      title: `${client.info.numero} - Éléments du schémas`,
+      tableTemplate: this.clientSchemaParcelTableService.buildTable(),
+      entityStore: this.createSchemaParcelStore(client, map),
+      actionStore: this.createSchemaParcelActionStore(),
+      meta: {client, type: 'schemaElement'}
     });
   }
 
-  private createParcelStore(client: Client, map: IgoMap): FeatureStore<ClientParcel> {
-    const store = new FeatureStore<ClientParcel>([], {
-      getKey: (entity: ClientParcel) => entity.properties.id,
+  private createSchemaParcelStore(client: Client, map: IgoMap): FeatureStore<ClientSchemaParcel> {
+    const store = new FeatureStore<ClientSchemaParcel>([], {
+      getKey: (entity: ClientSchemaParcel) => {
+        return entity.properties.idElementGeometrique || entity.meta.id;
+      },
       map
     });
-    store.view.sort({
-      valueAccessor: (parcel: ClientParcel) => parcel.properties.noParcelleAgricole,
-      direction: 'asc'
-    });
 
-    const layer = createParcelLayer(client);
+    const layer = createSchemaParcelLayer(client);
     store.bindLayer(layer);
 
     store.addStrategy(this.sharedLoadingStrategy, true);
@@ -69,13 +67,13 @@ export class ClientParcelEditorService {
     return store;
   }
 
-  private createParcelActionStore(): ActionStore {
+  private createSchemaParcelActionStore(): ActionStore {
     return new ActionStore([]);
   }
 
   private createSharedLoadingStrategy(): FeatureStoreLoadingStrategy {
     return new FeatureStoreLoadingStrategy({
-      viewScale: ClientParcelEditorService.viewScale
+      viewScale: ClientSchemaParcelEditorService.viewScale
     });
   }
 
@@ -83,8 +81,8 @@ export class ClientParcelEditorService {
     return new FeatureStoreSelectionStrategy({
       map: map,
       layer: new VectorLayer({
-        title: `Parcelles sélectionnées`,
-        zIndex: 102,
+        title: `Éléments du schémas sélectionnés`,
+        zIndex: 104,
         source: new FeatureDataSource(),
         style: createClientDefaultSelectionStyle(),
         showInLayerList: false,
@@ -92,9 +90,10 @@ export class ClientParcelEditorService {
         browsable: false
       }),
       many: true,
-      viewScale: ClientParcelEditorService.viewScale,
+      viewScale: ClientSchemaParcelEditorService.viewScale,
       areaRatio: 0.004,
       dragBox: true
     });
   }
+
 }

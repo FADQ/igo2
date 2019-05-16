@@ -42,7 +42,7 @@ export class ClientSchemaElementEditorService {
 
     return new Editor<ClientSchemaElement>({
       id: `fadq.${client.info.numero}-3-schema-element-editor`,
-      title: `${client.info.numero} - Éléments géométriques`,
+      title: `${client.info.numero} - Éléments du schémas`,
       tableTemplate: this.clientSchemaElementTableService.buildTable(),
       entityStore: this.createSchemaElementStore(client, map),
       actionStore: this.createSchemaElementActionStore(),
@@ -81,7 +81,7 @@ export class ClientSchemaElementEditorService {
     return new FeatureStoreSelectionStrategy({
       map: map,
       layer: new VectorLayer({
-        title: `Éléments géométriques sélectionnés`,
+        title: `Éléments du schémas sélectionnés`,
         zIndex: 104,
         source: new FeatureDataSource(),
         style: createClientDefaultSelectionStyle(),
@@ -91,7 +91,8 @@ export class ClientSchemaElementEditorService {
       }),
       many: true,
       viewScale: ClientSchemaElementEditorService.viewScale,
-      areaRatio: 0.004
+      areaRatio: 0.004,
+      dragBox: true
     });
   }
 

@@ -167,7 +167,7 @@ export class ClientSchemaElementActionsService {
           });
         },
         args: [this.clientSchemaElementSaverWidget, workspace],
-        conditions: [elementIsDefined, transactionIsNotInCommitPhase, transactionIsNotEmpty],
+        conditions: [transactionIsNotInCommitPhase, transactionIsNotEmpty],
         conditionArgs
       },
       {
@@ -181,7 +181,7 @@ export class ClientSchemaElementActionsService {
           });
         },
         args: [this.clientSchemaElementUndoWidget, workspace],
-        conditions: [elementIsDefined, transactionIsNotInCommitPhase, transactionIsNotEmpty],
+        conditions: [transactionIsNotInCommitPhase, transactionIsNotEmpty],
         conditionArgs
       },
       {
@@ -199,7 +199,7 @@ export class ClientSchemaElementActionsService {
           });
         },
         args: [this.clientSchemaElementImportDataWidget, workspace],
-        conditions: [elementIsDefined, transactionIsNotInCommitPhase],
+        conditions: [transactionIsNotInCommitPhase],
         conditionArgs
       },
       {
