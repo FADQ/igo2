@@ -32,7 +32,7 @@ export class ClientState implements OnDestroy {
 
   activeWorkspace$: BehaviorSubject<ClientWorkspace> = new BehaviorSubject(undefined);
 
-  get activeWorkspace(): ClientWorkspace { return this.activeWorkspace$.value }
+  get activeWorkspace(): ClientWorkspace { return this.activeWorkspace$.value; }
 
   /** Observable of the current workspace */
   get workspaceStore(): EntityStore<ClientWorkspace> { return this._workspaceStore; }
@@ -126,7 +126,9 @@ export class ClientState implements OnDestroy {
 
   setActiveWorkspace(workspace: ClientWorkspace) {
     if (workspace === undefined) {
-      this.workspaceStore.state.update(workspace, {selected: false, active: false});
+      if (this.activeWorkspace !== undefined) {
+        this.workspaceStore.state.update(this.activeWorkspace, {selected: false, active: false});
+      }
       this.editorStore.view.filter(undefined);
       this.activeWorkspace$.next(undefined);
       return;
@@ -142,12 +144,15 @@ export class ClientState implements OnDestroy {
     const currentEditor = this.editionState.editor$.value;
     if (currentEditor !== undefined && currentEditor.meta.client.info.numero !== cliNum) {
       const editors = [workspace.parcelEditor, workspace.schemaEditor, workspace.schemaElementEditor];
-      const editor = editors.find((editor: Editor) => editor.meta.type === currentEditor.meta.type);
-      this.editorStore.activateEditor(editor.isActive() ? editor : workspace.parcelEditor);
+      const editor = editors.find((_editor: Editor) => {
+        return _editor.meta.type === currentEditor.meta.type &&
+          this.editorStore.get(_editor.id) !== undefined;
+      });
+      this.editorStore.activateEditor(editor || workspace.parcelEditor);
     }
     this.editorStore.view.filter((editor: Editor) => {
       return editor.meta.client.info.numero === cliNum;
-    });  
+    });
   }
 
   private initWorkspaces() {

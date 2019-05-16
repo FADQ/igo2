@@ -16,9 +16,11 @@
     <mat-icon>clear_outline</mat-icon>
   </button>
   <div *ngIf="workspace.color$ | async as color" class="fadq-per-client-legend-thumbnail-container">
-    <div
-      class="fadq-per-client-legend-thumbnail"
-      [ngStyle]="{'border-color': getLegendOuterColor(), 'background-color': getLegendInnerColor()}">
+    <div class="fadq-per-client-legend-thumbnail-wrapper">
+      <div
+        class="fadq-per-client-legend-thumbnail"
+        [ngStyle]="{'border-color': getLegendOuterColor(), 'background-color': getLegendInnerColor()}">
+      </div>
     </div>
   </div>
 </mat-list-item>
@@ -35,6 +37,7 @@
   <a
     href=""
     target="popup"
+    class="fadq-client-info-link"
     (click)="openClientInfoLink(workspace.client)">
     Information détaillée
   </a>
