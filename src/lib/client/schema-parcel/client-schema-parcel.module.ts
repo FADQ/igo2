@@ -2,78 +2,43 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
-  FadqLibClientSchemaElementCreateFormModule
-} from './client-schema-element-create-form/client-schema-element-create-form.module';
+  FadqLibClientSchemaParcelCreateFormModule
+} from './client-schema-parcel-create-form/client-schema-parcel-create-form.module';
 import {
-  FadqLibClientSchemaElementUpdateFormModule
-} from './client-schema-element-update-form/client-schema-element-update-form.module';
+  FadqLibClientSchemaParcelUpdateFormModule
+} from './client-schema-parcel-update-form/client-schema-parcel-update-form.module';
 import {
-  FadqLibClientSchemaElementReincludeFormModule
-} from './client-schema-element-reinclude-form/client-schema-element-reinclude-form.module';
+  FadqLibClientSchemaParcelTransferFormModule
+} from './client-schema-parcel-transfer-form/client-schema-parcel-transfer-form.module';
 import {
-  FadqLibClientSchemaElementSliceFormModule
-} from './client-schema-element-slice-form/client-schema-element-slice-form.module';
-import {
-  FadqLibClientSchemaElementSaverModule
-} from './client-schema-element-saver/client-schema-element-saver.module';
-import {
-  FadqLibClientSchemaElementUndoModule
-} from './client-schema-element-undo/client-schema-element-undo.module';
-import {
-  FadqLibClientSchemaElementImportDataModule
-} from './client-schema-element-import-data/client-schema-element-import-data.module';
-
-import {
-  provideClientSchemaElementPointService,
-  provideClientSchemaElementLineService,
-  provideClientSchemaElementSurfaceService,
-  provideClientSchemaElementService,
-} from './shared/client-schema-element.providers';
-import {
-  provideClientSchemaElementCreateWidget,
-  provideClientSchemaElementUpdateWidget,
-  provideClientSchemaElementReincludeWidget,
-  provideClientSchemaElementSliceWidget,
-  provideClientSchemaElementSaverWidget,
-  provideClientSchemaElementUndoWidget,
-  provideClientSchemaElementImportDataWidget
-} from './shared/client-schema-element.widgets';
-import { ClientSchemaElementFormService } from './shared/client-schema-element-form.service';
-import { ClientSchemaElementTableService } from './shared/client-schema-element-table.service';
+  provideClientSchemaParcelCreateWidget,
+  provideClientSchemaParcelUpdateWidget,
+  provideClientSchemaParcelTransferFormWidget
+} from './shared/client-schema-parcel.widgets';
+import { ClientSchemaParcelFormService } from './shared/client-schema-parcel-form.service';
+import { ClientSchemaParcelTableService } from './shared/client-schema-parcel-table.service';
 
 @NgModule({
   imports: [
     CommonModule
   ],
   exports: [
-    FadqLibClientSchemaElementCreateFormModule,
-    FadqLibClientSchemaElementUpdateFormModule,
-    FadqLibClientSchemaElementReincludeFormModule,
-    FadqLibClientSchemaElementSliceFormModule,
-    FadqLibClientSchemaElementSaverModule,
-    FadqLibClientSchemaElementUndoModule,
-    FadqLibClientSchemaElementImportDataModule
+    FadqLibClientSchemaParcelCreateFormModule,
+    FadqLibClientSchemaParcelUpdateFormModule,
+    FadqLibClientSchemaParcelTransferFormModule
   ],
   declarations: []
 })
-export class FadqLibClientSchemaElementModule {
+export class FadqLibClientSchemaParcelModule {
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: FadqLibClientSchemaElementModule,
+      ngModule: FadqLibClientSchemaParcelModule,
       providers: [
-        provideClientSchemaElementPointService(),
-        provideClientSchemaElementLineService(),
-        provideClientSchemaElementSurfaceService(),
-        provideClientSchemaElementService(),
-        provideClientSchemaElementCreateWidget(),
-        provideClientSchemaElementUpdateWidget(),
-        provideClientSchemaElementReincludeWidget(),
-        provideClientSchemaElementSliceWidget(),
-        provideClientSchemaElementSaverWidget(),
-        provideClientSchemaElementUndoWidget(),
-        provideClientSchemaElementImportDataWidget(),
-        ClientSchemaElementFormService,
-        ClientSchemaElementTableService
+        provideClientSchemaParcelCreateWidget(),
+        provideClientSchemaParcelUpdateWidget(),
+        provideClientSchemaParcelTransferFormWidget(),
+        ClientSchemaParcelFormService,
+        ClientSchemaParcelTableService
       ]
     };
   }

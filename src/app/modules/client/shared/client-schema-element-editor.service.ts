@@ -81,7 +81,7 @@ export class ClientSchemaElementEditorService {
     return new FeatureStoreSelectionStrategy({
       map: map,
       layer: new VectorLayer({
-        title: `Éléments du schémas sélectionnés`,
+        title: `Éléments du schéma sélectionnés`,
         zIndex: 104,
         source: new FeatureDataSource(),
         style: createClientDefaultSelectionStyle(),

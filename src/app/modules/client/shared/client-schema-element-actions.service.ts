@@ -4,6 +4,7 @@ import { Action, EntityTableColumn, Widget } from '@igo2/common';
 import { entitiesToRowData, exportToCSV } from '@igo2/geo';
 
 import {
+  ClientWorkspace,
   ClientSchemaElementCreateWidget,
   ClientSchemaElementUpdateWidget,
   ClientSchemaElementReincludeWidget,
@@ -13,8 +14,6 @@ import {
   ClientSchemaElementImportDataWidget,
   generateOperationTitle
 } from 'src/lib/client';
-
-import { ClientWorkspace } from './client-workspace';
 
 @Injectable({
   providedIn: 'root'
@@ -31,12 +30,7 @@ export class ClientSchemaElementActionsService {
     @Inject(ClientSchemaElementImportDataWidget) private clientSchemaElementImportDataWidget: Widget
   ) {}
 
-  loadSchemaElementActions(workspace: ClientWorkspace) {
-    const actions = this.buildSchemaElementActions(workspace);
-    workspace.schemaElementEditor.actionStore.load(actions);
-  }
-
-  private buildSchemaElementActions(workspace: ClientWorkspace): Action[] {
+  buildActions(workspace: ClientWorkspace): Action[] {
 
     function schemaIsDefined(ws: ClientWorkspace): boolean {
       return ws.schema !== undefined;

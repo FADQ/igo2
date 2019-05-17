@@ -3,19 +3,14 @@ import { Injectable} from '@angular/core';
 import { Action, EntityTableColumn } from '@igo2/common';
 import { entitiesToRowData,  exportToCSV } from '@igo2/geo';
 
-import { ClientWorkspace } from './client-workspace';
+import { ClientWorkspace } from 'src/lib/client';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClientParcelActionsService {
 
-  loadParcelActions(workspace: ClientWorkspace) {
-    const actions = this.buildParcelActions(workspace);
-    workspace.parcelEditor.actionStore.load(actions);
-  }
-
-  private buildParcelActions(workspace: ClientWorkspace): Action[] {
+  buildActions(workspace: ClientWorkspace): Action[] {
     return [
       {
         id: 'export',

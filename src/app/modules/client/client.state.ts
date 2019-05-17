@@ -2,13 +2,15 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material';
 
 import { Observable, BehaviorSubject, Subscription, zip } from 'rxjs';
-import { skip, map } from 'rxjs/operators';
+import { skip } from 'rxjs/operators';
 
 import { EntityRecord, EntityStore,  Editor, EditorStore } from '@igo2/common';
 import { EditionState } from '@igo2/integration';
 
 import {
   Client,
+  ClientWorkspace,
+  ClientResolutionService,
   ClientService,
   ClientParcel,
   ClientParcelYear,
@@ -17,10 +19,7 @@ import {
   generateParcelColor
 } from 'src/lib/client';
 
-import { ClientWorkspace } from './shared/client-workspace';
 import { ClientWorkspaceService } from './shared/client-workspace.service';
-import { ClientResolutionService } from './shared/client-resolution.service';
-import { FeatureStoreSelectionStrategy } from '@igo2/geo';
 
 /**
  * Service that holds the state of the client module

@@ -4,17 +4,20 @@ import { EditionState, MapState } from '@igo2/integration';
 
 import {
   Client,
-  ClientSchemaElementService
+  ClientWorkspace,
+  ClientWorkspaceOptions,
+  ClientResolutionService,
+  ClientSchemaElementService,
 } from 'src/lib/client';
 
-import { ClientWorkspace, ClientWorkspaceOptions } from './client-workspace';
 import { ClientParcelEditorService } from './client-parcel-editor.service';
 import { ClientParcelActionsService } from './client-parcel-actions.service';
 import { ClientSchemaEditorService } from './client-schema-editor.service';
 import { ClientSchemaActionsService } from './client-schema-actions.service';
 import { ClientSchemaElementEditorService } from './client-schema-element-editor.service';
 import { ClientSchemaElementActionsService } from './client-schema-element-actions.service';
-import { ClientResolutionService } from './client-resolution.service';
+import { ClientSchemaParcelEditorService } from './client-schema-parcel-editor.service';
+import { ClientSchemaParcelActionsService } from './client-schema-parcel-actions.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +34,8 @@ export class ClientWorkspaceService {
     private clientSchemaElementEditorService: ClientSchemaElementEditorService,
     private clientSchemaElementActionsService: ClientSchemaElementActionsService,
     private clientSchemaElementService: ClientSchemaElementService,
+    private clientSchemaParcelEditorService: ClientSchemaParcelEditorService,
+    private clientSchemaParcelActionsService: ClientSchemaParcelActionsService,
     private clientResolutionService: ClientResolutionService
   ) {}
 
@@ -40,6 +45,7 @@ export class ClientWorkspaceService {
     const schemaEditor = this.clientSchemaEditorService.createSchemaEditor(client);
     const schemaElementEditor = this.clientSchemaElementEditorService.createSchemaElementEditor(client, map);
     const schemaElementService = this.clientSchemaElementService;
+    const schemaParcelEditor = this.clientSchemaParcelEditorService.createSchemaParcelEditor(client, map);
     const resolutionService = this.clientResolutionService;
 
     const workspace = new ClientWorkspace({
@@ -50,13 +56,22 @@ export class ClientWorkspaceService {
       schemaEditor,
       schemaElementEditor,
       schemaElementService,
+      schemaParcelEditor,
       resolutionService,
       // moveToParcels: options.moveToParcels
     });
 
-    this.clientParcelActionsService.loadParcelActions(workspace);
-    this.clientSchemaActionsService.loadSchemaActions(workspace);
-    this.clientSchemaElementActionsService.loadSchemaElementActions(workspace);
+    const parcelActions = this.clientParcelActionsService.buildActions(workspace);
+    parcelEditor.actionStore.load(parcelActions);
+
+    const schemaActions = this.clientSchemaActionsService.buildActions(workspace);
+    schemaEditor.actionStore.load(schemaActions);
+
+    const schemaElementActions = this.clientSchemaElementActionsService.buildActions(workspace);
+    schemaElementEditor.actionStore.load(schemaElementActions);
+
+    const schemaParcelActions = this.clientSchemaParcelActionsService.buildActions(workspace);
+    schemaParcelEditor.actionStore.load(schemaParcelActions);
 
     return workspace;
   }

@@ -14,6 +14,8 @@ import {
 } from '@igo2/common';
 import { IgoMap } from '@igo2/geo';
 
+import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
+
 @Injectable()
 export class ClientSchemaElementFormService {
 
@@ -22,7 +24,7 @@ export class ClientSchemaElementFormService {
     private languageService: LanguageService
   ) {}
 
-  buildCreateForm(igoMap: IgoMap, geometryTypes: string[]): Observable<Form> {
+  buildCreateForm(schema: ClientSchema, igoMap: IgoMap, geometryTypes: string[]): Observable<Form> {
     const geometryFields$ = zip(
       this.createGeometryField({inputs: {
         map: igoMap,
@@ -49,8 +51,8 @@ export class ClientSchemaElementFormService {
       );
   }
 
-  buildUpdateForm(igoMap: IgoMap, geometryTypes: string[]): Observable<Form> {
-    return this.buildCreateForm(igoMap, geometryTypes);
+  buildUpdateForm(schema: ClientSchema, igoMap: IgoMap, geometryTypes: string[]): Observable<Form> {
+    return this.buildCreateForm(schema, igoMap, geometryTypes);
   }
 
   private createIdField(partial?: Partial<FormFieldConfig>): Observable<FormField> {

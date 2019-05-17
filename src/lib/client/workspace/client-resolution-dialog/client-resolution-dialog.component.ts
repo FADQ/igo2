@@ -1,22 +1,22 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
-import { ClientSchemaElementService } from 'src/lib/client';
+import { ClientSchemaElementService } from '../../schema-element/shared/client-schema-element.service';
 
 import { ClientResolution } from '../shared/client-resolution.service';
 
 @Component({
-  selector: 'fadq-client-schema-confirm-dialog',
-  templateUrl: 'client-schema-confirm-dialog.component.html',
-  styleUrls: ['./client-schema-confirm-dialog.component.scss']
+  selector: 'fadq-client-resolution-dialog',
+  templateUrl: 'client-resolution-dialog.component.html',
+  styleUrls: ['./client-resolution-dialog.component.scss']
 })
-export class ClientSchemaConfirmDialogComponent {
+export class ClientResolutionDialogComponent {
 
   get resolution(): ClientResolution { return this.data.resolution; }
 
   constructor(
     private clientSchemaElementService: ClientSchemaElementService,
-    public dialogRef: MatDialogRef<ClientSchemaConfirmDialogComponent>,
+    public dialogRef: MatDialogRef<ClientResolutionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {resolution: ClientResolution}
   ) {}
 

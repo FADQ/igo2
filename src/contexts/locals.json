@@ -1,6 +1,14 @@
 [
   {
-    "uri": "local",
-    "title": "Local"
+    "uri": "_default",
+    "title": "Général"
+  },
+  {
+    "uri": "mesurage",
+    "title": "Mesurage"
+  },
+  {
+    "uri": "agroclim",
+    "title": "Analyse agroclimatique"
   }
 ]

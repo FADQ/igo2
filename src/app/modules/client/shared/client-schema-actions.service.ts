@@ -3,6 +3,7 @@ import { Inject, Injectable} from '@angular/core';
 import { Action, Widget } from '@igo2/common';
 
 import {
+  ClientWorkspace,
   ClientSchemaCreateWidget,
   ClientSchemaUpdateWidget,
   ClientSchemaDeleteWidget,
@@ -11,8 +12,6 @@ import {
   ClientSchemaFileManagerWidget,
   ClientSchemaType
 } from 'src/lib/client';
-
-import { ClientWorkspace } from './client-workspace';
 
 @Injectable({
   providedIn: 'root'
@@ -28,12 +27,7 @@ export class ClientSchemaActionsService {
     @Inject(ClientSchemaFileManagerWidget) private clientSchemaFileManagerWidget: Widget
   ) {}
 
-  loadSchemaActions(workspace: ClientWorkspace) {
-    const actions = this.buildSchemaActions(workspace);
-    workspace.schemaEditor.actionStore.load(actions);
-  }
-
-  private buildSchemaActions(workspace: ClientWorkspace): Action[] {
+  buildActions(workspace: ClientWorkspace): Action[] {
 
     function schemaIsDefined(ws: ClientWorkspace): boolean {
       return ws.schema !== undefined;
