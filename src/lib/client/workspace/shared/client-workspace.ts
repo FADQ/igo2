@@ -9,19 +9,14 @@ import {
   IgoMap
 } from '@igo2/geo';
 
-import {
-  Client,
-  ClientParcelDiagram,
-  ClientParcel,
-  ClientSchema,
-  ClientSchemaElement,
-  ClientSchemaElementTypes,
-  ClientSchemaElementService,
-  createSchemaElementLayerStyle,
-  createPerClientParcelLayerStyle,
-  createParcelLayerStyle
-} from 'src/lib/client';
-
+import { Client } from '../../shared/client.interfaces';
+import { ClientParcel, ClientParcelDiagram } from '../../parcel/shared/client-parcel.interfaces';
+import { createPerClientParcelLayerStyle, createParcelLayerStyle } from '../../parcel/shared/client-parcel.utils';
+import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
+import { ClientSchemaElement, ClientSchemaElementTypes } from '../../schema-element/shared/client-schema-element.interfaces';
+import { ClientSchemaElementService } from '../../schema-element/shared/client-schema-element.service';
+import { createSchemaElementLayerStyle } from '../../schema-element/shared/client-schema-element.utils';
+import { ClientSchemaParcel } from '../../schema-parcel/shared/client-schema-parcel.interfaces';
 import { ClientResolutionService } from './client-resolution.service';
 
 export interface ClientWorkspaceOptions {
@@ -32,6 +27,7 @@ export interface ClientWorkspaceOptions {
   schemaEditor: Editor<ClientSchema>;
   schemaElementEditor: Editor<ClientSchemaElement>;
   schemaElementService: ClientSchemaElementService;
+  schemaParcelEditor: Editor<ClientSchemaParcel>;
   resolutionService: ClientResolutionService;
   color?: [number, number, number];
   // moveToParcels?: boolean;
@@ -99,16 +95,6 @@ export class ClientWorkspace {
     return this.schemaEditor.entityStore as EntityStore<ClientSchema>;
   }
 
-  /** Element editor */
-  get schemaElementEditor(): Editor<ClientSchemaElement> {
-    return this.options.schemaElementEditor;
-  }
-
-  /** Store that holds the elements of the active schema */
-  get schemaElementStore(): FeatureStore<ClientSchemaElement> {
-    return this.schemaElementEditor.entityStore as FeatureStore<ClientSchemaElement>;
-  }
-
   /** Element service */
   get schemaElementService(): ClientSchemaElementService {
     return this.options.schemaElementService;
@@ -121,6 +107,19 @@ export class ClientWorkspace {
   /** Element transaction */
   get transaction(): EntityTransaction { return this._transaction; }
   private _transaction: EntityTransaction = new EntityTransaction();
+
+  /** Active element editor */
+  get schemaElementEditor(): Editor<ClientSchemaElement> | undefined { return this._schemaElementEditor; }
+  private _schemaElementEditor: Editor<ClientSchemaElement>;
+
+  /** Store that holds the elements of the active schema */
+  get schemaElementStore(): FeatureStore<ClientSchemaElement> | undefined {
+    if (this.schemaElementEditor === undefined) {
+      return undefined;
+    } else {
+      return this.schemaElementEditor.entityStore as FeatureStore<ClientSchemaElement>;
+    }
+  }
 
   /** Store that holds the diagrams of the active client */
   get diagramStore(): EntityStore<ClientParcelDiagram> { return this._diagramStore; }
@@ -211,11 +210,6 @@ export class ClientWorkspace {
       });
 
     this.editorStore.update(this.schemaEditor);
-
-    this.schemaElementLoadingStrategy =
-      this.schemaElementStore.getStrategyOfType(FeatureStoreLoadingStrategy) as FeatureStoreLoadingStrategy;
-    this.schemaElementSelectionStrategy =
-      this.schemaElementStore.getStrategyOfType(FeatureStoreSelectionStrategy) as FeatureStoreSelectionStrategy;
   }
 
   private teardownSchemas() {
@@ -227,7 +221,10 @@ export class ClientWorkspace {
   }
 
   private initSchemaElements(schema: ClientSchema) {
-    this.schemaElement$$ = this.schemaElementStore
+    const editor = schema.type === 'EPA' ? this.options.schemaParcelEditor : this.options.schemaElementEditor;
+    const store = editor.entityStore as FeatureStore<ClientSchemaElement>;
+
+    this.schemaElement$$ = store
       .stateView.firstBy$((record: EntityRecord<ClientSchemaElement>) => record.state.selected === true)
       .subscribe((record: EntityRecord<ClientSchemaElement>) => {
         const schemaElement = record ? record.entity : undefined;
@@ -235,17 +232,27 @@ export class ClientWorkspace {
       });
 
     this.parcelStore.state.updateAll({selected: false});
+
+    const schemaElementLoadingStrategy = store.getStrategyOfType(FeatureStoreLoadingStrategy);
+    if (schemaElementLoadingStrategy === undefined && this.schemaElementLoadingStrategy !== undefined) {
+      store.addStrategy(this.schemaElementLoadingStrategy, true);
+    } else {
+      this.schemaElementLoadingStrategy = schemaElementLoadingStrategy as FeatureStoreLoadingStrategy;
+    }
+
+    const schemaElementSelectionStrategy = store.getStrategyOfType(FeatureStoreSelectionStrategy);
+    if (schemaElementSelectionStrategy === undefined && this.schemaElementSelectionStrategy !== undefined) {
+      store.addStrategy(this.schemaElementSelectionStrategy, true);
+    } else {
+      this.schemaElementSelectionStrategy = schemaElementSelectionStrategy as FeatureStoreSelectionStrategy;
+    }
+
+    this.loadSchemaElements(schema, store);
+    this.editorStore.update(editor);
+
+    this._schemaElementEditor = editor;
+
     this.addSchemaElementLayer();
-
-    if (this.schemaElementStore.getStrategyOfType(FeatureStoreLoadingStrategy) === undefined) {
-      this.schemaElementStore.addStrategy(this.schemaElementLoadingStrategy, true);
-    }
-    if (this.schemaElementStore.getStrategyOfType(FeatureStoreSelectionStrategy) === undefined) {
-      this.schemaElementStore.addStrategy(this.schemaElementSelectionStrategy, true);
-    }
-
-    this.loadSchemaElements(schema);
-    this.editorStore.update(this.schemaElementEditor);
   }
 
   private teardownSchemaElements() {
@@ -262,6 +269,7 @@ export class ClientWorkspace {
     this.schemaElementStore.clear();
     this.transaction.clear();
     this.editorStore.delete(this.schemaElementEditor);
+    this._schemaElementEditor = undefined;
   }
 
   private onSelectDiagram(diagram: ClientParcelDiagram) {
@@ -340,7 +348,7 @@ export class ClientWorkspace {
     }
   }
 
-  private loadSchemaElements(schema: ClientSchema) {
+  private loadSchemaElements(schema: ClientSchema, store: FeatureStore<ClientSchemaElement>) {
     this.schemaElementService.getSchemaElementTypes(schema.type)
       .pipe(
         concatMap((types: ClientSchemaElementTypes) => {
@@ -352,8 +360,8 @@ export class ClientWorkspace {
       .subscribe((bunch: [ClientSchemaElementTypes, ClientSchemaElement[]]) => {
         const [types, elements] = bunch;
         const olStyle = createSchemaElementLayerStyle(types);
-        this.schemaElementStore.layer.ol.setStyle(olStyle);
-        this.schemaElementStore.load(elements);
+        store.layer.ol.setStyle(olStyle);
+        store.load(elements);
       });
   }
 }

@@ -4,7 +4,7 @@ import { MatButtonModule, MatDialogModule } from '@angular/material';
 
 import { IgoLanguageModule } from '@igo2/core';
 
-import { ClientSchemaConfirmDialogComponent } from './client-schema-confirm-dialog.component';
+import { ClientResolutionDialogComponent } from './client-resolution-dialog.component';
 
 /**
  * @ignore
@@ -16,8 +16,8 @@ import { ClientSchemaConfirmDialogComponent } from './client-schema-confirm-dial
     MatDialogModule,
     IgoLanguageModule
   ],
-  declarations: [ClientSchemaConfirmDialogComponent],
-  exports: [ClientSchemaConfirmDialogComponent],
-  entryComponents: [ClientSchemaConfirmDialogComponent]
+  declarations: [ClientResolutionDialogComponent],
+  exports: [ClientResolutionDialogComponent],
+  entryComponents: [ClientResolutionDialogComponent]
 })
-export class FadqClientSchemaConfirmDialogModule {}
+export class FadqLibClientResolutionDialogModule {}

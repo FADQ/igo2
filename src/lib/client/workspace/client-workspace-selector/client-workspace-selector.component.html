@@ -1,0 +1,6 @@
+<igo-entity-selector
+  [store]="store"
+  [placeholder]="'Numéro de client'"
+  [titleAccessor]="getClientNum"
+  (selectedChange)="selectedChange.emit($event)">
+</igo-entity-selector>

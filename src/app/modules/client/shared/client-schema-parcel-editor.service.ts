@@ -12,9 +12,9 @@ import {
 
 import {
   Client,
-  ClientSchemaElement,
-  ClientSchemaElementTableService,
-  createSchemaElementLayer,
+  ClientSchemaParcel,
+  ClientSchemaParcelTableService,
+  createSchemaParcelLayer,
   createClientDefaultSelectionStyle
 } from 'src/lib/client';
 
@@ -41,8 +41,8 @@ export class ClientSchemaParcelEditorService {
     }
 
     return new Editor<ClientSchemaParcel>({
-      id: `fadq.${client.info.numero}-3-schema-element-editor`,
-      title: `${client.info.numero} - Éléments du schémas`,
+      id: `fadq.${client.info.numero}-3-schema-parcel-editor`,
+      title: `${client.info.numero} - Parcelles du schémas`,
       tableTemplate: this.clientSchemaParcelTableService.buildTable(),
       entityStore: this.createSchemaParcelStore(client, map),
       actionStore: this.createSchemaParcelActionStore(),
@@ -81,7 +81,7 @@ export class ClientSchemaParcelEditorService {
     return new FeatureStoreSelectionStrategy({
       map: map,
       layer: new VectorLayer({
-        title: `Éléments du schémas sélectionnés`,
+        title: `Parcelles du schéma sélectionnées`,
         zIndex: 104,
         source: new FeatureDataSource(),
         style: createClientDefaultSelectionStyle(),

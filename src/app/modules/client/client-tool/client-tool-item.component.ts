@@ -9,11 +9,7 @@ import {
 
 import { BehaviorSubject } from 'rxjs';
 
-import { ToolComponent } from '@igo2/common';
-
-import { Client, ClientInfoService } from 'src/lib/client';
-
-import { ClientWorkspace } from '../shared/client-workspace';
+import { Client, ClientWorkspace, ClientInfoService } from 'src/lib/client';
 
 @Component({
   selector: 'fadq-client-tool-item',

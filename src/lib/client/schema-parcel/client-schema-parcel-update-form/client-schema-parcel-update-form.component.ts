@@ -23,25 +23,24 @@ import { LanguageService } from '@igo2/core';
 import { Feature, FeatureStore, IgoMap } from '@igo2/geo';
 
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
-import {
-  ClientSchemaElement,
-  ClientSchemaElementTypes
-} from '../shared/client-schema-element.interfaces';
-import { ClientSchemaElementService } from '../shared/client-schema-element.service';
-import { ClientSchemaElementFormService } from '../shared/client-schema-element-form.service';
+import { ClientSchemaElementTypes } from '../../schema-element/shared/client-schema-element.interfaces';
+import { ClientSchemaElementService } from '../../schema-element/shared/client-schema-element.service';
 import {
   generateOperationTitle,
   computeSchemaElementArea,
   getSchemaElementValidationMessage
-} from '../shared/client-schema-element.utils';
+} from '../../schema-element/shared/client-schema-element.utils';
+
+import { ClientSchemaParcel } from '../shared/client-schema-parcel.interfaces';
+import { ClientSchemaParcelFormService } from '../shared/client-schema-parcel-form.service';
 
 @Component({
-  selector: 'fadq-client-schema-element-update-form',
-  templateUrl: './client-schema-element-update-form.component.html',
-  styleUrls: ['./client-schema-element-update-form.component.scss'],
+  selector: 'fadq-client-schema-parcel-update-form',
+  templateUrl: './client-schema-parcel-update-form.component.html',
+  styleUrls: ['./client-schema-parcel-update-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientSchemaElementUpdateFormComponent implements OnInit, OnUpdateInputs, WidgetComponent {
+export class ClientSchemaParcelUpdateFormComponent implements OnInit, OnUpdateInputs, WidgetComponent {
 
   /**
    * Update form
@@ -56,17 +55,17 @@ export class ClientSchemaElementUpdateFormComponent implements OnInit, OnUpdateI
   errorMessage$: BehaviorSubject<string> = new BehaviorSubject(undefined);
 
   /**
-   * Map to draw elements on
+   * Map to draw parcels on
    */
   @Input() map: IgoMap;
 
   /**
-   * Schema element store
+   * Schema parcel store
    */
-  @Input() store: FeatureStore<ClientSchemaElement>;
+  @Input() store: FeatureStore<ClientSchemaParcel>;
 
   /**
-   * Schema element transaction
+   * Schema parcel transaction
    */
   @Input() transaction: EntityTransaction;
 
@@ -76,9 +75,9 @@ export class ClientSchemaElementUpdateFormComponent implements OnInit, OnUpdateI
   @Input() schema: ClientSchema;
 
   /**
-   * Schema element
+   * Schema parcel
    */
-  @Input() element: ClientSchemaElement;
+  @Input() element: ClientSchemaParcel;
 
   /**
    * Event emitted on complete
@@ -92,13 +91,13 @@ export class ClientSchemaElementUpdateFormComponent implements OnInit, OnUpdateI
 
   constructor(
     private clientSchemaElementService: ClientSchemaElementService,
-    private clientSchemaElementFormService: ClientSchemaElementFormService,
+    private clientSchemaParcelFormService: ClientSchemaParcelFormService,
     private languageService: LanguageService,
     private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
-    this.clientSchemaElementFormService
+    this.clientSchemaParcelFormService
       .buildUpdateForm(this.schema, this.map, [this.element.geometry.type])
       .subscribe((form: Form) => this.setForm(form));
   }
@@ -111,10 +110,10 @@ export class ClientSchemaElementUpdateFormComponent implements OnInit, OnUpdateI
   }
 
   onSubmit(data: Feature) {
-    const element = this.formDataToElement(data);
-    this.errorMessage$.next(getSchemaElementValidationMessage(element, this.languageService));
+    const parcel = this.formDataToParcel(data);
+    this.errorMessage$.next(getSchemaElementValidationMessage(parcel, this.languageService));
     if (this.errorMessage$.value === undefined) {
-      this.onSubmitSuccess(element);
+      this.onSubmitSuccess(parcel);
     }
   }
 
@@ -122,20 +121,20 @@ export class ClientSchemaElementUpdateFormComponent implements OnInit, OnUpdateI
     this.cancel.emit();
   }
 
-  private onSubmitSuccess(element: ClientSchemaElement) {
-    this.transaction.update(this.element, element, this.store, {
-      title: generateOperationTitle(element)
+  private onSubmitSuccess(parcel: ClientSchemaParcel) {
+    this.transaction.update(this.element, parcel, this.store, {
+      title: generateOperationTitle(parcel)
     });
     this.complete.emit();
   }
 
-  private formDataToElement(data: Feature): ClientSchemaElement {
-    const element = Object.assign({}, data as ClientSchemaElement);
+  private formDataToParcel(data: Feature): ClientSchemaParcel {
+    const parcel = Object.assign({}, data as ClientSchemaParcel);
     const typeDescription = this.clientSchemaElementService
-      .getSchemaElementTypeDescription(element.properties.typeElement);
-    element.properties.superficie = computeSchemaElementArea(element);
-    element.properties.descriptionTypeElement = typeDescription;
-    return element;
+      .getSchemaElementTypeDescription(parcel.properties.typeElement);
+    parcel.properties.superficie = computeSchemaElementArea(parcel);
+    parcel.properties.descriptionTypeElement = typeDescription;
+    return parcel;
   }
 
   private setForm(form: Form) {

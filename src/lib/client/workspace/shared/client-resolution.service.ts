@@ -3,16 +3,8 @@ import { MatDialog } from '@angular/material';
 
 import { Subject, Subscription } from 'rxjs';
 
-import {
-  Client,
-  ClientService,
-  ClientParcelYear,
-  ClientParcelYearService
-} from 'src/lib/client';
-
-import { ClientSchemaConfirmDialogComponent } from '../client-schema-confirm-dialog/client-schema-confirm-dialog.component';
+import { ClientResolutionDialogComponent } from '../client-resolution-dialog/client-resolution-dialog.component';
 import { ClientWorkspace } from './client-workspace';
-
 
 export interface ClientResolution {
   proceed: () => void;
@@ -51,7 +43,7 @@ export class ClientResolutionService implements OnDestroy {
   }
 
   private openResolutionDialog(resolution: ClientResolution): void {
-    this.dialog.open(ClientSchemaConfirmDialogComponent, {
+    this.dialog.open(ClientResolutionDialogComponent, {
       data: {resolution}
     });
   }

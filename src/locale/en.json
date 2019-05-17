@@ -169,6 +169,12 @@
       "importData.error.nothingToImport": "Aucun élément géométrique valide trouvé dans ce fichier",
       "exportToCSV": "Exporter les données en CSV",
       "exportToCSV.tooltip": "Exporter les données en CSV"
+    },
+    "schemaParcel": {
+      "parcel": "Parcelle",
+      "transfer": "Transférer des parcelles",
+      "transfer.tooltip": "Transférer des parcelle",
+      "transfer.apply": "Transférer"
     }
   },
 

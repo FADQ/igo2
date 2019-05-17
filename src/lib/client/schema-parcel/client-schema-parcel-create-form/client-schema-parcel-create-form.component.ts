@@ -25,23 +25,24 @@ import { LanguageService } from '@igo2/core';
 import { Feature, FeatureStore, IgoMap, GeoJSONGeometry } from '@igo2/geo';
 
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
-import { ClientSchemaElement, ClientSchemaElementTypes } from '../shared/client-schema-element.interfaces';
-import { ClientSchemaElementService } from '../shared/client-schema-element.service';
-import { ClientSchemaElementFormService } from '../shared/client-schema-element-form.service';
-
+import { ClientSchemaElementTypes } from '../../schema-element/shared/client-schema-element.interfaces';
+import { ClientSchemaElementService } from '../../schema-element/shared/client-schema-element.service';
 import {
   generateOperationTitle,
   computeSchemaElementArea,
   getSchemaElementValidationMessage
-} from '../shared/client-schema-element.utils';
+} from '../../schema-element/shared/client-schema-element.utils';
+
+import { ClientSchemaParcel } from '../shared/client-schema-parcel.interfaces';
+import { ClientSchemaParcelFormService } from '../shared/client-schema-parcel-form.service';
 
 @Component({
-  selector: 'fadq-client-schema-element-create-form',
-  templateUrl: './client-schema-element-create-form.component.html',
-  styleUrls: ['./client-schema-element-create-form.component.scss'],
+  selector: 'fadq-client-schema-parcel-create-form',
+  templateUrl: './client-schema-parcel-create-form.component.html',
+  styleUrls: ['./client-schema-parcel-create-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientSchemaElementCreateFormComponent
+export class ClientSchemaParcelCreateFormComponent
     implements OnInit, OnDestroy, OnUpdateInputs, WidgetComponent {
 
   /**
@@ -68,17 +69,17 @@ export class ClientSchemaElementCreateFormComponent
   private geometry$$: Subscription;
 
   /**
-   * Map to draw elements on
+   * Map to draw parcels on
    */
   @Input() map: IgoMap;
 
   /**
-   * Schema element store
+   * Schema parcel store
    */
-  @Input() store: FeatureStore<ClientSchemaElement>;
+  @Input() store: FeatureStore<ClientSchemaParcel>;
 
   /**
-   * Schema element transaction
+   * Schema parcel transaction
    */
   @Input() transaction: EntityTransaction;
 
@@ -99,7 +100,7 @@ export class ClientSchemaElementCreateFormComponent
 
   constructor(
     private clientSchemaElementService: ClientSchemaElementService,
-    private clientSchemaElementFormService: ClientSchemaElementFormService,
+    private clientSchemaParcelFormService: ClientSchemaParcelFormService,
     private languageService: LanguageService,
     private cdRef: ChangeDetectorRef
   ) {}
@@ -108,7 +109,7 @@ export class ClientSchemaElementCreateFormComponent
     this.clientSchemaElementService
       .getSchemaElementGeometryTypes(this.schema.type)
       .pipe(
-        concatMap((geometryTypes: string[]) => this.clientSchemaElementFormService
+        concatMap((geometryTypes: string[]) => this.clientSchemaParcelFormService
           .buildCreateForm(this.schema, this.map, geometryTypes)
         )
       )
@@ -130,10 +131,10 @@ export class ClientSchemaElementCreateFormComponent
   }
 
   onSubmit(data: Feature) {
-    const element = this.formDataToElement(data);
-    this.errorMessage$.next(getSchemaElementValidationMessage(element, this.languageService));
+    const parcel = this.formDataToParcel(data);
+    this.errorMessage$.next(getSchemaElementValidationMessage(parcel, this.languageService));
     if (this.errorMessage$.value === undefined) {
-      this.onSubmitSuccess(element);
+      this.onSubmitSuccess(parcel);
     }
   }
 
@@ -141,15 +142,16 @@ export class ClientSchemaElementCreateFormComponent
     this.cancel.emit();
   }
 
-  private onSubmitSuccess(element: ClientSchemaElement) {
-    this.transaction.insert(element, this.store, {
-      title: generateOperationTitle(element)
+  private onSubmitSuccess(parcel: ClientSchemaParcel) {
+    this.transaction.insert(parcel, this.store, {
+      title: generateOperationTitle(parcel)
     });
     this.complete.emit();
   }
 
-  private formDataToElement(data: Feature): ClientSchemaElement {
+  private formDataToParcel(data: Feature): ClientSchemaParcel {
     const properties = Object.assign({
+      noParcelleAgricole: undefined,
       idSchema: this.schema.id,
       idElementGeometrique: undefined,
       typeElement: undefined,
@@ -161,13 +163,13 @@ export class ClientSchemaElementCreateFormComponent
       usagerMaj: undefined
     }, data.properties);
 
-    const element = Object.assign({}, data, {properties});
+    const parcel = Object.assign({}, data, {properties});
     const typeDescription = this.clientSchemaElementService
       .getSchemaElementTypeDescription(properties.typeElement);
-    element.properties.superficie = computeSchemaElementArea(element);
-    element.properties.descriptionTypeElement = typeDescription;
+    parcel.properties.superficie = computeSchemaElementArea(parcel);
+    parcel.properties.descriptionTypeElement = typeDescription;
 
-    return element;
+    return parcel;
   }
 
   private setForm(form: Form) {
@@ -175,7 +177,7 @@ export class ClientSchemaElementCreateFormComponent
       .subscribe((geometry: GeoJSONGeometry) => {
         // When the drawGuide field is focused, changing tab
         // triggers an an "afterViewInit" error. Unfocusing the active
-        // element (whatever it is) fixes it.
+        // parcel (whatever it is) fixes it.
         if ('activeElement' in document) {
           (document.activeElement as HTMLElement).blur();
         }

@@ -4,12 +4,12 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { ToolComponent, EntityStore } from '@igo2/common';
 
 import {
+  ClientWorkspace,
   ClientParcelYear,
   ClientInfoService
 } from 'src/lib/client';
 
 import { ClientState } from '../client.state';
-import { ClientWorkspace } from '../shared/client-workspace';
 
 /**
  * Tool to display a client's info

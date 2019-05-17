@@ -2,8 +2,11 @@ import * as olstyle from 'ol/style';
 import OlFeature from 'ol/Feature';
 
 import { FeatureDataSource, VectorLayer } from '@igo2/geo';
+import { uuid } from '@igo2/utils';
 
 import { Client } from '../../shared/client.interfaces';
+import { ClientParcel } from '../../parcel/shared/client-parcel.interfaces';
+import { ClientSchemaParcel } from './client-schema-parcel.interfaces';
 
 export function createSchemaParcelLayer(client: Client): VectorLayer {
   const schemaElementDataSource = new FeatureDataSource();
@@ -46,4 +49,25 @@ function createSchemaParcelLayerTextStyle(): olstyle.Text {
 
 function getSchemaParcelDefaultColor() {
   return [128, 21, 21];
+}
+
+export function parcelToSchemaParcel(parcel: ClientParcel): ClientSchemaParcel {
+  const meta = Object.assign({}, parcel.meta, {id: uuid()});
+  return {
+    type: parcel.type,
+    projection: parcel.projection,
+    properties: Object.assign({
+      idElementGeometrique: undefined,
+      typeElement: 'PAC',  // TODO
+      descriptionTypeElement: 'Parcelle agricole cultivable',  // TODO
+      etiquette: undefined,
+      description: undefined,
+      anneeImage: undefined,
+      timbreMaj: undefined,
+      usagerMaj: undefined,
+      superficie: undefined
+    }, parcel.properties),
+    geometry: parcel.geometry,
+    meta
+  };
 }

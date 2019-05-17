@@ -163,7 +163,7 @@ export class ClientSchemaElementImportDataComponent implements OnInit, WidgetCom
 
       element.properties.superficie = computeSchemaElementArea(element);
       const errorMessage = getSchemaElementValidationMessage(element, this.languageService);
-      if (errorMessage !== undefined) {
+      if (errorMessage === undefined) {
         acc.push(element);
       }
 
