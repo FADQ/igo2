@@ -5,11 +5,7 @@ import { MatButtonModule, MatTabsModule } from '@angular/material';
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoFeatureFormModule } from '@igo2/geo';
 
-import { FadqLibEditionModule } from '../../../edition/edition.module';
-
-import {
-  ClientSchemaElementCreateFormComponent
-} from './client-schema-element-create-form.component';
+import { EditionFormComponent } from './edition-form.component';
 
 /**
  * @ignore
@@ -20,17 +16,16 @@ import {
     MatButtonModule,
     MatTabsModule,
     IgoLanguageModule,
-    IgoFeatureFormModule,
-    FadqLibEditionModule
+    IgoFeatureFormModule
   ],
   exports: [
-    ClientSchemaElementCreateFormComponent
+    EditionFormComponent
   ],
   declarations: [
-    ClientSchemaElementCreateFormComponent
+    EditionFormComponent
   ],
   entryComponents: [
-    ClientSchemaElementCreateFormComponent
+    EditionFormComponent
   ]
 })
-export class FadqLibClientSchemaElementCreateFormModule {}
+export class FadqLibEditionFormModule {}

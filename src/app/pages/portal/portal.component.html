@@ -35,6 +35,9 @@
 
   <igo-map-browser
     igoQuery
+    [queryFeatures]="true"
+    [queryFeaturesHitTolerance]="5"
+    [queryFeaturesCondition]="queryFeaturesCondition"
     [waitForAllQueries]="true"
     igoMapContext
     igoLayerContext

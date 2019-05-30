@@ -5,10 +5,12 @@ import {
   EventEmitter,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  OnInit
+  OnInit,
+  OnDestroy
 } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import {
   EntityTransaction,
@@ -20,18 +22,16 @@ import {
   FormFieldSelectChoice
 } from '@igo2/common';
 import { LanguageService } from '@igo2/core';
-import { Feature, FeatureStore, IgoMap } from '@igo2/geo';
+import { FeatureStore, IgoMap } from '@igo2/geo';
 
+import { EditionResult } from '../../../edition/shared/edition.interfaces';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
-import {
-  ClientSchemaElement,
-  ClientSchemaElementTypes
-} from '../shared/client-schema-element.interfaces';
+import { ClientSchemaElement, ClientSchemaElementTypes } from '../shared/client-schema-element.interfaces';
 import { ClientSchemaElementService } from '../shared/client-schema-element.service';
 import { ClientSchemaElementFormService } from '../shared/client-schema-element-form.service';
+
 import {
-  generateOperationTitle,
-  computeSchemaElementArea,
+  generateSchemaElementOperationTitle,
   getSchemaElementValidationMessage
 } from '../shared/client-schema-element.utils';
 
@@ -41,7 +41,8 @@ import {
   styleUrls: ['./client-schema-element-update-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientSchemaElementUpdateFormComponent implements OnInit, OnUpdateInputs, WidgetComponent {
+export class ClientSchemaElementUpdateFormComponent
+    implements OnInit, OnDestroy, OnUpdateInputs, WidgetComponent {
 
   /**
    * Update form
@@ -50,10 +51,15 @@ export class ClientSchemaElementUpdateFormComponent implements OnInit, OnUpdateI
   form$ = new BehaviorSubject<Form>(undefined);
 
   /**
-   * Import error, if any
+   * Update form
    * @internal
    */
-  errorMessage$: BehaviorSubject<string> = new BehaviorSubject(undefined);
+  groupIndex$ = new BehaviorSubject<number>(1);
+
+  /**
+   * Subscription to the value changes event
+   */
+  private geometry$$: Subscription;
 
   /**
    * Map to draw elements on
@@ -71,14 +77,14 @@ export class ClientSchemaElementUpdateFormComponent implements OnInit, OnUpdateI
   @Input() transaction: EntityTransaction;
 
   /**
-   * Schema
-   */
-  @Input() schema: ClientSchema;
-
-  /**
    * Schema element
    */
   @Input() element: ClientSchemaElement;
+
+  /**
+   * Schema
+   */
+  @Input() schema: ClientSchema;
 
   /**
    * Event emitted on complete
@@ -90,6 +96,14 @@ export class ClientSchemaElementUpdateFormComponent implements OnInit, OnUpdateI
    */
   @Output() cancel = new EventEmitter<void>();
 
+  get getOperationTitle(): (data: ClientSchemaElement, languageService: LanguageService) => string  {
+    return generateSchemaElementOperationTitle;
+  }
+  
+  get processData(): (data: ClientSchemaElement) => Observable<EditionResult>  {
+    return (data: ClientSchemaElement): Observable<EditionResult> => this.processSchemaElement(data);
+  }
+
   constructor(
     private clientSchemaElementService: ClientSchemaElementService,
     private clientSchemaElementFormService: ClientSchemaElementFormService,
@@ -99,8 +113,15 @@ export class ClientSchemaElementUpdateFormComponent implements OnInit, OnUpdateI
 
   ngOnInit() {
     this.clientSchemaElementFormService
-      .buildUpdateForm(this.schema, this.map, [this.element.geometry.type])
+      .buildUpdateForm(this.schema, this.map)
       .subscribe((form: Form) => this.setForm(form));
+  }
+
+  ngOnDestroy() {
+    if (this.geometry$$ !== undefined) {
+      this.geometry$$.unsubscribe();
+      this.geometry$$ = undefined;
+    }
   }
 
   /**
@@ -110,46 +131,42 @@ export class ClientSchemaElementUpdateFormComponent implements OnInit, OnUpdateI
     this.cdRef.detectChanges();
   }
 
-  onSubmit(data: Feature) {
-    const element = this.formDataToElement(data);
-    this.errorMessage$.next(getSchemaElementValidationMessage(element, this.languageService));
-    if (this.errorMessage$.value === undefined) {
-      this.onSubmitSuccess(element);
-    }
+  onComplete(element: ClientSchemaElement) {
+    this.complete.emit();
   }
 
   onCancel() {
     this.cancel.emit();
   }
 
-  private onSubmitSuccess(element: ClientSchemaElement) {
-    this.transaction.update(this.element, element, this.store, {
-      title: generateOperationTitle(element)
-    });
-    this.complete.emit();
-  }
-
-  private formDataToElement(data: Feature): ClientSchemaElement {
-    const element = Object.assign({}, data as ClientSchemaElement);
-    const typeDescription = this.clientSchemaElementService
-      .getSchemaElementTypeDescription(element.properties.typeElement);
-    element.properties.superficie = computeSchemaElementArea(element);
-    element.properties.descriptionTypeElement = typeDescription;
-    return element;
+  private processSchemaElement(data: ClientSchemaElement): Observable<EditionResult> {
+    return this.clientSchemaElementService.createSchemaElement(this.schema, data)
+      .pipe(
+        map((element: ClientSchemaElement): EditionResult => {
+          return {
+            feature: element,
+            error: getSchemaElementValidationMessage(element, this.languageService)
+          }
+        })
+      )
   }
 
   private setForm(form: Form) {
+    this.form$.next(form);
+    const geometryType = this.element.geometry.type;
+    this.updateElementTypeChoices(geometryType);
+  }
+
+  private updateElementTypeChoices(geometryType: string) {
     this.clientSchemaElementService
       .getSchemaElementTypes(this.schema.type)
       .subscribe((elementTypes: ClientSchemaElementTypes) => {
-        const geometryType = this.element.geometry.type;
-        const elementTypeField = form.groups[0].fields.find((field: FormField) => {
+        const form = this.form$.value;
+        const elementTypeField = form.groups[1].fields.find((field: FormField) => {
           return field.name === 'properties.typeElement';
         }) as FormField<FormFieldSelectInputs>;
-
         const choices$ = elementTypeField.inputs.choices as BehaviorSubject<FormFieldSelectChoice[]>;
         choices$.next(elementTypes[geometryType]);
-        this.form$.next(form);
       });
   }
 

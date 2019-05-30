@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Validators } from '@angular/forms';
 
 import { BehaviorSubject, Observable, of, zip } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { concatMap, map } from 'rxjs/operators';
 
 import { LanguageService } from '@igo2/core';
 import {
@@ -15,44 +15,55 @@ import {
 import { IgoMap } from '@igo2/geo';
 
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
+import { ClientSchemaElementService } from './client-schema-element.service';
 
 @Injectable()
 export class ClientSchemaElementFormService {
 
   constructor(
     private formService: FormService,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    private schemaElementService: ClientSchemaElementService
   ) {}
 
-  buildCreateForm(schema: ClientSchema, igoMap: IgoMap, geometryTypes: string[]): Observable<Form> {
-    const geometryFields$ = zip(
-      this.createGeometryField({inputs: {
-        map: igoMap,
-        geometryTypes,
-        geometryType: geometryTypes.length > 0 ? geometryTypes[0] : undefined
-      }})
-    );
-
-    const infoFields$ = zip(
-      this.createIdField({options: {disabled: true}}),
-      this.createTypeElementField(),
-      this.createDescriptionField(),
-      this.createEtiquetteField(),
-      this.createAnneeImageField()
-    );
-
-    return zip(geometryFields$, infoFields$)
+  buildCreateForm(schema: ClientSchema, igoMap: IgoMap): Observable<Form> {
+    return this.schemaElementService.getSchemaElementGeometryTypes(schema.type)
       .pipe(
-        map((fields: [FormField[], FormField[]]) => {
-          return this.formService.form(fields[0], [
-            this.formService.group({name: 'info'}, fields[1])
-          ]);
+        concatMap((geometryTypes: string[]) => {
+          const geometryFields$ = zip(
+            this.createGeometryField({inputs: {
+              map: igoMap,
+              geometryTypes,
+              geometryType: geometryTypes.length > 0 ? geometryTypes[0] : undefined
+            }})
+          );
+      
+          const infoFields$ = zip(
+            this.createIdField({options: {disabled: true}}),
+            this.createTypeElementField(),
+            this.createDescriptionField(),
+            this.createEtiquetteField(),
+            this.createAnneeImageField()
+          );
+
+          const geometryTitle = this.languageService.translate.instant('geometry.geometry');
+          const infoTitle = this.languageService.translate.instant('informations');
+
+          return zip(geometryFields$, infoFields$)
+            .pipe(
+              map((fields: [FormField[], FormField[]]) => {
+                return this.formService.form([], [
+                  this.formService.group({name: 'geometry', title: geometryTitle}, fields[0]),
+                  this.formService.group({name: 'info', title: infoTitle}, fields[1])
+                ]);
+              })
+            )
         })
       );
   }
 
-  buildUpdateForm(schema: ClientSchema, igoMap: IgoMap, geometryTypes: string[]): Observable<Form> {
-    return this.buildCreateForm(schema, igoMap, geometryTypes);
+  buildUpdateForm(schema: ClientSchema, igoMap: IgoMap): Observable<Form> {
+    return this.buildCreateForm(schema, igoMap);
   }
 
   private createIdField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
