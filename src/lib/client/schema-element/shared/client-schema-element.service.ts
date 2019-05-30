@@ -25,7 +25,7 @@ import {
 import { ClientSchemaElementPointService } from './client-schema-element-point.service';
 import { ClientSchemaElementLineService } from './client-schema-element-line.service';
 import { ClientSchemaElementSurfaceService } from './client-schema-element-surface.service';
-import { ClientSchemaElementTransactionSerializer } from './client-schema-element.utils';
+import { ClientSchemaElementTransactionSerializer, computeSchemaElementArea } from './client-schema-element.utils';
 
 @Injectable()
 export class ClientSchemaElementService {
@@ -93,14 +93,19 @@ export class ClientSchemaElementService {
       );
   }
 
-  getSchemaElementTypeDescription(elementType: string) {
-    const allTypes = Object.values(this.schemaElementTypes)
-      .reduce((acc: ClientSchemaElementType[], types: ClientSchemaElementTypes) => {
-        return acc.concat(...Object.values(types));
-      }, []);
-    const type = allTypes.find((_type: ClientSchemaElementType) => _type.value === elementType);
+  getSchemaElementTypeDescription(schemaType: string, elementType: string): Observable<string> {
+    return this.getSchemaElementTypes(schemaType)
+      .pipe(
+        map((types: ClientSchemaElementTypes): string => {
+          const allTypes =  Object.values(types)
+            .reduce((acc: ClientSchemaElementType[], types: ClientSchemaElementTypes) => {
+              return acc.concat(...Object.values(types));
+            }, []);
+          const type = allTypes.find((_type: ClientSchemaElementType) => _type.value === elementType);
 
-    return type ? type.title : undefined;
+          return type ? type.title : undefined;
+        })
+      );
   }
 
   /**
@@ -112,6 +117,40 @@ export class ClientSchemaElementService {
     return this.getSchemaElementTypes(schemaType).pipe(
       map((elementTypes: ClientSchemaElementTypes) => {
         return Object.keys(elementTypes).filter((key: string) => elementTypes[key].length > 0);
+      })
+    );
+  }
+
+  /**
+   * Create a schema element from partial data, withtout saving it
+   * @param schema Schema of the element
+   * @param data Schema element data
+   * @returns Observable of the schema element
+   */
+  createSchemaElement(schema: ClientSchema, data: Partial<ClientSchemaElement>): Observable<ClientSchemaElement> {
+    const properties = Object.assign({
+      idSchema: schema.id,
+      idElementGeometrique: undefined,
+      typeElement: undefined,
+      descriptionTypeElement: undefined,
+      etiquette: undefined,
+      description: undefined,
+      anneeImage: undefined,
+      timbreMaj: undefined,
+      usagerMaj: undefined
+    }, data.properties);
+
+    const partial = Object.assign({}, data, {properties}) as ClientSchemaElement;
+  
+    return zip(
+      of(partial),
+      this.getSchemaElementTypeDescription(schema.type, properties.typeElement)
+    ).pipe(
+      map((bunch: [ClientSchemaElement, string]) => {
+        const [element, typeDescription] = bunch;
+        element.properties.descriptionTypeElement = typeDescription;
+        element.properties.superficie = computeSchemaElementArea(element);
+        return element;
       })
     );
   }

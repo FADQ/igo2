@@ -7,13 +7,11 @@ import {
 } from '@angular/material';
 
 import { IgoLanguageModule } from '@igo2/core';
-import { IgoFeatureFormModule } from '@igo2/geo';
-
-import { FadqLibEditionModule } from '../../../edition/edition.module';
+import { IgoEntityTableModule, IgoFormModule } from '@igo2/common';
 
 import {
-  ClientSchemaElementSliceFormComponent
-} from './client-schema-element-slice-form.component';
+  EditionUndoComponent
+} from './edition-undo.component';
 
 /**
  * @ignore
@@ -25,17 +23,17 @@ import {
     MatIconModule,
     MatButtonModule,
     IgoLanguageModule,
-    IgoFeatureFormModule,
-    FadqLibEditionModule
+    IgoFormModule,
+    IgoEntityTableModule
   ],
   exports: [
-    ClientSchemaElementSliceFormComponent
+    EditionUndoComponent
   ],
   declarations: [
-    ClientSchemaElementSliceFormComponent
+    EditionUndoComponent
   ],
   entryComponents: [
-    ClientSchemaElementSliceFormComponent
+    EditionUndoComponent
   ]
 })
-export class FadqLibClientSchemaElementSliceFormModule {}
+export class FadqLibEditionUndoModule {}

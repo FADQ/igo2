@@ -97,6 +97,13 @@ export class ClientSchemaElementTransactionSerializer {
 }
 
 export function generateOperationTitle(element: ClientSchemaElement): string {
+  return 'todo';
+}
+
+export function generateSchemaElementOperationTitle(
+  element: ClientSchemaElement,
+  languageService: LanguageService
+): string {
   // TODO: this is for demo purpose. Make it clean.
   let geometryType;
   if (element.geometry.type === 'Point') {

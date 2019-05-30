@@ -10,10 +10,10 @@ import {
   ClientSchemaElementReincludeWidget,
   ClientSchemaElementSliceWidget,
   ClientSchemaElementSaverWidget,
-  ClientSchemaElementUndoWidget,
   ClientSchemaElementImportDataWidget,
   generateOperationTitle
 } from 'src/lib/client';
+import { EditionUndoWidget } from 'src/lib/edition';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,7 @@ export class ClientSchemaElementActionsService {
     @Inject(ClientSchemaElementReincludeWidget) private clientSchemaElementReincludeWidget: Widget,
     @Inject(ClientSchemaElementSliceWidget) private clientSchemaElementSliceWidget: Widget,
     @Inject(ClientSchemaElementSaverWidget) private clientSchemaElementSaverWidget: Widget,
-    @Inject(ClientSchemaElementUndoWidget) private clientSchemaElementUndoWidget: Widget,
+    @Inject(EditionUndoWidget) private editionUndoWidget: Widget,
     @Inject(ClientSchemaElementImportDataWidget) private clientSchemaElementImportDataWidget: Widget
   ) {}
 
@@ -174,7 +174,7 @@ export class ClientSchemaElementActionsService {
             transaction: ws.transaction
           });
         },
-        args: [this.clientSchemaElementUndoWidget, workspace],
+        args: [this.editionUndoWidget, workspace],
         conditions: [transactionIsNotInCommitPhase, transactionIsNotEmpty],
         conditionArgs
       },

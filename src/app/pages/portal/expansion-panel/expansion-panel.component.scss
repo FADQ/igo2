@@ -47,5 +47,6 @@
 }
 
 igo-backdrop ::ng-deep > div {
+  // 120 because material tables use z-index = 110 for sticky headers 
   z-index: 120 !important;
 }

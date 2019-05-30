@@ -4,34 +4,25 @@ import {
   Output,
   EventEmitter,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  OnInit,
-  OnDestroy
+  ChangeDetectorRef
 } from '@angular/core';
 
-import { Subscription, Subject, BehaviorSubject } from 'rxjs';
-
-import OlFeature from 'ol/Feature';
-import OlGeometry from 'ol/geom/Geometry';
-import OlGeoJSON from 'ol/format/GeoJSON';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { LanguageService } from '@igo2/core';
-import { uuid } from '@igo2/utils';
 
 import { EntityTransaction, WidgetComponent, OnUpdateInputs } from '@igo2/common';
-import {
-  FeatureStore,
-  IgoMap,
-  SliceControl,
-  GeometrySliceError,
-  GeometrySliceMultiPolygonError,
-  GeometrySliceLineStringError,
-  GeometrySliceTooManyIntersectionError
-} from '@igo2/geo';
+import { FeatureStore, IgoMap } from '@igo2/geo';
 
+import { EditionResult } from '../../../edition/shared/edition.interfaces';
+import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import { ClientSchemaElement } from '../shared/client-schema-element.interfaces';
 import { ClientSchemaElementService } from '../shared/client-schema-element.service';
-import { computeSchemaElementArea, generateOperationTitle } from '../shared/client-schema-element.utils';
+import {
+  generateSchemaElementOperationTitle,
+  getSchemaElementValidationMessage
+} from '../shared/client-schema-element.utils';
 
 @Component({
   selector: 'fadq-client-schema-element-slice-form',
@@ -39,44 +30,7 @@ import { computeSchemaElementArea, generateOperationTitle } from '../shared/clie
   styleUrls: ['./client-schema-element-slice-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientSchemaElementSliceFormComponent
-    implements OnInit, OnDestroy, OnUpdateInputs, WidgetComponent {
-
-  /**
-   * Slice error, if any
-   * @internal
-   */
-  errorMessage$: Subject<string> = new Subject();
-
-  /**
-   * Wether the submit button is enabled
-   * @internal
-   */
-  submitEnabled$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
-  /**
-   * Slice control
-   */
-  private sliceControl: SliceControl;
-
-  /**
-   * Subscription to slice end
-   */
-  private sliceEnd$$: Subscription;
-
-  /**
-   * Subscription to slice error
-   */
-  private sliceError$$: Subscription;
-
-  /**
-   * Error classes -> i18n key mapping
-   */
-  private errorMessages = new Map([
-    [GeometrySliceMultiPolygonError, 'geometry.slice.error.multiPolygon'],
-    [GeometrySliceLineStringError, 'geometry.slice.error.lineString'],
-    [GeometrySliceTooManyIntersectionError, 'geometry.slice.error.tooManyIntersection']
-  ]);
+export class ClientSchemaElementSliceFormComponent implements OnUpdateInputs, WidgetComponent {
 
   /**
    * Map to draw elements on
@@ -94,6 +48,11 @@ export class ClientSchemaElementSliceFormComponent
   @Input() transaction: EntityTransaction;
 
   /**
+   * Schema
+   */
+  @Input() schema: ClientSchema;
+
+  /**
    * Schema element
    */
   @Input() element: ClientSchemaElement;
@@ -108,28 +67,19 @@ export class ClientSchemaElementSliceFormComponent
    */
   @Output() cancel = new EventEmitter<void>();
 
+  get getOperationTitle(): (data: ClientSchemaElement, languageService: LanguageService) => string  {
+    return generateSchemaElementOperationTitle;
+  }
+  
+  get processData(): (data: ClientSchemaElement) => Observable<EditionResult>  {
+    return (data: ClientSchemaElement): Observable<EditionResult> => this.processSchemaElement(data);
+  }
+
   constructor(
     private clientSchemaElementService: ClientSchemaElementService,
     private languageService: LanguageService,
     private cdRef: ChangeDetectorRef
   ) {}
-
-  /**
-   * Add the draw line control
-   * @internal
-   */
-  ngOnInit() {
-    this.createSliceControl();
-    this.activateSliceControl();
-  }
-
-  /**
-   * Remove the draw line control
-   * @internal
-   */
-  ngOnDestroy() {
-    this.removeSliceControl();
-  }
 
   /**
    * Implemented as part of OnUpdateInputs
@@ -138,144 +88,29 @@ export class ClientSchemaElementSliceFormComponent
     this.cdRef.detectChanges();
   }
 
-  onSubmit() {
-    const newElements = this.getNewElements();
-    this.onSubmitSuccess(newElements);
+  onComplete(elements: ClientSchemaElement[]) {
+    this.complete.emit();
   }
 
   onCancel() {
     this.cancel.emit();
   }
 
-  private onSubmitSuccess(newElements: ClientSchemaElement[]) {
-    this.submitEnabled$.next(false);
-    if (newElements.length > 0) {
-      this.transaction.delete(this.element, this.store, {
-        title: generateOperationTitle(this.element)
-      });
-      newElements.forEach((element: ClientSchemaElement) => {
-        this.transaction.insert(element, this.store, {
-          title: generateOperationTitle(element)
-        });
-      });
-    }
-    this.deactivateSliceControl();
-    this.complete.emit();
-  }
-
-  /**
-   * Create a draw line control
-   */
-  private createSliceControl() {
-    this.sliceControl = new SliceControl({});
-  }
-
-  /**
-   * Activate a given control
-   * @param drawControl Draw control
-   */
-  private activateSliceControl() {
-    this.sliceEnd$$ = this.sliceControl.end$
-      .subscribe((olGeometries: OlGeometry[]) => this.onSliceEnd(olGeometries));
-    this.sliceError$$ = this.sliceControl.error$
-      .subscribe((error: GeometrySliceError) => this.onSliceError(error));
-
-    const olGeometry = new OlGeoJSON().readGeometry(this.element.geometry, {
-      dataProjection: this.element.projection,
-      featureProjection: this.map.projection
+  private processSchemaElement(data: ClientSchemaElement): Observable<EditionResult> {
+    Object.assign(data.properties, {
+      idElementGeometrique: undefined,
+      description: undefined,
+      etiquette: undefined
     });
-
-    this.sliceControl.setOlGeometry(olGeometry);
-    this.sliceControl.setOlMap(this.map.ol);
-  }
-
-  /**
-   * Deactivate the active draw control
-   */
-  private deactivateSliceControl() {
-    this.sliceEnd$$.unsubscribe();
-    this.sliceError$$.unsubscribe();
-    this.sliceControl.setOlMap(undefined);
-  }
-
-  /**
-   * Remove draw line control
-   */
-  private removeSliceControl() {
-    this.deactivateSliceControl();
-    this.sliceControl.getSource().clear();
-  }
-
-  private getNewElements(): ClientSchemaElement[] {
-    const olFeatures = this.sliceControl.getSource().getFeatures();
-    if (olFeatures.length <= 1) { return []; }
-
-    const olGeoJSON = new OlGeoJSON();
-    const baseElement = this.element;
-    const newElements = olFeatures.map((olFeature: OlFeature) => {
-      const olGeometry = olFeature.getGeometry();
-      const meta = Object.assign({}, baseElement.meta, {
-        id: uuid()
-      });
-      const properties = Object.assign({}, baseElement.properties, {
-        idElementGeometrique: undefined,
-        description: undefined,
-        etiquette: undefined
-      });
-
-      return Object.assign({}, baseElement, {
-        meta,
-        properties,
-        geometry: olGeoJSON.writeGeometryObject(olGeometry, {
-          dataProjection: baseElement.projection,
-          featureProjection: this.map.projection
+    return this.clientSchemaElementService.createSchemaElement(this.schema, data)
+      .pipe(
+        map((element: ClientSchemaElement): EditionResult => {
+          return {
+            feature: element,
+            error: getSchemaElementValidationMessage(element, this.languageService)
+          }
         })
-      });
-    });
-
-    const typeDescription = this.clientSchemaElementService
-      .getSchemaElementTypeDescription(baseElement.properties.typeElement);
-
-    newElements.forEach((element: ClientSchemaElement) => {
-      element.properties.descriptionTypeElement = typeDescription;
-      element.properties.superficie = computeSchemaElementArea(element);
-    });
-
-    return newElements;
+      )
   }
 
-  /**
-   * On slice end, enable the submit button
-   */
-  private onSliceEnd(olGeometries: OlGeometry[]) {
-    if (olGeometries.length > 0) {
-      this.submitEnabled$.next(true);
-    }
-  }
-
-  /**
-   * On slice error, display a nice, translated message, or display
-   * the error's default message.
-   * @param error Slice error object
-   */
-  private onSliceError(error: GeometrySliceError) {
-    if (error === undefined) {
-      this.errorMessage$.next(undefined);
-      return;
-    }
-
-    let message = error.message;
-
-    // We need to use instanceof instead of directly accessing the map with the error's prototype
-    // because GeometrySliceError all share the same GeometrySliceError
-    const key = Array.from(this.errorMessages.keys()).find((cls: typeof GeometrySliceError) => {
-      return error instanceof cls;
-    });
-    const messageKey = this.errorMessages.get(key);
-
-    try {
-      message = this.languageService.translate.instant(messageKey);
-    } catch (e) {}
-    this.errorMessage$.next(message);
-  }
 }
