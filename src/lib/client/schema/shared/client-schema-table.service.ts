@@ -14,6 +14,7 @@ export class ClientSchemaTableService {
     return {
       selection: true,
       sort: true,
+      fixedHeader: true,
       headerClassFunc: (() => {
         return {'text-centered': true};
       }),

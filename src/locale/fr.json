@@ -85,10 +85,10 @@
     },
     "legend": {
       "title": "Légende des parcelles",
-      "detexp": "Détenues exploitées",
-      "detnoexp": "Détenues non exploitées",
-      "nodetexp": "Non détenues exploitées",
-      "sel": "Sélectionnées"
+      "detexp": "Détenteur exploitant",
+      "detnoexp": "Détenteur autre exploitant",
+      "nodetexp": "Autre détenteur exploitant",
+      "sel": "Sélection"
     },
     "parcel": {
       "year.placeholder": "Année",

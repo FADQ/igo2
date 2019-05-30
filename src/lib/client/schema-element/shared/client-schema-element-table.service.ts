@@ -23,6 +23,7 @@ export class ClientSchemaElementTableService {
       selectionCheckbox: true,
       selectMany: true,
       sort: true,
+      fixedHeader: true,
       headerClassFunc: (() => {
         return {'text-centered': true};
       }),

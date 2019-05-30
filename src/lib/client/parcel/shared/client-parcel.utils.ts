@@ -61,14 +61,13 @@ function getParcelFeatureColor(olFeature: OlFeature) {
   const clientExp = olFeature.get('noClientExploitant') || clientDet;
 
   let color;
-  if (clientRech === clientDet) {
-    color = clientRech === clientExp
-      ? [255, 139, 0]  // Orange
-      : [35, 140, 0];  // Vert
+  if (clientRech === clientExp) {
+    color = [255, 139, 0];  // Orange;
+  } else if (!clientDet || clientDet !== clientExp) {
+    color = [35, 140, 0];  // Vert
   } else {
     color = [0, 218, 250];  // Turquoise
   }
 
   return color;
 }
-

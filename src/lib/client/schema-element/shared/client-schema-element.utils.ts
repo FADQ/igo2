@@ -158,6 +158,7 @@ export function createSchemaElementLayerStyle(
     const style = styles[geometryType];
     if (geometryType === 'Point') {
       style.setImage(createSchemaPointShape(type));
+      updateSchemaPointText(type, style.getText());
     } else {
       const color = type ? type.color : getSchemaElementDefaultColor();
       style.getFill().setColor(color.concat([0.30]));
@@ -188,6 +189,15 @@ function createSchemaPointShape(type: ClientSchemaElementType): olstyle.Circle |
   };
   const factory = factories[typeCode] || createDefaultPointShape;
   return factory(color);
+}
+
+function updateSchemaPointText(type: ClientSchemaElementType, olText: olstyle.Text)  {
+  const typeCode = type ? type.value : undefined;
+  if (['CAG', 'CRI', 'SIL'].indexOf(typeCode) < 0) {
+    olText.setTextAlign('left');
+    olText.setOffsetX(8);
+    olText.setOffsetY(-8);
+  }
 }
 
 function createDefaultPointShape(color: [number, number, number]): olstyle.Circle  {

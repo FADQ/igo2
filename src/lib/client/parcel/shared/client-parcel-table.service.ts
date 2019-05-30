@@ -18,6 +18,7 @@ export class ClientParcelTableService {
       selectionCheckbox: true,
       selectMany: true,
       sort: true,
+      fixedHeader: true,
       headerClassFunc: (() => {
         return {'text-centered': true};
       }),
@@ -75,7 +76,7 @@ export class ClientParcelTableService {
         },
         {
           name: 'properties.noClientDetenteur',
-          title: 'Détenteur',
+          title: 'Autre détenteur',
           renderer: EntityTableColumnRenderer.UnsanitizedHTML,
           valueAccessor: (parcel: ClientParcel) => {
             const value = parcel.properties.noClientDetenteur;
@@ -86,7 +87,7 @@ export class ClientParcelTableService {
         },
         {
           name: 'properties.noClientExploitant',
-          title: 'Exploitant',
+          title: 'Autre exploitant',
           renderer: EntityTableColumnRenderer.UnsanitizedHTML,
           valueAccessor: (parcel: ClientParcel) => {
             const value = parcel.properties.noClientExploitant;
