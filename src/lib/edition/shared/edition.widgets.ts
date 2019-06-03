@@ -5,38 +5,18 @@ import { InjectionToken } from '@angular/core';
 import { Widget, WidgetService } from '@igo2/common';
 
 import { EditionFormComponent } from '../edition-form/edition-form.component';
-import { EditionSlicerComponent } from '../edition-slicer/edition-slicer.component';
+import { EditionFillComponent } from '../edition-fill/edition-fill.component';
+import { EditionImportComponent } from '../edition-import/edition-import.component';
+import { EditionSaveComponent } from '../edition-save/edition-save.component';
+import { EditionSliceComponent } from '../edition-slice/edition-slice.component';
 import { EditionUndoComponent } from '../edition-undo/edition-undo.component';
 
-// import {
-//   EditionUpdateFormComponent
-// } from '../edition-update-form/edition-update-form.component';
-// import {
-//   EditionReincludeFormComponent
-// } from '../edition-reinclude-form/edition-reinclude-form.component';
-// import {
-//   EditionSliceFormComponent
-// } from '../edition-slice-form/edition-slice-form.component';
-// import {
-//   EditionSaverComponent
-// } from '../edition-saver/edition-saver.component';
-// import {
-//   EditionUndoComponent
-// } from '../edition-undo/edition-undo.component';
-// import {
-//   EditionImportDataComponent
-// } from '../edition-import-data/edition-import-data.component';
-
 export const EditionFormWidget = new InjectionToken<Widget>('EditionFormWidget');
-export const EditionSlicerWidget = new InjectionToken<Widget>('EditionSlicerWidget');
+export const EditionFillWidget = new InjectionToken<Widget>('EditionFillWidget');
+export const EditionImportWidget = new InjectionToken<Widget>('EditionImportWidget');
+export const EditionSaveWidget = new InjectionToken<Widget>('EditionSaveWidget');
+export const EditionSliceWidget = new InjectionToken<Widget>('EditionSliceWidget');
 export const EditionUndoWidget = new InjectionToken<Widget>('EditionUndoWidget');
-
-// export const EditionUpdateWidget = new InjectionToken<Widget>('EditionUpdateWidget');
-// export const EditionReincludeWidget = new InjectionToken<Widget>('EditionReincludeWidget');
-// export const EditionSliceWidget = new InjectionToken<Widget>('EditionSliceWidget');
-// export const EditionSaverWidget = new InjectionToken<Widget>('EditionSaverWidget');
-// export const EditionUndoWidget = new InjectionToken<Widget>('EditionUndoWidget');
-// export const EditionImportDataWidget = new InjectionToken<Widget>('EditionImportDataWidget');
 
 export function editionFormWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(EditionFormComponent);
@@ -50,56 +30,44 @@ export function provideEditionFormWidget() {
   };
 }
 
-export function editionSlicerWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(EditionSlicerComponent);
+export function editionFillWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(EditionFillComponent);
 }
 
-export function provideEditionSlicerWidget() {
+export function provideEditionFillWidget() {
   return {
-    provide: EditionSlicerWidget,
-    useFactory: editionSlicerWidgetFactory,
+    provide: EditionFillWidget,
+    useFactory: editionFillWidgetFactory,
     deps: [WidgetService]
   };
 }
 
-export function editionUndoWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(EditionUndoComponent);
+export function editionImportWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(EditionImportComponent);
 }
 
-export function provideEditionUndoWidget() {
+export function provideEditionImportWidget() {
   return {
-    provide: EditionUndoWidget,
-    useFactory: editionUndoWidgetFactory,
-    deps: [WidgetService]
-  };
-}
-/*
-export function editionUpdateWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(EditionUpdateFormComponent);
-}
-
-export function provideEditionUpdateWidget() {
-  return {
-    provide: EditionUpdateWidget,
-    useFactory: editionUpdateWidgetFactory,
+    provide: EditionImportWidget,
+    useFactory: editionImportWidgetFactory,
     deps: [WidgetService]
   };
 }
 
-export function editionReincludeWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(EditionReincludeFormComponent);
+export function editionSaveWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(EditionSaveComponent);
 }
 
-export function provideEditionReincludeWidget() {
+export function provideEditionSaveWidget() {
   return {
-    provide: EditionReincludeWidget,
-    useFactory: editionReincludeWidgetFactory,
+    provide: EditionSaveWidget,
+    useFactory: editionSaveWidgetFactory,
     deps: [WidgetService]
   };
 }
 
 export function editionSliceWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(EditionSliceFormComponent);
+  return widgetService.create(EditionSliceComponent);
 }
 
 export function provideEditionSliceWidget() {
@@ -110,18 +78,6 @@ export function provideEditionSliceWidget() {
   };
 }
 
-export function editionSaverWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(EditionSaverComponent);
-}
-
-export function provideEditionSaverWidget() {
-  return {
-    provide: EditionSaverWidget,
-    useFactory: editionSaverWidgetFactory,
-    deps: [WidgetService]
-  };
-}
-
 export function editionUndoWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(EditionUndoComponent);
 }
@@ -133,16 +89,3 @@ export function provideEditionUndoWidget() {
     deps: [WidgetService]
   };
 }
-
-export function editionImportDataWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(EditionImportDataComponent);
-}
-
-export function provideEditionImportDataWidget() {
-  return {
-    provide: EditionImportDataWidget,
-    useFactory: editionImportDataWidgetFactory,
-    deps: [WidgetService]
-  };
-}
-*/

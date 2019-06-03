@@ -1,11 +1,11 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { FadqLibClientSchemaCreateFormModule } from './client-schema-create-form/client-schema-create-form.module';
-import { FadqLibClientSchemaUpdateFormModule } from './client-schema-update-form/client-schema-update-form.module';
-import { FadqLibClientSchemaDeleteFormModule } from './client-schema-delete-form/client-schema-delete-form.module';
-import { FadqLibClientSchemaDuplicateFormModule } from './client-schema-duplicate-form/client-schema-duplicate-form.module';
-import { FadqLibClientSchemaTransferFormModule } from './client-schema-transfer-form/client-schema-transfer-form.module';
+import { FadqLibClientSchemaCreateModule } from './client-schema-create/client-schema-create.module';
+import { FadqLibClientSchemaUpdateModule } from './client-schema-update/client-schema-update.module';
+import { FadqLibClientSchemaDeleteModule } from './client-schema-delete/client-schema-delete.module';
+import { FadqLibClientSchemaDuplicateModule } from './client-schema-duplicate/client-schema-duplicate.module';
+import { FadqLibClientSchemaTransferModule } from './client-schema-transfer/client-schema-transfer.module';
 import { FadqLibClientSchemaSelectorModule } from './client-schema-selector/client-schema-selector.module';
 
 import {
@@ -20,18 +20,17 @@ import {
   provideClientSchemaTransferWidget,
   provideClientSchemaFileManagerWidget
 } from './shared/client-schema.widgets';
-import { ClientSchemaTableService } from './shared/client-schema-table.service';
 
 @NgModule({
   imports: [
     CommonModule
   ],
   exports: [
-    FadqLibClientSchemaCreateFormModule,
-    FadqLibClientSchemaUpdateFormModule,
-    FadqLibClientSchemaDeleteFormModule,
-    FadqLibClientSchemaDuplicateFormModule,
-    FadqLibClientSchemaTransferFormModule,
+    FadqLibClientSchemaCreateModule,
+    FadqLibClientSchemaUpdateModule,
+    FadqLibClientSchemaDeleteModule,
+    FadqLibClientSchemaDuplicateModule,
+    FadqLibClientSchemaTransferModule,
     FadqLibClientSchemaSelectorModule
   ],
   declarations: []
@@ -48,8 +47,7 @@ export class FadqLibClientSchemaModule {
         provideClientSchemaDeleteWidget(),
         provideClientSchemaDuplicateWidget(),
         provideClientSchemaTransferWidget(),
-        provideClientSchemaFileManagerWidget(),
-        ClientSchemaTableService
+        provideClientSchemaFileManagerWidget()
       ]
     };
   }

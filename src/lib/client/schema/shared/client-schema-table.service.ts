@@ -5,7 +5,9 @@ import { EntityTableTemplate } from '@igo2/common';
 import { formatDate } from 'src/lib/utils/date';
 import { ClientSchema } from './client-schema.interfaces';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ClientSchemaTableService {
 
   constructor() {}

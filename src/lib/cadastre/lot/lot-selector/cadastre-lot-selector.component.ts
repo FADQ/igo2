@@ -11,11 +11,10 @@ import {
 import { FormControl } from '@angular/forms';
 
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { map, startWith} from 'rxjs/operators';
 
 import {
   EntityStore,
-  EntityStoreController,
+  EntityStoreWatcher,
   EntityRecord
 } from '@igo2/common';
 
@@ -54,7 +53,7 @@ export class LotSelectorComponent implements OnInit, OnDestroy {
    * Controller of a lots
    * @internal
    */
-  private controller: EntityStoreController<Lot>;
+  private watcher: EntityStoreWatcher<Lot>;
 
   /**
    * Store that holds all the available Lots
@@ -77,7 +76,7 @@ export class LotSelectorComponent implements OnInit, OnDestroy {
    * Initialisation of the component
    */
   ngOnInit() {
-    this.controller = new EntityStoreController(this.store, this.cdRef);
+    this.watcher = new EntityStoreWatcher(this.store, this.cdRef);
     this.selected$$ = this.store.stateView
       .firstBy$((record: EntityRecord<Lot>) => record.state.selected === true)
       .subscribe((record: EntityRecord<Lot>) => {
@@ -89,7 +88,7 @@ export class LotSelectorComponent implements OnInit, OnDestroy {
    * Destroy the listeners
    */
   ngOnDestroy() {
-    this.controller.destroy();
+    this.watcher.destroy();
     this.selected$$.unsubscribe();
   }
 
