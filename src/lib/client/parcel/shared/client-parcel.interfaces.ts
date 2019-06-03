@@ -33,6 +33,7 @@ export interface ClientParcel extends Feature {
     timbreMajGeometrie: string;
     typeParcelleAgricole: string;
     usagerMajGeometrie: string;
+    relation: number;
   };
 }
 

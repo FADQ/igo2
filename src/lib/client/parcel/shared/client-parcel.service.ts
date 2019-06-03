@@ -12,6 +12,7 @@ import {
   ClientParcelListResponseItem
 } from './client-parcel.interfaces';
 import { padClientNum } from '../../shared/client.utils';
+import { getParcelRelation, sortParcelsByRelation } from './client-parcel.utils';
 
 @Injectable()
 export class ClientParcelService {
@@ -41,15 +42,20 @@ export class ClientParcelService {
     response: ClientParcelListResponse,
     clientNum: string
   ): ClientParcel[] {
-    return response.map(listItem => this.listItemToParcel(listItem, clientNum));
+    return response
+      .map(listItem => this.listItemToParcel(listItem, clientNum))
+      .sort(sortParcelsByRelation);
   }
 
   private listItemToParcel(
     listItem: ClientParcelListResponseItem,
     clientNum: string
   ): ClientParcel {
+    const noClientRecherche = padClientNum(clientNum);
+    const relation = getParcelRelation(listItem, noClientRecherche);
     const properties = Object.assign({}, listItem.properties, {
-      noClientRecherche: padClientNum(clientNum)
+      noClientRecherche,
+      relation
     });
     return {
       meta: {

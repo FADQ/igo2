@@ -2,9 +2,11 @@ import * as olstyle from 'ol/style';
 import OlFeature from 'ol/Feature';
 
 import { FeatureDataSource, VectorLayer } from '@igo2/geo';
+import { ObjectUtils } from '@igo2/utils';
 
-import { padClientNum } from '../../shared/client.utils';
-import { ClientParcelDiagram, ClientParcel } from './client-parcel.interfaces';
+import { Client } from '../../shared/client.interfaces';
+import { hexToRGB } from 'src/lib/utils/color';
+import { ClientParcelDiagram, ClientParcel, ClientParcelListResponseItem } from './client-parcel.interfaces';
 
 export function getDiagramsFromParcels(parcels: ClientParcel[]): ClientParcelDiagram[] {
   const diagramIds = new Set(parcels.map((parcel: ClientParcel) => {
@@ -16,7 +18,51 @@ export function getDiagramsFromParcels(parcels: ClientParcel[]): ClientParcelDia
   });
 }
 
-export function createParcelLayer(): VectorLayer {
+export function getParcelRelation(listItem: ClientParcelListResponseItem, noClientRech: string) {
+  const noClientDet = listItem.properties.noClientDetenteur || noClientRech;
+  const noClientExp = listItem.properties.noClientExploitant || noClientDet;
+
+  // Relation is a number used to order the parcels on the map and to define their color
+  let relation;
+  if (noClientRech === noClientExp) {
+    relation = 1;  // Orange;
+  } else if (!noClientDet || noClientDet !== noClientExp) {
+    relation = 2;  // Vert
+  } else {
+    relation = 3;  // Turquoise
+  }
+
+  return relation;
+}
+
+function getParcelFeatureColor(olFeature: OlFeature) {
+  const colors = {
+    1: [255, 139, 0],
+    2: [35, 140, 0],
+    3: [0, 218, 250]
+  }
+  return colors[ olFeature.get('relation')];
+}
+
+export function generateParcelColor(index: number): [number, number, number] {
+  const colors = [
+    '8e24aa',
+    'ffeb3b',
+    '00bcd4',
+    'd81b60',
+    'ff8f00'
+  ];
+
+  let color;
+  if (index >= colors.length) {
+    color = '' + Math.floor(Math.random() * 16777215).toString(16);
+  } else {
+    color = colors[index];
+  }
+  return hexToRGB(color);
+}
+
+export function createParcelLayer(client: Client): VectorLayer {
   const parcelDataSource = new FeatureDataSource();
   return new VectorLayer({
     title: 'Parcelles du client',
@@ -55,19 +101,10 @@ function createParcelLayerTextStyle(): olstyle.Text {
   });
 }
 
-function getParcelFeatureColor(olFeature: OlFeature) {
-  const clientRech = olFeature.get('noClientRecherche');
-  const clientDet = olFeature.get('noClientDetenteur') || clientRech;
-  const clientExp = olFeature.get('noClientExploitant') || clientDet;
-
-  let color;
-  if (clientRech === clientExp) {
-    color = [255, 139, 0];  // Orange;
-  } else if (!clientDet || clientDet !== clientExp) {
-    color = [35, 140, 0];  // Vert
-  } else {
-    color = [0, 218, 250];  // Turquoise
-  }
-
-  return color;
+export function sortParcelsByRelation(p1: ClientParcel, p2: ClientParcel) {
+  return ObjectUtils.naturalCompare(
+    p1.properties.relation,
+    p2.properties.relation,
+    'desc'
+  );
 }
