@@ -100,7 +100,6 @@
     },
     "schema": {
       "none": "None",
-      "confirmDialog.title": "Informations non sauvegardées", 
       "error.anneeRequired": "Vous devez saisir une année pour un plan de production ou un avis de dommage",
       "error.invalidAnnee": "Format d'année invalide",
       "error.onlyOneLSE": "Impossible d’avoir plus d’un schéma de type « Structure d’entreposage »",
@@ -135,6 +134,7 @@
       "download.tooltip": "Télécharger un document"
     },
     "schemaElement": {
+      "transaction.title": "Informations non sauvegardées",
       "error.etiquetteMaxLength": "Vous devez saisir une étiquette de moins de 25 caractères.",
       "error.descriptionMaxLength": "Vous devez saisir une étiquette de moins de 250 caractères.",
       "error.area": "La superficie doit être plus grande que 50m² et plus petite que 999 999 999 m².",
@@ -146,9 +146,9 @@
       "update.apply": "Modifier",
       "delete": "Supprimer",
       "delete.tooltip": "Supprimer un élément",
-      "reinclude": "Réinclure une surface exclue",
-      "reinclude.tooltip": "Réinclure une surface exclue",
-      "reinclude.message": "Sélectionnez les surfaces à réinclure",
+      "fill": "Réinclure une surface exclue",
+      "fill.tooltip": "Réinclure une surface exclue",
+      "fill.message": "Sélectionnez les surfaces à réinclure",
       "slice": "Couper un élément",
       "slice.tooltip": "Couper un élément",
       "slice.message": "Tracer une ligne pour couper l'élément sélectionné",

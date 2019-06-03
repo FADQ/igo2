@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 
+import { LanguageService } from '@igo2/core';
 import { Action, EntityTableColumn, Widget } from '@igo2/common';
 import { entitiesToRowData, exportToCSV } from '@igo2/geo';
 
@@ -7,11 +8,11 @@ import {
   ClientWorkspace,
   ClientSchemaElementCreateWidget,
   ClientSchemaElementUpdateWidget,
-  ClientSchemaElementReincludeWidget,
+  ClientSchemaElementFillWidget,
   ClientSchemaElementSliceWidget,
-  ClientSchemaElementSaverWidget,
-  ClientSchemaElementImportDataWidget,
-  generateOperationTitle
+  ClientSchemaElementSaveWidget,
+  ClientSchemaElementImportWidget,
+  generateSchemaElementOperationTitle
 } from 'src/lib/client';
 import { EditionUndoWidget } from 'src/lib/edition';
 
@@ -23,11 +24,12 @@ export class ClientSchemaElementActionsService {
   constructor(
     @Inject(ClientSchemaElementCreateWidget) private clientSchemaElementCreateWidget: Widget,
     @Inject(ClientSchemaElementUpdateWidget) private clientSchemaElementUpdateWidget: Widget,
-    @Inject(ClientSchemaElementReincludeWidget) private clientSchemaElementReincludeWidget: Widget,
+    @Inject(ClientSchemaElementFillWidget) private clientSchemaElementFillWidget: Widget,
     @Inject(ClientSchemaElementSliceWidget) private clientSchemaElementSliceWidget: Widget,
-    @Inject(ClientSchemaElementSaverWidget) private clientSchemaElementSaverWidget: Widget,
+    @Inject(ClientSchemaElementSaveWidget) private clientSchemaElementSaveWidget: Widget,
     @Inject(EditionUndoWidget) private editionUndoWidget: Widget,
-    @Inject(ClientSchemaElementImportDataWidget) private clientSchemaElementImportDataWidget: Widget
+    @Inject(ClientSchemaElementImportWidget) private clientSchemaElementImportWidget: Widget,
+    private languageService: LanguageService
   ) {}
 
   buildActions(workspace: ClientWorkspace): Action[] {
@@ -105,7 +107,7 @@ export class ClientSchemaElementActionsService {
         tooltip: 'client.schemaElement.delete.tooltip',
         handler: (ws: ClientWorkspace) => {
           ws.transaction.delete(ws.schemaElement, ws.schemaElementStore, {
-            title: generateOperationTitle(ws.schemaElement)
+            title: generateSchemaElementOperationTitle(ws.schemaElement, this.languageService)
           });
         },
         args: [workspace],
@@ -113,10 +115,10 @@ export class ClientSchemaElementActionsService {
         conditionArgs
       },
       {
-        id: 'reinclude',
+        id: 'fill',
         icon: 'select_all',
-        title: 'client.schemaElement.reinclude',
-        tooltip: 'client.schemaElement.reinclude.tooltip',
+        title: 'client.schemaElement.fill',
+        tooltip: 'client.schemaElement.fill.tooltip',
         handler: (widget: Widget, ws: ClientWorkspace) => {
           ws.schemaElementEditor.activateWidget(widget, {
             element: ws.schemaElement,
@@ -126,7 +128,7 @@ export class ClientSchemaElementActionsService {
             store: ws.schemaElementStore
           });
         },
-        args: [this.clientSchemaElementReincludeWidget, workspace],
+        args: [this.clientSchemaElementFillWidget, workspace],
         conditions: [elementIsDefined, transactionIsNotInCommitPhase, elementCanBeFilled],
         conditionArgs
       },
@@ -160,7 +162,7 @@ export class ClientSchemaElementActionsService {
             store: ws.schemaElementStore
           });
         },
-        args: [this.clientSchemaElementSaverWidget, workspace],
+        args: [this.clientSchemaElementSaveWidget, workspace],
         conditions: [transactionIsNotInCommitPhase, transactionIsNotEmpty],
         conditionArgs
       },
@@ -192,7 +194,7 @@ export class ClientSchemaElementActionsService {
             store: ws.schemaElementStore
           });
         },
-        args: [this.clientSchemaElementImportDataWidget, workspace],
+        args: [this.clientSchemaElementImportWidget, workspace],
         conditions: [transactionIsNotInCommitPhase],
         conditionArgs
       },

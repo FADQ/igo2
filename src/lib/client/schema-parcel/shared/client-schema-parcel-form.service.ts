@@ -16,7 +16,9 @@ import { IgoMap } from '@igo2/geo';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import { ClientSchemaElementFormService } from '../../schema-element/shared/client-schema-element-form.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ClientSchemaParcelFormService {
 
   constructor(
@@ -25,12 +27,12 @@ export class ClientSchemaParcelFormService {
     private clientSchemaElementFormService: ClientSchemaElementFormService
   ) {}
 
-  buildCreateForm(schema: ClientSchema, igoMap: IgoMap, geometryTypes: string[]): Observable<Form> {
+  buildCreateForm(schema: ClientSchema, igoMap: IgoMap): Observable<Form> {
     const parcelFields$ = zip(
       this.createNoParcelField()
     );
 
-    const schemaElementForm$ = this.clientSchemaElementFormService.buildCreateForm(schema, igoMap, geometryTypes);
+    const schemaElementForm$ = this.clientSchemaElementFormService.buildCreateForm(schema, igoMap);
 
     return zip(schemaElementForm$, parcelFields$)
       .pipe(
@@ -41,6 +43,10 @@ export class ClientSchemaParcelFormService {
           return form;
         })
       );
+  }
+
+  buildUpdateForm(schema: ClientSchema, igoMap: IgoMap): Observable<Form> {
+    return this.buildCreateForm(schema, igoMap);
   }
 
   private createNoParcelField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
@@ -55,10 +61,6 @@ export class ClientSchemaParcelFormService {
         // }
       }
     }, partial));
-  }
-
-  buildUpdateForm(schema: ClientSchema, igoMap: IgoMap, geometryTypes: string[]): Observable<Form> {
-    return this.buildCreateForm(schema, igoMap, geometryTypes);
   }
 
   private createField(config: FormFieldConfig, partial?: Partial<FormFieldConfig>): FormField {

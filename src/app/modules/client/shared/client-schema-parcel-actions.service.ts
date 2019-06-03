@@ -4,9 +4,7 @@ import { Action, Widget } from '@igo2/common';
 
 import {
   ClientWorkspace,
-  ClientSchemaParcelCreateWidget,
-  ClientSchemaParcelUpdateWidget,
-  ClientSchemaParcelTransferFormWidget
+  ClientSchemaParcelTransferWidget
 } from 'src/lib/client';
 
 import { ClientSchemaElementActionsService } from './client-schema-element-actions.service';
@@ -18,19 +16,17 @@ export class ClientSchemaParcelActionsService {
 
   constructor(
     private clientSchemaElementActionsService: ClientSchemaElementActionsService,
-    @Inject(ClientSchemaParcelCreateWidget) private clientSchemaParcelCreateWidget: Widget,
-    @Inject(ClientSchemaParcelUpdateWidget) private clientSchemaParcelUpdateWidget: Widget,
-    @Inject(ClientSchemaParcelTransferFormWidget) private clientSchemaParcelTransferFormWidget: Widget
+    @Inject(ClientSchemaParcelTransferWidget) private clientSchemaParcelTransferWidget: Widget
   ) {}
 
   buildActions(workspace: ClientWorkspace): Action[] {
     const actions = this.clientSchemaElementActionsService.buildActions(workspace);
 
-    const createAction = actions.find((action: Action) => action.id === 'create');
-    createAction.args = [this.clientSchemaParcelCreateWidget, workspace];
+    // const createAction = actions.find((action: Action) => action.id === 'create');
+    // createAction.args = [this.clientSchemaParcelCreateWidget, workspace];
 
-    const updateAction = actions.find((action: Action) => action.id === 'update');
-    updateAction.args = [this.clientSchemaParcelUpdateWidget, workspace];
+    // const updateAction = actions.find((action: Action) => action.id === 'update');
+    // updateAction.args = [this.clientSchemaParcelUpdateWidget, workspace];
 
     function transactionIsNotInCommitPhase(ws: ClientWorkspace): boolean {
       return ws.transaction.inCommitPhase === false;
@@ -52,7 +48,7 @@ export class ClientSchemaParcelActionsService {
             store: ws.schemaElementStore
           });
         },
-        args: [this.clientSchemaParcelTransferFormWidget, workspace],
+        args: [this.clientSchemaParcelTransferWidget, workspace],
         conditions: [transactionIsNotInCommitPhase],
         conditionArgs
       }

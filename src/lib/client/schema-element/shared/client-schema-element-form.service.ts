@@ -17,7 +17,9 @@ import { IgoMap } from '@igo2/geo';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import { ClientSchemaElementService } from './client-schema-element.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ClientSchemaElementFormService {
 
   constructor(

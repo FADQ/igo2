@@ -16,7 +16,7 @@ import { map, startWith} from 'rxjs/operators';
 
 import {
   EntityStore,
-  EntityStoreController,
+  EntityStoreWatcher,
   EntityRecord
 } from '@igo2/common';
 
@@ -50,7 +50,7 @@ export class MunSelectorComponent implements OnInit, OnDestroy {
    * Controller of a municipality
    * @internal
    */
-  private controller: EntityStoreController<Mun>;
+  private watcher: EntityStoreWatcher<Mun>;
 
   /**
    * Subscription to the selected municipality
@@ -76,7 +76,7 @@ export class MunSelectorComponent implements OnInit, OnDestroy {
    * Initialisation of the component
    */
   ngOnInit() {
-    this.controller = new EntityStoreController(this.store, this.cdRef);
+    this.watcher = new EntityStoreWatcher(this.store, this.cdRef);
 
     // Keep the selected Municipality in a subscription
     this.selectedMun$$ = this.store.stateView
@@ -94,7 +94,7 @@ export class MunSelectorComponent implements OnInit, OnDestroy {
    * Destroy the listeners
    */
   ngOnDestroy() {
-    this.controller.destroy();
+    this.watcher.destroy();
     this.selectedMun$$.unsubscribe();
   }
 

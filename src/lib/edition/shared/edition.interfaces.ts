@@ -5,7 +5,7 @@ export interface EditionResult {
   error?: string;
 }
 
-export interface EditionSlicerResult {
+export interface EditionSliceResult {
   features: Feature[];
   error?: string;
 }

@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 
-import { FormFieldSelectChoice } from '@igo2/common';
+import { FormFieldSelectChoice, EntityTransaction } from '@igo2/common';
 import { Feature } from '@igo2/geo';
 
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
@@ -71,6 +71,13 @@ export interface ClientSchemaElementTransactionData {
   lstElementsAjoutes: ClientSchemaElement[];
   lstElementsModifies: ClientSchemaElement[];
   lstIdElementsSupprimes: string[];
+}
+
+export interface ClientSchemaElementTransactionWrapper {
+  schema: ClientSchema;
+  transaction: EntityTransaction;
+  proceed: () => void;
+  abort?: () => void;
 }
 
 export interface GetElements {

@@ -2,26 +2,26 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
-  FadqLibClientSchemaElementCreateFormModule
-} from './client-schema-element-create-form/client-schema-element-create-form.module';
+  FadqLibClientSchemaElementCreateModule
+} from './client-schema-element-create/client-schema-element-create.module';
 import {
-  FadqLibClientSchemaElementUpdateFormModule
-} from './client-schema-element-update-form/client-schema-element-update-form.module';
+  FadqLibClientSchemaElementUpdateModule
+} from './client-schema-element-update/client-schema-element-update.module';
 import {
-  FadqLibClientSchemaElementReincludeFormModule
-} from './client-schema-element-reinclude-form/client-schema-element-reinclude-form.module';
+  FadqLibClientSchemaElementFillModule
+} from './client-schema-element-fill/client-schema-element-fill.module';
 import {
-  FadqLibClientSchemaElementSliceFormModule
-} from './client-schema-element-slice-form/client-schema-element-slice-form.module';
+  FadqLibClientSchemaElementSliceModule
+} from './client-schema-element-slice/client-schema-element-slice.module';
 import {
-  FadqLibClientSchemaElementSaverModule
-} from './client-schema-element-saver/client-schema-element-saver.module';
+  FadqLibClientSchemaElementSaveModule
+} from './client-schema-element-save/client-schema-element-save.module';
 import {
-  FadqLibClientSchemaElementUndoModule
-} from './client-schema-element-undo/client-schema-element-undo.module';
+  FadqLibClientSchemaElementImportModule
+} from './client-schema-element-import/client-schema-element-import.module';
 import {
-  FadqLibClientSchemaElementImportDataModule
-} from './client-schema-element-import-data/client-schema-element-import-data.module';
+  FadqLibClientSchemaElementTransactionModule
+} from './client-schema-element-transaction/client-schema-element-transaction.module';
 
 import {
   provideClientSchemaElementPointService,
@@ -32,27 +32,24 @@ import {
 import {
   provideClientSchemaElementCreateWidget,
   provideClientSchemaElementUpdateWidget,
-  provideClientSchemaElementReincludeWidget,
+  provideClientSchemaElementFillWidget,
   provideClientSchemaElementSliceWidget,
-  provideClientSchemaElementSaverWidget,
-  provideClientSchemaElementUndoWidget,
-  provideClientSchemaElementImportDataWidget
+  provideClientSchemaElementSaveWidget,
+  provideClientSchemaElementImportWidget
 } from './shared/client-schema-element.widgets';
-import { ClientSchemaElementFormService } from './shared/client-schema-element-form.service';
-import { ClientSchemaElementTableService } from './shared/client-schema-element-table.service';
 
 @NgModule({
   imports: [
     CommonModule
   ],
   exports: [
-    FadqLibClientSchemaElementCreateFormModule,
-    FadqLibClientSchemaElementUpdateFormModule,
-    FadqLibClientSchemaElementReincludeFormModule,
-    FadqLibClientSchemaElementSliceFormModule,
-    FadqLibClientSchemaElementSaverModule,
-    FadqLibClientSchemaElementUndoModule,
-    FadqLibClientSchemaElementImportDataModule
+    FadqLibClientSchemaElementCreateModule,
+    FadqLibClientSchemaElementUpdateModule,
+    FadqLibClientSchemaElementFillModule,
+    FadqLibClientSchemaElementSliceModule,
+    FadqLibClientSchemaElementSaveModule,
+    FadqLibClientSchemaElementImportModule,
+    FadqLibClientSchemaElementTransactionModule
   ],
   declarations: []
 })
@@ -67,13 +64,10 @@ export class FadqLibClientSchemaElementModule {
         provideClientSchemaElementService(),
         provideClientSchemaElementCreateWidget(),
         provideClientSchemaElementUpdateWidget(),
-        provideClientSchemaElementReincludeWidget(),
+        provideClientSchemaElementFillWidget(),
         provideClientSchemaElementSliceWidget(),
-        provideClientSchemaElementSaverWidget(),
-        provideClientSchemaElementUndoWidget(),
-        provideClientSchemaElementImportDataWidget(),
-        ClientSchemaElementFormService,
-        ClientSchemaElementTableService
+        provideClientSchemaElementSaveWidget(),
+        provideClientSchemaElementImportWidget()
       ]
     };
   }

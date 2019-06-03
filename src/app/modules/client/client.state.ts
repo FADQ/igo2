@@ -10,7 +10,7 @@ import { EditionState } from '@igo2/integration';
 import {
   Client,
   ClientWorkspace,
-  ClientResolutionService,
+  ClientSchemaElementTransactionService,
   ClientService,
   ClientParcel,
   ClientParcelYear,
@@ -60,7 +60,7 @@ export class ClientState implements OnDestroy {
     private clientService: ClientService,
     private clientParcelYearService: ClientParcelYearService,
     private clientWorkspaceService: ClientWorkspaceService,
-    private clientResolutionService: ClientResolutionService,
+    private clientSchemaElementTransactionService: ClientSchemaElementTransactionService,
     private dialog: MatDialog
   ) {
     this.editorStore.view.sort({
@@ -109,9 +109,10 @@ export class ClientState implements OnDestroy {
 
   clearWorkspace(workspace: ClientWorkspace) {
     if (!workspace.transaction.empty) {
-      this.clientResolutionService.enqueue({
-        proceed: () => this.clearWorkspace(workspace),
-        workspace
+      this.clientSchemaElementTransactionService.enqueue({
+        schema: workspace.schema,
+        transaction: workspace.transaction,
+        proceed: () => this.clearWorkspace(workspace)
       });
       return;
     }

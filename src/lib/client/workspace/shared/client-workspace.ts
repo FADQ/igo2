@@ -17,7 +17,7 @@ import { ClientSchemaElement, ClientSchemaElementTypes } from '../../schema-elem
 import { ClientSchemaElementService } from '../../schema-element/shared/client-schema-element.service';
 import { createSchemaElementLayerStyle } from '../../schema-element/shared/client-schema-element.utils';
 import { ClientSchemaParcel } from '../../schema-parcel/shared/client-schema-parcel.interfaces';
-import { ClientResolutionService } from './client-resolution.service';
+import { ClientSchemaElementTransactionService } from '../../schema-element/shared/client-schema-element-transaction.service';
 
 export interface ClientWorkspaceOptions {
   map: IgoMap;
@@ -28,7 +28,7 @@ export interface ClientWorkspaceOptions {
   schemaElementEditor: Editor<ClientSchemaElement>;
   schemaElementService: ClientSchemaElementService;
   schemaParcelEditor: Editor<ClientSchemaParcel>;
-  resolutionService: ClientResolutionService;
+  schemaElementTransactionService: ClientSchemaElementTransactionService;
   color?: [number, number, number];
   // moveToParcels?: boolean;
 }
@@ -100,8 +100,8 @@ export class ClientWorkspace {
     return this.options.schemaElementService;
   }
 
-  get resolutionService(): ClientResolutionService {
-    return this.options.resolutionService;
+  get schemaElementTransactionService(): ClientSchemaElementTransactionService {
+    return this.options.schemaElementTransactionService;
   }
 
   /** Element transaction */
@@ -297,10 +297,11 @@ export class ClientWorkspace {
 
   private setSchema(schema: ClientSchema) {
     if (!this.transaction.empty) {
-      this.resolutionService.enqueue({
+      this.schemaElementTransactionService.enqueue({
+        schema: this.schema,
+        transaction: this.transaction,
         proceed: () => this.setSchema(schema),
-        abort: () => this.schemaStore.state.update(this.schema, {selected: true}, true),
-        workspace: this
+        abort: () => this.schemaStore.state.update(this.schema, {selected: true}, true)
       });
       return;
     }

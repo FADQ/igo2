@@ -6,7 +6,9 @@ import { formatMeasure, squareMetersToAcres, squareMetersToHectares } from '@igo
 import { formatDate } from 'src/lib/utils/date';
 import { ClientSchemaElement } from './client-schema-element.interfaces';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ClientSchemaElementTableService {
 
   static elementTypes = {

@@ -15,7 +15,7 @@ import { map, startWith} from 'rxjs/operators';
 
 import {
   EntityStore,
-  EntityStoreController,
+  EntityStoreWatcher,
   EntityRecord
 } from '@igo2/common';
 
@@ -54,7 +54,7 @@ export class CadastreSelectorComponent implements OnInit, OnDestroy {
    * Controller of a municipality
    * @internal
    */
-  private controller: EntityStoreController<Cadastre>;
+  private watcher: EntityStoreWatcher<Cadastre>;
 
   /**
    * Subscription to the selected municipality
@@ -83,7 +83,7 @@ export class CadastreSelectorComponent implements OnInit, OnDestroy {
    * Initialisation of the component
    */
   ngOnInit() {
-    this.controller = new EntityStoreController(this.store, this.cdRef);
+    this.watcher = new EntityStoreWatcher(this.store, this.cdRef);
     this.selected$$ = this.store.stateView
       .firstBy$((record: EntityRecord<Cadastre>) => record.state.selected === true)
       .subscribe((record: EntityRecord<Cadastre>) => {
@@ -95,7 +95,7 @@ export class CadastreSelectorComponent implements OnInit, OnDestroy {
    * Destroy the listeners
    */
   ngOnDestroy() {
-    this.controller.destroy();
+    this.watcher.destroy();
     this.selected$$.unsubscribe();
   }
 

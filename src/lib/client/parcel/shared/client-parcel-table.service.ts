@@ -7,7 +7,9 @@ import { padClientNum } from '../../shared/client.utils';
 import { ClientInfoService } from '../../info/shared/client-info.service';
 import { ClientParcel } from './client-parcel.interfaces';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ClientParcelTableService {
 
   constructor(private clientInfoService: ClientInfoService) {}

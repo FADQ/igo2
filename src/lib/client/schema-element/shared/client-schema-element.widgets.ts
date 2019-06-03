@@ -5,37 +5,34 @@ import { InjectionToken } from '@angular/core';
 import { Widget, WidgetService } from '@igo2/common';
 
 import {
-  ClientSchemaElementCreateFormComponent
-} from '../client-schema-element-create-form/client-schema-element-create-form.component';
+  ClientSchemaElementCreateComponent
+} from '../client-schema-element-create/client-schema-element-create.component';
 import {
-  ClientSchemaElementUpdateFormComponent
-} from '../client-schema-element-update-form/client-schema-element-update-form.component';
+  ClientSchemaElementUpdateComponent
+} from '../client-schema-element-update/client-schema-element-update.component';
 import {
-  ClientSchemaElementReincludeFormComponent
-} from '../client-schema-element-reinclude-form/client-schema-element-reinclude-form.component';
+  ClientSchemaElementFillComponent
+} from '../client-schema-element-fill/client-schema-element-fill.component';
 import {
-  ClientSchemaElementSliceFormComponent
-} from '../client-schema-element-slice-form/client-schema-element-slice-form.component';
+  ClientSchemaElementSliceComponent
+} from '../client-schema-element-slice/client-schema-element-slice.component';
 import {
-  ClientSchemaElementSaverComponent
-} from '../client-schema-element-saver/client-schema-element-saver.component';
+  ClientSchemaElementSaveComponent
+} from '../client-schema-element-save/client-schema-element-save.component';
 import {
-  ClientSchemaElementUndoComponent
-} from '../client-schema-element-undo/client-schema-element-undo.component';
-import {
-  ClientSchemaElementImportDataComponent
-} from '../client-schema-element-import-data/client-schema-element-import-data.component';
+  ClientSchemaElementImportComponent
+} from '../client-schema-element-import/client-schema-element-import.component';
 
 export const ClientSchemaElementCreateWidget = new InjectionToken<Widget>('ClientSchemaElementCreateWidget');
 export const ClientSchemaElementUpdateWidget = new InjectionToken<Widget>('ClientSchemaElementUpdateWidget');
-export const ClientSchemaElementReincludeWidget = new InjectionToken<Widget>('ClientSchemaElementReincludeWidget');
+export const ClientSchemaElementFillWidget = new InjectionToken<Widget>('ClientSchemaElementFillWidget');
 export const ClientSchemaElementSliceWidget = new InjectionToken<Widget>('ClientSchemaElementSliceWidget');
-export const ClientSchemaElementSaverWidget = new InjectionToken<Widget>('ClientSchemaElementSaverWidget');
+export const ClientSchemaElementSaveWidget = new InjectionToken<Widget>('ClientSchemaElementSaveWidget');
 export const ClientSchemaElementUndoWidget = new InjectionToken<Widget>('ClientSchemaElementUndoWidget');
-export const ClientSchemaElementImportDataWidget = new InjectionToken<Widget>('ClientSchemaElementImportDataWidget');
+export const ClientSchemaElementImportWidget = new InjectionToken<Widget>('ClientSchemaElementImportWidget');
 
 export function clientSchemaElementCreateWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(ClientSchemaElementCreateFormComponent);
+  return widgetService.create(ClientSchemaElementCreateComponent);
 }
 
 export function provideClientSchemaElementCreateWidget() {
@@ -47,7 +44,7 @@ export function provideClientSchemaElementCreateWidget() {
 }
 
 export function clientSchemaElementUpdateWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(ClientSchemaElementUpdateFormComponent);
+  return widgetService.create(ClientSchemaElementUpdateComponent);
 }
 
 export function provideClientSchemaElementUpdateWidget() {
@@ -58,20 +55,20 @@ export function provideClientSchemaElementUpdateWidget() {
   };
 }
 
-export function clientSchemaElementReincludeWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(ClientSchemaElementReincludeFormComponent);
+export function clientSchemaElementFillWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(ClientSchemaElementFillComponent);
 }
 
-export function provideClientSchemaElementReincludeWidget() {
+export function provideClientSchemaElementFillWidget() {
   return {
-    provide: ClientSchemaElementReincludeWidget,
-    useFactory: clientSchemaElementReincludeWidgetFactory,
+    provide: ClientSchemaElementFillWidget,
+    useFactory: clientSchemaElementFillWidgetFactory,
     deps: [WidgetService]
   };
 }
 
 export function clientSchemaElementSliceWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(ClientSchemaElementSliceFormComponent);
+  return widgetService.create(ClientSchemaElementSliceComponent);
 }
 
 export function provideClientSchemaElementSliceWidget() {
@@ -82,38 +79,26 @@ export function provideClientSchemaElementSliceWidget() {
   };
 }
 
-export function clientSchemaElementSaverWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(ClientSchemaElementSaverComponent);
+export function clientSchemaElementSaveWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(ClientSchemaElementSaveComponent);
 }
 
-export function provideClientSchemaElementSaverWidget() {
+export function provideClientSchemaElementSaveWidget() {
   return {
-    provide: ClientSchemaElementSaverWidget,
-    useFactory: clientSchemaElementSaverWidgetFactory,
+    provide: ClientSchemaElementSaveWidget,
+    useFactory: clientSchemaElementSaveWidgetFactory,
     deps: [WidgetService]
   };
 }
 
-export function clientSchemaElementUndoWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(ClientSchemaElementUndoComponent);
+export function clientSchemaElementImportWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(ClientSchemaElementImportComponent);
 }
 
-export function provideClientSchemaElementUndoWidget() {
+export function provideClientSchemaElementImportWidget() {
   return {
-    provide: ClientSchemaElementUndoWidget,
-    useFactory: clientSchemaElementUndoWidgetFactory,
-    deps: [WidgetService]
-  };
-}
-
-export function clientSchemaElementImportDataWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(ClientSchemaElementImportDataComponent);
-}
-
-export function provideClientSchemaElementImportDataWidget() {
-  return {
-    provide: ClientSchemaElementImportDataWidget,
-    useFactory: clientSchemaElementImportDataWidgetFactory,
+    provide: ClientSchemaElementImportWidget,
+    useFactory: clientSchemaElementImportWidgetFactory,
     deps: [WidgetService]
   };
 }

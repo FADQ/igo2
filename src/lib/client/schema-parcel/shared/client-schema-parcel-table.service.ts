@@ -6,7 +6,9 @@ import { formatMeasure } from '@igo2/geo';
 import { formatDate } from 'src/lib/utils/date';
 import { ClientSchemaParcel } from './client-schema-parcel.interfaces';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ClientSchemaParcelTableService {
 
   buildTable(): EntityTableTemplate {

@@ -7,3 +7,4 @@ export * from './client-schema-element-table.service';
 export * from './client-schema-element-point.service';
 export * from './client-schema-element-line.service';
 export * from './client-schema-element-surface.service';
+export * from './client-schema-element-transaction.service';
