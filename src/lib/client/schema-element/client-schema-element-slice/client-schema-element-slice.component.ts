@@ -55,7 +55,7 @@ export class ClientSchemaElementSliceComponent implements OnUpdateInputs, Widget
   /**
    * Schema element
    */
-  @Input() element: ClientSchemaElement;
+  @Input() schemaElement: ClientSchemaElement;
 
   /**
    * Event emitted on complete
@@ -88,7 +88,7 @@ export class ClientSchemaElementSliceComponent implements OnUpdateInputs, Widget
     this.cdRef.detectChanges();
   }
 
-  onComplete(elements: ClientSchemaElement[]) {
+  onComplete(schemaElements: ClientSchemaElement[]) {
     this.complete.emit();
   }
 
@@ -104,10 +104,10 @@ export class ClientSchemaElementSliceComponent implements OnUpdateInputs, Widget
     });
     return this.clientSchemaElementService.createSchemaElement(this.schema, data)
       .pipe(
-        map((element: ClientSchemaElement): EditionResult => {
+        map((schemaElement: ClientSchemaElement): EditionResult => {
           return {
-            feature: element,
-            error: getSchemaElementValidationMessage(element, this.languageService)
+            feature: schemaElement,
+            error: getSchemaElementValidationMessage(schemaElement, this.languageService)
           }
         })
       )

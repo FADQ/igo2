@@ -73,7 +73,7 @@ export class ClientSchemaElementSaveComponent implements OnUpdateInputs, WidgetC
     this.cdRef.detectChanges();
   }
 
-  onComplete(elements: ClientSchemaElement[]) {
+  onComplete(schemaElements: ClientSchemaElement[]) {
     this.complete.emit();
   }
 
@@ -91,24 +91,24 @@ export class ClientSchemaElementSaveComponent implements OnUpdateInputs, WidgetC
 
   private onCommitSuccess(results: Array<ClientSchemaElement[] | Error>): string | undefined {
     let hasError = false;
-    const elementsToLoad = [];
+    const schemaElementsToLoad = [];
 
     results.forEach((result: ClientSchemaElement[] | Error) => {
       if (result instanceof Error) {
         hasError = true;
         const geometryType = result.message;
-        const elementsOfType = this.store.all().filter((element: ClientSchemaElement) => {
-          return element.geometry.type === geometryType;
+        const schemaElementsOfType = this.store.all().filter((schemaElement: ClientSchemaElement) => {
+          return schemaElement.geometry.type === geometryType;
         });
-        elementsToLoad.push(...elementsOfType);
+        schemaElementsToLoad.push(...schemaElementsOfType);
       } else {
-        elementsToLoad.push(...result);
+        schemaElementsToLoad.push(...result);
       }
     });
 
     // Reload everyting. Data that hasn't been saved because of an error
     // is also reloaded but is not obtained from the service.
-    this.store.load(elementsToLoad);
+    this.store.load(schemaElementsToLoad);
 
     return hasError
       ? this.languageService.translate.instant('client.schemaElement.save.error')

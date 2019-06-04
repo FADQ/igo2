@@ -3,6 +3,5 @@ export * from './parcel';
 export * from './schema';
 export * from './schema-file';
 export * from './schema-element';
-export * from './schema-parcel';
-export * from './workspace';
+export * from './parcel-element';
 export * from './shared';

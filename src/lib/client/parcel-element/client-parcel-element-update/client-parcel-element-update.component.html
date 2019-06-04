@@ -1,0 +1,12 @@
+<fadq-edition-form
+  *ngIf="form$ | async as form"
+  [form]="form"
+  [store]="store"
+  [transaction]="transaction"
+  [feature]="parcelElement"
+  [groupIndex]="groupIndex$ | async"
+  [processData]="processData"
+  [getOperationTitle]="getOperationTitle"
+  (complete)="onComplete($event)"
+  (cancel)="onCancel()">
+</fadq-edition-form>

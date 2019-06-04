@@ -188,21 +188,21 @@ export class EditionImportComponent implements WidgetComponent {
   }
 
   private onImportError(error: ImportError) {
-    const messageKey = 'client.schemaElement.importData.error.invalidFile';
+    const messageKey = 'edition.importData.error.invalidFile';
     const message = this.languageService.translate.instant(messageKey);
     this.errorMessage$.next(message);
     this.file$.next(undefined);
   }
 
   private onNothingToImport() {
-    const messageKey = 'client.schemaElement.importData.error.nothingToImport';
+    const messageKey = 'edition.importData.error.nothingToImport';
     const message = this.languageService.translate.instant(messageKey);
     this.errorMessage$.next(message);
     this.file$.next(undefined);
   }
 
   private resetPlaceholder() {
-    const key = 'client.schemaElement.importData.placeholder';
+    const key = 'edition.importData.placeholder';
     const placeholder = this.languageService.translate.instant(key);
     this.placeholder$.next(placeholder);
   }

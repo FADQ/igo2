@@ -4,7 +4,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { ToolComponent, EntityStore } from '@igo2/common';
 
 import {
-  ClientWorkspace,
+  ClientController,
   ClientParcelYear,
   ClientInfoService
 } from 'src/lib/client';
@@ -29,19 +29,19 @@ export class ClientToolComponent implements OnInit, OnDestroy {
 
   readonly showLegend$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  private workspaces$$: Subscription;
+  private controllers$$: Subscription;
 
   /**
    * Observable of the active client
    * @internal
    */
-  get workspaces(): EntityStore<ClientWorkspace> { return this.clientState.workspaceStore; }
+  get controllers(): EntityStore<ClientController> { return this.clientState.controllerStore; }
 
   /**
    * Observable of the client error, if any
    * @internal
    */
-  get activeWorkspace$(): BehaviorSubject<ClientWorkspace> { return this.clientState.activeWorkspace$; }
+  get activeController$(): BehaviorSubject<ClientController> { return this.clientState.activeController$; }
 
   /**
    * Observable of the client error, if any
@@ -63,8 +63,8 @@ export class ClientToolComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.workspaces$$ = this.workspaces.entities$.subscribe((workspaces: ClientWorkspace[]) => {
-      if (workspaces.length !== 1) {
+    this.controllers$$ = this.controllers.entities$.subscribe((controllers: ClientController[]) => {
+      if (controllers.length !== 1) {
         this.showLegend$.next(false);
       } else {
         this.showLegend$.next(true);
@@ -73,15 +73,15 @@ export class ClientToolComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.workspaces$$.unsubscribe();
+    this.controllers$$.unsubscribe();
   }
 
-  onClearWorkspace(workspace: ClientWorkspace) {
-    this.clientState.clearWorkspace(workspace);
+  onClearController(controller: ClientController) {
+    this.clientState.clearController(controller);
   }
 
-  onSelectWorkspace(workspace: ClientWorkspace) {
-    this.clientState.setActiveWorkspace(workspace);
+  onSelectController(controller: ClientController) {
+    this.clientState.setActiveController(controller);
   }
 
 }

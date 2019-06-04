@@ -115,6 +115,9 @@ export const igoEnvironment: IgoEnvironment = {
         list: '/igolocalisation/recherche_client/obtenirParcellesProductionsClientAnnee/${clientNum}/${annee}',
         years: '/igolocalisation/recherche_client/obtenirAnneesTraitementParcelleAgricole'
       },
+      parcelElement: {
+        list: '/igolocalisation/recherche_client/obtenirParcellesProductionsClientAnnee/${clientNum}/${annee}',
+      },
       schema: {
         list: '/igolocalisation/recherche_client/obtenirSchemasClient/${clientNum}',
         create: '/igoschema/edition_schema/ajouterSchema',

@@ -61,10 +61,10 @@
   [backdropShown]="expansionPanelBackdropShown">
 
   <ng-container expansionPanelHeader>
-    <igo-editor-selector [store]="editorStore"></igo-editor-selector>
+    <igo-workspace-selector [store]="workspaceStore"></igo-workspace-selector>
     <igo-actionbar
-      *ngIf="editor"
-      [store]="editor.actionStore"
+      *ngIf="workspace"
+      [store]="workspace.actionStore"
       [horizontal]="true"
       [xPosition]="'after'"
       [yPosition]="'above'"
@@ -76,10 +76,10 @@
   </ng-container>
 
   <igo-entity-table
-    *ngIf="editor"
+    *ngIf="workspace"
     class="table-compact table-centered"
-    [store]="editor.entityStore"
-    [template]="editor.tableTemplate">
+    [store]="workspace.entityStore"
+    [template]="workspace.meta.tableTemplate">
   </igo-entity-table>
 
 </fadq-expansion-panel>
@@ -95,10 +95,10 @@
     [feature]="searchResult.data">
   </igo-feature-details>
 
-  <igo-editor-outlet
-    *ngIf="toastPanelContent === 'editor'"
-    [editor]="editor"
-    (deactivateWidget)="onDeactivateEditorWidget()">
-  </igo-editor-outlet>
+  <igo-workspace-widget-outlet
+    *ngIf="toastPanelContent === 'workspace'"
+    [workspace]="workspace"
+    (deactivateWidget)="onDeactivateWorkspaceWidget()">
+  </igo-workspace-widget-outlet>
 
 </fadq-toast-panel>

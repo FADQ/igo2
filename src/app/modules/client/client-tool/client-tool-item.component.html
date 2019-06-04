@@ -9,13 +9,13 @@
   </mat-icon>
 
   <div matLine class="fadq-client-name" (click)="onSelect()">
-    {{workspace.client.info.nom}}
+    {{controller.client.info.nom}}
   </div>
 
   <button mat-icon-button (click)="onClear()">
     <mat-icon>clear_outline</mat-icon>
   </button>
-  <div *ngIf="workspace.color$ | async as color" class="fadq-per-client-legend-thumbnail-container">
+  <div *ngIf="controller.color$ | async as color" class="fadq-per-client-legend-thumbnail-container">
     <div class="fadq-per-client-legend-thumbnail-wrapper">
       <div
         class="fadq-per-client-legend-thumbnail"
@@ -26,24 +26,24 @@
 </mat-list-item>
   
 <div #content class="fadq-client-content">
-  <div *ngIf="workspace.message$ | async as message" class="fadq-error-text">
+  <div *ngIf="controller.message$ | async as message" class="fadq-error-text">
     {{message | translate}}
   </div>
 
   <div class="fadq-client-tool-bottom-section"></div>
-  <fadq-client-parcel-diagram-selector [store]="workspace.diagramStore"></fadq-client-parcel-diagram-selector>
-  <fadq-client-schema-selector [store]="workspace.schemaStore"></fadq-client-schema-selector>
+  <fadq-client-parcel-diagram-selector [store]="controller.diagramStore"></fadq-client-parcel-diagram-selector>
+  <fadq-client-schema-selector [store]="controller.schemaStore"></fadq-client-schema-selector>
 
   <a
     href=""
     target="popup"
     class="fadq-client-info-link"
-    (click)="openClientInfoLink(workspace.client)">
+    (click)="openClientInfoLink(controller.client)">
     Information détaillée
   </a>
   <fadq-client-info-addresses
-    [client]="workspace.client"
-    [map]="workspace.map">
+    [client]="controller.client"
+    [map]="controller.map">
   </fadq-client-info-addresses>
 </div>
   

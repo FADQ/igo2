@@ -1,15 +1,13 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material';
 
 import { Observable, BehaviorSubject, Subscription, zip } from 'rxjs';
 import { skip } from 'rxjs/operators';
 
-import { EntityRecord, EntityStore,  Editor, EditorStore } from '@igo2/common';
-import { EditionState } from '@igo2/integration';
+import { EntityRecord, EntityStore,  Workspace, WorkspaceStore } from '@igo2/common';
 
 import {
   Client,
-  ClientWorkspace,
+  ClientController,
   ClientSchemaElementTransactionService,
   ClientService,
   ClientParcel,
@@ -19,7 +17,7 @@ import {
   generateParcelColor
 } from 'src/lib/client';
 
-import { ClientWorkspaceService } from './shared/client-workspace.service';
+import { ClientControllerService } from './shared/client-controller.service';
 
 /**
  * Service that holds the state of the client module
@@ -29,13 +27,13 @@ import { ClientWorkspaceService } from './shared/client-workspace.service';
 })
 export class ClientState implements OnDestroy {
 
-  activeWorkspace$: BehaviorSubject<ClientWorkspace> = new BehaviorSubject(undefined);
+  activeController$: BehaviorSubject<ClientController> = new BehaviorSubject(undefined);
 
-  get activeWorkspace(): ClientWorkspace { return this.activeWorkspace$.value; }
+  get activeController(): ClientController { return this.activeController$.value; }
 
-  /** Observable of the current workspace */
-  get workspaceStore(): EntityStore<ClientWorkspace> { return this._workspaceStore; }
-  _workspaceStore: EntityStore<ClientWorkspace>;
+  /** Observable of the current controller */
+  get controllerStore(): EntityStore<ClientController> { return this._controllerStore; }
+  _controllerStore: EntityStore<ClientController>;
 
   /** Observable of a message or error */
   readonly message$ = new BehaviorSubject<string>(undefined);
@@ -46,34 +44,36 @@ export class ClientState implements OnDestroy {
   /** Subscription to the parcel year changes */
   private parcelYear$$: Subscription;
 
-  /** Subscription to the workspaces changes */
-  private workspaces$$: Subscription;
+  /** Subscription to the controllers changes */
+  private controllers$$: Subscription;
 
   /** Store that holds all the "parcel years". This is not on a per client basis. */
   get parcelYearStore(): EntityStore<ClientParcelYear> { return this._parcelYearStore; }
   _parcelYearStore: EntityStore<ClientParcelYear>;
 
-  get editorStore(): EditorStore { return this.editionState.store; }
+  get workspaceStore(): WorkspaceStore { return this._workspaceStore; }
+  _workspaceStore: WorkspaceStore;
 
   constructor(
-    private editionState: EditionState,
     private clientService: ClientService,
     private clientParcelYearService: ClientParcelYearService,
-    private clientWorkspaceService: ClientWorkspaceService,
-    private clientSchemaElementTransactionService: ClientSchemaElementTransactionService,
-    private dialog: MatDialog
+    private clientControllerService: ClientControllerService,
+    private clientSchemaElementTransactionService: ClientSchemaElementTransactionService
   ) {
-    this.editorStore.view.sort({
-      valueAccessor: (editor: Editor) => editor.id,
-      direction: 'asc'
-    });
-
     this.initParcelYears();
+    this.initControllers();
     this.initWorkspaces();
   }
 
+  /**
+   * Store that holds all the available workspaces
+   */
+  get store(): WorkspaceStore { return this._store; }
+  private _store: WorkspaceStore;
+
   ngOnDestroy() {
     this.teardownWorkspaces();
+    this.teardownControllers();
     this.teardownParcelYears();
   }
 
@@ -81,21 +81,22 @@ export class ClientState implements OnDestroy {
     const annee = this.parcelYear ? this.parcelYear.annee : undefined;
     return this.clientService.getClientByNum(clientNum, annee);
   }
-
+  
   addClient(client: Client | undefined) {
     this.setClientNotFound(false);
 
-    const currentWorkspace = this.workspaceStore.get(client.info.numero);
-    if (currentWorkspace !== undefined) {
+    const currentController = this.controllerStore.get(client.info.numero);
+    if (currentController !== undefined) {
       return;
     }
 
-    const workspace = this.clientWorkspaceService.createClientWorkspace(client, {
+    const controller = this.clientControllerService.createClientController(client, {
+      workspaceStore: this.workspaceStore
       // moveToParcels: this.shouldMoveToParcels()
     });
-    this.workspaceStore.insert(workspace);
-    if (this.activeWorkspace === undefined) {
-      this.editorStore.activateEditor(workspace.parcelEditor);
+    this.controllerStore.insert(controller);
+    if (this.activeController === undefined) {
+      this.workspaceStore.activateWorkspace(controller.parcelWorkspace);
     }
   }
 
@@ -107,66 +108,78 @@ export class ClientState implements OnDestroy {
     }
   }
 
-  clearWorkspace(workspace: ClientWorkspace) {
-    if (!workspace.transaction.empty) {
+  clearController(controller: ClientController) {
+    if (!controller.transaction.empty) {
       this.clientSchemaElementTransactionService.enqueue({
-        schema: workspace.schema,
-        transaction: workspace.transaction,
-        proceed: () => this.clearWorkspace(workspace)
+        schema: controller.schema,
+        transaction: controller.transaction,
+        proceed: () => this.clearController(controller)
       });
       return;
     }
 
-    if (workspace === this.activeWorkspace) {
-      this.setActiveWorkspace(undefined);
+    if (controller === this.activeController) {
+      this.setActiveController(undefined);
     }
-    workspace.destroy();
-    this.workspaceStore.delete(workspace);
+    controller.destroy();
+    this.controllerStore.delete(controller);
   }
 
-  setActiveWorkspace(workspace: ClientWorkspace) {
-    if (workspace === undefined) {
-      if (this.activeWorkspace !== undefined) {
-        this.workspaceStore.state.update(this.activeWorkspace, {selected: false, active: false});
+  setActiveController(controller: ClientController) {
+    if (controller === undefined) {
+      if (this.activeController !== undefined) {
+        this.controllerStore.state.update(this.activeController, {selected: false, active: false});
       }
-      this.editorStore.view.filter(undefined);
-      this.activeWorkspace$.next(undefined);
+      this.workspaceStore.view.filter(undefined);
+      this.activeController$.next(undefined);
       return;
     }
 
-    this.workspaceStore.state.update(workspace, {selected: true, active: true}, true);
-    this.setWorkspaceActiveEditor(workspace);
-    this.activeWorkspace$.next(workspace);
+    this.controllerStore.state.update(controller, {selected: true, active: true}, true);
+    this.setControllerActiveWorkspace(controller);
+    this.activeController$.next(controller);
   }
 
-  private setWorkspaceActiveEditor(workspace: ClientWorkspace) {
-    const cliNum = workspace.client.info.numero;
-    const currentEditor = this.editionState.editor$.value;
-    if (currentEditor !== undefined && currentEditor.meta.client.info.numero !== cliNum) {
-      const editors = [workspace.parcelEditor, workspace.schemaEditor, workspace.schemaElementEditor];
-      const editor = editors.find((_editor: Editor) => {
-        return _editor.meta.type === currentEditor.meta.type &&
-          this.editorStore.get(_editor.id) !== undefined;
+  private setControllerActiveWorkspace(controller: ClientController) {
+    const cliNum = controller.client.info.numero;
+    const currentWorkspace = this.workspaceStore.activeWorkspace$.value;
+    if (currentWorkspace !== undefined && currentWorkspace.meta.client.info.numero !== cliNum) {
+      const workspaces = [controller.parcelWorkspace, controller.schemaWorkspace, controller.schemaElementWorkspace];
+      const workspace = workspaces.find((_workspace: Workspace) => {
+        return _workspace.meta.type === currentWorkspace.meta.type &&
+          this.workspaceStore.get(_workspace.id) !== undefined;
       });
-      this.editorStore.activateEditor(editor || workspace.parcelEditor);
+      this.workspaceStore.activateWorkspace(workspace || controller.parcelWorkspace);
     }
-    this.editorStore.view.filter((editor: Editor) => {
-      return editor.meta.client.info.numero === cliNum;
+    this.workspaceStore.view.filter((workspace: Workspace) => {
+      return workspace.meta.client.info.numero === cliNum;
     });
+  }
+
+  private initControllers() {
+    this._controllerStore = new EntityStore<ClientController>([], {
+      getKey: (controller: ClientController) => controller.client.info.numero
+    });
+
+    this.controllers$$ = this.controllerStore.entities$
+      .subscribe((controllers: ClientController[]) => this.updateControllersColor());
+  }
+
+  private teardownControllers() {
+    this.controllers$$.unsubscribe();
+    this.controllerStore.all().forEach((controller: ClientController) => controller.destroy());
+    this.controllerStore.clear();
   }
 
   private initWorkspaces() {
-    this._workspaceStore = new EntityStore<ClientWorkspace>([], {
-      getKey: (workspace: ClientWorkspace) => workspace.client.info.numero
+    this._workspaceStore = new WorkspaceStore([]);
+    this._workspaceStore.view.sort({
+      valueAccessor: (workspace: Workspace) => workspace.id,
+      direction: 'asc'
     });
-
-    this.workspaces$$ = this.workspaceStore.entities$
-      .subscribe((workspaces: ClientWorkspace[]) => this.updateWorkspacesColor());
   }
 
   private teardownWorkspaces() {
-    this.workspaces$$.unsubscribe();
-    this.workspaceStore.all().forEach((workspace: ClientWorkspace) => workspace.destroy());
     this.workspaceStore.clear();
   }
 
@@ -197,14 +210,14 @@ export class ClientState implements OnDestroy {
   private onSelectParcelYear(parcelYear: ClientParcelYear) {
     this.parcelYear = parcelYear;
 
-    const clients$ = this.workspaceStore.all().map((workspace: ClientWorkspace) => {
-      return this.getClientByNum(workspace.client.info.numero);
+    const clients$ = this.controllerStore.all().map((controller: ClientController) => {
+      return this.getClientByNum(controller.client.info.numero);
     });
 
     zip(...clients$).subscribe((clients: Client[]) => {
       clients.forEach((client: Client) => {
-        const workspace = this.workspaceStore.get(client.info.numero);
-        workspace.parcelStore.load(client.parcels, false);
+        const controller = this.controllerStore.get(client.info.numero);
+        controller.parcelStore.load(client.parcels, false);
       });
     });
   }
@@ -225,32 +238,32 @@ export class ClientState implements OnDestroy {
       });
   }
 
-  private updateWorkspacesColor() {
-    if (this.workspaceStore.count === 1) {
-      const workspace = this.workspaceStore.all()[0];
-      if (workspace.color !== undefined) {
-        workspace.setColor(undefined);
+  private updateControllersColor() {
+    if (this.controllerStore.count === 1) {
+      const controller = this.controllerStore.all()[0];
+      if (controller.color !== undefined) {
+        controller.setColor(undefined);
       }
       return;
     }
 
-    this.workspaceStore.all().forEach((workspace: ClientWorkspace, index: number) => {
-      if (workspace.color === undefined) {
+    this.controllerStore.all().forEach((controller: ClientController, index: number) => {
+      if (controller.color === undefined) {
         const color = generateParcelColor(index);
-        workspace.setColor(color);
+        controller.setColor(color);
       }
     });
   }
 
   private shouldMoveToParcels(): boolean {
-    for (const workspace of this.workspaceStore.all()) {
-      const selectedParcel = workspace.parcelStore.stateView
+    for (const controller of this.controllerStore.all()) {
+      const selectedParcel = controller.parcelStore.stateView
         .firstBy((record: EntityRecord<ClientParcel>) => record.state.selected === true);
       if (selectedParcel !== undefined) {
         return false;
       }
 
-      const selectedElement = workspace.schemaElementStore.stateView
+      const selectedElement = controller.schemaElementStore.stateView
         .firstBy((record: EntityRecord<ClientSchemaElement>) => record.state.selected === true);
       if (selectedElement !== undefined) {
         return false;

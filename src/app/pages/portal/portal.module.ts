@@ -12,7 +12,7 @@ import {
 import { IgoLanguageModule } from '@igo2/core';
 import {
   IgoActionModule,
-  IgoEditionModule,
+  IgoWorkspaceModule,
   IgoEntityModule,
   IgoPanelModule,
   IgoBackdropModule,
@@ -45,7 +45,7 @@ import { PortalComponent } from './portal.component';
 
     IgoLanguageModule,
     IgoActionModule,
-    IgoEditionModule,
+    IgoWorkspaceModule,
     IgoEntityModule,
     IgoPanelModule,
     IgoToolModule,

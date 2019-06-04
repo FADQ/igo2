@@ -9,14 +9,14 @@
   overflow: hidden;
   position: relative;
   display: block;
-  font-family: Times New Roman;
+  font-family: Roboto,"Helvetica Neue",sans-serif;
   font-size: 16px;
 }
 
 :host ::ng-deep {
   h3 {
-    font-size: 1.17em;
-    font-weight: bold;
+    // font-size: 1.1em;
+    font-weight: 300;
   }
 
   h4 {
