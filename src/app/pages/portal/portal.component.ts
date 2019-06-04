@@ -6,8 +6,8 @@ import { MapBrowserPointerEvent as OlMapBrowserPointerEvent } from 'ol/MapBrowse
 import { Media, MediaService, MediaOrientation } from '@igo2/core';
 import {
   ActionbarMode,
-  Editor,
-  EditorStore,
+  Workspace,
+  WorkspaceStore,
   EntityRecord,
   EntityStore,
   getEntityTitle
@@ -28,7 +28,6 @@ import {
 } from '@igo2/geo';
 import {
   ContextState,
-  EditionState,
   ToolState,
   MapState,
   SearchState
@@ -102,20 +101,20 @@ export class PortalComponent implements OnInit, OnDestroy {
     return this.searchState.store;
   }
 
-  get editorStore(): EditorStore {
-    return this.editionState.store;
+  get workspaceStore(): WorkspaceStore {
+    return this.clientState.workspaceStore;
   }
 
-  get editor(): Editor {
-    return this.editionState.editor$.value;
+  get workspace(): Workspace {
+    return this.workspaceStore.activeWorkspace$.value;
   }
 
   get searchbarDisabled(): boolean { return this.currentSearchType === CADASTRE; }
 
   get toastPanelContent(): string {
     let content;
-    if (this.editor !== undefined && this.editor.hasWidget) {
-      content = 'editor';
+    if (this.workspace !== undefined && this.workspace.hasWidget) {
+      content = 'workspace';
     } else if (this.searchResult !== undefined) {
       content = this.searchResult.meta.dataType.toLowerCase();
     }
@@ -124,7 +123,7 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   get toastPanelTitle(): string {
     let title;
-    if (this.toastPanelContent !== 'editor' && this.searchResult !== undefined) {
+    if (this.toastPanelContent !== 'workspace' && this.searchResult !== undefined) {
       title = getEntityTitle(this.searchResult);
     }
     return title;
@@ -132,7 +131,7 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   get toastPanelOpened(): boolean {
     const content = this.toastPanelContent;
-    if (content === 'editor') {
+    if (content === 'workspace') {
       return true;
     }
     return this._toastPanelOpened;
@@ -145,7 +144,6 @@ export class PortalComponent implements OnInit, OnDestroy {
   constructor(
     private mapState: MapState,
     private clientState: ClientState,
-    private editionState: EditionState,
     private contextState: ContextState,
     private searchState: SearchState,
     private toolState: ToolState,
@@ -250,7 +248,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     }
   }
 
-  onDeactivateEditorWidget() {
+  onDeactivateWorkspaceWidget() {
     this.closeToastPanel();
   }
 

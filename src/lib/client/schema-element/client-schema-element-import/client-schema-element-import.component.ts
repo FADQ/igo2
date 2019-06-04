@@ -83,7 +83,7 @@ export class ClientSchemaElementImportComponent implements OnUpdateInputs, Widge
     this.cdRef.detectChanges();
   }
 
-  onComplete(elements: ClientSchemaElement[]) {
+  onComplete(schemaElements: ClientSchemaElement[]) {
     this.complete.emit();
   }
 
@@ -99,9 +99,9 @@ export class ClientSchemaElementImportComponent implements OnUpdateInputs, Widge
     });
     return this.clientSchemaElementService.createSchemaElement(this.schema, data)
       .pipe(
-        map((element: ClientSchemaElement): EditionResult => {
-          const error =  getSchemaElementValidationMessage(element, this.languageService);
-          return error === undefined ? {feature: element} : undefined
+        map((schemaElement: ClientSchemaElement): EditionResult => {
+          const error =  getSchemaElementValidationMessage(schemaElement, this.languageService);
+          return error === undefined ? {feature: schemaElement} : undefined
         })
       )
   }

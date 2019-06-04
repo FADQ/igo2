@@ -96,10 +96,6 @@ export class ClientSchemaElementTransactionSerializer {
 
 }
 
-export function generateOperationTitle(element: ClientSchemaElement): string {
-  return 'todo';
-}
-
 export function generateSchemaElementOperationTitle(
   element: ClientSchemaElement,
   languageService: LanguageService

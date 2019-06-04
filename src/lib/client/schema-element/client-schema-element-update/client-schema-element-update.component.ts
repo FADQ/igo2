@@ -79,7 +79,7 @@ export class ClientSchemaElementUpdateComponent
   /**
    * Schema element
    */
-  @Input() element: ClientSchemaElement;
+  @Input() schemaElement: ClientSchemaElement;
 
   /**
    * Schema
@@ -131,7 +131,7 @@ export class ClientSchemaElementUpdateComponent
     this.cdRef.detectChanges();
   }
 
-  onComplete(element: ClientSchemaElement) {
+  onComplete(schemaElement: ClientSchemaElement) {
     this.complete.emit();
   }
 
@@ -142,10 +142,10 @@ export class ClientSchemaElementUpdateComponent
   private processSchemaElement(data: ClientSchemaElement): Observable<EditionResult> {
     return this.clientSchemaElementService.createSchemaElement(this.schema, data)
       .pipe(
-        map((element: ClientSchemaElement): EditionResult => {
+        map((schemaElement: ClientSchemaElement): EditionResult => {
           return {
-            feature: element,
-            error: getSchemaElementValidationMessage(element, this.languageService)
+            feature: schemaElement,
+            error: getSchemaElementValidationMessage(schemaElement, this.languageService)
           }
         })
       )
@@ -153,20 +153,20 @@ export class ClientSchemaElementUpdateComponent
 
   private setForm(form: Form) {
     this.form$.next(form);
-    const geometryType = this.element.geometry.type;
+    const geometryType = this.schemaElement.geometry.type;
     this.updateElementTypeChoices(geometryType);
   }
 
   private updateElementTypeChoices(geometryType: string) {
     this.clientSchemaElementService
       .getSchemaElementTypes(this.schema.type)
-      .subscribe((elementTypes: ClientSchemaElementTypes) => {
+      .subscribe((schemaElementTypes: ClientSchemaElementTypes) => {
         const form = this.form$.value;
-        const elementTypeField = form.groups[1].fields.find((field: FormField) => {
+        const schemaElementTypeField = form.groups[1].fields.find((field: FormField) => {
           return field.name === 'properties.typeElement';
         }) as FormField<FormFieldSelectInputs>;
-        const choices$ = elementTypeField.inputs.choices as BehaviorSubject<FormFieldSelectChoice[]>;
-        choices$.next(elementTypes[geometryType]);
+        const choices$ = schemaElementTypeField.inputs.choices as BehaviorSubject<FormFieldSelectChoice[]>;
+        choices$.next(schemaElementTypes[geometryType]);
       });
   }
 

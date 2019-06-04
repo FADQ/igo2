@@ -9,7 +9,7 @@ import {
 
 import { BehaviorSubject } from 'rxjs';
 
-import { Client, ClientWorkspace, ClientInfoService } from 'src/lib/client';
+import { Client, ClientController, ClientInfoService } from 'src/lib/client';
 
 @Component({
   selector: 'fadq-client-tool-item',
@@ -21,7 +21,7 @@ export class ClientToolItemComponent {
 
   readonly showContent$: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
-  @Input() workspace: ClientWorkspace;
+  @Input() controller: ClientController;
 
   /**
    * Whether a row is selected
@@ -34,9 +34,9 @@ export class ClientToolItemComponent {
   get selected(): boolean { return this._selected; }
   private _selected = false;
 
-  @Output() clear = new EventEmitter<ClientWorkspace>();
+  @Output() clear = new EventEmitter<ClientController>();
 
-  @Output() select = new EventEmitter<ClientWorkspace>();
+  @Output() select = new EventEmitter<ClientController>();
 
   /**
    * @ignore
@@ -49,12 +49,12 @@ export class ClientToolItemComponent {
   ) {}
 
   onClear() {
-    this.clear.emit(this.workspace);
+    this.clear.emit(this.controller);
   }
 
   onSelect() {
     this.selected = true;
-    this.select.emit(this.workspace);
+    this.select.emit(this.controller);
   }
 
   /**
@@ -73,10 +73,10 @@ export class ClientToolItemComponent {
   }
 
   getLegendInnerColor(): string {
-    return `rgba(${this.workspace.color.join(',')}, 0.15)`;
+    return `rgba(${this.controller.color.join(',')}, 0.15)`;
   }
 
   getLegendOuterColor(): string {
-    return `rgb(${this.workspace.color.join(',')})`;
+    return `rgb(${this.controller.color.join(',')})`;
   }
 }

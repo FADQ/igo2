@@ -161,21 +161,21 @@ fadq-expansion-panel.fadq-expansion-panel-expanded {
 
 fadq-expansion-panel:not(.fadq-expansion-panel-expanded) {
   @include small-screen {
-    igo-editor-selector,
+    igo-workspace-selector,
     fadq-actionbar {
       display: none;
     }
   }
 
   @include tablet {
-    igo-editor-selector,
+    igo-workspace-selector,
     fadq-actionbar {
       display: none;
     }
   }
 
   @include mobile {
-    igo-editor-selector,
+    igo-workspace-selector,
     fadq-actionbar {
       display: none;
     }
@@ -183,12 +183,12 @@ fadq-expansion-panel:not(.fadq-expansion-panel-expanded) {
 }
 
 fadq-expansion-panel {
-  igo-editor-selector {
+  igo-workspace-selector {
     width: calc(#{$fadq-sidenav-width} - #{$igo-icon-size} - 20px)
   }
 
   @include mobile {
-    igo-editor-selector {
+    igo-workspace-selector {
       width: calc(#{$fadq-sidenav-width} - (2 * #{$igo-icon-size}) - 20px);
     }
   }

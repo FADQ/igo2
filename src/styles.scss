@@ -65,3 +65,13 @@ tr.text-centered th div.mat-sort-header-container {
   line-height: 36px !important;
   padding: 0 16px !important;
 }
+
+igo-actionbar igo-actionbar-item.tool-actived {
+  mat-list-item {
+    background-color: inherit !important;
+  }
+
+  button {
+    background-color: #e0e0e0;
+  }
+}

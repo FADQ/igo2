@@ -3,7 +3,7 @@
     <div mat-card-avatar>
       <mat-icon [color]="'accent'">help</mat-icon>
     </div>
-    <mat-card-title>{{'client.schemaElement.slice.message' | translate}}</mat-card-title>
+    <mat-card-title>{{'edition.slice.message' | translate}}</mat-card-title>
   </mat-card-header>
 
   <mat-card-content>
@@ -25,7 +25,7 @@
         color="primary"
         [disabled]="!(submitEnabled$ | async)"
         (click)="onSubmit()">
-        {{ 'client.schemaElement.slice.apply' | translate }}
+        {{ 'edition.slice.apply' | translate }}
       </button>
     </div>
   </mat-card-content>

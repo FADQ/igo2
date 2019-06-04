@@ -8,12 +8,12 @@
   </div>
 
   <igo-list [navigation]="false" [selection]="false">
-    <ng-template ngFor let-workspace [ngForOf]="workspaces.view.all$() | async">
+    <ng-template ngFor let-controller [ngForOf]="controllers.view.all$() | async">
       <fadq-client-tool-item
-        [workspace]="workspace"
-        [selected]="(activeWorkspace$ | async) === workspace"
-        (clear)="onClearWorkspace($event)"
-        (select)="onSelectWorkspace($event)">
+        [controller]="controller"
+        [selected]="(activeController$ | async) === controller"
+        (clear)="onClearController($event)"
+        (select)="onSelectController($event)">
       </fadq-client-tool-item>
     </ng-template>
 
