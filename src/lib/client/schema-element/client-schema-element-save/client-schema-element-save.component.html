@@ -2,6 +2,6 @@
   [store]="store"
   [transaction]="transaction"
   [commitHandler]="commitHandler"
-  (complete)="onComplete()"
+  (complete)="onComplete($event)"
   (cancel)="onCancel()">
 </fadq-edition-save>
