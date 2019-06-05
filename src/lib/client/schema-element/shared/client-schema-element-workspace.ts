@@ -1,4 +1,3 @@
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
 
 import { EntityTableTemplate, Workspace, WorkspaceOptions } from '@igo2/common';

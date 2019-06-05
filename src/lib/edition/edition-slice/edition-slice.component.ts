@@ -147,7 +147,7 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent {
     this.cdRef.detectChanges();
   }
 
-  onSubmit(data: Feature) {
+  onSubmit() {
     const features = this.computeFeatures();
     const results$ = [];
     if (typeof this.processData === 'function') {

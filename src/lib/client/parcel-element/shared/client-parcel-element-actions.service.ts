@@ -41,11 +41,11 @@ export class ClientParcelElementActionsService {
     }
 
     function transactionIsNotEmpty(controller: ClientController): boolean {
-      return controller.transaction.empty === false;
+      return controller.parcelElementTransaction.empty === false;
     }
 
     function transactionIsNotInCommitPhase(controller: ClientController): boolean {
-      return controller.transaction.inCommitPhase === false;
+      return controller.parcelElementTransaction.inCommitPhase === false;
     }
 
     function parcelElementCanBeFilled(controller: ClientController): boolean {
@@ -74,7 +74,7 @@ export class ClientParcelElementActionsService {
         tooltip: 'edition.create.tooltip',
         handler: (widget: Widget, controller: ClientController) => {
           controller.parcelElementWorkspace.activateWidget(widget, {
-            transaction: controller.transaction,
+            transaction: controller.parcelElementTransaction,
             map: controller.map,
             store: controller.parcelElementStore
           });
@@ -91,7 +91,7 @@ export class ClientParcelElementActionsService {
         handler: (widget: Widget, controller: ClientController) => {
           controller.parcelElementWorkspace.activateWidget(widget, {
             parcelElement: controller.parcelElement,
-            transaction: controller.transaction,
+            transaction: controller.parcelElementTransaction,
             map: controller.map,
             store: controller.parcelElementStore
           });
@@ -106,7 +106,7 @@ export class ClientParcelElementActionsService {
         title: 'edition.delete',
         tooltip: 'edition.delete.tooltip',
         handler: (controller: ClientController) => {
-          controller.transaction.delete(controller.parcelElement, controller.parcelElementStore, {
+          controller.parcelElementTransaction.delete(controller.parcelElement, controller.parcelElementStore, {
             title: generateParcelElementOperationTitle(controller.parcelElement, this.languageService)
           });
         },
@@ -122,7 +122,7 @@ export class ClientParcelElementActionsService {
         handler: (widget: Widget, controller: ClientController) => {
           controller.parcelElementWorkspace.activateWidget(widget, {
             parcelElement: controller.parcelElement,
-            transaction: controller.transaction,
+            transaction: controller.parcelElementTransaction,
             map: controller.map,
             store: controller.parcelElementStore
           });
@@ -139,7 +139,7 @@ export class ClientParcelElementActionsService {
         handler: (widget: Widget, controller: ClientController) => {
           controller.parcelElementWorkspace.activateWidget(widget, {
             parcelElement: controller.parcelElement,
-            transaction: controller.transaction,
+            transaction: controller.parcelElementTransaction,
             map: controller.map,
             store: controller.parcelElementStore
           });
@@ -155,7 +155,7 @@ export class ClientParcelElementActionsService {
         tooltip: 'edition.save.tooltip',
         handler: (widget: Widget, controller: ClientController) => {
           controller.parcelElementWorkspace.activateWidget(widget, {
-            transaction: controller.transaction,
+            transaction: controller.parcelElementTransaction,
             store: controller.parcelElementStore
           });
         },
@@ -170,7 +170,7 @@ export class ClientParcelElementActionsService {
         tooltip: 'edition.undo.tooltip',
         handler: (widget: Widget, controller: ClientController) => {
           controller.parcelElementWorkspace.activateWidget(widget, {
-            transaction: controller.transaction
+            transaction: controller.parcelElementTransaction
           });
         },
         args: [this.editionUndoWidget, controller],
@@ -201,7 +201,7 @@ export class ClientParcelElementActionsService {
         handler: (widget: Widget, controller: ClientController) => {
           controller.parcelElementWorkspace.activateWidget(widget, {
             parcelElement: controller.parcelElement,
-            transaction: controller.transaction,
+            transaction: controller.parcelElementTransaction,
             map: controller.map,
             store: controller.parcelElementStore
           });

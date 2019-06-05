@@ -12,11 +12,12 @@ import { Client } from '../shared/client.interfaces';
 import { ClientParcel, ClientParcelDiagram } from '../parcel/shared/client-parcel.interfaces';
 import { createPerClientParcelLayerStyle, createParcelLayerStyle } from '../parcel/shared/client-parcel.utils';
 import { ClientParcelElementWorkspace } from '../parcel-element/shared/client-parcel-element-workspace';
+import { ClientParcelElement } from '../parcel-element/shared/client-parcel-element.interfaces';
+import { ClientParcelElementTransactionService } from '../parcel-element/shared/client-parcel-element-transaction.service';
+
 import { ClientSchema } from '../schema/shared/client-schema.interfaces';
 import { ClientSchemaElement } from '../schema-element/shared/client-schema-element.interfaces';
 import { ClientSchemaElementWorkspace } from '../schema-element/shared/client-schema-element-workspace';
-import { ClientSchemaElementService } from '../schema-element/shared/client-schema-element.service';
-import { ClientParcelElement } from '../parcel-element/shared/client-parcel-element.interfaces';
 import { ClientSchemaElementTransactionService } from '../schema-element/shared/client-schema-element-transaction.service';
 
 export interface ClientControllerOptions {
@@ -25,9 +26,9 @@ export interface ClientControllerOptions {
   workspaceStore: WorkspaceStore;
   parcelWorkspace: Workspace<ClientParcel>;
   parcelElementWorkspace: ClientParcelElementWorkspace;
+  parcelElementTransactionService: ClientParcelElementTransactionService;
   schemaWorkspace: Workspace<ClientSchema>;
   schemaElementWorkspace:ClientSchemaElementWorkspace;
-  schemaElementService: ClientSchemaElementService;
   schemaElementTransactionService: ClientSchemaElementTransactionService;
   color?: [number, number, number];
 }
@@ -97,6 +98,14 @@ export class ClientController {
   get parcelElement(): ClientParcelElement { return this._parcelElement; }
   private _parcelElement: ClientParcelElement;
 
+  /** Parcel element transaction */
+  get parcelElementTransaction(): EntityTransaction { return this._parcelElementTransaction; }
+  private _parcelElementTransaction: EntityTransaction = new EntityTransaction();
+
+  get parcelElementTransactionService(): ClientParcelElementTransactionService {
+    return this.options.parcelElementTransactionService;
+  }
+
   /** Schema workspace */
   get schemaWorkspace(): Workspace<ClientSchema> {
     return this.options.schemaWorkspace;
@@ -121,22 +130,17 @@ export class ClientController {
     return this.schemaElementWorkspace.entityStore as FeatureStore<ClientSchemaElement>;
   }
 
-  /** Element service */
-  get schemaElementService(): ClientSchemaElementService {
-    return this.options.schemaElementService;
-  }
-
-  get schemaElementTransactionService(): ClientSchemaElementTransactionService {
-    return this.options.schemaElementTransactionService;
-  }
-
   /** Active schema element */
   get schemaElement(): ClientSchemaElement { return this._schemaElement; }
   private _schemaElement: ClientSchemaElement;
 
   /** Element transaction */
-  get transaction(): EntityTransaction { return this._transaction; }
-  private _transaction: EntityTransaction = new EntityTransaction();
+  get schemaElementTransaction(): EntityTransaction { return this._schemaElementTransaction; }
+  private _schemaElementTransaction: EntityTransaction = new EntityTransaction();
+
+  get schemaElementTransactionService(): ClientSchemaElementTransactionService {
+    return this.options.schemaElementTransactionService;
+  }
 
   /** Store that holds the diagrams of the active client */
   get diagramStore(): EntityStore<ClientParcelDiagram> { return this._diagramStore; }
@@ -177,6 +181,14 @@ export class ClientController {
   }
 
   stopParcelEdition() {
+    if (!this.parcelElementTransaction.empty) {
+      this.parcelElementTransactionService.enqueue({
+        transaction: this.parcelElementTransaction,
+        proceed: () => this.stopParcelEdition()
+      });
+      return;
+    }
+
     this.teardownParcelElements();
     this.initParcels();
     this.workspaceStore.activateWorkspace(this.parcelWorkspace);
@@ -286,7 +298,7 @@ export class ClientController {
     this.parcelElementWorkspace.deactivate();
     this.parcelElementStore.layer.ol.getSource().clear();
     this.parcelElementStore.clear();
-    this.transaction.clear();
+    this.schemaElementTransaction.clear();
 
     this.workspaceStore.delete(this.parcelElementWorkspace);
   }
@@ -356,7 +368,7 @@ export class ClientController {
     this.schemaElementWorkspace.deactivate();
     this.schemaElementStore.layer.ol.getSource().clear();
     this.schemaElementStore.clear();
-    this.transaction.clear();
+    this.schemaElementTransaction.clear();
     this.workspaceStore.delete(this.schemaElementWorkspace);
   }
 
@@ -388,10 +400,10 @@ export class ClientController {
   }
 
   private setSchema(schema: ClientSchema) {
-    if (!this.transaction.empty) {
+    if (!this.schemaElementTransaction.empty) {
       this.schemaElementTransactionService.enqueue({
         schema: this.schema,
-        transaction: this.transaction,
+        transaction: this.schemaElementTransaction,
         proceed: () => this.setSchema(schema),
         abort: () => this.schemaStore.state.update(this.schema, {selected: true}, true)
       });

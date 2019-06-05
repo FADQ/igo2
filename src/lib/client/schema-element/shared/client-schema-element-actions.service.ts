@@ -44,11 +44,11 @@ export class ClientSchemaElementActionsService {
     }
 
     function transactionIsNotEmpty(controller: ClientController): boolean {
-      return controller.transaction.empty === false;
+      return controller.schemaElementTransaction.empty === false;
     }
 
     function transactionIsNotInCommitPhase(controller: ClientController): boolean {
-      return controller.transaction.inCommitPhase === false;
+      return controller.schemaElementTransaction.inCommitPhase === false;
     }
 
     function schemaElementIsAPolygon(controller: ClientController): boolean {
@@ -74,7 +74,7 @@ export class ClientSchemaElementActionsService {
         handler: (widget: Widget, controller: ClientController) => {
           controller.schemaElementWorkspace.activateWidget(widget, {
             schema: controller.schema,
-            transaction: controller.transaction,
+            transaction: controller.schemaElementTransaction,
             map: controller.map,
             store: controller.schemaElementStore
           });
@@ -92,7 +92,7 @@ export class ClientSchemaElementActionsService {
           controller.schemaElementWorkspace.activateWidget(widget, {
             schemaElement: controller.schemaElement,
             schema: controller.schema,
-            transaction: controller.transaction,
+            transaction: controller.schemaElementTransaction,
             map: controller.map,
             store: controller.schemaElementStore
           });
@@ -107,7 +107,7 @@ export class ClientSchemaElementActionsService {
         title: 'edition.delete',
         tooltip: 'edition.delete.tooltip',
         handler: (controller: ClientController) => {
-          controller.transaction.delete(controller.schemaElement, controller.schemaElementStore, {
+          controller.schemaElementTransaction.delete(controller.schemaElement, controller.schemaElementStore, {
             title: generateSchemaElementOperationTitle(controller.schemaElement, this.languageService)
           });
         },
@@ -124,7 +124,7 @@ export class ClientSchemaElementActionsService {
           controller.schemaElementWorkspace.activateWidget(widget, {
             schemaElement: controller.schemaElement,
             schema: controller.schema,
-            transaction: controller.transaction,
+            transaction: controller.schemaElementTransaction,
             map: controller.map,
             store: controller.schemaElementStore
           });
@@ -142,7 +142,7 @@ export class ClientSchemaElementActionsService {
           controller.schemaElementWorkspace.activateWidget(widget, {
             schemaElement: controller.schemaElement,
             schema: controller.schema,
-            transaction: controller.transaction,
+            transaction: controller.schemaElementTransaction,
             map: controller.map,
             store: controller.schemaElementStore
           });
@@ -159,7 +159,7 @@ export class ClientSchemaElementActionsService {
         handler: (widget: Widget, controller: ClientController) => {
           controller.schemaElementWorkspace.activateWidget(widget, {
             schema: controller.schema,
-            transaction: controller.transaction,
+            transaction: controller.schemaElementTransaction,
             store: controller.schemaElementStore
           });
         },
@@ -174,7 +174,7 @@ export class ClientSchemaElementActionsService {
         tooltip: 'edition.undo.tooltip',
         handler: (widget: Widget, controller: ClientController) => {
           controller.schemaElementWorkspace.activateWidget(widget, {
-            transaction: controller.transaction
+            transaction: controller.schemaElementTransaction
           });
         },
         args: [this.editionUndoWidget, controller],
@@ -190,7 +190,7 @@ export class ClientSchemaElementActionsService {
           controller.schemaElementWorkspace.activateWidget(widget, {
             schemaElement: controller.schemaElement,
             schema: controller.schema,
-            transaction: controller.transaction,
+            transaction: controller.schemaElementTransaction,
             map: controller.map,
             store: controller.schemaElementStore
           });

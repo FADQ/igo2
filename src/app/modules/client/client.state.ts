@@ -8,7 +8,6 @@ import { EntityRecord, EntityStore,  Workspace, WorkspaceStore } from '@igo2/com
 import {
   Client,
   ClientController,
-  ClientSchemaElementTransactionService,
   ClientService,
   ClientParcel,
   ClientParcelYear,
@@ -57,8 +56,7 @@ export class ClientState implements OnDestroy {
   constructor(
     private clientService: ClientService,
     private clientParcelYearService: ClientParcelYearService,
-    private clientControllerService: ClientControllerService,
-    private clientSchemaElementTransactionService: ClientSchemaElementTransactionService
+    private clientControllerService: ClientControllerService
   ) {
     this.initParcelYears();
     this.initControllers();
@@ -109,10 +107,18 @@ export class ClientState implements OnDestroy {
   }
 
   clearController(controller: ClientController) {
-    if (!controller.transaction.empty) {
-      this.clientSchemaElementTransactionService.enqueue({
+    if (!controller.schemaElementTransaction.empty) {
+      controller.schemaElementTransactionService.enqueue({
         schema: controller.schema,
-        transaction: controller.transaction,
+        transaction: controller.schemaElementTransaction,
+        proceed: () => this.clearController(controller)
+      });
+      return;
+    }
+
+    if (!controller.parcelElementTransaction.empty) {
+      controller.parcelElementTransactionService.enqueue({
+        transaction: controller.parcelElementTransaction,
         proceed: () => this.clearController(controller)
       });
       return;

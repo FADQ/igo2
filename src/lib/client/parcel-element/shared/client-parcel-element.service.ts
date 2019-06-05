@@ -1,10 +1,10 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, of } from 'rxjs';
+import { Observable, of, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { EntityTransaction } from '@igo2/common';
+import { EntityOperation, EntityTransaction } from '@igo2/common';
 
 import { ApiService } from 'src/lib/core/api';
 import {
@@ -54,11 +54,37 @@ export class ClientParcelElementService {
    * Commit (save) a whole transaction  containig points, lines and polygons. Each of those geometry type
    * has it's own endpoint so we're making 3 requests. On a success, elements of the same geometry
    * type are fetched and returned
+   * @param schema Parcel
    * @param transaction Transaction shared by all geometry types
    * @returns Observable of the all the elements by geometry type or of an error object
    */
   commitTransaction(
     transaction: EntityTransaction
+  ): Observable<ClientParcelElement[] | Error> {
+    const commits$ = ['Polygon'].map((type: string) => {
+      const operations = transaction.operations.all().filter((operation: EntityOperation) => {
+        const element = (operation.current || operation.previous) as ClientParcelElement;
+        return element.geometry.type === type;
+      });
+
+      return transaction.commit(operations, (tx: EntityTransaction, ops: EntityOperation[]) => {
+        return this.commitOperationsOfType(ops, type);
+      });
+    });
+
+    return zip(...commits$);
+  }
+
+  /**
+   * Commit (save) some operations of a transaction
+   * @param schema Parcel
+   * @param operations Transaction operations
+   * @param geometryType The geometry type of the data we're saving
+   * @returns Observable of the all the elements of that by geometry type or of an error object
+   */
+  private commitOperationsOfType(
+    operations: EntityOperation[],
+    geometryType: string
   ): Observable<ClientParcelElement[] | Error> {
     return of([]);
   }
