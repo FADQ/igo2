@@ -86,7 +86,7 @@ export class MapActionbarComponent implements OnInit, OnDestroy {
       // },
       {
         id: MapAction.ZoomIn,
-        icon: 'zoom_in',
+        icon: 'magnify-plus-outline',
         title: 'map.actionbar.zoomin.title',
         tooltip: 'map.actionbar.zoomin.tooltip',
         handler: () => {
@@ -95,7 +95,7 @@ export class MapActionbarComponent implements OnInit, OnDestroy {
       },
       {
         id: MapAction.ZoomOut,
-        icon: 'zoom_out',
+        icon: 'magnify-minus-outline',
         title: 'map.actionbar.zoomout.title',
         tooltip: 'map.actionbar.zoomout.tooltip',
         handler: () => {
@@ -104,7 +104,7 @@ export class MapActionbarComponent implements OnInit, OnDestroy {
       },
       {
         id: MapAction.PreviousView,
-        icon: 'arrow_back',
+        icon: 'arrow-left',
         title: 'map.actionbar.previousview.title',
         tooltip: 'map.actionbar.previousview.tooltip',
         conditions: [mapViewHasPreviousState],
@@ -114,7 +114,7 @@ export class MapActionbarComponent implements OnInit, OnDestroy {
       },
       {
         id: MapAction.NextView,
-        icon: 'arrow_forward',
+        icon: 'arrow-right',
         title: 'map.actionbar.nextview.title',
         tooltip: 'map.actionbar.nextview.tooltip',
         conditions: [mapViewHasNextState],
@@ -124,7 +124,7 @@ export class MapActionbarComponent implements OnInit, OnDestroy {
       },
       {
         id: MapAction.InitialView,
-        icon: 'public',
+        icon: 'earth',
         title: 'map.actionbar.initialview.title',
         tooltip: 'map.actionbar.initialview.tooltip',
         handler: () => {
@@ -149,7 +149,7 @@ export class MapActionbarComponent implements OnInit, OnDestroy {
       // },
       {
         id: MapAction.GoogleView,
-        icon: 'streetview',
+        icon: 'google-maps',
         title: 'map.actionbar.googleview.title',
         tooltip: 'map.actionbar.googleview.tooltip',
         handler: () => {

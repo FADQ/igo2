@@ -14,8 +14,7 @@ export class ClientParcelActionsService {
     return [
       {
         id: 'startEdition',
-        // icon: 'power_settings_new',
-        icon: 'add_box',
+        icon: 'square-edit-outline',
         title: 'client.parcel.startEdition',
         tooltip: 'client.parcel.startEdition.tooltip',
         handler: function(ctrl: ClientController) {
@@ -25,7 +24,7 @@ export class ClientParcelActionsService {
       },
       {
         id: 'export',
-        icon: 'file_download',
+        icon: 'file-download',
         title: 'client.parcel.exportToCSV',
         tooltip: 'client.parcel.exportToCSV.tooltip',
         handler: function(ctrl: ClientController) {

@@ -3,6 +3,7 @@
     class="igo-chevron"
     mat-list-avatar
     igoCollapse
+    svgIcon="chevron-up"
     [target]="content"
     [collapsed]="!(showContent$ | async)"
     (toggle)="toggleContent($event)">
@@ -13,7 +14,7 @@
   </div>
 
   <button mat-icon-button (click)="onClear()">
-    <mat-icon>clear_outline</mat-icon>
+    <mat-icon svgIcon="close"></mat-icon>
   </button>
   <div *ngIf="controller.color$ | async as color" class="fadq-per-client-legend-thumbnail-container">
     <div class="fadq-per-client-legend-thumbnail-wrapper">

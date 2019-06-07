@@ -29,8 +29,8 @@ import { FeatureStore } from '@igo2/geo';
 export class EditionSaveComponent implements WidgetComponent {
 
   static operationIcons = {
-    [EntityOperationType.Insert]: 'add',
-    [EntityOperationType.Update]: 'edit',
+    [EntityOperationType.Insert]: 'plus',
+    [EntityOperationType.Update]: 'pencil',
     [EntityOperationType.Delete]: 'delete'
   };
 
