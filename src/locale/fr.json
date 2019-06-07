@@ -242,10 +242,13 @@
   },
 
   "icherche": {
+    "adresse": "Adresse",
     "code_postal": "Code Postal",
     "municipalite": "Municipalité",
+    "nom": "Nom",
     "numero_civique": "Numéro civique",
     "numero_civique_suffixe": "Numéro civique (suffix)",
+    "producteur": "Fournisseur",
     "rue": "Rue",
     "type": "Type"
   },
