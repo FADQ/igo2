@@ -22,12 +22,12 @@ import { EditionResult } from '../shared/edition.interfaces';
 import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition.utils';
 
 @Component({
-  selector: 'fadq-edition-form',
-  templateUrl: './edition-form.component.html',
-  styleUrls: ['./edition-form.component.scss'],
+  selector: 'fadq-edition-upsert',
+  templateUrl: './edition-upsert.component.html',
+  styleUrls: ['./edition-upsert.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditionFormComponent implements  OnUpdateInputs, WidgetComponent {
+export class EditionUpsertComponent implements  OnUpdateInputs, WidgetComponent {
 
   /**
    * Error message, if any
@@ -66,9 +66,9 @@ export class EditionFormComponent implements  OnUpdateInputs, WidgetComponent {
   @Input() processData: (data: Feature) => EditionResult | Observable<EditionResult>;
 
   /**
-   * Process data before submit
+   * Generate an operation title
    */
-  @Input() getOperationTitle: (data: Feature, languageService: LanguageService) => EditionResult | Observable<EditionResult>;
+  @Input() getOperationTitle: (data: Feature, languageService: LanguageService) => string;
 
   /**
    * Event emitted on complete
@@ -103,7 +103,7 @@ export class EditionFormComponent implements  OnUpdateInputs, WidgetComponent {
         this.submitResult(resultOrObservable);
       }
     } else {
-      this.submitResult({feature: data as Feature});  
+      this.submitResult({feature: data as Feature});
     }
   }
 
@@ -122,7 +122,7 @@ export class EditionFormComponent implements  OnUpdateInputs, WidgetComponent {
 
   private onSubmitSuccess(feature: Feature) {
     if (this.transaction !== undefined && this.store !== undefined) {
-      this.addToTransaction(feature);  
+      this.addToTransaction(feature);
     }
     this.complete.emit(feature);
   }
@@ -130,7 +130,7 @@ export class EditionFormComponent implements  OnUpdateInputs, WidgetComponent {
   private addToTransaction(feature: Feature) {
     const getOperationTitle = this.getOperationTitle ? this.getOperationTitle : getDefaultOperationTitle;
     const operationTitle = getOperationTitle(feature, this.languageService);
-    
+
     if (this.feature === undefined) {
       this.transaction.insert(feature, this.store, {
         title: operationTitle

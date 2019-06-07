@@ -11,6 +11,9 @@ import {
   ClientSchemaElementUpdateComponent
 } from '../client-schema-element-update/client-schema-element-update.component';
 import {
+  ClientSchemaElementUpdateBatchComponent
+} from '../client-schema-element-update-batch/client-schema-element-update-batch.component';
+import {
   ClientSchemaElementFillComponent
 } from '../client-schema-element-fill/client-schema-element-fill.component';
 import {
@@ -25,6 +28,7 @@ import {
 
 export const ClientSchemaElementCreateWidget = new InjectionToken<Widget>('ClientSchemaElementCreateWidget');
 export const ClientSchemaElementUpdateWidget = new InjectionToken<Widget>('ClientSchemaElementUpdateWidget');
+export const ClientSchemaElementUpdateBatchWidget = new InjectionToken<Widget>('ClientSchemaElementUpdateBatchWidget');
 export const ClientSchemaElementFillWidget = new InjectionToken<Widget>('ClientSchemaElementFillWidget');
 export const ClientSchemaElementSliceWidget = new InjectionToken<Widget>('ClientSchemaElementSliceWidget');
 export const ClientSchemaElementSaveWidget = new InjectionToken<Widget>('ClientSchemaElementSaveWidget');
@@ -51,6 +55,18 @@ export function provideClientSchemaElementUpdateWidget() {
   return {
     provide: ClientSchemaElementUpdateWidget,
     useFactory: clientSchemaElementUpdateWidgetFactory,
+    deps: [WidgetService]
+  };
+}
+
+export function clientSchemaElementUpdateBatchWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(ClientSchemaElementUpdateBatchComponent);
+}
+
+export function provideClientSchemaElementUpdateBatchWidget() {
+  return {
+    provide: ClientSchemaElementUpdateBatchWidget,
+    useFactory: clientSchemaElementUpdateBatchWidgetFactory,
     deps: [WidgetService]
   };
 }

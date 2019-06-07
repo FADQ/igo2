@@ -3,7 +3,8 @@ import {
   Input,
   Output,
   EventEmitter,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  OnInit
 } from '@angular/core';
 
 import { BehaviorSubject, Subject, Observable, of, zip } from 'rxjs';
@@ -29,7 +30,7 @@ import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition
   styleUrls: ['./edition-import.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditionImportComponent implements WidgetComponent {
+export class EditionImportComponent implements WidgetComponent, OnInit {
 
   projection: string;
 
@@ -83,9 +84,9 @@ export class EditionImportComponent implements WidgetComponent {
   @Input() processData: (data: Feature) => EditionResult | Observable<EditionResult>;
 
   /**
-   * Process data before submit
+   * Generate an operation title
    */
-  @Input() getOperationTitle: (data: Feature, languageService: LanguageService) => EditionResult | Observable<EditionResult>;
+  @Input() getOperationTitle: (data: Feature, languageService: LanguageService) => string;
 
   /**
    * Event emitted on complete
@@ -136,17 +137,17 @@ export class EditionImportComponent implements WidgetComponent {
       features.forEach((feature: Feature) => {
         const resultOrObservable = this.processData(feature);
         if (resultOrObservable instanceof Observable) {
-          results$.push(resultOrObservable)
+          results$.push(resultOrObservable);
         } else {
-          results$.push(of(resultOrObservable))
+          results$.push(of(resultOrObservable));
         }
       });
       zip(...results$).subscribe((results: EditionResult[]) => {
         this.submitResults(results.filter((result: EditionResult) => result !== undefined));
       });
     } else {
-      const results = features.map((feature: Feature) => {return {feature}});
-      this.submitResults(results);  
+      const results = features.map((feature: Feature) => ({feature}));
+      this.submitResults(results);
     }
   }
 
@@ -168,7 +169,7 @@ export class EditionImportComponent implements WidgetComponent {
     }
 
     if (this.transaction !== undefined && this.store !== undefined) {
-      this.addToTransaction(features);  
+      this.addToTransaction(features);
     }
 
     const olFeatures = features.map((feature: Feature) => featureToOl(feature, this.map.projection));
@@ -179,7 +180,7 @@ export class EditionImportComponent implements WidgetComponent {
 
   private addToTransaction(features: Feature[]) {
     const getOperationTitle = this.getOperationTitle ? this.getOperationTitle : getDefaultOperationTitle;
-    
+
     features.forEach((feature: Feature) => {
       this.transaction.insert(feature, this.store, {
         title: getOperationTitle(feature, this.languageService)

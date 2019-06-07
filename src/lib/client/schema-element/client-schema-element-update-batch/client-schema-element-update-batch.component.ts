@@ -4,36 +4,50 @@ import {
   Output,
   EventEmitter,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  OnInit
 } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import {
+  EntityTransaction,
+  Form,
+  WidgetComponent,
+  OnUpdateInputs
+} from '@igo2/common';
 import { LanguageService } from '@igo2/core';
-
-import { EntityTransaction, WidgetComponent, OnUpdateInputs } from '@igo2/common';
 import { FeatureStore, IgoMap } from '@igo2/geo';
 
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import { ClientSchemaElement } from '../shared/client-schema-element.interfaces';
 import { ClientSchemaElementService } from '../shared/client-schema-element.service';
+import { ClientSchemaElementFormService } from '../shared/client-schema-element-form.service';
+
 import {
   generateSchemaElementOperationTitle,
   getSchemaElementValidationMessage
 } from '../shared/client-schema-element.utils';
 
 @Component({
-  selector: 'fadq-client-schema-element-import',
-  templateUrl: './client-schema-element-import.component.html',
-  styleUrls: ['./client-schema-element-import.component.scss'],
+  selector: 'fadq-client-schema-element-update-batch-form',
+  templateUrl: './client-schema-element-update-batch.component.html',
+  styleUrls: ['./client-schema-element-update-batch.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientSchemaElementImportComponent implements OnUpdateInputs, WidgetComponent {
+export class ClientSchemaElementUpdateBatchComponent
+    implements OnInit, OnUpdateInputs, WidgetComponent {
 
   /**
-   * Map to import elements on
+   * Update form
+   * @internal
+   */
+  form$ = new BehaviorSubject<Form>(undefined);
+
+  /**
+   * Map to draw elements on
    */
   @Input() map: IgoMap;
 
@@ -46,6 +60,11 @@ export class ClientSchemaElementImportComponent implements OnUpdateInputs, Widge
    * Schema element transaction
    */
   @Input() transaction: EntityTransaction;
+
+  /**
+   * Schema elements
+   */
+  @Input() schemaElements: ClientSchemaElement[];
 
   /**
    * Schema
@@ -72,9 +91,16 @@ export class ClientSchemaElementImportComponent implements OnUpdateInputs, Widge
 
   constructor(
     private clientSchemaElementService: ClientSchemaElementService,
+    private clientSchemaElementFormService: ClientSchemaElementFormService,
     private languageService: LanguageService,
     private cdRef: ChangeDetectorRef
   ) {}
+
+  ngOnInit() {
+    this.clientSchemaElementFormService
+      .buildUpdateBatchForm(this.schema)
+      .subscribe((form: Form) => this.setForm(form));
+  }
 
   /**
    * Implemented as part of OnUpdateInputs
@@ -83,7 +109,7 @@ export class ClientSchemaElementImportComponent implements OnUpdateInputs, Widge
     this.cdRef.detectChanges();
   }
 
-  onComplete(schemaElements: ClientSchemaElement[]) {
+  onComplete(schemaElement: ClientSchemaElement) {
     this.complete.emit();
   }
 
@@ -92,18 +118,19 @@ export class ClientSchemaElementImportComponent implements OnUpdateInputs, Widge
   }
 
   private processSchemaElement(data: ClientSchemaElement): Observable<EditionResult> {
-    Object.assign(data.properties, {
-      idElementGeometrique: undefined,
-      description: undefined,
-      etiquette: undefined
-    });
     return this.clientSchemaElementService.createSchemaElement(this.schema, data)
       .pipe(
         map((schemaElement: ClientSchemaElement): EditionResult => {
-          const error =  getSchemaElementValidationMessage(schemaElement, this.languageService);
-          return error === undefined ? {feature: schemaElement} : undefined;
+          return {
+            feature: schemaElement,
+            error: getSchemaElementValidationMessage(schemaElement, this.languageService)
+          };
         })
       );
+  }
+
+  private setForm(form: Form) {
+    this.form$.next(form);
   }
 
 }

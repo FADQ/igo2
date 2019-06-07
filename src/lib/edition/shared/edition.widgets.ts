@@ -4,28 +4,42 @@ import { InjectionToken } from '@angular/core';
 
 import { Widget, WidgetService } from '@igo2/common';
 
-import { EditionFormComponent } from '../edition-form/edition-form.component';
+import { EditionUpsertComponent } from '../edition-upsert/edition-upsert.component';
+import { EditionUpdateBatchComponent } from '../edition-update-batch/edition-update-batch.component';
 import { EditionFillComponent } from '../edition-fill/edition-fill.component';
 import { EditionImportComponent } from '../edition-import/edition-import.component';
 import { EditionSaveComponent } from '../edition-save/edition-save.component';
 import { EditionSliceComponent } from '../edition-slice/edition-slice.component';
 import { EditionUndoComponent } from '../edition-undo/edition-undo.component';
 
-export const EditionFormWidget = new InjectionToken<Widget>('EditionFormWidget');
+export const EditionUpsertWidget = new InjectionToken<Widget>('EditionUpsertWidget');
+export const EditionUpdateBatchWidget = new InjectionToken<Widget>('EditionUpdateBatchWidget');
 export const EditionFillWidget = new InjectionToken<Widget>('EditionFillWidget');
 export const EditionImportWidget = new InjectionToken<Widget>('EditionImportWidget');
 export const EditionSaveWidget = new InjectionToken<Widget>('EditionSaveWidget');
 export const EditionSliceWidget = new InjectionToken<Widget>('EditionSliceWidget');
 export const EditionUndoWidget = new InjectionToken<Widget>('EditionUndoWidget');
 
-export function editionFormWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(EditionFormComponent);
+export function editionUpsertWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(EditionUpsertComponent);
 }
 
-export function provideEditionFormWidget() {
+export function provideEditionUpsertWidget() {
   return {
-    provide: EditionFormWidget,
-    useFactory: editionFormWidgetFactory,
+    provide: EditionUpsertWidget,
+    useFactory: editionUpsertWidgetFactory,
+    deps: [WidgetService]
+  };
+}
+
+export function editionUpdateBatchWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(EditionUpdateBatchComponent);
+}
+
+export function provideEditionUpdateBatchWidget() {
+  return {
+    provide: EditionUpdateBatchWidget,
+    useFactory: editionUpdateBatchWidgetFactory,
     deps: [WidgetService]
   };
 }

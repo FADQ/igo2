@@ -18,8 +18,8 @@ export class ClientParcelActionsService {
         icon: 'add_box',
         title: 'client.parcel.startEdition',
         tooltip: 'client.parcel.startEdition.tooltip',
-        handler: function(controller: ClientController) {
-          controller.startParcelEdition();
+        handler: function(ctrl: ClientController) {
+          ctrl.startParcelEdition();
         },
         args: [controller]
       },
@@ -28,13 +28,13 @@ export class ClientParcelActionsService {
         icon: 'file_download',
         title: 'client.parcel.exportToCSV',
         tooltip: 'client.parcel.exportToCSV.tooltip',
-        handler: function(controller: ClientController) {
-          const workspace = controller.parcelWorkspace;
+        handler: function(ctrl: ClientController) {
+          const workspace = ctrl.parcelWorkspace;
           const columns = workspace.meta.tableTemplate.columns;
           const headers = columns.map((column: EntityTableColumn) => column.title);
           const rows = entitiesToRowData(workspace.entityStore.view.all(), columns);
 
-          const fileName = `Parcelles du client ${controller.client.info.numero}.csv`;
+          const fileName = `Parcelles du client ${ctrl.client.info.numero}.csv`;
           exportToCSV([headers].concat(rows), fileName, ';');
         },
         args: [controller]

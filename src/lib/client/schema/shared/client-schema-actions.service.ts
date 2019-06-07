@@ -29,16 +29,16 @@ export class ClientSchemaActionsService {
 
   buildActions(controller: ClientController): Action[] {
 
-    function schemaIsDefined(controller: ClientController): boolean {
-      return controller.schema !== undefined;
+    function schemaIsDefined(ctrl: ClientController): boolean {
+      return ctrl.schema !== undefined;
     }
 
-    function schemaIsOfTypeLSE(controller: ClientController): boolean {
-      return schemaIsDefined(controller) && controller.schema.type === ClientSchemaType.LSE;
+    function schemaIsOfTypeLSE(ctrl: ClientController): boolean {
+      return schemaIsDefined(ctrl) && ctrl.schema.type === ClientSchemaType.LSE;
     }
 
-    function schemaIsNotOfTypeLSE(controller: ClientController): boolean {
-      return schemaIsDefined(controller) && controller.schema.type !== ClientSchemaType.LSE;
+    function schemaIsNotOfTypeLSE(ctrl: ClientController): boolean {
+      return schemaIsDefined(ctrl) && ctrl.schema.type !== ClientSchemaType.LSE;
     }
 
     const conditionArgs = [controller];
@@ -49,11 +49,11 @@ export class ClientSchemaActionsService {
         icon: 'add',
         title: 'client.schema.create',
         tooltip: 'client.schema.create.tooltip',
-        handler: function(widget: Widget, controller: ClientController) {
-          controller.schemaWorkspace.activateWidget(widget, {
-            client: controller.client,
-            schema: controller.schema,
-            store: controller.schemaWorkspace.entityStore
+        handler: function(widget: Widget, ctrl: ClientController) {
+          ctrl.schemaWorkspace.activateWidget(widget, {
+            client: ctrl.client,
+            schema: ctrl.schema,
+            store: ctrl.schemaWorkspace.entityStore
           });
         },
         args: [this.clientSchemaCreateWidget, controller]
@@ -63,11 +63,11 @@ export class ClientSchemaActionsService {
         icon: 'edit',
         title: 'client.schema.update',
         tooltip: 'client.schema.update.tooltip',
-        handler: function(widget: Widget, controller: ClientController) {
-          controller.schemaWorkspace.activateWidget(widget, {
-            client: controller.client,
-            schema: controller.schema,
-            store: controller.schemaWorkspace.entityStore
+        handler: function(widget: Widget, ctrl: ClientController) {
+          ctrl.schemaWorkspace.activateWidget(widget, {
+            client: ctrl.client,
+            schema: ctrl.schema,
+            store: ctrl.schemaWorkspace.entityStore
           });
         },
         args: [this.clientSchemaUpdateWidget, controller],
@@ -79,11 +79,11 @@ export class ClientSchemaActionsService {
         icon: 'delete',
         title: 'client.schema.delete',
         tooltip: 'client.schema.delete.tooltip',
-        handler: function(widget: Widget, controller: ClientController) {
-          controller.schemaWorkspace.activateWidget(widget, {
-            client: controller.client,
-            schema: controller.schema,
-            store: controller.schemaWorkspace.entityStore
+        handler: function(widget: Widget, ctrl: ClientController) {
+          ctrl.schemaWorkspace.activateWidget(widget, {
+            client: ctrl.client,
+            schema: ctrl.schema,
+            store: ctrl.schemaWorkspace.entityStore
           });
         },
         args: [this.clientSchemaDeleteWidget, controller],
@@ -95,11 +95,11 @@ export class ClientSchemaActionsService {
         icon: 'queue',
         title: 'client.schema.duplicate',
         tooltip: 'client.schema.duplicate.tooltip',
-        handler: function(widget: Widget, controller: ClientController) {
-          controller.schemaWorkspace.activateWidget(widget, {
-            client: controller.client,
-            schema: controller.schema,
-            store: controller.schemaWorkspace.entityStore
+        handler: function(widget: Widget, ctrl: ClientController) {
+          ctrl.schemaWorkspace.activateWidget(widget, {
+            client: ctrl.client,
+            schema: ctrl.schema,
+            store: ctrl.schemaWorkspace.entityStore
           });
         },
         args: [this.clientSchemaDuplicateWidget, controller],
@@ -111,10 +111,10 @@ export class ClientSchemaActionsService {
         icon: 'attach_file',
         title: 'client.schema.manageFiles',
         tooltip: 'client.schema.manageFiles.tooltip',
-        handler: function(widget: Widget, controller: ClientController) {
-          controller.schemaWorkspace.activateWidget(widget, {schema: controller.schema}, {
+        handler: function(widget: Widget, ctrl: ClientController) {
+          ctrl.schemaWorkspace.activateWidget(widget, {schema: ctrl.schema}, {
             complete: (count: number) => {
-              controller.schemaWorkspace.entityStore.update(Object.assign({}, controller.schema, {nbDocuments: count}));
+              ctrl.schemaWorkspace.entityStore.update(Object.assign({}, ctrl.schema, {nbDocuments: count}));
             }
           });
         },
@@ -127,11 +127,11 @@ export class ClientSchemaActionsService {
         icon: 'swap_horiz',
         title: 'client.schema.transfer',
         tooltip: 'client.schema.transfer.tooltip',
-        handler: function(widget: Widget, controller: ClientController) {
-          controller.schemaWorkspace.activateWidget(widget, {
-            client: controller.client,
-            schema: controller.schema,
-            store: controller.schemaWorkspace.entityStore
+        handler: function(widget: Widget, ctrl: ClientController) {
+          ctrl.schemaWorkspace.activateWidget(widget, {
+            client: ctrl.client,
+            schema: ctrl.schema,
+            store: ctrl.schemaWorkspace.entityStore
           });
         },
         args: [this.clientSchemaTransferWidget, controller],

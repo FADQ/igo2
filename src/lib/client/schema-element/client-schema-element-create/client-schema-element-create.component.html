@@ -1,4 +1,4 @@
-<fadq-edition-form
+<fadq-edition-upsert
   *ngIf="form$ | async as form"
   [form]="form"
   [store]="store"
@@ -8,4 +8,4 @@
   [getOperationTitle]="getOperationTitle"
   (complete)="onComplete($event)"
   (cancel)="onCancel()">
-</fadq-edition-form>
+</fadq-edition-upsert>

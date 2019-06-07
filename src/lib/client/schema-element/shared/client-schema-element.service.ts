@@ -98,8 +98,8 @@ export class ClientSchemaElementService {
       .pipe(
         map((types: ClientSchemaElementTypes): string => {
           const allTypes =  Object.values(types)
-            .reduce((acc: ClientSchemaElementType[], types: ClientSchemaElementTypes) => {
-              return acc.concat(...Object.values(types));
+            .reduce((acc: ClientSchemaElementType[], _types: ClientSchemaElementTypes) => {
+              return acc.concat(...Object.values(_types));
             }, []);
           const type = allTypes.find((_type: ClientSchemaElementType) => _type.value === elementType);
 
@@ -141,7 +141,7 @@ export class ClientSchemaElementService {
     }, data.properties);
 
     const partial = Object.assign({}, data, {properties}) as ClientSchemaElement;
-  
+
     return zip(
       of(partial),
       this.getSchemaElementTypeDescription(schema.type, properties.typeElement)

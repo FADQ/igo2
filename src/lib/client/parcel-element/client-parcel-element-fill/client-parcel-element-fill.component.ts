@@ -64,7 +64,7 @@ export class ClientParcelElementFillComponent implements OnUpdateInputs, WidgetC
   get getOperationTitle(): (data: ClientParcelElement, languageService: LanguageService) => string  {
     return generateParcelElementOperationTitle;
   }
-  
+
   get processData(): (data: ClientParcelElement) => Observable<EditionResult>  {
     return (data: ClientParcelElement): Observable<EditionResult> => this.processParcelElement(data);
   }
@@ -97,9 +97,9 @@ export class ClientParcelElementFillComponent implements OnUpdateInputs, WidgetC
           return {
             feature: parcelElement,
             error: getParcelElementValidationMessage(parcelElement, this.languageService)
-          }
+          };
         })
-      )
+      );
   }
 
 }

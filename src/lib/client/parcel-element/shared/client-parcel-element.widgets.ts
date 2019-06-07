@@ -9,6 +9,9 @@ import {
   ClientParcelElementUpdateComponent
 } from '../client-parcel-element-update/client-parcel-element-update.component';
 import {
+  ClientParcelElementUpdateBatchComponent
+} from '../client-parcel-element-update-batch/client-parcel-element-update-batch.component';
+import {
   ClientParcelElementFillComponent
 } from '../client-parcel-element-fill/client-parcel-element-fill.component';
 import {
@@ -26,6 +29,7 @@ import {
 
 export const ClientParcelElementCreateWidget = new InjectionToken<Widget>('ClientParcelElementCreateWidget');
 export const ClientParcelElementUpdateWidget = new InjectionToken<Widget>('ClientParcelElementUpdateWidget');
+export const ClientParcelElementUpdateBatchWidget = new InjectionToken<Widget>('ClientParcelElementUpdateBatchWidget');
 export const ClientParcelElementFillWidget = new InjectionToken<Widget>('ClientParcelElementFillWidget');
 export const ClientParcelElementSliceWidget = new InjectionToken<Widget>('ClientParcelElementSliceWidget');
 export const ClientParcelElementSaveWidget = new InjectionToken<Widget>('ClientParcelElementSaveWidget');
@@ -53,6 +57,18 @@ export function provideClientParcelElementUpdateWidget() {
   return {
     provide: ClientParcelElementUpdateWidget,
     useFactory: clientParcelElementUpdateWidgetFactory,
+    deps: [WidgetService]
+  };
+}
+
+export function clientParcelElementUpdateBatchWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(ClientParcelElementUpdateBatchComponent);
+}
+
+export function provideClientParcelElementUpdateBatchWidget() {
+  return {
+    provide: ClientParcelElementUpdateBatchWidget,
+    useFactory: clientParcelElementUpdateBatchWidgetFactory,
     deps: [WidgetService]
   };
 }
