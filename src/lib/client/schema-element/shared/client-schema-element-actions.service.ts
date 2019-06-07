@@ -7,9 +7,11 @@ import { entitiesToRowData, exportToCSV } from '@igo2/geo';
 import { EditionUndoWidget } from '../../../edition/shared/edition.widgets';
 
 import { ClientController } from '../../shared/controller';
+import { ClientSchemaElement } from './client-schema-element.interfaces';
 import {
   ClientSchemaElementCreateWidget,
   ClientSchemaElementUpdateWidget,
+  ClientSchemaElementUpdateBatchWidget,
   ClientSchemaElementFillWidget,
   ClientSchemaElementSliceWidget,
   ClientSchemaElementSaveWidget,
@@ -25,6 +27,7 @@ export class ClientSchemaElementActionsService {
   constructor(
     @Inject(ClientSchemaElementCreateWidget) private clientSchemaElementCreateWidget: Widget,
     @Inject(ClientSchemaElementUpdateWidget) private clientSchemaElementUpdateWidget: Widget,
+    @Inject(ClientSchemaElementUpdateBatchWidget) private clientSchemaElementUpdateBatchWidget: Widget,
     @Inject(ClientSchemaElementFillWidget) private clientSchemaElementFillWidget: Widget,
     @Inject(ClientSchemaElementSliceWidget) private clientSchemaElementSliceWidget: Widget,
     @Inject(ClientSchemaElementSaveWidget) private clientSchemaElementSaveWidget: Widget,
@@ -35,30 +38,34 @@ export class ClientSchemaElementActionsService {
 
   buildActions(controller: ClientController): Action[] {
 
-    function schemaIsDefined(controller: ClientController): boolean {
-      return controller.schema !== undefined;
+    function schemaIsDefined(ctrl: ClientController): boolean {
+      return ctrl.schema !== undefined;
     }
 
-    function schemaElementIsDefined(controller: ClientController): boolean {
-      return controller.schemaElement !== undefined;
+    function oneSchemaElementIsActive(ctrl: ClientController): boolean {
+      return ctrl.activeSchemaElement !== undefined;
     }
 
-    function transactionIsNotEmpty(controller: ClientController): boolean {
-      return controller.schemaElementTransaction.empty === false;
+    function oneOrMoreSchemaElementAreSelected(ctrl: ClientController): boolean {
+      return ctrl.selectedSchemaElements.length > 0;
     }
 
-    function transactionIsNotInCommitPhase(controller: ClientController): boolean {
-      return controller.schemaElementTransaction.inCommitPhase === false;
+    function transactionIsNotEmpty(ctrl: ClientController): boolean {
+      return ctrl.schemaElementTransaction.empty === false;
     }
 
-    function schemaElementIsAPolygon(controller: ClientController): boolean {
-      const schemaElement = controller.schemaElement;
+    function transactionIsNotInCommitPhase(ctrl: ClientController): boolean {
+      return ctrl.schemaElementTransaction.inCommitPhase === false;
+    }
+
+    function schemaElementIsAPolygon(ctrl: ClientController): boolean {
+      const schemaElement = ctrl.activeSchemaElement;
       const geometry = schemaElement === undefined ? undefined : schemaElement.geometry;
       return geometry !== undefined && geometry.type === 'Polygon';
     }
 
-    function schemaElementCanBeFilled(controller: ClientController): boolean {
-      const schemaElement = controller.schemaElement;
+    function schemaElementCanBeFilled(ctrl: ClientController): boolean {
+      const schemaElement = ctrl.activeSchemaElement;
       const geometry = schemaElement === undefined ? undefined : schemaElement.geometry;
       return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length > 1;
     }
@@ -71,12 +78,12 @@ export class ClientSchemaElementActionsService {
         icon: 'add',
         title: 'edition.create',
         tooltip: 'edition.create.tooltip',
-        handler: (widget: Widget, controller: ClientController) => {
-          controller.schemaElementWorkspace.activateWidget(widget, {
-            schema: controller.schema,
-            transaction: controller.schemaElementTransaction,
-            map: controller.map,
-            store: controller.schemaElementStore
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.schemaElementWorkspace.activateWidget(widget, {
+            schema: ctrl.schema,
+            transaction: ctrl.schemaElementTransaction,
+            map: ctrl.map,
+            store: ctrl.schemaElementStore
           });
         },
         args: [this.clientSchemaElementCreateWidget, controller],
@@ -88,17 +95,30 @@ export class ClientSchemaElementActionsService {
         icon: 'edit',
         title: 'edition.update',
         tooltip: 'edition.update.tooltip',
-        handler: (widget: Widget, controller: ClientController) => {
-          controller.schemaElementWorkspace.activateWidget(widget, {
-            schemaElement: controller.schemaElement,
-            schema: controller.schema,
-            transaction: controller.schemaElementTransaction,
-            map: controller.map,
-            store: controller.schemaElementStore
-          });
+        handler: (singleWidget: Widget, batchWidget: Widget, ctrl: ClientController) => {
+          const inputs = {
+            schema: ctrl.schema,
+            transaction: ctrl.schemaElementTransaction,
+            map: ctrl.map,
+            store: ctrl.schemaElementStore
+          };
+
+          if (ctrl.activeSchemaElement !== undefined) {
+            ctrl.schemaElementWorkspace.activateWidget(singleWidget, Object.assign({
+              schemaElement: ctrl.activeSchemaElement
+            }, inputs));
+          } else {
+            ctrl.schemaElementWorkspace.activateWidget(batchWidget, Object.assign({
+              schemaElements: ctrl.selectedSchemaElements
+            }, inputs));
+          }
         },
-        args: [this.clientSchemaElementUpdateWidget, controller],
-        conditions: [schemaIsDefined, schemaElementIsDefined, transactionIsNotInCommitPhase],
+        args: [
+          this.clientSchemaElementUpdateWidget,
+          this.clientSchemaElementUpdateBatchWidget,
+          controller
+        ],
+        conditions: [oneOrMoreSchemaElementAreSelected, transactionIsNotInCommitPhase],
         conditionArgs
       },
       {
@@ -106,13 +126,18 @@ export class ClientSchemaElementActionsService {
         icon: 'delete',
         title: 'edition.delete',
         tooltip: 'edition.delete.tooltip',
-        handler: (controller: ClientController) => {
-          controller.schemaElementTransaction.delete(controller.schemaElement, controller.schemaElementStore, {
-            title: generateSchemaElementOperationTitle(controller.schemaElement, this.languageService)
+        handler: (ctrl: ClientController) => {
+          const store = ctrl.schemaElementStore;
+          const transaction = ctrl.schemaElementTransaction;
+          const schemaElements = ctrl.selectedSchemaElements;
+          schemaElements.forEach((schemaElement: ClientSchemaElement) => {
+            transaction.delete(schemaElement, store, {
+              title: generateSchemaElementOperationTitle(schemaElement, this.languageService)
+            });
           });
         },
         args: [controller],
-        conditions: [schemaElementIsDefined, transactionIsNotInCommitPhase],
+        conditions: [oneOrMoreSchemaElementAreSelected, transactionIsNotInCommitPhase],
         conditionArgs
       },
       {
@@ -120,17 +145,17 @@ export class ClientSchemaElementActionsService {
         icon: 'select_all',
         title: 'edition.fill',
         tooltip: 'edition.fill.tooltip',
-        handler: (widget: Widget, controller: ClientController) => {
-          controller.schemaElementWorkspace.activateWidget(widget, {
-            schemaElement: controller.schemaElement,
-            schema: controller.schema,
-            transaction: controller.schemaElementTransaction,
-            map: controller.map,
-            store: controller.schemaElementStore
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.schemaElementWorkspace.activateWidget(widget, {
+            schemaElement: ctrl.activeSchemaElement,
+            schema: ctrl.schema,
+            transaction: ctrl.schemaElementTransaction,
+            map: ctrl.map,
+            store: ctrl.schemaElementStore
           });
         },
         args: [this.clientSchemaElementFillWidget, controller],
-        conditions: [schemaElementIsDefined, transactionIsNotInCommitPhase, schemaElementCanBeFilled],
+        conditions: [oneSchemaElementIsActive, transactionIsNotInCommitPhase, schemaElementCanBeFilled],
         conditionArgs
       },
       {
@@ -138,17 +163,17 @@ export class ClientSchemaElementActionsService {
         icon: 'flip',
         title: 'edition.slice',
         tooltip: 'edition.slice.tooltip',
-        handler: (widget: Widget, controller: ClientController) => {
-          controller.schemaElementWorkspace.activateWidget(widget, {
-            schemaElement: controller.schemaElement,
-            schema: controller.schema,
-            transaction: controller.schemaElementTransaction,
-            map: controller.map,
-            store: controller.schemaElementStore
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.schemaElementWorkspace.activateWidget(widget, {
+            schemaElement: ctrl.activeSchemaElement,
+            schema: ctrl.schema,
+            transaction: ctrl.schemaElementTransaction,
+            map: ctrl.map,
+            store: ctrl.schemaElementStore
           });
         },
         args: [this.clientSchemaElementSliceWidget, controller],
-        conditions: [schemaElementIsDefined, transactionIsNotInCommitPhase, schemaElementIsAPolygon],
+        conditions: [oneSchemaElementIsActive, transactionIsNotInCommitPhase, schemaElementIsAPolygon],
         conditionArgs
       },
       {
@@ -156,11 +181,11 @@ export class ClientSchemaElementActionsService {
         icon: 'save',
         title: 'edition.save',
         tooltip: 'edition.save.tooltip',
-        handler: (widget: Widget, controller: ClientController) => {
-          controller.schemaElementWorkspace.activateWidget(widget, {
-            schema: controller.schema,
-            transaction: controller.schemaElementTransaction,
-            store: controller.schemaElementStore
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.schemaElementWorkspace.activateWidget(widget, {
+            schema: ctrl.schema,
+            transaction: ctrl.schemaElementTransaction,
+            store: ctrl.schemaElementStore
           });
         },
         args: [this.clientSchemaElementSaveWidget, controller],
@@ -172,9 +197,9 @@ export class ClientSchemaElementActionsService {
         icon: 'undo',
         title: 'edition.undo',
         tooltip: 'edition.undo.tooltip',
-        handler: (widget: Widget, controller: ClientController) => {
-          controller.schemaElementWorkspace.activateWidget(widget, {
-            transaction: controller.schemaElementTransaction
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.schemaElementWorkspace.activateWidget(widget, {
+            transaction: ctrl.schemaElementTransaction
           });
         },
         args: [this.editionUndoWidget, controller],
@@ -186,13 +211,13 @@ export class ClientSchemaElementActionsService {
         icon: 'input',
         title: 'client.schemaElement.importData',
         tooltip: 'client.schemaElement.importData.tooltip',
-        handler: (widget: Widget, controller: ClientController) => {
-          controller.schemaElementWorkspace.activateWidget(widget, {
-            schemaElement: controller.schemaElement,
-            schema: controller.schema,
-            transaction: controller.schemaElementTransaction,
-            map: controller.map,
-            store: controller.schemaElementStore
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.schemaElementWorkspace.activateWidget(widget, {
+            schemaElement: ctrl.activeSchemaElement,
+            schema: ctrl.schema,
+            transaction: ctrl.schemaElementTransaction,
+            map: ctrl.map,
+            store: ctrl.schemaElementStore
           });
         },
         args: [this.clientSchemaElementImportWidget, controller],
@@ -204,13 +229,13 @@ export class ClientSchemaElementActionsService {
         icon: 'file_download',
         title: 'edition.exportToCSV',
         tooltip: 'edition.exportToCSV.tooltip',
-        handler: (controller: ClientController) => {
-          const workspace = controller.schemaElementWorkspace;
+        handler: (ctrl: ClientController) => {
+          const workspace = ctrl.schemaElementWorkspace;
           const columns = workspace.meta.tableTemplate.columns;
           const headers = columns.map((column: EntityTableColumn) => column.title);
           const rows = entitiesToRowData(workspace.entityStore.view.all(), columns);
 
-          const fileName = `Éléments du schéma ${controller.schema.id}.csv`;
+          const fileName = `Éléments du schéma ${ctrl.schema.id}.csv`;
           exportToCSV([headers].concat(rows), fileName, ';');
         },
         args: [controller]

@@ -1,0 +1,38 @@
+<p
+  *ngIf="errorMessage$ | async as errorMessage"
+  class="fadq-error-text">
+  {{errorMessage}}
+</p>
+
+<igo-feature-form
+  class="igo-form-compact"
+  [form]="form"
+  [feature]="baseFeature$ | async"
+  [store]="store"
+  (submitForm)="onSubmit($event)">
+
+  <mat-tab-group *ngIf="form.groups.length > 0" [selectedIndex]="groupIndex">
+    <mat-tab *ngFor="let group of form.groups" [label]="group.title">
+      <igo-form-group [group]="group"></igo-form-group>
+    </mat-tab>
+  </mat-tab-group>
+
+  <igo-form-field *ngFor="let field of form.fields" [field]="field"></igo-form-field>
+
+  <div formButtons>
+    <button
+      mat-button
+      type="button"
+      (click)="onCancel()">
+      {{ 'cancel' | translate }}
+    </button>
+    <button
+      mat-raised-button
+      type="submit"
+      color="primary"
+      [disabled]="!form.control.valid">
+      {{ 'apply' | translate }}
+    </button>
+  </div>
+  
+</igo-feature-form>

@@ -40,7 +40,7 @@ function getParcelFeatureColor(olFeature: OlFeature) {
     1: [255, 139, 0],
     2: [35, 140, 0],
     3: [0, 218, 250]
-  }
+  };
   return colors[ olFeature.get('relation')];
 }
 

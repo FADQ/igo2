@@ -90,7 +90,7 @@ export class ClientParcelElementUpdateComponent
   get getOperationTitle(): (data: ClientParcelElement, languageService: LanguageService) => string  {
     return generateParcelElementOperationTitle;
   }
-  
+
   get processData(): (data: ClientParcelElement) => Observable<EditionResult>  {
     return (data: ClientParcelElement): Observable<EditionResult> => this.processParcelElement(data);
   }
@@ -137,9 +137,9 @@ export class ClientParcelElementUpdateComponent
           return {
             feature: parcelElement,
             error: getParcelElementValidationMessage(parcelElement, this.languageService)
-          }
+          };
         })
-      )
+      );
   }
 
   private setForm(form: Form) {

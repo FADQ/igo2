@@ -79,7 +79,7 @@ export class ClientState implements OnDestroy {
     const annee = this.parcelYear ? this.parcelYear.annee : undefined;
     return this.clientService.getClientByNum(clientNum, annee);
   }
-  
+
   addClient(client: Client | undefined) {
     this.setClientNotFound(false);
 

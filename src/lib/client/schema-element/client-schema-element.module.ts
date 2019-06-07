@@ -8,6 +8,9 @@ import {
   FadqLibClientSchemaElementUpdateModule
 } from './client-schema-element-update/client-schema-element-update.module';
 import {
+  FadqLibClientSchemaElementUpdateBatchModule
+} from './client-schema-element-update-batch/client-schema-element-update-batch.module';
+import {
   FadqLibClientSchemaElementFillModule
 } from './client-schema-element-fill/client-schema-element-fill.module';
 import {
@@ -32,6 +35,7 @@ import {
 import {
   provideClientSchemaElementCreateWidget,
   provideClientSchemaElementUpdateWidget,
+  provideClientSchemaElementUpdateBatchWidget,
   provideClientSchemaElementFillWidget,
   provideClientSchemaElementSliceWidget,
   provideClientSchemaElementSaveWidget,
@@ -45,6 +49,7 @@ import {
   exports: [
     FadqLibClientSchemaElementCreateModule,
     FadqLibClientSchemaElementUpdateModule,
+    FadqLibClientSchemaElementUpdateBatchModule,
     FadqLibClientSchemaElementFillModule,
     FadqLibClientSchemaElementSliceModule,
     FadqLibClientSchemaElementSaveModule,
@@ -64,6 +69,7 @@ export class FadqLibClientSchemaElementModule {
         provideClientSchemaElementService(),
         provideClientSchemaElementCreateWidget(),
         provideClientSchemaElementUpdateWidget(),
+        provideClientSchemaElementUpdateBatchWidget(),
         provideClientSchemaElementFillWidget(),
         provideClientSchemaElementSliceWidget(),
         provideClientSchemaElementSaveWidget(),

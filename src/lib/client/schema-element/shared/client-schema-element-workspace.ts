@@ -15,7 +15,7 @@ export interface ClientSchemaElementWorkspaceOptions extends WorkspaceOptions {
     type: 'schemaElement',
     tableTemplate: EntityTableTemplate;
     schemaElementService: ClientSchemaElementService;
-  }
+  };
 }
 
 export class ClientSchemaElementWorkspace extends Workspace<ClientSchemaElement> {
@@ -27,7 +27,7 @@ export class ClientSchemaElementWorkspace extends Workspace<ClientSchemaElement>
   constructor(protected options: ClientSchemaElementWorkspaceOptions) {
     super(options);
   }
-  
+
   loadSchemaElements(schema: ClientSchema) {
     this.schemaElementService.getSchemaElementTypes(schema.type)
       .pipe(

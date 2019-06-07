@@ -30,7 +30,6 @@ export class ClientParcelElementFormService {
     );
 
     const infoFields$ = zip(
-      this.createIdField({options: {disabled: true}}),
       this.createNoParcelField(),
     );
 
@@ -45,11 +44,27 @@ export class ClientParcelElementFormService {
             this.formService.group({name: 'info', title: infoTitle}, fields[1])
           ]);
         })
-      )
+      );
   }
 
   buildUpdateForm(igoMap: IgoMap): Observable<Form> {
     return this.buildCreateForm(igoMap);
+  }
+
+  buildUpdateBatchForm(): Observable<Form> {
+    const infoFields$ = zip(
+      this.createNoParcelField()
+    );
+    const infoTitle = this.languageService.translate.instant('informations');
+
+    return infoFields$
+      .pipe(
+        map((fields:  FormField[]) => {
+          return this.formService.form([], [
+            this.formService.group({name: 'info', title: infoTitle}, fields)
+          ]);
+        })
+      );
   }
 
   private createIdField(partial?: Partial<FormFieldConfig>): Observable<FormField> {

@@ -5,7 +5,7 @@ import { MatButtonModule, MatTabsModule } from '@angular/material';
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoFeatureFormModule } from '@igo2/geo';
 
-import { EditionFormComponent } from './edition-form.component';
+import { EditionUpsertComponent } from './edition-upsert.component';
 
 /**
  * @ignore
@@ -19,13 +19,13 @@ import { EditionFormComponent } from './edition-form.component';
     IgoFeatureFormModule
   ],
   exports: [
-    EditionFormComponent
+    EditionUpsertComponent
   ],
   declarations: [
-    EditionFormComponent
+    EditionUpsertComponent
   ],
   entryComponents: [
-    EditionFormComponent
+    EditionUpsertComponent
   ]
 })
-export class FadqLibEditionFormModule {}
+export class FadqLibEditionUpsertModule {}

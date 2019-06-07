@@ -5,14 +5,8 @@ export interface ClientParcelElementApiConfig {
   list: string;
 }
 
-// import { ClientParcelProperties } from '../../parcel/shared/client-parcel.interfaces';
-
-// export interface ClientParcelElementProperties extends ClientParcelProperties {
-//  noParcelleAgricole: string;
-// }
-
 export interface ClientParcelElementProperties {
-  id: string; 
+  id: string;
   noParcelleAgricole: string;
   timbreMaj: string;
   usagerMaj: string;

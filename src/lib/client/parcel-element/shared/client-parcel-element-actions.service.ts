@@ -6,9 +6,11 @@ import { Action, Widget } from '@igo2/common';
 import { EditionUndoWidget } from '../../../edition/shared/edition.widgets';
 
 import { ClientController } from '../../shared/controller';
+import { ClientParcelElement } from './client-parcel-element.interfaces';
 import {
   ClientParcelElementCreateWidget,
   ClientParcelElementUpdateWidget,
+  ClientParcelElementUpdateBatchWidget,
   ClientParcelElementFillWidget,
   ClientParcelElementSliceWidget,
   ClientParcelElementSaveWidget,
@@ -25,6 +27,7 @@ export class ClientParcelElementActionsService {
   constructor(
     @Inject(ClientParcelElementCreateWidget) private clientParcelElementCreateWidget: Widget,
     @Inject(ClientParcelElementUpdateWidget) private clientParcelElementUpdateWidget: Widget,
+    @Inject(ClientParcelElementUpdateBatchWidget) private clientParcelElementUpdateBatchWidget: Widget,
     @Inject(ClientParcelElementFillWidget) private clientParcelElementFillWidget: Widget,
     @Inject(ClientParcelElementSliceWidget) private clientParcelElementSliceWidget: Widget,
     @Inject(ClientParcelElementSaveWidget) private clientParcelElementSaveWidget: Widget,
@@ -36,20 +39,24 @@ export class ClientParcelElementActionsService {
 
   buildActions(controller: ClientController): Action[] {
 
-    function parcelElementIsDefined(controller: ClientController): boolean {
-      return controller.parcelElement !== undefined;
+    function oneParcelElementIsActive(ctrl: ClientController): boolean {
+      return ctrl.activeParcelElement !== undefined;
     }
 
-    function transactionIsNotEmpty(controller: ClientController): boolean {
-      return controller.parcelElementTransaction.empty === false;
+    function oneOrMoreParcelElementAreSelected(ctrl: ClientController): boolean {
+      return ctrl.selectedParcelElements.length > 0;
     }
 
-    function transactionIsNotInCommitPhase(controller: ClientController): boolean {
-      return controller.parcelElementTransaction.inCommitPhase === false;
+    function transactionIsNotEmpty(ctrl: ClientController): boolean {
+      return ctrl.parcelElementTransaction.empty === false;
     }
 
-    function parcelElementCanBeFilled(controller: ClientController): boolean {
-      const parcelElement = controller.parcelElement;
+    function transactionIsNotInCommitPhase(ctrl: ClientController): boolean {
+      return ctrl.parcelElementTransaction.inCommitPhase === false;
+    }
+
+    function parcelElementCanBeFilled(ctrl: ClientController): boolean {
+      const parcelElement = ctrl.activeParcelElement;
       const geometry = parcelElement === undefined ? undefined : parcelElement.geometry;
       return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length > 1;
     }
@@ -62,8 +69,8 @@ export class ClientParcelElementActionsService {
         icon: 'block',
         title: 'client.parcel.stopEdition',
         tooltip: 'client.parcel.stopEdition.tooltip',
-        handler: function(controller: ClientController) {
-          controller.stopParcelEdition();
+        handler: function(ctrl: ClientController) {
+          ctrl.stopParcelEdition();
         },
         args: [controller]
       },
@@ -72,11 +79,11 @@ export class ClientParcelElementActionsService {
         icon: 'add',
         title: 'edition.create',
         tooltip: 'edition.create.tooltip',
-        handler: (widget: Widget, controller: ClientController) => {
-          controller.parcelElementWorkspace.activateWidget(widget, {
-            transaction: controller.parcelElementTransaction,
-            map: controller.map,
-            store: controller.parcelElementStore
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.parcelElementWorkspace.activateWidget(widget, {
+            transaction: ctrl.parcelElementTransaction,
+            map: ctrl.map,
+            store: ctrl.parcelElementStore
           });
         },
         args: [this.clientParcelElementCreateWidget, controller],
@@ -88,16 +95,29 @@ export class ClientParcelElementActionsService {
         icon: 'edit',
         title: 'edition.update',
         tooltip: 'edition.update.tooltip',
-        handler: (widget: Widget, controller: ClientController) => {
-          controller.parcelElementWorkspace.activateWidget(widget, {
-            parcelElement: controller.parcelElement,
-            transaction: controller.parcelElementTransaction,
-            map: controller.map,
-            store: controller.parcelElementStore
-          });
+        handler: (singleWidget: Widget, batchWidget: Widget, ctrl: ClientController) => {
+          const inputs = {
+            transaction: ctrl.parcelElementTransaction,
+            map: ctrl.map,
+            store: ctrl.parcelElementStore
+          };
+
+          if (ctrl.activeParcelElement !== undefined) {
+            ctrl.parcelElementWorkspace.activateWidget(singleWidget, Object.assign({
+              parcelElement: ctrl.activeParcelElement
+            }, inputs));
+          } else {
+            ctrl.parcelElementWorkspace.activateWidget(batchWidget, Object.assign({
+              parcelElements: ctrl.selectedParcelElements
+            }, inputs));
+          }
         },
-        args: [this.clientParcelElementUpdateWidget, controller],
-        conditions: [parcelElementIsDefined, transactionIsNotInCommitPhase],
+        args: [
+          this.clientParcelElementUpdateWidget,
+          this.clientParcelElementUpdateBatchWidget,
+          controller
+        ],
+        conditions: [oneOrMoreParcelElementAreSelected, transactionIsNotInCommitPhase],
         conditionArgs
       },
       {
@@ -105,13 +125,18 @@ export class ClientParcelElementActionsService {
         icon: 'delete',
         title: 'edition.delete',
         tooltip: 'edition.delete.tooltip',
-        handler: (controller: ClientController) => {
-          controller.parcelElementTransaction.delete(controller.parcelElement, controller.parcelElementStore, {
-            title: generateParcelElementOperationTitle(controller.parcelElement, this.languageService)
+        handler: (ctrl: ClientController) => {
+          const store = ctrl.parcelElementStore;
+          const transaction = ctrl.parcelElementTransaction;
+          const parcelElements = ctrl.selectedParcelElements;
+          parcelElements.forEach((parcelElement: ClientParcelElement) => {
+            transaction.delete(parcelElement, store, {
+              title: generateParcelElementOperationTitle(parcelElement, this.languageService)
+            });
           });
         },
         args: [controller],
-        conditions: [parcelElementIsDefined, transactionIsNotInCommitPhase],
+        conditions: [oneOrMoreParcelElementAreSelected, transactionIsNotInCommitPhase],
         conditionArgs
       },
       {
@@ -119,16 +144,16 @@ export class ClientParcelElementActionsService {
         icon: 'select_all',
         title: 'edition.fill',
         tooltip: 'edition.fill.tooltip',
-        handler: (widget: Widget, controller: ClientController) => {
-          controller.parcelElementWorkspace.activateWidget(widget, {
-            parcelElement: controller.parcelElement,
-            transaction: controller.parcelElementTransaction,
-            map: controller.map,
-            store: controller.parcelElementStore
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.parcelElementWorkspace.activateWidget(widget, {
+            parcelElement: ctrl.activeParcelElement,
+            transaction: ctrl.parcelElementTransaction,
+            map: ctrl.map,
+            store: ctrl.parcelElementStore
           });
         },
         args: [this.clientParcelElementFillWidget, controller],
-        conditions: [parcelElementIsDefined, transactionIsNotInCommitPhase, parcelElementCanBeFilled],
+        conditions: [oneParcelElementIsActive, transactionIsNotInCommitPhase, parcelElementCanBeFilled],
         conditionArgs
       },
       {
@@ -136,16 +161,16 @@ export class ClientParcelElementActionsService {
         icon: 'flip',
         title: 'edition.slice',
         tooltip: 'edition.slice.tooltip',
-        handler: (widget: Widget, controller: ClientController) => {
-          controller.parcelElementWorkspace.activateWidget(widget, {
-            parcelElement: controller.parcelElement,
-            transaction: controller.parcelElementTransaction,
-            map: controller.map,
-            store: controller.parcelElementStore
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.parcelElementWorkspace.activateWidget(widget, {
+            parcelElement: ctrl.activeParcelElement,
+            transaction: ctrl.parcelElementTransaction,
+            map: ctrl.map,
+            store: ctrl.parcelElementStore
           });
         },
         args: [this.clientParcelElementSliceWidget, controller],
-        conditions: [parcelElementIsDefined, transactionIsNotInCommitPhase],
+        conditions: [oneParcelElementIsActive, transactionIsNotInCommitPhase],
         conditionArgs
       },
       {
@@ -153,10 +178,10 @@ export class ClientParcelElementActionsService {
         icon: 'save',
         title: 'edition.save',
         tooltip: 'edition.save.tooltip',
-        handler: (widget: Widget, controller: ClientController) => {
-          controller.parcelElementWorkspace.activateWidget(widget, {
-            transaction: controller.parcelElementTransaction,
-            store: controller.parcelElementStore
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.parcelElementWorkspace.activateWidget(widget, {
+            transaction: ctrl.parcelElementTransaction,
+            store: ctrl.parcelElementStore
           });
         },
         args: [this.clientParcelElementSaveWidget, controller],
@@ -168,9 +193,9 @@ export class ClientParcelElementActionsService {
         icon: 'undo',
         title: 'edition.undo',
         tooltip: 'edition.undo.tooltip',
-        handler: (widget: Widget, controller: ClientController) => {
-          controller.parcelElementWorkspace.activateWidget(widget, {
-            transaction: controller.parcelElementTransaction
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.parcelElementWorkspace.activateWidget(widget, {
+            transaction: ctrl.parcelElementTransaction
           });
         },
         args: [this.editionUndoWidget, controller],
@@ -182,11 +207,11 @@ export class ClientParcelElementActionsService {
         icon: 'swap_horiz',
         title: 'client.parcelElement.transfer',
         tooltip: 'client.parcelElement.transfer.tooltip',
-        handler: (widget: Widget, controller: ClientController) => {
-          controller.parcelElementWorkspace.activateWidget(widget, {
-            client: controller.client,
-            map: controller.map,
-            store: controller.parcelElementStore
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.parcelElementWorkspace.activateWidget(widget, {
+            client: ctrl.client,
+            map: ctrl.map,
+            store: ctrl.parcelElementStore
           });
         },
         args: [this.clientParcelElementTransferWidget, controller],
@@ -198,12 +223,12 @@ export class ClientParcelElementActionsService {
         icon: 'input',
         title: 'client.parcelElement.importData',
         tooltip: 'client.parcelElement.importData.tooltip',
-        handler: (widget: Widget, controller: ClientController) => {
-          controller.parcelElementWorkspace.activateWidget(widget, {
-            parcelElement: controller.parcelElement,
-            transaction: controller.parcelElementTransaction,
-            map: controller.map,
-            store: controller.parcelElementStore
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.parcelElementWorkspace.activateWidget(widget, {
+            parcelElement: ctrl.activeParcelElement,
+            transaction: ctrl.parcelElementTransaction,
+            map: ctrl.map,
+            store: ctrl.parcelElementStore
           });
         },
         args: [this.clientParcelElementImportWidget, controller],

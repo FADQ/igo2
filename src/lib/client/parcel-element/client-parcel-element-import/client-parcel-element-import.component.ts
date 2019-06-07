@@ -59,7 +59,7 @@ export class ClientParcelElementImportComponent implements OnUpdateInputs, Widge
   get getOperationTitle(): (data: ClientParcelElement, languageService: LanguageService) => string  {
     return generateParcelElementOperationTitle;
   }
-  
+
   get processData(): (data: ClientParcelElement) => Observable<EditionResult>  {
     return (data: ClientParcelElement): Observable<EditionResult> => this.processParcelElement(data);
   }
@@ -95,9 +95,9 @@ export class ClientParcelElementImportComponent implements OnUpdateInputs, Widge
       .pipe(
         map((parcelElement: ClientParcelElement): EditionResult => {
           const error =  getParcelElementValidationMessage(parcelElement, this.languageService);
-          return error === undefined ? {feature: parcelElement} : undefined
+          return error === undefined ? {feature: parcelElement} : undefined;
         })
-      )
+      );
   }
 
 }

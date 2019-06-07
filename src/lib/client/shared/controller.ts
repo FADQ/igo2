@@ -28,7 +28,7 @@ export interface ClientControllerOptions {
   parcelElementWorkspace: ClientParcelElementWorkspace;
   parcelElementTransactionService: ClientParcelElementTransactionService;
   schemaWorkspace: Workspace<ClientSchema>;
-  schemaElementWorkspace:ClientSchemaElementWorkspace;
+  schemaElementWorkspace: ClientSchemaElementWorkspace;
   schemaElementTransactionService: ClientSchemaElementTransactionService;
   color?: [number, number, number];
 }
@@ -47,7 +47,7 @@ export class ClientController {
   private parcelSelectionStrategy: FeatureStoreSelectionStrategy;
 
   /** Subscription to the selected parcel element  */
-  private parcelElement$$: Subscription;
+  private parcelElements$$: Subscription;
 
   private parcelElementLoadingStrategy: FeatureStoreLoadingStrategy;
 
@@ -57,7 +57,7 @@ export class ClientController {
   private schema$$: Subscription;
 
   /** Subscription to the selected schema element  */
-  private schemaElement$$: Subscription;
+  private schemaElements$$: Subscription;
 
   private schemaElementLoadingStrategy: FeatureStoreLoadingStrategy;
 
@@ -94,9 +94,14 @@ export class ClientController {
     return this.parcelElementWorkspace.entityStore as FeatureStore<ClientParcelElement>;
   }
 
-  /** Active parcel element */
-  get parcelElement(): ClientParcelElement { return this._parcelElement; }
-  private _parcelElement: ClientParcelElement;
+  /** Selected parcel elements */
+  get selectedParcelElements(): ClientParcelElement[] { return this._selectedParcelElements; }
+  private _selectedParcelElements: ClientParcelElement[] = [];
+
+  /** Selected parcel elements */
+  get activeParcelElement(): ClientParcelElement {
+    return this._selectedParcelElements.length === 1 ? this.selectedParcelElements[0] : undefined;
+  }
 
   /** Parcel element transaction */
   get parcelElementTransaction(): EntityTransaction { return this._parcelElementTransaction; }
@@ -130,9 +135,14 @@ export class ClientController {
     return this.schemaElementWorkspace.entityStore as FeatureStore<ClientSchemaElement>;
   }
 
-  /** Active schema element */
-  get schemaElement(): ClientSchemaElement { return this._schemaElement; }
-  private _schemaElement: ClientSchemaElement;
+  /** Selected schema elements */
+  get selectedSchemaElements(): ClientSchemaElement[] { return this._selectedSchemaElements; }
+  private _selectedSchemaElements: ClientSchemaElement[] = [];
+
+  /** Selected schema elements */
+  get activeSchemaElement(): ClientSchemaElement {
+    return this._selectedSchemaElements.length === 1 ? this.selectedSchemaElements[0] : undefined;
+  }
 
   /** Element transaction */
   get schemaElementTransaction(): EntityTransaction { return this._schemaElementTransaction; }
@@ -259,11 +269,10 @@ export class ClientController {
     const workspace = this.parcelElementWorkspace;
     const store = this.parcelElementStore;
 
-    this.schemaElement$$ = store
-      .stateView.firstBy$((record: EntityRecord<ClientParcelElement>) => record.state.selected === true)
-      .subscribe((record: EntityRecord<ClientParcelElement>) => {
-        const parcelElement = record ? record.entity : undefined;
-        this.onSelectParcelElement(parcelElement);
+    this.parcelElements$$ = store
+      .stateView.manyBy$((record: EntityRecord<ClientParcelElement>) => record.state.selected === true)
+      .subscribe((records: EntityRecord<ClientParcelElement>[]) => {
+        this.onSelectParcelElements(records.map(record => record.entity));
       });
 
     const parcelElementLoadingStrategy = store.getStrategyOfType(FeatureStoreLoadingStrategy);
@@ -287,8 +296,8 @@ export class ClientController {
   }
 
   private teardownParcelElements() {
-    if (this.parcelElement$$ !== undefined) {
-      this.parcelElement$$.unsubscribe();
+    if (this.parcelElements$$ !== undefined) {
+      this.parcelElements$$.unsubscribe();
     }
 
     this.parcelElementStore.removeStrategy(this.parcelElementLoadingStrategy);
@@ -327,11 +336,10 @@ export class ClientController {
     const workspace = this.schemaElementWorkspace;
     const store = this.schemaElementStore;
 
-    this.schemaElement$$ = store
-      .stateView.firstBy$((record: EntityRecord<ClientSchemaElement>) => record.state.selected === true)
-      .subscribe((record: EntityRecord<ClientSchemaElement>) => {
-        const schemaElement = record ? record.entity : undefined;
-        this.onSelectSchemaElement(schemaElement);
+    this.schemaElements$$ = store
+      .stateView.manyBy$((record: EntityRecord<ClientSchemaElement>) => record.state.selected === true)
+      .subscribe((records: EntityRecord<ClientSchemaElement>[]) => {
+        this.onSelectSchemaElements(records.map(record => record.entity));
       });
 
     this.parcelStore.state.updateAll({selected: false});
@@ -357,8 +365,8 @@ export class ClientController {
   }
 
   private teardownSchemaElements() {
-    if (this.schemaElement$$ !== undefined) {
-      this.schemaElement$$.unsubscribe();
+    if (this.schemaElements$$ !== undefined) {
+      this.schemaElements$$.unsubscribe();
     }
 
     this.schemaElementStore.removeStrategy(this.schemaElementLoadingStrategy);
@@ -388,8 +396,8 @@ export class ClientController {
     }
   }
 
-  private onSelectParcelElement(parcelElement: ClientParcelElement) {
-    this._parcelElement = parcelElement;
+  private onSelectParcelElements(parcelElements: ClientParcelElement[]) {
+    this._selectedParcelElements = parcelElements;
   }
 
   private onSelectSchema(schema: ClientSchema) {
@@ -425,8 +433,8 @@ export class ClientController {
     this._schema = undefined;
   }
 
-  private onSelectSchemaElement(schemaElement: ClientSchemaElement) {
-    this._schemaElement = schemaElement;
+  private onSelectSchemaElements(schemaElements: ClientSchemaElement[]) {
+    this._selectedSchemaElements = schemaElements;
   }
 
   private addParcelLayer() {

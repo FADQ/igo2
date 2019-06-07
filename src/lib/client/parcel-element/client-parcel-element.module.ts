@@ -9,6 +9,9 @@ import {
   FadqLibClientParcelElementUpdateModule
 } from './client-parcel-element-update/client-parcel-element-update.module';
 import {
+  FadqLibClientParcelElementUpdateBatchModule
+} from './client-parcel-element-update-batch/client-parcel-element-update-batch.module';
+import {
   FadqLibClientParcelElementFillModule
 } from './client-parcel-element-fill/client-parcel-element-fill.module';
 import {
@@ -31,6 +34,7 @@ import { provideClientParcelElementService } from './shared/client-parcel-elemen
 import {
   provideClientParcelElementCreateWidget,
   provideClientParcelElementUpdateWidget,
+  provideClientParcelElementUpdateBatchWidget,
   provideClientParcelElementFillWidget,
   provideClientParcelElementSliceWidget,
   provideClientParcelElementSaveWidget,
@@ -45,6 +49,7 @@ import {
   exports: [
     FadqLibClientParcelElementCreateModule,
     FadqLibClientParcelElementUpdateModule,
+    FadqLibClientParcelElementUpdateBatchModule,
     FadqLibClientParcelElementFillModule,
     FadqLibClientParcelElementSliceModule,
     FadqLibClientParcelElementSaveModule,
@@ -62,6 +67,7 @@ export class FadqLibClientParcelElementModule {
         provideClientParcelElementService(),
         provideClientParcelElementCreateWidget(),
         provideClientParcelElementUpdateWidget(),
+        provideClientParcelElementUpdateBatchWidget(),
         provideClientParcelElementFillWidget(),
         provideClientParcelElementSliceWidget(),
         provideClientParcelElementSaveWidget(),

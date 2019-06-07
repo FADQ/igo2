@@ -11,7 +11,7 @@ export interface ClientParcelElementWorkspaceOptions extends WorkspaceOptions {
     type: 'parcelElement',
     tableTemplate: EntityTableTemplate;
     parcelElementService: ClientParcelElementService;
-  }
+  };
 }
 
 export class ClientParcelElementWorkspace extends Workspace<ClientParcelElement> {

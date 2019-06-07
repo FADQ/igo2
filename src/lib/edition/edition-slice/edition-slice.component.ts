@@ -4,7 +4,9 @@ import {
   Output,
   EventEmitter,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  OnInit,
+  OnDestroy
 } from '@angular/core';
 
 import { Subscription, BehaviorSubject, Observable, of, zip } from 'rxjs';
@@ -40,7 +42,7 @@ import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition
   styleUrls: ['./edition-slice.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent {
+export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, OnInit, OnDestroy {
 
   /**
    * Error message, if any
@@ -104,9 +106,9 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent {
   @Input() processData: (data: Feature) => EditionResult | Observable<EditionResult>;
 
   /**
-   * Process data before submit
+   * Generate an operation title
    */
-  @Input() getOperationTitle: (data: Feature, languageService: LanguageService) => EditionResult | Observable<EditionResult>;
+  @Input() getOperationTitle: (data: Feature, languageService: LanguageService) => string;
 
   /**
    * Event emitted on complete
@@ -154,17 +156,17 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent {
       features.forEach((feature: Feature) => {
         const resultOrObservable = this.processData(feature);
         if (resultOrObservable instanceof Observable) {
-          results$.push(resultOrObservable)
+          results$.push(resultOrObservable);
         } else {
-          results$.push(of(resultOrObservable))
+          results$.push(of(resultOrObservable));
         }
       });
       zip(...results$).subscribe((results: EditionResult[]) => {
         this.submitResults(results.filter((result: EditionResult) => result !== undefined));
       });
     } else {
-      const results = features.map((feature: Feature) => {return {feature}});
-      this.submitResults(results);  
+      const results = features.map((feature: Feature) => ({feature}));
+      this.submitResults(results);
     }
   }
 
@@ -185,7 +187,7 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent {
   private onSubmitSuccess(features: Feature[]) {
     this.submitEnabled$.next(false);
     if (this.transaction !== undefined && this.store !== undefined) {
-      this.addToTransaction(features);  
+      this.addToTransaction(features);
     }
     this.deactivateSliceControl();
     this.complete.emit(features);
@@ -193,7 +195,7 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent {
 
   private addToTransaction(features: Feature[]) {
     const getOperationTitle = this.getOperationTitle ? this.getOperationTitle : getDefaultOperationTitle;
-    
+
     this.transaction.delete(this.feature, this.store, {
       title: getOperationTitle(this.feature, this.languageService)
     });

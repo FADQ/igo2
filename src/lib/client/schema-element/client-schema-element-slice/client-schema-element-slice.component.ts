@@ -70,7 +70,7 @@ export class ClientSchemaElementSliceComponent implements OnUpdateInputs, Widget
   get getOperationTitle(): (data: ClientSchemaElement, languageService: LanguageService) => string  {
     return generateSchemaElementOperationTitle;
   }
-  
+
   get processData(): (data: ClientSchemaElement) => Observable<EditionResult>  {
     return (data: ClientSchemaElement): Observable<EditionResult> => this.processSchemaElement(data);
   }
@@ -108,9 +108,9 @@ export class ClientSchemaElementSliceComponent implements OnUpdateInputs, Widget
           return {
             feature: schemaElement,
             error: getSchemaElementValidationMessage(schemaElement, this.languageService)
-          }
+          };
         })
-      )
+      );
   }
 
 }

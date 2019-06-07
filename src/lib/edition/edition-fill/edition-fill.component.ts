@@ -3,7 +3,9 @@ import {
   Input,
   Output,
   EventEmitter,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  OnInit,
+  OnDestroy
 } from '@angular/core';
 
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -37,7 +39,7 @@ import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition
   styleUrls: ['./edition-fill.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditionFillComponent implements WidgetComponent {
+export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy {
 
   tableTemplate: EntityTableTemplate = {
     sort: false,
@@ -86,9 +88,9 @@ export class EditionFillComponent implements WidgetComponent {
   @Input() processData: (data: Feature) => EditionResult | Observable<EditionResult>;
 
   /**
-   * Process data before submit
+   * Generate an operation title
    */
-  @Input() getOperationTitle: (data: Feature, languageService: LanguageService) => EditionResult | Observable<EditionResult>;
+  @Input() getOperationTitle: (data: Feature, languageService: LanguageService) => string;
 
   /**
    * Event emitted on complete
@@ -124,7 +126,7 @@ export class EditionFillComponent implements WidgetComponent {
         this.submitResult(resultOrObservable);
       }
     } else {
-      this.submitResult({feature});  
+      this.submitResult({feature});
     }
   }
 
@@ -143,7 +145,7 @@ export class EditionFillComponent implements WidgetComponent {
 
   private onSubmitSuccess(feature: Feature) {
     if (this.transaction !== undefined && this.store !== undefined) {
-      this.addToTransaction(feature);  
+      this.addToTransaction(feature);
     }
     this.complete.emit(feature);
   }
