@@ -243,10 +243,13 @@
   },
 
   "icherche": {
+    "adresse": "Address",
     "code_postal": "Zip Code",
     "municipalite": "Municipality",
+    "nom": "Name",
     "numero_civique": "Address",
     "numero_civique_suffixe": "Address Suffix",
+    "producteur": "Provider",
     "rue": "Street",
     "type": "Type"
   },

@@ -63,16 +63,22 @@ export const igoEnvironment: IgoEnvironment = {
     icherche: {
       enabled: true,
       available: true,
+      title: 'Adresse ou lieu',
       searchUrl: 'https://geoegl.msp.gouv.qc.ca/icherche/geocode',
       params: {
-        type: 'adresse,code_postal,route,municipalite,mrc,region_administrative',
+        type: 'adresse,code_postal,route,municipalite,mrc,region_administrative,lieu',
         limit: '5',
         geometrie: 'geom'
       }
     },
-    icherchereverse: {
+    coordinatesreverse: {
       enabled: true,
       available: true,
+      title: 'Coordonnées'
+    },
+    icherchereverse: {
+      enabled: false,
+      available: false,
       searchUrl: 'https://geoegl.msp.gouv.qc.ca/apis/territoires/locate',
       params: {
         type: 'adresses,municipalites,mrc,regadmin',
