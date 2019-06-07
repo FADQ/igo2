@@ -14,9 +14,7 @@
     matTooltipShowDelay="500"
     [matTooltip]="(sidenavOpened ? 'menu.close' : 'menu.open') | translate"
     (click)="onToggleSidenavClick()">
-    <mat-icon>
-      <ng-container>menu</ng-container>
-    </mat-icon>
+    <mat-icon svgIcon="menu"></mat-icon>
   </button>
 
   <igo-search-bar

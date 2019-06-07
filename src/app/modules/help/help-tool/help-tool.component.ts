@@ -9,7 +9,7 @@ import { ConfigService } from '@igo2/core';
 @ToolComponent({
   name: 'help',
   title: 'tools.help',
-  icon: 'info'
+  icon: 'information'
 })
 @Component({
   selector: 'fadq-help-tool',
