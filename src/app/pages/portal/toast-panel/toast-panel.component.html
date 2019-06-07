@@ -8,8 +8,8 @@
     *ngIf="withHeader && !empty"
     mat-icon-button
     panelLeftButton>
-    <mat-icon *ngIf="!opened">arrow_drop_up</mat-icon>
-    <mat-icon *ngIf="opened">arrow_drop_down</mat-icon>
+    <mat-icon *ngIf="!opened" svgIcon="menu-up"></mat-icon>
+    <mat-icon *ngIf="opened" svgIcon="menu-down"></mat-icon>
   </button>
   <button
     *ngIf="withHeader && !empty"
@@ -17,7 +17,7 @@
     panelRightButton
     igoStopPropagation
     (click)="onClearButtonClick()">
-    <mat-icon>clear</mat-icon>
+    <mat-icon svgIcon="close"></mat-icon>
   </button>
 
   <div

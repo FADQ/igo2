@@ -18,7 +18,7 @@
       matTooltipShowDelay="500"
       [matTooltip]="'client.schemaFile.add.tooltip' | translate"
       (click)="fileInput.click()">
-      <mat-icon>add</mat-icon>
+      <mat-icon svgIcon="plus"></mat-icon>
       {{'client.schemaFile.add' | translate}}
     </button>
 
@@ -35,7 +35,7 @@
       [matTooltip]="'client.schemaFile.download.tooltip' | translate"
       [disabled]="this.schemaFile === undefined ? true : false"
       (click)="onDownloadButtonClick()">
-      <mat-icon>save_alt</mat-icon>
+      <mat-icon svgIcon="download"></mat-icon>
       {{'client.schemaFile.download' | translate}}
     </button>
     <a #downloadLink download  target="_blank" style="display:none;"></a>
@@ -46,7 +46,7 @@
       [matTooltip]="'client.schemaFile.delete.tooltip' | translate"
       [disabled]="this.schemaFile === undefined ? true : false"
       (click)="onDeleteButtonClick()">
-      <mat-icon>delete</mat-icon>
+      <mat-icon svgIcon="delete"></mat-icon>
       {{'client.schemaFile.delete' | translate}}
     </button>
 

@@ -17,7 +17,7 @@ import { ClientState } from '../client.state';
 @ToolComponent({
   name: 'client',
   title: 'tools.client',
-  icon: 'person'
+  icon: 'account'
 })
 @Component({
   selector: 'fadq-client-tool',

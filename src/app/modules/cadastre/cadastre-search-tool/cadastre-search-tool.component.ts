@@ -32,7 +32,7 @@ import { CadastreState } from '../cadastre.state';
 @ToolComponent({
   name: 'cadastre',
   title: 'tools.cadastre',
-  icon: 'grid_on'
+  icon: 'view-quilt'
 })
 @Component({
   selector: 'fadq-cadastre-search-tool',

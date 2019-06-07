@@ -66,7 +66,7 @@ export class ClientParcelElementActionsService {
     return [
       {
         id: 'stopEdition',
-        icon: 'block',
+        icon: 'cancel',
         title: 'client.parcel.stopEdition',
         tooltip: 'client.parcel.stopEdition.tooltip',
         handler: function(ctrl: ClientController) {
@@ -76,7 +76,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'create',
-        icon: 'add',
+        icon: 'plus',
         title: 'edition.create',
         tooltip: 'edition.create.tooltip',
         handler: (widget: Widget, ctrl: ClientController) => {
@@ -92,7 +92,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'update',
-        icon: 'edit',
+        icon: 'pencil',
         title: 'edition.update',
         tooltip: 'edition.update.tooltip',
         handler: (singleWidget: Widget, batchWidget: Widget, ctrl: ClientController) => {
@@ -141,7 +141,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'fill',
-        icon: 'select_all',
+        icon: 'select-all',
         title: 'edition.fill',
         tooltip: 'edition.fill.tooltip',
         handler: (widget: Widget, ctrl: ClientController) => {
@@ -158,7 +158,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'slice',
-        icon: 'flip',
+        icon: 'box-cutter',
         title: 'edition.slice',
         tooltip: 'edition.slice.tooltip',
         handler: (widget: Widget, ctrl: ClientController) => {
@@ -175,7 +175,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'save',
-        icon: 'save',
+        icon: 'floppy',
         title: 'edition.save',
         tooltip: 'edition.save.tooltip',
         handler: (widget: Widget, ctrl: ClientController) => {
@@ -204,7 +204,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'transfer',
-        icon: 'swap_horiz',
+        icon: 'swap-horizontal',
         title: 'client.parcelElement.transfer',
         tooltip: 'client.parcelElement.transfer.tooltip',
         handler: (widget: Widget, ctrl: ClientController) => {
@@ -220,7 +220,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'importData',
-        icon: 'input',
+        icon: 'import',
         title: 'client.parcelElement.importData',
         tooltip: 'client.parcelElement.importData.tooltip',
         handler: (widget: Widget, ctrl: ClientController) => {

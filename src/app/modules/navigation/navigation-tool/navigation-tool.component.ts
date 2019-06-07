@@ -10,7 +10,7 @@ import { PlaceCategory } from 'src/lib/navigation';
 @ToolComponent({
   name: 'navigation',
   title: 'tools.navigation',
-  icon: 'pin_drop'
+  icon: 'map-marker-radius'
 })
 @Component({
   selector: 'fadq-navigation-tool',
