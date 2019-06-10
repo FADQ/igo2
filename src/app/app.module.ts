@@ -1,8 +1,7 @@
-import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatIconRegistry } from '@angular/material';
 
 import { IgoSpinnerModule, IgoStopPropagationModule } from '@igo2/common';
 import { IgoGeometryModule, IgoQueryModule } from '@igo2/geo';
@@ -43,8 +42,4 @@ import { AppComponent } from './app.component';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-  constructor(matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer){
-    matIconRegistry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('./assets/mdi.svg'));
-  }
-}
+export class AppModule {}
