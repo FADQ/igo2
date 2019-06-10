@@ -9,7 +9,6 @@ export function coordinatesReverseSearchSourceFactory(
   config: ConfigService
 ) {
   return new CoordinatesReverseSearchSource(
-    undefined,
     config.getConfig(`searchSources.${CoordinatesReverseSearchSource.id}`)
   );
 }
