@@ -29,6 +29,11 @@ mat-card {
     font-size: $icon-size;
     height: $icon-size;
     width: $icon-size;
+
+    ::ng-deep svg {
+      height: 100%;
+      width: 100%;
+    }
   }
 }
 
@@ -58,4 +63,5 @@ mat-card-content.with-error-message {
 
 p.fadq-error-text {
   margin: 20px;
+  text-align: center;
 }

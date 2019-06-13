@@ -1,8 +1,10 @@
 $icon-size: 48px;
-$error-message-height: 60px;
+$message-height: 50px;
+$button-container-height: 56px;
 
 mat-card {
   height: 100%;
+  overflow: hidden;
 }
 
 .mat-card-header {
@@ -29,6 +31,11 @@ mat-card {
     font-size: $icon-size;
     height: $icon-size;
     width: $icon-size;
+
+    ::ng-deep svg {
+      height: 100%;
+      width: 100%;
+    }
   }
 }
 
@@ -36,7 +43,7 @@ mat-card-content {
   height: calc(100% - 42px);
 
   igo-entity-table {
-    max-height: calc(100% - 66px);
+    max-height: calc(100% - #{$button-container-height});
   
     ::ng-deep {
       td.mat-cell:first-child,
@@ -48,14 +55,12 @@ mat-card-content {
   }
 }
 
-mat-card-content.with-error-message {
-  height: calc(100% - 52px);
-
+mat-card-content.with-message {
   igo-entity-table{
-    max-height: calc(100% - 66px - 62px) !important;
+    max-height: calc(100% - #{$button-container-height} - #{$message-height}) !important;
   }
 }
 
-p.fadq-error-text {
-  margin: 20px;
+fadq-message-inline {
+  text-align: center;
 }

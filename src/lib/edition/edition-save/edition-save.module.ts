@@ -9,9 +9,9 @@ import {
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoEntityTableModule, IgoFormModule } from '@igo2/common';
 
-import {
-  EditionSaveComponent
-} from './edition-save.component';
+import { FadqLibMessageInlineModule } from 'src/lib/message/message-inline/message-inline.module';
+
+import { EditionSaveComponent } from './edition-save.component';
 
 /**
  * @ignore
@@ -24,7 +24,8 @@ import {
     MatButtonModule,
     IgoLanguageModule,
     IgoFormModule,
-    IgoEntityTableModule
+    IgoEntityTableModule,
+    FadqLibMessageInlineModule
   ],
   exports: [
     EditionSaveComponent

@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-header>
     <div mat-card-avatar>
-      <mat-icon [color]="'accent'">help</mat-icon>
+      <mat-icon [color]="'accent'" svgIcon="help-circle"></mat-icon>
     </div>
     <mat-card-title>{{'edition.fill.message' | translate}}</mat-card-title>
   </mat-card-header>
@@ -15,7 +15,6 @@
 
     <igo-entity-table
       class="table-compact"
-      [ngClass]="{'with-error-message': (errorMessage$ | async) !== undefined}"
       [store]="exclusionStore"
       [template]="tableTemplate">
     </igo-entity-table>

@@ -8,6 +8,7 @@ import {
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import { Message } from '@igo2/core';
 import {
   EntityOperation,
   EntityOperationType,
@@ -35,10 +36,12 @@ export class EditionSaveComponent implements WidgetComponent {
   };
 
   /**
-   * Import error, if any
+   * Error or success message, if any
    * @internal
    */
-  errorMessage$: BehaviorSubject<string> = new BehaviorSubject(undefined);
+  message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
+
+  submitted$: BehaviorSubject<boolean> = new BehaviorSubject(false); 
 
   tableTemplate: EntityTableTemplate = {
     selection: false,
@@ -75,7 +78,7 @@ export class EditionSaveComponent implements WidgetComponent {
   /**
    * Process data before submit
    */
-  @Input() commitHandler: (transaction: EntityTransaction) => Observable<string | undefined>;
+  @Input() commitHandler: (transaction: EntityTransaction) => Observable<Message | undefined>;
 
   /**
    * Event emitted on complete
@@ -91,7 +94,7 @@ export class EditionSaveComponent implements WidgetComponent {
 
   onSubmit() {
     this.commitHandler(this.transaction)
-      .subscribe((error?: string) => this.onSubmitSuccess(error));
+      .subscribe((message?: Message) => this.onCommit(message));
   }
 
   onCancel() {
@@ -106,11 +109,12 @@ export class EditionSaveComponent implements WidgetComponent {
     }
   }
 
-  private onSubmitSuccess(error?: string) {
-    this.errorMessage$.next(error);
-    if (error === undefined) {
+  private onCommit(message?: Message) {
+    this.message$.next(message);
+    if (message === undefined) {
       this.complete.emit();
     }
+    this.submitted$.next(true);
   }
 
 }
