@@ -118,6 +118,7 @@ export class ClientState implements OnDestroy {
 
     if (!controller.parcelElementTransaction.empty) {
       controller.parcelElementTransactionService.enqueue({
+        client: controller.client,
         transaction: controller.parcelElementTransaction,
         proceed: () => this.clearController(controller)
       });
@@ -167,8 +168,8 @@ export class ClientState implements OnDestroy {
       getKey: (controller: ClientController) => controller.client.info.numero
     });
 
-    this.controllers$$ = this.controllerStore.entities$
-      .subscribe((controllers: ClientController[]) => this.updateControllersColor());
+    this.controllers$$ = this.controllerStore.count$
+      .subscribe((count: number) => this.updateControllersColor());
   }
 
   private teardownControllers() {
@@ -259,23 +260,5 @@ export class ClientState implements OnDestroy {
         controller.setColor(color);
       }
     });
-  }
-
-  private shouldMoveToParcels(): boolean {
-    for (const controller of this.controllerStore.all()) {
-      const selectedParcel = controller.parcelStore.stateView
-        .firstBy((record: EntityRecord<ClientParcel>) => record.state.selected === true);
-      if (selectedParcel !== undefined) {
-        return false;
-      }
-
-      const selectedElement = controller.schemaElementStore.stateView
-        .firstBy((record: EntityRecord<ClientSchemaElement>) => record.state.selected === true);
-      if (selectedElement !== undefined) {
-        return false;
-      }
-    }
-
-    return true;
   }
 }

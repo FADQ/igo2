@@ -1,7 +1,6 @@
 import { Injectable} from '@angular/core';
 
 import { EntityTableTemplate } from '@igo2/common';
-import { formatMeasure } from '@igo2/geo';
 
 import { formatDate } from 'src/lib/utils/date';
 import { ClientParcelElement } from './client-parcel-element.interfaces';
@@ -24,52 +23,68 @@ export class ClientParcelElementTableService {
         return {'text-centered': true};
       }),
       columns: [
-        // {
-        //   name: 'properties.id',
-        //   title: 'ID'
-        // },
         {
           name: 'properties.noParcelleAgricole',
           title: 'Numéro de parcelle'
         },
-        /*
         {
-          name: 'properties.descriptionTypeElement',
-          title: 'Type d\'élément'
-        },
-        {
-          name: 'properties.etiquette',
-          title: 'Étiquette'
-        },
-        {
-          name: 'properties.description',
-          title: 'Description'
+          name: 'properties.noDiagramme',
+          title: 'Numéro de diagramme'
         },
         {
           name: 'properties.superficie',
-          title: 'Superficie(m²)',
-          valueAccessor: (parcelElement: ClientParcelElement) => {
-            const area = parcelElement.properties.superficie;
-            return area ? formatMeasure(area, {decimal: 1, locale: 'fr'}) : '';
-          }
+          title: 'Superficie mesurée (m²)'
+        },
+        {
+          name: 'properties.superficieHectare',
+          title: 'Superficie mesurée (ha)'
+        },
+        {
+          name: 'properties.statutAugmentationSupCultivable',
+          title: 'Statut augmentation culture'  // TODO: Validate title
+        },
+        {
+          name: 'properties.parcelleDrainee',
+          title: 'Drainage'
+        },
+        {
+          name: 'properties.infoLocateur',
+          title: 'Info locateur'
         },
         {
           name: 'properties.anneeImage',
-          title: 'Année d\'image'
+          title: 'Année image'
         },
-        */
         {
-          name: 'properties.timbreMaj',
+          name: 'properties.sourceParcelleAgricole',
+          title: 'Source parcelle agricole'
+        },
+        {
+          name: 'properties.timbreMajGeometrie',
           title: 'Date de mise à jour',
           valueAccessor: (parcelElement: ClientParcelElement) => {
-            const value = parcelElement.properties.timbreMaj;
+            const value = parcelElement.properties.timbreMajGeometrie;
             if (!value) { return ''; }
             return formatDate(value);
           }
         },
         {
-          name: 'properties.usagerMaj',
-          title: 'Usager mise à jour'
+          name: 'properties.usagerMajGeometrie',
+          title: 'Utilisateur'
+        },
+        {
+          name: 'meta.errors',
+          title: 'Validation',
+          cellClassFunc: (parcelElement: ClientParcelElement) => {
+            const errors = parcelElement.meta.errors || [];
+            return {
+              'error-text': errors.length > 0
+            };
+          },
+          valueAccessor: (parcelElement: ClientParcelElement) => {
+            const errors = parcelElement.meta.errors || [];
+            return errors.join(', ');
+          }
         }
       ]
     };

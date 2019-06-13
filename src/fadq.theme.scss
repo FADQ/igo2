@@ -1,6 +1,7 @@
 $primary: mat-palette($mat-blue, 800);
 $accent: mat-palette($mat-blue, 200);
 $warn: mat-palette($mat-red);
+$success: mat-palette($mat-green);
 
 $theme: mat-light-theme(
   $primary,
@@ -19,5 +20,8 @@ table.igo-striped tbody tr:nth-child(odd) {
 
 .fadq-error-text {
   color: mat-color($warn);
-  margin: 10px;
+}
+
+.fadq-success-text {
+  color: mat-color($success);
 }

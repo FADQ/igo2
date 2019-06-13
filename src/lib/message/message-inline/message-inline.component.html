@@ -1,0 +1,9 @@
+<div>
+  <p
+    [ngClass]="{
+      'fadq-success-text': message.type === messageType.SUCCESS,
+      'fadq-error-text': message.type === messageType.ERROR
+    }">
+    {{message.text}}
+  </p>
+</div>

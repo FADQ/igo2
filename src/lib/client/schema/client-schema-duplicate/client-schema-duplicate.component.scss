@@ -28,5 +28,10 @@ mat-card {
     font-size: $icon-size;
     height: $icon-size;
     width: $icon-size;
+
+    ::ng-deep svg {
+      height: 100%;
+      width: 100%;
+    }
   }
 }

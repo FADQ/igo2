@@ -10,18 +10,14 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { LanguageService } from '@igo2/core';
+import { LanguageService, Message, MessageType } from '@igo2/core';
 
 import { EntityTransaction, WidgetComponent, OnUpdateInputs } from '@igo2/common';
 import { FeatureStore } from '@igo2/geo';
 
-import { ClientParcel } from '../../parcel/shared/client-parcel.interfaces';
+import { Client } from '../../shared/client.interfaces';
 import { ClientParcelElement } from '../shared/client-parcel-element.interfaces';
 import { ClientParcelElementService } from '../shared/client-parcel-element.service';
-import {
-  generateParcelElementOperationTitle,
-  getParcelElementValidationMessage
-} from '../shared/client-parcel-element.utils';
 
 @Component({
   selector: 'fadq-client-parcel-element-save',
@@ -30,6 +26,11 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientParcelElementSaveComponent implements OnUpdateInputs, WidgetComponent {
+
+  /**
+   * Client
+   */
+  @Input() client: Client;
 
   /**
    * Parcel element store
@@ -51,8 +52,8 @@ export class ClientParcelElementSaveComponent implements OnUpdateInputs, WidgetC
    */
   @Output() cancel = new EventEmitter<void>();
 
-  get commitHandler(): (transaction: EntityTransaction) => Observable<string | undefined>  {
-    return (transaction: EntityTransaction): Observable<string | undefined> => this.commitTransaction(transaction);
+  get commitHandler(): (transaction: EntityTransaction) => Observable<Message | undefined>  {
+    return (transaction: EntityTransaction): Observable<Message | undefined> => this.commitTransaction(transaction);
   }
 
   constructor(
@@ -76,21 +77,28 @@ export class ClientParcelElementSaveComponent implements OnUpdateInputs, WidgetC
     this.cancel.emit();
   }
 
-  private commitTransaction(transaction: EntityTransaction): Observable<string | undefined> {
+  private commitTransaction(transaction: EntityTransaction): Observable<Message | undefined> {
     return this.clientParcelElementService
-      .commitTransaction(transaction)
+      .commitTransaction(this.client, transaction)
       .pipe(
         map((results: ClientParcelElement[] | Error) => this.onCommitSuccess(results))
       );
   }
 
-  private onCommitSuccess(results: ClientParcelElement[] | Error): string | undefined {
+  private onCommitSuccess(results: ClientParcelElement[] | Error): Message | undefined {
     if (results instanceof Error) {
-      return this.languageService.translate.instant('client.parcelElement.save.error');
+      return {
+        type: MessageType.ERROR,
+        text: this.languageService.translate.instant('client.parcelElement.save.error')
+      };
     }
 
     this.store.load(results);
-    return undefined;
+
+    return {
+      type: MessageType.SUCCESS,
+      text: this.languageService.translate.instant('client.parcelElement.save.success')
+    };
   }
 
 }

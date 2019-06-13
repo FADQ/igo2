@@ -63,8 +63,8 @@ export class ClientToolComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.controllers$$ = this.controllers.entities$.subscribe((controllers: ClientController[]) => {
-      if (controllers.length !== 1) {
+    this.controllers$$ = this.controllers.count$.subscribe((count: number) => {
+      if (count !== 1) {
         this.showLegend$.next(false);
       } else {
         this.showLegend$.next(true);

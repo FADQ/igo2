@@ -44,6 +44,11 @@ th.text-centered {
   text-align: center;
 }
 
+td.error-text {
+  color: red;
+  font-weight: bold;
+}
+
 tr.text-centered th div.mat-sort-header-container {
   display: flex;
   justify-content: center !important;

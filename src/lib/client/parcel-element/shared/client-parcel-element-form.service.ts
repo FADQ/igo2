@@ -31,17 +31,28 @@ export class ClientParcelElementFormService {
 
     const infoFields$ = zip(
       this.createNoParcelField(),
+      this.createStatutAugmField(),
+      this.createParcelleDraineeField(),
+      this.createSourceParcelleField(),
+      this.createAnneeImageField(),
+      this.createInfoLocateurField()
+    );
+
+    const remarqueFields$ = zip(
+      this.createRemarqueField()
     );
 
     const geometryTitle = this.languageService.translate.instant('geometry.geometry');
     const infoTitle = this.languageService.translate.instant('informations');
+    const remarqueTitle = this.languageService.translate.instant('remarque');
 
-    return zip(geometryFields$, infoFields$)
+    return zip(geometryFields$, infoFields$, remarqueFields$)
       .pipe(
-        map((fields: [FormField[], FormField[]]) => {
+        map((fields: [FormField[], FormField[], FormField[]]) => {
           return this.formService.form([], [
             this.formService.group({name: 'geometry', title: geometryTitle}, fields[0]),
-            this.formService.group({name: 'info', title: infoTitle}, fields[1])
+            this.formService.group({name: 'info', title: infoTitle}, fields[1]),
+            this.formService.group({name: 'remarque', title: remarqueTitle}, fields[2])
           ]);
         })
       );
@@ -53,7 +64,12 @@ export class ClientParcelElementFormService {
 
   buildUpdateBatchForm(): Observable<Form> {
     const infoFields$ = zip(
-      this.createNoParcelField()
+      this.createNoParcelField(),
+      this.createStatutAugmField(),
+      this.createParcelleDraineeField(),
+      this.createSourceParcelleField(),
+      this.createAnneeImageField(),
+      this.createInfoLocateurField()
     );
     const infoTitle = this.languageService.translate.instant('informations');
 
@@ -67,16 +83,6 @@ export class ClientParcelElementFormService {
       );
   }
 
-  private createIdField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
-    return of(this.createField({
-      name: 'properties.id',
-      title: 'ID',
-      options:  {
-        cols: 1
-      }
-    }, partial));
-  }
-
   private createNoParcelField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
     return of(this.createField({
       name: 'properties.noParcelleAgricole',
@@ -87,6 +93,89 @@ export class ClientParcelElementFormService {
         // errors: {
         //   maxlength: 'client.parcelElement.error.descriptionMaxLength'
         // }
+      }
+    }, partial));
+  }
+
+  private createStatutAugmField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
+    return of(this.createField({
+      name: 'properties.statutAugmentationSupCultivable',
+      title: 'Statut d\'augmentation',
+      type: 'select',
+      options:  {
+        cols: 1
+      },
+      inputs: {
+        choices: []
+      }
+    }, partial));
+  }
+
+  private createParcelleDraineeField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
+    return of(this.createField({
+      name: 'properties.parcelleDrainee',
+      title: 'Parcelle drainée',
+      type: 'select',
+      options:  {
+        cols: 1
+      },
+      inputs: {
+        choices: [
+          {value: 'inconnue', title: 'Inconnu'},
+          {value: 'oui', title: 'Oui'},
+          {value: 'non', title: 'Non'}
+        ]
+      }
+    }, partial));
+  }
+
+  private createSourceParcelleField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
+    return of(this.createField({
+      name: 'properties.sourceParcelleAgricole',
+      title: 'Source parcelle',
+      type: 'select',
+      options:  {
+        cols: 1
+      },
+      inputs: {
+        choices: []
+      }
+    }, partial));
+  }
+
+  private createAnneeImageField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
+    return of(this.createField({
+      name: 'properties.anneeImage',
+      title: 'Année d\image',
+      options:  {
+        cols: 1,
+        validator: Validators.compose([
+          Validators.pattern(/^([1-9][\d]{3})$/)
+        ]),
+        errors: {
+          pattern: 'errors.invalidAnnee'
+        }
+      }
+    }, partial));
+  }
+
+  private createInfoLocateurField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
+    return of(this.createField({
+      name: 'properties.infoLocateur',
+      title: 'Info locateur',
+      options:  {
+        cols: 1
+      }
+    }, partial));
+  }
+
+  private createRemarqueField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
+    return of(this.createField({
+      name: 'properties.remarque',
+      title: 'Remarque',
+      type: 'textarea',
+      options:  {
+        cols: 2
       }
     }, partial));
   }

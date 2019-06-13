@@ -15,6 +15,12 @@ import {
   ClientParcelElementFillComponent
 } from '../client-parcel-element-fill/client-parcel-element-fill.component';
 import {
+  ClientParcelElementNumberingComponent
+} from '../client-parcel-element-numbering/client-parcel-element-numbering.component';
+import {
+  ClientParcelElementReconciliateComponent
+} from '../client-parcel-element-reconciliate/client-parcel-element-reconciliate.component';
+import {
   ClientParcelElementSliceComponent
 } from '../client-parcel-element-slice/client-parcel-element-slice.component';
 import {
@@ -31,6 +37,8 @@ export const ClientParcelElementCreateWidget = new InjectionToken<Widget>('Clien
 export const ClientParcelElementUpdateWidget = new InjectionToken<Widget>('ClientParcelElementUpdateWidget');
 export const ClientParcelElementUpdateBatchWidget = new InjectionToken<Widget>('ClientParcelElementUpdateBatchWidget');
 export const ClientParcelElementFillWidget = new InjectionToken<Widget>('ClientParcelElementFillWidget');
+export const ClientParcelElementNumberingWidget = new InjectionToken<Widget>('ClientParcelElementNumberingWidget');
+export const ClientParcelElementReconciliateWidget = new InjectionToken<Widget>('ClientParcelElementReconciliateWidget');
 export const ClientParcelElementSliceWidget = new InjectionToken<Widget>('ClientParcelElementSliceWidget');
 export const ClientParcelElementSaveWidget = new InjectionToken<Widget>('ClientParcelElementSaveWidget');
 export const ClientParcelElementUndoWidget = new InjectionToken<Widget>('ClientParcelElementUndoWidget');
@@ -81,6 +89,30 @@ export function provideClientParcelElementFillWidget() {
   return {
     provide: ClientParcelElementFillWidget,
     useFactory: clientParcelElementFillWidgetFactory,
+    deps: [WidgetService]
+  };
+}
+
+export function clientParcelElementNumberingWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(ClientParcelElementNumberingComponent);
+}
+
+export function provideClientParcelElementNumberingWidget() {
+  return {
+    provide: ClientParcelElementNumberingWidget,
+    useFactory: clientParcelElementNumberingWidgetFactory,
+    deps: [WidgetService]
+  };
+}
+
+export function clientParcelElementReconciliateWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(ClientParcelElementReconciliateComponent);
+}
+
+export function provideClientParcelElementReconciliateWidget() {
+  return {
+    provide: ClientParcelElementReconciliateWidget,
+    useFactory: clientParcelElementReconciliateWidgetFactory,
     deps: [WidgetService]
   };
 }

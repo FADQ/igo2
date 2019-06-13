@@ -25,7 +25,7 @@ export class ClientParcelElementWorkspace extends Workspace<ClientParcelElement>
   }
 
   loadParcelElements() {
-    this.parcelElementService.getClientParcelElementsByNum(this.meta.client.info.numero)
+    this.parcelElementService.getParcelElements(this.meta.client)
       .subscribe((parcelElements: ClientParcelElement[]) => {
         const store = this.entityStore as FeatureStore<ClientParcelElement>;
         store.load(parcelElements);

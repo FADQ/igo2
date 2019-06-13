@@ -13,6 +13,7 @@
   "yes": "Yes",
   "no": "No",
   "informations": "Informations",
+  "remarque": "Remarque",
 
   "search": {
     "feature.title": "Address, place or coordinate",
@@ -51,6 +52,10 @@
       "zc2": "Zone maïs-grain",
       "rzc": "Région zonage"
     }
+  },
+
+  "errors": {
+    "invalidAnnee": "Format d'année invalide"
   },
 
   "tools": {
@@ -104,18 +109,26 @@
     },
     "parcelElement": {
       "parcel": "Parcelle",
+      "numbering": "Numéroter les parcelles",
+      "numbering.tooltip": "Numéroter les parcelles",
+      "numbering.header": "Numéroter les parcelles",
+      "numbering.numberInUse.error": "Ce numéro de parcelle est déjà utilisé",
       "transfer": "Transférer des parcelles",
       "transfer.tooltip": "Transférer des parcelle",
       "transfer.apply": "Transférer",
       "transaction.title": "Informations non sauvegardées",
       "importData": "Importer des données",
       "importData.tooltip": "Importer des données",
-      "save.error": "Les parcelles n'ont pas pu être sauvegardés"
+      "save.error": "Les parcelles n'ont pas pu être sauvegardés",
+      "save.success": "Sauvegarde réussie",
+      "reconciliate": "Réconcilier les parcelles en édition",
+      "reconciliate.tooltip": "Réconcilier les parcelles en édition",
+      "reconciliate.confirm": "Désirez-vous réconcilier les parcelles en édition?",
+      "reconciliate.invalid": "Des parcelles en édition sont invalides et ne peuvent être réconciliées."
     },
     "schema": {
       "none": "None",
       "error.anneeRequired": "Vous devez saisir une année pour un plan de production ou un avis de dommage",
-      "error.invalidAnnee": "Format d'année invalide",
       "error.onlyOneLSE": "Impossible d’avoir plus d’un schéma de type « Structure d’entreposage »",
       "error.onlyOneEPA": "Impossible d’avoir plus d’un schéma de type « Édition de parcelles agricoles »",
       "error.etatRequiredByEPA": "Seul le schéma de type « Édition de parcelles agricoles » doit contenir un état de schéma",
@@ -154,7 +167,8 @@
       "error.area": "La superficie doit être plus grande que 50m² et plus petite que 999 999 999 m².",
       "importData": "Importer des données dans le schéma",
       "importData.tooltip": "Importer des données dans un schéma",
-      "save.error": "Certains éléments du schéma n'ont pas pu être sauvegardés"
+      "save.error": "Certains éléments du schéma n'ont pas pu être sauvegardés",
+      "save.success": "Sauvegarde réussie"
     }
   },
 

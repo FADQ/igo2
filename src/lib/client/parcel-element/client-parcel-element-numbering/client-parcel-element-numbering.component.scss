@@ -1,0 +1,59 @@
+mat-card {
+  height: 100%;
+  padding-top: 0px;
+}
+
+mat-card-content {
+  overflow-x: hidden;
+  height: 100%;
+}
+
+igo-entity-table {
+  max-height: calc(100% - 130px);
+
+  ::ng-deep {
+    thead {
+      display: none;
+    }
+
+    td.mat-cell:first-child,
+    th.mat-header-cell:first-child {
+      padding-left: 0;
+      width: 25%;
+    }
+
+    td.mat-cell:nth-child(2),
+    th.mat-header-cell:nth-child(2) {
+      text-align: center;
+      width: 50%;
+    }
+
+    td.mat-cell:last-child,
+    th.mat-header-cell:last-child {
+      text-align: right;
+      width: 25%;
+
+      button {
+        color: black;
+        background-color: inherit;
+        margin: 0;
+        box-shadow: none;
+      }
+    }
+  }
+}
+
+mat-card-content.with-error-message {
+  igo-entity-table{
+    max-height: calc(100% - 130px - 14px) !important;
+  }
+}
+
+p.fadq-error-text {
+  margin: 0;
+  text-align: center;
+}
+
+mat-form-field {
+  width: 100%;
+}

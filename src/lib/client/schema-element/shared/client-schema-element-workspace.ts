@@ -32,7 +32,7 @@ export class ClientSchemaElementWorkspace extends Workspace<ClientSchemaElement>
     this.schemaElementService.getSchemaElementTypes(schema.type)
       .pipe(
         concatMap((types: ClientSchemaElementTypes) => {
-          return this.schemaElementService.getElements(schema).pipe(
+          return this.schemaElementService.getSchemaElements(schema).pipe(
             map((elements: ClientSchemaElement[]) => [types, elements])
           );
         })

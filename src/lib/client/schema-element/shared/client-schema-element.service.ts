@@ -2,17 +2,17 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable, of, zip } from 'rxjs';
-import { concatMap, map, reduce, tap, catchError } from 'rxjs/operators';
+import { concatMap, map, tap, catchError } from 'rxjs/operators';
 
 import { EntityOperation, EntityTransaction } from '@igo2/common';
 
 import { ApiService } from 'src/lib/core/api';
 import { hexToRGB } from 'src/lib/utils/color';
+import { TransactionSerializer, TransactionData } from 'src/lib/utils/transaction';
 
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import {
   ClientSchemaElement,
-  ClientSchemaElementTransactionData,
   ClientSchemaElementApiConfig,
   ClientSchemaElementType,
   ClientSchemaElementTypes,
@@ -25,7 +25,7 @@ import {
 import { ClientSchemaElementPointService } from './client-schema-element-point.service';
 import { ClientSchemaElementLineService } from './client-schema-element-line.service';
 import { ClientSchemaElementSurfaceService } from './client-schema-element-surface.service';
-import { ClientSchemaElementTransactionSerializer, computeSchemaElementArea } from './client-schema-element.utils';
+import { computeSchemaElementArea } from './client-schema-element.utils';
 
 @Injectable()
 export class ClientSchemaElementService {
@@ -54,11 +54,11 @@ export class ClientSchemaElementService {
    * @param schema Schema
    * @returns Observable of the all the elements of the schema
    */
-  getElements(schema: ClientSchema): Observable<ClientSchemaElement[]> {
+  getSchemaElements(schema: ClientSchema): Observable<ClientSchemaElement[]> {
     const elements$ = zip(
-      this.schemaElementPointService.getElements(schema),
-      this.schemaElementLineService.getElements(schema),
-      this.schemaElementSurfaceService.getElements(schema)
+      this.schemaElementPointService.getSchemaElements(schema),
+      this.schemaElementLineService.getSchemaElements(schema),
+      this.schemaElementSurfaceService.getSchemaElements(schema)
     );
 
     return elements$.pipe(
@@ -193,7 +193,7 @@ export class ClientSchemaElementService {
     operations: EntityOperation[],
     geometryType: string
   ): Observable<ClientSchemaElement[] | Error> {
-    const serializer = new ClientSchemaElementTransactionSerializer();
+    const serializer = new TransactionSerializer<ClientSchemaElement>();
     const data = serializer.serializeOperations(operations);
     return this.saveElements(schema, data, geometryType);
   }
@@ -207,7 +207,7 @@ export class ClientSchemaElementService {
    */
   private saveElements(
     schema: ClientSchema,
-    data: ClientSchemaElementTransactionData,
+    data: TransactionData<ClientSchemaElement>,
     geometryType: string
   ): Observable<ClientSchemaElement[] | Error> {
     const service = this.services[geometryType];
@@ -219,7 +219,7 @@ export class ClientSchemaElementService {
           if (response instanceof Error) {
             return of(response);
           } else {
-            return (service as GetElements).getElements(schema);
+            return (service as GetElements).getSchemaElements(schema);
           }
         })
       );

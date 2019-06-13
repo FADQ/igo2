@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { FormFieldSelectChoice, EntityTransaction } from '@igo2/common';
 import { Feature } from '@igo2/geo';
 
+import { TransactionData } from 'src/lib/utils/transaction';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 
 export interface ClientSchemaElementApiConfig {
@@ -67,12 +68,6 @@ export interface ClientSchemaElementTypesResponseItem {
   iconeElement?: string;
 }
 
-export interface ClientSchemaElementTransactionData {
-  lstElementsAjoutes: ClientSchemaElement[];
-  lstElementsModifies: ClientSchemaElement[];
-  lstIdElementsSupprimes: string[];
-}
-
 export interface ClientSchemaElementTransactionWrapper {
   schema: ClientSchema;
   transaction: EntityTransaction;
@@ -81,9 +76,9 @@ export interface ClientSchemaElementTransactionWrapper {
 }
 
 export interface GetElements {
-  getElements(schema: ClientSchema): Observable<ClientSchemaElement[]>;
+  getSchemaElements(schema: ClientSchema): Observable<ClientSchemaElement[]>;
 }
 
 export interface SaveElements {
-  saveElements(schema: ClientSchema, data: ClientSchemaElementTransactionData): Observable<any>;
+  saveElements(schema: ClientSchema, data: TransactionData<ClientSchemaElement>): Observable<any>;
 }
