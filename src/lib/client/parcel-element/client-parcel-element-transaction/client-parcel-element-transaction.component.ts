@@ -22,7 +22,7 @@ export class ClientParcelElementTransactionComponent {
 
   onYesClick() {
     this.clientParcelElementService
-      .commitTransaction(this.transaction.transaction)
+      .commitTransaction(this.transaction.client, this.transaction.transaction)
       .subscribe(() => {
         this.transaction.proceed();
         this.dialogRef.close();

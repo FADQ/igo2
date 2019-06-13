@@ -10,7 +10,7 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { LanguageService } from '@igo2/core';
+import { LanguageService, Message, MessageType } from '@igo2/core';
 
 import { EntityTransaction, WidgetComponent, OnUpdateInputs } from '@igo2/common';
 import { FeatureStore } from '@igo2/geo';
@@ -56,8 +56,8 @@ export class ClientSchemaElementSaveComponent implements OnUpdateInputs, WidgetC
    */
   @Output() cancel = new EventEmitter<void>();
 
-  get commitHandler(): (transaction: EntityTransaction) => Observable<string | undefined>  {
-    return (transaction: EntityTransaction): Observable<string | undefined> => this.commitTransaction(transaction);
+  get commitHandler(): (transaction: EntityTransaction) => Observable<Message | undefined>  {
+    return (transaction: EntityTransaction): Observable<Message | undefined> => this.commitTransaction(transaction);
   }
 
   constructor(
@@ -81,7 +81,7 @@ export class ClientSchemaElementSaveComponent implements OnUpdateInputs, WidgetC
     this.cancel.emit();
   }
 
-  private commitTransaction(transaction: EntityTransaction): Observable<string | undefined> {
+  private commitTransaction(transaction: EntityTransaction): Observable<Message | undefined> {
     return this.clientSchemaElementService
       .commitTransaction(this.schema, transaction)
       .pipe(
@@ -89,7 +89,7 @@ export class ClientSchemaElementSaveComponent implements OnUpdateInputs, WidgetC
       );
   }
 
-  private onCommitSuccess(results: Array<ClientSchemaElement[] | Error>): string | undefined {
+  private onCommitSuccess(results: Array<ClientSchemaElement[] | Error>): Message | undefined {
     let hasError = false;
     const schemaElementsToLoad = [];
 
@@ -110,9 +110,18 @@ export class ClientSchemaElementSaveComponent implements OnUpdateInputs, WidgetC
     // is also reloaded but is not obtained from the service.
     this.store.load(schemaElementsToLoad);
 
-    return hasError
-      ? this.languageService.translate.instant('client.schemaElement.save.error')
-      : undefined;
+    if (hasError) {
+      return {
+        type: MessageType.ERROR,
+        text: this.languageService.translate.instant('client.schemaElement.save.error')
+      };
+    }
+
+    return {
+      type: MessageType.SUCCESS,
+      text: this.languageService.translate.instant('client.schemaElement.save.success')
+    };
+      
   }
 
 }

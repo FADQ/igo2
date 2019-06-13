@@ -2,7 +2,6 @@ import * as olstyle from 'ol/style';
 import OlFeature from 'ol/Feature';
 import OlGeoJSON from 'ol/format/GeoJSON';
 
-import { EntityKey, EntityOperation, EntityOperationType } from '@igo2/common';
 import { LanguageService } from '@igo2/core';
 import {
   measureOlGeometryArea,
@@ -14,8 +13,7 @@ import { Client } from '../../shared/client.interfaces';
 import {
   ClientSchemaElement,
   ClientSchemaElementType,
-  ClientSchemaElementTypes,
-  ClientSchemaElementTransactionData
+  ClientSchemaElementTypes
 } from './client-schema-element.interfaces';
 
 export function computeSchemaElementArea(element: ClientSchemaElement): number {
@@ -48,52 +46,6 @@ export function getSchemaElementValidationMessage(
     const messageKey = 'client.schemaElement.error.area';
     return languageService.translate.instant(messageKey);
   }
-}
-
-export class ClientSchemaElementTransactionSerializer {
-
-  serializeOperations(operations: EntityOperation[]): ClientSchemaElementTransactionData {
-    const inserts = [];
-    const updates = [];
-    const deletes = [];
-
-    operations.forEach((operation: EntityOperation) => {
-      if (operation.type === EntityOperationType.Insert) {
-        inserts.push(this.serializeInsert(operation));
-      } else if (operation.type === EntityOperationType.Update) {
-        updates.push(this.serializeUpdate(operation));
-      } else if (operation.type === EntityOperationType.Delete) {
-        deletes.push(this.serializeDelete(operation));
-      }
-    });
-
-    return {
-      lstElementsAjoutes: inserts,
-      lstElementsModifies: updates,
-      lstIdElementsSupprimes: deletes
-    };
-  }
-
-  private serializeInsert(operation: EntityOperation): Partial<ClientSchemaElement> {
-    return this.serializeElement(operation.current as ClientSchemaElement);
-  }
-
-  private serializeUpdate(operation: EntityOperation): Partial<ClientSchemaElement> {
-    return this.serializeElement(operation.current as ClientSchemaElement);
-  }
-
-  private serializeDelete(operation: EntityOperation): EntityKey {
-    return operation.key;
-  }
-
-  private serializeElement(element: ClientSchemaElement): Partial<ClientSchemaElement> {
-    return {
-      type: element.type,
-      geometry: element.geometry,
-      properties: element.properties
-    };
-  }
-
 }
 
 export function generateSchemaElementOperationTitle(

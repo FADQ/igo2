@@ -193,6 +193,7 @@ export class ClientController {
   stopParcelEdition() {
     if (!this.parcelElementTransaction.empty) {
       this.parcelElementTransactionService.enqueue({
+        client: this.client,
         transaction: this.parcelElementTransaction,
         proceed: () => this.stopParcelEdition()
       });

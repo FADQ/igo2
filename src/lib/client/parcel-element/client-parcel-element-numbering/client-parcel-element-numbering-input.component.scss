@@ -1,0 +1,31 @@
+.numbering-input-container {
+  display: flex;
+}
+
+.numbering-part-container {
+  display: inline-block;
+
+  .numbering-part-header {
+    text-align: center;
+    padding-bottom: 10px;
+  }
+
+  input {
+    width: 100%;
+    border: none;
+    background: none;
+    padding: 0;
+    outline: none;
+    font: inherit;
+    text-align: center;
+  }
+}
+
+.numbering-part-container.prefix,
+.numbering-part-container.suffix {
+  width: 25%;
+}
+
+.numbering-part-container.number {
+  width: 50%;
+}

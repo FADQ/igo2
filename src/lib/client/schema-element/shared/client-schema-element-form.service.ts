@@ -135,7 +135,7 @@ export class ClientSchemaElementFormService {
           Validators.pattern(/^([1-9][\d]{3})$/)
         ]),
         errors: {
-          pattern: 'client.schema.error.invalidAnnee'
+          pattern: 'errors.invalidAnnee'
         }
       }
     }, partial));

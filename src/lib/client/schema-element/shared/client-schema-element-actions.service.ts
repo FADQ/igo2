@@ -58,16 +58,16 @@ export class ClientSchemaElementActionsService {
       return ctrl.schemaElementTransaction.inCommitPhase === false;
     }
 
-    function schemaElementIsAPolygon(ctrl: ClientController): boolean {
-      const schemaElement = ctrl.activeSchemaElement;
-      const geometry = schemaElement === undefined ? undefined : schemaElement.geometry;
-      return geometry !== undefined && geometry.type === 'Polygon';
-    }
-
     function schemaElementCanBeFilled(ctrl: ClientController): boolean {
       const schemaElement = ctrl.activeSchemaElement;
       const geometry = schemaElement === undefined ? undefined : schemaElement.geometry;
       return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length > 1;
+    }
+
+    function schemaElementCanBeSliced(ctrl: ClientController): boolean {
+      const schemaElement = ctrl.activeSchemaElement;
+      const geometry = schemaElement === undefined ? undefined : schemaElement.geometry;
+      return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length === 1;
     }
 
     const conditionArgs = [controller];
@@ -173,7 +173,7 @@ export class ClientSchemaElementActionsService {
           });
         },
         args: [this.clientSchemaElementSliceWidget, controller],
-        conditions: [oneSchemaElementIsActive, transactionIsNotInCommitPhase, schemaElementIsAPolygon],
+        conditions: [oneSchemaElementIsActive, transactionIsNotInCommitPhase, schemaElementCanBeSliced],
         conditionArgs
       },
       {

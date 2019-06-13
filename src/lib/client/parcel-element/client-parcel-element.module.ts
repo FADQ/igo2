@@ -15,6 +15,12 @@ import {
   FadqLibClientParcelElementFillModule
 } from './client-parcel-element-fill/client-parcel-element-fill.module';
 import {
+  FadqLibClientParcelElementNumberingModule
+} from './client-parcel-element-numbering/client-parcel-element-numbering.module';
+import {
+  FadqLibClientParcelElementReconciliateModule
+} from './client-parcel-element-reconciliate/client-parcel-element-reconciliate.module';
+import {
   FadqLibClientParcelElementSliceModule
 } from './client-parcel-element-slice/client-parcel-element-slice.module';
 import {
@@ -36,6 +42,8 @@ import {
   provideClientParcelElementUpdateWidget,
   provideClientParcelElementUpdateBatchWidget,
   provideClientParcelElementFillWidget,
+  provideClientParcelElementNumberingWidget,
+  provideClientParcelElementReconciliateWidget,
   provideClientParcelElementSliceWidget,
   provideClientParcelElementSaveWidget,
   provideClientParcelElementImportWidget,
@@ -51,6 +59,8 @@ import {
     FadqLibClientParcelElementUpdateModule,
     FadqLibClientParcelElementUpdateBatchModule,
     FadqLibClientParcelElementFillModule,
+    FadqLibClientParcelElementNumberingModule,
+    FadqLibClientParcelElementReconciliateModule,
     FadqLibClientParcelElementSliceModule,
     FadqLibClientParcelElementSaveModule,
     FadqLibClientParcelElementImportModule,
@@ -69,6 +79,8 @@ export class FadqLibClientParcelElementModule {
         provideClientParcelElementUpdateWidget(),
         provideClientParcelElementUpdateBatchWidget(),
         provideClientParcelElementFillWidget(),
+        provideClientParcelElementNumberingWidget(),
+        provideClientParcelElementReconciliateWidget(),
         provideClientParcelElementSliceWidget(),
         provideClientParcelElementSaveWidget(),
         provideClientParcelElementImportWidget(),

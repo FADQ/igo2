@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ApiService } from 'src/lib/core/api';
+import { TransactionData } from 'src/lib/utils/transaction';
 
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import {
@@ -12,7 +13,6 @@ import {
   ClientSchemaElementApiConfig,
   ClientSchemaElementListResponse,
   ClientSchemaElementListResponseItem,
-  ClientSchemaElementTransactionData,
   GetElements,
   SaveElements
 } from './client-schema-element.interfaces';
@@ -27,7 +27,7 @@ export class ClientSchemaElementSurfaceService implements GetElements, SaveEleme
     private apiConfig: ClientSchemaElementApiConfig
   ) {}
 
-  getElements(schema: ClientSchema): Observable<ClientSchemaElement[]> {
+  getSchemaElements(schema: ClientSchema): Observable<ClientSchemaElement[]> {
     const url = this.apiService.buildUrl(this.apiConfig.surfaces, {
       schemaId: schema.id
     });
@@ -41,7 +41,7 @@ export class ClientSchemaElementSurfaceService implements GetElements, SaveEleme
       );
   }
 
-  saveElements(schema: ClientSchema, data: ClientSchemaElementTransactionData): Observable<any> {
+  saveElements(schema: ClientSchema, data: TransactionData<ClientSchemaElement>): Observable<any> {
     const url = this.apiService.buildUrl(this.apiConfig.saveSurfaces, {
       schemaId: schema.id
     });

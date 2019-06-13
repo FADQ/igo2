@@ -12,6 +12,8 @@ import {
   ClientParcelElementUpdateWidget,
   ClientParcelElementUpdateBatchWidget,
   ClientParcelElementFillWidget,
+  ClientParcelElementNumberingWidget,
+  ClientParcelElementReconciliateWidget,
   ClientParcelElementSliceWidget,
   ClientParcelElementSaveWidget,
   ClientParcelElementImportWidget,
@@ -29,6 +31,8 @@ export class ClientParcelElementActionsService {
     @Inject(ClientParcelElementUpdateWidget) private clientParcelElementUpdateWidget: Widget,
     @Inject(ClientParcelElementUpdateBatchWidget) private clientParcelElementUpdateBatchWidget: Widget,
     @Inject(ClientParcelElementFillWidget) private clientParcelElementFillWidget: Widget,
+    @Inject(ClientParcelElementNumberingWidget) private clientParcelElementNumberingWidget: Widget,
+    @Inject(ClientParcelElementReconciliateWidget) private clientParcelElementReconciliateWidget: Widget,
     @Inject(ClientParcelElementSliceWidget) private clientParcelElementSliceWidget: Widget,
     @Inject(ClientParcelElementSaveWidget) private clientParcelElementSaveWidget: Widget,
     @Inject(EditionUndoWidget) private editionUndoWidget: Widget,
@@ -59,6 +63,12 @@ export class ClientParcelElementActionsService {
       const parcelElement = ctrl.activeParcelElement;
       const geometry = parcelElement === undefined ? undefined : parcelElement.geometry;
       return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length > 1;
+    }
+
+    function parcelElementCanBeSliced(ctrl: ClientController): boolean {
+      const parcelElement = ctrl.activeParcelElement;
+      const geometry = parcelElement === undefined ? undefined : parcelElement.geometry;
+      return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length === 1;
     }
 
     const conditionArgs = [controller];
@@ -170,7 +180,7 @@ export class ClientParcelElementActionsService {
           });
         },
         args: [this.clientParcelElementSliceWidget, controller],
-        conditions: [oneParcelElementIsActive, transactionIsNotInCommitPhase],
+        conditions: [oneParcelElementIsActive, transactionIsNotInCommitPhase, parcelElementCanBeSliced],
         conditionArgs
       },
       {
@@ -180,6 +190,7 @@ export class ClientParcelElementActionsService {
         tooltip: 'edition.save.tooltip',
         handler: (widget: Widget, ctrl: ClientController) => {
           ctrl.parcelElementWorkspace.activateWidget(widget, {
+            client: ctrl.client,
             transaction: ctrl.parcelElementTransaction,
             store: ctrl.parcelElementStore
           });
@@ -233,6 +244,35 @@ export class ClientParcelElementActionsService {
         },
         args: [this.clientParcelElementImportWidget, controller],
         conditions: [transactionIsNotInCommitPhase],
+        conditionArgs
+      },
+      {
+        id: 'numbering',
+        icon: 'counter',
+        title: 'client.parcelElement.numbering',
+        tooltip: 'client.parcelElement.numbering.tooltip',
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.parcelElementWorkspace.activateWidget(widget, {
+            transaction: ctrl.parcelElementTransaction,
+            store: ctrl.parcelElementStore
+          });
+        },
+        args: [this.clientParcelElementNumberingWidget, controller],
+        conditions: [],
+        conditionArgs
+      },
+      {
+        id: 'reconciliate',
+        icon: 'table-merge-cells',
+        title: 'client.parcelElement.reconciliate',
+        tooltip: 'client.parcelElement.reconciliate.tooltip',
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.parcelElementWorkspace.activateWidget(widget, {
+            store: ctrl.parcelElementStore
+          });
+        },
+        args: [this.clientParcelElementReconciliateWidget, controller],
+        conditions: [],
         conditionArgs
       }
     ];

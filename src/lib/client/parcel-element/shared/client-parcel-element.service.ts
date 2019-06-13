@@ -2,11 +2,14 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable, of, zip } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { concatMap, map, reduce, tap, catchError } from 'rxjs/operators';
 
 import { EntityOperation, EntityTransaction } from '@igo2/common';
 
 import { ApiService } from 'src/lib/core/api';
+import { TransactionSerializer, TransactionData } from 'src/lib/utils/transaction';
+
+import { Client } from '../../shared/client.interfaces';
 import {
   ClientParcelElement,
   ClientParcelElementApiConfig,
@@ -23,19 +26,20 @@ export class ClientParcelElementService {
     @Inject('clientParcelApiConfig') private apiConfig: ClientParcelElementApiConfig
   ) {}
 
-  getClientParcelElementsByNum(clientNum: string, annee: number = 2018): Observable<ClientParcelElement[]> {
-    const url = this.apiService.buildUrl(this.apiConfig.list, {
-      clientNum,
-      annee
-    });
-
-    return this.http
-      .get(url)
-      .pipe(
-        map((response: ClientParcelElementListResponse) => {
-          return this.extractParcelsFromListResponse(response, clientNum);
-        })
-      );
+  getParcelElements(client: Client, annee: number = 2018): Observable<ClientParcelElement[]> {
+    return zip(
+      this.buildGetParcelElementsRequest(client, annee),
+      this.buildValidateParcelElementsRequest(client)
+    ).pipe(
+      map((bunch: [ClientParcelElement[], {[key: string]: string[]}]) => {
+        const [parcelElements, errors] = bunch;
+        return parcelElements.map((parcelElement: ClientParcelElement) => {
+          const _errors = errors[parcelElement.properties.id];
+          const meta = Object.assign({}, parcelElement.meta, {errors: _errors});
+          return Object.assign({}, parcelElement, {meta});
+        });
+      })
+    );
   }
 
   /**
@@ -59,47 +63,100 @@ export class ClientParcelElementService {
    * @returns Observable of the all the elements by geometry type or of an error object
    */
   commitTransaction(
+    client: Client,
     transaction: EntityTransaction
   ): Observable<ClientParcelElement[] | Error> {
-    const commits$ = ['Polygon'].map((type: string) => {
-      const operations = transaction.operations.all().filter((operation: EntityOperation) => {
-        const element = (operation.current || operation.previous) as ClientParcelElement;
-        return element.geometry.type === type;
-      });
+    const operations = transaction.operations.all();
+    return transaction.commit(operations, (tx: EntityTransaction, ops: EntityOperation[]) => {
+      return this.commitOperations(client, ops);
+    });
+  }
 
-      return transaction.commit(operations, (tx: EntityTransaction, ops: EntityOperation[]) => {
-        return this.commitOperationsOfType(ops, type);
-      });
+  private buildGetParcelElementsRequest(client: Client, annee: number): Observable<ClientParcelElement[]> {
+    const url = this.apiService.buildUrl(this.apiConfig.list, {
+      clientNum: client.info.numero,
+      annee
     });
 
-    return zip(...commits$);
+    return this.http
+      .get(url)
+      .pipe(
+        map((response: ClientParcelElementListResponse) => {
+          return this.extractParcelsFromListResponse(response, client);
+        })
+      );
+  }
+
+  private buildSaveParcelElementsRequest(client: Client, data: TransactionData<ClientParcelElement>): Observable<any> {
+    return of({});
+    // const url = this.apiService.buildUrl(this.apiConfig.save, {
+    //   cliNum: client.info.numero
+    // });
+    // return this.http.post(url, data);
+  }
+
+  private buildValidateParcelElementsRequest(client: Client): Observable<{[key: string]: string[]}> {
+    const errors = client.parcels.reduce((acc: any, parcel: any) => {
+      acc[parcel.properties.id] = ['Invalide'];
+      return acc
+    }, {});
+    return of(errors);
+    // const url = this.apiService.buildUrl(this.apiConfig.validate, {
+    //   cliNum: client.info.numero
+    // });
+    // return this.http.post(url, data);
   }
 
   /**
    * Commit (save) some operations of a transaction
-   * @param schema Parcel
    * @param operations Transaction operations
    * @param geometryType The geometry type of the data we're saving
    * @returns Observable of the all the elements of that by geometry type or of an error object
    */
-  private commitOperationsOfType(
-    operations: EntityOperation[],
-    geometryType: string
+  private commitOperations(
+    client: Client,
+    operations: EntityOperation[]
   ): Observable<ClientParcelElement[] | Error> {
-    return of([]);
+    const serializer = new TransactionSerializer<ClientParcelElement>();
+    const data = serializer.serializeOperations(operations);
+    return this.saveElements(client, data);
+  }
+
+  /**
+   * Save the elements of a geometry type then fetch all the elements of the type.
+   * @param schema Schema
+   * @param data Data to save
+   * @param geometryType The geometry type of the data we're saving
+   * @returns Observable of the all the elements of that by geometry type or of an error object
+   */
+  private saveElements(
+    client: Client,
+    data: TransactionData<ClientParcelElement>
+  ): Observable<ClientParcelElement[] | Error> {
+    return this.buildSaveParcelElementsRequest(client, data)
+      .pipe(
+        catchError(() => of(new Error())),
+        concatMap((response: any) => {
+          if (response instanceof Error) {
+            return of(response);
+          } else {
+            return this.getParcelElements(client)
+          }
+        })
+      );
   }
 
   private extractParcelsFromListResponse(
     response: ClientParcelElementListResponse,
-    clientNum: string
+    client: Client
   ): ClientParcelElement[] {
     return response
-      .map(listItem => this.listItemToParcel(listItem, clientNum));
+      .map(listItem => this.listItemToParcel(listItem, client));
   }
 
   private listItemToParcel(
     listItem: ClientParcelElementListResponseItem,
-    clientNum: string
+    client: Client
   ): ClientParcelElement {
     const properties = Object.assign({}, listItem.properties);
     return {

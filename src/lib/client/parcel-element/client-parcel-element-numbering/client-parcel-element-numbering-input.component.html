@@ -1,0 +1,23 @@
+<div [formGroup]="parts" class="numbering-input-container">
+  <div class="numbering-part-container prefix">
+    <div class="numbering-part-header">Préfixe</div>
+    <input
+      formControlName="prefix"
+      aria-label="Prefix"
+      (input)="_handleInput()">
+  </div>
+  <div class="numbering-part-container number">
+    <div class="numbering-part-header">Numéro</div>
+    <input
+      formControlName="number"
+      aria-label="Number"
+      (input)="_handleInput()">
+  </div>
+  <div class="numbering-part-container suffix">
+    <div class="numbering-part-header">Suffixe</div>
+    <input
+      formControlName="suffix"
+      aria-label="Suffix"
+      (input)="_handleInput()">
+  </div>
+</div>
