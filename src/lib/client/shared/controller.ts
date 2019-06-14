@@ -23,6 +23,7 @@ import { ClientSchemaElementTransactionService } from '../schema-element/shared/
 export interface ClientControllerOptions {
   map: IgoMap;
   client: Client;
+  controllerStore: EntityStore<ClientController>;
   workspaceStore: WorkspaceStore;
   parcelWorkspace: Workspace<ClientParcel>;
   parcelElementWorkspace: ClientParcelElementWorkspace;
@@ -63,11 +64,18 @@ export class ClientController {
 
   private schemaElementSelectionStrategy: FeatureStoreSelectionStrategy;
 
+  private currentStyle: 'single' | 'multi' = 'single';
+
   /** Map */
   get map(): IgoMap { return this.options.map; }
 
   /** Active client */
   get client(): Client { return this.options.client; }
+
+  /** Controller store */
+  get controllerStore(): EntityStore<ClientController> {
+    return this.options.controllerStore;
+  }
 
   /** Workspace store */
   get workspaceStore(): WorkspaceStore {
@@ -163,30 +171,51 @@ export class ClientController {
     this.initDiagrams();
     this.initParcels();
     this.initSchemas();
-    this.setColor(options.color);
+    this.defineColor(options.color);
   }
 
   destroy() {
     this.message$.next(undefined);
     this.teardownDiagrams();
     this.teardownParcels();
+    this.teardownParcelElements();
     this.teardownSchemas();
   }
 
-  setColor(color: [number, number, number] | undefined) {
-    let olLayerStyle;
-    if (color === undefined) {
-      olLayerStyle = createParcelLayerStyle();
-    } else {
-      olLayerStyle = createPerClientParcelLayerStyle(color);
-    }
-    this.parcelStore.layer.ol.setStyle(olLayerStyle);
+  defineColor(color: [number, number, number] | undefined) {
     this.color$.next(color);
+
+    const olParcelLayerStyle = createPerClientParcelLayerStyle(color);
+    this.parcelStore.layer.ol.setStyle(olParcelLayerStyle);
+
+    this.applyParcelElementStyle();
+    if (this.currentStyle === 'multi') {
+      this.applyParcelMultiClientStyle();
+    }
+  }
+
+  applyParcelMultiClientStyle() {
+    const color = this.color$.value;
+    const olParcelLayerStyle = createPerClientParcelLayerStyle(color);
+    this.parcelStore.layer.ol.setStyle(olParcelLayerStyle);
+    this.currentStyle = 'multi';
+  }
+
+  applyParcelSingleClientStyle() {
+    const olParcelLayerStyle = createParcelLayerStyle();
+    this.parcelStore.layer.ol.setStyle(olParcelLayerStyle);
+    this.currentStyle = 'single';
+  }
+
+  private applyParcelElementStyle() {
+    const color = this.color$.value;
+    const olParcelElementLayerStyle = createPerClientParcelLayerStyle(color);
+    this.parcelElementStore.layer.ol.setStyle(olParcelElementLayerStyle);
   }
 
   startParcelEdition() {
-    this.teardownParcels();
     this.initParcelElements();
+    this.teardownParcels();
     this.workspaceStore.activateWorkspace(this.parcelElementWorkspace);
   }
 

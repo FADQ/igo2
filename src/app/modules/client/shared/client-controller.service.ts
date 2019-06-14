@@ -8,6 +8,7 @@ import {
   ClientControllerOptions,
   ClientSchemaElementTransactionService
 } from 'src/lib/client';
+import { hexToRGB } from 'src/lib/utils/color';
 
 import {
   ClientParcelWorkspaceService,
@@ -26,6 +27,16 @@ import {
 })
 export class ClientControllerService {
 
+  static colors: string[] = [
+    '8e24aa',
+    'ffeb3b',
+    '00bcd4',
+    'd81b60',
+    'ff8f00'
+  ];
+
+  private colorPalette: Iterator<[number, number, number]>;
+
   constructor(
     private mapState: MapState,
     private clientParcelWorkspaceService: ClientParcelWorkspaceService,
@@ -38,7 +49,9 @@ export class ClientControllerService {
     private clientParcelElementTransactionService: ClientParcelElementTransactionService,
     private clientParcelElementWorkspaceService: ClientParcelElementWorkspaceService,
     private clientParcelElementActionsService: ClientParcelElementActionsService,
-  ) {}
+  ) {
+    this.colorPalette = this.createColorIterator();
+  }
 
   createClientController(client: Client, options: Partial<ClientControllerOptions> = {}): ClientController {
     const map = this.mapState.map;
@@ -59,7 +72,8 @@ export class ClientControllerService {
       schemaElementWorkspace,
       parcelElementWorkspace,
       schemaElementTransactionService,
-      // moveToParcels: options.moveToParcels
+      controllerStore: options.controllerStore,
+      color: this.colorPalette.next().value
     });
 
     const parcelActions = this.clientParcelActionsService.buildActions(controller);
@@ -75,6 +89,24 @@ export class ClientControllerService {
     parcelElementWorkspace.actionStore.load(parcelElementActions);
 
     return controller;
+  }
+
+  *createColorIterator(): Iterator<[number, number, number]> {
+    let index = 0;
+    let hex: string;
+
+    while (true) {
+      if (index < ClientControllerService.colors.length) {
+        hex = ClientControllerService.colors[index];
+      } else {
+        hex = '' + Math.floor(Math.random() * 16777215).toString(16);
+      }
+
+      yield hexToRGB(hex);
+
+      index += 1;
+    }
+
   }
 
 }

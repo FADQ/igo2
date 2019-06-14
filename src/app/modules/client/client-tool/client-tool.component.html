@@ -11,6 +11,7 @@
     <ng-template ngFor let-controller [ngForOf]="controllers.view.all$() | async">
       <fadq-client-tool-item
         [controller]="controller"
+        [showLegend]="!(showLegend$ | async)"
         [selected]="(activeController$ | async) === controller"
         (clear)="onClearController($event)"
         (select)="onSelectController($event)">

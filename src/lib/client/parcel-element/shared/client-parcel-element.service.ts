@@ -98,7 +98,7 @@ export class ClientParcelElementService {
   private buildValidateParcelElementsRequest(client: Client): Observable<{[key: string]: string[]}> {
     const errors = client.parcels.reduce((acc: any, parcel: any) => {
       acc[parcel.properties.id] = ['Invalide'];
-      return acc
+      return acc;
     }, {});
     return of(errors);
     // const url = this.apiService.buildUrl(this.apiConfig.validate, {
@@ -140,7 +140,7 @@ export class ClientParcelElementService {
           if (response instanceof Error) {
             return of(response);
           } else {
-            return this.getParcelElements(client)
+            return this.getParcelElements(client);
           }
         })
       );

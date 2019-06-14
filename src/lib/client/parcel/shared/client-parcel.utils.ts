@@ -5,7 +5,6 @@ import { FeatureDataSource, VectorLayer } from '@igo2/geo';
 import { ObjectUtils } from '@igo2/utils';
 
 import { Client } from '../../shared/client.interfaces';
-import { hexToRGB } from 'src/lib/utils/color';
 import { ClientParcelDiagram, ClientParcel, ClientParcelListResponseItem } from './client-parcel.interfaces';
 
 export function getDiagramsFromParcels(parcels: ClientParcel[]): ClientParcelDiagram[] {
@@ -42,24 +41,6 @@ function getParcelFeatureColor(olFeature: OlFeature) {
     3: [0, 218, 250]
   };
   return colors[ olFeature.get('relation')];
-}
-
-export function generateParcelColor(index: number): [number, number, number] {
-  const colors = [
-    '8e24aa',
-    'ffeb3b',
-    '00bcd4',
-    'd81b60',
-    'ff8f00'
-  ];
-
-  let color;
-  if (index >= colors.length) {
-    color = '' + Math.floor(Math.random() * 16777215).toString(16);
-  } else {
-    color = colors[index];
-  }
-  return hexToRGB(color);
 }
 
 export function createParcelLayer(client: Client): VectorLayer {

@@ -1,10 +1,11 @@
 import { Inject, Injectable } from '@angular/core';
 
 import { LanguageService } from '@igo2/core';
-import { Action, Widget } from '@igo2/common';
+import { Action, Widget, EntityStore } from '@igo2/common';
 
 import { EditionUndoWidget } from '../../../edition/shared/edition.widgets';
 
+import { Client } from '../../shared/client.interfaces';
 import { ClientController } from '../../shared/controller';
 import { ClientParcelElement } from './client-parcel-element.interfaces';
 import {
@@ -219,10 +220,17 @@ export class ClientParcelElementActionsService {
         title: 'client.parcelElement.transfer',
         tooltip: 'client.parcelElement.transfer.tooltip',
         handler: (widget: Widget, ctrl: ClientController) => {
+          const clients = ctrl.controllerStore.all()
+            .filter((_ctrl: ClientController) => _ctrl !== ctrl)
+            .map((_ctrl: ClientController) => _ctrl.client);
+          const clientStore = new EntityStore(clients, {
+            getKey: (client: Client) => client.info.numero
+          });
+
           ctrl.parcelElementWorkspace.activateWidget(widget, {
             client: ctrl.client,
-            map: ctrl.map,
-            store: ctrl.parcelElementStore
+            clientStore: clientStore,
+            parcelElementSore: ctrl.parcelElementStore
           });
         },
         args: [this.clientParcelElementTransferWidget, controller],

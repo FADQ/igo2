@@ -13,7 +13,6 @@
   "yes": "Oui",
   "no": "Non",
   "informations": "Informations",
-  "remarque": "Remarque",
 
   "search": {
     "feature.title": "Adresse, lieu ou coordonnées",
@@ -111,6 +110,9 @@
       "numbering.header": "Numéroter les parcelles",
       "numbering.numberInUse.error": "Ce numéro de parcelle est déjà utilisé",
       "transfer": "Transférer des parcelles",
+      "transfer.client.placeholder": "Transférer au client",
+      "transfer.keepParcelNumbers": "Conserver les numéros de parcelles",
+      "transfer.transferAllParcels": "Transférer toutes les parcelles",
       "transfer.tooltip": "Transférer des parcelle",
       "transfer.apply": "Transférer",
       "transaction.title": "Informations non sauvegardées",
@@ -192,8 +194,8 @@
     "save": "Sauvegarder",
     "save.tooltip": "Sauvegarder les éléments",
     "save.confirm": "Désirez-vous sauvegarder les modifications?",
-    "undo": "Annuler tous les modifications",
-    "undo.tooltip": "Annuler tous les modifications",
+    "undo": "Annuler toutes les modifications",
+    "undo.tooltip": "Annuler toutes les modifications",
     "undo.confirm": "Désirez-vous annuler les modifications?",
     "importData.placeholder": "Cliquez ici pour sélectionner un fichier à importer",
     "importData.error.invalidFile": "Impossible d'importer ce fichier",

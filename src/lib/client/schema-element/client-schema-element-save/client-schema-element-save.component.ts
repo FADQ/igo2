@@ -121,7 +121,7 @@ export class ClientSchemaElementSaveComponent implements OnUpdateInputs, WidgetC
       type: MessageType.SUCCESS,
       text: this.languageService.translate.instant('client.schemaElement.save.success')
     };
-      
+
   }
 
 }

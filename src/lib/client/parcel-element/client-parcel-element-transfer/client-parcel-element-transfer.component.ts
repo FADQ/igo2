@@ -3,14 +3,18 @@ import {
   Input,
   Output,
   EventEmitter,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  OnInit,
+  OnDestroy
 } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { WidgetComponent } from '@igo2/common';
-import { IgoMap, FeatureStore } from '@igo2/geo';
+import { Subscription } from 'rxjs';
+
+import { EntityStore, WidgetComponent } from '@igo2/common';
+import { FeatureStore } from '@igo2/geo';
 
 import { Client } from '../../shared/client.interfaces';
-import { ClientParcel } from '../../parcel/shared/client-parcel.interfaces';
 import { ClientParcelElement } from '../../parcel-element/shared/client-parcel-element.interfaces';
 
 @Component({
@@ -19,7 +23,21 @@ import { ClientParcelElement } from '../../parcel-element/shared/client-parcel-e
   styleUrls: ['./client-parcel-element-transfer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientParcelElementTransferComponent implements WidgetComponent {
+export class ClientParcelElementTransferComponent implements WidgetComponent, OnInit, OnDestroy {
+
+  private formGroup: FormGroup;
+
+  private transferAllParcels$$: Subscription;
+
+  get keepParcelNumbers(): boolean { return this.keepParcelNumbersField.value; }
+  get keepParcelNumbersField(): FormControl {
+    return (this.formGroup.controls as any).keepParcelNumbers as FormControl;
+  }
+
+  get transferAllParcels(): boolean { return this.transferAllParcelsField.value; }
+  get transferAllParcelsField(): FormControl {
+    return (this.formGroup.controls as any).transferAllParcels as FormControl;
+  }
 
   /**
    * Client
@@ -27,19 +45,14 @@ export class ClientParcelElementTransferComponent implements WidgetComponent {
   @Input() client: Client;
 
   /**
-   * Map to draw elements on
+   * Client store
    */
-  @Input() map: IgoMap;
-
-  /**
-   * Parcel
-   */
-  @Input() parcel: ClientParcel;
+  @Input() clientStore: EntityStore<Client>;
 
   /**
    * Parcel element store
    */
-  @Input() store: FeatureStore<ClientParcelElement>;
+  @Input() parcelElementStore: FeatureStore<ClientParcelElement>;
 
   /**
    * Event emitted on complete
@@ -51,7 +64,21 @@ export class ClientParcelElementTransferComponent implements WidgetComponent {
    */
   @Output() cancel = new EventEmitter<void>();
 
-  constructor() {}
+  constructor(private formBuilder: FormBuilder) {}
+
+  ngOnInit() {
+    this.formGroup = this.formBuilder.group({
+      keepParcelNumbers: false,
+      transferAllParcels: false
+    });
+
+    this.transferAllParcels$$ = this.transferAllParcelsField.valueChanges
+      .subscribe((value: boolean) => this.onTransferAllParcelsChange(value));
+  }
+
+  ngOnDestroy() {
+    this.transferAllParcels$$.unsubscribe();
+  }
 
   onTransfer() {
     this.complete.emit();
@@ -59,6 +86,19 @@ export class ClientParcelElementTransferComponent implements WidgetComponent {
 
   onCancel() {
     this.cancel.emit();
+  }
+
+  getClientNumber(client: Client): string {
+    return client.info.numero;
+  }
+
+  private onTransferAllParcelsChange(value: boolean) {
+    if (value === true) {
+      this.keepParcelNumbersField.setValue(true);
+      this.keepParcelNumbersField.disable();
+    } else {
+      this.keepParcelNumbersField.enable();
+    }
   }
 
 }

@@ -41,7 +41,7 @@ export class ClientParcelElementTableService {
         },
         {
           name: 'properties.statutAugmentationSupCultivable',
-          title: 'Statut augmentation culture'  // TODO: Validate title
+          title: 'Statut de déboisement'
         },
         {
           name: 'properties.parcelleDrainee',

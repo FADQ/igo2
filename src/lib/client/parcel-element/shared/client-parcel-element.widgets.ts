@@ -33,17 +33,28 @@ import {
   ClientParcelElementTransferComponent
 } from '../client-parcel-element-transfer/client-parcel-element-transfer.component';
 
-export const ClientParcelElementCreateWidget = new InjectionToken<Widget>('ClientParcelElementCreateWidget');
-export const ClientParcelElementUpdateWidget = new InjectionToken<Widget>('ClientParcelElementUpdateWidget');
-export const ClientParcelElementUpdateBatchWidget = new InjectionToken<Widget>('ClientParcelElementUpdateBatchWidget');
-export const ClientParcelElementFillWidget = new InjectionToken<Widget>('ClientParcelElementFillWidget');
-export const ClientParcelElementNumberingWidget = new InjectionToken<Widget>('ClientParcelElementNumberingWidget');
-export const ClientParcelElementReconciliateWidget = new InjectionToken<Widget>('ClientParcelElementReconciliateWidget');
-export const ClientParcelElementSliceWidget = new InjectionToken<Widget>('ClientParcelElementSliceWidget');
-export const ClientParcelElementSaveWidget = new InjectionToken<Widget>('ClientParcelElementSaveWidget');
-export const ClientParcelElementUndoWidget = new InjectionToken<Widget>('ClientParcelElementUndoWidget');
-export const ClientParcelElementImportWidget = new InjectionToken<Widget>('ClientParcelElementImportWidget');
-export const ClientParcelElementTransferWidget = new InjectionToken<Widget>('ClientParcelElementTransferWidget');
+export const ClientParcelElementCreateWidget =
+  new InjectionToken<Widget>('ClientParcelElementCreateWidget');
+export const ClientParcelElementUpdateWidget =
+  new InjectionToken<Widget>('ClientParcelElementUpdateWidget');
+export const ClientParcelElementUpdateBatchWidget =
+  new InjectionToken<Widget>('ClientParcelElementUpdateBatchWidget');
+export const ClientParcelElementFillWidget =
+  new InjectionToken<Widget>('ClientParcelElementFillWidget');
+export const ClientParcelElementNumberingWidget =
+  new InjectionToken<Widget>('ClientParcelElementNumberingWidget');
+export const ClientParcelElementReconciliateWidget =
+  new InjectionToken<Widget>('ClientParcelElementReconciliateWidget');
+export const ClientParcelElementSliceWidget =
+  new InjectionToken<Widget>('ClientParcelElementSliceWidget');
+export const ClientParcelElementSaveWidget =
+  new InjectionToken<Widget>('ClientParcelElementSaveWidget');
+export const ClientParcelElementUndoWidget =
+  new InjectionToken<Widget>('ClientParcelElementUndoWidget');
+export const ClientParcelElementImportWidget =
+  new InjectionToken<Widget>('ClientParcelElementImportWidget');
+export const ClientParcelElementTransferWidget =
+  new InjectionToken<Widget>('ClientParcelElementTransferWidget');
 
 export function clientParcelElementCreateWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientParcelElementCreateComponent);
