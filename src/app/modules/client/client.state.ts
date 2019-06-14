@@ -9,11 +9,8 @@ import {
   Client,
   ClientController,
   ClientService,
-  ClientParcel,
   ClientParcelYear,
-  ClientParcelYearService,
-  ClientSchemaElement,
-  generateParcelColor
+  ClientParcelYearService
 } from 'src/lib/client';
 
 import { ClientControllerService } from './shared/client-controller.service';
@@ -89,8 +86,8 @@ export class ClientState implements OnDestroy {
     }
 
     const controller = this.clientControllerService.createClientController(client, {
-      workspaceStore: this.workspaceStore
-      // moveToParcels: this.shouldMoveToParcels()
+      workspaceStore: this.workspaceStore,
+      controllerStore: this.controllerStore
     });
     this.controllerStore.insert(controller);
     if (this.activeController === undefined) {
@@ -248,17 +245,12 @@ export class ClientState implements OnDestroy {
   private updateControllersColor() {
     if (this.controllerStore.count === 1) {
       const controller = this.controllerStore.all()[0];
-      if (controller.color !== undefined) {
-        controller.setColor(undefined);
-      }
+      controller.applyParcelSingleClientStyle();
       return;
     }
 
     this.controllerStore.all().forEach((controller: ClientController, index: number) => {
-      if (controller.color === undefined) {
-        const color = generateParcelColor(index);
-        controller.setColor(color);
-      }
+      controller.applyParcelMultiClientStyle();
     });
   }
 }

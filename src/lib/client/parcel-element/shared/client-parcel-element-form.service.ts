@@ -38,21 +38,15 @@ export class ClientParcelElementFormService {
       this.createInfoLocateurField()
     );
 
-    const remarqueFields$ = zip(
-      this.createRemarqueField()
-    );
-
     const geometryTitle = this.languageService.translate.instant('geometry.geometry');
     const infoTitle = this.languageService.translate.instant('informations');
-    const remarqueTitle = this.languageService.translate.instant('remarque');
 
-    return zip(geometryFields$, infoFields$, remarqueFields$)
+    return zip(geometryFields$, infoFields$)
       .pipe(
-        map((fields: [FormField[], FormField[], FormField[]]) => {
+        map((fields: [FormField[], FormField[]]) => {
           return this.formService.form([], [
             this.formService.group({name: 'geometry', title: geometryTitle}, fields[0]),
-            this.formService.group({name: 'info', title: infoTitle}, fields[1]),
-            this.formService.group({name: 'remarque', title: remarqueTitle}, fields[2])
+            this.formService.group({name: 'info', title: infoTitle}, fields[1])
           ]);
         })
       );
@@ -100,7 +94,7 @@ export class ClientParcelElementFormService {
   private createStatutAugmField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
     return of(this.createField({
       name: 'properties.statutAugmentationSupCultivable',
-      title: 'Statut d\'augmentation',
+      title: 'Statut de déboisement',
       type: 'select',
       options:  {
         cols: 1
@@ -165,17 +159,6 @@ export class ClientParcelElementFormService {
       title: 'Info locateur',
       options:  {
         cols: 1
-      }
-    }, partial));
-  }
-
-  private createRemarqueField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
-    return of(this.createField({
-      name: 'properties.remarque',
-      title: 'Remarque',
-      type: 'textarea',
-      options:  {
-        cols: 2
       }
     }, partial));
   }

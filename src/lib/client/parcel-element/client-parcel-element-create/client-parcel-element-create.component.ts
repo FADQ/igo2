@@ -5,11 +5,10 @@ import {
   EventEmitter,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  OnInit,
-  OnDestroy
+  OnInit
 } from '@angular/core';
 
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import {
@@ -38,24 +37,13 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientParcelElementCreateComponent
-    implements OnInit, OnDestroy, OnUpdateInputs, WidgetComponent {
+    implements OnInit, OnUpdateInputs, WidgetComponent {
 
   /**
    * Create form
    * @internal
    */
   form$ = new BehaviorSubject<Form>(undefined);
-
-  /**
-   * Create form
-   * @internal
-   */
-  groupIndex$ = new BehaviorSubject<number>(0);
-
-  /**
-   * Subscription to the value changes event
-   */
-  private geometry$$: Subscription;
 
   /**
    * Map to draw elements on
@@ -101,13 +89,6 @@ export class ClientParcelElementCreateComponent
     this.clientParcelElementFormService
       .buildCreateForm(this.map)
       .subscribe((form: Form) => this.setForm(form));
-  }
-
-  ngOnDestroy() {
-    if (this.geometry$$ !== undefined) {
-      this.geometry$$.unsubscribe();
-      this.geometry$$ = undefined;
-    }
   }
 
   /**

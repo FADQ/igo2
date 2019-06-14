@@ -23,6 +23,8 @@ export class ClientToolItemComponent {
 
   @Input() controller: ClientController;
 
+  @Input() showLegend: boolean = false;
+
   /**
    * Whether a row is selected
    */

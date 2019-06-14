@@ -16,7 +16,7 @@
   <button mat-icon-button (click)="onClear()">
     <mat-icon svgIcon="close"></mat-icon>
   </button>
-  <div *ngIf="controller.color$ | async as color" class="fadq-per-client-legend-thumbnail-container">
+  <div *ngIf="showLegend" class="fadq-per-client-legend-thumbnail-container">
     <div class="fadq-per-client-legend-thumbnail-wrapper">
       <div
         class="fadq-per-client-legend-thumbnail"

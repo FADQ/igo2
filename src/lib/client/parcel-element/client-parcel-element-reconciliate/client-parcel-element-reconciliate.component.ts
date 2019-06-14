@@ -57,7 +57,7 @@ export class ClientParcelElementReconciliateComponent implements WidgetComponent
   ngOnInit() {
     const error = this.store.all().find((parcelElement: ClientParcelElement) => {
       const errors = parcelElement.meta.errors || [];
-      return errors.length > 0; 
+      return errors.length > 0;
     });
 
     if (error !== undefined) {

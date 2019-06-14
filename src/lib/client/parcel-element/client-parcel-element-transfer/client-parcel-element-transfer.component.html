@@ -1,21 +1,22 @@
-<form class="igo-form">
-  <mat-form-field>
-    <!--input
-      matInput
-      placeholder="Importer les parcelles du client"
-      name="client"
-      [(ngModel)]="client"-->
-    <input
-      matInput
-      placeholder="Exporter les parcelles sélectionnées au client"
-      name="client">
-  </mat-form-field>
-  <mat-form-field>
-    <input
-      matInput
-      placeholder="Schéma"
-      name="parcel">
-  </mat-form-field>
+<form class="igo-form" [formGroup]="formGroup">
+  <igo-entity-selector
+    [store]="clientStore"
+    [placeholder]="'client.parcelElement.transfer.client.placeholder' | translate"
+    [titleAccessor]="getClientNumber">
+  </igo-entity-selector>
+
+  <div class="slide-toggle-container">
+    <mat-slide-toggle
+      formControlName="keepParcelNumbers"
+      [labelPosition]="'before'">
+      {{'client.parcelElement.transfer.keepParcelNumbers' | translate}}
+    </mat-slide-toggle>
+    <mat-slide-toggle
+      formControlName="transferAllParcels"
+      [labelPosition]="'before'">
+      {{'client.parcelElement.transfer.transferAllParcels' | translate}}
+    </mat-slide-toggle>
+  </div>
 
   <div class="igo-form-buttons">
     <button

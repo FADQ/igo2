@@ -41,7 +41,7 @@ export class EditionSaveComponent implements WidgetComponent {
    */
   message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
-  submitted$: BehaviorSubject<boolean> = new BehaviorSubject(false); 
+  submitted$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   tableTemplate: EntityTableTemplate = {
     selection: false,
