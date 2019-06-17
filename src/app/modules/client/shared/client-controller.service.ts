@@ -49,9 +49,7 @@ export class ClientControllerService {
     private clientParcelElementTransactionService: ClientParcelElementTransactionService,
     private clientParcelElementWorkspaceService: ClientParcelElementWorkspaceService,
     private clientParcelElementActionsService: ClientParcelElementActionsService,
-  ) {
-    this.colorPalette = this.createColorIterator();
-  }
+  ) {}
 
   createClientController(client: Client, options: Partial<ClientControllerOptions> = {}): ClientController {
     const map = this.mapState.map;
@@ -61,6 +59,10 @@ export class ClientControllerService {
     const schemaElementWorkspace = this.clientSchemaElementWorkspaceService.createSchemaElementWorkspace(client, map);
     const parcelElementWorkspace = this.clientParcelElementWorkspaceService.createParcelElementWorkspace(client, map);
     const schemaElementTransactionService = this.clientSchemaElementTransactionService;
+
+    if (this.colorPalette === undefined || options.controllerStore.count === 0) {
+      this.colorPalette = this.createColorIterator();
+    }
 
     const controller = new ClientController({
       map,

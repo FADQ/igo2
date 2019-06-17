@@ -164,6 +164,8 @@ export class EditionUpdateBatchComponent implements  OnUpdateInputs, WidgetCompo
   }
 
   private computeBaseFeature(): Partial<Feature> {
+    // TODO: Properties that share the same value across all features should be
+    // set on the base feature's properties
     const properties = {};
     return {
       type: FEATURE,

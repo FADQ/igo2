@@ -70,9 +70,9 @@ export class ClientSchemaElementFormService {
 
   buildUpdateBatchForm(schema: ClientSchema): Observable<Form> {
     const infoFields$ = zip(
-      this.createDescriptionField(),
-      this.createEtiquetteField(),
-      this.createAnneeImageField()
+      this.createDescriptionField({options: {disabled: true, disableSwitch: true}}),
+      this.createEtiquetteField({options: {disabled: true, disableSwitch: true}}),
+      this.createAnneeImageField({options: {disabled: true, disableSwitch: true}})
     );
 
     const infoTitle = this.languageService.translate.instant('informations');

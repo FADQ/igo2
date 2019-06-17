@@ -14,6 +14,7 @@ import { createPerClientParcelLayerStyle, createParcelLayerStyle } from '../parc
 import { ClientParcelElementWorkspace } from '../parcel-element/shared/client-parcel-element-workspace';
 import { ClientParcelElement } from '../parcel-element/shared/client-parcel-element.interfaces';
 import { ClientParcelElementTransactionService } from '../parcel-element/shared/client-parcel-element-transaction.service';
+import { createParcelElementLayerStyle } from '../parcel-element/shared/client-parcel-element.utils';
 
 import { ClientSchema } from '../schema/shared/client-schema.interfaces';
 import { ClientSchemaElement } from '../schema-element/shared/client-schema-element.interfaces';
@@ -209,7 +210,7 @@ export class ClientController {
 
   private applyParcelElementStyle() {
     const color = this.color$.value;
-    const olParcelElementLayerStyle = createPerClientParcelLayerStyle(color);
+    const olParcelElementLayerStyle = createParcelElementLayerStyle(color);
     this.parcelElementStore.layer.ol.setStyle(olParcelElementLayerStyle);
   }
 

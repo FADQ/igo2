@@ -58,12 +58,12 @@ export class ClientParcelElementFormService {
 
   buildUpdateBatchForm(): Observable<Form> {
     const infoFields$ = zip(
-      this.createNoParcelField(),
-      this.createStatutAugmField(),
-      this.createParcelleDraineeField(),
-      this.createSourceParcelleField(),
-      this.createAnneeImageField(),
-      this.createInfoLocateurField()
+      this.createNoParcelField({options: {disabled: true}}),
+      this.createStatutAugmField({options: {disabled: true, disableSwitch: true}}),
+      this.createParcelleDraineeField({options: {disabled: true, disableSwitch: true}}),
+      this.createSourceParcelleField({options: {disabled: true, disableSwitch: true}}),
+      this.createAnneeImageField({options: {disabled: true, disableSwitch: true}}),
+      this.createInfoLocateurField({options: {disabled: true, disableSwitch: true}})
     );
     const infoTitle = this.languageService.translate.instant('informations');
 
