@@ -13,25 +13,26 @@ export function createParcelElementLayer(client: Client): VectorLayer {
     title: `${client.info.numero} - Parcelles du schéma`,
     zIndex: 102,
     source: parcelElementDataSource,
-    style: createParcelElementLayerStyle(client),
     removable: false,
     browsable: false
   });
 }
 
-export function createParcelElementLayerStyle(client: Client): (olFeature: OlFeature) => olstyle.Style {
+export function createParcelElementLayerStyle(
+  color: [number, number, number]
+): (olFeature: OlFeature) => olstyle.Style {
   const olStyle = new olstyle.Style({
-    fill: new olstyle.Fill(),
+    fill: new olstyle.Fill({
+      color: color.concat([0.30])
+    }),
     stroke: new olstyle.Stroke({
+      color: color,
       width: 2
     }),
     text: createParcelElementLayerTextStyle()
   });
 
   return (function(olFeature: OlFeature) {
-    const color = getParcelElementDefaultColor();
-    olStyle.getFill().setColor(color.concat([0.30]));
-    olStyle.getStroke().setColor(color);
     olStyle.getText().setText(olFeature.get('noParcelleAgricole'));
     return olStyle;
   });
@@ -44,10 +45,6 @@ function createParcelElementLayerTextStyle(): olstyle.Text {
     stroke: new olstyle.Stroke({ color: '#fff', width: 3 }),
     overflow: true
   });
-}
-
-function getParcelElementDefaultColor() {
-  return [128, 21, 21];
 }
 
 export function getParcelElementValidationMessage(
