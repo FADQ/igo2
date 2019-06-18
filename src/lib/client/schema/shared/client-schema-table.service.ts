@@ -42,7 +42,7 @@ export class ClientSchemaTableService {
         },
         {
           name: 'descriptionEtat',
-          title: 'État'
+          title: 'État de schéma'
         },
         {
           name: 'timbreMaj.date',

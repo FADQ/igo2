@@ -99,8 +99,12 @@ export class ClientSchemaElementImportComponent implements OnUpdateInputs, Widge
     });
     return this.clientSchemaElementService.createSchemaElement(this.schema, data)
       .pipe(
-        map((schemaElement: ClientSchemaElement): EditionResult => {
-          const error =  getSchemaElementValidationMessage(schemaElement, this.languageService);
+        map((schemaElement: ClientSchemaElement | undefined): EditionResult => {
+          if (schemaElement === undefined) {
+            return undefined;
+          }
+
+          const error = getSchemaElementValidationMessage(schemaElement, this.languageService);
           return error === undefined ? {feature: schemaElement} : undefined;
         })
       );

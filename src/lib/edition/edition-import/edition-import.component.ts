@@ -32,7 +32,7 @@ import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition
 })
 export class EditionImportComponent implements WidgetComponent, OnInit {
 
-  projection: string;
+  projection: string = 'EPSG:4326';
 
   /**
    * File object
@@ -155,6 +155,11 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
    * @internal
    */
   private onImportSuccess(features: Feature[]) {
+    if (features.length === 0) {
+      this.onEmptyFile();
+      return;
+    }
+
     const results$ = [];
     if (typeof this.processData === 'function') {
       features.forEach((feature: Feature) => {
@@ -225,6 +230,16 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
         title: getOperationTitle(feature, this.languageService)
       });
     });
+  }
+
+  /**
+   * On nothing to import error, display a message and clear the selected file
+   */
+  private onEmptyFile() {
+    const messageKey = 'edition.importData.error.emptyFile';
+    const message = this.languageService.translate.instant(messageKey);
+    this.errorMessage$.next(message);
+    this.file$.next(undefined);
   }
 
   /**
