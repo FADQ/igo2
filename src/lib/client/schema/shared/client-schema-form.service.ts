@@ -99,7 +99,7 @@ export class ClientSchemaFormService {
   private createNumeroClientField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
     return of(this.createField({
       name: 'numeroClient',
-      title: 'Numéro de client',
+      title: 'Client pour transfert',
       options:  {
         cols: 2,
         validator: Validators.required
@@ -171,7 +171,7 @@ export class ClientSchemaFormService {
         map((choices: FormFieldSelectChoice[]) => {
           return this.createField({
             name: 'etat',
-            title: 'État',
+            title: 'État de schéma',
             type: 'select',
             options:  {
               cols: 1,

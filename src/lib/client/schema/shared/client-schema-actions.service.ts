@@ -3,7 +3,7 @@ import { Inject, Injectable} from '@angular/core';
 import { Action, Widget } from '@igo2/common';
 
 import { ClientController } from '../../shared/controller';
-import { ClientSchemaType } from '../../schema/shared/client-schema.enums';
+import { ClientSchemaType, ClientSchemaEtat } from '../../schema/shared/client-schema.enums';
 import {
   ClientSchemaCreateWidget,
   ClientSchemaUpdateWidget,
@@ -37,8 +37,11 @@ export class ClientSchemaActionsService {
       return schemaIsDefined(ctrl) && ctrl.schema.type === ClientSchemaType.LSE;
     }
 
-    function schemaIsNotOfTypeLSE(ctrl: ClientController): boolean {
-      return schemaIsDefined(ctrl) && ctrl.schema.type !== ClientSchemaType.LSE;
+    function schemaCanBeDuplicated(ctrl: ClientController): boolean {
+      return schemaIsDefined(ctrl) &&
+        !schemaIsOfTypeLSE(ctrl) &&
+        ctrl.schema.etat !== ClientSchemaEtat.ENTRAI &&
+        ctrl.schema.etat !== ClientSchemaEtat.VALIDE;
     }
 
     const conditionArgs = [controller];
@@ -103,7 +106,7 @@ export class ClientSchemaActionsService {
           });
         },
         args: [this.clientSchemaDuplicateWidget, controller],
-        conditions: [schemaIsNotOfTypeLSE],
+        conditions: [schemaCanBeDuplicated],
         conditionArgs
       },
       {

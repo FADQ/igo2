@@ -53,7 +53,7 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
     columns: [
       {
         name: 'properties.title',
-        title: 'Exclusion'
+        title: 'Exclusion(s) à réinclure'
       }
     ]
   };

@@ -30,7 +30,7 @@ export class ClientSchemaTransferComponent implements OnInit, OnUpdateInputs, Wi
    * Transfer form
    * @internal
    */
-  public form$: Subject<Form> = new Subject<Form>();
+  form$: Subject<Form> = new Subject<Form>();
 
   /**
    * Slice error, if any

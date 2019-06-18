@@ -159,16 +159,15 @@
       "add.tooltip": "Ajouter un document",
       "delete": "Supprimer",
       "delete.tooltip": "Supprimer un document",
-      "download": "Télécharger",
       "download.tooltip": "Télécharger un document"
     },
     "schemaElement": {
       "transaction.title": "Informations non sauvegardées",
       "error.etiquetteMaxLength": "Vous devez saisir une étiquette de moins de 25 caractères.",
-      "error.descriptionMaxLength": "Vous devez saisir une étiquette de moins de 250 caractères.",
+      "error.descriptionMaxLength": "Vous devez saisir une description de moins de 250 caractères.",
       "error.area": "La superficie doit être plus grande que 50m² et plus petite que 999 999 999 m².",
-      "importData": "Importer des données dans le schéma",
-      "importData.tooltip": "Importer des données dans un schéma",
+      "importData": "Importer des données dans ce schéma",
+      "importData.tooltip": "Importer des données dans ce schéma",
       "save.error": "Certains éléments du schéma n'ont pas pu être sauvegardés",
       "save.success": "Sauvegarde réussie"
     }
@@ -188,7 +187,7 @@
     "fill.message": "Sélectionnez les surfaces à réinclure",
     "slice": "Couper un élément",
     "slice.tooltip": "Couper un élément",
-    "slice.message": "Tracer une ligne pour couper l'élément sélectionné",
+    "slice.message": "Tracez une ligne pour couper l'élément sélectionné",
     "slice.apply": "Couper",
     "move": "Déplacer",
     "move.tooltip": "Déplacer un élément",
@@ -199,7 +198,8 @@
     "undo.tooltip": "Annuler toutes les modifications",
     "undo.confirm": "Désirez-vous annuler les modifications?",
     "importData.placeholder": "Cliquez ici pour sélectionner un fichier à importer",
-    "importData.error.invalidFile": "Impossible d'importer ce fichier",
+    "importData.error.emptyFile": "Le fichier est vide, impossible d'importer",
+    "importData.error.invalidFile": "Le fichier est impossible à lire",
     "importData.error.nothingToImport": "Aucun élément géométrique valide trouvé dans ce fichier",
     "exportToCSV": "Exporter les données en CSV",
     "exportToCSV.tooltip": "Exporter les données en CSV"

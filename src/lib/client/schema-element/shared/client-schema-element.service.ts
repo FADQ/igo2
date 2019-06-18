@@ -127,7 +127,10 @@ export class ClientSchemaElementService {
    * @param data Schema element data
    * @returns Observable of the schema element
    */
-  createSchemaElement(schema: ClientSchema, data: Partial<ClientSchemaElement>): Observable<ClientSchemaElement> {
+  createSchemaElement(
+    schema: ClientSchema,
+    data: Partial<ClientSchemaElement>
+  ): Observable<ClientSchemaElement | undefined> {
     const properties = Object.assign({
       idSchema: schema.id,
       idElementGeometrique: undefined,
@@ -144,10 +147,15 @@ export class ClientSchemaElementService {
 
     return zip(
       of(partial),
+      this.getSchemaElementGeometryTypes(schema.type),
       this.getSchemaElementTypeDescription(schema.type, properties.typeElement)
     ).pipe(
-      map((bunch: [ClientSchemaElement, string]) => {
-        const [element, typeDescription] = bunch;
+      map((bunch: [ClientSchemaElement, string[], string]) => {
+        const [element, geometryTypes, typeDescription] = bunch;
+        if (!geometryTypes.includes(element.geometry.type)) {
+          return undefined;
+        }
+
         element.properties.descriptionTypeElement = typeDescription;
         element.properties.superficie = computeSchemaElementArea(element);
         return element;
