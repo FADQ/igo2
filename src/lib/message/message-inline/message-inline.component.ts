@@ -8,7 +8,7 @@ import {
 import { Message, MessageType } from '@igo2/core';
 
 /**
- * Map actions bar
+ * Inline message
  */
 @Component({
   selector: 'fadq-message-inline',
