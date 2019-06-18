@@ -30,6 +30,11 @@ export class PlaceService {
     private apiService: ApiService
   ) {}
 
+  /**
+   * Get the places of a category (without geometry)
+   * @param category Category
+   * @returns Observable of the places
+   */
   getPlacesByCategory(category: PlaceCategory): Observable<Place[]> {
     const api = category.collection;
     const url = this.apiService.buildUrl(api.uri);
@@ -38,6 +43,12 @@ export class PlaceService {
       .pipe(map(res => this.extractPlacesFromResponse(res, category)));
   }
 
+  /**
+   * Get a place's feature (geometry)
+   * @param category Category
+   * @param place Place
+   * @returns Observable of the place's feature
+   */
   getPlaceFeatureByCategory(category: PlaceCategory, place: Place): Observable<Feature> {
     const api = category.feature;
     const url = this.apiService.buildUrl(api.uri, {id: place.id});
@@ -46,16 +57,22 @@ export class PlaceService {
       .pipe(map(res => this.extractPlaceFeatureFromResponse(res, place)));
   }
 
-  private extractPlacesFromResponse(response: Object, category: PlaceCategory): Place[] {
+  /**
+   * Extract places from list response
+   * @param response List response
+   * @param category Category
+   * @returns Places list
+   */
+  private extractPlacesFromResponse(response: object, category: PlaceCategory): Place[] {
     let data = response;
     if (response.hasOwnProperty('data')) {
       data = response['data'];
     }
 
     const api = category.collection;
-    let results: Object[] = [];
+    let results: object[] = [];
     if (data instanceof Array) {
-      results = data as Object[];
+      results = data as object[];
     } else if (api.resultsProperty !== undefined && data.hasOwnProperty(api.resultsProperty)) {
       results = data[api.resultsProperty];
     }
@@ -71,7 +88,13 @@ export class PlaceService {
     });
   }
 
-  private formatPlaceResult(result: Object, mapper: PlaceMapper): Place {
+  /**
+   * Format a place result
+   * @param result Result
+   * @param mapper Attribute mapper
+   * @returns Place
+   */
+  private formatPlaceResult(result: object, mapper: PlaceMapper): Place {
     const id = String(result[mapper.idProperty]);
     const title = this.computeTitle(result, mapper) || id;
     return {
@@ -80,14 +103,26 @@ export class PlaceService {
     };
   }
 
-  private extractPlaceFeatureFromResponse(response: Object, place: Place): Feature | undefined {
+  /**
+   * Extract place feature from response
+   * @param response Feature response
+   * @param place Place
+   * @returns Place feature
+   */
+  private extractPlaceFeatureFromResponse(response: object, place: Place): Feature | undefined {
     if (Object.getOwnPropertyNames(response).length > 0) {
       return this.formatPlaceFeatureResult(response, place);
     }
     return;
   }
 
-  private formatPlaceFeatureResult(result: Object, place: Place): Feature {
+  /**
+   * Format a place feature result
+   * @param result Result
+   * @param place Place
+   * @returns Feature
+   */
+  private formatPlaceFeatureResult(result: object, place: Place): Feature {
     return Object.assign({
       projection: 'EPSG:4326',
       meta: {
@@ -96,7 +131,13 @@ export class PlaceService {
     }, result) as Feature;
   }
 
-  private computeTitle(result: Object, mapper: PlaceMapper): string | undefined {
+  /**
+   * Compute a place's title
+   * @param result Result
+   * @param mapper Attribute mapper
+   * @returns Place title
+   */
+  private computeTitle(result: object, mapper: PlaceMapper): string | undefined {
     let title;
     if (mapper.titleProperty !== undefined) {
       title = result[mapper.titleProperty];

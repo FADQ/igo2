@@ -9,7 +9,9 @@ import * as oleasing from 'ol/easing';
 import { Poi } from '@igo2/context';
 import { IgoMap } from '@igo2/geo';
 
-
+/**
+ * POI selector
+ */
 @Component({
   selector: 'fadq-poi-selector',
   templateUrl: './poi-selector.component.html',
@@ -18,16 +20,35 @@ import { IgoMap } from '@igo2/geo';
 })
 export class PoiSelectorComponent implements OnInit {
 
+  /**
+   * List of filtered pois
+   * @internal
+   */
   filteredPois$: Observable<Poi[]>;
 
+  /**
+   * Selected poi form control
+   * @internal
+   */
   poiControl = new FormControl();
 
+  /**
+   * Map
+   */
   @Input() map: IgoMap;
 
+  /**
+   * List of all pois
+   * @internal
+   */
   @Input() pois: Poi[];
 
   constructor() {}
 
+  /**
+   * On init, setup an observable of filtered pois
+   * @internal
+   */
   ngOnInit() {
     this.filteredPois$ = this.poiControl.valueChanges
       .pipe(
@@ -42,22 +63,46 @@ export class PoiSelectorComponent implements OnInit {
       );
   }
 
+  /**
+   * Zoom to the selected poi
+   * @param poi POI
+   * @internal
+   */
   onPoiSelect(poi: Poi) {
     this.zoomToPoi(poi);
   }
 
+  /**
+   * Rezoom to the selected poi
+   * @internal
+   */
   onZoomButtonClick() {
     this.zoomToPoi(this.poiControl.value);
   }
 
+  /**
+   * Clear the selected poi form control
+   * @internal
+   */
   onClearButtonClick() {
     this.poiControl.setValue(undefined);
   }
 
+  /**
+   * Get a poi's title
+   * @param poi POI
+   * @returns Title
+   * @internal
+   */
   getPoiTitle(poi?: Poi) {
     return poi ? poi.title : undefined;
   }
 
+  /**
+   * Filter pois by title
+   * @param title Title
+   * @returns List of filtered pois
+   */
   private filterPoisByTitle(title: string): Poi[] {
     const filterValue = title.toLowerCase();
     return this.pois.filter(poi => {
@@ -65,6 +110,10 @@ export class PoiSelectorComponent implements OnInit {
     });
   }
 
+  /**
+   * Zoom to a poi
+   * @param poi POI
+   */
   private zoomToPoi(poi: Poi) {
     const center = olproj.fromLonLat(
       [Number(poi.x), Number(poi.y)],
