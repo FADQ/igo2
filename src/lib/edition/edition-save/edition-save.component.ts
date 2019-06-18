@@ -41,8 +41,16 @@ export class EditionSaveComponent implements WidgetComponent {
    */
   message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
+  /**
+   * Observable of the submit status
+   * @internal
+   */
   submitted$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
+  /**
+   * Transaction operations table template
+   * @internal
+   */
   tableTemplate: EntityTableTemplate = {
     selection: false,
     sort: false,
@@ -66,7 +74,7 @@ export class EditionSaveComponent implements WidgetComponent {
   };
 
   /**
-   * Schema element store
+   * Feature store
    */
   @Input() store: FeatureStore;
 
@@ -76,7 +84,7 @@ export class EditionSaveComponent implements WidgetComponent {
   @Input() transaction: EntityTransaction;
 
   /**
-   * Process data before submit
+   * Commit handler
    */
   @Input() commitHandler: (transaction: EntityTransaction) => Observable<Message | undefined>;
 
@@ -92,15 +100,27 @@ export class EditionSaveComponent implements WidgetComponent {
 
   constructor() {}
 
+  /**
+   * Commit transaction
+   * @internal
+   */
   onSubmit() {
     this.commitHandler(this.transaction)
       .subscribe((message?: Message) => this.onCommit(message));
   }
 
+  /**
+   * Event emitted on cancel
+   */
   onCancel() {
     this.cancel.emit();
   }
 
+  /**
+   * On operation click, select the associated feature
+   * @param operation Operation
+   * @internal
+   */
   onOperationClick(operation: EntityOperation) {
     const store = operation.store;
     const entity = operation.current;
@@ -109,6 +129,11 @@ export class EditionSaveComponent implements WidgetComponent {
     }
   }
 
+  /**
+   * that returns no message, emit the complete event.
+   * Either way, always update the submitted state.
+   * @param message Message or undefined
+   */
   private onCommit(message?: Message) {
     this.message$.next(message);
     if (message === undefined) {

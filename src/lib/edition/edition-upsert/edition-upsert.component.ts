@@ -92,6 +92,11 @@ export class EditionUpsertComponent implements  OnUpdateInputs, WidgetComponent 
     this.cdRef.detectChanges();
   }
 
+  /**
+   * Do any additional processing of the new or updated feature (optional).
+   * @param data Feature data
+   * @internal
+   */
   onSubmit(data: Feature) {
     if (typeof this.processData === 'function') {
       const resultOrObservable = this.processData(data);
@@ -107,10 +112,18 @@ export class EditionUpsertComponent implements  OnUpdateInputs, WidgetComponent 
     }
   }
 
+  /**
+   * Emit the cancel event
+   * @internal
+   */
   onCancel() {
     this.cancel.emit();
   }
 
+  /**
+   * Display  an error message, if any
+   * @param results Edition results
+   */
   private submitResult(result: EditionResult) {
     const error = result.error;
     this.errorMessage$.next(error);
@@ -120,6 +133,10 @@ export class EditionUpsertComponent implements  OnUpdateInputs, WidgetComponent 
     }
   }
 
+  /**
+   * Add the new or updated to the transaction and emit the complete event
+   * @param featurs Features
+   */
   private onSubmitSuccess(feature: Feature) {
     if (this.transaction !== undefined && this.store !== undefined) {
       this.addToTransaction(feature);
@@ -127,6 +144,10 @@ export class EditionUpsertComponent implements  OnUpdateInputs, WidgetComponent 
     this.complete.emit(feature);
   }
 
+  /**
+   * Add the new or updated feature to the transaction
+   * @param feature Feature
+   */
   private addToTransaction(feature: Feature) {
     const getOperationTitle = this.getOperationTitle ? this.getOperationTitle : getDefaultOperationTitle;
     const operationTitle = getOperationTitle(feature, this.languageService);

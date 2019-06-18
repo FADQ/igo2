@@ -13,8 +13,10 @@ import { BehaviorSubject, Observable, of, zip } from 'rxjs';
 import {
   EntityTransaction,
   Form,
+  FormField,
   WidgetComponent,
-  OnUpdateInputs
+  OnUpdateInputs,
+  getAllFormFields
 } from '@igo2/common';
 import { LanguageService } from '@igo2/core';
 import { FEATURE, Feature, FeatureStore } from '@igo2/geo';
@@ -103,6 +105,12 @@ export class EditionUpdateBatchComponent implements  OnUpdateInputs, WidgetCompo
     this.cdRef.detectChanges();
   }
 
+  /**
+   * Batch update the features properties then,
+   * do any additional processing of these features (optional).
+   * @param data Feature data
+   * @internal
+   */
   onSubmit(data: Partial<Feature>) {
     const features = this.updateFeatures(data);
     const results$ = [];
@@ -124,10 +132,18 @@ export class EditionUpdateBatchComponent implements  OnUpdateInputs, WidgetCompo
     }
   }
 
+  /**
+   * Emit the cancel event
+   * @internal
+   */
   onCancel() {
     this.cancel.emit();
   }
 
+  /**
+   * Display  an error message, if any
+   * @param results Edition results
+   */
   private submitResults(results: EditionResult[]) {
     const firstResultWithError = results.find((result: EditionResult) => result.error !== undefined);
     const error = firstResultWithError === undefined ? undefined : firstResultWithError.error;
@@ -138,6 +154,10 @@ export class EditionUpdateBatchComponent implements  OnUpdateInputs, WidgetCompo
     }
   }
 
+  /**
+   * Add the updated features to the transaction and emit the complete event
+   * @param featurs Features
+   */
   private onSubmitSuccess(features: Feature[]) {
     if (this.transaction !== undefined && this.store !== undefined) {
       this.addToTransaction(features);
@@ -145,6 +165,10 @@ export class EditionUpdateBatchComponent implements  OnUpdateInputs, WidgetCompo
     this.complete.emit(features);
   }
 
+  /**
+   * Add the updated features to the transaction
+   * @param feature Feature
+   */
   private addToTransaction(features: Feature[]) {
     const getOperationTitle = this.getOperationTitle ? this.getOperationTitle : getDefaultOperationTitle;
 
@@ -155,6 +179,10 @@ export class EditionUpdateBatchComponent implements  OnUpdateInputs, WidgetCompo
     });
   }
 
+  /**
+   * Update features
+   * @param feature Feature
+   */
   private updateFeatures(data: Partial<Feature>): Feature[] {
     return this.features.map((feature: Feature) => {
       const properties = Object.assign({}, feature.properties, data.properties);
@@ -163,10 +191,37 @@ export class EditionUpdateBatchComponent implements  OnUpdateInputs, WidgetCompo
     });
   }
 
+  /**
+   * Compute the base feature to work with. The properties that share
+   * the same value accros all features will be kept. Other properties
+   * will be set to undefined.
+   * @returns Feature
+   */
   private computeBaseFeature(): Partial<Feature> {
-    // TODO: Properties that share the same value across all features should be
-    // set on the base feature's properties
-    const properties = {};
+    const fields = getAllFormFields(this.form);
+    const fieldNames = fields.map((field: FormField) => field.name);
+
+    const keys = this.features
+      .reduce((acc: string[], feature: Feature) => {
+        return acc.concat(Object.keys(feature.properties));
+      }, [])
+      .filter((key: string) => fieldNames.includes(`properties.${key}`));
+    const uniqueKeys = new Set(keys);
+
+    const deleted = [];
+    const properties = this.features.reduce((acc: {[key: string]: any}, feature: Feature) => {
+      uniqueKeys.forEach((key: string) => {
+        const value = feature.properties[key];
+        if (!(key in acc) && !deleted.includes(key)) {
+          acc[key] = value;
+        } else if (acc[key] !== value) {
+          delete acc[key];
+          deleted.push(key);
+        }
+      });
+      return acc;
+    }, {});
+
     return {
       type: FEATURE,
       properties,
