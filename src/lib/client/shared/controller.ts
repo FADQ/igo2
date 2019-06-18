@@ -1,4 +1,4 @@
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { EntityRecord, EntityStore, EntityTransaction, Workspace, WorkspaceStore } from '@igo2/common';
 import {
@@ -214,6 +214,10 @@ export class ClientController {
     this.parcelElementStore.layer.ol.setStyle(olParcelElementLayerStyle);
   }
 
+  canStartParcelEdition(): Observable<boolean> {
+    return this.parcelElementWorkspace.canStartParcelEdition();
+  }
+
   startParcelEdition() {
     this.initParcelElements();
     this.teardownParcels();
@@ -417,13 +421,17 @@ export class ClientController {
 
   private setDiagram(diagram: ClientParcelDiagram) {
     this.parcelStore.state.clear();
+    this.parcelElementStore.state.clear();
+
     if (diagram === undefined) {
       this.parcelStore.view.filter(undefined);
+      this.parcelElementStore.view.filter(undefined);
     } else {
-      const filterClause = function(parcel: ClientParcel): boolean {
+      const filterClause = function(parcel: ClientParcel | ClientParcelElement): boolean {
         return parcel.properties.noDiagramme === diagram.id;
       };
       this.parcelStore.view.filter(filterClause);
+      this.parcelElementStore.view.filter(filterClause);
     }
   }
 

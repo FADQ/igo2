@@ -55,15 +55,15 @@ export class ClientSchemaElementService {
    * @returns Observable of the all the elements of the schema
    */
   getSchemaElements(schema: ClientSchema): Observable<ClientSchemaElement[]> {
-    const elements$ = zip(
+    const schemaElements$ = zip(
       this.schemaElementPointService.getSchemaElements(schema),
       this.schemaElementLineService.getSchemaElements(schema),
       this.schemaElementSurfaceService.getSchemaElements(schema)
     );
 
-    return elements$.pipe(
-      map((elements: [ClientSchemaElement[], ClientSchemaElement[], ClientSchemaElement[]]) => {
-        return [].concat(...elements);
+    return schemaElements$.pipe(
+      map((schemaElements: [ClientSchemaElement[], ClientSchemaElement[], ClientSchemaElement[]]) => {
+        return [].concat(...schemaElements);
       })
     );
   }
@@ -87,13 +87,13 @@ export class ClientSchemaElementService {
         map((response: ClientSchemaElementTypesResponse) => {
           return this.extractSchemaElementTypesFromResponse(response);
         }),
-        tap((elementTypes: ClientSchemaElementTypes) => {
-          this.cacheSchemaElementTypes(schemaType, elementTypes);
+        tap((schemaElementTypes: ClientSchemaElementTypes) => {
+          this.cacheSchemaElementTypes(schemaType, schemaElementTypes);
         })
       );
   }
 
-  getSchemaElementTypeDescription(schemaType: string, elementType: string): Observable<string> {
+  getSchemaElementTypeDescription(schemaType: string, schemaElementType: string): Observable<string> {
     return this.getSchemaElementTypes(schemaType)
       .pipe(
         map((types: ClientSchemaElementTypes): string => {
@@ -101,7 +101,7 @@ export class ClientSchemaElementService {
             .reduce((acc: ClientSchemaElementType[], _types: ClientSchemaElementTypes) => {
               return acc.concat(...Object.values(_types));
             }, []);
-          const type = allTypes.find((_type: ClientSchemaElementType) => _type.value === elementType);
+          const type = allTypes.find((_type: ClientSchemaElementType) => _type.value === schemaElementType);
 
           return type ? type.title : undefined;
         })
@@ -115,8 +115,8 @@ export class ClientSchemaElementService {
    */
   getSchemaElementGeometryTypes(schemaType: string): Observable<string[]> {
     return this.getSchemaElementTypes(schemaType).pipe(
-      map((elementTypes: ClientSchemaElementTypes) => {
-        return Object.keys(elementTypes).filter((key: string) => elementTypes[key].length > 0);
+      map((schemaElementTypes: ClientSchemaElementTypes) => {
+        return Object.keys(schemaElementTypes).filter((key: string) => schemaElementTypes[key].length > 0);
       })
     );
   }
@@ -151,14 +151,14 @@ export class ClientSchemaElementService {
       this.getSchemaElementTypeDescription(schema.type, properties.typeElement)
     ).pipe(
       map((bunch: [ClientSchemaElement, string[], string]) => {
-        const [element, geometryTypes, typeDescription] = bunch;
-        if (!geometryTypes.includes(element.geometry.type)) {
+        const [schemaElement, geometryTypes, typeDescription] = bunch;
+        if (!geometryTypes.includes(schemaElement.geometry.type)) {
           return undefined;
         }
 
-        element.properties.descriptionTypeElement = typeDescription;
-        element.properties.superficie = computeSchemaElementArea(element);
-        return element;
+        schemaElement.properties.descriptionTypeElement = typeDescription;
+        schemaElement.properties.superficie = computeSchemaElementArea(schemaElement);
+        return schemaElement;
       })
     );
   }
@@ -177,8 +177,8 @@ export class ClientSchemaElementService {
   ): Observable<Array<ClientSchemaElement[] | Error>> {
     const commits$ = ['Point', 'LineString', 'Polygon'].map((type: string) => {
       const operations = transaction.operations.all().filter((operation: EntityOperation) => {
-        const element = (operation.current || operation.previous) as ClientSchemaElement;
-        return element.geometry.type === type;
+        const schemaElement = (operation.current || operation.previous) as ClientSchemaElement;
+        return schemaElement.geometry.type === type;
       });
 
       return transaction.commit(operations, (tx: EntityTransaction, ops: EntityOperation[]) => {
@@ -262,8 +262,8 @@ export class ClientSchemaElementService {
    * @param schemaType Schema type
    * @param elementTypes Element types
    */
-  private cacheSchemaElementTypes(schemaType: string, elementTypes:  ClientSchemaElementTypes) {
-    this.schemaElementTypes[schemaType] = elementTypes;
+  private cacheSchemaElementTypes(schemaType: string, schemaElementTypes:  ClientSchemaElementTypes) {
+    this.schemaElementTypes[schemaType] = schemaElementTypes;
   }
 
 }

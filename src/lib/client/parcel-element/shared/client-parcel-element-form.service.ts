@@ -176,7 +176,7 @@ export class ClientParcelElementFormService {
         geometryType: 'Polygon',
         geometryTypeField: false,
         drawGuideField: true,
-        drawGuide: 0,
+        drawGuide: undefined,
         drawGuidePlaceholder: 'Guide d\'aide au traçage',
         measure: true
       }

@@ -2,13 +2,14 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable, of, zip } from 'rxjs';
-import { concatMap, map, reduce, tap, catchError } from 'rxjs/operators';
+import { concatMap, map, catchError } from 'rxjs/operators';
 
 import { EntityOperation, EntityTransaction } from '@igo2/common';
 
 import { ApiService } from 'src/lib/core/api';
 import { TransactionSerializer, TransactionData } from 'src/lib/utils/transaction';
 
+import { computeParcelElementArea } from './client-parcel-element.utils';
 import { Client } from '../../shared/client.interfaces';
 import {
   ClientParcelElement,
@@ -25,6 +26,14 @@ export class ClientParcelElementService {
     private apiService: ApiService,
     @Inject('clientParcelApiConfig') private apiConfig: ClientParcelElementApiConfig
   ) {}
+
+  canStartParcelEdition(client: Client): Observable<boolean> {
+    return of(false);
+    // const url = this.apiService.buildUrl(this.apiConfig.startEdition, {
+    //   cliNum: client.info.numero
+    // });
+    // return this.http.post(url, data);
+  }
 
   getParcelElements(client: Client, annee: number = 2018): Observable<ClientParcelElement[]> {
     return zip(
@@ -51,6 +60,7 @@ export class ClientParcelElementService {
   createParcelElement(data: Partial<ClientParcelElement>): Observable<ClientParcelElement> {
     const properties = Object.assign({}, data.properties);
     const parcelElement = Object.assign({}, data, {properties}) as ClientParcelElement;
+    parcelElement.properties.superficie = computeParcelElementArea(parcelElement);
     return of(parcelElement);
   }
 

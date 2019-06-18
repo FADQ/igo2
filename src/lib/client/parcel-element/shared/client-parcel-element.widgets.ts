@@ -6,6 +6,9 @@ import {
   ClientParcelElementCreateComponent
 } from '../client-parcel-element-create/client-parcel-element-create.component';
 import {
+  ClientParcelElementEditComponent
+} from '../client-parcel-element-edit/client-parcel-element-edit.component';
+import {
   ClientParcelElementUpdateComponent
 } from '../client-parcel-element-update/client-parcel-element-update.component';
 import {
@@ -35,6 +38,8 @@ import {
 
 export const ClientParcelElementCreateWidget =
   new InjectionToken<Widget>('ClientParcelElementCreateWidget');
+  export const ClientParcelElementEditWidget =
+  new InjectionToken<Widget>('ClientParcelElementEditWidget');
 export const ClientParcelElementUpdateWidget =
   new InjectionToken<Widget>('ClientParcelElementUpdateWidget');
 export const ClientParcelElementUpdateBatchWidget =
@@ -64,6 +69,18 @@ export function provideClientParcelElementCreateWidget() {
   return {
     provide: ClientParcelElementCreateWidget,
     useFactory: clientParcelElementCreateWidgetFactory,
+    deps: [WidgetService]
+  };
+}
+
+export function clientParcelElementEditWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(ClientParcelElementEditComponent);
+}
+
+export function provideClientParcelElementEditWidget() {
+  return {
+    provide: ClientParcelElementEditWidget,
+    useFactory: clientParcelElementEditWidgetFactory,
     deps: [WidgetService]
   };
 }
