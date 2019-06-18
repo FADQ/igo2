@@ -77,13 +77,6 @@ export class MapActionbarComponent implements OnInit, OnDestroy {
     };
 
     return [
-      // {
-      //   id: MapAction.BaseLayerSwitcher,
-      //   icon: 'photo_library',
-      //   title: 'map.actionbar.baselayerswitcher.title',
-      //   tooltip: 'map.actionbar.baselayerswitcher.tooltip',
-      //   handler: () => {}
-      // },
       {
         id: MapAction.ZoomIn,
         icon: 'magnify-plus-outline',
@@ -131,22 +124,6 @@ export class MapActionbarComponent implements OnInit, OnDestroy {
           this.map.viewController.setInitialState();
         }
       },
-      // {
-      //   id: MapAction.ClickInteraction,
-      //   icon: 'mouse',
-      //   title: 'map.actionbar.clickinteraction.title',
-      //   tooltip: 'map.actionbar.clickinteraction.tooltip',
-      //   handler: () => {}
-      // },
-      // {
-      //   id: MapAction.Geolocation,
-      //   icon: 'my_location',
-      //   title: 'map.actionbar.geolocation.title',
-      //   tooltip: 'map.actionbar.geolocation.tooltip',
-      //   handler: () => {
-      //     this.map.geolocate();
-      //   }
-      // },
       {
         id: MapAction.GoogleView,
         icon: 'google-maps',
