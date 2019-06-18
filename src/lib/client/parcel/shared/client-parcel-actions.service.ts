@@ -1,6 +1,8 @@
-import { Injectable} from '@angular/core';
+import { Inject, Injectable} from '@angular/core';
 
-import { Action, EntityTableColumn } from '@igo2/common';
+import { ClientParcelElementEditWidget } from '../../parcel-element/shared/client-parcel-element.widgets';
+
+import { Action, EntityTableColumn, Widget } from '@igo2/common';
 import { entitiesToRowData,  exportToCSV } from '@igo2/geo';
 
 import { ClientController } from '../../shared/controller';
@@ -10,17 +12,30 @@ import { ClientController } from '../../shared/controller';
 })
 export class ClientParcelActionsService {
 
+  constructor(
+    @Inject(ClientParcelElementEditWidget) private clientParcelElementEditWidget: Widget
+  ) {}
+
   buildActions(controller: ClientController): Action[] {
     return [
       {
         id: 'startEdition',
         icon: 'square-edit-outline',
-        title: 'client.parcel.startEdition',
-        tooltip: 'client.parcel.startEdition.tooltip',
-        handler: function(ctrl: ClientController) {
-          ctrl.startParcelEdition();
+        title: 'client.parcelElement.startEdition',
+        tooltip: 'client.parcelElement.startEdition.tooltip',
+        handler: function(widget: Widget, ctrl: ClientController) {
+          ctrl.canStartParcelEdition()
+            .subscribe((response: boolean) => {
+              if (response === true) {
+                ctrl.startParcelEdition();
+              } else {
+                ctrl.parcelWorkspace.activateWidget(widget, {
+                  controller: ctrl
+                });
+              }
+            });
         },
-        args: [controller]
+        args: [this.clientParcelElementEditWidget, controller]
       },
       {
         id: 'export',

@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+
 import { EntityTableTemplate, Workspace, WorkspaceOptions } from '@igo2/common';
 import { FeatureStore } from '@igo2/geo';
 
@@ -30,5 +32,9 @@ export class ClientParcelElementWorkspace extends Workspace<ClientParcelElement>
         const store = this.entityStore as FeatureStore<ClientParcelElement>;
         store.load(parcelElements);
       });
+  }
+
+  canStartParcelEdition(): Observable<boolean> {
+    return this.parcelElementService.canStartParcelEdition(this.meta.client);
   }
 }

@@ -11,7 +11,7 @@ import { ClientSchemaElement } from './client-schema-element.interfaces';
 })
 export class ClientSchemaElementTableService {
 
-  static elementTypes = {
+  static schemaElementTypes = {
     'Point': 'P',
     'LineString': 'L',
     'Polygon': 'S'
@@ -37,8 +37,8 @@ export class ClientSchemaElementTableService {
           name: 'geometry.type',
           title: 'Type',
           renderer: EntityTableColumnRenderer.HTML,
-          valueAccessor: (element: ClientSchemaElement) => {
-            return `<b>${ClientSchemaElementTableService.elementTypes[element.geometry.type]}`;
+          valueAccessor: (schemaElement: ClientSchemaElement) => {
+            return `<b>${ClientSchemaElementTableService.schemaElementTypes[schemaElement.geometry.type]}`;
           }
         },
         {
@@ -60,24 +60,24 @@ export class ClientSchemaElementTableService {
         {
           name: 'properties.superficie',
           title: 'Superficie(m²)',
-          valueAccessor: (element: ClientSchemaElement) => {
-            const area = element.properties.superficie;
+          valueAccessor: (schemaElement: ClientSchemaElement) => {
+            const area = schemaElement.properties.superficie;
             return area ? formatMeasure(area, {decimal: 1, locale: 'fr'}) : '';
           }
         },
         {
           name: 'superficieHectares',
           title: 'Superficie (ha)',
-          valueAccessor: (element: ClientSchemaElement) => {
-            const area = element.properties.superficie;
+          valueAccessor: (schemaElement: ClientSchemaElement) => {
+            const area = schemaElement.properties.superficie;
             return area ? formatMeasure(squareMetersToHectares(area), {decimal: 1, locale: 'fr'}) : '';
           }
         },
         {
           name: 'superficieAcres',
           title: 'Superficie (acres)',
-          valueAccessor: (element: ClientSchemaElement) => {
-            const area = element.properties.superficie;
+          valueAccessor: (schemaElement: ClientSchemaElement) => {
+            const area = schemaElement.properties.superficie;
             return area ? formatMeasure(squareMetersToAcres(area), {decimal: 1, locale: 'fr'}) : '';
           }
         },
@@ -88,8 +88,8 @@ export class ClientSchemaElementTableService {
         {
           name: 'properties.timbreMaj',
           title: 'Date de mise à jour',
-          valueAccessor: (element: ClientSchemaElement) => {
-            const value = element.properties.timbreMaj;
+          valueAccessor: (schemaElement: ClientSchemaElement) => {
+            const value = schemaElement.properties.timbreMaj;
             if (!value) { return ''; }
             return formatDate(value);
           }

@@ -1,11 +1,25 @@
 import * as olstyle from 'ol/style';
 import OlFeature from 'ol/Feature';
+import OlGeoJSON from 'ol/format/GeoJSON';
 
 import { LanguageService } from '@igo2/core';
-import { FeatureDataSource, VectorLayer } from '@igo2/geo';
+import {
+  FeatureDataSource,
+  VectorLayer,
+  measureOlGeometryArea
+} from '@igo2/geo';
 
 import { Client } from '../../shared/client.interfaces';
 import { ClientParcelElement } from './client-parcel-element.interfaces';
+
+export function computeParcelElementArea(parcelElement: ClientParcelElement): number {
+  const measureProjection = 'EPSG:32198';
+  const olGeometry = new OlGeoJSON().readGeometry(parcelElement.geometry, {
+    dataProjection: parcelElement.projection,
+    featureProjection: measureProjection
+  });
+  return measureOlGeometryArea(olGeometry, measureProjection);
+}
 
 export function createParcelElementLayer(client: Client): VectorLayer {
   const parcelElementDataSource = new FeatureDataSource();

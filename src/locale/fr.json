@@ -97,11 +97,7 @@
     "parcel": {
       "year.placeholder": "Année",
       "exportToCSV": "Exporter les données en CSV",
-      "exportToCSV.tooltip": "Exporter les données en CSV",
-      "startEdition": "Édition de parcelles",
-      "startEdition.tooltip": "Démarrer l'édition de parcelles",
-      "stopEdition": "Édition de parcelles",
-      "stopEdition.tooltip": "Arrêter l'édition de parcelles"
+      "exportToCSV.tooltip": "Exporter les données en CSV"
     },
     "parcelElement": {
       "parcel": "Parcelle",
@@ -123,7 +119,12 @@
       "reconciliate": "Réconcilier les parcelles en édition",
       "reconciliate.tooltip": "Réconcilier les parcelles en édition",
       "reconciliate.confirm": "Désirez-vous réconcilier les parcelles en édition?",
-      "reconciliate.invalid": "Des parcelles en édition sont invalides et ne peuvent être réconciliées."
+      "reconciliate.invalid": "Des parcelles en édition sont invalides et ne peuvent être réconciliées.",
+      "edit.confirm": "Désirez-vous débuter l'édition de parcelles?",
+      "startEdition": "Édition de parcelles",
+      "startEdition.tooltip": "Démarrer l'édition de parcelles",
+      "stopEdition": "Édition de parcelles",
+      "stopEdition.tooltip": "Arrêter l'édition de parcelles"
     },
     "diagram": {
       "placeholder": "Diagramme",

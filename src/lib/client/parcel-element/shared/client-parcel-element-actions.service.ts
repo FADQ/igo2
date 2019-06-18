@@ -72,14 +72,18 @@ export class ClientParcelElementActionsService {
       return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length === 1;
     }
 
+    function moreThanOneClient(ctrl: ClientController): boolean {
+      return ctrl.controllerStore.count > 1;
+    }
+
     const conditionArgs = [controller];
 
     return [
       {
         id: 'stopEdition',
         icon: 'cancel',
-        title: 'client.parcel.stopEdition',
-        tooltip: 'client.parcel.stopEdition.tooltip',
+        title: 'client.parcelElement.stopEdition',
+        tooltip: 'client.parcelElement.stopEdition.tooltip',
         handler: function(ctrl: ClientController) {
           ctrl.stopParcelEdition();
         },
@@ -215,6 +219,23 @@ export class ClientParcelElementActionsService {
         conditionArgs
       },
       {
+        id: 'importData',
+        icon: 'import',
+        title: 'client.parcelElement.importData',
+        tooltip: 'client.parcelElement.importData.tooltip',
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.parcelElementWorkspace.activateWidget(widget, {
+            parcelElement: ctrl.activeParcelElement,
+            transaction: ctrl.parcelElementTransaction,
+            map: ctrl.map,
+            store: ctrl.parcelElementStore
+          });
+        },
+        args: [this.clientParcelElementImportWidget, controller],
+        conditions: [transactionIsNotInCommitPhase],
+        conditionArgs
+      },
+      {
         id: 'transfer',
         icon: 'swap-horizontal',
         title: 'client.parcelElement.transfer',
@@ -234,23 +255,6 @@ export class ClientParcelElementActionsService {
           });
         },
         args: [this.clientParcelElementTransferWidget, controller],
-        conditions: [transactionIsNotInCommitPhase],
-        conditionArgs
-      },
-      {
-        id: 'importData',
-        icon: 'import',
-        title: 'client.parcelElement.importData',
-        tooltip: 'client.parcelElement.importData.tooltip',
-        handler: (widget: Widget, ctrl: ClientController) => {
-          ctrl.parcelElementWorkspace.activateWidget(widget, {
-            parcelElement: ctrl.activeParcelElement,
-            transaction: ctrl.parcelElementTransaction,
-            map: ctrl.map,
-            store: ctrl.parcelElementStore
-          });
-        },
-        args: [this.clientParcelElementImportWidget, controller],
         conditions: [transactionIsNotInCommitPhase],
         conditionArgs
       },

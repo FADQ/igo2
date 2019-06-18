@@ -1,6 +1,7 @@
 import { Injectable} from '@angular/core';
 
 import { EntityTableTemplate } from '@igo2/common';
+import { formatMeasure, squareMetersToHectares } from '@igo2/geo';
 
 import { formatDate } from 'src/lib/utils/date';
 import { ClientParcelElement } from './client-parcel-element.interfaces';
@@ -33,11 +34,19 @@ export class ClientParcelElementTableService {
         },
         {
           name: 'properties.superficie',
-          title: 'Superficie mesurée (m²)'
+          title: 'Superficie mesurée (m²)',
+          valueAccessor: (parcelElement: ClientParcelElement) => {
+            const area = parcelElement.properties.superficie;
+            return area ? formatMeasure(area, {decimal: 0, locale: 'fr'}) : '';
+          }
         },
         {
-          name: 'properties.superficieHectare',
-          title: 'Superficie mesurée (ha)'
+          name: 'superficieHectares',
+          title: 'Superficie mesurée (ha)',
+          valueAccessor: (parcelElement: ClientParcelElement) => {
+            const area = parcelElement.properties.superficie;
+            return area ? formatMeasure(squareMetersToHectares(area), {decimal: 1, locale: 'fr'}) : '';
+          }
         },
         {
           name: 'properties.statutAugmentationSupCultivable',
