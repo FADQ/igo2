@@ -149,6 +149,11 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, 
     this.cdRef.detectChanges();
   }
 
+   /**
+   * Slice the base feature into multiple features and
+   * do any additional processing on them (optional).
+   * @internal
+   */
   onSubmit() {
     const features = this.computeFeatures();
     const results$ = [];
@@ -170,10 +175,18 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, 
     }
   }
 
+  /**
+   * Emit the cancel event
+   * @internal
+   */
   onCancel() {
     this.cancel.emit();
   }
 
+  /**
+   * Display  an error message, if any
+   * @param result Edition result
+   */
   private submitResults(results: EditionResult[]) {
     const firstResultWithError = results.find((result: EditionResult) => result.error !== undefined);
     const error = firstResultWithError === undefined ? undefined : firstResultWithError.error;
@@ -184,6 +197,11 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, 
     }
   }
 
+  /**
+   * Remove the base feature from the transaction, add the new ones
+   * and emit the complete event
+   * @param feature Feature
+   */
   private onSubmitSuccess(features: Feature[]) {
     this.submitEnabled$.next(false);
     if (this.transaction !== undefined && this.store !== undefined) {
@@ -283,6 +301,10 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, 
     this.errorMessage$.next(message);
   }
 
+  /**
+   * Compute the sliced features
+   * @returns Features
+   */
   private computeFeatures(): Feature[] {
     const olFeatures = this.sliceControl.getSource().getFeatures();
     if (olFeatures.length <= 1) {

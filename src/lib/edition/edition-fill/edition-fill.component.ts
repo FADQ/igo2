@@ -41,6 +41,10 @@ import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition
 })
 export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy {
 
+  /**
+   * Exclusion table template
+   * @internal
+   */
   tableTemplate: EntityTableTemplate = {
     sort: false,
     selection: true,
@@ -54,10 +58,14 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
     ]
   };
 
+  /**
+   * Exclusion store
+   * @internal
+   */
   exclusionStore: FeatureStore;
 
   /**
-   * Import error, if any
+   * Error message, if any
    * @internal
    */
   errorMessage$: BehaviorSubject<string> = new BehaviorSubject(undefined);
@@ -99,21 +107,37 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
 
   /**
    * Event emitted on cancel
+   * @internal
    */
   @Output() cancel = new EventEmitter<void>();
 
   constructor(private languageService: LanguageService) {}
 
+  /**
+   * Create the exclusion store and add a layer of exclusions
+   * to the map
+   * @internal
+   */
   ngOnInit() {
     this.exclusionStore = this.createExclusionStore();
     this.map.ol.addLayer(this.exclusionStore.layer.ol);
   }
 
+  /**
+   * Clear the exclusion store and remove the layer of exclusions
+   * from the map
+   * @internal
+   */
   ngOnDestroy() {
     this.map.ol.removeLayer(this.exclusionStore.layer.ol);
     this.exclusionStore.clear();
   }
 
+  /**
+   * Remove the exclusions from the base feature then,
+   * do any additional processing of the feature (optional).
+   * @internal
+   */
   onSubmit() {
     const feature = this.updateFeature();
     if (typeof this.processData === 'function') {
@@ -130,10 +154,18 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
     }
   }
 
+  /**
+   * Emit the cancel event
+   * @internal
+   */
   onCancel() {
     this.cancel.emit();
   }
 
+  /**
+   * Display  an error message, if any
+   * @param result Edition result
+   */
   private submitResult(result: EditionResult) {
     const error = result.error;
     this.errorMessage$.next(error);
@@ -143,6 +175,10 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
     }
   }
 
+  /**
+   * Add the base feature to the transaction and emit the complete event
+   * @param feature Feature
+   */
   private onSubmitSuccess(feature: Feature) {
     if (this.transaction !== undefined && this.store !== undefined) {
       this.addToTransaction(feature);
@@ -150,6 +186,10 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
     this.complete.emit(feature);
   }
 
+  /**
+   * Add the updated and processed base feature to the transaction
+   * @param feature Feature
+   */
   private addToTransaction(feature: Feature) {
     const getOperationTitle = this.getOperationTitle ? this.getOperationTitle : getDefaultOperationTitle;
     const operationTitle = getOperationTitle(feature, this.languageService);
@@ -158,6 +198,11 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
     });
   }
 
+  /**
+   * Create an exclusion store with selection capabilities
+   * and load the base feature's exclusions into it.
+   * @returns Exclusion store
+   */
   private createExclusionStore(): FeatureStore {
     const getKey = (exclusion: Feature) => exclusion.properties.id;
     const exclusionStore = new FeatureStore([], {
@@ -206,6 +251,10 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
     return exclusionStore;
   }
 
+  /**
+   * Remove the selected exclusions from the base feature
+   * @returns Updated feature
+   */
   private updateFeature() {
     const keepExclusions = this.exclusionStore.stateView
       .manyBy((record: EntityRecord<Feature>) => record.state.selected !== true)

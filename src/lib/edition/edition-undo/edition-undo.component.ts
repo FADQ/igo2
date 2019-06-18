@@ -33,11 +33,19 @@ export class EditionUndoComponent implements WidgetComponent {
 
   constructor() {}
 
+  /**
+   * Rollback the transaction
+   * @internal
+   */
   onSubmit() {
     this.transaction.rollback();
     this.complete.emit();
   }
 
+  /**
+   * Emit the cancel event
+   * @internal
+   */
   onCancel() {
     this.cancel.emit();
   }

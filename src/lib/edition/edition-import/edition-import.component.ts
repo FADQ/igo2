@@ -41,7 +41,7 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
   file$: BehaviorSubject<File> = new BehaviorSubject(undefined);
 
   /**
-   * Import error, if any
+   * Error message, if any
    * @internal
    */
   errorMessage$: Subject<string> = new Subject();
@@ -103,10 +103,20 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
     private languageService: LanguageService
   ) {}
 
+  /**
+   * Set the proper placeholder
+   * @internal
+   */
   ngOnInit() {
     this.resetPlaceholder();
   }
 
+  /**
+   * Keep a reference to the selected file, update the placeholder and
+   * enable the submit button.
+   * @param files Selected files
+   * @internal
+   */
   onSelectFiles(files: File[]) {
     const file = files.length > 0 ? files[0] : undefined;
     if (file === undefined) {
@@ -118,6 +128,10 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
     this.file$.next(file);
   }
 
+  /**
+   * Handle the imported file like the import tool does
+   * @internal
+   */
   onImport() {
     const projection = this.projection || 'EPSG:4326';
     this.importService.import(this.file$.value, projection)
@@ -127,10 +141,19 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
     );
   }
 
+  /**
+   * Handle the imported file like the import tool does
+   * @internal
+   */
   onCancel() {
     this.cancel.emit();
   }
 
+  /**
+   * Process the imported features then, submit those that are not undefined
+   * @param features Imported features
+   * @internal
+   */
   private onImportSuccess(features: Feature[]) {
     const results$ = [];
     if (typeof this.processData === 'function') {
@@ -151,6 +174,12 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
     }
   }
 
+  /**
+   * Submit processed features. If any feature has an error, display it
+   * and don't move forward
+   * @param results Results of the processed features
+   * @internal
+   */
   private submitResults(results: EditionResult[]) {
     const firstResultWithError = results.find((result: EditionResult) => result.error !== undefined);
     const error = firstResultWithError === undefined ? undefined : firstResultWithError.error;
@@ -161,6 +190,12 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
     }
   }
 
+  /**
+   * Add features to the transaction, if any, then move the
+   * map's view over them and emit the complete event.
+   * @param features Features
+   * @internal
+   */
   private onSubmitSuccess(features: Feature[]) {
     this.submitEnabled$.next(false);
     if (features.length === 0) {
@@ -178,6 +213,10 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
     this.complete.emit(features);
   }
 
+  /**
+   * Add the imported and processed features to the transaction
+   * @param features Features
+   */
   private addToTransaction(features: Feature[]) {
     const getOperationTitle = this.getOperationTitle ? this.getOperationTitle : getDefaultOperationTitle;
 
@@ -188,6 +227,10 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
     });
   }
 
+  /**
+   * On any import error, display a message and clear the selected file
+   * @param error Error instance
+   */
   private onImportError(error: ImportError) {
     const messageKey = 'edition.importData.error.invalidFile';
     const message = this.languageService.translate.instant(messageKey);
@@ -195,6 +238,9 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
     this.file$.next(undefined);
   }
 
+  /**
+   * On nothing to import error, display a message and clear the selected file
+   */
   private onNothingToImport() {
     const messageKey = 'edition.importData.error.nothingToImport';
     const message = this.languageService.translate.instant(messageKey);
@@ -202,6 +248,9 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
     this.file$.next(undefined);
   }
 
+  /**
+   * Reset the file input placeholder
+   */
   private resetPlaceholder() {
     const key = 'edition.importData.placeholder';
     const placeholder = this.languageService.translate.instant(key);
