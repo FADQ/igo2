@@ -247,10 +247,10 @@ export class ClientController {
     });
 
     this.diagram$$ = this.diagramStore.stateView
-      .firstBy$((record: EntityRecord<ClientParcelDiagram>) => record.state.selected === true)
-      .subscribe((record: EntityRecord<ClientParcelDiagram>) => {
-        const diagram = record ? record.entity : undefined;
-        this.onSelectDiagram(diagram);
+      .manyBy$((record: EntityRecord<ClientParcelDiagram>) => record.state.selected === true)
+      .subscribe((records: EntityRecord<ClientParcelDiagram>[]) => {
+        const diagrams = records.map((record: EntityRecord<ClientParcelDiagram>) => record.entity);
+        this.onSelectDiagrams(diagrams);
       });
   }
 
@@ -415,20 +415,21 @@ export class ClientController {
     this.workspaceStore.delete(this.schemaElementWorkspace);
   }
 
-  private onSelectDiagram(diagram: ClientParcelDiagram) {
-    this.setDiagram(diagram);
+  private onSelectDiagrams(diagrams: ClientParcelDiagram[]) {
+    this.setDiagrams(diagrams);
   }
 
-  private setDiagram(diagram: ClientParcelDiagram) {
+  private setDiagrams(diagrams: ClientParcelDiagram[]) {
     this.parcelStore.state.clear();
     this.parcelElementStore.state.clear();
 
-    if (diagram === undefined) {
+    if (diagrams.length === 0) {
       this.parcelStore.view.filter(undefined);
       this.parcelElementStore.view.filter(undefined);
     } else {
+      const diagramIds = diagrams.map((diagram: ClientParcelDiagram) => diagram.id);
       const filterClause = function(parcel: ClientParcel | ClientParcelElement): boolean {
-        return parcel.properties.noDiagramme === diagram.id;
+        return diagramIds.includes(parcel.properties.noDiagramme);
       };
       this.parcelStore.view.filter(filterClause);
       this.parcelElementStore.view.filter(filterClause);

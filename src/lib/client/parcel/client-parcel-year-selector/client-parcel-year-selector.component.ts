@@ -21,7 +21,7 @@ export class ClientParcelYearSelectorComponent {
 
   @Output() selectedChange = new EventEmitter<{
     selected: boolean;
-    entity: ClientParcelYear;
+    value: ClientParcelYear;
   }>();
 
   getParcelYearTitle(parcelYear: ClientParcelYear): string {
