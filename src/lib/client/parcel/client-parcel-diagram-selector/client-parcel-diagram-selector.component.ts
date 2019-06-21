@@ -21,7 +21,7 @@ export class ClientParcelDiagramSelectorComponent {
 
   @Output() selectedChange = new EventEmitter<{
     selected: boolean;
-    entity: ClientParcelDiagram;
+    value: ClientParcelDiagram[];
   }>();
 
   getDiagramId(diagram: ClientParcelDiagram): number {

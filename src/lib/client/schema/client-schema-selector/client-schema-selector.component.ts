@@ -22,7 +22,7 @@ export class ClientSchemaSelectorComponent {
 
   @Output() selectedChange = new EventEmitter<{
     selected: boolean;
-    entity: ClientSchema;
+    value: ClientSchema;
   }>();
 
   getSchemaTitle(schema: ClientSchema): string {

@@ -1,5 +1,6 @@
 <igo-entity-selector
   [store]="store"
+  [many]="false"
   [placeholder]="'client.parcel.year.placeholder' | translate"
   [titleAccessor]="getParcelYearTitle"
   (selectedChange)="selectedChange.emit($event)">
