@@ -14,8 +14,11 @@ export interface ClientApiConfig {
   schemaElement: ClientSchemaElementApiConfig;
 }
 
-export interface Client {
+export class ClientRef {
   info: ClientInfo;
+}
+
+export interface Client extends ClientRef {
   parcels: ClientParcel[];
   schemas: ClientSchema[];
   diagrams: ClientParcelDiagram[];

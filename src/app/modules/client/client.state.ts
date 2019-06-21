@@ -77,6 +77,13 @@ export class ClientState implements OnDestroy {
     return this.clientService.getClientByNum(clientNum, annee);
   }
 
+  clearClientByNum(clientNum: string) {
+    const controller = this.controllerStore.get(clientNum);
+    if (controller !== undefined) {
+      this.clearController(controller);
+    }
+  }
+
   addClient(client: Client | undefined) {
     this.setClientNotFound(false);
 
