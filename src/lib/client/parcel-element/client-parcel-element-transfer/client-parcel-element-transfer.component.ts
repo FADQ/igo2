@@ -25,7 +25,7 @@ import { ClientParcelElement } from '../../parcel-element/shared/client-parcel-e
 })
 export class ClientParcelElementTransferComponent implements WidgetComponent, OnInit, OnDestroy {
 
-  private formGroup: FormGroup;
+  formGroup: FormGroup;
 
   private transferAllParcels$$: Subscription;
 
