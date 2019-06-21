@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable, zip } from 'rxjs';
+import { Observable, zip, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ClientInfo, ClientInfoService } from '../info';
 import { ClientParcel, ClientParcelService, getDiagramsFromParcels } from '../parcel';
 import { ClientSchema, ClientSchemaService } from '../schema';
 
-import { Client } from './client.interfaces';
+import { Client, ClientRef } from './client.interfaces';
 
 @Injectable()
 export class ClientService {
@@ -30,6 +30,18 @@ export class ClientService {
          return  this.resultsToClient(results);
         })
       );
+  }
+
+  getClients(): Observable<ClientRef[]> {
+    return zip(
+      this.infoService.getClientInfoByNum('1560'),
+      this.infoService.getClientInfoByNum('7229')
+    ).pipe(
+      map((results: [ClientInfo, ClientInfo]) => {
+        console.log(results);
+        return results.map((result: ClientInfo) => this.resultsToClient([result, [], []]));
+      })
+    );
   }
 
   private resultsToClient(

@@ -62,6 +62,7 @@
     "help": "Help",
     "addressEditor": "Address Edit Tool",
     "client": "Client",
+    "clientList": "Clients en cours d'édition",
     "measurer": "Measurer",
     "navigation": "Zoom on a region",
     "cadastre": "Cadastre originaire"

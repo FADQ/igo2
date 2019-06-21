@@ -45,7 +45,7 @@ export class ClientParcelElementService {
         console.log(errors);
         return parcelElements.map((parcelElement: ClientParcelElement) => {
           const parcelElementErrors = errors[parcelElement.properties.noParcelleAgricole];
-          const meta = Object.assign({}, parcelElement.meta, {errors:parcelElementErrors});
+          const meta = Object.assign({}, parcelElement.meta, {errors: parcelElementErrors});
           return Object.assign({}, parcelElement, {meta});
         });
       })
