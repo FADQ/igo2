@@ -35,16 +35,18 @@
   <fadq-client-parcel-diagram-selector [store]="controller.diagramStore"></fadq-client-parcel-diagram-selector>
   <fadq-client-schema-selector [store]="controller.schemaStore"></fadq-client-schema-selector>
 
-  <a
-    href=""
-    target="popup"
-    class="fadq-client-info-link"
-    (click)="openClientInfoLink(controller.client)">
-    Information détaillée
-  </a>
-  <fadq-client-info-addresses
-    [client]="controller.client"
-    [map]="controller.map">
-  </fadq-client-info-addresses>
+  <ng-container *ngIf="showInfo">
+    <a
+      href=""
+      target="popup"
+      class="fadq-client-info-link"
+      (click)="openClientInfoLink(controller.client)">
+      Information détaillée
+    </a>
+    <fadq-client-info-addresses
+      [client]="controller.client"
+      [map]="controller.map">
+    </fadq-client-info-addresses>
+  </ng-container>
 </div>
   

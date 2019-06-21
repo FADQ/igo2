@@ -1,4 +1,10 @@
-import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Input,
+  ChangeDetectionStrategy,
+  OnInit,
+  OnDestroy
+} from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { ToolComponent, EntityStore } from '@igo2/common';
@@ -28,6 +34,8 @@ import { ClientState } from '../client.state';
 export class ClientToolComponent implements OnInit, OnDestroy {
 
   readonly showLegend$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+  @Input() showInfo: boolean = true;
 
   private controllers$$: Subscription;
 
