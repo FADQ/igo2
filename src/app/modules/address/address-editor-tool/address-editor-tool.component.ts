@@ -14,7 +14,7 @@ import { AddressState } from '../address.state';
 @ToolComponent({
   name: 'addressEditor',
   title: 'tools.addressEditor',
-  icon: 'edit_location'
+  icon: 'home-map-marker'
 })
 @Component({
   selector: 'fadq-address-editor-tool',
