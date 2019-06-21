@@ -25,6 +25,8 @@ export class ClientToolItemComponent {
 
   @Input() showLegend: boolean = false;
 
+  @Input() showInfo: boolean = true;
+
   /**
    * Whether a row is selected
    */
