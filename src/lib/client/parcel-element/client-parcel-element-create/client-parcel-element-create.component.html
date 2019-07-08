@@ -3,7 +3,7 @@
   [form]="form"
   [store]="store"
   [transaction]="transaction"
-  [groupIndex]="0"
+  [groupIndex]="groupIndex$ | async"
   [processData]="processData"
   [getOperationTitle]="getOperationTitle"
   (complete)="onComplete($event)"

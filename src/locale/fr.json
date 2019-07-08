@@ -16,7 +16,7 @@
 
   "search": {
     "feature.title": "Adresse, lieu ou coordonnées",
-    "feature.placeholder": "Rechercher une adresse, un lieu, des coordonnées",
+    "feature.placeholder": "Rechercher adresse, lieu, coordonnées",
     "layer.title": "Couche de données",
     "layer.placeholder": "Rechercher une couche de données.",
     "client.title": "Client",
@@ -109,7 +109,7 @@
       "transfer": "Transférer des parcelles",
       "transfer.client.placeholder": "Transférer au client",
       "transfer.keepParcelNumbers": "Conserver les numéros de parcelles",
-      "transfer.transferAllParcels": "Transférer toutes les parcelles",
+      "transfer.transferAllParcels": "Transférer la totalité des parcelles du client",
       "transfer.tooltip": "Transférer des parcelle",
       "transfer.apply": "Transférer",
       "transaction.title": "Informations non sauvegardées",
@@ -128,8 +128,9 @@
       "stopEdition.tooltip": "Arrêter l'édition de parcelles"
     },
     "diagram": {
-      "placeholder": "Diagramme",
-      "all": "Tous"
+      "placeholder": "Diagrammes",
+      "all": "Tous",
+      "none": "Aucun"
     },
     "schema": {
       "none": "Aucun", 

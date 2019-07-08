@@ -24,8 +24,8 @@ export class ClientParcelDiagramSelectorComponent {
     value: ClientParcelDiagram[];
   }>();
 
-  getDiagramId(diagram: ClientParcelDiagram): number {
-    return diagram.id;
+  getDiagramTitle(diagram: ClientParcelDiagram): number | string {
+    return diagram.title ? diagram.title : diagram.id;
   }
 
 }

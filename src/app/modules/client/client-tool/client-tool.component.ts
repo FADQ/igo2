@@ -8,8 +8,11 @@ import {
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { ToolComponent, EntityStore } from '@igo2/common';
+import { FEATURE } from '@igo2/geo';
+import { SearchState } from '@igo2/integration';
 
 import {
+  CLIENT,
   ClientController,
   ClientParcelYear,
   ClientInfoService
@@ -67,7 +70,8 @@ export class ClientToolComponent implements OnInit, OnDestroy {
 
   constructor(
     private clientInfoService: ClientInfoService,
-    private clientState: ClientState
+    private clientState: ClientState,
+    private searchState: SearchState
   ) {}
 
   ngOnInit() {
@@ -86,6 +90,11 @@ export class ClientToolComponent implements OnInit, OnDestroy {
 
   onSelectController(controller: ClientController) {
     this.clientState.setActiveController(controller);
+  }
+
+  onClickAddress(address: string) {
+    this.searchState.setSearchType(FEATURE);
+    this.searchState.setSearchTerm(address);
   }
 
 }

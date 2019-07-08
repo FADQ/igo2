@@ -1,9 +1,10 @@
 import { Injectable} from '@angular/core';
 
-import { ActionStore, EntityStore, Workspace } from '@igo2/common';
+import { ActionStore, EntityStore } from '@igo2/common';
 
 import { Client } from '../../shared/client.interfaces';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
+import { ClientSchemaWorkspace } from './client-schema-workspace';
 import { ClientSchemaTableService } from './client-schema-table.service';
 
 @Injectable({
@@ -13,8 +14,8 @@ export class ClientSchemaWorkspaceService {
 
   constructor(private clientSchemaTableService: ClientSchemaTableService) {}
 
-  createSchemaWorkspace(client: Client): Workspace<ClientSchema> {
-    return new Workspace<ClientSchema>({
+  createSchemaWorkspace(client: Client): ClientSchemaWorkspace {
+    return new ClientSchemaWorkspace({
       id: `fadq.${client.info.numero}-3-schema-workspace`,
       title: `${client.info.numero} - Schémas`,
       entityStore: this.createSchemaStore(client),

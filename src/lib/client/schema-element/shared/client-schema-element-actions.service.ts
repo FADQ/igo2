@@ -38,6 +38,10 @@ export class ClientSchemaElementActionsService {
 
   buildActions(controller: ClientController): Action[] {
 
+    function noActiveWidget(ctrl: ClientController): boolean {
+      return !ctrl.schemaElementWorkspace.hasWidget;
+    }
+
     function schemaIsDefined(ctrl: ClientController): boolean {
       return ctrl.schema !== undefined;
     }
@@ -87,7 +91,7 @@ export class ClientSchemaElementActionsService {
           });
         },
         args: [this.clientSchemaElementCreateWidget, controller],
-        conditions: [schemaIsDefined],
+        conditions: [noActiveWidget, schemaIsDefined],
         conditionArgs
       },
       {
@@ -118,7 +122,7 @@ export class ClientSchemaElementActionsService {
           this.clientSchemaElementUpdateBatchWidget,
           controller
         ],
-        conditions: [oneOrMoreSchemaElementAreSelected, transactionIsNotInCommitPhase],
+        conditions: [noActiveWidget, oneOrMoreSchemaElementAreSelected, transactionIsNotInCommitPhase],
         conditionArgs
       },
       {
@@ -155,7 +159,7 @@ export class ClientSchemaElementActionsService {
           });
         },
         args: [this.clientSchemaElementFillWidget, controller],
-        conditions: [oneSchemaElementIsActive, transactionIsNotInCommitPhase, schemaElementCanBeFilled],
+        conditions: [noActiveWidget, oneSchemaElementIsActive, transactionIsNotInCommitPhase, schemaElementCanBeFilled],
         conditionArgs
       },
       {
@@ -173,7 +177,7 @@ export class ClientSchemaElementActionsService {
           });
         },
         args: [this.clientSchemaElementSliceWidget, controller],
-        conditions: [oneSchemaElementIsActive, transactionIsNotInCommitPhase, schemaElementCanBeSliced],
+        conditions: [noActiveWidget, oneSchemaElementIsActive, transactionIsNotInCommitPhase, schemaElementCanBeSliced],
         conditionArgs
       },
       {
@@ -189,7 +193,7 @@ export class ClientSchemaElementActionsService {
           });
         },
         args: [this.clientSchemaElementSaveWidget, controller],
-        conditions: [transactionIsNotInCommitPhase, transactionIsNotEmpty],
+        conditions: [noActiveWidget, transactionIsNotInCommitPhase, transactionIsNotEmpty],
         conditionArgs
       },
       {
@@ -203,7 +207,7 @@ export class ClientSchemaElementActionsService {
           });
         },
         args: [this.editionUndoWidget, controller],
-        conditions: [transactionIsNotInCommitPhase, transactionIsNotEmpty],
+        conditions: [noActiveWidget, transactionIsNotInCommitPhase, transactionIsNotEmpty],
         conditionArgs
       },
       {
@@ -221,7 +225,7 @@ export class ClientSchemaElementActionsService {
           });
         },
         args: [this.clientSchemaElementImportWidget, controller],
-        conditions: [transactionIsNotInCommitPhase],
+        conditions: [noActiveWidget, transactionIsNotInCommitPhase],
         conditionArgs
       },
       {
@@ -238,7 +242,9 @@ export class ClientSchemaElementActionsService {
           const fileName = `Éléments du schéma ${ctrl.schema.id}.csv`;
           exportToCSV([headers].concat(rows), fileName, ';');
         },
-        args: [controller]
+        args: [controller],
+        conditions: [noActiveWidget],
+        conditionArgs
       }
     ];
   }

@@ -63,4 +63,5 @@ export interface ClientParcelYearListResponse {
 /*** Parcel Diagram ***/
 export interface ClientParcelDiagram {
   id: number;
+  title?: string;
 }

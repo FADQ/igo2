@@ -17,6 +17,7 @@ import {
   Form,
   FormField,
   FormFieldSelectInputs,
+  getAllFormFields,
   WidgetComponent,
   OnUpdateInputs,
   FormFieldSelectChoice
@@ -25,6 +26,7 @@ import { LanguageService } from '@igo2/core';
 import { FeatureStore, IgoMap, GeoJSONGeometry } from '@igo2/geo';
 
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
+import { getAnneeImageFromMap } from '../../shared/client.utils';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import { ClientSchemaElement, ClientSchemaElementTypes } from '../shared/client-schema-element.interfaces';
 import { ClientSchemaElementService } from '../shared/client-schema-element.service';
@@ -147,12 +149,16 @@ export class ClientSchemaElementCreateComponent
   }
 
   private setForm(form: Form) {
+    const fields = getAllFormFields(form);
+
+    const anneeImageField = fields.find((field: FormField) => field.name === 'properties.anneeImage');
+    if (anneeImageField !== undefined) {
+      anneeImageField.control.setValue(getAnneeImageFromMap(this.map));
+    }
+
     this.form$.next(form);
 
-    const geometryField = form.groups[0].fields.find((field: FormField) => {
-      return field.name === 'geometry';
-    });
-
+    const geometryField = fields.find((field: FormField) => field.name === 'geometry');
     this.geometry$$ = geometryField.control.valueChanges
       .subscribe((geometry: GeoJSONGeometry) => {
         // When the drawGuide field is focused, changing tab
@@ -171,7 +177,8 @@ export class ClientSchemaElementCreateComponent
       .getSchemaElementTypes(this.schema.type)
       .subscribe((schemaElementTypes: ClientSchemaElementTypes) => {
         const form = this.form$.value;
-        const schemaElementTypeField = form.groups[1].fields.find((field: FormField) => {
+        const fields = getAllFormFields(form);
+        const schemaElementTypeField = fields.find((field: FormField) => {
           return field.name === 'properties.typeElement';
         }) as FormField<FormFieldSelectInputs>;
         const choices$ = schemaElementTypeField.inputs.choices as BehaviorSubject<FormFieldSelectChoice[]>;

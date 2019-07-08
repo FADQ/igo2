@@ -1,17 +1,12 @@
 import {
   Component,
   Input,
+  Output,
+  EventEmitter,
   ChangeDetectionStrategy
 } from '@angular/core';
 
-import {
-  Feature,
-  IgoMap,
-  IChercheSearchSource,
-  SearchResult,
-  SearchSource,
-  SearchSourceService
-} from '@igo2/geo';
+import { IgoMap } from '@igo2/geo';
 
 import { Client } from '../../shared/client.interfaces';
 
@@ -27,30 +22,6 @@ export class ClientInfoAddressesComponent {
 
   @Input() map: IgoMap;
 
-  constructor(private searchSource: SearchSourceService) {}
-
-  searchAddress(address: string) {
-    const icherche = this.searchSource
-      .getSources()
-      .find((source: SearchSource) => {
-        return source instanceof IChercheSearchSource;
-      }) as IChercheSearchSource;
-
-    icherche.search(address, {
-      params: {
-        type: 'adresse',
-        limit: '1'
-      }
-    }).subscribe((results: SearchResult<Feature>[]) => this.onSearchAddress(results));
-  }
-
-  private onSearchAddress(results: SearchResult<Feature>[]) {
-    const feature = results.length === 1 ? results[0].data : undefined;
-    if (feature !== undefined) {
-      this.map.overlay.setFeatures([feature]);
-    } else {
-      this.map.overlay.clear();
-    }
-  }
+  @Output() clickAddress = new EventEmitter<string>();
 
 }

@@ -19,12 +19,12 @@ import {
 import { ClientState } from '../client.state';
 
 /**
- * Tool to display a client's info
+ * Tool to display a list of clients
  */
 @ToolComponent({
   name: 'clientList',
   title: 'tools.clientList',
-  icon: 'account-group'
+  icon: 'account-multiple-plus'
 })
 @Component({
   selector: 'fadq-client-list-tool',
@@ -36,7 +36,7 @@ export class ClientListToolComponent implements OnInit, OnDestroy {
 
   clients$: BehaviorSubject<ClientRef[]> = new BehaviorSubject([]);
 
-  // private activeClients$$: Subscription;
+  private activeClients$$: Subscription;
 
   constructor(
     private clientService: ClientService,
@@ -48,12 +48,12 @@ export class ClientListToolComponent implements OnInit, OnDestroy {
     this.clientService.getClients()
       .subscribe((clients: ClientRef[]) => this.clients$.next(clients));
 
-    // this.activeClients$$ = this.clientState.controllerStore.entities$
-    //   .subscribe((controller: ClientController[]) => { this.cdRef.detectChanges(); });
+    this.activeClients$$ = this.clientState.controllerStore.entities$
+       .subscribe((controller: ClientController[]) => { this.cdRef.detectChanges(); });
   }
 
   ngOnDestroy() {
-    // this.activeClients$$.unsubscribe();
+    this.activeClients$$.unsubscribe();
   }
 
   onClientAddedChange(event: {added: boolean, client: ClientRef}) {

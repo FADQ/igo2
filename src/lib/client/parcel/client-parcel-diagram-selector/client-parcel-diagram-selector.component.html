@@ -1,7 +1,9 @@
 <igo-entity-selector
   [store]="store"
-  [many]="true"
+  [multi]="true"
+  [multiAllText]="'client.diagram.all' | translate"
+  [multiNoneText]="'client.diagram.none' | translate"
   [placeholder]="'client.diagram.placeholder' | translate"
-  [titleAccessor]="getDiagramId"
+  [titleAccessor]="getDiagramTitle"
   (selectedChange)="selectedChange.emit($event)">
 </igo-entity-selector>

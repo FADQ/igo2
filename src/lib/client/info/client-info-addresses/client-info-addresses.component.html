@@ -28,7 +28,7 @@
     <a
       *ngIf="address"
       href="#"
-      (click)="searchAddress(address)">
+      (click)="clickAddress.emit(address)">
       {{address}}
     </a>
     <ng-container *ngIf="!address">-</ng-container>

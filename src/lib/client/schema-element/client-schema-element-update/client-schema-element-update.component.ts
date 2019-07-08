@@ -16,6 +16,7 @@ import {
   Form,
   FormField,
   FormFieldSelectInputs,
+  getAllFormFields,
   WidgetComponent,
   OnUpdateInputs,
   FormFieldSelectChoice
@@ -143,7 +144,8 @@ export class ClientSchemaElementUpdateComponent
       .getSchemaElementTypes(this.schema.type)
       .subscribe((schemaElementTypes: ClientSchemaElementTypes) => {
         const form = this.form$.value;
-        const schemaElementTypeField = form.groups[1].fields.find((field: FormField) => {
+        const fields = getAllFormFields(form);
+        const schemaElementTypeField = fields.find((field: FormField) => {
           return field.name === 'properties.typeElement';
         }) as FormField<FormFieldSelectInputs>;
         const choices$ = schemaElementTypeField.inputs.choices as BehaviorSubject<FormFieldSelectChoice[]>;

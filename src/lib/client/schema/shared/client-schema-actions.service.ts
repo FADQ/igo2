@@ -29,6 +29,10 @@ export class ClientSchemaActionsService {
 
   buildActions(controller: ClientController): Action[] {
 
+    function noActiveWidget(ctrl: ClientController): boolean {
+      return !ctrl.schemaWorkspace.hasWidget;
+    }
+
     function schemaIsDefined(ctrl: ClientController): boolean {
       return ctrl.schema !== undefined;
     }
@@ -59,7 +63,9 @@ export class ClientSchemaActionsService {
             store: ctrl.schemaWorkspace.entityStore
           });
         },
-        args: [this.clientSchemaCreateWidget, controller]
+        args: [this.clientSchemaCreateWidget, controller],
+        conditions: [noActiveWidget],
+        conditionArgs
       },
       {
         id: 'update',
@@ -74,7 +80,7 @@ export class ClientSchemaActionsService {
           });
         },
         args: [this.clientSchemaUpdateWidget, controller],
-        conditions: [schemaIsDefined],
+        conditions: [noActiveWidget, schemaIsDefined],
         conditionArgs
       },
       {
@@ -90,7 +96,7 @@ export class ClientSchemaActionsService {
           });
         },
         args: [this.clientSchemaDeleteWidget, controller],
-        conditions: [schemaIsDefined],
+        conditions: [noActiveWidget, schemaIsDefined],
         conditionArgs
       },
       {
@@ -106,7 +112,7 @@ export class ClientSchemaActionsService {
           });
         },
         args: [this.clientSchemaDuplicateWidget, controller],
-        conditions: [schemaCanBeDuplicated],
+        conditions: [noActiveWidget, schemaCanBeDuplicated],
         conditionArgs
       },
       {
@@ -122,12 +128,12 @@ export class ClientSchemaActionsService {
           });
         },
         args: [this.clientSchemaFileManagerWidget, controller],
-        conditions: [schemaIsDefined],
+        conditions: [noActiveWidget, schemaIsDefined],
         conditionArgs
       },
       {
         id: 'transfer',
-        icon: 'swap-horizontal',
+        icon: 'account-switch',
         title: 'client.schema.transfer',
         tooltip: 'client.schema.transfer.tooltip',
         handler: function(widget: Widget, ctrl: ClientController) {
@@ -138,7 +144,7 @@ export class ClientSchemaActionsService {
           });
         },
         args: [this.clientSchemaTransferWidget, controller],
-        conditions: [schemaIsOfTypeLSE],
+        conditions: [noActiveWidget, schemaIsOfTypeLSE],
         conditionArgs
       },
       {
@@ -147,7 +153,7 @@ export class ClientSchemaActionsService {
         title: 'client.schema.createMap',
         tooltip: 'client.schema.createMap.tooltip',
         handler: function() {},
-        conditions: [schemaIsDefined, () => false],
+        conditions: [noActiveWidget, schemaIsDefined, () => false],
         conditionArgs
       }
     ];
