@@ -95,8 +95,9 @@
       "sel": "Sélection"
     },
     "diagram": {
-      "placeholder": "Diagramme",
-      "all": "All"
+      "placeholder": "Diagrammes",
+      "all": "Tous",
+      "none": "Aucun"
     },
     "parcel": {
       "year.placeholder": "Year",
@@ -112,7 +113,7 @@
       "transfer": "Transférer des parcelles",
       "transfer.client.placeholder": "Transférer au client",
       "transfer.keepParcelNumbers": "Conserver les numéros de parcelles",
-      "transfer.transferAllParcels": "Transférer toutes les parcelles",
+      "transfer.transferAllParcels": "Transférer la totalité des parcelles du client",
       "transfer.tooltip": "Transférer des parcelle",
       "transfer.apply": "Transférer",
       "transaction.title": "Informations non sauvegardées",

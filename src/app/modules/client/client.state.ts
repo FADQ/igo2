@@ -252,12 +252,12 @@ export class ClientState implements OnDestroy {
   private updateControllersColor() {
     if (this.controllerStore.count === 1) {
       const controller = this.controllerStore.all()[0];
-      controller.applyParcelSingleClientStyle();
+      controller.applySingleClientStyle();
       return;
     }
 
     this.controllerStore.all().forEach((controller: ClientController, index: number) => {
-      controller.applyParcelMultiClientStyle();
+      controller.applyMultiClientStyle();
     });
   }
 }

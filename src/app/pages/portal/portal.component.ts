@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription, of } from 'rxjs';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Subject, Subscription, of } from 'rxjs';
 
 import { MapBrowserPointerEvent as OlMapBrowserPointerEvent } from 'ol/MapBrowserEvent';
 
@@ -10,7 +10,7 @@ import {
   WorkspaceStore,
   EntityRecord,
   EntityStore,
-  getEntityTitle
+  Widget
 } from '@igo2/common';
 import {
   FEATURE,
@@ -22,6 +22,7 @@ import {
   SearchResult,
   SearchSource,
   SearchSourceService,
+  SearchBarComponent,
   Layer,
   LayerOptions,
   LayerService
@@ -55,6 +56,8 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   public expansionPanelExpanded = false;
   public sidenavOpened = false;
+  public toastPanelOpened = false;
+  public showToastPanelToggle = false;
 
   private focusedSearchResult$$: Subscription;
   private currentSearchTerm: string;
@@ -63,6 +66,12 @@ export class PortalComponent implements OnInit, OnDestroy {
   private searchAddedLayers: Map<string, Layer[]> = new Map();
   private searchVisibledLayers: Map<string, Layer[]> = new Map();
   private context$$: Subscription;
+
+  private searchTerm$$: Subscription;
+  private searchType$$: Subscription;
+
+  private activeWorkspace$$: Subscription;
+  private activeWorkspaceWidget$$: Subscription;
 
   get map(): IgoMap {
     return this.mapState.map;
@@ -79,10 +88,14 @@ export class PortalComponent implements OnInit, OnDestroy {
   get mapActionbarMode(): ActionbarMode {
     const media = this.mediaService.media$.value;
     const orientation = this.mediaService.orientation$.value;
-    if (media === Media.Desktop && orientation === MediaOrientation.Landscape) {
-      return ActionbarMode.Dock;
+    if (
+      media === Media.Desktop && orientation === MediaOrientation.Portrait ||
+      media === Media.Tablet ||
+      media === Media.Mobile
+    ) {
+      return ActionbarMode.Overlay;
     }
-    return ActionbarMode.Overlay;
+    return ActionbarMode.Dock;
   }
 
   get mapActionbarWithTitle(): boolean {
@@ -90,7 +103,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   get actionbarMode(): ActionbarMode {
-    return this.expansionPanelExpanded ? ActionbarMode.Dock : ActionbarMode.Overlay;
+    return this.mapActionbarMode;
   }
 
   get actionbarWithTitle(): boolean {
@@ -111,35 +124,11 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   get searchbarDisabled(): boolean { return this.currentSearchType === CADASTRE; }
 
-  get toastPanelContent(): string {
-    let content;
-    if (this.workspace !== undefined && this.workspace.hasWidget) {
-      content = 'workspace';
-    } else if (this.searchResult !== undefined) {
-      content = this.searchResult.meta.dataType.toLowerCase();
-    }
-    return content;
-  }
+  get searchTerm$(): Subject<string> { return this.searchState.searchTerm$; }
 
-  get toastPanelTitle(): string {
-    let title;
-    if (this.toastPanelContent !== 'workspace' && this.searchResult !== undefined) {
-      title = getEntityTitle(this.searchResult);
-    }
-    return title;
-  }
+  get searchType$(): Subject<string> { return this.searchState.searchType$; }
 
-  get toastPanelOpened(): boolean {
-    const content = this.toastPanelContent;
-    if (content === 'workspace') {
-      return true;
-    }
-    return this._toastPanelOpened;
-  }
-  set toastPanelOpened(value: boolean) {
-    this._toastPanelOpened = value;
-  }
-  private _toastPanelOpened = false;
+  @ViewChild(SearchBarComponent) searchbar: SearchBarComponent;
 
   constructor(
     private mapState: MapState,
@@ -153,6 +142,14 @@ export class PortalComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.searchTerm$$ = this.searchState.searchTerm$.subscribe((searchTerm: string) => {
+      this.searchbar.setTerm(searchTerm);
+    });
+
+    this.searchType$$ = this.searchState.searchType$.subscribe((searchType: string) => {
+      this.searchbar.setSearchType(searchType);
+    });
+
     this.focusedSearchResult$$ = this.searchStore.stateView
       .firstBy$((record: EntityRecord<SearchResult>) => record.state.focused === true)
       .subscribe((record: EntityRecord<SearchResult>) => {
@@ -166,11 +163,34 @@ export class PortalComponent implements OnInit, OnDestroy {
         this.updateSearchLayers(undefined);
       }
     });
+
+    this.activeWorkspace$$ = this.workspaceStore.activeWorkspace$.subscribe((workspace: Workspace) => {
+      if (this.activeWorkspaceWidget$$ !== undefined) {
+        this.activeWorkspaceWidget$$.unsubscribe();
+        this.activeWorkspaceWidget$$ = undefined;
+      }
+      if (workspace !== undefined) {
+        this.activeWorkspaceWidget$$ = workspace.widget$.subscribe((widget: Widget) => {
+          if (widget !== undefined) {
+            this.openToastPanel();
+            this.showToastPanelToggle = true;
+          } else {
+            this.showToastPanelToggle = false;
+          }
+        });
+      }
+    });
   }
 
   ngOnDestroy() {
     this.context$$.unsubscribe();
     this.focusedSearchResult$$.unsubscribe();
+    this.activeWorkspace$$.unsubscribe();
+    this.searchTerm$$.unsubscribe();
+    this.searchType$$.unsubscribe();
+    if (this.activeWorkspaceWidget$$ !== undefined) {
+      this.activeWorkspaceWidget$$.unsubscribe();
+    }
   }
 
   onBackdropClick() {
@@ -203,8 +223,8 @@ export class PortalComponent implements OnInit, OnDestroy {
     });
   }
 
-  onSearchTermChange(term?: string) {
-    this.currentSearchTerm = term;
+  onSearchTermChange(searchTerm?: string) {
+    this.currentSearchTerm = searchTerm;
     if (this.verifyNullTerm()) {
       this.onClearSearch();
       return;
@@ -212,8 +232,8 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.onBeforeSearch();
   }
 
-  onSearchTypeChange(type?: string) {
-    this.currentSearchType = type;
+  onSearchTypeChange(searchType?: string) {
+    this.currentSearchType = searchType;
     this.onBeforeSearch();
   }
 
@@ -223,7 +243,6 @@ export class PortalComponent implements OnInit, OnDestroy {
     if (results.length === 0 && querySearchSource !== undefined && event.research.source === querySearchSource) {
       if (this.searchResult !== undefined && this.searchResult.source === querySearchSource) {
         this.searchStore.state.update(this.searchResult, {focused: false, selected: false});
-        this.closeToastPanel();
       }
       return;
     }
@@ -253,7 +272,6 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   clearSearchResult() {
-    this.closeToastPanel();
     this.map.overlay.clear();
     this.searchResult = undefined;
     this.searchStore.state.updateAll({focused: false, selected: false});
@@ -313,10 +331,6 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   private onBeforeSearchOthers() {
     if (this.verifyNullTerm()) { return; }
-
-    if (this.mediaService.media$.value === Media.Mobile) {
-      this.closeToastPanel();
-    }
     this.toolState.toolbox.activateTool('searchResults');
     this.openSidenav();
   }
@@ -348,7 +362,6 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   private onSearchClient(result: SearchResult<Client>) {
-    this.closeToastPanel();
     this.clientState.addClient(result.data);
   }
 
@@ -358,9 +371,6 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   private onSearchMap(results: SearchResult<Feature>[]) {
     if (results.length === 0) { return; }
-    if (this.mediaService.media$.value === Media.Mobile) {
-      this.closeToastPanel();
-    }
     this.toolState.toolbox.activateTool('searchResults');
     this.openSidenav();
     this.searchStore.state.update(results[0], {selected: true}, true);
@@ -368,7 +378,6 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   private onFocusSearchResult(result: SearchResult) {
     if (result === undefined) {
-      this.closeToastPanel();
       this.searchResult = undefined;
       return;
     }
@@ -379,11 +388,6 @@ export class PortalComponent implements OnInit, OnDestroy {
       }
 
       this.searchResult = result;
-      // open the toast panel only if the focus comes from the map
-      const querySearchSource = this.getQuerySearchSource();
-      if (querySearchSource !== undefined && result.source === querySearchSource) {
-        this.openToastPanel();
-      }
     } else {
       this.searchResult = undefined;
     }
@@ -392,9 +396,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   private onClearSearch() {
     this.searchStore.clear();
     this.map.overlay.clear();
-    this.closeToastPanel();
     this.clientState.setClientNotFound(false);
-    // this.clientState.clearAllClients();
   }
 
   private getQuerySearchSource(): SearchSource {

@@ -6,6 +6,7 @@ export * from './client-schema-form.service';
 export * from './client-schema-table.service';
 export * from './client-schema-actions.service';
 export * from './client-schema-workspace.service';
+export * from './client-schema-workspace';
 export * from './client-schema-validators';
 export * from './client-schema.enums';
 export * from './client-schema.utils';

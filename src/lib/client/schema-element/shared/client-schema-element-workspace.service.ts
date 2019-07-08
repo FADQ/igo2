@@ -26,24 +26,12 @@ export class ClientSchemaElementWorkspaceService {
 
   static viewScale: [number, number, number, number] = [0, 0, 0.8, 0.6];
 
-  private sharedLoadingStrategy: FeatureStoreLoadingStrategy;
-
-  private sharedSelectionStrategy: FeatureStoreSelectionStrategy;
-
   constructor(
     private clientSchemaElementService: ClientSchemaElementService,
     private clientSchemaElementTableService: ClientSchemaElementTableService
   ) {}
 
   createSchemaElementWorkspace(client: Client,  map: IgoMap): ClientSchemaElementWorkspace {
-    if (this.sharedLoadingStrategy === undefined) {
-      this.sharedLoadingStrategy = this.createSharedLoadingStrategy();
-    }
-
-    if (this.sharedSelectionStrategy === undefined) {
-      this.sharedSelectionStrategy = this.createSharedSelectionStrategy(map);
-    }
-
     return new ClientSchemaElementWorkspace({
       id: `fadq.${client.info.numero}-4-schema-element-workspace`,
       title: `${client.info.numero} - Éléments du schémas`,
@@ -51,6 +39,7 @@ export class ClientSchemaElementWorkspaceService {
       actionStore: this.createSchemaElementActionStore(),
       meta: {
         client,
+        map,
         type: 'schemaElement',
         tableTemplate: this.clientSchemaElementTableService.buildTable(),
         schemaElementService: this.clientSchemaElementService
@@ -69,8 +58,8 @@ export class ClientSchemaElementWorkspaceService {
     const layer = createSchemaElementLayer(client);
     store.bindLayer(layer);
 
-    store.addStrategy(this.sharedLoadingStrategy, true);
-    store.addStrategy(this.sharedSelectionStrategy, true);
+    store.addStrategy(this.createLoadingStrategy(), true);
+    store.addStrategy(this.createSelectionStrategy(client, map), true);
 
     return store;
   }
@@ -79,17 +68,17 @@ export class ClientSchemaElementWorkspaceService {
     return new ActionStore([]);
   }
 
-  private createSharedLoadingStrategy(): FeatureStoreLoadingStrategy {
+  private createLoadingStrategy(): FeatureStoreLoadingStrategy {
     return new FeatureStoreLoadingStrategy({
       viewScale: ClientSchemaElementWorkspaceService.viewScale
     });
   }
 
-  private createSharedSelectionStrategy(map: IgoMap): FeatureStoreSelectionStrategy {
+  private createSelectionStrategy(client: Client, map: IgoMap): FeatureStoreSelectionStrategy {
     return new FeatureStoreSelectionStrategy({
       map: map,
       layer: new VectorLayer({
-        title: `Éléments du schéma sélectionnés`,
+        title: `${client.info.numero} - Éléments du schéma sélectionnés`,
         zIndex: 104,
         source: new FeatureDataSource(),
         style: createClientDefaultSelectionStyle(),

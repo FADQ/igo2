@@ -45,7 +45,8 @@
     </a>
     <fadq-client-info-addresses
       [client]="controller.client"
-      [map]="controller.map">
+      [map]="controller.map"
+      (clickAddress)="clickAddress.emit($event)">
     </fadq-client-info-addresses>
   </ng-container>
 </div>

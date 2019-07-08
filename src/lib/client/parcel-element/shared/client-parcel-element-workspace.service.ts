@@ -25,24 +25,12 @@ export class ClientParcelElementWorkspaceService {
 
   static viewScale: [number, number, number, number] = [0, 0, 0.8, 0.6];
 
-  private sharedLoadingStrategy: FeatureStoreLoadingStrategy;
-
-  private sharedSelectionStrategy: FeatureStoreSelectionStrategy;
-
   constructor(
     private clientParcelElementService: ClientParcelElementService,
     private clientParcelElementTableService: ClientParcelElementTableService
   ) {}
 
   createParcelElementWorkspace(client: Client,  map: IgoMap): ClientParcelElementWorkspace {
-    if (this.sharedLoadingStrategy === undefined) {
-      this.sharedLoadingStrategy = this.createSharedLoadingStrategy();
-    }
-
-    if (this.sharedSelectionStrategy === undefined) {
-      this.sharedSelectionStrategy = this.createSharedSelectionStrategy(map);
-    }
-
     return new ClientParcelElementWorkspace({
       id: `fadq.${client.info.numero}-2-parcel-element-workspace`,
       title: `${client.info.numero} - Parcelles en édition`,
@@ -50,6 +38,7 @@ export class ClientParcelElementWorkspaceService {
       actionStore: this.createParcelElementActionStore(),
       meta: {
         client,
+        map,
         type: 'parcelElement',
         tableTemplate: this.clientParcelElementTableService.buildTable(),
         parcelElementService: this.clientParcelElementService
@@ -68,8 +57,8 @@ export class ClientParcelElementWorkspaceService {
     const layer = createParcelElementLayer(client);
     store.bindLayer(layer);
 
-    store.addStrategy(this.sharedLoadingStrategy, true);
-    store.addStrategy(this.sharedSelectionStrategy, true);
+    store.addStrategy(this.createLoadingStrategy(), true);
+    store.addStrategy(this.createSelectionStrategy(client, map), true);
 
     return store;
   }
@@ -78,17 +67,17 @@ export class ClientParcelElementWorkspaceService {
     return new ActionStore([]);
   }
 
-  private createSharedLoadingStrategy(): FeatureStoreLoadingStrategy {
+  private createLoadingStrategy(): FeatureStoreLoadingStrategy {
     return new FeatureStoreLoadingStrategy({
       viewScale: ClientParcelElementWorkspaceService.viewScale
     });
   }
 
-  private createSharedSelectionStrategy(map: IgoMap): FeatureStoreSelectionStrategy {
+  private createSelectionStrategy(client: Client, map: IgoMap): FeatureStoreSelectionStrategy {
     return new FeatureStoreSelectionStrategy({
       map: map,
       layer: new VectorLayer({
-        title: `Parcelles en édition sélectionnées`,
+        title: `${client.info.numero} - Parcelles en édition sélectionnées`,
         zIndex: 104,
         source: new FeatureDataSource(),
         style: createClientDefaultSelectionStyle(),

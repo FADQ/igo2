@@ -45,13 +45,13 @@
   </igo-map-browser>
 </mat-sidenav-container>
 
-<div class="fadq-footer">
-  <fadq-map-actionbar
-    [map]="map"
-    [mode]="mapActionbarMode"
-    [withTitle]="mapActionbarWithTitle">
-  </fadq-map-actionbar>
-</div>
+<div class="fadq-footer"></div>
+
+<fadq-map-actionbar
+  [map]="map"
+  [mode]="mapActionbarMode"
+  [withTitle]="mapActionbarWithTitle">
+</fadq-map-actionbar>
 
 <fadq-expansion-panel
   [(expanded)]="expansionPanelExpanded"
@@ -83,19 +83,33 @@
 
 <fadq-toast-panel
   [title]="toastPanelTitle"
-  [withHeader]="toastPanelContent === 'feature'"
+  [withHeader]="false"
   [(opened)]="toastPanelOpened"
   (clear)="clearSearchResult()">
 
-  <igo-feature-details
-    *ngIf="toastPanelContent === 'feature'"
-    [feature]="searchResult.data">
-  </igo-feature-details>
-
   <igo-workspace-widget-outlet
-    *ngIf="toastPanelContent === 'workspace'"
+    *ngIf="workspace"
     [workspace]="workspace"
     (deactivateWidget)="onDeactivateWorkspaceWidget()">
   </igo-workspace-widget-outlet>
 
+  <div class="fadq-toast-panel-close-button-container">
+    <button
+      mat-icon-button
+      color="warn"
+      (click)="closeToastPanel()">
+      <mat-icon svgIcon="menu-down"></mat-icon>  
+    </button>
+  </div>
+
 </fadq-toast-panel>
+
+<div class="fadq-toast-panel-open-button-container">
+  <button
+    *ngIf="!toastPanelOpened && showToastPanelToggle"
+    mat-flat-button
+    color="warn"
+    (click)="openToastPanel()">
+    <mat-icon svgIcon="menu-up"></mat-icon>
+  </button>
+</div>

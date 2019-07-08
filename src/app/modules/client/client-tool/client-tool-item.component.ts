@@ -42,6 +42,8 @@ export class ClientToolItemComponent {
 
   @Output() select = new EventEmitter<ClientController>();
 
+  @Output() clickAddress = new EventEmitter<string>();
+
   /**
    * @ignore
    */

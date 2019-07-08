@@ -83,7 +83,7 @@ export function createSchemaElementLayer(client: Client): VectorLayer {
 
 export function createSchemaElementLayerStyle(
   types: ClientSchemaElementTypes
-): (olFeature: OlFeature) => olstyle.Style {
+): (olFeature: OlFeature, resolution: number) => olstyle.Style {
   const styles = {
     'Point': new olstyle.Style({
       text: createSchemaElementLayerTextStyle()
@@ -104,7 +104,7 @@ export function createSchemaElementLayerStyle(
     }),
   };
 
-  return (function(olFeature: OlFeature) {
+  return (function(olFeature: OlFeature, resolution: number) {
     const geometryType = olFeature.getGeometry().getType();
     const elementType = olFeature.get('typeElement');
     const type = (types[geometryType] || []).find((_type: ClientSchemaElementType) => {
@@ -120,7 +120,7 @@ export function createSchemaElementLayerStyle(
       style.getFill().setColor(color.concat([0.30]));
       style.getStroke().setColor(color);
     }
-    style.getText().setText(olFeature.get('etiquette'));
+    style.getText().setText(getSchemaElementFeatureText(olFeature, resolution));
 
     return style;
   });
@@ -128,11 +128,19 @@ export function createSchemaElementLayerStyle(
 
 function createSchemaElementLayerTextStyle(): olstyle.Text {
   return new olstyle.Text({
-    font: '16px Calibri,sans-serif',
+    font: '12px Calibri,sans-serif',
     fill: new olstyle.Fill({ color: '#000' }),
     stroke: new olstyle.Stroke({ color: '#fff', width: 3 }),
     overflow: true
   });
+}
+
+function getSchemaElementFeatureText(olFeature: OlFeature, resolution: number): string {
+  const maxResolution = 14;
+  if (resolution > maxResolution) {
+    return '';
+  }
+  return olFeature.get('etiquette');
 }
 
 function createSchemaPointShape(type: ClientSchemaElementType): olstyle.Circle | olstyle.RegularShape  {

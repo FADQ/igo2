@@ -18,10 +18,6 @@ import { FeatureStore } from '@igo2/geo';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import { ClientSchemaElement } from '../shared/client-schema-element.interfaces';
 import { ClientSchemaElementService } from '../shared/client-schema-element.service';
-import {
-  generateSchemaElementOperationTitle,
-  getSchemaElementValidationMessage
-} from '../shared/client-schema-element.utils';
 
 @Component({
   selector: 'fadq-client-schema-element-save',

@@ -5,22 +5,26 @@ import {
   EventEmitter,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  OnInit
+  OnInit,
+  OnDestroy
 } from '@angular/core';
 
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import {
   EntityTransaction,
   Form,
+  FormField,
+  getAllFormFields,
   WidgetComponent,
   OnUpdateInputs
 } from '@igo2/common';
 import { LanguageService } from '@igo2/core';
-import { FeatureStore, IgoMap } from '@igo2/geo';
+import { FeatureStore, IgoMap, GeoJSONGeometry } from '@igo2/geo';
 
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
+import { getAnneeImageFromMap } from '../../shared/client.utils';
 import { ClientParcelElement } from '../shared/client-parcel-element.interfaces';
 import { ClientParcelElementService } from '../shared/client-parcel-element.service';
 import { ClientParcelElementFormService } from '../shared/client-parcel-element-form.service';
@@ -37,13 +41,24 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientParcelElementCreateComponent
-    implements OnInit, OnUpdateInputs, WidgetComponent {
+    implements OnInit, OnDestroy, OnUpdateInputs, WidgetComponent {
 
   /**
    * Create form
    * @internal
    */
   form$ = new BehaviorSubject<Form>(undefined);
+
+  /**
+   * Create form
+   * @internal
+   */
+  groupIndex$ = new BehaviorSubject<number>(0);
+
+  /**
+   * Subscription to the value changes event
+   */
+  private geometry$$: Subscription;
 
   /**
    * Map to draw elements on
@@ -91,6 +106,13 @@ export class ClientParcelElementCreateComponent
       .subscribe((form: Form) => this.setForm(form));
   }
 
+  ngOnDestroy() {
+    if (this.geometry$$ !== undefined) {
+      this.geometry$$.unsubscribe();
+      this.geometry$$ = undefined;
+    }
+  }
+
   /**
    * Implemented as part of OnUpdateInputs
    */
@@ -119,7 +141,24 @@ export class ClientParcelElementCreateComponent
   }
 
   private setForm(form: Form) {
+    const fields =  getAllFormFields(form);
+
+    const anneeImageField = fields.find((field: FormField) => field.name === 'properties.anneeImage');
+    if (anneeImageField !== undefined) {
+      anneeImageField.control.setValue(getAnneeImageFromMap(this.map));
+    }
+
     this.form$.next(form);
+
+    const geometryField = fields.find((field: FormField) => field.name === 'geometry');
+    this.geometry$$ = geometryField.control.valueChanges
+      .subscribe((geometry: GeoJSONGeometry) => {
+        if ('activeElement' in document) {
+          (document.activeElement as HTMLElement).blur();
+        }
+        this.groupIndex$.next(1);
+      });
+
   }
 
 }

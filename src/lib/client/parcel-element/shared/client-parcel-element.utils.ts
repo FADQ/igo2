@@ -34,7 +34,7 @@ export function createParcelElementLayer(client: Client): VectorLayer {
 
 export function createParcelElementLayerStyle(
   color: [number, number, number]
-): (olFeature: OlFeature) => olstyle.Style {
+): (olFeature: OlFeature, resolution: number) => olstyle.Style {
   const olStyle = new olstyle.Style({
     fill: new olstyle.Fill({
       color: color.concat([0.30])
@@ -46,19 +46,27 @@ export function createParcelElementLayerStyle(
     text: createParcelElementLayerTextStyle()
   });
 
-  return (function(olFeature: OlFeature) {
-    olStyle.getText().setText(olFeature.get('noParcelleAgricole'));
+  return (function(olFeature: OlFeature, resolution: number) {
+    olStyle.getText().setText(getParcelElementFeatureText(olFeature, resolution));
     return olStyle;
   });
 }
 
 function createParcelElementLayerTextStyle(): olstyle.Text {
   return new olstyle.Text({
-    font: '16px Calibri,sans-serif',
+    font: '12px Calibri,sans-serif',
     fill: new olstyle.Fill({ color: '#000' }),
     stroke: new olstyle.Stroke({ color: '#fff', width: 3 }),
     overflow: true
   });
+}
+
+function getParcelElementFeatureText(olFeature: OlFeature, resolution: number): string {
+  const maxResolution = 14;
+  if (resolution > maxResolution) {
+    return '';
+  }
+  return olFeature.get('noParcelleAgricole');
 }
 
 export function getParcelElementValidationMessage(

@@ -44,6 +44,10 @@ export class ClientParcelElementActionsService {
 
   buildActions(controller: ClientController): Action[] {
 
+    function noActiveWidget(ctrl: ClientController): boolean {
+      return !ctrl.parcelElementWorkspace.hasWidget;
+    }
+
     function oneParcelElementIsActive(ctrl: ClientController): boolean {
       return ctrl.activeParcelElement !== undefined;
     }
@@ -87,7 +91,9 @@ export class ClientParcelElementActionsService {
         handler: function(ctrl: ClientController) {
           ctrl.stopParcelEdition();
         },
-        args: [controller]
+        args: [controller],
+        conditions: [noActiveWidget],
+        conditionArgs
       },
       {
         id: 'create',
@@ -102,7 +108,7 @@ export class ClientParcelElementActionsService {
           });
         },
         args: [this.clientParcelElementCreateWidget, controller],
-        conditions: [],
+        conditions: [noActiveWidget],
         conditionArgs
       },
       {
@@ -132,7 +138,7 @@ export class ClientParcelElementActionsService {
           this.clientParcelElementUpdateBatchWidget,
           controller
         ],
-        conditions: [oneOrMoreParcelElementAreSelected, transactionIsNotInCommitPhase],
+        conditions: [noActiveWidget, oneOrMoreParcelElementAreSelected, transactionIsNotInCommitPhase],
         conditionArgs
       },
       {
@@ -151,7 +157,7 @@ export class ClientParcelElementActionsService {
           });
         },
         args: [controller],
-        conditions: [oneOrMoreParcelElementAreSelected, transactionIsNotInCommitPhase],
+        conditions: [noActiveWidget, oneOrMoreParcelElementAreSelected, transactionIsNotInCommitPhase],
         conditionArgs
       },
       {
@@ -168,7 +174,7 @@ export class ClientParcelElementActionsService {
           });
         },
         args: [this.clientParcelElementFillWidget, controller],
-        conditions: [oneParcelElementIsActive, transactionIsNotInCommitPhase, parcelElementCanBeFilled],
+        conditions: [noActiveWidget, oneParcelElementIsActive, transactionIsNotInCommitPhase, parcelElementCanBeFilled],
         conditionArgs
       },
       {
@@ -185,7 +191,7 @@ export class ClientParcelElementActionsService {
           });
         },
         args: [this.clientParcelElementSliceWidget, controller],
-        conditions: [oneParcelElementIsActive, transactionIsNotInCommitPhase, parcelElementCanBeSliced],
+        conditions: [noActiveWidget, oneParcelElementIsActive, transactionIsNotInCommitPhase, parcelElementCanBeSliced],
         conditionArgs
       },
       {
@@ -201,7 +207,7 @@ export class ClientParcelElementActionsService {
           });
         },
         args: [this.clientParcelElementSaveWidget, controller],
-        conditions: [transactionIsNotInCommitPhase, transactionIsNotEmpty],
+        conditions: [noActiveWidget, transactionIsNotInCommitPhase, transactionIsNotEmpty],
         conditionArgs
       },
       {
@@ -215,7 +221,7 @@ export class ClientParcelElementActionsService {
           });
         },
         args: [this.editionUndoWidget, controller],
-        conditions: [transactionIsNotInCommitPhase, transactionIsNotEmpty],
+        conditions: [noActiveWidget, transactionIsNotInCommitPhase, transactionIsNotEmpty],
         conditionArgs
       },
       {
@@ -232,12 +238,12 @@ export class ClientParcelElementActionsService {
           });
         },
         args: [this.clientParcelElementImportWidget, controller],
-        conditions: [transactionIsNotInCommitPhase],
+        conditions: [noActiveWidget, transactionIsNotInCommitPhase],
         conditionArgs
       },
       {
         id: 'transfer',
-        icon: 'swap-horizontal',
+        icon: 'account-switch',
         title: 'client.parcelElement.transfer',
         tooltip: 'client.parcelElement.transfer.tooltip',
         handler: (widget: Widget, ctrl: ClientController) => {
@@ -255,7 +261,7 @@ export class ClientParcelElementActionsService {
           });
         },
         args: [this.clientParcelElementTransferWidget, controller],
-        conditions: [transactionIsNotInCommitPhase],
+        conditions: [noActiveWidget, transactionIsNotInCommitPhase],
         conditionArgs
       },
       {
@@ -270,7 +276,7 @@ export class ClientParcelElementActionsService {
           });
         },
         args: [this.clientParcelElementNumberingWidget, controller],
-        conditions: [],
+        conditions: [noActiveWidget],
         conditionArgs
       },
       {
@@ -284,7 +290,7 @@ export class ClientParcelElementActionsService {
           });
         },
         args: [this.clientParcelElementReconciliateWidget, controller],
-        conditions: [],
+        conditions: [noActiveWidget],
         conditionArgs
       }
     ];

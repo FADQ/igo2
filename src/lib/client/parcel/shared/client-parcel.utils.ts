@@ -34,13 +34,12 @@ export function getParcelRelation(listItem: ClientParcelListResponseItem, noClie
   return relation;
 }
 
-function getParcelFeatureColor(olFeature: OlFeature) {
-  const colors = {
-    1: [255, 139, 0],
-    2: [35, 140, 0],
-    3: [0, 218, 250]
-  };
-  return colors[ olFeature.get('relation')];
+export function sortParcelsByRelation(p1: ClientParcel, p2: ClientParcel) {
+  return ObjectUtils.naturalCompare(
+    p1.properties.relation,
+    p2.properties.relation,
+    'desc'
+  );
 }
 
 export function createParcelLayer(client: Client): VectorLayer {
@@ -75,7 +74,7 @@ export function createPerClientParcelLayerStyle(
   });
 }
 
-export function createParcelLayerStyle(): (olFeature: OlFeature) => olstyle.Style {
+export function createParcelLayerStyle(): (olFeature: OlFeature, resolution: number) => olstyle.Style {
   const style = new olstyle.Style({
     stroke: new olstyle.Stroke({
       width: 2
@@ -84,28 +83,37 @@ export function createParcelLayerStyle(): (olFeature: OlFeature) => olstyle.Styl
     text: createParcelLayerTextStyle()
   });
 
-  return (function(feature: OlFeature) {
-    const color = getParcelFeatureColor(feature);
+  return (function(olFeature: OlFeature, resolution: number) {
+    const color = getParcelFeatureColor(olFeature);
     style.getFill().setColor(color.concat([0.15]));
     style.getStroke().setColor(color);
-    style.getText().setText(feature.get('_mapTitle'));
+    style.getText().setText(getParcelFeatureText(olFeature, resolution));
     return style;
   });
 }
 
 function createParcelLayerTextStyle(): olstyle.Text {
   return new olstyle.Text({
-    font: '16px Calibri,sans-serif',
+    font: '12px Calibri,sans-serif',
     fill: new olstyle.Fill({ color: '#000' }),
     stroke: new olstyle.Stroke({ color: '#fff', width: 3 }),
     overflow: true
   });
 }
 
-export function sortParcelsByRelation(p1: ClientParcel, p2: ClientParcel) {
-  return ObjectUtils.naturalCompare(
-    p1.properties.relation,
-    p2.properties.relation,
-    'desc'
-  );
+function getParcelFeatureText(olFeature: OlFeature, resolution: number): string {
+  const maxResolution = 14;
+  if (resolution > maxResolution) {
+    return '';
+  }
+  return olFeature.get('noParcelleAgricole');
+}
+
+function getParcelFeatureColor(olFeature: OlFeature) {
+  const colors = {
+    1: [255, 139, 0],
+    2: [35, 140, 0],
+    3: [0, 218, 250]
+  };
+  return colors[ olFeature.get('relation')];
 }

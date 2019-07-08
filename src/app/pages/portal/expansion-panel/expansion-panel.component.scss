@@ -5,23 +5,26 @@
   background-color: white;
 
   height: $fadq-expansion-panel-collapsed-height;
-  width: $fadq-sidenav-width + $igo-icon-size;
+  // width: $fadq-sidenav-width + $igo-icon-size;
+
+  // transition:
+  //   height 200ms cubic-bezier(.4, 0, .2, 1),
+  //   width 200ms cubic-bezier(.4, 0, .2, 1);
 
   transition:
-    height 200ms cubic-bezier(.4, 0, .2, 1),
-    width 200ms cubic-bezier(.4, 0, .2, 1);
+    height 200ms cubic-bezier(.4, 0, .2, 1);
 
-  @include small-screen {
-    width: $fadq-expansion-panel-collapsed-width;
-  }
+  // @include small-screen {
+  //   width: $fadq-expansion-panel-collapsed-width;
+  // }
 
-  @include tablet {
-    width: $fadq-expansion-panel-collapsed-width;
-  }
+  // @include tablet {
+  //   width: $fadq-expansion-panel-collapsed-width;
+  // }
 
-  @include mobile {
-    width: $fadq-expansion-panel-collapsed-width;
-  }
+  // @include mobile {
+  //   width: $fadq-expansion-panel-collapsed-width;
+  // }
 }
 
 .fadq-expansion-panel-container {

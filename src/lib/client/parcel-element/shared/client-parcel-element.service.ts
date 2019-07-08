@@ -42,7 +42,6 @@ export class ClientParcelElementService {
     ).pipe(
       map((bunch: [ClientParcelElement[], {[key: string]: string[]}]) => {
         const [parcelElements, errors] = bunch;
-        console.log(errors);
         return parcelElements.map((parcelElement: ClientParcelElement) => {
           const parcelElementErrors = errors[parcelElement.properties.noParcelleAgricole];
           const meta = Object.assign({}, parcelElement.meta, {errors: parcelElementErrors});

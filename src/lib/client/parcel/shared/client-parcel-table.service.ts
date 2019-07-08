@@ -37,46 +37,6 @@ export class ClientParcelTableService {
           title: 'Numéro de diagramme'
         },
         {
-          name: 'properties.production',
-          title: 'Code de production'
-        },
-        {
-          name: 'properties.descriptionProduction',
-          title: 'Description de production'
-        },
-        {
-          name: 'properties.superficie',
-          title: 'Superficie mesurée (m²)'
-        },
-        {
-          name: 'properties.superficieHectare',
-          title: 'Superficie mesurée (ha)'
-        },
-        {
-          name: 'properties.pourcentageSupMao',
-          title: 'Superficie (%)'
-        },
-        {
-          name: 'properties.superficieMao',
-          title: 'Superficie (ha)'
-        },
-        {
-          name: 'properties.superficieDeclaree',
-          title: 'Superficie déclarée'
-        },
-        {
-          name: 'properties.codeDefaultCultural',
-          title: 'Code de défaut cultural'
-        },
-        {
-          name: 'properties.pourcentageDefautCultural',
-          title: 'Pourcentage de défaut cultural'
-        },
-        {
-          name: 'properties.noConfirmation',
-          title: 'Numéro de confirmation IVEG'
-        },
-        {
           name: 'properties.noClientDetenteur',
           title: 'Autre détenteur',
           renderer: EntityTableColumnRenderer.UnsanitizedHTML,
@@ -99,6 +59,50 @@ export class ClientParcelTableService {
           }
         },
         {
+          name: 'properties.infoLocateur',
+          title: 'Information localisation'
+        },
+        {
+          name: 'properties.production',
+          title: 'Code de production'
+        },
+        {
+          name: 'properties.descriptionProduction',
+          title: 'Description de production'
+        },
+        {
+          name: 'properties.superficie',
+          title: 'Superficie mesurée (m²)'
+        },
+        {
+          name: 'properties.superficieHectare',
+          title: 'Superficie mesurée (ha)'
+        },
+        {
+          name: 'properties.pourcentageSupMao',
+          title: 'Superficie mesurée selon % (ha)'
+        },
+        {
+          name: 'properties.superficieMao',
+          title: 'Superficie (ha)'
+        },
+        {
+          name: 'properties.superficieDeclaree',
+          title: 'Superficie déclarée IVEG (ha)'
+        },
+        {
+          name: 'properties.codeDefaultCultural',
+          title: 'Code de défaut cultural'
+        },
+        {
+          name: 'properties.pourcentageDefautCultural',
+          title: 'Pourcentage de défaut cultural'
+        },
+        {
+          name: 'properties.noConfirmation',
+          title: 'Numéro de confirmation IVEG'
+        },
+        {
           name: 'properties.statutAugmentationSupCultivable',
           title: 'Statut de déboisement'
         },
@@ -108,7 +112,7 @@ export class ClientParcelTableService {
         },
         {
           name: 'properties.sourceParcelleAgricole',
-          title: 'Source parcelle agricole'
+          title: 'Référence de la mesure'
         },
         {
           name: 'properties.timbreMajGeometrie',
@@ -118,10 +122,6 @@ export class ClientParcelTableService {
             if (!value) { return ''; }
             return formatDate(value);
           }
-        },
-        {
-          name: 'properties.usagerMajGeometrie',
-          title: 'Utilisateur'
         }
       ]
     };

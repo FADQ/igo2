@@ -38,7 +38,6 @@ export class ClientService {
       this.infoService.getClientInfoByNum('7229')
     ).pipe(
       map((results: [ClientInfo, ClientInfo]) => {
-        console.log(results);
         return results.map((result: ClientInfo) => this.resultsToClient([result, [], []]));
       })
     );
