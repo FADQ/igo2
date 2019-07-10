@@ -24,7 +24,7 @@ export class ClientSchemaFileService {
     @Inject('clientSchemaFileApiConfig') private apiConfig: ClientSchemaFileApiConfig
   ) {}
 
-  getClientSchemaFiles(schema: ClientSchema): Observable<ClientSchemaFile[]> {
+  getSchemaFiles(schema: ClientSchema): Observable<ClientSchemaFile[]> {
     const url = this.apiService.buildUrl(this.apiConfig.list, {schemaId: schema.id});
 
     return this.http

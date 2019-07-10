@@ -110,7 +110,6 @@ export class ClientSchemaTransferComponent implements OnInit, OnUpdateInputs, Wi
   private onSubmitSuccess() {
     this.errorMessage$.next(undefined);
     this.store.delete(this.schema);
-    this.client.schemas = this.store.all();
     this.complete.emit();
   }
 

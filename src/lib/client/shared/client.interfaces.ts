@@ -18,8 +18,4 @@ export class ClientRef {
   info: ClientInfo;
 }
 
-export interface Client extends ClientRef {
-  parcels: ClientParcel[];
-  schemas: ClientSchema[];
-  diagrams: ClientParcelDiagram[];
-}
+export interface Client extends ClientRef {}

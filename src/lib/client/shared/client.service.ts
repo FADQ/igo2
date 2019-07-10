@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable, zip, of } from 'rxjs';
+import { Observable, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ClientInfo, ClientInfoService } from '../info';
-import { ClientParcel, ClientParcelService, getDiagramsFromParcels } from '../parcel';
-import { ClientSchema, ClientSchemaService } from '../schema';
 
 import { Client, ClientRef } from './client.interfaces';
 
@@ -12,21 +10,17 @@ import { Client, ClientRef } from './client.interfaces';
 export class ClientService {
 
   constructor(
-    private infoService: ClientInfoService,
-    private parcelService: ClientParcelService,
-    private schemaService: ClientSchemaService
+    private infoService: ClientInfoService
   ) {}
 
-  getClientByNum(clientNum: string, annee: number = 2018): Observable<Client> {
+  getClientByNum(clientNum: string): Observable<Client> {
     const client$ = zip(
-      this.infoService.getClientInfoByNum(clientNum),
-      this.schemaService.getClientSchemasByNum(clientNum),
-      this.parcelService.getClientParcelsByNum(clientNum, annee)
+      this.infoService.getClientInfoByNum(clientNum)
     );
 
     return client$
       .pipe(
-        map((results: [ClientInfo, ClientSchema[], ClientParcel[]]) => {
+        map((results: [ClientInfo]) => {
          return  this.resultsToClient(results);
         })
       );
@@ -38,24 +32,22 @@ export class ClientService {
       this.infoService.getClientInfoByNum('7229')
     ).pipe(
       map((results: [ClientInfo, ClientInfo]) => {
-        return results.map((result: ClientInfo) => this.resultsToClient([result, [], []]));
+        return results.map((result: ClientInfo) => this.resultsToClient([result]));
       })
     );
   }
 
   private resultsToClient(
-    results: [ClientInfo, ClientSchema[], ClientParcel[]]
+    results: [ClientInfo]
   ): Client | undefined {
-    const [info, schemas, parcels] = results;
+    const [info] = results;
     if (info === undefined) {
       return undefined;
     }
 
     return Object.assign({meta: {idProperty: 'numero'}}, {
       info: info,
-      schemas: schemas,
-      parcels: parcels,
-      diagrams: getDiagramsFromParcels(parcels)
+
     });
   }
 }

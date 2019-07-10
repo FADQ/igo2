@@ -40,7 +40,6 @@ export class ClientParcelWorkspace extends Workspace<ClientParcel> {
 
   init() {
     this.parcelStore.activateStrategyOfType(FeatureStoreLoadingStrategy);
-    this.parcelStore.load(this.client.parcels);
     this.addParcelLayer();
   }
 
@@ -51,6 +50,10 @@ export class ClientParcelWorkspace extends Workspace<ClientParcel> {
     this.deactivate();
     this.parcelStore.layer.ol.getSource().clear();
     this.parcelStore.clear();
+  }
+
+  load(parcels: ClientParcel[]) {
+    this.parcelStore.load(parcels);
   }
 
   activate() {

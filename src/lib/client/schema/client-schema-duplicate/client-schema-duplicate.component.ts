@@ -69,7 +69,6 @@ export class ClientSchemaDuplicateComponent implements OnUpdateInputs, WidgetCom
 
   private onSubmitSuccess(schema: ClientSchema) {
     this.store.insert(schema);
-    this.client.schemas = this.store.all();
     this.complete.emit();
   }
 

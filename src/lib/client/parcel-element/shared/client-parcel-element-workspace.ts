@@ -42,7 +42,6 @@ export class ClientParcelElementWorkspace extends Workspace<ClientParcelElement>
 
   init() {
     this.parcelElementStore.activateStrategyOfType(FeatureStoreLoadingStrategy);
-    this.loadParcelElements();
     this.addParcelElementLayer();
   }
 
@@ -55,6 +54,10 @@ export class ClientParcelElementWorkspace extends Workspace<ClientParcelElement>
     this.parcelElementStore.clear();
   }
 
+  load(parcelElements: ClientParcelElement[]) {
+    this.parcelElementStore.load(parcelElements);  
+  }
+
   activate() {
     super.activate();
     this.parcelElementStore.activateStrategyOfType(FeatureStoreSelectionStrategy);
@@ -64,18 +67,6 @@ export class ClientParcelElementWorkspace extends Workspace<ClientParcelElement>
     super.deactivate();
     this.parcelElementStore.deactivateStrategyOfType(FeatureStoreSelectionStrategy);
     this.parcelElementStore.state.clear();
-  }
-
-  canStartParcelEdition(): Observable<boolean> {
-    return this.parcelElementService.canStartParcelEdition(this.meta.client);
-  }
-
-  private loadParcelElements() {
-    this.parcelElementService.getParcelElements(this.meta.client)
-      .subscribe((parcelElements: ClientParcelElement[]) => {
-        const store = this.entityStore as FeatureStore<ClientParcelElement>;
-        store.load(parcelElements);
-      });
   }
 
   private addParcelElementLayer() {

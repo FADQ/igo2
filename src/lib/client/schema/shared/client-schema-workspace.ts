@@ -30,8 +30,10 @@ export class ClientSchemaWorkspace extends Workspace<ClientSchema> {
     super(options);
   }
 
-  init() {
-    this.schemaStore.load(this.client.schemas);
+  init() {}
+
+  load(schemas: ClientSchema[]) {
+    this.schemaStore.load(schemas);
   }
 
   teardown() {

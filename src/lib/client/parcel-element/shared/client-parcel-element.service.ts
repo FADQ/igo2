@@ -27,12 +27,20 @@ export class ClientParcelElementService {
     @Inject('clientParcelApiConfig') private apiConfig: ClientParcelElementApiConfig
   ) {}
 
-  canStartParcelEdition(client: Client): Observable<boolean> {
+  canStartParcelEdition(client: Client, annee: number = 2018): Observable<boolean> {
     return of(false);
     // const url = this.apiService.buildUrl(this.apiConfig.startEdition, {
-    //   cliNum: client.info.numero
+    //   clientNum: client.info.numero
     // });
     // return this.http.post(url, data);
+  }
+
+  startParcelEdition(client: Client, annee: number = 2018): Observable<any> {
+    const url = this.apiService.buildUrl(this.apiConfig.startEdition, {
+      clientNum: client.info.numero,
+      annee: annee
+    });
+    return this.http.get(url);
   }
 
   getParcelElements(client: Client, annee: number = 2018): Observable<ClientParcelElement[]> {
@@ -100,19 +108,20 @@ export class ClientParcelElementService {
   private buildSaveParcelElementsRequest(client: Client, data: TransactionData<ClientParcelElement>): Observable<any> {
     return of({});
     // const url = this.apiService.buildUrl(this.apiConfig.save, {
-    //   cliNum: client.info.numero
+    //   clientNum: client.info.numero
     // });
     // return this.http.post(url, data);
   }
 
   private buildValidateParcelElementsRequest(client: Client): Observable<{[key: string]: string[]}> {
-    const errors = client.parcels.reduce((acc: any, parcel: any) => {
-      acc[parcel.properties.noParcelleAgricole] = ['Invalide'];
-      return acc;
-    }, {});
+    const errors = {};
+    // const errors = client.parcels.reduce((acc: any, parcel: any) => {
+    //   acc[parcel.properties.noParcelleAgricole] = ['Invalide'];
+    //   return acc;
+    // }, {});
     return of(errors);
     // const url = this.apiService.buildUrl(this.apiConfig.validate, {
-    //   cliNum: client.info.numero
+    //   clientNum: client.info.numero
     // });
     // return this.http.post(url, data);
   }

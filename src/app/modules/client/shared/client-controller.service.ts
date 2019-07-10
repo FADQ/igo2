@@ -11,11 +11,14 @@ import {
 import { hexToRGB } from 'src/lib/utils/color';
 
 import {
+  ClientParcelService,
   ClientParcelWorkspaceService,
   ClientParcelActionsService,
+  ClientParcelElementService,
   ClientParcelElementTransactionService,
   ClientParcelElementWorkspaceService,
   ClientParcelElementActionsService,
+  ClientSchemaService,
   ClientSchemaWorkspaceService,
   ClientSchemaActionsService,
   ClientSchemaElementWorkspaceService,
@@ -39,13 +42,16 @@ export class ClientControllerService {
 
   constructor(
     private mapState: MapState,
+    private clientParcelService: ClientParcelService,
     private clientParcelWorkspaceService: ClientParcelWorkspaceService,
     private clientParcelActionsService: ClientParcelActionsService,
+    private clientSchemaService: ClientSchemaService,
     private clientSchemaWorkspaceService: ClientSchemaWorkspaceService,
     private clientSchemaActionsService: ClientSchemaActionsService,
     private clientSchemaElementTransactionService: ClientSchemaElementTransactionService,
     private clientSchemaElementWorkspaceService: ClientSchemaElementWorkspaceService,
     private clientSchemaElementActionsService: ClientSchemaElementActionsService,
+    private clientParcelElementService: ClientParcelElementService,
     private clientParcelElementTransactionService: ClientParcelElementTransactionService,
     private clientParcelElementWorkspaceService: ClientParcelElementWorkspaceService,
     private clientParcelElementActionsService: ClientParcelElementActionsService,
@@ -53,10 +59,13 @@ export class ClientControllerService {
 
   createClientController(client: Client, options: Partial<ClientControllerOptions> = {}): ClientController {
     const map = this.mapState.map;
+    const parcelService = this.clientParcelService;
     const parcelWorkspace = this.clientParcelWorkspaceService.createParcelWorkspace(client, map);
     const parcelElementTransactionService = this.clientParcelElementTransactionService;
+    const schemaService = this.clientSchemaService;
     const schemaWorkspace = this.clientSchemaWorkspaceService.createSchemaWorkspace(client);
     const schemaElementWorkspace = this.clientSchemaElementWorkspaceService.createSchemaElementWorkspace(client, map);
+    const parcelElementService = this.clientParcelElementService;
     const parcelElementWorkspace = this.clientParcelElementWorkspaceService.createParcelElementWorkspace(client, map);
     const schemaElementTransactionService = this.clientSchemaElementTransactionService;
 
@@ -68,10 +77,13 @@ export class ClientControllerService {
       map,
       workspaceStore: options.workspaceStore,
       client,
+      parcelService,
       parcelWorkspace,
       parcelElementTransactionService,
+      schemaService,
       schemaWorkspace,
       schemaElementWorkspace,
+      parcelElementService,
       parcelElementWorkspace,
       schemaElementTransactionService,
       controllerStore: options.controllerStore,

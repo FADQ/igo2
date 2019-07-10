@@ -8,3 +8,4 @@ export * from './client-parcel-element-workspace.service';
 export * from './client-parcel-element-workspace';
 export * from './client-parcel-element.widgets';
 export * from './client-parcel-element.providers';
+export * from './client-parcel-element.service';

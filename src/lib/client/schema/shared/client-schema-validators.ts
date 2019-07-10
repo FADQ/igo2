@@ -1,17 +1,17 @@
 import { FormGroup, ValidationErrors } from '@angular/forms';
 
-import { Client } from '../../shared/client.interfaces';
+import { EntityStore } from '@igo2/common';
 import { ClientSchemaEtat, ClientSchemaType } from './client-schema.enums';
 import { ClientSchema } from './client-schema.interfaces';
 
-export function validateOnlyOneLSE(control: FormGroup, client: Client): ValidationErrors | null {
+export function validateOnlyOneLSE(control: FormGroup, store: EntityStore<ClientSchema>): ValidationErrors | null {
   const schemaId = control.controls['id'].value;
   const schemaTypeControl = control.controls['type'];
   const schemaType = schemaTypeControl.value;
 
   if (schemaType !== ClientSchemaType.LSE) { return null; }
 
-  const otherLSESchema = client.schemas.find((schema: ClientSchema) => {
+  const otherLSESchema = store.all().find((schema: ClientSchema) => {
     return schema.type === ClientSchemaType.LSE && schema.id !== schemaId;
   });
 
@@ -40,7 +40,7 @@ export function validateAnnee(control: FormGroup): null {
   return null;
 }
 
-export function validateEtatEPA(control: FormGroup, client: Client): null {
+export function validateEtatEPA(control: FormGroup, store: EntityStore<ClientSchema>): null {
   const schemaId = control.controls['id'].value;
   const schemaEtatControl = control.controls['etat'];
   const schemaEtat = schemaEtatControl.value;
@@ -66,7 +66,7 @@ export function validateEtatEPA(control: FormGroup, client: Client): null {
   const onlyOneOf = [ClientSchemaEtat.ENTRAI, ClientSchemaEtat.VALIDE];
   if (onlyOneOf.indexOf(schemaEtat) < 0) { return null; }
 
-  const otherSchema = client.schemas.find((schema: ClientSchema) => {
+  const otherSchema = store.all().find((schema: ClientSchema) => {
     return onlyOneOf.indexOf(schema.etat) >= 0 && schema.id !== schemaId;
   });
 

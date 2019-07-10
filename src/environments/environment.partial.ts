@@ -123,7 +123,8 @@ export const igoEnvironment: IgoEnvironment = {
       },
       parcelElement: {
         list: '/igolocalisation/recherche_client/obtenirParcellesProductionsClientAnnee/${clientNum}/${annee}',
-        save: ''
+        save: '',
+        startEdition: '/igodonneesgeospatiales/edition_parcelle_agricole/activeredition/${clientNum}/${annee}'
       },
       schema: {
         list: '/igolocalisation/recherche_client/obtenirSchemasClient/${clientNum}',
