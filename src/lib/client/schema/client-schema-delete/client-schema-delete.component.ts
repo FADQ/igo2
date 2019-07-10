@@ -69,7 +69,6 @@ export class ClientSchemaDeleteComponent implements OnUpdateInputs, WidgetCompon
 
   private onSubmitSuccess() {
     this.store.delete(this.schema);
-    this.client.schemas = this.store.all();
     this.complete.emit();
   }
 

@@ -1,12 +1,13 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 
 import { Observable, of, zip } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { LanguageService } from '@igo2/core';
 import {
+  EntityStore,
   Form,
   FormField,
   FormFieldConfig,
@@ -17,13 +18,13 @@ import {
 
 import { ApiService } from 'src/lib/core/api';
 
-import { Client } from '../../shared/client.interfaces';
 import {
   validateOnlyOneLSE,
   validateEtatEPA,
   validateAnnee
 } from './client-schema-validators';
 import {
+  ClientSchema,
   ClientSchemaApiConfig,
   ClientSchemaTypeChoicesResponse,
   ClientSchemaEtatChoicesResponse
@@ -43,10 +44,10 @@ export class ClientSchemaFormService {
     @Inject('clientSchemaApiConfig') private apiConfig: ClientSchemaApiConfig
   ) {}
 
-  buildCreateForm(client: Client): Observable<Form> {
+  buildCreateForm(store: EntityStore<ClientSchema>): Observable<Form> {
     const fields$ = zip(
       this.createIdField({options: {disabled: true}}),
-      this.createTypeField(client),
+      this.createTypeField(),
       this.createDescriptionField(),
       this.createAnneeField(),
       this.createEtatField()
@@ -58,9 +59,9 @@ export class ClientSchemaFormService {
             name: 'info',
             options: {
               validator: Validators.compose([
-                (control: FormGroup) => validateEtatEPA(control, client),
+                (control: FormGroup) => validateEtatEPA(control, store),
                 (control: FormGroup) => validateAnnee(control),
-                (control: FormGroup) => validateOnlyOneLSE(control, client)
+                (control: FormGroup) => validateOnlyOneLSE(control, store)
               ])
             }
           }, fields)
@@ -69,8 +70,8 @@ export class ClientSchemaFormService {
     );
   }
 
-  buildUpdateForm(client: Client): Observable<Form> {
-    return this.buildCreateForm(client);
+  buildUpdateForm(store: EntityStore<ClientSchema>): Observable<Form> {
+    return this.buildCreateForm(store);
   }
 
   buildTransferForm(): Observable<Form> {
@@ -108,7 +109,6 @@ export class ClientSchemaFormService {
   }
 
   private createTypeField(
-    client: Client,
     partial?: Partial<FormFieldConfig>
   ): Observable<FormField<FormFieldSelectInputs>> {
 

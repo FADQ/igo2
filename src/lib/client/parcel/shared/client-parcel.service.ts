@@ -5,13 +5,15 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ApiService } from 'src/lib/core/api';
+
+import { Client } from '../../shared/client.interfaces';
+import { padClientNum } from '../../shared/client.utils';
 import {
   ClientParcel,
   ClientParcelApiConfig,
   ClientParcelListResponse,
   ClientParcelListResponseItem
 } from './client-parcel.interfaces';
-import { padClientNum } from '../../shared/client.utils';
 import { getParcelRelation, sortParcelsByRelation } from './client-parcel.utils';
 
 @Injectable()
@@ -23,9 +25,9 @@ export class ClientParcelService {
     @Inject('clientParcelApiConfig') private apiConfig: ClientParcelApiConfig
   ) {}
 
-  getClientParcelsByNum(clientNum: string, annee: number = 2018): Observable<ClientParcel[]> {
+  getParcels(client: Client, annee: number = 2018): Observable<ClientParcel[]> {
     const url = this.apiService.buildUrl(this.apiConfig.list, {
-      clientNum,
+      clientNum: client.info.numero,
       annee
     });
 
@@ -33,25 +35,25 @@ export class ClientParcelService {
       .get(url)
       .pipe(
         map((response: ClientParcelListResponse) => {
-          return this.extractParcelsFromListResponse(response, clientNum);
+          return this.extractParcelsFromListResponse(response, client);
         })
       );
   }
 
   private extractParcelsFromListResponse(
     response: ClientParcelListResponse,
-    clientNum: string
+    client: Client
   ): ClientParcel[] {
     return response
-      .map(listItem => this.listItemToParcel(listItem, clientNum))
+      .map(listItem => this.listItemToParcel(listItem, client))
       .sort(sortParcelsByRelation);
   }
 
   private listItemToParcel(
     listItem: ClientParcelListResponseItem,
-    clientNum: string
+    client: Client
   ): ClientParcel {
-    const noClientRecherche = padClientNum(clientNum);
+    const noClientRecherche = padClientNum(client.info.numero);
     const relation = getParcelRelation(listItem, noClientRecherche);
     const properties = Object.assign({}, listItem.properties, {
       noClientRecherche,

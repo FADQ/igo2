@@ -63,7 +63,7 @@ export class ClientSchemaUpdateComponent implements OnInit, OnUpdateInputs, Widg
   ) {}
 
   ngOnInit() {
-    this.clientSchemaFormService.buildUpdateForm(this.client)
+    this.clientSchemaFormService.buildUpdateForm(this.store)
       .subscribe((form: Form) => this.form$.next(form));
   }
 
@@ -89,7 +89,6 @@ export class ClientSchemaUpdateComponent implements OnInit, OnUpdateInputs, Widg
 
   private onSubmitSuccess(schema: ClientSchema) {
     this.store.update(schema);
-    this.client.schemas = this.store.all();
     this.complete.emit();
   }
 

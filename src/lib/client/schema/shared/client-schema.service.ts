@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ApiService } from 'src/lib/core/api';
+import { Client } from '../../shared/client.interfaces';
 import {
   ClientSchema,
   ClientSchemaApiConfig,
@@ -27,8 +28,8 @@ export class ClientSchemaService {
     @Inject('clientSchemaApiConfig') private apiConfig: ClientSchemaApiConfig
   ) {}
 
-  getClientSchemasByNum(clientNum: string): Observable<ClientSchema[]> {
-    const url = this.apiService.buildUrl(this.apiConfig.list, {clientNum});
+  getSchemas(client: Client): Observable<ClientSchema[]> {
+    const url = this.apiService.buildUrl(this.apiConfig.list, {clientNum: client.info.numero});
     return this.http
       .get(url)
       .pipe(

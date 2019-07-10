@@ -6,13 +6,19 @@ import { FeatureStore, IgoMap } from '@igo2/geo';
 import { Client } from '../shared/client.interfaces';
 import { ClientParcel, ClientParcelDiagram } from '../parcel/shared/client-parcel.interfaces';
 import { ClientParcelWorkspace } from '../parcel/shared/client-parcel-workspace';
-import { createPerClientParcelLayerStyle, createParcelLayerStyle } from '../parcel/shared/client-parcel.utils';
+import { ClientParcelService } from '../parcel/shared/client-parcel.service';
+import {
+  createPerClientParcelLayerStyle,
+  createParcelLayerStyle,
+  getDiagramsFromParcels
+} from '../parcel/shared/client-parcel.utils';
 import { ClientParcelElementWorkspace } from '../parcel-element/shared/client-parcel-element-workspace';
 import { ClientParcelElement } from '../parcel-element/shared/client-parcel-element.interfaces';
+import { ClientParcelElementService } from '../parcel-element/shared/client-parcel-element.service';
 import { ClientParcelElementTransactionService } from '../parcel-element/shared/client-parcel-element-transaction.service';
 import { createParcelElementLayerStyle } from '../parcel-element/shared/client-parcel-element.utils';
-
 import { ClientSchema } from '../schema/shared/client-schema.interfaces';
+import { ClientSchemaService } from '../schema/shared/client-schema.service';
 import { ClientSchemaWorkspace } from '../schema/shared/client-schema-workspace';
 import { ClientSchemaElement } from '../schema-element/shared/client-schema-element.interfaces';
 import { ClientSchemaElementWorkspace } from '../schema-element/shared/client-schema-element-workspace';
@@ -24,8 +30,11 @@ export interface ClientControllerOptions {
   controllerStore: EntityStore<ClientController>;
   workspaceStore: WorkspaceStore;
   parcelWorkspace: ClientParcelWorkspace;
+  parcelService: ClientParcelService;
   parcelElementWorkspace: ClientParcelElementWorkspace;
+  parcelElementService: ClientParcelElementService;
   parcelElementTransactionService: ClientParcelElementTransactionService;
+  schemaService: ClientSchemaService;
   schemaWorkspace: ClientSchemaWorkspace;
   schemaElementWorkspace: ClientSchemaElementWorkspace;
   schemaElementTransactionService: ClientSchemaElementTransactionService;
@@ -40,6 +49,8 @@ export class ClientController {
 
   /** Subscription to the selected diagram  */
   private diagram$$: Subscription;
+
+  private parcelYear: number;
 
   /** Subscription to the selected parcels  */
   private parcels$$: Subscription;
@@ -90,6 +101,10 @@ export class ClientController {
     return this._selectedParcels.length === 1 ? this.selectedParcels[0] : undefined;
   }
 
+  get parcelService(): ClientParcelService {
+    return this.options.parcelService;
+  }
+
   /** Active parcel element workspace */
   get parcelElementWorkspace(): ClientParcelElementWorkspace {
     return this.options.parcelElementWorkspace;
@@ -113,6 +128,10 @@ export class ClientController {
   get parcelElementTransaction(): EntityTransaction { return this._parcelElementTransaction; }
   private _parcelElementTransaction: EntityTransaction = new EntityTransaction();
 
+  get parcelElementService(): ClientParcelElementService {
+    return this.options.parcelElementService;
+  }
+
   get parcelElementTransactionService(): ClientParcelElementTransactionService {
     return this.options.parcelElementTransactionService;
   }
@@ -130,6 +149,10 @@ export class ClientController {
   /** Active schema */
   get schema(): ClientSchema { return this._schema; }
   private _schema: ClientSchema;
+
+  get schemaService(): ClientSchemaService {
+    return this.options.schemaService;
+  }
 
   /** Active element workspace */
   get schemaElementWorkspace(): ClientSchemaElementWorkspace {
@@ -180,14 +203,23 @@ export class ClientController {
     this.teardownSchemas();
   }
 
+  setParcelYear(parcelYear: number) {
+    this.parcelYear = parcelYear;
+    this.loadParcels();
+  }
+
   canStartParcelEdition(): Observable<boolean> {
-    return this.parcelElementWorkspace.canStartParcelEdition();
+    return this.parcelElementService.canStartParcelEdition(this.client, this.parcelYear);
   }
 
   startParcelEdition() {
-    this.initParcelElements();
-    this.teardownParcels();
-    this.workspaceStore.activateWorkspace(this.parcelElementWorkspace);
+    this.parcelElementService
+      .startParcelEdition(this.client, this.parcelYear)
+      .subscribe(() => {
+        this.initParcelElements();
+        this.teardownParcels();
+        this.workspaceStore.activateWorkspace(this.parcelElementWorkspace);
+      })
   }
 
   stopParcelEdition() {
@@ -237,8 +269,7 @@ export class ClientController {
   }
 
   private initDiagrams() {
-    this._diagramStore = new EntityStore<ClientParcelDiagram>(this.client.diagrams);
-    this.diagramStore.state.updateMany(this.client.diagrams, {selected: true});
+    this._diagramStore = new EntityStore<ClientParcelDiagram>([]);
     this.diagramStore.view.sort({
       valueAccessor: (diagram: ClientParcelDiagram) => diagram.id,
       direction: 'asc'
@@ -250,6 +281,11 @@ export class ClientController {
         const diagrams = records.map((record: EntityRecord<ClientParcelDiagram>) => record.entity);
         this.onSelectDiagrams(diagrams);
       });
+  }
+
+  private loadDiagrams(diagrams: ClientParcelDiagram[]) {
+    this.diagramStore.load(diagrams);
+    this.diagramStore.state.updateMany(diagrams, {selected: true});
   }
 
   private teardownDiagrams() {
@@ -266,12 +302,22 @@ export class ClientController {
 
     this.parcelWorkspace.init();
     this.workspaceStore.update(this.parcelWorkspace);
+    this.loadParcels();
+  }
 
-    if (this.client.parcels.length === 0) {
-      this.message$.next('client.error.noparcel');
-    } else {
-      this.message$.next(undefined);
-    }
+  private loadParcels(){
+    this.parcelService.getParcels(this.client, this.parcelYear)
+      .subscribe((parcels: ClientParcel[]) => {
+        const diagrams = getDiagramsFromParcels(parcels);
+        this.loadDiagrams(diagrams);
+        this.parcelWorkspace.load(parcels);
+
+        if (parcels.length === 0) {
+          this.message$.next('client.error.noparcel');
+        } else {
+          this.message$.next(undefined);
+        }
+      });
   }
 
   private teardownParcels() {
@@ -290,8 +336,16 @@ export class ClientController {
         this.onSelectParcelElements(records.map(record => record.entity));
       });
 
-    this.parcelElementWorkspace.init();
-    this.workspaceStore.update(this.parcelElementWorkspace);
+      this.parcelElementWorkspace.init();
+      this.workspaceStore.update(this.parcelElementWorkspace);
+      this.loadParcelElements();
+  }
+
+  private loadParcelElements() {
+    this.parcelElementService.getParcelElements(this.client, this.parcelYear)
+      .subscribe((parcelElements: ClientParcelElement[]) => {
+        this.parcelElementWorkspace.load(parcelElements);
+      });
   }
 
   private teardownParcelElements() {
@@ -315,6 +369,14 @@ export class ClientController {
 
     this.schemaWorkspace.init();
     this.workspaceStore.update(this.schemaWorkspace);
+    this.loadSchemas();
+  }
+
+  private loadSchemas(){
+    this.schemaService.getSchemas(this.client)
+      .subscribe((schemas: ClientSchema[]) => {
+        this.schemaWorkspace.load(schemas);
+      });
   }
 
   private teardownSchemas() {

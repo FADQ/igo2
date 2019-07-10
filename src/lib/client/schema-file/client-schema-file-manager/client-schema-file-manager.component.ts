@@ -118,7 +118,7 @@ export class ClientSchemaFileManagerComponent implements OnInit, OnDestroy, Widg
   }
 
   private loadClientSchemaFiles() {
-    this.clientSchemaFileService.getClientSchemaFiles(this.schema)
+    this.clientSchemaFileService.getSchemaFiles(this.schema)
       .subscribe((schemaFiles: ClientSchemaFile[]) => {
         this.store.load(schemaFiles);
       });

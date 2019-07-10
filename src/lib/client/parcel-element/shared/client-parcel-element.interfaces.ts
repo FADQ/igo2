@@ -6,6 +6,7 @@ import { Client } from '../../shared/client.interfaces';
 export interface ClientParcelElementApiConfig {
   list: string;
   save: string;
+  startEdition: string;
 }
 
 export interface ClientParcelElementProperties {

@@ -73,8 +73,7 @@ export class ClientState implements OnDestroy {
   }
 
   getClientByNum(clientNum: string): Observable<Client> {
-    const annee = this.parcelYear ? this.parcelYear.annee : undefined;
-    return this.clientService.getClientByNum(clientNum, annee);
+    return this.clientService.getClientByNum(clientNum);
   }
 
   clearClientByNum(clientNum: string) {
@@ -152,9 +151,9 @@ export class ClientState implements OnDestroy {
   }
 
   private setControllerActiveWorkspace(controller: ClientController) {
-    const cliNum = controller.client.info.numero;
+    const clientNum = controller.client.info.numero;
     const currentWorkspace = this.workspaceStore.activeWorkspace$.value;
-    if (currentWorkspace !== undefined && currentWorkspace.meta.client.info.numero !== cliNum) {
+    if (currentWorkspace !== undefined && currentWorkspace.meta.client.info.numero !== clientNum) {
       const workspaces = [controller.parcelWorkspace, controller.schemaWorkspace, controller.schemaElementWorkspace];
       const workspace = workspaces.find((_workspace: Workspace) => {
         return _workspace.meta.type === currentWorkspace.meta.type &&
@@ -163,7 +162,7 @@ export class ClientState implements OnDestroy {
       this.workspaceStore.activateWorkspace(workspace || controller.parcelWorkspace);
     }
     this.workspaceStore.view.filter((workspace: Workspace) => {
-      return workspace.meta.client.info.numero === cliNum;
+      return workspace.meta.client.info.numero === clientNum;
     });
   }
 
@@ -220,7 +219,7 @@ export class ClientState implements OnDestroy {
 
   private onSelectParcelYear(parcelYear: ClientParcelYear) {
     this.parcelYear = parcelYear;
-
+    /*
     const clients$ = this.controllerStore.all().map((controller: ClientController) => {
       return this.getClientByNum(controller.client.info.numero);
     });
@@ -228,8 +227,13 @@ export class ClientState implements OnDestroy {
     zip(...clients$).subscribe((clients: Client[]) => {
       clients.forEach((client: Client) => {
         const controller = this.controllerStore.get(client.info.numero);
+        controller.setParcelYear(parcelYear);
         controller.parcelStore.load(client.parcels, false);
       });
+    });
+    */
+    this.controllerStore.all().forEach((controller: ClientController) => {
+      controller.setParcelYear(parcelYear.annee);
     });
   }
 
