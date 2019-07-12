@@ -17,6 +17,7 @@ import {
   GetElements,
   SaveElements
 } from './client-schema-element.interfaces';
+import { transactionDataToSaveSchemaElementData } from './client-schema-element.utils';
 
 @Injectable()
 export class ClientSchemaElementPointService implements GetElements, SaveElements {
@@ -46,7 +47,7 @@ export class ClientSchemaElementPointService implements GetElements, SaveElement
     const url = this.apiService.buildUrl(this.apiConfig.savePoints, {
       schemaId: schema.id
     });
-    return this.http.post(url, data);
+    return this.http.post(url, transactionDataToSaveSchemaElementData(data));
   }
 
   private extractElementsFromListResponse(response: ClientSchemaElementListResponse): ClientSchemaElement[] {

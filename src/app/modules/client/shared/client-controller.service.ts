@@ -2,15 +2,12 @@ import { Injectable} from '@angular/core';
 
 import { MapState } from '@igo2/integration';
 
+import { hexToRGB } from 'src/lib/utils/color';
+
 import {
   Client,
   ClientController,
   ClientControllerOptions,
-  ClientSchemaElementTransactionService
-} from 'src/lib/client';
-import { hexToRGB } from 'src/lib/utils/color';
-
-import {
   ClientParcelService,
   ClientParcelWorkspaceService,
   ClientParcelActionsService,
@@ -21,6 +18,8 @@ import {
   ClientSchemaService,
   ClientSchemaWorkspaceService,
   ClientSchemaActionsService,
+  ClientSchemaElementService,
+  ClientSchemaElementTransactionService,
   ClientSchemaElementWorkspaceService,
   ClientSchemaElementActionsService
 } from 'src/lib/client';
@@ -45,16 +44,17 @@ export class ClientControllerService {
     private clientParcelService: ClientParcelService,
     private clientParcelWorkspaceService: ClientParcelWorkspaceService,
     private clientParcelActionsService: ClientParcelActionsService,
-    private clientSchemaService: ClientSchemaService,
-    private clientSchemaWorkspaceService: ClientSchemaWorkspaceService,
-    private clientSchemaActionsService: ClientSchemaActionsService,
-    private clientSchemaElementTransactionService: ClientSchemaElementTransactionService,
-    private clientSchemaElementWorkspaceService: ClientSchemaElementWorkspaceService,
-    private clientSchemaElementActionsService: ClientSchemaElementActionsService,
     private clientParcelElementService: ClientParcelElementService,
     private clientParcelElementTransactionService: ClientParcelElementTransactionService,
     private clientParcelElementWorkspaceService: ClientParcelElementWorkspaceService,
     private clientParcelElementActionsService: ClientParcelElementActionsService,
+    private clientSchemaService: ClientSchemaService,
+    private clientSchemaWorkspaceService: ClientSchemaWorkspaceService,
+    private clientSchemaActionsService: ClientSchemaActionsService,
+    private clientSchemaElementService: ClientSchemaElementService,
+    private clientSchemaElementTransactionService: ClientSchemaElementTransactionService,
+    private clientSchemaElementWorkspaceService: ClientSchemaElementWorkspaceService,
+    private clientSchemaElementActionsService: ClientSchemaElementActionsService
   ) {}
 
   createClientController(client: Client, options: Partial<ClientControllerOptions> = {}): ClientController {
@@ -67,6 +67,7 @@ export class ClientControllerService {
     const schemaElementWorkspace = this.clientSchemaElementWorkspaceService.createSchemaElementWorkspace(client, map);
     const parcelElementService = this.clientParcelElementService;
     const parcelElementWorkspace = this.clientParcelElementWorkspaceService.createParcelElementWorkspace(client, map);
+    const schemaElementService = this.clientSchemaElementService;
     const schemaElementTransactionService = this.clientSchemaElementTransactionService;
 
     if (this.colorPalette === undefined || options.controllerStore.count === 0) {
@@ -77,6 +78,7 @@ export class ClientControllerService {
       map,
       workspaceStore: options.workspaceStore,
       client,
+      parcelYear: options.parcelYear,
       parcelService,
       parcelWorkspace,
       parcelElementTransactionService,
@@ -85,6 +87,7 @@ export class ClientControllerService {
       schemaElementWorkspace,
       parcelElementService,
       parcelElementWorkspace,
+      schemaElementService,
       schemaElementTransactionService,
       controllerStore: options.controllerStore,
       color: this.colorPalette.next().value

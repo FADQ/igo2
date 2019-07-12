@@ -181,6 +181,12 @@ fadq-expansion-panel {
     width: calc(#{$fadq-sidenav-width} - #{$igo-icon-size} - 20px);
   }
 
+  .fadq-workspace-count {
+    position: absolute;
+    right: 0px;
+    margin: 15px;
+  }
+
   @include tablet {
     igo-workspace-selector {
       width: calc(#{$fadq-sidenav-width} - (2 * #{$igo-icon-size}) - 20px);
@@ -191,8 +197,14 @@ fadq-expansion-panel {
     igo-workspace-selector {
       width: calc(#{$fadq-sidenav-width-mobile} - 5px);
     }
+
+    .fadq-workspace-count {
+      display: none
+    }
   }
 }
+
+
 
 /*** Info panel ***/
 fadq-toast-panel {

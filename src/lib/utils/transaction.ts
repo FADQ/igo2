@@ -5,9 +5,9 @@ import { Feature } from '@igo2/geo';
  * Structure receivable by the save element (parcel/schema) endpoints.
  */
 export interface TransactionData<E> {
-  lstElementsAjoutes: E[];
-  lstElementsModifies: E[];
-  lstIdElementsSupprimes: string[];
+  inserts: E[];
+  updates: E[];
+  deletes: string[];
 }
 
 /**
@@ -35,11 +35,7 @@ export class TransactionSerializer<E extends Feature> {
       }
     });
 
-    return {
-      lstElementsAjoutes: inserts,
-      lstElementsModifies: updates,
-      lstIdElementsSupprimes: deletes
-    };
+    return {inserts, updates, deletes};
   }
 
   /**

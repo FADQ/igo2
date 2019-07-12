@@ -9,8 +9,13 @@ import {
   measureOlGeometryArea
 } from '@igo2/geo';
 
+import { TransactionData } from '../../../utils/transaction';
 import { Client } from '../../shared/client.interfaces';
-import { ClientParcelElement } from './client-parcel-element.interfaces';
+import {
+  ClientParcelElement,
+  ClientParcelElementMessage,
+  ClientParcelElementSaveData
+} from './client-parcel-element.interfaces';
 
 export function computeParcelElementArea(parcelElement: ClientParcelElement): number {
   const measureProjection = 'EPSG:32198';
@@ -69,6 +74,20 @@ function getParcelElementFeatureText(olFeature: OlFeature, resolution: number): 
   return olFeature.get('noParcelleAgricole');
 }
 
+export function getParcelElementErrors(parcelElement: ClientParcelElement): string[] {
+  const messages = parcelElement.properties.messages;
+  return messages
+    .filter((message: ClientParcelElementMessage) => message.type === 'error')
+    .map((message: ClientParcelElementMessage) => message.text);
+}
+
+export function getParcelElementWarnings(parcelElement: ClientParcelElement): string[] {
+  const messages = parcelElement.properties.messages;
+  return messages
+    .filter((message: ClientParcelElementMessage) => message.type === 'warning')
+    .map((message: ClientParcelElementMessage) => message.text);
+}
+
 export function getParcelElementValidationMessage(
   parcelElement: ClientParcelElement,
   languageService: LanguageService
@@ -84,4 +103,14 @@ export function generateParcelElementOperationTitle(
     parcelElement.properties.noParcelleAgricole
   ];
   return terms.filter((term: string) => term !== undefined).join(' - ');
+}
+
+export function transactionDataToSaveParcelElementData(
+  data: TransactionData<ClientParcelElement>
+): ClientParcelElementSaveData {
+  return {
+    lstParcellesAjoutes: data.inserts,
+    lstParcellesModifies: data.updates,
+    lstIdParcellesSupprimes: data.deletes
+  };
 }

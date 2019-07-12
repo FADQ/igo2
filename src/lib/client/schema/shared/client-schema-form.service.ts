@@ -1,9 +1,8 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { FormGroup, Validators } from '@angular/forms';
 
 import { Observable, of, zip } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map} from 'rxjs/operators';
 
 import { LanguageService } from '@igo2/core';
 import {
@@ -17,6 +16,7 @@ import {
 } from '@igo2/common';
 
 import { ApiService } from 'src/lib/core/api';
+import { DomainService } from 'src/lib/core/domain';
 
 import {
   validateOnlyOneLSE,
@@ -25,21 +25,16 @@ import {
 } from './client-schema-validators';
 import {
   ClientSchema,
-  ClientSchemaApiConfig,
-  ClientSchemaTypeChoicesResponse,
-  ClientSchemaEtatChoicesResponse
+  ClientSchemaApiConfig
 } from './client-schema.interfaces';
 
 @Injectable()
 export class ClientSchemaFormService {
 
-  private clientSchemaTypeChoices: FormFieldSelectChoice[];
-  private clientSchemaEtatChoices: FormFieldSelectChoice[];
-
   constructor(
     private formService: FormService,
-    private http: HttpClient,
     private apiService: ApiService,
+    private domainService: DomainService,
     private languageService: LanguageService,
     @Inject('clientSchemaApiConfig') private apiConfig: ClientSchemaApiConfig
   ) {}
@@ -194,68 +189,12 @@ export class ClientSchemaFormService {
   }
 
   private getClientSchemaTypeChoices(): Observable<FormFieldSelectChoice[]> {
-    if (this.clientSchemaTypeChoices !== undefined) {
-      return of(this.clientSchemaTypeChoices);
-    }
-
     const url = this.apiService.buildUrl(this.apiConfig.domains.type);
-    return this.http
-      .get(url)
-      .pipe(
-        map((response: ClientSchemaTypeChoicesResponse) => {
-          return this.extractSchemaTypeChoicesFromResponse(response);
-        }),
-        tap((choices: FormFieldSelectChoice[]) => {
-          this.cacheClientSchemaTypeChoices(choices);
-        })
-      );
-  }
-
-  private extractSchemaTypeChoicesFromResponse(
-    response: ClientSchemaTypeChoicesResponse
-  ): FormFieldSelectChoice[] {
-    const items = response.data || [];
-    return items.map(item => Object.create({
-      value: item.code,
-      title: item.descriptionAbregeeFrancais
-    }));
-  }
-
-  private cacheClientSchemaTypeChoices(choices: FormFieldSelectChoice[]) {
-    this.clientSchemaTypeChoices = choices;
+    return this.domainService.getChoices(url);
   }
 
   private getClientSchemaEtatChoices(): Observable<FormFieldSelectChoice[]> {
-    if (this.clientSchemaEtatChoices !== undefined) {
-      return of(this.clientSchemaEtatChoices);
-    }
-
     const url = this.apiService.buildUrl(this.apiConfig.domains.etat);
-    return this.http
-      .get(url)
-      .pipe(
-        map((response: ClientSchemaEtatChoicesResponse) => {
-          return [{value: undefined, title: ''}].concat(
-            this.extractSchemaEtatChoicesFromResponse(response)
-          );
-        }),
-        tap((choices: FormFieldSelectChoice[]) => {
-          this.cacheClientSchemaEtatChoices(choices);
-        })
-      );
-  }
-
-  private extractSchemaEtatChoicesFromResponse(
-    response: ClientSchemaEtatChoicesResponse
-  ): FormFieldSelectChoice[] {
-    const items = response.data || [];
-    return items.map(item => Object.create({
-      value: item.code,
-      title: item.descriptionAbregeeFrancais
-    }));
-  }
-
-  private cacheClientSchemaEtatChoices(choices: FormFieldSelectChoice[]) {
-    this.clientSchemaEtatChoices = choices;
+    return this.domainService.getChoices(url);
   }
 }

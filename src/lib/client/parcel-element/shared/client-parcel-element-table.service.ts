@@ -1,10 +1,11 @@
 import { Injectable} from '@angular/core';
 
-import { EntityTableTemplate } from '@igo2/common';
+import { EntityTableTemplate, EntityTableColumnRenderer } from '@igo2/common';
 import { formatMeasure, squareMetersToHectares } from '@igo2/geo';
 
 import { formatDate } from 'src/lib/utils/date';
 import { ClientParcelElement } from './client-parcel-element.interfaces';
+import { getParcelElementErrors, getParcelElementWarnings } from './client-parcel-element.utils';
 
 @Injectable({
   providedIn: 'root'
@@ -82,17 +83,19 @@ export class ClientParcelElementTableService {
           title: 'Utilisateur'
         },
         {
-          name: 'meta.errors',
+          name: 'properties.messages',
           title: 'Validation',
-          cellClassFunc: (parcelElement: ClientParcelElement) => {
-            const errors = parcelElement.meta.errors || [];
-            return {
-              'error-text': errors.length > 0
-            };
-          },
+          renderer: EntityTableColumnRenderer.HTML,
           valueAccessor: (parcelElement: ClientParcelElement) => {
-            const errors = parcelElement.meta.errors || [];
-            return errors.join(', ');
+            const errors = getParcelElementErrors(parcelElement);
+            const warnings =  getParcelElementWarnings(parcelElement);
+            const errorsHtml = errors.map((error: string) => {
+              return `<span class="error-text">${error}</span>`;
+            });
+            const warningsHtml = warnings.map((warning: string) => {
+              return `<span class="warning-text">${warning}</span>`;
+            });
+            return [...errorsHtml, ...warningsHtml].join(', ');
           }
         }
       ]

@@ -277,31 +277,31 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.searchStore.state.updateAll({focused: false, selected: false});
   }
 
-  private closeToastPanel() {
+  closeToastPanel() {
     this.toastPanelOpened = false;
   }
 
-  private openToastPanel() {
+  openToastPanel() {
     this.toastPanelOpened = true;
   }
 
-  private closeExpansionPanel() {
+  closeExpansionPanel() {
     this.expansionPanelExpanded = false;
   }
 
-  private openExpansionPanel() {
+  openExpansionPanel() {
     this.expansionPanelExpanded = true;
   }
 
-  private closeSidenav() {
+  closeSidenav() {
     this.sidenavOpened = false;
   }
 
-  private openSidenav() {
+  openSidenav() {
     this.sidenavOpened = true;
   }
 
-  private toggleSidenav() {
+  toggleSidenav() {
     this.sidenavOpened ? this.closeSidenav() : this.openSidenav();
   }
 

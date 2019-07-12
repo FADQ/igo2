@@ -1,5 +1,6 @@
 import { Inject, Injectable} from '@angular/core';
 
+import { ClientParcelElementEditionState } from '../../parcel-element/shared/client-parcel-element.enums';
 import { ClientParcelElementEditWidget } from '../../parcel-element/shared/client-parcel-element.widgets';
 
 import { Action, EntityTableColumn, Widget } from '@igo2/common';
@@ -19,18 +20,19 @@ export class ClientParcelActionsService {
   buildActions(controller: ClientController): Action[] {
     return [
       {
-        id: 'startEdition',
+        id: 'activateEdition',
         icon: 'square-edit-outline',
-        title: 'client.parcelElement.startEdition',
-        tooltip: 'client.parcelElement.startEdition.tooltip',
+        title: 'client.parcelElement.activateEdition',
+        tooltip: 'client.parcelElement.activateEdition.tooltip',
         handler: function(widget: Widget, ctrl: ClientController) {
-          ctrl.canStartParcelEdition()
-            .subscribe((response: boolean) => {
-              if (response === true) {
-                ctrl.startParcelEdition();
+          ctrl.getParcelEditionState()
+            .subscribe((state: ClientParcelElementEditionState) => {
+              if (state === ClientParcelElementEditionState.OK) {
+                ctrl.activateParcelEdition();
               } else {
                 ctrl.parcelWorkspace.activateWidget(widget, {
-                  controller: ctrl
+                  controller: ctrl,
+                  state: state
                 });
               }
             });

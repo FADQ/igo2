@@ -4,14 +4,17 @@ import {
   Output,
   EventEmitter,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  OnInit
 } from '@angular/core';
+
+import { BehaviorSubject } from 'rxjs';
 
 import { LanguageService } from '@igo2/core';
 import { WidgetComponent, OnUpdateInputs } from '@igo2/common';
 
 import { ClientController } from '../../shared/controller';
-
+import { ClientParcelElementEditionState} from '../shared/client-parcel-element.enums';
 
 @Component({
   selector: 'fadq-client-parcel-element-edit',
@@ -19,12 +22,23 @@ import { ClientController } from '../../shared/controller';
   styleUrls: ['./client-parcel-element-edit.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientParcelElementEditComponent implements WidgetComponent, OnUpdateInputs {
+export class ClientParcelElementEditComponent implements WidgetComponent, OnUpdateInputs, OnInit {
+
+  /**
+   * Import error, if any
+   * @internal
+   */
+  errorMessage$: BehaviorSubject<string> = new BehaviorSubject(undefined);
 
   /**
    * Client controller
    */
   @Input() controller: ClientController;
+
+   /**
+   * Edition state
+   */
+  @Input() state: ClientParcelElementEditionState;
 
   /**
    * Event emitted on complete
@@ -41,6 +55,11 @@ export class ClientParcelElementEditComponent implements WidgetComponent, OnUpda
     private cdRef: ChangeDetectorRef
   ) {}
 
+  ngOnInit() {
+    const error = this.validateState();
+    this.errorMessage$.next(error);
+  }
+
   /**
    * Implemented as part of OnUpdateInputs
    */
@@ -49,12 +68,33 @@ export class ClientParcelElementEditComponent implements WidgetComponent, OnUpda
   }
 
   onSubmit() {
-    this.controller.startParcelEdition();
-    this.complete.emit();
+    if (this.state === ClientParcelElementEditionState.OK) {
+      this.onSubmitSuccess();
+    } else {
+      this.controller.prepareParcelEdition().subscribe(() => {
+        this.onSubmitSuccess();
+      });
+    }
   }
 
   onCancel() {
     this.cancel.emit();
   }
 
+  private onSubmitSuccess() {
+    this.controller.activateParcelEdition();
+    this.complete.emit();
+  }
+
+  private validateState(): string | undefined {
+    const state = this.state;
+    if (state === ClientParcelElementEditionState.AI) {
+      return this.languageService.translate.instant('client.parcelElement.edition.ai.error');
+    }
+    if (state === ClientParcelElementEditionState.EEC) {
+      return this.languageService.translate.instant('client.parcelElement.edition.eec.error');
+    }
+
+    return undefined;
+  }
 }

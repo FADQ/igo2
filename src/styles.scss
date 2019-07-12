@@ -44,11 +44,6 @@ th.text-centered {
   text-align: center;
 }
 
-td.error-text {
-  color: red;
-  font-weight: bold;
-}
-
 tr.text-centered th div.mat-sort-header-container {
   display: flex;
   justify-content: center !important;
@@ -79,4 +74,9 @@ igo-actionbar igo-actionbar-item.tool-actived {
   button {
     background-color: #e0e0e0;
   }
+}
+
+.error-text {
+  color: red;
+  font-weight: bold;
 }
