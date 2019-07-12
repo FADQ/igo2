@@ -1,4 +1,5 @@
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { concatMap, map } from 'rxjs/operators';
 
 import { EntityRecord, EntityStore, EntityTransaction, WorkspaceStore } from '@igo2/common';
 import { FeatureStore, IgoMap } from '@igo2/geo';
@@ -16,19 +17,23 @@ import { ClientParcelElementWorkspace } from '../parcel-element/shared/client-pa
 import { ClientParcelElement } from '../parcel-element/shared/client-parcel-element.interfaces';
 import { ClientParcelElementService } from '../parcel-element/shared/client-parcel-element.service';
 import { ClientParcelElementTransactionService } from '../parcel-element/shared/client-parcel-element-transaction.service';
+import { ClientParcelElementEditionState } from '../parcel-element/shared/client-parcel-element.enums';
 import { createParcelElementLayerStyle } from '../parcel-element/shared/client-parcel-element.utils';
 import { ClientSchema } from '../schema/shared/client-schema.interfaces';
 import { ClientSchemaService } from '../schema/shared/client-schema.service';
 import { ClientSchemaWorkspace } from '../schema/shared/client-schema-workspace';
-import { ClientSchemaElement } from '../schema-element/shared/client-schema-element.interfaces';
+import { ClientSchemaElement, ClientSchemaElementTypes } from '../schema-element/shared/client-schema-element.interfaces';
 import { ClientSchemaElementWorkspace } from '../schema-element/shared/client-schema-element-workspace';
+import { ClientSchemaElementService } from '../schema-element/shared/client-schema-element.service';
 import { ClientSchemaElementTransactionService } from '../schema-element/shared/client-schema-element-transaction.service';
+import { createSchemaElementLayerStyle } from '../schema-element/shared/client-schema-element.utils';
 
 export interface ClientControllerOptions {
   map: IgoMap;
   client: Client;
   controllerStore: EntityStore<ClientController>;
   workspaceStore: WorkspaceStore;
+  parcelYear: number;
   parcelWorkspace: ClientParcelWorkspace;
   parcelService: ClientParcelService;
   parcelElementWorkspace: ClientParcelElementWorkspace;
@@ -37,6 +42,7 @@ export interface ClientControllerOptions {
   schemaService: ClientSchemaService;
   schemaWorkspace: ClientSchemaWorkspace;
   schemaElementWorkspace: ClientSchemaElementWorkspace;
+  schemaElementService: ClientSchemaElementService;
   schemaElementTransactionService: ClientSchemaElementTransactionService;
   color?: [number, number, number];
 }
@@ -49,8 +55,6 @@ export class ClientController {
 
   /** Subscription to the selected diagram  */
   private diagram$$: Subscription;
-
-  private parcelYear: number;
 
   /** Subscription to the selected parcels  */
   private parcels$$: Subscription;
@@ -81,6 +85,9 @@ export class ClientController {
   get workspaceStore(): WorkspaceStore {
     return this.options.workspaceStore;
   }
+
+  get parcelYear(): number { return this._parcelYear || this.options.parcelYear; }
+  private _parcelYear: number;
 
   /** Parcel workspace */
   get parcelWorkspace(): ClientParcelWorkspace {
@@ -177,6 +184,10 @@ export class ClientController {
   get schemaElementTransaction(): EntityTransaction { return this._schemaElementTransaction; }
   private _schemaElementTransaction: EntityTransaction = new EntityTransaction();
 
+  get schemaElementService(): ClientSchemaElementService {
+    return this.options.schemaElementService;
+  }
+
   get schemaElementTransactionService(): ClientSchemaElementTransactionService {
     return this.options.schemaElementTransactionService;
   }
@@ -204,30 +215,31 @@ export class ClientController {
   }
 
   setParcelYear(parcelYear: number) {
-    this.parcelYear = parcelYear;
+    this._parcelYear = parcelYear;
     this.loadParcels();
   }
 
-  canStartParcelEdition(): Observable<boolean> {
-    return this.parcelElementService.canStartParcelEdition(this.client, this.parcelYear);
+  getParcelEditionState(): Observable<ClientParcelElementEditionState> {
+    return this.parcelElementService.getParcelEditionState(this.client, this.parcelYear);
   }
 
-  startParcelEdition() {
-    this.parcelElementService
-      .startParcelEdition(this.client, this.parcelYear)
-      .subscribe(() => {
-        this.initParcelElements();
-        this.teardownParcels();
-        this.workspaceStore.activateWorkspace(this.parcelElementWorkspace);
-      })
+  prepareParcelEdition(): Observable<void> {
+    return this.parcelElementService.prepareParcelEdition(this.client, this.parcelYear);
   }
 
-  stopParcelEdition() {
+  activateParcelEdition() {
+    this.initParcelElements();
+    this.teardownParcels();
+    this.workspaceStore.activateWorkspace(this.parcelElementWorkspace);
+  }
+
+  deactivateParcelEdition() {
     if (!this.parcelElementTransaction.empty) {
       this.parcelElementTransactionService.enqueue({
         client: this.client,
+        annee: this.parcelYear,
         transaction: this.parcelElementTransaction,
-        proceed: () => this.stopParcelEdition()
+        proceed: () => this.deactivateParcelEdition()
       });
       return;
     }
@@ -305,7 +317,7 @@ export class ClientController {
     this.loadParcels();
   }
 
-  private loadParcels(){
+  private loadParcels() {
     this.parcelService.getParcels(this.client, this.parcelYear)
       .subscribe((parcels: ClientParcel[]) => {
         const diagrams = getDiagramsFromParcels(parcels);
@@ -372,7 +384,7 @@ export class ClientController {
     this.loadSchemas();
   }
 
-  private loadSchemas(){
+  private loadSchemas() {
     this.schemaService.getSchemas(this.client)
       .subscribe((schemas: ClientSchema[]) => {
         this.schemaWorkspace.load(schemas);
@@ -393,8 +405,26 @@ export class ClientController {
         this.onSelectSchemaElements(records.map(record => record.entity));
       });
 
-    this.schemaElementWorkspace.init(schema);
+    this.schemaElementWorkspace.init();
     this.workspaceStore.update(this.schemaElementWorkspace);
+    this.loadSchemaElements(schema);
+  }
+
+  private loadSchemaElements(schema: ClientSchema) {
+    this.schemaElementService.getSchemaElementTypes(schema.type)
+      .pipe(
+        concatMap((types: ClientSchemaElementTypes) => {
+          return this.schemaElementService.getSchemaElements(schema).pipe(
+            map((elements: ClientSchemaElement[]) => [types, elements])
+          );
+        })
+      )
+      .subscribe((bunch: [ClientSchemaElementTypes, ClientSchemaElement[]]) => {
+        const [types, elements] = bunch;
+        const olStyle = createSchemaElementLayerStyle(types);
+        this.schemaElementStore.layer.ol.setStyle(olStyle);
+        this.schemaElementStore.load(elements);
+      });
   }
 
   private teardownSchemaElements() {
@@ -437,7 +467,7 @@ export class ClientController {
     const diagramIds = diagrams.map((diagram: ClientParcelDiagram) => diagram.id);
     const filterClause = function(parcel: ClientParcel | ClientParcelElement): boolean {
       const noDiagramme = parcel.properties.noDiagramme;
-      return diagramIds.includes(noDiagramme) || noDiagramme === undefined;
+      return diagramIds.includes(noDiagramme) || noDiagramme === 9999;
     };
     this.parcelStore.view.filter(filterClause);
     this.parcelElementStore.view.filter(filterClause);

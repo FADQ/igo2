@@ -84,12 +84,12 @@ export class ClientParcelElementActionsService {
 
     return [
       {
-        id: 'stopEdition',
-        icon: 'cancel',
-        title: 'client.parcelElement.stopEdition',
-        tooltip: 'client.parcelElement.stopEdition.tooltip',
+        id: 'deactivateEdition',
+        icon: 'close-box-outline',
+        title: 'client.parcelElement.deactivateEdition',
+        tooltip: 'client.parcelElement.deactivateEdition.tooltip',
         handler: function(ctrl: ClientController) {
-          ctrl.stopParcelEdition();
+          ctrl.deactivateParcelEdition();
         },
         args: [controller],
         conditions: [noActiveWidget],
@@ -202,6 +202,7 @@ export class ClientParcelElementActionsService {
         handler: (widget: Widget, ctrl: ClientController) => {
           ctrl.parcelElementWorkspace.activateWidget(widget, {
             client: ctrl.client,
+            annee: ctrl.parcelYear,
             transaction: ctrl.parcelElementTransaction,
             store: ctrl.parcelElementStore
           });

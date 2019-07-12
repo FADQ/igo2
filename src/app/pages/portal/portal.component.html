@@ -70,6 +70,10 @@
       [withTitle]="actionbarWithTitle"
       [mode]="actionbarMode">
     </igo-actionbar>
+
+    <div *ngIf="workspace && expansionPanelExpanded" class="fadq-workspace-count">
+      {{workspace.entityStore.view.count$ | async}} / {{workspace.entityStore.count$ | async}}
+    </div>
   </ng-container>
 
   <igo-entity-table
@@ -82,7 +86,6 @@
 </fadq-expansion-panel>
 
 <fadq-toast-panel
-  [title]="toastPanelTitle"
   [withHeader]="false"
   [(opened)]="toastPanelOpened"
   (clear)="clearSearchResult()">

@@ -15,6 +15,7 @@ import { WidgetComponent, OnUpdateInputs } from '@igo2/common';
 import { FeatureStore } from '@igo2/geo';
 
 import { ClientParcelElement } from '../shared/client-parcel-element.interfaces';
+import { getParcelElementErrors } from '../shared/client-parcel-element.utils';
 
 @Component({
   selector: 'fadq-client-parcel-element-reconciliate',
@@ -56,7 +57,7 @@ export class ClientParcelElementReconciliateComponent implements WidgetComponent
 
   ngOnInit() {
     const error = this.store.all().find((parcelElement: ClientParcelElement) => {
-      const errors = parcelElement.meta.errors || [];
+      const errors = getParcelElementErrors(parcelElement);
       return errors.length > 0;
     });
 

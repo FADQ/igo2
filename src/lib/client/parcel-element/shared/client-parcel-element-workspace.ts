@@ -55,7 +55,7 @@ export class ClientParcelElementWorkspace extends Workspace<ClientParcelElement>
   }
 
   load(parcelElements: ClientParcelElement[]) {
-    this.parcelElementStore.load(parcelElements);  
+    this.parcelElementStore.load(parcelElements);
   }
 
   activate() {

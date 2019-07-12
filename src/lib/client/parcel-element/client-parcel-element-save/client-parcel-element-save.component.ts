@@ -33,6 +33,11 @@ export class ClientParcelElementSaveComponent implements OnUpdateInputs, WidgetC
   @Input() client: Client;
 
   /**
+   * Parcel annee
+   */
+  @Input() annee: number;
+
+  /**
    * Parcel element store
    */
   @Input() store: FeatureStore<ClientParcelElement>;
@@ -79,7 +84,7 @@ export class ClientParcelElementSaveComponent implements OnUpdateInputs, WidgetC
 
   private commitTransaction(transaction: EntityTransaction): Observable<Message | undefined> {
     return this.clientParcelElementService
-      .commitTransaction(this.client, transaction)
+      .commitTransaction(this.client, this.annee, transaction)
       .pipe(
         map((results: ClientParcelElement[] | Error) => this.onCommitSuccess(results))
       );

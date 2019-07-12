@@ -39,7 +39,10 @@ import {
   FadqLibClientParcelElementTransferModule
 } from './client-parcel-element-transfer/client-parcel-element-transfer.module';
 
-import { provideClientParcelElementService } from './shared/client-parcel-element.providers';
+import {
+  provideClientParcelElementService,
+  provideClientParcelElementFormService
+} from './shared/client-parcel-element.providers';
 import {
   provideClientParcelElementCreateWidget,
   provideClientParcelElementEditWidget,
@@ -80,6 +83,7 @@ export class FadqLibClientParcelElementModule {
       ngModule: FadqLibClientParcelElementModule,
       providers: [
         provideClientParcelElementService(),
+        provideClientParcelElementFormService(),
         provideClientParcelElementCreateWidget(),
         provideClientParcelElementEditWidget(),
         provideClientParcelElementUpdateWidget(),

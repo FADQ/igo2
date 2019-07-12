@@ -155,7 +155,8 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
   }
 
   private onSelectParcelElement(parcelElement: ClientParcelElement) {
-    if (this.lastUpdate !== undefined && parcelElement.properties.id === this.lastUpdate.properties.id) {
+    if (this.lastUpdate !== undefined &&
+        parcelElement.properties.idParcelle === this.lastUpdate.properties.idParcelle) {
       return;
     }
     if (this.errorMessage$.value !== undefined) {
@@ -235,7 +236,7 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
 
   private addToSubTransaction(parcelElement: ClientParcelElement) {
     const operationTitle = parcelElement.properties.noParcelleAgricole;
-    const sourceParcelElement = this.store.get(parcelElement.properties.id);
+    const sourceParcelElement = this.store.get(parcelElement.properties.idParcelle);
     this.subTransaction.update(sourceParcelElement, parcelElement, this.store, {
       title: operationTitle,
       index: this.computeOperationIndex()
@@ -259,7 +260,7 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
   }
 
   private deleteOperation(operation: EntityOperation<ClientParcelElement>) {
-    if (operation.current.properties.id === this.lastUpdate.properties.id) {
+    if (operation.current.properties.idParcelle === this.lastUpdate.properties.idParcelle) {
       this.store.state.update(this.lastUpdate, {selected: false});
       this.lastUpdate = undefined;
     }

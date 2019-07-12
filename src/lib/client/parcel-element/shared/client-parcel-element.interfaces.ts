@@ -1,17 +1,29 @@
 import { EntityTransaction } from '@igo2/common';
-import { Feature, FeatureMeta } from '@igo2/geo';
+import { Feature } from '@igo2/geo';
 
 import { Client } from '../../shared/client.interfaces';
+import { ClientParcelElementEditionState } from './client-parcel-element.enums';
 
 export interface ClientParcelElementApiConfig {
   list: string;
   save: string;
-  startEdition: string;
+  activateEdition: string;
+  createEditionSchema: string;
+  domains: {
+    source: string;
+    statutAugm: string;
+  };
+}
+
+export interface ClientParcelElementMessage {
+  type: string;
+  text: string;
 }
 
 export interface ClientParcelElementProperties {
-  id: string;
+  idParcelle: string;
   noParcelleAgricole: string;
+  typeParcelle: string;
   anneeImage: number;
   infoLocateur: string;
   noDiagramme: number;
@@ -22,25 +34,37 @@ export interface ClientParcelElementProperties {
   superficieHectare: number;
   timbreMajGeometrie: string;
   usagerMajGeometrie: string;
-  remarque: string;
-}
-
-export interface ClientParcelElementMeta extends FeatureMeta {
-  errors?: string[];
+  messages: ClientParcelElementMessage[];
 }
 
 export interface ClientParcelElement extends Feature {
   properties: ClientParcelElementProperties;
-  meta: ClientParcelElementMeta;
 }
 
 export interface ClientParcelElementListResponseItem extends ClientParcelElement {}
 
-export type ClientParcelElementListResponse = ClientParcelElementListResponseItem[];
+export interface ClientParcelElementListResponse {
+  statut: number;
+  data: ClientParcelElementListResponseItem[];
+}
 
 export interface ClientParcelElementTransactionWrapper {
   client: Client;
+  annee: number;
   transaction: EntityTransaction;
   proceed: () => void;
   abort?: () => void;
+}
+
+export interface ClientParcelElementActivateEditionResponse {
+  statut: number;
+  data: {
+    resultat: ClientParcelElementEditionState;
+  };
+}
+
+export interface ClientParcelElementSaveData {
+  lstParcellesAjoutes: ClientParcelElement[];
+  lstParcellesModifies: ClientParcelElement[];
+  lstIdParcellesSupprimes: string[];
 }

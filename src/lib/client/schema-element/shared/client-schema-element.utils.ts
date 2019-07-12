@@ -9,11 +9,13 @@ import {
   VectorLayer
 } from '@igo2/geo';
 
+import { TransactionData } from '../../../utils/transaction';
 import { Client } from '../../shared/client.interfaces';
 import {
   ClientSchemaElement,
   ClientSchemaElementType,
-  ClientSchemaElementTypes
+  ClientSchemaElementTypes,
+  ClientSchemaElementSaveData
 } from './client-schema-element.interfaces';
 
 export function computeSchemaElementArea(element: ClientSchemaElement): number {
@@ -213,4 +215,14 @@ function createSILShape(color: [number, number, number]): olstyle.RegularShape {
 
 function getSchemaElementDefaultColor() {
   return [128, 21, 21];
+}
+
+export function transactionDataToSaveSchemaElementData(
+  data: TransactionData<ClientSchemaElement>
+): ClientSchemaElementSaveData {
+  return {
+    lstElementsAjoutes: data.inserts,
+    lstElementsModifies: data.updates,
+    lstIdElementsSupprimes: data.deletes
+  };
 }

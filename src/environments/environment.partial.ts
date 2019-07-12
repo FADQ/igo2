@@ -122,9 +122,14 @@ export const igoEnvironment: IgoEnvironment = {
         years: '/igolocalisation/recherche_client/obtenirAnneesTraitementParcelleAgricole'
       },
       parcelElement: {
-        list: '/igolocalisation/recherche_client/obtenirParcellesProductionsClientAnnee/${clientNum}/${annee}',
-        save: '',
-        startEdition: '/igodonneesgeospatiales/edition_parcelle_agricole/activeredition/${clientNum}/${annee}'
+        list: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirParcellesEdition/${clientNum}/${annee}',
+        save: '/igodonneesgeospatiales/edition_parcelle_agricole/enregistrerParcellesEdition/${clientNum}/${annee}',
+        activateEdition: '/igodonneesgeospatiales/edition_parcelle_agricole/activeredition/${clientNum}/${annee}',
+        createEditionSchema: '/igodonneesgeospatiales/edition_parcelle_agricole/creerSchemaEdition/${clientNum}/${annee}',
+        domains: {
+          statutAugm: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirStatutsAugmentationSuperficiesCultivees',
+          source: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirSourcesParcelles'
+        }
       },
       schema: {
         list: '/igolocalisation/recherche_client/obtenirSchemasClient/${clientNum}',

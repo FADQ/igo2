@@ -82,3 +82,9 @@ export interface GetElements {
 export interface SaveElements {
   saveElements(schema: ClientSchema, data: TransactionData<ClientSchemaElement>): Observable<any>;
 }
+
+export interface ClientSchemaElementSaveData {
+  lstElementsAjoutes: ClientSchemaElement[];
+  lstElementsModifies: ClientSchemaElement[];
+  lstIdElementsSupprimes: string[];
+}

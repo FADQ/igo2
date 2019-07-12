@@ -1,27 +1,35 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Validators } from '@angular/forms';
 
 import { Observable, of, zip } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { LanguageService } from '@igo2/core';
 import {
   Form,
   FormField,
   FormFieldConfig,
+  FormFieldSelectChoice,
+  FormFieldSelectInputs,
   FormService
 } from '@igo2/common';
 import { IgoMap } from '@igo2/geo';
 
-@Injectable({
-  providedIn: 'root'
-})
+import { ApiService } from 'src/lib/core/api';
+import { DomainService } from 'src/lib/core/domain';
+
+import { ClientParcelElementApiConfig } from './client-parcel-element.interfaces';
+
+@Injectable()
 export class ClientParcelElementFormService {
 
   constructor(
     private formService: FormService,
+    private apiService: ApiService,
+    private domainService: DomainService,
     private languageService: LanguageService,
-    private clientParcelElementFormService: ClientParcelElementFormService
+    @Inject('clientParcelElementApiConfig') private apiConfig: ClientParcelElementApiConfig
   ) {}
 
   buildCreateForm(igoMap: IgoMap): Observable<Form> {
@@ -33,7 +41,7 @@ export class ClientParcelElementFormService {
       this.createNoParcelField(),
       this.createStatutAugmField(),
       this.createParcelleDraineeField(),
-      this.createSourceParcelleField(),
+      this.createSourceField(),
       this.createAnneeImageField(),
       this.createInfoLocateurField()
     );
@@ -61,7 +69,7 @@ export class ClientParcelElementFormService {
       this.createNoParcelField({options: {disabled: true}}),
       this.createStatutAugmField({options: {disabled: true, disableSwitch: true}}),
       this.createParcelleDraineeField({options: {disabled: true, disableSwitch: true}}),
-      this.createSourceParcelleField({options: {disabled: true, disableSwitch: true}}),
+      this.createSourceField({options: {disabled: true, disableSwitch: true}}),
       this.createAnneeImageField({options: {disabled: true, disableSwitch: true}}),
       this.createInfoLocateurField({options: {disabled: true, disableSwitch: true}})
     );
@@ -92,17 +100,22 @@ export class ClientParcelElementFormService {
   }
 
   private createStatutAugmField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
-    return of(this.createField({
-      name: 'properties.statutAugmentationSupCultivable',
-      title: 'Statut de déboisement',
-      type: 'select',
-      options:  {
-        cols: 1
-      },
-      inputs: {
-        choices: []
-      }
-    }, partial));
+    return this.getStatutAugmChoices()
+      .pipe(
+        map((choices: FormFieldSelectChoice[]) => {
+          return this.createField({
+            name: 'properties.statutAugmentationSupCultivable',
+            title: 'Statut de déboisement',
+            type: 'select',
+            options:  {
+              cols: 1
+            },
+            inputs: {
+              choices
+            }
+          }, partial)  as FormField<FormFieldSelectInputs>;
+        })
+      );
   }
 
   private createParcelleDraineeField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
@@ -123,18 +136,23 @@ export class ClientParcelElementFormService {
     }, partial));
   }
 
-  private createSourceParcelleField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
-    return of(this.createField({
-      name: 'properties.sourceParcelleAgricole',
-      title: 'Source parcelle',
-      type: 'select',
-      options:  {
-        cols: 1
-      },
-      inputs: {
-        choices: []
-      }
-    }, partial));
+  private createSourceField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
+    return this.getSourceChoices()
+      .pipe(
+        map((choices: FormFieldSelectChoice[]) => {
+          return this.createField({
+            name: 'properties.sourceParcelleAgricole',
+            title: 'Source parcelle',
+            type: 'select',
+            options:  {
+              cols: 1
+            },
+            inputs: {
+              choices
+            }
+          }, partial)  as FormField<FormFieldSelectInputs>;
+        })
+      );
   }
 
   private createAnneeImageField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
@@ -186,5 +204,15 @@ export class ClientParcelElementFormService {
   private createField(config: FormFieldConfig, partial?: Partial<FormFieldConfig>): FormField {
     config = this.formService.extendFieldConfig(config, partial || {});
     return this.formService.field(config);
+  }
+
+  private getSourceChoices(): Observable<FormFieldSelectChoice[]> {
+    const url = this.apiService.buildUrl(this.apiConfig.domains.source);
+    return this.domainService.getChoices(url);
+  }
+
+  private getStatutAugmChoices(): Observable<FormFieldSelectChoice[]> {
+    const url = this.apiService.buildUrl(this.apiConfig.domains.statutAugm);
+    return this.domainService.getChoices(url);
   }
 }

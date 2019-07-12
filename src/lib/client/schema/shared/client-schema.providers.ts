@@ -4,6 +4,7 @@ import { ConfigService, LanguageService } from '@igo2/core';
 import { FormService } from '@igo2/common';
 
 import { ApiService } from 'src/lib/core/api';
+import { DomainService } from 'src/lib/core/domain';
 
 import { ClientSchemaService } from './client-schema.service';
 import { ClientSchemaFormService } from './client-schema-form.service';
@@ -30,15 +31,15 @@ export function provideClientSchemaService() {
 
 export function clientSchemaFormServiceFactory(
   formService: FormService,
-  http: HttpClient,
   apiService: ApiService,
+  domainService: DomainService,
   languageService: LanguageService,
   config: ConfigService
 ) {
   return new ClientSchemaFormService(
     formService,
-    http,
     apiService,
+    domainService,
     languageService,
     config.getConfig('client.api.schema')
   );
@@ -48,6 +49,6 @@ export function provideClientSchemaFormService() {
   return {
     provide: ClientSchemaFormService,
     useFactory: clientSchemaFormServiceFactory,
-    deps: [FormService, HttpClient, ApiService, LanguageService, ConfigService]
+    deps: [FormService, ApiService, DomainService, LanguageService, ConfigService]
   };
 }

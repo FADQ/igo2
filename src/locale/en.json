@@ -126,10 +126,12 @@
       "reconciliate.confirm": "Désirez-vous réconcilier les parcelles en édition?",
       "reconciliate.invalid": "Des parcelles en édition sont invalides et ne peuvent être réconciliées.",
       "edit.confirm": "Désirez-vous débuter l'édition de parcelles?",
-      "startEdition": "Édition de parcelles",
-      "startEdition.tooltip": "Démarrer l'édition de parcelles",
-      "stopEdition": "Édition de parcelles",
-      "stopEdition.tooltip": "Arrêter l'édition de parcelles"
+      "activateEdition": "Édition de parcelles",
+      "activateEdition.tooltip": "Démarrer l'édition de parcelles",
+      "deactivateEdition": "Édition de parcelles",
+      "deactivateEdition.tooltip": "Arrêter l'édition de parcelles",
+      "edition.ai.error": "L'année est invalide",
+      "edition.eec.error": "Une session d'édition est déjà en cours"
     },
     "schema": {
       "none": "None",

@@ -49,7 +49,7 @@ export class ClientParcelElementWorkspaceService {
   private createParcelElementStore(client: Client, map: IgoMap): FeatureStore<ClientParcelElement> {
     const store = new FeatureStore<ClientParcelElement>([], {
       getKey: (entity: ClientParcelElement) => {
-        return entity.properties.id || entity.meta.id;
+        return entity.properties.idParcelle || entity.meta.id;
       },
       map
     });

@@ -4,6 +4,7 @@ import { IgoCoreModule, RouteService, provideConfigOptions } from '@igo2/core';
 
 import { environment } from 'src/environments/environment';
 import { FadqLibApiModule } from './api/api.module';
+import { FadqLibDomainModule } from './domain/domain.module';
 
 const providers: Provider[] = [
   RouteService,
@@ -16,12 +17,14 @@ const providers: Provider[] = [
 @NgModule({
   imports: [
     IgoCoreModule.forRoot(),
-    FadqLibApiModule
+    FadqLibApiModule,
+    FadqLibDomainModule
   ],
   declarations: [],
   exports: [
     IgoCoreModule,
-    FadqLibApiModule
+    FadqLibApiModule,
+    FadqLibDomainModule
   ]
 })
 export class FadqLibCoreModule {

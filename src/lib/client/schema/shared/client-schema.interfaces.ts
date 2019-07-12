@@ -1,3 +1,5 @@
+import { DomainChoicesResponseItem } from 'src/lib/core/domain';
+
 export interface ClientSchemaApiConfig  {
   list: string;
   create: string;
@@ -33,17 +35,10 @@ export interface ClientSchemaListResponse {
 export interface ClientSchemaListResponseItem {
   id: string;
   numeroClient: string;
-  typeSchema: ClientSchemaTypeChoicesResponseItem;
+  typeSchema: DomainChoicesResponseItem;
   description: string;
   annee: string;
-  etatSchema: {
-    code: string;
-    descriptionAbregeeFrancais: string;
-    descriptionFrancais: string;
-    descriptionAbregeeAnglais: string;
-    descriptionAnglais: string;
-    ordreAffichage: number;
-  };
+  etatSchema: DomainChoicesResponseItem;
   nbDocuments: number;
   usagerMaj: string;
   timbreMaj: {
@@ -82,30 +77,4 @@ export interface ClientSchemaTransferResponse {
 
 export interface ClientSchemaDuplicateResponse {
   data: ClientSchemaListResponseItem;
-}
-
-export interface ClientSchemaTypeChoicesResponse {
-  data: ClientSchemaTypeChoicesResponseItem[];
-}
-
-export interface ClientSchemaTypeChoicesResponseItem {
-  code: string;
-  descriptionAbregeeFrancais: string;
-  descriptionFrancais: string;
-  descriptionAbregeeAnglais: string;
-  descriptionAnglais: string;
-  ordreAffichage: number;
-}
-
-export interface ClientSchemaEtatChoicesResponse {
-  data: ClientSchemaEtatChoicesResponseItem[];
-}
-
-export interface ClientSchemaEtatChoicesResponseItem {
-  code: string;
-  descriptionAbregeeFrancais: string;
-  descriptionFrancais: string;
-  descriptionAbregeeAnglais: string;
-  descriptionAnglaiss: string;
-  ordreAffichage: number;
 }

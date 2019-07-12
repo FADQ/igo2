@@ -1,5 +1,3 @@
-import { concatMap, map } from 'rxjs/operators';
-
 import { EntityTableTemplate, Workspace, WorkspaceOptions } from '@igo2/common';
 import {
   IgoMap,
@@ -9,10 +7,8 @@ import {
 } from '@igo2/geo';
 
 import { Client } from '../../shared/client.interfaces';
-import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
-import { ClientSchemaElement, ClientSchemaElementTypes } from './client-schema-element.interfaces';
+import { ClientSchemaElement } from './client-schema-element.interfaces';
 import { ClientSchemaElementService } from './client-schema-element.service';
-import { createSchemaElementLayerStyle } from './client-schema-element.utils';
 
 export interface ClientSchemaElementWorkspaceOptions extends WorkspaceOptions {
   meta: {
@@ -42,9 +38,8 @@ export class ClientSchemaElementWorkspace extends Workspace<ClientSchemaElement>
     super(options);
   }
 
-  init(schema: ClientSchema) {
+  init() {
     this.schemaElementStore.activateStrategyOfType(FeatureStoreLoadingStrategy);
-    this.loadSchemaElements(schema);
     this.addSchemaElementLayer();
   }
 
@@ -65,24 +60,6 @@ export class ClientSchemaElementWorkspace extends Workspace<ClientSchemaElement>
     super.deactivate();
     this.schemaElementStore.deactivateStrategyOfType(FeatureStoreSelectionStrategy);
     this.schemaElementStore.state.clear();
-  }
-
-  private loadSchemaElements(schema: ClientSchema) {
-    this.schemaElementService.getSchemaElementTypes(schema.type)
-      .pipe(
-        concatMap((types: ClientSchemaElementTypes) => {
-          return this.schemaElementService.getSchemaElements(schema).pipe(
-            map((elements: ClientSchemaElement[]) => [types, elements])
-          );
-        })
-      )
-      .subscribe((bunch: [ClientSchemaElementTypes, ClientSchemaElement[]]) => {
-        const [types, elements] = bunch;
-        const olStyle = createSchemaElementLayerStyle(types);
-        const store = this.entityStore as FeatureStore<ClientSchemaElement>;
-        store.layer.ol.setStyle(olStyle);
-        store.load(elements);
-      });
   }
 
   private addSchemaElementLayer() {
