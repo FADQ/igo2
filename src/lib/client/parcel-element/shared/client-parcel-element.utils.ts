@@ -78,14 +78,14 @@ export function getParcelElementErrors(parcelElement: ClientParcelElement): stri
   const messages = parcelElement.properties.messages;
   return messages
     .filter((message: ClientParcelElementMessage) => message.type === 'error')
-    .map((message: ClientParcelElementMessage) => message.text);
+    .map((message: ClientParcelElementMessage) => message.code);
 }
 
 export function getParcelElementWarnings(parcelElement: ClientParcelElement): string[] {
   const messages = parcelElement.properties.messages;
   return messages
     .filter((message: ClientParcelElementMessage) => message.type === 'warning')
-    .map((message: ClientParcelElementMessage) => message.text);
+    .map((message: ClientParcelElementMessage) => message.code);
 }
 
 export function getParcelElementValidationMessage(

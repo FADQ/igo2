@@ -7,6 +7,9 @@ import { ClientParcelElementEditionState } from './client-parcel-element.enums';
 export interface ClientParcelElementApiConfig {
   list: string;
   save: string;
+  reconciliate: string;
+  validateTransfer: string;
+  transfer: string;
   activateEdition: string;
   createEditionSchema: string;
   domains: {
@@ -17,11 +20,11 @@ export interface ClientParcelElementApiConfig {
 
 export interface ClientParcelElementMessage {
   type: string;
-  text: string;
+  code: string;
 }
 
 export interface ClientParcelElementProperties {
-  idParcelle: string;
+  idParcelle: number;
   noParcelleAgricole: string;
   typeParcelle: string;
   anneeImage: number;
@@ -67,4 +70,11 @@ export interface ClientParcelElementSaveData {
   lstParcellesAjoutes: ClientParcelElement[];
   lstParcellesModifies: ClientParcelElement[];
   lstIdParcellesSupprimes: string[];
+}
+
+export interface ClientParcelElementValidateTransferResponse {
+  statut: number;
+  data: {
+    transfertPossible: boolean;
+  };
 }

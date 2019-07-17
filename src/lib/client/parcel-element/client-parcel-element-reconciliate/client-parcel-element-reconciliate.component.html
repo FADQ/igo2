@@ -1,20 +1,31 @@
 <mat-card>
   <mat-card-header>
-    <div mat-card-avatar>
-      <mat-icon [color]="'accent'" svgIcon="help-circle"></mat-icon>
-    </div>
-    <mat-card-title>{{'client.parcelElement.reconciliate.confirm' | translate}}</mat-card-title>
+    <ng-container *ngIf="!(submitted$ | async); else submitted">
+      <div mat-card-avatar>
+        <mat-icon [color]="'accent'" svgIcon="help-circle"></mat-icon>
+      </div>
+      <mat-card-title>{{'client.parcelElement.reconciliate.confirm' | translate}}</mat-card-title>
+    </ng-container>
+    <ng-template #submitted>
+      <ng-container *ngIf="submitError$ | async; else submitSuccess">
+        <div mat-card-avatar>
+          <mat-icon [color]="'warn'" svgIcon="thumb-down"></mat-icon>
+        </div>
+        <mat-card-title>{{'client.parcelElement.reconciliate.error' | translate}}</mat-card-title>
+      </ng-container>
+      <ng-template #submitSuccess>
+        <div mat-card-avatar>
+          <mat-icon [color]="'accent'" svgIcon="thumb-up"></mat-icon>
+        </div>
+        <mat-card-title>{{'client.parcelElement.reconciliate.success' | translate}}</mat-card-title>  
+      </ng-template>
+    </ng-template>
   </mat-card-header>
 
   <mat-card-content>
-    <fadq-message-inline
-      *ngIf="message$ | async as message"  
-      [message]="message">
-    </fadq-message-inline>
-
     <div>
       <div class="igo-form-buttons">
-        <ng-container *ngIf="!hasError; else close">
+        <ng-container *ngIf="!(submitted$ | async); else close">
           <button
             mat-button
             type="button"
@@ -34,7 +45,7 @@
             mat-raised-button
             color="primary"
             type="button"
-            (click)="onCancel()">
+            (click)="onClose()">
             {{ 'close' | translate }}
           </button>  
         </ng-template>
