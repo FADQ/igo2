@@ -4,18 +4,17 @@ import {
   Output,
   EventEmitter,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  OnInit
+  ChangeDetectorRef
 } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
-import { LanguageService, Message, MessageType } from '@igo2/core';
+import { LanguageService } from '@igo2/core';
 import { WidgetComponent, OnUpdateInputs } from '@igo2/common';
-import { FeatureStore } from '@igo2/geo';
 
-import { ClientParcelElement } from '../shared/client-parcel-element.interfaces';
-import { getParcelElementErrors } from '../shared/client-parcel-element.utils';
+import { Client } from '../../shared/client.interfaces';
+import { ClientParcelElementService } from '../shared/client-parcel-element.service';
 
 @Component({
   selector: 'fadq-client-parcel-element-reconciliate',
@@ -23,18 +22,29 @@ import { getParcelElementErrors } from '../shared/client-parcel-element.utils';
   styleUrls: ['./client-parcel-element-reconciliate.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientParcelElementReconciliateComponent implements WidgetComponent, OnUpdateInputs, OnInit {
+export class ClientParcelElementReconciliateComponent implements WidgetComponent, OnUpdateInputs {
 
   /**
-   * Success or error message
+   * Submitted flag
    * @internal
    */
-  message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
+  readonly submitted$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   /**
-   * Parcel element store
+   * Whether there was a submit error
+   * @internal
    */
-  @Input() store: FeatureStore<ClientParcelElement>;
+  readonly submitError$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+  /**
+   * Client
+   */
+  @Input() client: Client;
+
+  /**
+   * Parcel annee
+   */
+  @Input() annee: number;
 
   /**
    * Event emitted on complete
@@ -46,29 +56,11 @@ export class ClientParcelElementReconciliateComponent implements WidgetComponent
    */
   @Output() cancel = new EventEmitter<void>();
 
-  get hasError(): boolean {
-    return this.message$.value !== undefined && this.message$.value.type === MessageType.ERROR;
-  }
-
   constructor(
+    private clientParcelElementService: ClientParcelElementService,
     private languageService: LanguageService,
     private cdRef: ChangeDetectorRef
   ) {}
-
-  ngOnInit() {
-    const error = this.store.all().find((parcelElement: ClientParcelElement) => {
-      const errors = getParcelElementErrors(parcelElement);
-      return errors.length > 0;
-    });
-
-    if (error !== undefined) {
-      const text = this.languageService.translate.instant('client.parcelElement.reconciliate.invalid');
-      this.message$.next({
-        type: MessageType.ERROR,
-        text
-      });
-    }
-  }
 
   /**
    * Implemented as part of OnUpdateInputs
@@ -78,14 +70,33 @@ export class ClientParcelElementReconciliateComponent implements WidgetComponent
   }
 
   onSubmit() {
-    if (this.hasError) {
-      return;
-    }
-    this.complete.emit();
+    this.clientParcelElementService.reconciliate(this.client, this.annee).pipe(
+      catchError(() => of(new Error()))
+    ).subscribe((response: Error | unknown) => {
+      if (response instanceof Error) {
+        this.onReconciliationError();
+      } else {
+        this.onReconciliationSuccess();
+      }
+    });
   }
 
   onCancel() {
     this.cancel.emit();
+  }
+
+  onClose() {
+    this.complete.emit();
+  }
+
+  private onReconciliationError() {
+    this.submitted$.next(true);
+    this.submitError$.next(true);
+  }
+
+  private onReconciliationSuccess() {
+    this.submitted$.next(true);
+    this.submitError$.next(false);
   }
 
 }

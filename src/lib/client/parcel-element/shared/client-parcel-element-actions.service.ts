@@ -20,7 +20,10 @@ import {
   ClientParcelElementImportWidget,
   ClientParcelElementTransferWidget
 } from './client-parcel-element.widgets';
-import { generateParcelElementOperationTitle } from './client-parcel-element.utils';
+import {
+  generateParcelElementOperationTitle,
+  getParcelElementErrors
+} from './client-parcel-element.utils';
 
 @Injectable({
   providedIn: 'root'
@@ -76,8 +79,13 @@ export class ClientParcelElementActionsService {
       return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length === 1;
     }
 
-    function moreThanOneClient(ctrl: ClientController): boolean {
-      return ctrl.controllerStore.count > 1;
+    function noParcelElementError(ctrl: ClientController): boolean {
+      const parcelElements = ctrl.parcelElementStore.all();
+      const errors = parcelElements.reduce((acc: string[], parcelElement: ClientParcelElement) => {
+        acc.push(...getParcelElementErrors(parcelElement));
+        return acc;
+      }, []);
+      return errors.length === 0;
     }
 
     const conditionArgs = [controller];
@@ -257,8 +265,9 @@ export class ClientParcelElementActionsService {
 
           ctrl.parcelElementWorkspace.activateWidget(widget, {
             client: ctrl.client,
+            annee: ctrl.parcelYear,
             clientStore: clientStore,
-            parcelElementSore: ctrl.parcelElementStore
+            parcelElementStore: ctrl.parcelElementStore
           });
         },
         args: [this.clientParcelElementTransferWidget, controller],
@@ -287,11 +296,12 @@ export class ClientParcelElementActionsService {
         tooltip: 'client.parcelElement.reconciliate.tooltip',
         handler: (widget: Widget, ctrl: ClientController) => {
           ctrl.parcelElementWorkspace.activateWidget(widget, {
-            store: ctrl.parcelElementStore
+            client: ctrl.client,
+            annee: ctrl.parcelYear
           });
         },
         args: [this.clientParcelElementReconciliateWidget, controller],
-        conditions: [noActiveWidget],
+        conditions: [noActiveWidget, noParcelElementError],
         conditionArgs
       }
     ];

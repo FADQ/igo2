@@ -10,6 +10,8 @@ import {
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoFormModule, IgoEntitySelectorModule } from '@igo2/common';
 
+import { FadqLibMessageInlineModule } from '../../../message/message-inline/message-inline.module';
+
 import { ClientParcelElementTransferComponent } from './client-parcel-element-transfer.component';
 
 /**
@@ -24,7 +26,8 @@ import { ClientParcelElementTransferComponent } from './client-parcel-element-tr
     MatSlideToggleModule,
     IgoLanguageModule,
     IgoFormModule,
-    IgoEntitySelectorModule
+    IgoEntitySelectorModule,
+    FadqLibMessageInlineModule
   ],
   exports: [
     ClientParcelElementTransferComponent

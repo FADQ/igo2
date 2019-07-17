@@ -17,7 +17,8 @@ import {
   ClientParcelElementApiConfig,
   ClientParcelElementListResponse,
   ClientParcelElementListResponseItem,
-  ClientParcelElementActivateEditionResponse
+  ClientParcelElementActivateEditionResponse,
+  ClientParcelElementValidateTransferResponse
 } from './client-parcel-element.interfaces';
 
 @Injectable()
@@ -63,6 +64,45 @@ export class ClientParcelElementService {
           return this.extractParcelsFromListResponse(response, client);
         })
       );
+  }
+
+  reconciliate(client: Client, annee: number): Observable<any> {
+    const url = this.apiService.buildUrl(this.apiConfig.reconciliate, {
+      clientNum: client.info.numero,
+      annee
+    });
+
+    return this.http.get(url);
+  }
+
+  validateTransfer(toClient: Client, annee: number): Observable<boolean> {
+    const url = this.apiService.buildUrl(this.apiConfig.validateTransfer, {
+      toClientNum: toClient.info.numero,
+      annee
+    });
+
+    return this.http.get(url).pipe(
+      map((response: ClientParcelElementValidateTransferResponse) => response.data.transfertPossible)
+    );
+  }
+
+  transfer(
+    fromClient: Client,
+    toClient: Client,
+    annee: number,
+    parcelElementIds: number[],
+    keepParcelNumbers: boolean
+  ): Observable<unknown> {
+    const url = this.apiService.buildUrl(this.apiConfig.transfer, {
+      fromClientNum: fromClient.info.numero,
+      toClientNum: toClient.info.numero,
+      annee
+    });
+
+    return this.http.post(url, {
+      lstIdParcelles: parcelElementIds,
+      indiConserverNoParcelle: keepParcelNumbers
+    });
   }
 
   /**
@@ -161,9 +201,7 @@ export class ClientParcelElementService {
     listItem: ClientParcelElementListResponseItem,
     client: Client
   ): ClientParcelElement {
-    const properties = Object.assign({}, listItem.properties, {
-      messages: [{type: 'error', text: 'ERR'}, {type: 'warning', text: 'WARN'}]}
-    );
+    const properties = Object.assign({}, listItem.properties);
     return {
       meta: {
         id: listItem.properties.idParcelle,

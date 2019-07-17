@@ -124,6 +124,9 @@ export const igoEnvironment: IgoEnvironment = {
       parcelElement: {
         list: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirParcellesEdition/${clientNum}/${annee}',
         save: '/igodonneesgeospatiales/edition_parcelle_agricole/enregistrerParcellesEdition/${clientNum}/${annee}',
+        reconciliate: '/igodonneesgeospatiales/edition_parcelle_agricole/reconcilierParcellesEdition/${clientNum}/${annee}',
+        validateTransfer: '/igodonneesgeospatiales/edition_parcelle_agricole/validertransfertparcelle/${toClientNum}/${annee}',
+        transfer: '/igodonneesgeospatiales/edition_parcelle_agricole/transfererparcellesedition/${fromClientNum}/${toClientNum}/${annee}',
         activateEdition: '/igodonneesgeospatiales/edition_parcelle_agricole/activeredition/${clientNum}/${annee}',
         createEditionSchema: '/igodonneesgeospatiales/edition_parcelle_agricole/creerSchemaEdition/${clientNum}/${annee}',
         domains: {

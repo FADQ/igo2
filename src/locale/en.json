@@ -125,6 +125,8 @@
       "reconciliate.tooltip": "Réconcilier les parcelles en édition",
       "reconciliate.confirm": "Désirez-vous réconcilier les parcelles en édition?",
       "reconciliate.invalid": "Des parcelles en édition sont invalides et ne peuvent être réconciliées.",
+      "reconciliate.error": "Réconciliation en erreur",
+      "reconciliate.success": "Réconciliation réussie",
       "edit.confirm": "Désirez-vous débuter l'édition de parcelles?",
       "activateEdition": "Édition de parcelles",
       "activateEdition.tooltip": "Démarrer l'édition de parcelles",

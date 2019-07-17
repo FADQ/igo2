@@ -1,8 +1,14 @@
 <form class="igo-form" [formGroup]="formGroup">
+  <fadq-message-inline
+    *ngIf="message$ | async as message"  
+    [message]="message">
+  </fadq-message-inline>
+
   <igo-entity-selector
     [store]="clientStore"
     [placeholder]="'client.parcelElement.transfer.client.placeholder' | translate"
-    [titleAccessor]="getClientNumber">
+    [titleAccessor]="getClientNumber"
+    (selectedChange)="onSelectClient($event)">
   </igo-entity-selector>
 
   <div class="slide-toggle-container">
@@ -29,6 +35,7 @@
       mat-raised-button
       type="button"
       color="primary"
+      [disabled]="(toClient$ | async) === undefined"
       (click)="onTransfer()">
       {{'client.parcelElement.transfer.apply' | translate}}
     </button>
