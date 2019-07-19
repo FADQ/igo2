@@ -18,11 +18,11 @@
   </button>
 
   <igo-search-bar
-    [disabled]="searchbarDisabled"
+    igoSearchBarBinding
     [searchTypes]="searchTypes"
     [minLength]="minSearchTermLength"
     (searchTypeChange)="onSearchTypeChange($event)"
-    (change)="onSearchTermChange($event)"
+    (searchTermChange)="onSearchTermChange($event)"
     (search)="onSearch($event)">
   </igo-search-bar>
 

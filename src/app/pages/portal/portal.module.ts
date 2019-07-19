@@ -24,6 +24,7 @@ import {
   IgoQueryModule
 } from '@igo2/geo';
 import { IgoContextManagerModule } from '@igo2/context';
+import { IgoAppSearchModule } from '@igo2/integration';
 
 import { FadqMapModule } from '../../modules/map/map.module';
 import { FadqSearchModule } from '../../modules/search/search.module';
@@ -54,6 +55,7 @@ import { PortalComponent } from './portal.component';
     IgoImportExportModule,
     IgoQueryModule,
     IgoContextManagerModule,
+    IgoAppSearchModule,
 
     FadqMapModule,
     FadqSearchModule,

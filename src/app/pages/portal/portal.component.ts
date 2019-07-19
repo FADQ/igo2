@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { Subject, Subscription, of } from 'rxjs';
+import { BehaviorSubject, ReplaySubject, Subscription, of, combineLatest } from 'rxjs';
 
 import { MapBrowserPointerEvent as OlMapBrowserPointerEvent } from 'ol/MapBrowserEvent';
 
@@ -60,18 +60,14 @@ export class PortalComponent implements OnInit, OnDestroy {
   public showToastPanelToggle = false;
 
   private focusedSearchResult$$: Subscription;
-  private currentSearchTerm: string;
-  private currentSearchType: string = CLIENT;
 
   private searchAddedLayers: Map<string, Layer[]> = new Map();
   private searchVisibledLayers: Map<string, Layer[]> = new Map();
   private context$$: Subscription;
 
-  private searchTerm$$: Subscription;
-  private searchType$$: Subscription;
+  private searchDisabled$$: Subscription;
 
-  private activeWorkspace$$: Subscription;
-  private activeWorkspaceWidget$$: Subscription;
+  private activeWidget$$: Subscription;
 
   get map(): IgoMap {
     return this.mapState.map;
@@ -122,13 +118,11 @@ export class PortalComponent implements OnInit, OnDestroy {
     return this.workspaceStore.activeWorkspace$.value;
   }
 
-  get searchbarDisabled(): boolean { return this.currentSearchType === CADASTRE; }
+  get searchTerm(): string { return this.searchState.searchTerm$.value; }
 
-  get searchTerm$(): Subject<string> { return this.searchState.searchTerm$; }
+  get searchType(): string { return this.searchState.searchType$.value; }
 
-  get searchType$(): Subject<string> { return this.searchState.searchType$; }
-
-  @ViewChild(SearchBarComponent) searchbar: SearchBarComponent;
+  @ViewChild(SearchBarComponent) search: SearchBarComponent;
 
   constructor(
     private mapState: MapState,
@@ -142,13 +136,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.searchTerm$$ = this.searchState.searchTerm$.subscribe((searchTerm: string) => {
-      this.searchbar.setTerm(searchTerm);
-    });
-
-    this.searchType$$ = this.searchState.searchType$.subscribe((searchType: string) => {
-      this.searchbar.setSearchType(searchType);
-    });
+    this.searchState.setSearchType(CLIENT);
 
     this.focusedSearchResult$$ = this.searchStore.stateView
       .firstBy$((record: EntityRecord<SearchResult>) => record.state.focused === true)
@@ -164,20 +152,25 @@ export class PortalComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.activeWorkspace$$ = this.workspaceStore.activeWorkspace$.subscribe((workspace: Workspace) => {
-      if (this.activeWorkspaceWidget$$ !== undefined) {
-        this.activeWorkspaceWidget$$.unsubscribe();
-        this.activeWorkspaceWidget$$ = undefined;
+    this.activeWidget$$ = this.clientState.activeWidget$.subscribe((widget: Widget) => {
+      if (widget !== undefined) {
+        this.openToastPanel();
+        this.showToastPanelToggle = true;
+      } else {
+        this.closeToastPanel();
+        this.showToastPanelToggle = false;
       }
-      if (workspace !== undefined) {
-        this.activeWorkspaceWidget$$ = workspace.widget$.subscribe((widget: Widget) => {
-          if (widget !== undefined) {
-            this.openToastPanel();
-            this.showToastPanelToggle = true;
-          } else {
-            this.showToastPanelToggle = false;
-          }
-        });
+    });
+
+    this.searchDisabled$$ = combineLatest(
+      this.clientState.activeWidget$,
+      this.searchState.searchType$
+    ).subscribe((bunch: [Widget, string]) => {
+      const disabled = bunch[0] !== undefined || bunch[1] === CADASTRE;
+      if (disabled === true) {
+        this.searchState.disableSearch();
+      } else {
+        this.searchState.enableSearch();
       }
     });
   }
@@ -185,12 +178,8 @@ export class PortalComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.context$$.unsubscribe();
     this.focusedSearchResult$$.unsubscribe();
-    this.activeWorkspace$$.unsubscribe();
-    this.searchTerm$$.unsubscribe();
-    this.searchType$$.unsubscribe();
-    if (this.activeWorkspaceWidget$$ !== undefined) {
-      this.activeWorkspaceWidget$$.unsubscribe();
-    }
+    this.activeWidget$$.unsubscribe();
+    this.searchDisabled$$.unsubscribe();
   }
 
   onBackdropClick() {
@@ -224,17 +213,15 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   onSearchTermChange(searchTerm?: string) {
-    this.currentSearchTerm = searchTerm;
-    if (this.verifyNullTerm()) {
+    if (this.verifyNullTerm(searchTerm)) {
       this.onClearSearch();
       return;
     }
-    this.onBeforeSearch();
+    this.onBeforeSearch(this.searchType, searchTerm);
   }
 
   onSearchTypeChange(searchType?: string) {
-    this.currentSearchType = searchType;
-    this.onBeforeSearch();
+    this.onBeforeSearch(searchType, this.searchTerm);
   }
 
   onSearch(event: {research: Research, results: SearchResult[]}) {
@@ -305,17 +292,17 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.sidenavOpened ? this.closeSidenav() : this.openSidenav();
   }
 
-  private verifyNullTerm(): boolean {
-    if (this.currentSearchTerm === undefined || this.currentSearchTerm === '') {
+  private verifyNullTerm(searchTerm: string): boolean {
+    if (searchTerm === undefined || searchTerm === '') {
       return true;
     }
     return false;
   }
 
-  private onBeforeSearch() {
-    switch (this.currentSearchType) {
+  private onBeforeSearch(searchType?: string, searchTerm?: string) {
+    switch (searchType) {
       case CLIENT: {
-        this.onBeforeSearchClient();
+        this.onBeforeSearchClient(searchTerm);
         break;
       }
       case CADASTRE: {
@@ -323,20 +310,20 @@ export class PortalComponent implements OnInit, OnDestroy {
         break;
       }
       default: {
-        this.onBeforeSearchOthers();
+        this.onBeforeSearchOthers(searchTerm);
         break;
       }
     }
   }
 
-  private onBeforeSearchOthers() {
-    if (this.verifyNullTerm()) { return; }
+  private onBeforeSearchOthers(searchTerm: string) {
+    if (this.verifyNullTerm(searchTerm)) { return; }
     this.toolState.toolbox.activateTool('searchResults');
     this.openSidenav();
   }
 
-  private onBeforeSearchClient() {
-    if (this.verifyNullTerm()) { return; }
+  private onBeforeSearchClient(searchTerm: string) {
+    if (this.verifyNullTerm(searchTerm)) { return; }
 
     if (this.mediaService.media$.value === Media.Mobile) {
       this.closeExpansionPanel();
@@ -344,7 +331,7 @@ export class PortalComponent implements OnInit, OnDestroy {
       this.openExpansionPanel();
     }
 
-    if (this.currentSearchTerm.length >= 3) {
+    if (searchTerm.length >= 3) {
       this.toolState.toolbox.activateTool('client');
       this.openSidenav();
     }

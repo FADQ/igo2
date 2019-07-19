@@ -45,6 +45,7 @@ export class ClientListToolComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    // TODO: disabled when a widget is active
     this.clientService.getClients()
       .subscribe((clients: ClientRef[]) => this.clients$.next(clients));
 
