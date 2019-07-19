@@ -1,9 +1,9 @@
 import { Injectable, OnDestroy } from '@angular/core';
 
-import { Observable, BehaviorSubject, Subscription, zip } from 'rxjs';
+import { Observable, BehaviorSubject, Subscription } from 'rxjs';
 import { skip } from 'rxjs/operators';
 
-import { EntityRecord, EntityStore,  Workspace, WorkspaceStore } from '@igo2/common';
+import { EntityRecord, EntityStore,  Widget, Workspace, WorkspaceStore } from '@igo2/common';
 
 import {
   Client,
@@ -23,7 +23,9 @@ import { ClientControllerService } from './shared/client-controller.service';
 })
 export class ClientState implements OnDestroy {
 
-  activeController$: BehaviorSubject<ClientController> = new BehaviorSubject(undefined);
+  readonly activeController$: BehaviorSubject<ClientController> = new BehaviorSubject(undefined);
+
+  readonly activeWidget$: BehaviorSubject<Widget> = new BehaviorSubject(undefined);
 
   get activeController(): ClientController { return this.activeController$.value; }
 
@@ -43,12 +45,20 @@ export class ClientState implements OnDestroy {
   /** Subscription to the controllers changes */
   private controllers$$: Subscription;
 
+  private activeWorkspace$$: Subscription;
+
+  private activeWorkspaceWidget$$: Subscription;
+
   /** Store that holds all the "parcel years". This is not on a per client basis. */
   get parcelYearStore(): EntityStore<ClientParcelYear> { return this._parcelYearStore; }
   _parcelYearStore: EntityStore<ClientParcelYear>;
 
   get workspaceStore(): WorkspaceStore { return this._workspaceStore; }
   _workspaceStore: WorkspaceStore;
+
+  get activeWorkspace$(): BehaviorSubject<Workspace> {
+    return this.workspaceStore.activeWorkspace$;
+  }
 
   constructor(
     private clientService: ClientService,
@@ -189,10 +199,26 @@ export class ClientState implements OnDestroy {
       valueAccessor: (workspace: Workspace) => workspace.id,
       direction: 'asc'
     });
+
+    this.activeWorkspace$$ = this._workspaceStore.activeWorkspace$.subscribe((workspace: Workspace) => {
+      if (this.activeWorkspaceWidget$$ !== undefined) {
+        this.activeWorkspaceWidget$$.unsubscribe();
+        this.activeWorkspaceWidget$$ = undefined;
+      }
+      if (workspace !== undefined) {
+        this.activeWorkspaceWidget$$ = workspace.widget$.subscribe((widget: Widget) => {
+          this.activeWidget$.next(widget);
+        });
+      }
+    });
   }
 
   private teardownWorkspaces() {
     this.workspaceStore.clear();
+    if (this.activeWorkspaceWidget$$ !== undefined) {
+      this.activeWorkspaceWidget$$.unsubscribe();
+    }
+    this.activeWorkspace$$.unsubscribe();
   }
 
   private initParcelYears() {
