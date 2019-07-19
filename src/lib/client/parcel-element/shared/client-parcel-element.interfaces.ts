@@ -2,12 +2,17 @@ import { EntityTransaction } from '@igo2/common';
 import { Feature } from '@igo2/geo';
 
 import { Client } from '../../shared/client.interfaces';
+import {
+  ClientInfoGetResponse,
+  ClientInfoGetResponseData
+} from '../../info/shared/client-info.interfaces';
 import { ClientParcelElementEditionState } from './client-parcel-element.enums';
 
 export interface ClientParcelElementApiConfig {
   list: string;
   save: string;
   reconciliate: string;
+  reconciliateClients: string;
   validateTransfer: string;
   transfer: string;
   activateEdition: string;
@@ -19,8 +24,9 @@ export interface ClientParcelElementApiConfig {
 }
 
 export interface ClientParcelElementMessage {
-  type: string;
-  code: string;
+  severite: string;
+  id: string;
+  libelle: string;
 }
 
 export interface ClientParcelElementProperties {
@@ -77,4 +83,10 @@ export interface ClientParcelElementValidateTransferResponse {
   data: {
     transfertPossible: boolean;
   };
+}
+
+export type ClientInReconciliationResponseData = ClientInfoGetResponseData;
+
+export interface ClientInReconciliationResponse {
+  data: ClientInfoGetResponseData[];
 }

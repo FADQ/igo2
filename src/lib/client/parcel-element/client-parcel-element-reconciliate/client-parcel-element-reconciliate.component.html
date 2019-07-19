@@ -24,6 +24,15 @@
 
   <mat-card-content>
     <div>
+      <div class="client-parcels-reconciliate-message">
+        {{'client.parcelElement.reconciliate.clientsMessage' | translate}}
+      </div>
+      <igo-entity-table
+        class="table-compact"
+        [store]="clientStore"
+        [template]="tableTemplate">
+      </igo-entity-table>
+
       <div class="igo-form-buttons">
         <ng-container *ngIf="!(submitted$ | async); else close">
           <button

@@ -25,7 +25,7 @@ export class ClientParcelService {
     @Inject('clientParcelApiConfig') private apiConfig: ClientParcelApiConfig
   ) {}
 
-  getParcels(client: Client, annee: number = 2018): Observable<ClientParcel[]> {
+  getParcels(client: Client, annee: number): Observable<ClientParcel[]> {
     const url = this.apiService.buildUrl(this.apiConfig.list, {
       clientNum: client.info.numero,
       annee

@@ -13,6 +13,8 @@ import { computeParcelElementArea, transactionDataToSaveParcelElementData } from
 import { Client } from '../../shared/client.interfaces';
 import { ClientParcelElementEditionState } from './client-parcel-element.enums';
 import {
+  ClientInReconciliationResponse,
+  ClientInReconciliationResponseData,
   ClientParcelElement,
   ClientParcelElementApiConfig,
   ClientParcelElementListResponse,
@@ -30,7 +32,7 @@ export class ClientParcelElementService {
     @Inject('clientParcelApiConfig') private apiConfig: ClientParcelElementApiConfig
   ) {}
 
-  getParcelEditionState(client: Client, annee: number = 2018): Observable<ClientParcelElementEditionState> {
+  getParcelEditionState(client: Client, annee: number): Observable<ClientParcelElementEditionState> {
     const url = this.apiService.buildUrl(this.apiConfig.activateEdition, {
       clientNum: client.info.numero,
       annee: annee
@@ -43,7 +45,7 @@ export class ClientParcelElementService {
       );
   }
 
-  prepareParcelEdition(client: Client, annee: number = 2018): Observable<any> {
+  prepareParcelEdition(client: Client, annee: number): Observable<any> {
     const url = this.apiService.buildUrl(this.apiConfig.createEditionSchema, {
       clientNum: client.info.numero,
       annee: annee
@@ -64,6 +66,28 @@ export class ClientParcelElementService {
           return this.extractParcelsFromListResponse(response, client);
         })
       );
+  }
+
+  getClientsInReconcilitation(client: Client): Observable<Client[]> {
+    const url = this.apiService.buildUrl(this.apiConfig.reconciliateClients, {
+      clientNum: client.info.numero
+    });
+
+    return this.http.get(url).pipe(
+      map((response: ClientInReconciliationResponse) => {
+        return response.data.map((data: ClientInReconciliationResponseData) => {
+          return {
+            info: {
+              nom: data.nomClient,
+              numero: data.numeroClient,
+              adresseCor: undefined,
+              adresseExp: undefined,
+              adressePro: []
+            }
+          };
+        });
+      })
+    );
   }
 
   reconciliate(client: Client, annee: number): Observable<any> {

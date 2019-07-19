@@ -77,15 +77,15 @@ function getParcelElementFeatureText(olFeature: OlFeature, resolution: number): 
 export function getParcelElementErrors(parcelElement: ClientParcelElement): string[] {
   const messages = parcelElement.properties.messages;
   return messages
-    .filter((message: ClientParcelElementMessage) => message.type === 'error')
-    .map((message: ClientParcelElementMessage) => message.code);
+    .filter((message: ClientParcelElementMessage) => message.severite === 'A')
+    .map((message: ClientParcelElementMessage) => message.id);
 }
 
 export function getParcelElementWarnings(parcelElement: ClientParcelElement): string[] {
   const messages = parcelElement.properties.messages;
   return messages
-    .filter((message: ClientParcelElementMessage) => message.type === 'warning')
-    .map((message: ClientParcelElementMessage) => message.code);
+    .filter((message: ClientParcelElementMessage) => message.severite === 'warning')
+    .map((message: ClientParcelElementMessage) => message.id);
 }
 
 export function getParcelElementValidationMessage(

@@ -7,6 +7,7 @@ import {
 } from '@angular/material';
 
 import { IgoLanguageModule } from '@igo2/core';
+import { IgoEntityTableModule } from '@igo2/common';
 
 import { FadqLibMessageInlineModule } from 'src/lib/message/message-inline/message-inline.module';
 
@@ -22,6 +23,7 @@ import { ClientParcelElementReconciliateComponent } from './client-parcel-elemen
     MatIconModule,
     MatButtonModule,
     IgoLanguageModule,
+    IgoEntityTableModule,
     FadqLibMessageInlineModule
   ],
   exports: [
