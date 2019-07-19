@@ -39,19 +39,19 @@ export class EditionSaveComponent implements WidgetComponent {
    * Error or success message, if any
    * @internal
    */
-  message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
+  readonly message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
   /**
    * Observable of the submit status
    * @internal
    */
-  submitted$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  readonly submitted$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   /**
    * Transaction operations table template
    * @internal
    */
-  tableTemplate: EntityTableTemplate = {
+  readonly tableTemplate: EntityTableTemplate = {
     selection: false,
     sort: false,
     columns: [

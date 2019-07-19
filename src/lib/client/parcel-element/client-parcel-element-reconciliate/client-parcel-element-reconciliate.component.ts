@@ -4,14 +4,20 @@ import {
   Output,
   EventEmitter,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  OnInit
 } from '@angular/core';
 
 import { BehaviorSubject, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { LanguageService } from '@igo2/core';
-import { WidgetComponent, OnUpdateInputs } from '@igo2/common';
+import {
+  EntityStore,
+  EntityTableTemplate,
+  WidgetComponent,
+  OnUpdateInputs
+} from '@igo2/common';
 
 import { Client } from '../../shared/client.interfaces';
 import { ClientParcelElementService } from '../shared/client-parcel-element.service';
@@ -22,7 +28,7 @@ import { ClientParcelElementService } from '../shared/client-parcel-element.serv
   styleUrls: ['./client-parcel-element-reconciliate.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientParcelElementReconciliateComponent implements WidgetComponent, OnUpdateInputs {
+export class ClientParcelElementReconciliateComponent implements WidgetComponent, OnUpdateInputs, OnInit {
 
   /**
    * Submitted flag
@@ -35,6 +41,33 @@ export class ClientParcelElementReconciliateComponent implements WidgetComponent
    * @internal
    */
   readonly submitError$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+  /**
+   * Clients in reconciliation store
+   * @internal
+   */
+  readonly clientStore: EntityStore<Client> = new EntityStore([], {
+    getKey: (client: Client) => client.info.numero
+  });
+
+  /**
+   * Transaction operations table template
+   * @internal
+   */
+  readonly tableTemplate: EntityTableTemplate = {
+    selection: false,
+    sort: false,
+    columns: [
+      {
+        name: 'info.numero',
+        title: 'No. de client'
+      },
+      {
+        name: 'info.nom',
+        title: 'Nom'
+      }
+    ]
+  };
 
   /**
    * Client
@@ -61,6 +94,11 @@ export class ClientParcelElementReconciliateComponent implements WidgetComponent
     private languageService: LanguageService,
     private cdRef: ChangeDetectorRef
   ) {}
+
+  ngOnInit() {
+    this.clientParcelElementService.getClientsInReconcilitation(this.client)
+      .subscribe((clients: Client[]) => this.clientStore.load(clients));
+  }
 
   /**
    * Implemented as part of OnUpdateInputs
