@@ -211,10 +211,10 @@ export class ClientSchemaElementActionsService {
         conditionArgs
       },
       {
-        id: 'importData',
+        id: 'import',
         icon: 'import',
-        title: 'client.schemaElement.importData',
-        tooltip: 'client.schemaElement.importData.tooltip',
+        title: 'client.schemaElement.import',
+        tooltip: 'client.schemaElement.import.tooltip',
         handler: (widget: Widget, ctrl: ClientController) => {
           ctrl.schemaElementWorkspace.activateWidget(widget, {
             schemaElement: ctrl.activeSchemaElement,

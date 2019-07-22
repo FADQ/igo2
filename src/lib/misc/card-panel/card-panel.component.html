@@ -1,0 +1,18 @@
+<mat-card>
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon
+        [color]="iconColor"
+        [svgIcon]="svgIcon">
+      </mat-icon>
+    </div>
+    <mat-card-title>{{title}}</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <fadq-card-panel-content [message]="message$ | async">
+      <ng-content ngProjectAs="[body]"></ng-content>
+      <ng-content select="[buttons]" ngProjectAs="[buttons]"></ng-content>
+    </fadq-card-panel-content>
+  </mat-card-content>
+</mat-card>

@@ -20,7 +20,7 @@ import {
   WidgetComponent,
   OnUpdateInputs
 } from '@igo2/common';
-import { LanguageService } from '@igo2/core';
+import { LanguageService, Message, MessageType } from '@igo2/core';
 import {
   Feature,
   FeatureStore,
@@ -45,10 +45,10 @@ import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition
 export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, OnInit, OnDestroy {
 
   /**
-   * Error message, if any
+   * Message, if any
    * @internal
    */
-  errorMessage$: BehaviorSubject<string> = new BehaviorSubject(undefined);
+  message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
   /**
    * Wether the submit button is enabled
@@ -190,7 +190,7 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, 
   private submitResults(results: EditionResult[]) {
     const firstResultWithError = results.find((result: EditionResult) => result.error !== undefined);
     const error = firstResultWithError === undefined ? undefined : firstResultWithError.error;
-    this.errorMessage$.next(error);
+    this.setError(error);
 
     if (error === undefined) {
       this.onSubmitSuccess(results.map((result: EditionResult) => result.feature));
@@ -282,23 +282,23 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, 
    */
   private onSliceError(error: GeometrySliceError) {
     if (error === undefined) {
-      this.errorMessage$.next(undefined);
+      this.setError(undefined);
       return;
     }
 
-    let message = error.message;
+    let text = error.message;
 
     // We need to use instanceof instead of directly accessing the map with the error's prototype
     // because GeometrySliceError all share the same GeometrySliceError
     const key = Array.from(this.errorMessages.keys()).find((cls: typeof GeometrySliceError) => {
       return error instanceof cls;
     });
-    const messageKey = this.errorMessages.get(key);
+    const textKey = this.errorMessages.get(key);
 
     try {
-      message = this.languageService.translate.instant(messageKey);
+      text = this.languageService.translate.instant(textKey);
     } catch (e) {}
-    this.errorMessage$.next(message);
+    this.setError(text);
   }
 
   /**
@@ -329,6 +329,17 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, 
         })
       });
     });
+  }
+
+  private setError(text: string | undefined) {
+    if (text === undefined) {
+      this.message$.next(undefined);
+    } else {
+      this.message$.next({
+        type: MessageType.ERROR,
+        text: text
+      });
+    }
   }
 
 }

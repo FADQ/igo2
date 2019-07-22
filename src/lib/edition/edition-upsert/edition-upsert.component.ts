@@ -15,7 +15,7 @@ import {
   WidgetComponent,
   OnUpdateInputs
 } from '@igo2/common';
-import { LanguageService } from '@igo2/core';
+import { LanguageService, Message, MessageType } from '@igo2/core';
 import { Feature, FeatureStore } from '@igo2/geo';
 
 import { EditionResult } from '../shared/edition.interfaces';
@@ -30,10 +30,10 @@ import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition
 export class EditionUpsertComponent implements  OnUpdateInputs, WidgetComponent {
 
   /**
-   * Error message, if any
+   * Message, if any
    * @internal
    */
-  errorMessage$: BehaviorSubject<string> = new BehaviorSubject(undefined);
+  message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
   /**
    * Create form
@@ -126,7 +126,7 @@ export class EditionUpsertComponent implements  OnUpdateInputs, WidgetComponent 
    */
   private submitResult(result: EditionResult) {
     const error = result.error;
-    this.errorMessage$.next(error);
+    this.setError(error);
 
     if (error === undefined) {
       this.onSubmitSuccess(result.feature);
@@ -159,6 +159,17 @@ export class EditionUpsertComponent implements  OnUpdateInputs, WidgetComponent 
     } else {
       this.transaction.update(this.feature, feature, this.store, {
         title: operationTitle
+      });
+    }
+  }
+
+  private setError(text: string | undefined) {
+    if (text === undefined) {
+      this.message$.next(undefined);
+    } else {
+      this.message$.next({
+        type: MessageType.ERROR,
+        text: text
       });
     }
   }

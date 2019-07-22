@@ -9,7 +9,7 @@ import {
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoEntityTableModule, IgoFormModule } from '@igo2/common';
 
-import { FadqLibMessageInlineModule } from 'src/lib/message/message-inline/message-inline.module';
+import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
 
 import { EditionSaveComponent } from './edition-save.component';
 
@@ -25,7 +25,7 @@ import { EditionSaveComponent } from './edition-save.component';
     IgoLanguageModule,
     IgoFormModule,
     IgoEntityTableModule,
-    FadqLibMessageInlineModule
+    FadqLibCardPanelModule
   ],
   exports: [
     EditionSaveComponent

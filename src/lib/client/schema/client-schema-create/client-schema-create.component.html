@@ -1,5 +1,6 @@
 <igo-form
   *ngIf="form$ | async as form"
+  class="igo-form-compact"
   [form]="form"
   (submitForm)="onSubmit($event)">
 

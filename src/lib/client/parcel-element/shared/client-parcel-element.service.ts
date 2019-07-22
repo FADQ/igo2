@@ -138,12 +138,12 @@ export class ClientParcelElementService {
   createParcelElement(data: Partial<ClientParcelElement>): Observable<ClientParcelElement> {
     const properties = Object.assign(
       {
-        noDiagramme: 9999
+        noDiagramme: 9999,
+        messages: []
       },
       data.properties,
       {
-        typeParcelle: 'PAC',
-        messages: []
+        typeParcelle: 'PAC'
       }
     );
     const parcelElement = Object.assign({}, data, {properties}) as ClientParcelElement;

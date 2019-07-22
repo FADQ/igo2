@@ -1,33 +1,34 @@
-<form class="igo-form">
-  <mat-form-field [floatLabel]="'never'">
+<fadq-card-panel
+  [svgIcon]="'help-circle'"
+  [iconColor]="'accent'"
+  [title]="title || ('edition.import.message' | translate)"
+  [message]="message$ | async">
+
+  <form class="igo-form">
+    <mat-form-field [floatLabel]="'never'">
+      <input
+        matInput
+        autocomplete="off"
+        [placeholder]="placeholder$ | async"
+        (click)="fileInput.click()">
+    </mat-form-field>
+  
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="{{'igo.geo.importExportForm.importProjPlaceholder' | translate}}"
+        name="projection"
+        [(ngModel)]="projection">
+    </mat-form-field>
+  
     <input
-      matInput
-      autocomplete="off"
-      [placeholder]="placeholder$ | async"
-      (click)="fileInput.click()">
-  </mat-form-field>
+      #fileInput
+      type="file"
+      [style.display]="'none'"
+      (change)="onSelectFiles($event.target.files)">
+  </form>
 
-  <mat-form-field>
-    <input
-      matInput
-      placeholder="{{'igo.geo.importExportForm.importProjPlaceholder' | translate}}"
-      name="projection"
-      [(ngModel)]="projection">
-  </mat-form-field>
-
-  <input
-    #fileInput
-    type="file"
-    [style.display]="'none'"
-    (change)="onSelectFiles($event.target.files)">
-
-  <p
-    *ngIf="errorMessage$ | async as errorMessage"
-    class="fadq-error-text">
-    {{errorMessage}}
-  </p>
-
-  <div class="igo-form-buttons">
+  <ng-container buttons>
     <button
       mat-button
       type="button"
@@ -41,6 +42,8 @@
       [disabled]="(file$ | async) === undefined"
       (click)="onImport()">
       {{'igo.geo.importExportForm.importButton' | translate}}
-    </button>
-  </div>
-</form>
+    </button> 
+  </ng-container>
+
+</fadq-card-panel>
+

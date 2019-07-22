@@ -1,17 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  MatCardModule,
-  MatIconModule,
-  MatButtonModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material';
 
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoEntityTableModule, IgoFormModule } from '@igo2/common';
 
-import {
-  EditionFillComponent
-} from './edition-fill.component';
+import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
+
+import { EditionFillComponent } from './edition-fill.component';
 
 /**
  * @ignore
@@ -19,12 +15,11 @@ import {
 @NgModule({
   imports: [
     CommonModule,
-    MatCardModule,
-    MatIconModule,
     MatButtonModule,
     IgoLanguageModule,
     IgoFormModule,
-    IgoEntityTableModule
+    IgoEntityTableModule,
+    FadqLibCardPanelModule
   ],
   exports: [
     EditionFillComponent

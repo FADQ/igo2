@@ -15,7 +15,6 @@ mat-tab-group {
   }
 }
 
-p.fadq-error-text {
-  margin: 20px;
+fadq-message-inline ::ng-deep .fadq-error-text {
   text-align: center;
 }

@@ -5,6 +5,8 @@ import { MatButtonModule, MatTabsModule } from '@angular/material';
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoFeatureFormModule } from '@igo2/geo';
 
+import { FadqLibMessageInlineModule } from 'src/lib/message/message-inline/message-inline.module';
+
 import { EditionUpdateBatchComponent } from './edition-update-batch.component';
 
 /**
@@ -16,7 +18,8 @@ import { EditionUpdateBatchComponent } from './edition-update-batch.component';
     MatButtonModule,
     MatTabsModule,
     IgoLanguageModule,
-    IgoFeatureFormModule
+    IgoFeatureFormModule,
+    FadqLibMessageInlineModule
   ],
   exports: [
     EditionUpdateBatchComponent
