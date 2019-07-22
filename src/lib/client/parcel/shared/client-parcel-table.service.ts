@@ -80,11 +80,11 @@ export class ClientParcelTableService {
         },
         {
           name: 'properties.pourcentageSupMao',
-          title: 'Superficie mesurée selon % (ha)'
+          title: 'Superficie (%)'
         },
         {
           name: 'properties.superficieMao',
-          title: 'Superficie (ha)'
+          title: 'Superficie mesurée selon % (ha)'
         },
         {
           name: 'properties.superficieDeclaree',

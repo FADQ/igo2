@@ -3,7 +3,6 @@ igo-form {
   padding: 10px;
 }
 
-p.fadq-error-text {
-  margin: 20px;
+fadq-message-inline ::ng-deep .fadq-error-text {
   text-align: center;
 }

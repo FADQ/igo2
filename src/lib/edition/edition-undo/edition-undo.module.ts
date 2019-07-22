@@ -9,9 +9,9 @@ import {
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoEntityTableModule, IgoFormModule } from '@igo2/common';
 
-import {
-  EditionUndoComponent
-} from './edition-undo.component';
+import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
+
+import { EditionUndoComponent } from './edition-undo.component';
 
 /**
  * @ignore
@@ -24,7 +24,8 @@ import {
     MatButtonModule,
     IgoLanguageModule,
     IgoFormModule,
-    IgoEntityTableModule
+    IgoEntityTableModule,
+    FadqLibCardPanelModule
   ],
   exports: [
     EditionUndoComponent

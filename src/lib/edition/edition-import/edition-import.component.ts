@@ -7,10 +7,10 @@ import {
   OnInit
 } from '@angular/core';
 
-import { BehaviorSubject, Subject, Observable, of, zip } from 'rxjs';
+import { BehaviorSubject, Observable, of, zip } from 'rxjs';
 
 import { EntityTransaction, WidgetComponent } from '@igo2/common';
-import { LanguageService } from '@igo2/core';
+import { LanguageService, Message, MessageType } from '@igo2/core';
 import {
   IgoMap,
   Feature,
@@ -41,10 +41,10 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
   file$: BehaviorSubject<File> = new BehaviorSubject(undefined);
 
   /**
-   * Error message, if any
+   * Message, if any
    * @internal
    */
-  errorMessage$: Subject<string> = new Subject();
+  message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
   /**
    * Wether the submit button is enabled
@@ -188,8 +188,7 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
   private submitResults(results: EditionResult[]) {
     const firstResultWithError = results.find((result: EditionResult) => result.error !== undefined);
     const error = firstResultWithError === undefined ? undefined : firstResultWithError.error;
-    this.errorMessage$.next(error);
-
+    this.setError(error);
     if (error === undefined) {
       this.onSubmitSuccess(results.map((result: EditionResult) => result.feature));
     }
@@ -233,33 +232,33 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
   }
 
   /**
-   * On nothing to import error, display a message and clear the selected file
+   * On nothing to import error, display a text and clear the selected file
    */
   private onEmptyFile() {
-    const messageKey = 'edition.importData.error.emptyFile';
-    const message = this.languageService.translate.instant(messageKey);
-    this.errorMessage$.next(message);
+    const textKey = 'edition.import.error.emptyFile';
+    const text = this.languageService.translate.instant(textKey);
+    this.setError(text);
     this.file$.next(undefined);
   }
 
   /**
-   * On any import error, display a message and clear the selected file
+   * On any import error, display a text and clear the selected file
    * @param error Error instance
    */
   private onImportError(error: ImportError) {
-    const messageKey = 'edition.importData.error.invalidFile';
-    const message = this.languageService.translate.instant(messageKey);
-    this.errorMessage$.next(message);
+    const textKey = 'edition.import.error.invalidFile';
+    const text = this.languageService.translate.instant(textKey);
+    this.setError(text);
     this.file$.next(undefined);
   }
 
   /**
-   * On nothing to import error, display a message and clear the selected file
+   * On nothing to import error, display a text and clear the selected file
    */
   private onNothingToImport() {
-    const messageKey = 'edition.importData.error.nothingToImport';
-    const message = this.languageService.translate.instant(messageKey);
-    this.errorMessage$.next(message);
+    const textKey = 'edition.import.error.nothingToImport';
+    const text = this.languageService.translate.instant(textKey);
+    this.setError(text);
     this.file$.next(undefined);
   }
 
@@ -267,9 +266,20 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
    * Reset the file input placeholder
    */
   private resetPlaceholder() {
-    const key = 'edition.importData.placeholder';
+    const key = 'edition.import.placeholder';
     const placeholder = this.languageService.translate.instant(key);
     this.placeholder$.next(placeholder);
+  }
+
+  private setError(text: string | undefined) {
+    if (text === undefined) {
+      this.message$.next(undefined);
+    } else {
+      this.message$.next({
+        type: MessageType.ERROR,
+        text: text
+      });
+    }
   }
 
 }

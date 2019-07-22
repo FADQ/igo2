@@ -10,9 +10,10 @@ import {
   ElementRef
 } from '@angular/core';
 
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { EntityStore, EntityTableTemplate, WidgetComponent } from '@igo2/common';
+import { LanguageService, Message, MessageType } from '@igo2/core';
 
 import { formatDate } from 'src/lib/utils/date';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
@@ -30,10 +31,10 @@ export class ClientSchemaFileManagerComponent implements OnInit, OnDestroy, Widg
   static maxSize = 1024 * 1024 * 10;  // 10mo
 
   /**
-   * Import error, if any
+   * Message, if any
    * @internal
    */
-  errorMessage$: Subject<string> = new Subject();
+  message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
   tableTemplate: EntityTableTemplate = {
     selection: true,
@@ -77,7 +78,10 @@ export class ClientSchemaFileManagerComponent implements OnInit, OnDestroy, Widg
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
 
-  constructor(private clientSchemaFileService: ClientSchemaFileService) {}
+  constructor(
+    private languageService: LanguageService,
+    private clientSchemaFileService: ClientSchemaFileService
+  ) {}
 
   ngOnInit() {
     this.loadClientSchemaFiles();
@@ -92,9 +96,11 @@ export class ClientSchemaFileManagerComponent implements OnInit, OnDestroy, Widg
       const file = event.target.files[0];
       if (file.size > 0 && file.size < ClientSchemaFileManagerComponent.maxSize) {
         this.createSchemaFile(file);
-        this.errorMessage$.next(undefined);
+        this.setError(undefined);
       } else {
-        this.errorMessage$.next('client.schemaFile.error.size');
+        const errorKey = 'client.schemaFile.error.size';
+        const error = this.languageService.translate.instant(errorKey);
+        this.setError(error);
       }
     }
   }
@@ -156,5 +162,16 @@ export class ClientSchemaFileManagerComponent implements OnInit, OnDestroy, Widg
   private onDeleteSuccess(schemaFile: ClientSchemaFile) {
     this.store.delete(schemaFile);
     this.schemaFile = undefined;
+  }
+
+  private setError(text: string | undefined) {
+    if (text === undefined) {
+      this.message$.next(undefined);
+    } else {
+      this.message$.next({
+        type: MessageType.ERROR,
+        text: text
+      });
+    }
   }
 }

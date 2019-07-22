@@ -18,7 +18,7 @@ import {
   OnUpdateInputs,
   getAllFormFields
 } from '@igo2/common';
-import { LanguageService } from '@igo2/core';
+import { LanguageService, Message, MessageType } from '@igo2/core';
 import { FEATURE, Feature, FeatureStore } from '@igo2/geo';
 
 import { EditionResult } from '../shared/edition.interfaces';
@@ -33,10 +33,10 @@ import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition
 export class EditionUpdateBatchComponent implements  OnUpdateInputs, WidgetComponent, OnInit {
 
   /**
-   * Error message, if any
+   * Message, if any
    * @internal
    */
-  errorMessage$: BehaviorSubject<string> = new BehaviorSubject(undefined);
+  message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
   /**
    * Error message, if any
@@ -147,7 +147,7 @@ export class EditionUpdateBatchComponent implements  OnUpdateInputs, WidgetCompo
   private submitResults(results: EditionResult[]) {
     const firstResultWithError = results.find((result: EditionResult) => result.error !== undefined);
     const error = firstResultWithError === undefined ? undefined : firstResultWithError.error;
-    this.errorMessage$.next(error);
+    this.setError(error);
 
     if (error === undefined) {
       this.onSubmitSuccess(results.map((result: EditionResult) => result.feature));
@@ -227,6 +227,17 @@ export class EditionUpdateBatchComponent implements  OnUpdateInputs, WidgetCompo
       properties,
       geometry: undefined
     };
+  }
+
+  private setError(text: string | undefined) {
+    if (text === undefined) {
+      this.message$.next(undefined);
+    } else {
+      this.message$.next({
+        type: MessageType.ERROR,
+        text: text
+      });
+    }
   }
 
 }

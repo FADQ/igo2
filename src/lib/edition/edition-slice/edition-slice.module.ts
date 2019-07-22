@@ -1,13 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  MatCardModule,
-  MatIconModule,
-  MatButtonModule
-} from '@angular/material';
-
+import { MatButtonModule } from '@angular/material';
 
 import { IgoLanguageModule } from '@igo2/core';
+
+import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
 
 import { EditionSliceComponent } from './edition-slice.component';
 
@@ -17,10 +14,9 @@ import { EditionSliceComponent } from './edition-slice.component';
 @NgModule({
   imports: [
     CommonModule,
-    MatCardModule,
-    MatIconModule,
     MatButtonModule,
-    IgoLanguageModule
+    IgoLanguageModule,
+    FadqLibCardPanelModule
   ],
   exports: [
     EditionSliceComponent

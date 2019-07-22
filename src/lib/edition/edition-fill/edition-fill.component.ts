@@ -17,7 +17,7 @@ import {
   WidgetComponent,
   getEntityRevision
 } from '@igo2/common';
-import { LanguageService } from '@igo2/core';
+import { LanguageService, Message, MessageType } from '@igo2/core';
 import {
   IgoMap,
   VectorLayer,
@@ -65,10 +65,10 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
   exclusionStore: FeatureStore;
 
   /**
-   * Error message, if any
+   * Message, if any
    * @internal
    */
-  errorMessage$: BehaviorSubject<string> = new BehaviorSubject(undefined);
+  message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
   /**
    * Map to draw features on
@@ -89,6 +89,11 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
    * Schema feature
    */
   @Input() feature: Feature;
+
+  /**
+   * Title
+   */
+  @Input() title: string;
 
   /**
    * Process data before submit
@@ -168,10 +173,14 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
    */
   private submitResult(result: EditionResult) {
     const error = result.error;
-    this.errorMessage$.next(error);
-
     if (error === undefined) {
+      this.message$.next(undefined);
       this.onSubmitSuccess(result.feature);
+    } else {
+      this.message$.next({
+        type: MessageType.ERROR,
+        text: error
+      });
     }
   }
 

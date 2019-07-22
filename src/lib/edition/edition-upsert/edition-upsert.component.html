@@ -1,8 +1,7 @@
-<p
-  *ngIf="errorMessage$ | async as errorMessage"
-  class="fadq-error-text">
-  {{errorMessage}}
-</p>
+<fadq-message-inline
+  *ngIf="message$ | async as message"  
+  [message]="message">
+</fadq-message-inline>
 
 <igo-feature-form
   class="igo-form-compact"

@@ -1,52 +1,42 @@
+<fadq-card-panel
+  [svgIcon]="'help-circle'"
+  [iconColor]="'accent'"
+  [title]="title || ('edition.save.confirm' | translate)"
+  [message]="message$ | async">
 
+  <igo-entity-table
+    *ngIf="!(submitted$ | async)"
+    class="table-compact"
+    [store]="transaction.operations"
+    [template]="tableTemplate"
+    (entityClick)="onOperationClick($event)">
+  </igo-entity-table>
 
-<mat-card>
-  <mat-card-header>
-    <div mat-card-avatar>
-      <mat-icon [color]="'accent'" svgIcon="help-circle"></mat-icon>
-    </div>
-    <mat-card-title>{{'edition.save.confirm' | translate}}</mat-card-title>
-  </mat-card-header>
+  <ng-container buttons>
+    <ng-container *ngIf="!(submitted$ | async); else close">
+      <button
+        mat-button
+        type="button"
+        (click)="onCancel()">
+        {{ 'cancel' | translate }}
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="disabled"
+        (click)="onSubmit()">
+        {{ 'save' | translate }}
+      </button>
+    </ng-container>
+    <ng-template #close>
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        (click)="onCancel()">
+        {{ 'close' | translate }}
+      </button>
+    </ng-template> 
+  </ng-container>
 
-  <mat-card-content [ngClass]="{'with-message': (message$ | async) !== undefined}">
-    <fadq-message-inline
-      *ngIf="message$ | async as message"  
-      [message]="message">
-    </fadq-message-inline>
-
-    <igo-entity-table
-      *ngIf="!(submitted$ | async)"
-      class="table-compact"
-      [store]="transaction.operations"
-      [template]="tableTemplate"
-      (entityClick)="onOperationClick($event)">
-    </igo-entity-table>
-
-    <div class="igo-form-buttons">
-      <ng-container *ngIf="!(submitted$ | async); else close">
-        <button
-          mat-button
-          type="button"
-          (click)="onCancel()">
-          {{ 'cancel' | translate }}
-        </button>
-        <button
-          mat-raised-button
-          color="primary"
-          [disabled]="disabled"
-          (click)="onSubmit()">
-          {{ 'save' | translate }}
-        </button>
-      </ng-container>
-      <ng-template #close>
-        <button
-          mat-raised-button
-          color="primary"
-          type="button"
-          (click)="onCancel()">
-          {{ 'close' | translate }}
-        </button>
-      </ng-template>
-    </div>
-  </mat-card-content>
-</mat-card>
+</fadq-card-panel>

@@ -77,14 +77,14 @@ function getParcelElementFeatureText(olFeature: OlFeature, resolution: number): 
 export function getParcelElementErrors(parcelElement: ClientParcelElement): string[] {
   const messages = parcelElement.properties.messages;
   return messages
-    .filter((message: ClientParcelElementMessage) => message.severite === 'A')
+    .filter((message: ClientParcelElementMessage) => message.severite === 'S')
     .map((message: ClientParcelElementMessage) => message.id);
 }
 
 export function getParcelElementWarnings(parcelElement: ClientParcelElement): string[] {
   const messages = parcelElement.properties.messages;
   return messages
-    .filter((message: ClientParcelElementMessage) => message.severite === 'warning')
+    .filter((message: ClientParcelElementMessage) => message.severite === 'A')
     .map((message: ClientParcelElementMessage) => message.id);
 }
 

@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  MatCardModule,
-  MatIconModule,
-  MatButtonModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material';
 
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoFormModule } from '@igo2/common';
+
+import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
 
 import { ClientSchemaDeleteComponent } from './client-schema-delete.component';
 
@@ -17,11 +15,10 @@ import { ClientSchemaDeleteComponent } from './client-schema-delete.component';
 @NgModule({
   imports: [
     CommonModule,
-    MatCardModule,
-    MatIconModule,
     MatButtonModule,
     IgoLanguageModule,
     IgoFormModule,
+    FadqLibCardPanelModule
   ],
   exports: [
     ClientSchemaDeleteComponent

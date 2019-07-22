@@ -9,6 +9,8 @@ import {
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoEntityTableModule } from '@igo2/common';
 
+import { FadqLibMessageInlineModule } from 'src/lib/message/message-inline/message-inline.module';
+
 import { ClientSchemaFileManagerComponent } from './client-schema-file-manager.component';
 
 /**
@@ -21,7 +23,8 @@ import { ClientSchemaFileManagerComponent } from './client-schema-file-manager.c
     MatIconModule,
     MatTooltipModule,
     IgoLanguageModule,
-    IgoEntityTableModule
+    IgoEntityTableModule,
+    FadqLibMessageInlineModule
   ],
   exports: [
     ClientSchemaFileManagerComponent

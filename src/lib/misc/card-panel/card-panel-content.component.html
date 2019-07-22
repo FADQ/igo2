@@ -1,0 +1,18 @@
+<div class="fadq-card-panel-content-wrapper">
+  <div class="fadq-card-panel-content">
+    <div class="fadq-card-panel-message">
+      <fadq-message-inline
+        *ngIf="message$ | async as message"  
+        [message]="message">
+      </fadq-message-inline>
+    </div>
+    <div class="fadq-card-panel-body">
+      <ng-content select="[body]"></ng-content>
+    </div>
+  </div>
+
+  <div class="fadq-card-panel-buttons igo-form-buttons">
+    <ng-content select="[buttons]"></ng-content>
+  </div>
+</div>
+

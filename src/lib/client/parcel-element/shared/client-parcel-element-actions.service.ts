@@ -85,6 +85,7 @@ export class ClientParcelElementActionsService {
         acc.push(...getParcelElementErrors(parcelElement));
         return acc;
       }, []);
+      console.log(errors);
       return errors.length === 0;
     }
 
@@ -234,10 +235,10 @@ export class ClientParcelElementActionsService {
         conditionArgs
       },
       {
-        id: 'importData',
+        id: 'import',
         icon: 'import',
-        title: 'client.parcelElement.importData',
-        tooltip: 'client.parcelElement.importData.tooltip',
+        title: 'client.parcelElement.import',
+        tooltip: 'client.parcelElement.import.tooltip',
         handler: (widget: Widget, ctrl: ClientController) => {
           ctrl.parcelElementWorkspace.activateWidget(widget, {
             parcelElement: ctrl.activeParcelElement,

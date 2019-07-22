@@ -1,0 +1,36 @@
+$buttons-height: 56px;
+
+.fadq-card-panel-content-wrapper {
+  height: 100%;
+
+  .fadq-card-panel-content {
+    display: flex;
+    flex: 1 0 100%;
+    flex-direction: column;
+    max-height: calc(100% - #{$buttons-height});
+
+    .fadq-card-panel-message {
+      text-align: center;
+
+      ::ng-deep p {
+        margin: 0;
+      }
+    }
+
+    .fadq-card-panel-body {
+      overflow: auto;
+      max-height: 100%;
+    }
+  }
+
+  .fadq-card-panel-buttons {
+    flex: 1 0 100%;
+  }
+
+  .fadq-card-panel-buttons.igo-form-buttons:not(:empty) {
+    height: $buttons-height;
+    margin: 0 !important;
+    padding: 10px;
+  }
+}
+

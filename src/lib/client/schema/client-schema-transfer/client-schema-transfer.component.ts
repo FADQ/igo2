@@ -8,8 +8,9 @@ import {
   OnInit
 } from '@angular/core';
 
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
+import { Message, MessageType } from '@igo2/core';
 import { EntityStore, Form, WidgetComponent, OnUpdateInputs } from '@igo2/common';
 
 import { Client } from '../../shared/client.interfaces';
@@ -33,10 +34,10 @@ export class ClientSchemaTransferComponent implements OnInit, OnUpdateInputs, Wi
   form$: Subject<Form> = new Subject<Form>();
 
   /**
-   * Slice error, if any
+   * Message, if any
    * @internal
    */
-  errorMessage$: Subject<string> = new Subject();
+  message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
   /**
    * Client
@@ -108,7 +109,7 @@ export class ClientSchemaTransferComponent implements OnInit, OnUpdateInputs, Wi
    * to the current client anymore.
    */
   private onSubmitSuccess() {
-    this.errorMessage$.next(undefined);
+    this.setError(undefined);
     this.store.delete(this.schema);
     this.complete.emit();
   }
@@ -117,7 +118,18 @@ export class ClientSchemaTransferComponent implements OnInit, OnUpdateInputs, Wi
    * On submit error, display an error message
    */
   private onSubmitError(messages: string[]) {
-    this.errorMessage$.next(messages[0]);
+    this.setError(messages[0]);
+  }
+
+  private setError(text: string | undefined) {
+    if (text === undefined) {
+      this.message$.next(undefined);
+    } else {
+      this.message$.next({
+        type: MessageType.ERROR,
+        text: text
+      });
+    }
   }
 
 }

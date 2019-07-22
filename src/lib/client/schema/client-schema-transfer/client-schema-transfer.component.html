@@ -1,15 +1,15 @@
 <igo-form
   *ngIf="form$ | async as form"
+  class="igo-form-compact"
   [form]="form"
   (submitForm)="onSubmit($event)">
 
   <igo-form-group [group]="form.groups[0]"></igo-form-group>
 
-  <p
-    *ngIf="errorMessage$ | async as errorMessage"
-    class="fadq-error-text">
-    {{errorMessage}}
-  </p>
+  <fadq-message-inline
+    *ngIf="message$ | async as message"  
+    [message]="message">
+  </fadq-message-inline>
 
   <div formButtons>
     <button

@@ -9,6 +9,8 @@ import {
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoEntityTableModule, IgoFormModule } from '@igo2/common';
 
+import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
+
 import { EditionImportComponent } from './edition-import.component';
 
 /**
@@ -22,7 +24,8 @@ import { EditionImportComponent } from './edition-import.component';
     MatButtonModule,
     IgoLanguageModule,
     IgoFormModule,
-    IgoEntityTableModule
+    IgoEntityTableModule,
+    FadqLibCardPanelModule
   ],
   exports: [
     EditionImportComponent
