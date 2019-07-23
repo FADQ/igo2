@@ -5,11 +5,12 @@ import {
   EventEmitter,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  OnInit
+  OnInit,
+  OnDestroy
 } from '@angular/core';
 
-import { BehaviorSubject, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { BehaviorSubject, Subscription, combineLatest, of } from 'rxjs';
+import { catchError, debounceTime } from 'rxjs/operators';
 
 import { LanguageService } from '@igo2/core';
 import {
@@ -28,7 +29,8 @@ import { ClientParcelElementService } from '../shared/client-parcel-element.serv
   styleUrls: ['./client-parcel-element-reconciliate.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientParcelElementReconciliateComponent implements WidgetComponent, OnUpdateInputs, OnInit {
+export class ClientParcelElementReconciliateComponent
+    implements WidgetComponent, OnUpdateInputs, OnInit, OnDestroy {
 
   /**
    * Submitted flag
@@ -41,6 +43,24 @@ export class ClientParcelElementReconciliateComponent implements WidgetComponent
    * @internal
    */
   readonly submitError$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+  /**
+   * Title
+   * @internal
+   */
+  readonly title$: BehaviorSubject<string> = new BehaviorSubject(undefined);
+
+  /**
+   * Icon
+   * @internal
+   */
+  readonly icon$: BehaviorSubject<string> = new BehaviorSubject(undefined);
+
+  /**
+   * Icon color
+   * @internal
+   */
+  readonly iconColor$: BehaviorSubject<string> = new BehaviorSubject(undefined);
 
   /**
    * Clients in reconciliation store
@@ -68,6 +88,8 @@ export class ClientParcelElementReconciliateComponent implements WidgetComponent
       }
     ]
   };
+
+  private submit$$: Subscription;
 
   /**
    * Client
@@ -98,6 +120,14 @@ export class ClientParcelElementReconciliateComponent implements WidgetComponent
   ngOnInit() {
     this.clientParcelElementService.getClientsInReconcilitation(this.client)
       .subscribe((clients: Client[]) => this.clientStore.load(clients));
+
+    this.submit$$ = combineLatest(this.submitted$, this.submitError$).pipe(
+      debounceTime(10)
+    ).subscribe((bunch: [boolean, boolean]) => this.updateHeader(...bunch));
+  }
+
+  ngOnDestroy() {
+    this.submit$$.unsubscribe();
   }
 
   /**
@@ -137,4 +167,26 @@ export class ClientParcelElementReconciliateComponent implements WidgetComponent
     this.submitError$.next(false);
   }
 
+  private updateHeader(submitted: boolean, submitError: boolean) {
+    let icon, iconColor, title;
+    if (submitted === false) {
+      icon = 'help-circle';
+      iconColor = 'accent';
+      title = 'client.parcelElement.reconciliate.confirm';
+    } else {
+      if (submitError === true) {
+        icon = 'thumb-down';
+        iconColor = 'warn';
+        title = 'client.parcelElement.reconciliate.error';
+      } else {
+        icon = 'thumb-up';
+        iconColor = 'accent';
+        title = 'client.parcelElement.reconciliate.success';
+      }
+    }
+
+    this.icon$.next(icon);
+    this.iconColor$.next(iconColor);
+    this.title$.next(this.languageService.translate.instant(title));
+  }
 }

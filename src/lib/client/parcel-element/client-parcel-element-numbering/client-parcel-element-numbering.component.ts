@@ -12,7 +12,7 @@ import {
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { skip } from 'rxjs/operators';
 
-import { LanguageService } from '@igo2/core';
+import { LanguageService, Message, MessageType } from '@igo2/core';
 import {
   EntityRecord,
   EntityOperation,
@@ -44,10 +44,10 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
   private _value: MultipartNoParcel = {number: '', prefix: '', suffix: ''};
 
   /**
-   * Import error, if any
+   * Message, if any
    * @internal
    */
-  errorMessage$: BehaviorSubject<string> = new BehaviorSubject(undefined);
+  message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
   tableTemplate: EntityTableTemplate = {
     selection: false,
@@ -159,7 +159,7 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
         parcelElement.properties.idParcelle === this.lastUpdate.properties.idParcelle) {
       return;
     }
-    if (this.errorMessage$.value !== undefined) {
+    if (this.message$.value !== undefined) {
       return;
     }
 
@@ -216,7 +216,14 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
   private setValue(value: MultipartNoParcel) {
     this._value = value;
     const error = this.validateValue();
-    this.errorMessage$.next(error);
+    if (error === undefined) {
+      this.message$.next(undefined);
+    } else {
+      this.message$.next({
+        type: MessageType.ERROR,
+        text: error
+      });
+    }
   }
 
   private validateValue(): string | undefined {

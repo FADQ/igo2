@@ -85,7 +85,6 @@ export class ClientParcelElementActionsService {
         acc.push(...getParcelElementErrors(parcelElement));
         return acc;
       }, []);
-      console.log(errors);
       return errors.length === 0;
     }
 

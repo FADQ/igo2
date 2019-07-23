@@ -9,7 +9,7 @@ import {
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoEntityTableModule } from '@igo2/common';
 
-import { FadqLibMessageInlineModule } from 'src/lib/message/message-inline/message-inline.module';
+import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
 
 import { ClientParcelElementReconciliateComponent } from './client-parcel-element-reconciliate.component';
 
@@ -24,7 +24,7 @@ import { ClientParcelElementReconciliateComponent } from './client-parcel-elemen
     MatButtonModule,
     IgoLanguageModule,
     IgoEntityTableModule,
-    FadqLibMessageInlineModule
+    FadqLibCardPanelModule
   ],
   exports: [
     ClientParcelElementReconciliateComponent

@@ -142,7 +142,7 @@ export class ClientParcelElementFormService {
         map((choices: FormFieldSelectChoice[]) => {
           return this.createField({
             name: 'properties.sourceParcelleAgricole',
-            title: 'Source parcelle',
+            title: 'Référence de la parcelle',
             type: 'select',
             options:  {
               cols: 1
@@ -174,7 +174,7 @@ export class ClientParcelElementFormService {
   private createInfoLocateurField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
     return of(this.createField({
       name: 'properties.infoLocateur',
-      title: 'Info locateur',
+      title: 'Info localisation',
       options:  {
         cols: 1
       }

@@ -10,7 +10,7 @@ import {
 
 import { BehaviorSubject } from 'rxjs';
 
-import { LanguageService } from '@igo2/core';
+import { LanguageService, Message, MessageType } from '@igo2/core';
 import { WidgetComponent, OnUpdateInputs } from '@igo2/common';
 
 import { ClientController } from '../../shared/controller';
@@ -25,10 +25,10 @@ import { ClientParcelElementEditionState} from '../shared/client-parcel-element.
 export class ClientParcelElementEditComponent implements WidgetComponent, OnUpdateInputs, OnInit {
 
   /**
-   * Import error, if any
+   * Message, if any
    * @internal
    */
-  errorMessage$: BehaviorSubject<string> = new BehaviorSubject(undefined);
+  message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
   /**
    * Client controller
@@ -57,7 +57,12 @@ export class ClientParcelElementEditComponent implements WidgetComponent, OnUpda
 
   ngOnInit() {
     const error = this.validateState();
-    this.errorMessage$.next(error);
+    if (error !== undefined) {
+      this.message$.next({
+        type: MessageType.ERROR,
+        text: error
+      });
+    }
   }
 
   /**
@@ -94,7 +99,6 @@ export class ClientParcelElementEditComponent implements WidgetComponent, OnUpda
     if (state === ClientParcelElementEditionState.EEC) {
       return this.languageService.translate.instant('client.parcelElement.edition.eec.error');
     }
-
     return undefined;
   }
 }

@@ -96,7 +96,7 @@ export class ClientParcelTableService {
         },
         {
           name: 'properties.pourcentageDefautCultural',
-          title: 'Pourcentage de défaut cultural'
+          title: 'Défaut cultural (%)'
         },
         {
           name: 'properties.noConfirmation',
@@ -108,7 +108,7 @@ export class ClientParcelTableService {
         },
         {
           name: 'properties.parcelleDrainee',
-          title: 'Drainage'
+          title: 'Drainage source FADQ'
         },
         {
           name: 'properties.sourceParcelleAgricole',

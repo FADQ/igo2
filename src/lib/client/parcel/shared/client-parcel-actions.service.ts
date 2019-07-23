@@ -27,6 +27,10 @@ export class ClientParcelActionsService {
         handler: function(widget: Widget, ctrl: ClientController) {
           ctrl.getParcelEditionState()
             .subscribe((state: ClientParcelElementEditionState) => {
+              ctrl.parcelWorkspace.activateWidget(widget, {
+                controller: ctrl,
+                state: state
+              });
               if (state === ClientParcelElementEditionState.OK) {
                 ctrl.activateParcelEdition();
               } else {

@@ -1,10 +1,10 @@
 mat-card {
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  padding-top: 0px;
 }
 
 mat-card-content {
-  overflow-x: hidden;
   height: 100%;
 }
 
@@ -41,17 +41,6 @@ igo-entity-table {
       }
     }
   }
-}
-
-mat-card-content.with-error-message {
-  igo-entity-table{
-    max-height: calc(100% - 130px - 14px) !important;
-  }
-}
-
-p.fadq-error-text {
-  margin: 0;
-  text-align: center;
 }
 
 mat-form-field {
