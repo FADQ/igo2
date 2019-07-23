@@ -6,8 +6,11 @@ import {
   ClientParcelElementCreateComponent
 } from '../client-parcel-element-create/client-parcel-element-create.component';
 import {
-  ClientParcelElementEditComponent
-} from '../client-parcel-element-edit/client-parcel-element-edit.component';
+  ClientParcelElementStartTxComponent
+} from '../client-parcel-element-start-tx/client-parcel-element-start-tx.component';
+import {
+  ClientParcelElementDeleteTxComponent
+} from '../client-parcel-element-delete-tx/client-parcel-element-delete-tx.component';
 import {
   ClientParcelElementUpdateComponent
 } from '../client-parcel-element-update/client-parcel-element-update.component';
@@ -38,8 +41,10 @@ import {
 
 export const ClientParcelElementCreateWidget =
   new InjectionToken<Widget>('ClientParcelElementCreateWidget');
-  export const ClientParcelElementEditWidget =
-  new InjectionToken<Widget>('ClientParcelElementEditWidget');
+export const ClientParcelElementStartTxWidget =
+  new InjectionToken<Widget>('ClientParcelElementStartTxWidget');
+  export const ClientParcelElementDeleteTxWidget =
+  new InjectionToken<Widget>('ClientParcelElementDeleteTxWidget');
 export const ClientParcelElementUpdateWidget =
   new InjectionToken<Widget>('ClientParcelElementUpdateWidget');
 export const ClientParcelElementUpdateBatchWidget =
@@ -73,14 +78,26 @@ export function provideClientParcelElementCreateWidget() {
   };
 }
 
-export function clientParcelElementEditWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(ClientParcelElementEditComponent);
+export function clientParcelElementStartTxWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(ClientParcelElementStartTxComponent);
 }
 
-export function provideClientParcelElementEditWidget() {
+export function provideClientParcelElementStartTxWidget() {
   return {
-    provide: ClientParcelElementEditWidget,
-    useFactory: clientParcelElementEditWidgetFactory,
+    provide: ClientParcelElementStartTxWidget,
+    useFactory: clientParcelElementStartTxWidgetFactory,
+    deps: [WidgetService]
+  };
+}
+
+export function clientParcelElementDeleteTxWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(ClientParcelElementDeleteTxComponent);
+}
+
+export function provideClientParcelElementDeleteTxWidget() {
+  return {
+    provide: ClientParcelElementDeleteTxWidget,
+    useFactory: clientParcelElementDeleteTxWidgetFactory,
     deps: [WidgetService]
   };
 }

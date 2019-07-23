@@ -17,7 +17,7 @@ import { ClientParcelElementWorkspace } from '../parcel-element/shared/client-pa
 import { ClientParcelElement } from '../parcel-element/shared/client-parcel-element.interfaces';
 import { ClientParcelElementService } from '../parcel-element/shared/client-parcel-element.service';
 import { ClientParcelElementTransactionService } from '../parcel-element/shared/client-parcel-element-transaction.service';
-import { ClientParcelElementEditionState } from '../parcel-element/shared/client-parcel-element.enums';
+import { ClientParcelElementTxState } from '../parcel-element/shared/client-parcel-element.enums';
 import { createParcelElementLayerStyle } from '../parcel-element/shared/client-parcel-element.utils';
 import { ClientSchema } from '../schema/shared/client-schema.interfaces';
 import { ClientSchemaService } from '../schema/shared/client-schema.service';
@@ -219,27 +219,27 @@ export class ClientController {
     this.loadParcels();
   }
 
-  getParcelEditionState(): Observable<ClientParcelElementEditionState> {
-    return this.parcelElementService.getParcelEditionState(this.client, this.parcelYear);
+  getParcelTxState(): Observable<ClientParcelElementTxState> {
+    return this.parcelElementService.getParcelTxState(this.client, this.parcelYear);
   }
 
-  prepareParcelEdition(): Observable<void> {
-    return this.parcelElementService.prepareParcelEdition(this.client, this.parcelYear);
+  prepareParcelTx(): Observable<void> {
+    return this.parcelElementService.prepareParcelTx(this.client, this.parcelYear);
   }
 
-  activateParcelEdition() {
+  activateParcelTx() {
     this.initParcelElements();
     this.teardownParcels();
     this.workspaceStore.activateWorkspace(this.parcelElementWorkspace);
   }
 
-  deactivateParcelEdition() {
+  deactivateParcelTx() {
     if (!this.parcelElementTransaction.empty) {
       this.parcelElementTransactionService.enqueue({
         client: this.client,
         annee: this.parcelYear,
         transaction: this.parcelElementTransaction,
-        proceed: () => this.deactivateParcelEdition()
+        proceed: () => this.deactivateParcelTx()
       });
       return;
     }

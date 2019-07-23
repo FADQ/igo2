@@ -11,7 +11,7 @@ import { TransactionSerializer, TransactionData } from 'src/lib/utils/transactio
 
 import { computeParcelElementArea, transactionDataToSaveParcelElementData } from './client-parcel-element.utils';
 import { Client } from '../../shared/client.interfaces';
-import { ClientParcelElementEditionState } from './client-parcel-element.enums';
+import { ClientParcelElementTxState } from './client-parcel-element.enums';
 import {
   ClientInReconciliationResponse,
   ClientInReconciliationResponseData,
@@ -19,7 +19,7 @@ import {
   ClientParcelElementApiConfig,
   ClientParcelElementListResponse,
   ClientParcelElementListResponseItem,
-  ClientParcelElementActivateEditionResponse,
+  ClientParcelElementActivateTxResponse,
   ClientParcelElementValidateTransferResponse
 } from './client-parcel-element.interfaces';
 
@@ -32,21 +32,29 @@ export class ClientParcelElementService {
     @Inject('clientParcelApiConfig') private apiConfig: ClientParcelElementApiConfig
   ) {}
 
-  getParcelEditionState(client: Client, annee: number): Observable<ClientParcelElementEditionState> {
-    const url = this.apiService.buildUrl(this.apiConfig.activateEdition, {
+  getParcelTxState(client: Client, annee: number): Observable<ClientParcelElementTxState> {
+    const url = this.apiService.buildUrl(this.apiConfig.startTx, {
       clientNum: client.info.numero,
       annee: annee
     });
     return this.http.get(url)
       .pipe(
-        map((response: ClientParcelElementActivateEditionResponse) => {
+        map((response: ClientParcelElementActivateTxResponse) => {
           return response.data.resultat;
         })
       );
   }
 
-  prepareParcelEdition(client: Client, annee: number): Observable<any> {
-    const url = this.apiService.buildUrl(this.apiConfig.createEditionSchema, {
+  prepareParcelTx(client: Client, annee: number): Observable<any> {
+    const url = this.apiService.buildUrl(this.apiConfig.createTx, {
+      clientNum: client.info.numero,
+      annee: annee
+    });
+    return this.http.get(url);
+  }
+
+  deleteParcelTx(client: Client, annee: number): Observable<any> {
+    const url = this.apiService.buildUrl(this.apiConfig.deleteTx, {
       clientNum: client.info.numero,
       annee: annee
     });

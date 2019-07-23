@@ -31,7 +31,7 @@ import {
 } from '../shared/client-parcel-element.utils';
 
 @Component({
-  selector: 'fadq-client-parcel-element-update-form',
+  selector: 'fadq-client-parcel-element-update',
   templateUrl: './client-parcel-element-update.component.html',
   styleUrls: ['./client-parcel-element-update.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

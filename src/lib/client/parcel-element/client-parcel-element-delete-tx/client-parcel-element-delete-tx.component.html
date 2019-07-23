@@ -1,0 +1,21 @@
+<fadq-card-panel
+  [svgIcon]="'alert'"
+  [iconColor]="'warn'"
+  [title]="'client.parcelElement.deleteTx.confirm' | translate">
+
+  <ng-container buttons>
+    <button
+      mat-button
+      type="button"
+      (click)="onCancel()">
+      {{ 'no' | translate }}
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onSubmit()">
+      {{ 'yes' | translate }}
+    </button>  
+  </ng-container>
+
+</fadq-card-panel>

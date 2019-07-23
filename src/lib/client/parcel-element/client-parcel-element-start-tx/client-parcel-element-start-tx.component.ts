@@ -14,15 +14,15 @@ import { LanguageService, Message, MessageType } from '@igo2/core';
 import { WidgetComponent, OnUpdateInputs } from '@igo2/common';
 
 import { ClientController } from '../../shared/controller';
-import { ClientParcelElementEditionState} from '../shared/client-parcel-element.enums';
+import { ClientParcelElementTxState} from '../shared/client-parcel-element.enums';
 
 @Component({
-  selector: 'fadq-client-parcel-element-edit',
-  templateUrl: './client-parcel-element-edit.component.html',
-  styleUrls: ['./client-parcel-element-edit.component.scss'],
+  selector: 'fadq-client-parcel-element-start-tx',
+  templateUrl: './client-parcel-element-start-tx.component.html',
+  styleUrls: ['./client-parcel-element-start-tx.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientParcelElementEditComponent implements WidgetComponent, OnUpdateInputs, OnInit {
+export class ClientParcelElementStartTxComponent implements WidgetComponent, OnUpdateInputs, OnInit {
 
   /**
    * Message, if any
@@ -38,7 +38,7 @@ export class ClientParcelElementEditComponent implements WidgetComponent, OnUpda
    /**
    * Edition state
    */
-  @Input() state: ClientParcelElementEditionState;
+  @Input() state: ClientParcelElementTxState;
 
   /**
    * Event emitted on complete
@@ -73,10 +73,10 @@ export class ClientParcelElementEditComponent implements WidgetComponent, OnUpda
   }
 
   onSubmit() {
-    if (this.state === ClientParcelElementEditionState.OK) {
+    if (this.state === ClientParcelElementTxState.OK) {
       this.onSubmitSuccess();
     } else {
-      this.controller.prepareParcelEdition().subscribe(() => {
+      this.controller.prepareParcelTx().subscribe(() => {
         this.onSubmitSuccess();
       });
     }
@@ -87,16 +87,16 @@ export class ClientParcelElementEditComponent implements WidgetComponent, OnUpda
   }
 
   private onSubmitSuccess() {
-    this.controller.activateParcelEdition();
+    this.controller.activateParcelTx();
     this.complete.emit();
   }
 
   private validateState(): string | undefined {
     const state = this.state;
-    if (state === ClientParcelElementEditionState.AI) {
+    if (state === ClientParcelElementTxState.AI) {
       return this.languageService.translate.instant('client.parcelElement.edition.ai.error');
     }
-    if (state === ClientParcelElementEditionState.EEC) {
+    if (state === ClientParcelElementTxState.EEC) {
       return this.languageService.translate.instant('client.parcelElement.edition.eec.error');
     }
     return undefined;

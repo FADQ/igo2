@@ -18,7 +18,7 @@ import { ClientSchemaService } from '../shared/client-schema.service';
 import { ClientSchemaFormService } from '../shared/client-schema-form.service';
 
 @Component({
-  selector: 'fadq-client-schema-create-form',
+  selector: 'fadq-client-schema-create',
   templateUrl: './client-schema-create.component.html',
   styleUrls: ['./client-schema-create.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

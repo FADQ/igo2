@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material';
 
 import { IgoLanguageModule } from '@igo2/core';
+import { IgoFormModule } from '@igo2/common';
 
 import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
 
-import { ClientParcelElementEditComponent } from './client-parcel-element-edit.component';
+import { ClientParcelElementDeleteTxComponent } from './client-parcel-element-delete-tx.component';
 
 /**
  * @ignore
@@ -16,16 +17,17 @@ import { ClientParcelElementEditComponent } from './client-parcel-element-edit.c
     CommonModule,
     MatButtonModule,
     IgoLanguageModule,
+    IgoFormModule,
     FadqLibCardPanelModule
   ],
   exports: [
-    ClientParcelElementEditComponent
+    ClientParcelElementDeleteTxComponent
   ],
   declarations: [
-    ClientParcelElementEditComponent
+    ClientParcelElementDeleteTxComponent
   ],
   entryComponents: [
-    ClientParcelElementEditComponent
+    ClientParcelElementDeleteTxComponent
   ]
 })
-export class FadqLibClientParcelElementEditModule {}
+export class FadqLibClientParcelElementDeleteTxModule {}

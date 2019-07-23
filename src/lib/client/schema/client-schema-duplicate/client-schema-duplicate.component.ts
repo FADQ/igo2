@@ -14,7 +14,7 @@ import { ClientSchema } from '../shared/client-schema.interfaces';
 import { ClientSchemaService } from '../shared/client-schema.service';
 
 @Component({
-  selector: 'fadq-client-schema-duplicate-form',
+  selector: 'fadq-client-schema-duplicate',
   templateUrl: './client-schema-duplicate.component.html',
   styleUrls: ['./client-schema-duplicate.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

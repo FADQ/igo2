@@ -1,4 +1,4 @@
 import { strEnum } from '@igo2/utils';
 
-export const ClientParcelElementEditionState = strEnum(['AI', 'EEC', 'CREE', 'OK']);
-export type ClientParcelElementEditionState = keyof typeof ClientParcelElementEditionState;
+export const ClientParcelElementTxState = strEnum(['AI', 'EEC', 'CREE', 'OK']);
+export type ClientParcelElementTxState = keyof typeof ClientParcelElementTxState;
