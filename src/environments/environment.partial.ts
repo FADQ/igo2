@@ -128,8 +128,9 @@ export const igoEnvironment: IgoEnvironment = {
         reconciliateClients: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirliensclientsedition/${clientNum}',
         validateTransfer: '/igodonneesgeospatiales/edition_parcelle_agricole/validertransfertparcelle/${toClientNum}/${annee}',
         transfer: '/igodonneesgeospatiales/edition_parcelle_agricole/transfererparcellesedition/${fromClientNum}/${toClientNum}/${annee}',
-        activateEdition: '/igodonneesgeospatiales/edition_parcelle_agricole/activeredition/${clientNum}/${annee}',
-        createEditionSchema: '/igodonneesgeospatiales/edition_parcelle_agricole/creerSchemaEdition/${clientNum}/${annee}',
+        startTx: '/igodonneesgeospatiales/edition_parcelle_agricole/activeredition/${clientNum}/${annee}',
+        createTx: '/igodonneesgeospatiales/edition_parcelle_agricole/creerSchemaEdition/${clientNum}/${annee}',
+        deleteTx: '/igodonneesgeospatiales/edition_parcelle_agricole/supprimerschema/${clientNum}/${annee}',
         domains: {
           statutAugm: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirStatutsAugmentationSuperficiesCultivees',
           source: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirSourcesParcelles'

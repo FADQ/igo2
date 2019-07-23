@@ -6,8 +6,11 @@ import {
   FadqLibClientParcelElementCreateModule
 } from './client-parcel-element-create/client-parcel-element-create.module';
 import {
-  FadqLibClientParcelElementEditModule
-} from './client-parcel-element-edit/client-parcel-element-edit.module';
+  FadqLibClientParcelElementStartTxModule
+} from './client-parcel-element-start-tx/client-parcel-element-start-tx.module';
+import {
+  FadqLibClientParcelElementDeleteTxModule
+} from './client-parcel-element-delete-tx/client-parcel-element-delete-tx.module';
 import {
   FadqLibClientParcelElementUpdateModule
 } from './client-parcel-element-update/client-parcel-element-update.module';
@@ -45,7 +48,8 @@ import {
 } from './shared/client-parcel-element.providers';
 import {
   provideClientParcelElementCreateWidget,
-  provideClientParcelElementEditWidget,
+  provideClientParcelElementStartTxWidget,
+  provideClientParcelElementDeleteTxWidget,
   provideClientParcelElementUpdateWidget,
   provideClientParcelElementUpdateBatchWidget,
   provideClientParcelElementFillWidget,
@@ -63,7 +67,8 @@ import {
   ],
   exports: [
     FadqLibClientParcelElementCreateModule,
-    FadqLibClientParcelElementEditModule,
+    FadqLibClientParcelElementStartTxModule,
+    FadqLibClientParcelElementDeleteTxModule,
     FadqLibClientParcelElementUpdateModule,
     FadqLibClientParcelElementUpdateBatchModule,
     FadqLibClientParcelElementFillModule,
@@ -85,7 +90,8 @@ export class FadqLibClientParcelElementModule {
         provideClientParcelElementService(),
         provideClientParcelElementFormService(),
         provideClientParcelElementCreateWidget(),
-        provideClientParcelElementEditWidget(),
+        provideClientParcelElementStartTxWidget(),
+        provideClientParcelElementDeleteTxWidget(),
         provideClientParcelElementUpdateWidget(),
         provideClientParcelElementUpdateBatchWidget(),
         provideClientParcelElementFillWidget(),

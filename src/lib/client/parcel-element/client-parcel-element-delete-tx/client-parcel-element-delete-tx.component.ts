@@ -7,19 +7,18 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 
-import { EntityStore, WidgetComponent, OnUpdateInputs } from '@igo2/common';
+import { WidgetComponent, OnUpdateInputs } from '@igo2/common';
 
 import { Client } from '../../shared/client.interfaces';
-import { ClientSchema } from '../shared/client-schema.interfaces';
-import { ClientSchemaService } from '../shared/client-schema.service';
+import { ClientParcelElementService } from '../shared/client-parcel-element.service';
 
 @Component({
-  selector: 'fadq-client-schema-delete',
-  templateUrl: './client-schema-delete.component.html',
-  styleUrls: ['./client-schema-delete.component.scss'],
+  selector: 'fadq-client-parcel-element-delete-tx',
+  templateUrl: './client-parcel-element-delete-tx.component.html',
+  styleUrls: ['./client-parcel-element-delete-tx.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientSchemaDeleteComponent implements OnUpdateInputs, WidgetComponent {
+export class ClientParcelElementDeleteTxComponent implements OnUpdateInputs, WidgetComponent {
 
   /**
    * Client
@@ -27,14 +26,9 @@ export class ClientSchemaDeleteComponent implements OnUpdateInputs, WidgetCompon
   @Input() client: Client;
 
   /**
-   * Schema store
+   * Parcel annee
    */
-  @Input() store: EntityStore<ClientSchema>;
-
-  /**
-   * Schema to delete
-   */
-  @Input() schema: ClientSchema;
+  @Input() annee: number;
 
   /**
    * Event emitted on complete
@@ -47,7 +41,7 @@ export class ClientSchemaDeleteComponent implements OnUpdateInputs, WidgetCompon
   @Output() cancel = new EventEmitter<void>();
 
   constructor(
-    private clientSchemaService: ClientSchemaService,
+    private clientParcelElementService: ClientParcelElementService,
     private cdRef: ChangeDetectorRef
   ) {}
 
@@ -59,7 +53,7 @@ export class ClientSchemaDeleteComponent implements OnUpdateInputs, WidgetCompon
   }
 
   onSubmit() {
-    this.clientSchemaService.deleteSchema(this.schema)
+    this.clientParcelElementService.deleteParcelTx(this.client, this.annee)
       .subscribe(() => this.onSubmitSuccess());
   }
 
@@ -68,7 +62,6 @@ export class ClientSchemaDeleteComponent implements OnUpdateInputs, WidgetCompon
   }
 
   private onSubmitSuccess() {
-    this.store.delete(this.schema);
     this.complete.emit();
   }
 

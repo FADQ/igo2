@@ -1,7 +1,7 @@
 import { Inject, Injectable} from '@angular/core';
 
-import { ClientParcelElementEditionState } from '../../parcel-element/shared/client-parcel-element.enums';
-import { ClientParcelElementEditWidget } from '../../parcel-element/shared/client-parcel-element.widgets';
+import { ClientParcelElementTxState } from '../../parcel-element/shared/client-parcel-element.enums';
+import { ClientParcelElementStartTxWidget } from '../../parcel-element/shared/client-parcel-element.widgets';
 
 import { Action, EntityTableColumn, Widget } from '@igo2/common';
 import { entitiesToRowData,  exportToCSV } from '@igo2/geo';
@@ -14,25 +14,25 @@ import { ClientController } from '../../shared/controller';
 export class ClientParcelActionsService {
 
   constructor(
-    @Inject(ClientParcelElementEditWidget) private clientParcelElementEditWidget: Widget
+    @Inject(ClientParcelElementStartTxWidget) private clientParcelElementStartTxWidget: Widget
   ) {}
 
   buildActions(controller: ClientController): Action[] {
     return [
       {
-        id: 'activateEdition',
+        id: 'startTx',
         icon: 'square-edit-outline',
-        title: 'client.parcelElement.activateEdition',
-        tooltip: 'client.parcelElement.activateEdition.tooltip',
+        title: 'client.parcelElement.startTx',
+        tooltip: 'client.parcelElement.startTx.tooltip',
         handler: function(widget: Widget, ctrl: ClientController) {
-          ctrl.getParcelEditionState()
-            .subscribe((state: ClientParcelElementEditionState) => {
+          ctrl.getParcelTxState()
+            .subscribe((state: ClientParcelElementTxState) => {
               ctrl.parcelWorkspace.activateWidget(widget, {
                 controller: ctrl,
                 state: state
               });
-              if (state === ClientParcelElementEditionState.OK) {
-                ctrl.activateParcelEdition();
+              if (state === ClientParcelElementTxState.OK) {
+                ctrl.activateParcelTx();
               } else {
                 ctrl.parcelWorkspace.activateWidget(widget, {
                   controller: ctrl,
@@ -41,7 +41,7 @@ export class ClientParcelActionsService {
               }
             });
         },
-        args: [this.clientParcelElementEditWidget, controller]
+        args: [this.clientParcelElementStartTxWidget, controller]
       },
       {
         id: 'export',

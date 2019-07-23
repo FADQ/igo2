@@ -2,11 +2,8 @@ import { EntityTransaction } from '@igo2/common';
 import { Feature } from '@igo2/geo';
 
 import { Client } from '../../shared/client.interfaces';
-import {
-  ClientInfoGetResponse,
-  ClientInfoGetResponseData
-} from '../../info/shared/client-info.interfaces';
-import { ClientParcelElementEditionState } from './client-parcel-element.enums';
+import { ClientInfoGetResponseData } from '../../info/shared/client-info.interfaces';
+import { ClientParcelElementTxState } from './client-parcel-element.enums';
 
 export interface ClientParcelElementApiConfig {
   list: string;
@@ -15,8 +12,9 @@ export interface ClientParcelElementApiConfig {
   reconciliateClients: string;
   validateTransfer: string;
   transfer: string;
-  activateEdition: string;
-  createEditionSchema: string;
+  startTx: string;
+  createTx: string;
+  deleteTx: string;
   domains: {
     source: string;
     statutAugm: string;
@@ -65,10 +63,10 @@ export interface ClientParcelElementTransactionWrapper {
   abort?: () => void;
 }
 
-export interface ClientParcelElementActivateEditionResponse {
+export interface ClientParcelElementActivateTxResponse {
   statut: number;
   data: {
-    resultat: ClientParcelElementEditionState;
+    resultat: ClientParcelElementTxState;
   };
 }
 

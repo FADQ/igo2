@@ -38,7 +38,7 @@ import {
 } from '../shared/client-schema-element.utils';
 
 @Component({
-  selector: 'fadq-client-schema-element-create-form',
+  selector: 'fadq-client-schema-element-create',
   templateUrl: './client-schema-element-create.component.html',
   styleUrls: ['./client-schema-element-create.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

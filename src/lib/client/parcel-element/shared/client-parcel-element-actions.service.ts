@@ -9,6 +9,7 @@ import { Client } from '../../shared/client.interfaces';
 import { ClientController } from '../../shared/controller';
 import { ClientParcelElement } from './client-parcel-element.interfaces';
 import {
+  ClientParcelElementDeleteTxWidget,
   ClientParcelElementCreateWidget,
   ClientParcelElementUpdateWidget,
   ClientParcelElementUpdateBatchWidget,
@@ -31,6 +32,7 @@ import {
 export class ClientParcelElementActionsService {
 
   constructor(
+    @Inject(ClientParcelElementDeleteTxWidget) private clientParcelElementDeleteTxWidget: Widget,
     @Inject(ClientParcelElementCreateWidget) private clientParcelElementCreateWidget: Widget,
     @Inject(ClientParcelElementUpdateWidget) private clientParcelElementUpdateWidget: Widget,
     @Inject(ClientParcelElementUpdateBatchWidget) private clientParcelElementUpdateBatchWidget: Widget,
@@ -92,15 +94,30 @@ export class ClientParcelElementActionsService {
 
     return [
       {
-        id: 'deactivateEdition',
+        id: 'stopTx',
         icon: 'close-box-outline',
-        title: 'client.parcelElement.deactivateEdition',
-        tooltip: 'client.parcelElement.deactivateEdition.tooltip',
+        title: 'client.parcelElement.stopTx',
+        tooltip: 'client.parcelElement.stopTx.tooltip',
         handler: function(ctrl: ClientController) {
-          ctrl.deactivateParcelEdition();
+          ctrl.deactivateParcelTx();
         },
         args: [controller],
         conditions: [noActiveWidget],
+        conditionArgs
+      },
+      {
+        id: 'deleteTx',
+        icon: 'close-outline',
+        title: 'client.parcelElement.deleteTx',
+        tooltip: 'client.parcelElement.deleteTx.tooltip',
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.parcelElementWorkspace.activateWidget(widget, {
+            client: ctrl.client,
+            annee: ctrl.parcelYear
+          });
+        },
+        args: [this.clientParcelElementDeleteTxWidget, controller],
+        conditions: [noActiveWidget, noParcelElementError],
         conditionArgs
       },
       {

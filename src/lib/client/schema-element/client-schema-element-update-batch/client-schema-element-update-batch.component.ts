@@ -32,7 +32,7 @@ import {
 } from '../shared/client-schema-element.utils';
 
 @Component({
-  selector: 'fadq-client-schema-element-update-batch-form',
+  selector: 'fadq-client-schema-element-update-batch',
   templateUrl: './client-schema-element-update-batch.component.html',
   styleUrls: ['./client-schema-element-update-batch.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
