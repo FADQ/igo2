@@ -1,34 +1,33 @@
 <mat-card>
-  <mat-card-content [ngClass]="{'with-error-message': (errorMessage$ | async) !== undefined}">
-    <mat-form-field>
-      <fadq-client-parcel-element-numbering-input [(ngModel)]="value"></fadq-client-parcel-element-numbering-input>
-    </mat-form-field>
+  <mat-card-content>
+    <fadq-card-panel-content [message]="message$ | async">
 
-    <p
-      *ngIf="errorMessage$ | async as errorMessage"
-      class="fadq-error-text">
-      {{errorMessage}}
-    </p>
+      <ng-container body>
+        <mat-form-field>
+          <fadq-client-parcel-element-numbering-input [(ngModel)]="value"></fadq-client-parcel-element-numbering-input>
+        </mat-form-field>
+        <igo-entity-table
+          class="table-compact"
+          [store]="subTransaction.operations"
+          [template]="tableTemplate">
+        </igo-entity-table>
+      </ng-container>
 
-    <igo-entity-table
-      class="table-compact"
-      [store]="subTransaction.operations"
-      [template]="tableTemplate">
-    </igo-entity-table>
+      <ng-container buttons>
+        <button
+          mat-button
+          type="button"
+          (click)="onCancel()">
+          {{ 'cancel' | translate }}
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onComplete()">
+          {{ 'apply' | translate }}
+        </button>
+      </ng-container>
 
-    <div class="igo-form-buttons">
-      <button
-        mat-button
-        type="button"
-        (click)="onCancel()">
-        {{ 'cancel' | translate }}
-      </button>
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="onComplete()">
-        {{ 'apply' | translate }}
-      </button>
-    </div>
+    </fadq-card-panel-content>
   </mat-card-content> 
 </mat-card>

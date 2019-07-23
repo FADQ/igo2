@@ -1,30 +1,32 @@
-<form class="igo-form" [formGroup]="formGroup">
-  <fadq-message-inline
-    *ngIf="message$ | async as message"  
-    [message]="message">
-  </fadq-message-inline>
+<fadq-card-panel
+  [svgIcon]="'help-circle'"
+  [iconColor]="'accent'"
+  [title]="'client.parcelElement.transfer' | translate"
+  [message]="message$ | async">
 
-  <igo-entity-selector
-    [store]="clientStore"
-    [placeholder]="'client.parcelElement.transfer.client.placeholder' | translate"
-    [titleAccessor]="getClientNumber"
-    (selectedChange)="onSelectClient($event)">
-  </igo-entity-selector>
+  <form class="igo-form" [formGroup]="formGroup">
+    <igo-entity-selector
+      [store]="clientStore"
+      [placeholder]="'client.parcelElement.transfer.client.placeholder' | translate"
+      [titleAccessor]="getClientNumber"
+      (selectedChange)="onSelectClient($event)">
+    </igo-entity-selector>
+  
+    <div class="slide-toggle-container">
+      <mat-slide-toggle
+        formControlName="keepParcelNumbers"
+        [labelPosition]="'before'">
+        {{'client.parcelElement.transfer.keepParcelNumbers' | translate}}
+      </mat-slide-toggle>
+      <mat-slide-toggle
+        formControlName="transferAllParcels"
+        [labelPosition]="'before'">
+        {{'client.parcelElement.transfer.transferAllParcels' | translate}}
+      </mat-slide-toggle>
+    </div>
+  </form>
 
-  <div class="slide-toggle-container">
-    <mat-slide-toggle
-      formControlName="keepParcelNumbers"
-      [labelPosition]="'before'">
-      {{'client.parcelElement.transfer.keepParcelNumbers' | translate}}
-    </mat-slide-toggle>
-    <mat-slide-toggle
-      formControlName="transferAllParcels"
-      [labelPosition]="'before'">
-      {{'client.parcelElement.transfer.transferAllParcels' | translate}}
-    </mat-slide-toggle>
-  </div>
-
-  <div class="igo-form-buttons">
+  <ng-container buttons>
     <button
       mat-button
       type="button"
@@ -39,5 +41,7 @@
       (click)="onTransfer()">
       {{'client.parcelElement.transfer.apply' | translate}}
     </button>
-  </div>
-</form>
+  </ng-container>
+
+</fadq-card-panel>
+

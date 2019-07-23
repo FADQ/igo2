@@ -1,65 +1,43 @@
-<mat-card>
-  <mat-card-header>
-    <ng-container *ngIf="!(submitted$ | async); else submitted">
-      <div mat-card-avatar>
-        <mat-icon [color]="'accent'" svgIcon="help-circle"></mat-icon>
-      </div>
-      <mat-card-title>{{'client.parcelElement.reconciliate.confirm' | translate}}</mat-card-title>
+<fadq-card-panel
+  [svgIcon]="icon$ | async"
+  [iconColor]="iconColor$ | async"
+  [title]="title$ | async">
+
+  <div class="client-parcels-reconciliate-linked-clients">
+    {{'client.parcelElement.reconciliate.linkedClients' | translate}}
+  </div>
+
+  <igo-entity-table
+    class="table-compact"
+    [store]="clientStore"
+    [template]="tableTemplate">
+  </igo-entity-table>
+
+  <ng-container buttons>
+    <ng-container *ngIf="!(submitted$ | async); else close">
+      <button
+        mat-button
+        type="button"
+        (click)="onCancel()">
+        {{ 'no' | translate }}
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="disabled"
+        (click)="onSubmit()">
+        {{ 'yes' | translate }}
+      </button>
     </ng-container>
-    <ng-template #submitted>
-      <ng-container *ngIf="submitError$ | async; else submitSuccess">
-        <div mat-card-avatar>
-          <mat-icon [color]="'warn'" svgIcon="thumb-down"></mat-icon>
-        </div>
-        <mat-card-title>{{'client.parcelElement.reconciliate.error' | translate}}</mat-card-title>
-      </ng-container>
-      <ng-template #submitSuccess>
-        <div mat-card-avatar>
-          <mat-icon [color]="'accent'" svgIcon="thumb-up"></mat-icon>
-        </div>
-        <mat-card-title>{{'client.parcelElement.reconciliate.success' | translate}}</mat-card-title>  
-      </ng-template>
+    <ng-template #close>
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        (click)="onClose()">
+        {{ 'close' | translate }}
+      </button>  
     </ng-template>
-  </mat-card-header>
+  </ng-container>
 
-  <mat-card-content>
-    <div>
-      <div class="client-parcels-reconciliate-message">
-        {{'client.parcelElement.reconciliate.clientsMessage' | translate}}
-      </div>
-      <igo-entity-table
-        class="table-compact"
-        [store]="clientStore"
-        [template]="tableTemplate">
-      </igo-entity-table>
-
-      <div class="igo-form-buttons">
-        <ng-container *ngIf="!(submitted$ | async); else close">
-          <button
-            mat-button
-            type="button"
-            (click)="onCancel()">
-            {{ 'no' | translate }}
-          </button>
-          <button
-            mat-raised-button
-            color="primary"
-            [disabled]="disabled"
-            (click)="onSubmit()">
-            {{ 'yes' | translate }}
-          </button>
-        </ng-container>
-        <ng-template #close>
-          <button
-            mat-raised-button
-            color="primary"
-            type="button"
-            (click)="onClose()">
-            {{ 'close' | translate }}
-          </button>  
-        </ng-template>
-      </div>
-    </div>
-  </mat-card-content>
-</mat-card>
-  
+</fadq-card-panel>

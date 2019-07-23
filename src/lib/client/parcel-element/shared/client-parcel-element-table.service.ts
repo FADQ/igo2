@@ -42,7 +42,7 @@ export class ClientParcelElementTableService {
           }
         },
         {
-          name: 'superficieHectares',
+          name: 'properties.superficieHectare',
           title: 'Superficie mesurée (ha)',
           valueAccessor: (parcelElement: ClientParcelElement) => {
             const area = parcelElement.properties.superficie;
@@ -55,11 +55,11 @@ export class ClientParcelElementTableService {
         },
         {
           name: 'properties.parcelleDrainee',
-          title: 'Drainage'
+          title: 'Drainage source FADQ'
         },
         {
           name: 'properties.infoLocateur',
-          title: 'Info locateur'
+          title: 'Information localisation'
         },
         {
           name: 'properties.anneeImage',
@@ -67,7 +67,7 @@ export class ClientParcelElementTableService {
         },
         {
           name: 'properties.sourceParcelleAgricole',
-          title: 'Source parcelle agricole'
+          title: 'Référence de la mesure'
         },
         {
           name: 'properties.timbreMajGeometrie',

@@ -10,7 +10,7 @@ import {
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoFormModule, IgoEntitySelectorModule } from '@igo2/common';
 
-import { FadqLibMessageInlineModule } from '../../../message/message-inline/message-inline.module';
+import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
 
 import { ClientParcelElementTransferComponent } from './client-parcel-element-transfer.component';
 
@@ -27,7 +27,7 @@ import { ClientParcelElementTransferComponent } from './client-parcel-element-tr
     IgoLanguageModule,
     IgoFormModule,
     IgoEntitySelectorModule,
-    FadqLibMessageInlineModule
+    FadqLibCardPanelModule
   ],
   exports: [
     ClientParcelElementTransferComponent

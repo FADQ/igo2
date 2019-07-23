@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { Subscription, BehaviorSubject, of } from 'rxjs';
+import { Subscription, BehaviorSubject } from 'rxjs';
 
 import { Message, MessageType, LanguageService } from '@igo2/core';
 import { EntityRecord, EntityStore, WidgetComponent } from '@igo2/common';
@@ -30,10 +30,10 @@ export class ClientParcelElementTransferComponent implements WidgetComponent, On
   formGroup: FormGroup;
 
   /**
-   * Error or success message, if any
+   * Message, if any
    * @internal
    */
-  readonly message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
+  message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
   get toClient(): Client { return this.toClient$.value; }
   readonly toClient$: BehaviorSubject<Client> = new BehaviorSubject(undefined);
@@ -144,7 +144,7 @@ export class ClientParcelElementTransferComponent implements WidgetComponent, On
   private onValidationError() {
     this.message$.next({
       type: MessageType.ERROR,
-      text: this.languageService.translate.instant('client.parcelElement.validation.error')
+      text: this.languageService.translate.instant('client.parcelElement.transfer.validation.error')
     });
   }
 
