@@ -181,36 +181,6 @@ export class ClientSchemaElementActionsService {
         conditionArgs
       },
       {
-        id: 'save',
-        icon: 'floppy',
-        title: 'edition.save',
-        tooltip: 'edition.save.tooltip',
-        handler: (widget: Widget, ctrl: ClientController) => {
-          ctrl.schemaElementWorkspace.activateWidget(widget, {
-            schema: ctrl.schema,
-            transaction: ctrl.schemaElementTransaction,
-            store: ctrl.schemaElementStore
-          });
-        },
-        args: [this.clientSchemaElementSaveWidget, controller],
-        conditions: [noActiveWidget, transactionIsNotInCommitPhase, transactionIsNotEmpty],
-        conditionArgs
-      },
-      {
-        id: 'undo',
-        icon: 'undo',
-        title: 'edition.undo',
-        tooltip: 'edition.undo.tooltip',
-        handler: (widget: Widget, ctrl: ClientController) => {
-          ctrl.schemaElementWorkspace.activateWidget(widget, {
-            transaction: ctrl.schemaElementTransaction
-          });
-        },
-        args: [this.editionUndoWidget, controller],
-        conditions: [noActiveWidget, transactionIsNotInCommitPhase, transactionIsNotEmpty],
-        conditionArgs
-      },
-      {
         id: 'import',
         icon: 'import',
         title: 'client.schemaElement.import',
@@ -244,6 +214,36 @@ export class ClientSchemaElementActionsService {
         },
         args: [controller],
         conditions: [noActiveWidget],
+        conditionArgs
+      },
+      {
+        id: 'save',
+        icon: 'floppy',
+        title: 'edition.save',
+        tooltip: 'edition.save.tooltip',
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.schemaElementWorkspace.activateWidget(widget, {
+            schema: ctrl.schema,
+            transaction: ctrl.schemaElementTransaction,
+            store: ctrl.schemaElementStore
+          });
+        },
+        args: [this.clientSchemaElementSaveWidget, controller],
+        conditions: [noActiveWidget, transactionIsNotInCommitPhase, transactionIsNotEmpty],
+        conditionArgs
+      },
+      {
+        id: 'undo',
+        icon: 'undo',
+        title: 'edition.undo',
+        tooltip: 'edition.undo.tooltip',
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.schemaElementWorkspace.activateWidget(widget, {
+            transaction: ctrl.schemaElementTransaction
+          });
+        },
+        args: [this.editionUndoWidget, controller],
+        conditions: [noActiveWidget, transactionIsNotInCommitPhase, transactionIsNotEmpty],
         conditionArgs
       }
     ];

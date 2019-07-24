@@ -9,10 +9,9 @@ import {
   OnDestroy
 } from '@angular/core';
 
-import { BehaviorSubject, Subscription, combineLatest, of } from 'rxjs';
-import { catchError, debounceTime } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
-import { LanguageService } from '@igo2/core';
+import { LanguageService, Message, MessageType } from '@igo2/core';
 import {
   EntityStore,
   EntityTableTemplate,
@@ -20,6 +19,7 @@ import {
   OnUpdateInputs
 } from '@igo2/common';
 
+import { SubmitStep, SubmitHandler } from '../../../utils';
 import { Client } from '../../shared/client.interfaces';
 import { ClientParcelElementService } from '../shared/client-parcel-element.service';
 
@@ -33,16 +33,14 @@ export class ClientParcelElementReconciliateComponent
     implements WidgetComponent, OnUpdateInputs, OnInit, OnDestroy {
 
   /**
-   * Submitted flag
+   * Message, if any
    * @internal
    */
-  readonly submitted$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  readonly message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
-  /**
-   * Whether there was a submit error
-   * @internal
-   */
-  readonly submitError$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  readonly submitStep = SubmitStep;
+
+  readonly submitHandler = new SubmitHandler();
 
   /**
    * Title
@@ -89,8 +87,6 @@ export class ClientParcelElementReconciliateComponent
     ]
   };
 
-  private submit$$: Subscription;
-
   /**
    * Client
    */
@@ -120,14 +116,10 @@ export class ClientParcelElementReconciliateComponent
   ngOnInit() {
     this.clientParcelElementService.getClientsInReconcilitation(this.client)
       .subscribe((clients: Client[]) => this.clientStore.load(clients));
-
-    this.submit$$ = combineLatest(this.submitted$, this.submitError$).pipe(
-      debounceTime(10)
-    ).subscribe((bunch: [boolean, boolean]) => this.updateHeader(...bunch));
   }
 
   ngOnDestroy() {
-    this.submit$$.unsubscribe();
+    this.submitHandler.destroy();
   }
 
   /**
@@ -138,18 +130,15 @@ export class ClientParcelElementReconciliateComponent
   }
 
   onSubmit() {
-    this.clientParcelElementService.reconciliate(this.client, this.annee).pipe(
-      catchError(() => of(new Error()))
-    ).subscribe((response: Error | unknown) => {
-      if (response instanceof Error) {
-        this.onReconciliationError();
-      } else {
-        this.onReconciliationSuccess();
-      }
-    });
+    const submit$ = this.clientParcelElementService.reconciliate(this.client, this.annee);
+    this.submitHandler.handle(submit$, {
+      error: () => this.onSubmitError(),
+      success: () => this.onSubmitSuccess()
+    }).submit();
   }
 
   onCancel() {
+    this.submitHandler.destroy();
     this.cancel.emit();
   }
 
@@ -157,36 +146,17 @@ export class ClientParcelElementReconciliateComponent
     this.complete.emit();
   }
 
-  private onReconciliationError() {
-    this.submitted$.next(true);
-    this.submitError$.next(true);
+  private onSubmitError() {
+    const messageKey = 'client.parcelElement.reconciliate.error';
+    const messageType = MessageType.ERROR;
+    const text = this.languageService.translate.instant(messageKey);
+    this.message$.next({type: messageType, text});
   }
 
-  private onReconciliationSuccess() {
-    this.submitted$.next(true);
-    this.submitError$.next(false);
-  }
-
-  private updateHeader(submitted: boolean, submitError: boolean) {
-    let icon, iconColor, title;
-    if (submitted === false) {
-      icon = 'help-circle';
-      iconColor = 'accent';
-      title = 'client.parcelElement.reconciliate.confirm';
-    } else {
-      if (submitError === true) {
-        icon = 'thumb-down';
-        iconColor = 'warn';
-        title = 'client.parcelElement.reconciliate.error';
-      } else {
-        icon = 'thumb-up';
-        iconColor = 'accent';
-        title = 'client.parcelElement.reconciliate.success';
-      }
-    }
-
-    this.icon$.next(icon);
-    this.iconColor$.next(iconColor);
-    this.title$.next(this.languageService.translate.instant(title));
+  private onSubmitSuccess() {
+    const messageKey = 'client.parcelElement.reconciliate.success';
+    const messageType = MessageType.SUCCESS;
+    const text = this.languageService.translate.instant(messageKey);
+    this.message$.next({type: messageType, text});
   }
 }

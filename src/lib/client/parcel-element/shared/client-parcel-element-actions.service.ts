@@ -106,21 +106,6 @@ export class ClientParcelElementActionsService {
         conditionArgs
       },
       {
-        id: 'deleteTx',
-        icon: 'close-outline',
-        title: 'client.parcelElement.deleteTx',
-        tooltip: 'client.parcelElement.deleteTx.tooltip',
-        handler: (widget: Widget, ctrl: ClientController) => {
-          ctrl.parcelElementWorkspace.activateWidget(widget, {
-            client: ctrl.client,
-            annee: ctrl.parcelYear
-          });
-        },
-        args: [this.clientParcelElementDeleteTxWidget, controller],
-        conditions: [noActiveWidget, noParcelElementError],
-        conditionArgs
-      },
-      {
         id: 'create',
         icon: 'plus',
         title: 'edition.create',
@@ -220,37 +205,6 @@ export class ClientParcelElementActionsService {
         conditionArgs
       },
       {
-        id: 'save',
-        icon: 'floppy',
-        title: 'edition.save',
-        tooltip: 'edition.save.tooltip',
-        handler: (widget: Widget, ctrl: ClientController) => {
-          ctrl.parcelElementWorkspace.activateWidget(widget, {
-            client: ctrl.client,
-            annee: ctrl.parcelYear,
-            transaction: ctrl.parcelElementTransaction,
-            store: ctrl.parcelElementStore
-          });
-        },
-        args: [this.clientParcelElementSaveWidget, controller],
-        conditions: [noActiveWidget, transactionIsNotInCommitPhase, transactionIsNotEmpty],
-        conditionArgs
-      },
-      {
-        id: 'undo',
-        icon: 'undo',
-        title: 'edition.undo',
-        tooltip: 'edition.undo.tooltip',
-        handler: (widget: Widget, ctrl: ClientController) => {
-          ctrl.parcelElementWorkspace.activateWidget(widget, {
-            transaction: ctrl.parcelElementTransaction
-          });
-        },
-        args: [this.editionUndoWidget, controller],
-        conditions: [noActiveWidget, transactionIsNotInCommitPhase, transactionIsNotEmpty],
-        conditionArgs
-      },
-      {
         id: 'import',
         icon: 'import',
         title: 'client.parcelElement.import',
@@ -307,6 +261,37 @@ export class ClientParcelElementActionsService {
         conditionArgs
       },
       {
+        id: 'save',
+        icon: 'floppy',
+        title: 'edition.save',
+        tooltip: 'edition.save.tooltip',
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.parcelElementWorkspace.activateWidget(widget, {
+            client: ctrl.client,
+            annee: ctrl.parcelYear,
+            transaction: ctrl.parcelElementTransaction,
+            store: ctrl.parcelElementStore
+          });
+        },
+        args: [this.clientParcelElementSaveWidget, controller],
+        conditions: [noActiveWidget, transactionIsNotInCommitPhase, transactionIsNotEmpty],
+        conditionArgs
+      },
+      {
+        id: 'undo',
+        icon: 'undo',
+        title: 'edition.undo',
+        tooltip: 'edition.undo.tooltip',
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.parcelElementWorkspace.activateWidget(widget, {
+            transaction: ctrl.parcelElementTransaction
+          });
+        },
+        args: [this.editionUndoWidget, controller],
+        conditions: [noActiveWidget, transactionIsNotInCommitPhase, transactionIsNotEmpty],
+        conditionArgs
+      },
+      {
         id: 'reconciliate',
         icon: 'table-merge-cells',
         title: 'client.parcelElement.reconciliate',
@@ -319,6 +304,20 @@ export class ClientParcelElementActionsService {
         },
         args: [this.clientParcelElementReconciliateWidget, controller],
         conditions: [noActiveWidget, noParcelElementError],
+        conditionArgs
+      },
+      {
+        id: 'deleteTx',
+        icon: 'close-outline',
+        title: 'client.parcelElement.deleteTx',
+        tooltip: 'client.parcelElement.deleteTx.tooltip',
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.parcelElementWorkspace.activateWidget(widget, {
+            controller: ctrl
+          });
+        },
+        args: [this.clientParcelElementDeleteTxWidget, controller],
+        conditions: [noActiveWidget],
         conditionArgs
       }
     ];

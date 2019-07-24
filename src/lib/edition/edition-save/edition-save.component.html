@@ -5,7 +5,7 @@
   [message]="message$ | async">
 
   <igo-entity-table
-    *ngIf="!(submitted$ | async)"
+    *ngIf="((submitHandler.step$ | async) !== submitStep.Complete)"
     class="table-compact"
     [store]="transaction.operations"
     [template]="tableTemplate"
@@ -13,17 +13,18 @@
   </igo-entity-table>
 
   <ng-container buttons>
-    <ng-container *ngIf="!(submitted$ | async); else close">
+      <ng-container *ngIf="((submitHandler.step$ | async) !== submitStep.Complete); else close">
       <button
         mat-button
         type="button"
+        [disabled]="(submitHandler.step$ | async) === submitStep.Pending"
         (click)="onCancel()">
         {{ 'cancel' | translate }}
       </button>
       <button
         mat-raised-button
         color="primary"
-        [disabled]="disabled"
+        [disabled]="(submitHandler.step$ | async) === submitStep.Pending"
         (click)="onSubmit()">
         {{ 'save' | translate }}
       </button>

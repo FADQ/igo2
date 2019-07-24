@@ -59,6 +59,11 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
   placeholder$: BehaviorSubject<string> = new BehaviorSubject(undefined);
 
   /**
+   * Optional title
+   */
+  @Input() title: string;
+
+  /**
    * Map to draw features on
    */
   @Input() map: IgoMap;

@@ -135,7 +135,7 @@ export class EditionUpsertComponent implements  OnUpdateInputs, WidgetComponent 
 
   /**
    * Add the new or updated to the transaction and emit the complete event
-   * @param featurs Features
+   * @param feature Features
    */
   private onSubmitSuccess(feature: Feature) {
     if (this.transaction !== undefined && this.store !== undefined) {
