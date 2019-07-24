@@ -17,6 +17,11 @@ import { EntityTransaction, WidgetComponent } from '@igo2/common';
 export class EditionUndoComponent implements WidgetComponent {
 
   /**
+   * Optional title
+   */
+  @Input() title: string;
+
+  /**
    * Transaction
    */
   @Input() transaction: EntityTransaction;

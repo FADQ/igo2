@@ -30,6 +30,7 @@
     <button
       mat-button
       type="button"
+      [disabled]="(submitHandler.step$ | async) === submitStep.Pending"
       (click)="onCancel()">
       {{ 'cancel' | translate }}
     </button>
@@ -37,7 +38,7 @@
       mat-raised-button
       type="button"
       color="primary"
-      [disabled]="(toClient$ | async) === undefined"
+      [disabled]="(submitHandler.step$ | async) === submitStep.Pending || (toClient$ | async) === undefined"
       (click)="onTransfer()">
       {{'client.parcelElement.transfer.apply' | translate}}
     </button>

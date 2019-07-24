@@ -98,7 +98,7 @@ export class ClientParcelElementService {
     );
   }
 
-  reconciliate(client: Client, annee: number): Observable<any> {
+  reconciliate(client: Client, annee: number): Observable<unknown> {
     const url = this.apiService.buildUrl(this.apiConfig.reconciliate, {
       clientNum: client.info.numero,
       annee

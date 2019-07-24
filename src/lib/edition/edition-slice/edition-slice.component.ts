@@ -80,7 +80,12 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, 
     [GeometrySliceTooManyIntersectionError, 'geometry.slice.error.tooManyIntersection']
   ]);
 
-   /**
+  /**
+   * Optional title
+   */
+  @Input() title: string;
+
+  /**
    * Map to draw features on
    */
   @Input() map: IgoMap;

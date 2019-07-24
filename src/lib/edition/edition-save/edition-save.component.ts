@@ -3,7 +3,8 @@ import {
   Input,
   Output,
   EventEmitter,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  OnDestroy
 } from '@angular/core';
 
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -21,13 +22,15 @@ import {
 } from '@igo2/common';
 import { FeatureStore } from '@igo2/geo';
 
+import { SubmitStep, SubmitHandler } from '../../utils';
+
 @Component({
   selector: 'fadq-edition-save',
   templateUrl: './edition-save.component.html',
   styleUrls: ['./edition-save.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditionSaveComponent implements WidgetComponent {
+export class EditionSaveComponent implements WidgetComponent, OnDestroy {
 
   static operationIcons = {
     [EntityOperationType.Insert]: 'plus',
@@ -41,11 +44,9 @@ export class EditionSaveComponent implements WidgetComponent {
    */
   readonly message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
-  /**
-   * Observable of the submit status
-   * @internal
-   */
-  readonly submitted$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  readonly submitStep = SubmitStep;
+
+  readonly submitHandler = new SubmitHandler();
 
   /**
    * Transaction operations table template
@@ -74,6 +75,11 @@ export class EditionSaveComponent implements WidgetComponent {
   };
 
   /**
+   * Optional title
+   */
+  @Input() title: string;
+
+  /**
    * Feature store
    */
   @Input() store: FeatureStore;
@@ -100,19 +106,26 @@ export class EditionSaveComponent implements WidgetComponent {
 
   constructor() {}
 
+  ngOnDestroy() {
+    this.submitHandler.destroy();
+  }
+
   /**
    * Commit transaction
    * @internal
    */
   onSubmit() {
-    this.commitHandler(this.transaction)
-      .subscribe((message?: Message) => this.onCommit(message));
+    const submit$ = this.commitHandler(this.transaction);
+    this.submitHandler.handle(submit$, {
+      success: (message?: Message) => this.onCommit(message)
+    }).submit();
   }
 
   /**
    * Event emitted on cancel
    */
   onCancel() {
+    this.submitHandler.destroy();
     this.cancel.emit();
   }
 
@@ -139,7 +152,6 @@ export class EditionSaveComponent implements WidgetComponent {
     if (message === undefined) {
       this.complete.emit();
     }
-    this.submitted$.next(true);
   }
 
 }

@@ -9,11 +9,14 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { Subscription, BehaviorSubject } from 'rxjs';
+import { Subscription, BehaviorSubject, throwError } from 'rxjs';
+import { concatMap } from 'rxjs/operators';
 
 import { Message, MessageType, LanguageService } from '@igo2/core';
 import { EntityRecord, EntityStore, WidgetComponent } from '@igo2/common';
 import { FeatureStore } from '@igo2/geo';
+
+import { SubmitStep, SubmitHandler } from '../../../utils';
 
 import { Client } from '../../shared/client.interfaces';
 import { ClientParcelElement } from '../../parcel-element/shared/client-parcel-element.interfaces';
@@ -33,7 +36,11 @@ export class ClientParcelElementTransferComponent implements WidgetComponent, On
    * Message, if any
    * @internal
    */
-  message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
+  readonly message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
+
+  readonly submitStep = SubmitStep;
+
+  readonly submitHandler = new SubmitHandler();
 
   get toClient(): Client { return this.toClient$.value; }
   readonly toClient$: BehaviorSubject<Client> = new BehaviorSubject(undefined);
@@ -97,35 +104,46 @@ export class ClientParcelElementTransferComponent implements WidgetComponent, On
   }
 
   ngOnDestroy() {
+    this.submitHandler.destroy();
     this.transferAllParcels$$.unsubscribe();
   }
 
   onTransfer() {
-    this.clientParcelElementService.validateTransfer(
-      this.toClient,
-      this.annee
-    ).subscribe((valid: boolean) => {
-      if (valid === true) {
-        this.doTransfer();
-      }
-      this.onValidationError();
-    });
-  }
-
-  private doTransfer() {
     const parcelElements = this.getParcelElementsToTransfer();
     const parcelElementIds = parcelElements
       .map((parcelElement: ClientParcelElement) => parcelElement.properties.idParcelle);
-    this.clientParcelElementService.transfer(
+
+    const validate$ = this.clientParcelElementService.validateTransfer(
+      this.toClient,
+      this.annee
+    );
+
+    const transfer$ = this.clientParcelElementService.transfer(
       this.client,
       this.toClient,
       this.annee,
       parcelElementIds,
       this.keepParcelNumbers
-    ).subscribe(() => this.onTransferSuccess(parcelElements));
+    );
+
+    const submit$ = validate$.pipe(
+      concatMap((valid: boolean) => {
+        if (valid === true) {
+          return transfer$;
+        }
+        return throwError({valid});
+      })
+    );
+
+    this.submitHandler.handle(submit$, {
+      success: (_parcelElements: ClientParcelElement[]) => this.onSubmitSuccess(_parcelElements),
+      error: () => this.onValidationError()
+    }).submit();
   }
 
   onCancel() {
+    this.submitHandler.destroy();
+
     this.cancel.emit();
   }
 
@@ -148,7 +166,7 @@ export class ClientParcelElementTransferComponent implements WidgetComponent, On
     });
   }
 
-  private onTransferSuccess(parcelElements: ClientParcelElement[]) {
+  private onSubmitSuccess(parcelElements: ClientParcelElement[]) {
     this.parcelElementStore.deleteMany(parcelElements);
     this.complete.emit();
   }

@@ -7,12 +7,14 @@
     <button
       mat-button
       type="button"
+      [disabled]="(submitHandler.step$ | async) === submitStep.Pending"
       (click)="onCancel()">
       {{ 'no' | translate }}
     </button>
     <button
       mat-raised-button
       color="primary"
+      [disabled]="(submitHandler.step$ | async) === submitStep.Pending"
       (click)="onSubmit()">
       {{ 'yes' | translate }}
     </button>  

@@ -5,7 +5,8 @@ import {
   EventEmitter,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  OnInit
+  OnInit,
+  OnDestroy
 } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
@@ -13,6 +14,7 @@ import { BehaviorSubject } from 'rxjs';
 import { LanguageService, Message, MessageType } from '@igo2/core';
 import { WidgetComponent, OnUpdateInputs } from '@igo2/common';
 
+import { SubmitStep, SubmitHandler } from '../../../utils';
 import { ClientController } from '../../shared/controller';
 import { ClientParcelElementTxState} from '../shared/client-parcel-element.enums';
 
@@ -22,13 +24,18 @@ import { ClientParcelElementTxState} from '../shared/client-parcel-element.enums
   styleUrls: ['./client-parcel-element-start-tx.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientParcelElementStartTxComponent implements WidgetComponent, OnUpdateInputs, OnInit {
+export class ClientParcelElementStartTxComponent
+    implements WidgetComponent, OnUpdateInputs, OnInit, OnDestroy {
 
   /**
    * Message, if any
    * @internal
    */
-  message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
+  readonly message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
+
+  readonly submitStep = SubmitStep;
+
+  readonly submitHandler = new SubmitHandler();
 
   /**
    * Client controller
@@ -65,6 +72,10 @@ export class ClientParcelElementStartTxComponent implements WidgetComponent, OnU
     }
   }
 
+  ngOnDestroy() {
+    this.submitHandler.destroy();
+  }
+
   /**
    * Implemented as part of OnUpdateInputs
    */
@@ -76,13 +87,15 @@ export class ClientParcelElementStartTxComponent implements WidgetComponent, OnU
     if (this.state === ClientParcelElementTxState.OK) {
       this.onSubmitSuccess();
     } else {
-      this.controller.prepareParcelTx().subscribe(() => {
-        this.onSubmitSuccess();
-      });
+      const submit$ = this.controller.prepareParcelTx();
+      this.submitHandler.handle(submit$, {
+        success: () => this.onSubmitSuccess()
+      }).submit();
     }
   }
 
   onCancel() {
+    this.submitHandler.destroy();
     this.cancel.emit();
   }
 

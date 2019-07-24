@@ -4,12 +4,15 @@ import {
   Output,
   EventEmitter,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  OnDestroy
 } from '@angular/core';
 
 import { WidgetComponent, OnUpdateInputs } from '@igo2/common';
 
-import { Client } from '../../shared/client.interfaces';
+import { SubmitStep, SubmitHandler } from '../../../utils';
+
+import { ClientController } from '../../shared/controller';
 import { ClientParcelElementService } from '../shared/client-parcel-element.service';
 
 @Component({
@@ -18,17 +21,17 @@ import { ClientParcelElementService } from '../shared/client-parcel-element.serv
   styleUrls: ['./client-parcel-element-delete-tx.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientParcelElementDeleteTxComponent implements OnUpdateInputs, WidgetComponent {
+export class ClientParcelElementDeleteTxComponent
+    implements OnUpdateInputs, WidgetComponent, OnDestroy {
+
+  readonly submitStep = SubmitStep;
+
+  readonly submitHandler = new SubmitHandler();
 
   /**
-   * Client
+   * Client controller
    */
-  @Input() client: Client;
-
-  /**
-   * Parcel annee
-   */
-  @Input() annee: number;
+  @Input() controller: ClientController;
 
   /**
    * Event emitted on complete
@@ -45,6 +48,10 @@ export class ClientParcelElementDeleteTxComponent implements OnUpdateInputs, Wid
     private cdRef: ChangeDetectorRef
   ) {}
 
+  ngOnDestroy() {
+    this.submitHandler.destroy();
+  }
+
   /**
    * Implemented as part of OnUpdateInputs
    */
@@ -53,15 +60,22 @@ export class ClientParcelElementDeleteTxComponent implements OnUpdateInputs, Wid
   }
 
   onSubmit() {
-    this.clientParcelElementService.deleteParcelTx(this.client, this.annee)
-      .subscribe(() => this.onSubmitSuccess());
+    const submit$ = this.clientParcelElementService.deleteParcelTx(
+      this.controller.client,
+      this.controller.parcelYear
+    );
+    this.submitHandler.handle(submit$, {
+      success: () => this.onSubmitSuccess()
+    }).submit();
   }
 
   onCancel() {
+    this.submitHandler.destroy();
     this.cancel.emit();
   }
 
   private onSubmitSuccess() {
+    this.controller.deactivateParcelTx();
     this.complete.emit();
   }
 
