@@ -56,9 +56,9 @@ export class ClientState implements OnDestroy {
   get workspaceStore(): WorkspaceStore { return this._workspaceStore; }
   _workspaceStore: WorkspaceStore;
 
-  get activeWorkspace$(): BehaviorSubject<Workspace> {
-    return this.workspaceStore.activeWorkspace$;
-  }
+  get activeWorkspace$(): BehaviorSubject<Workspace> { return this.workspaceStore.activeWorkspace$; }
+
+  get activeWorkspace(): Workspace { return this.activeWorkspace$.value; }
 
   constructor(
     private clientService: ClientService,
@@ -66,8 +66,8 @@ export class ClientState implements OnDestroy {
     private clientControllerService: ClientControllerService
   ) {
     this.initParcelYears();
-    this.initControllers();
     this.initWorkspaces();
+    this.initControllers();
   }
 
   /**
@@ -77,8 +77,8 @@ export class ClientState implements OnDestroy {
   private _store: WorkspaceStore;
 
   ngOnDestroy() {
-    this.teardownWorkspaces();
     this.teardownControllers();
+    this.teardownWorkspaces();
     this.teardownParcelYears();
   }
 
@@ -164,7 +164,7 @@ export class ClientState implements OnDestroy {
 
   private setControllerActiveWorkspace(controller: ClientController) {
     const clientNum = controller.client.info.numero;
-    const currentWorkspace = this.workspaceStore.activeWorkspace$.value;
+    const currentWorkspace = this.activeWorkspace;
     if (currentWorkspace !== undefined && currentWorkspace.meta.client.info.numero !== clientNum) {
       const workspaces = [controller.parcelWorkspace, controller.schemaWorkspace, controller.schemaElementWorkspace];
       const workspace = workspaces.find((_workspace: Workspace) => {
@@ -184,7 +184,12 @@ export class ClientState implements OnDestroy {
     });
 
     this.controllers$$ = this.controllerStore.count$
-      .subscribe((count: number) => this.updateControllersColor());
+      .subscribe((count: number) => {
+        this.updateControllersColor();
+        if (this.activeWorkspace !== undefined) {
+          this.activeWorkspace.updateActionsAvailability();
+        }
+      });
   }
 
   private teardownControllers() {

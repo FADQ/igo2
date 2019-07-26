@@ -136,7 +136,7 @@ export class ClientParcelElementTransferComponent implements WidgetComponent, On
     );
 
     this.submitHandler.handle(submit$, {
-      success: (_parcelElements: ClientParcelElement[]) => this.onSubmitSuccess(_parcelElements),
+      success: () => this.onSubmitSuccess(parcelElements),
       error: () => this.onValidationError()
     }).submit();
   }

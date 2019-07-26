@@ -55,7 +55,7 @@ export function createParcelLayer(client: Client): VectorLayer {
 
 export function createPerClientParcelLayerStyle(
   color: [number, number, number]
-): (olFeature: OlFeature) => olstyle.Style {
+): (olFeature: OlFeature, resolution: number) => olstyle.Style {
 
   const style = new olstyle.Style({
     stroke: new olstyle.Stroke({
@@ -68,8 +68,8 @@ export function createPerClientParcelLayerStyle(
     text: createParcelLayerTextStyle()
   });
 
-  return (function(feature: OlFeature) {
-    style.getText().setText(feature.get('_mapTitle'));
+  return (function(olFeature: OlFeature, resolution: number) {
+    style.getText().setText(getParcelFeatureText(olFeature, resolution));
     return style;
   });
 }

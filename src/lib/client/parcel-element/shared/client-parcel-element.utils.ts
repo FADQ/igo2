@@ -74,18 +74,14 @@ function getParcelElementFeatureText(olFeature: OlFeature, resolution: number): 
   return olFeature.get('noParcelleAgricole');
 }
 
-export function getParcelElementErrors(parcelElement: ClientParcelElement): string[] {
+export function getParcelElementErrors(parcelElement: ClientParcelElement): ClientParcelElementMessage[] {
   const messages = parcelElement.properties.messages;
-  return messages
-    .filter((message: ClientParcelElementMessage) => message.severite === 'S')
-    .map((message: ClientParcelElementMessage) => message.id);
+  return messages.filter((message: ClientParcelElementMessage) => message.severite === 'S');
 }
 
-export function getParcelElementWarnings(parcelElement: ClientParcelElement): string[] {
+export function getParcelElementWarnings(parcelElement: ClientParcelElement): ClientParcelElementMessage[] {
   const messages = parcelElement.properties.messages;
-  return messages
-    .filter((message: ClientParcelElementMessage) => message.severite === 'A')
-    .map((message: ClientParcelElementMessage) => message.id);
+  return messages.filter((message: ClientParcelElementMessage) => message.severite === 'A');
 }
 
 export function getParcelElementValidationMessage(

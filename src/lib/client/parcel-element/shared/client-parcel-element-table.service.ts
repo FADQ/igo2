@@ -4,7 +4,7 @@ import { EntityTableTemplate, EntityTableColumnRenderer } from '@igo2/common';
 import { formatMeasure, squareMetersToHectares } from '@igo2/geo';
 
 import { formatDate } from 'src/lib/utils/date';
-import { ClientParcelElement } from './client-parcel-element.interfaces';
+import { ClientParcelElement, ClientParcelElementMessage } from './client-parcel-element.interfaces';
 import { getParcelElementErrors, getParcelElementWarnings } from './client-parcel-element.utils';
 
 @Injectable({
@@ -89,11 +89,11 @@ export class ClientParcelElementTableService {
           valueAccessor: (parcelElement: ClientParcelElement) => {
             const errors = getParcelElementErrors(parcelElement);
             const warnings =  getParcelElementWarnings(parcelElement);
-            const errorsHtml = errors.map((error: string) => {
-              return `<span class="error-text">${error}</span>`;
+            const errorsHtml = errors.map((error: ClientParcelElementMessage) => {
+              return `<span class="error-text" title="${error.libelle}">${error.id}</span>`;
             });
-            const warningsHtml = warnings.map((warning: string) => {
-              return `<span class="warning-text">${warning}</span>`;
+            const warningsHtml = warnings.map((warning: ClientParcelElementMessage) => {
+              return `<span class="warning-text" title="${warning.libelle}">${warning.id}</span>`;
             });
             return [...errorsHtml, ...warningsHtml].join(', ');
           }

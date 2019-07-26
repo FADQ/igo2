@@ -18,6 +18,14 @@ export class ClientParcelActionsService {
   ) {}
 
   buildActions(controller: ClientController): Action[] {
+
+    function onlyOneParcelTx(controller: ClientController): boolean {
+      return controller.controllerStore.view.all()
+        .find((_controller: ClientController) => _controller.parcelElementTxActive) === undefined; 
+    }
+
+    const conditionArgs = [controller];
+  
     return [
       {
         id: 'startTx',
@@ -27,10 +35,6 @@ export class ClientParcelActionsService {
         handler: function(widget: Widget, ctrl: ClientController) {
           ctrl.getParcelTxState()
             .subscribe((state: ClientParcelElementTxState) => {
-              ctrl.parcelWorkspace.activateWidget(widget, {
-                controller: ctrl,
-                state: state
-              });
               if (state === ClientParcelElementTxState.OK) {
                 ctrl.activateParcelTx();
               } else {
@@ -41,7 +45,9 @@ export class ClientParcelActionsService {
               }
             });
         },
-        args: [this.clientParcelElementStartTxWidget, controller]
+        args: [this.clientParcelElementStartTxWidget, controller],
+        conditions: [onlyOneParcelTx],
+        conditionArgs
       },
       {
         id: 'export',
