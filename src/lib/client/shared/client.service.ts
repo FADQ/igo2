@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { ClientInfo, ClientInfoService } from '../info';
 
-import { Client, ClientRef } from './client.interfaces';
+import { Client } from './client.interfaces';
 
 @Injectable()
 export class ClientService {
@@ -24,17 +24,6 @@ export class ClientService {
          return  this.resultsToClient(results);
         })
       );
-  }
-
-  getClients(): Observable<ClientRef[]> {
-    return zip(
-      this.infoService.getClientInfoByNum('1560'),
-      this.infoService.getClientInfoByNum('7229')
-    ).pipe(
-      map((results: [ClientInfo, ClientInfo]) => {
-        return results.map((result: ClientInfo) => this.resultsToClient([result]));
-      })
-    );
   }
 
   private resultsToClient(

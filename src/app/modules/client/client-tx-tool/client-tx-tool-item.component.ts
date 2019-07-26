@@ -7,16 +7,16 @@ import {
   HostBinding
 } from '@angular/core';
 
-import { ClientRef } from 'src/lib/client';
+import { ClientInTx } from 'src/lib/client';
 
 @Component({
-  selector: 'fadq-client-list-tool-item',
-  templateUrl: './client-list-tool-item.component.html',
+  selector: 'fadq-client-tx-tool-item',
+  templateUrl: './client-tx-tool-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientListToolItemComponent {
+export class ClientTxToolItemComponent {
 
-  @Input() client: ClientRef;
+  @Input() client: ClientInTx;
 
   /**
    * Whether a row is added
@@ -34,13 +34,13 @@ export class ClientListToolItemComponent {
    */
   @Output() addedChange = new EventEmitter<{
     added: boolean;
-    client: ClientRef;
+    client: ClientInTx;
   }>();
 
   /**
    * @ignore
    */
-  @HostBinding('class.fadq-client-list-tool-item-added')
+  @HostBinding('class.fadq-client-tx-tool-item-added')
   get withAddedClass() { return this.added; }
 
   constructor() {}
@@ -54,12 +54,10 @@ export class ClientListToolItemComponent {
   }
 
   private doRemove() {
-    this.added = false;
     this.addedChange.emit({added: false, client: this.client});
   }
 
   private doAdd() {
-    this.added = true;
     this.addedChange.emit({added: true, client: this.client});
   }
 }

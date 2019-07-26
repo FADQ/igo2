@@ -62,7 +62,7 @@
     "help": "Aide",
     "addressEditor": "Outil d'édition d'adresse",
     "client": "Client",
-    "clientList": "Clients en cours d'édition",
+    "clientTx": "Clients en cours d'édition",
     "measurer": "Mesurage",
     "navigation": "Zoom sur une région",
     "cadastre": "Cadastre originaire"
