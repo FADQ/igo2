@@ -143,6 +143,10 @@ export class ClientController {
     return this.options.parcelElementTransactionService;
   }
 
+  /** Whether parcel element tx is active */
+  get parcelElementTxActive(): boolean { return this._parcelElementTxActive; }
+  private _parcelElementTxActive: boolean;
+
   /** Schema workspace */
   get schemaWorkspace(): ClientSchemaWorkspace {
     return this.options.schemaWorkspace;
@@ -228,6 +232,7 @@ export class ClientController {
   }
 
   activateParcelTx() {
+    this._parcelElementTxActive = true;
     this.initParcelElements();
     this.teardownParcels();
     this.workspaceStore.activateWorkspace(this.parcelElementWorkspace);
@@ -244,6 +249,7 @@ export class ClientController {
       return;
     }
 
+    this._parcelElementTxActive = false;
     this.teardownParcelElements();
     this.initParcels();
     this.workspaceStore.activateWorkspace(this.parcelWorkspace);
@@ -361,6 +367,8 @@ export class ClientController {
   }
 
   private teardownParcelElements() {
+    this._parcelElementTxActive = false;
+
     if (this.parcelElements$$ !== undefined) {
       this.parcelElements$$.unsubscribe();
     }

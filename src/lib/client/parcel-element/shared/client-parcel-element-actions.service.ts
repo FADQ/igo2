@@ -7,7 +7,7 @@ import { EditionUndoWidget } from '../../../edition/shared/edition.widgets';
 
 import { Client } from '../../shared/client.interfaces';
 import { ClientController } from '../../shared/controller';
-import { ClientParcelElement } from './client-parcel-element.interfaces';
+import { ClientParcelElement, ClientParcelElementMessage } from './client-parcel-element.interfaces';
 import {
   ClientParcelElementDeleteTxWidget,
   ClientParcelElementCreateWidget,
@@ -61,6 +61,10 @@ export class ClientParcelElementActionsService {
       return ctrl.selectedParcelElements.length > 0;
     }
 
+    function transactionIsEmpty(ctrl: ClientController): boolean {
+      return ctrl.parcelElementTransaction.empty === true;
+    }
+
     function transactionIsNotEmpty(ctrl: ClientController): boolean {
       return ctrl.parcelElementTransaction.empty === false;
     }
@@ -83,11 +87,15 @@ export class ClientParcelElementActionsService {
 
     function noParcelElementError(ctrl: ClientController): boolean {
       const parcelElements = ctrl.parcelElementStore.all();
-      const errors = parcelElements.reduce((acc: string[], parcelElement: ClientParcelElement) => {
+      const errors = parcelElements.reduce((acc: ClientParcelElementMessage[], parcelElement: ClientParcelElement) => {
         acc.push(...getParcelElementErrors(parcelElement));
         return acc;
       }, []);
       return errors.length === 0;
+    }
+
+    function moreThanOneClient(ctrl: ClientController): boolean {
+     return ctrl.controllerStore.count > 1;
     }
 
     const conditionArgs = [controller];
@@ -242,7 +250,7 @@ export class ClientParcelElementActionsService {
           });
         },
         args: [this.clientParcelElementTransferWidget, controller],
-        conditions: [noActiveWidget, transactionIsNotInCommitPhase],
+        conditions: [noActiveWidget, transactionIsEmpty, moreThanOneClient],
         conditionArgs
       },
       {
@@ -303,7 +311,7 @@ export class ClientParcelElementActionsService {
           });
         },
         args: [this.clientParcelElementReconciliateWidget, controller],
-        conditions: [noActiveWidget, noParcelElementError],
+        conditions: [noActiveWidget, transactionIsEmpty, noParcelElementError],
         conditionArgs
       },
       {
