@@ -251,6 +251,9 @@ export class ClientController {
 
     this._parcelElementTxActive = false;
     this.teardownParcelElements();
+  }
+
+  activateParcels() {
     this.initParcels();
     this.workspaceStore.activateWorkspace(this.parcelWorkspace);
   }
@@ -344,6 +347,9 @@ export class ClientController {
     }
 
     this.parcelWorkspace.teardown();
+    if (this.workspaceStore.activeWorkspace$.value === this.parcelWorkspace) {
+      this.workspaceStore.deactivateWorkspace();
+    }
     this.workspaceStore.delete(this.parcelWorkspace);
   }
 
@@ -375,7 +381,9 @@ export class ClientController {
 
     this.parcelElementWorkspace.teardown();
     this.schemaElementTransaction.clear();
-
+    if (this.workspaceStore.activeWorkspace$.value === this.parcelElementWorkspace) {
+      this.workspaceStore.deactivateWorkspace();
+    }
     this.workspaceStore.delete(this.parcelElementWorkspace);
   }
 
@@ -402,6 +410,9 @@ export class ClientController {
   private teardownSchemas() {
     this.schema$$.unsubscribe();
     this.schemaWorkspace.teardown();
+    if (this.workspaceStore.activeWorkspace$.value === this.schemaWorkspace) {
+      this.workspaceStore.deactivateWorkspace();
+    }
     this.workspaceStore.delete(this.schemaWorkspace);
     this.clearSchema();
   }
@@ -442,6 +453,9 @@ export class ClientController {
 
     this.schemaElementWorkspace.teardown();
     this.schemaElementTransaction.clear();
+    if (this.workspaceStore.activeWorkspace$.value === this.schemaElementWorkspace) {
+      this.workspaceStore.deactivateWorkspace();
+    }
     this.workspaceStore.delete(this.schemaElementWorkspace);
   }
 

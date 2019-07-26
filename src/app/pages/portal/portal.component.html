@@ -60,7 +60,7 @@
   <ng-container expansionPanelHeader>
     <igo-workspace-selector [store]="workspaceStore"></igo-workspace-selector>
     <igo-actionbar
-      *ngIf="workspace"
+      *ngIf="(workspace$ | async) as workspace"
       [store]="workspace.actionStore"
       [horizontal]="true"
       [xPosition]="'after'"
@@ -71,13 +71,15 @@
       [mode]="actionbarMode">
     </igo-actionbar>
 
-    <div *ngIf="workspace && expansionPanelExpanded" class="fadq-workspace-count">
-      {{workspace.entityStore.view.count$ | async}} / {{workspace.entityStore.count$ | async}}
-    </div>
+    <ng-container *ngIf="expansionPanelExpanded">
+      <div *ngIf="(workspace$ | async) as workspace" class="fadq-workspace-count">
+        {{workspace.entityStore.view.count$ | async}} / {{workspace.entityStore.count$ | async}}
+      </div>
+    </ng-container>
   </ng-container>
 
   <igo-entity-table
-    *ngIf="workspace"
+    *ngIf="(workspace$ | async) as workspace"
     class="table-compact table-centered"
     [store]="workspace.entityStore"
     [template]="workspace.meta.tableTemplate">
@@ -91,7 +93,7 @@
   (clear)="clearSearchResult()">
 
   <igo-workspace-widget-outlet
-    *ngIf="workspace"
+    *ngIf="(workspace$ | async) as workspace"
     [workspace]="workspace"
     (deactivateWidget)="onDeactivateWorkspaceWidget()">
   </igo-workspace-widget-outlet>

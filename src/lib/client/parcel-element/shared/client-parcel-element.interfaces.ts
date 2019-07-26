@@ -15,6 +15,7 @@ export interface ClientParcelElementApiConfig {
   startTx: string;
   createTx: string;
   deleteTx: string;
+  clientsInTx: string;
   domains: {
     source: string;
     statutAugm: string;
@@ -87,4 +88,18 @@ export type ClientInReconciliationResponseData = ClientInfoGetResponseData;
 
 export interface ClientInReconciliationResponse {
   data: ClientInfoGetResponseData[];
+}
+
+
+export interface ClientsInTxGetResponse {
+  data: ClientInTx[];
+}
+
+export interface ClientInTx {
+  noClient: string;
+  nomClient: string;
+  annee: number;
+  dateCreation: {
+    date: string;
+  };
 }

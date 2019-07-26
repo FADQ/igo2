@@ -20,7 +20,9 @@ import {
   ClientParcelElementListResponse,
   ClientParcelElementListResponseItem,
   ClientParcelElementActivateTxResponse,
-  ClientParcelElementValidateTransferResponse
+  ClientParcelElementValidateTransferResponse,
+  ClientsInTxGetResponse,
+  ClientInTx
 } from './client-parcel-element.interfaces';
 
 @Injectable()
@@ -31,6 +33,16 @@ export class ClientParcelElementService {
     private apiService: ApiService,
     @Inject('clientParcelApiConfig') private apiConfig: ClientParcelElementApiConfig
   ) {}
+
+  getClientsInTx(): Observable<ClientInTx[]> {
+    const url = this.apiService.buildUrl(this.apiConfig.clientsInTx);
+    return this.http.get(url)
+      .pipe(
+        map((response: ClientsInTxGetResponse) => {
+          return response.data || [];
+        })
+      );
+  }
 
   getParcelTxState(client: Client, annee: number): Observable<ClientParcelElementTxState> {
     const url = this.apiService.buildUrl(this.apiConfig.startTx, {

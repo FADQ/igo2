@@ -19,13 +19,13 @@ export class ClientParcelActionsService {
 
   buildActions(controller: ClientController): Action[] {
 
-    function onlyOneParcelTx(controller: ClientController): boolean {
-      return controller.controllerStore.view.all()
-        .find((_controller: ClientController) => _controller.parcelElementTxActive) === undefined; 
+    function onlyOneParcelTx(ctrl: ClientController): boolean {
+      return ctrl.controllerStore.view.all()
+        .find((_ctrl: ClientController) => _ctrl.parcelElementTxActive) === undefined;
     }
 
     const conditionArgs = [controller];
-  
+
     return [
       {
         id: 'startTx',

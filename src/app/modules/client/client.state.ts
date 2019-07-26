@@ -37,7 +37,8 @@ export class ClientState implements OnDestroy {
   readonly message$ = new BehaviorSubject<string>(undefined);
 
   /** Current parcel year */
-  private parcelYear: number;
+  readonly parcelYear$: BehaviorSubject<number> = new BehaviorSubject(undefined);
+  get parcelYear(): number { return this.parcelYear$.value; }
 
   /** Subscription to the parcel year changes */
   private parcelYear$$: Subscription;
@@ -250,7 +251,7 @@ export class ClientState implements OnDestroy {
   }
 
   private onSelectParcelYear(parcelYear: ClientParcelYear) {
-    this.parcelYear = parcelYear === undefined ? undefined : parcelYear.annee;
+    this.parcelYear$.next( parcelYear === undefined ? undefined : parcelYear.annee);
     this.controllerStore.all().forEach((controller: ClientController) => {
       controller.setParcelYear(this.parcelYear);
     });

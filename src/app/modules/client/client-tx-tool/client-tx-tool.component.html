@@ -1,13 +1,13 @@
 <div>
   <igo-list [navigation]="false" [selection]="false">
-    <ng-template ngFor let-client [ngForOf]="clients$ | async">
-      <fadq-client-list-tool-item
+    <ng-template ngFor let-client [ngForOf]="clients.view.all$() | async">
+      <fadq-client-tx-tool-item
         igoListItem
         [client]="client"
         [added]="clientIsAdded(client)"
         [disabled]="clientIsAdded(client)"
         (addedChange)="onClientAddedChange($event)">
-      </fadq-client-list-tool-item>
+      </fadq-client-tx-tool-item>
     </ng-template>
   </igo-list>
 </div>

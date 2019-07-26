@@ -131,6 +131,7 @@ export const igoEnvironment: IgoEnvironment = {
         startTx: '/igodonneesgeospatiales/edition_parcelle_agricole/activeredition/${clientNum}/${annee}',
         createTx: '/igodonneesgeospatiales/edition_parcelle_agricole/creerSchemaEdition/${clientNum}/${annee}',
         deleteTx: '/igodonneesgeospatiales/edition_parcelle_agricole/supprimerschema/${clientNum}/${annee}',
+        clientsInTx: '/igolocalisation/recherche_client_schema_edition/obtenirclientsedition',
         domains: {
           statutAugm: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirStatutsAugmentationSuperficiesCultivees',
           source: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirSourcesParcelles'

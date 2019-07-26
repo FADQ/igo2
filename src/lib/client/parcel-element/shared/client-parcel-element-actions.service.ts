@@ -108,6 +108,7 @@ export class ClientParcelElementActionsService {
         tooltip: 'client.parcelElement.stopTx.tooltip',
         handler: function(ctrl: ClientController) {
           ctrl.deactivateParcelTx();
+          ctrl.activateParcels();
         },
         args: [controller],
         conditions: [noActiveWidget],
