@@ -23,6 +23,7 @@
         <button
           mat-raised-button
           color="primary"
+          [disabled]="subTransaction.operations.empty$ | async"
           (click)="onComplete()">
           {{ 'apply' | translate }}
         </button>
