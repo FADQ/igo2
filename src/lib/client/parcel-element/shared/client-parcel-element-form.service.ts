@@ -158,7 +158,7 @@ export class ClientParcelElementFormService {
   private createAnneeImageField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
     return of(this.createField({
       name: 'properties.anneeImage',
-      title: 'Année d\image',
+      title: 'Année d\'image',
       options:  {
         cols: 1,
         validator: Validators.compose([
