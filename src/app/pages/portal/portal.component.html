@@ -19,6 +19,7 @@
 
   <igo-search-bar
     igoSearchBarBinding
+    [searchSelector]="true"
     [searchTypes]="searchTypes"
     [minLength]="minSearchTermLength"
     (searchTypeChange)="onSearchTypeChange($event)"
