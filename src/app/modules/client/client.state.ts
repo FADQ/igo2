@@ -167,7 +167,12 @@ export class ClientState implements OnDestroy {
     const clientNum = controller.client.info.numero;
     const currentWorkspace = this.activeWorkspace;
     if (currentWorkspace !== undefined && currentWorkspace.meta.client.info.numero !== clientNum) {
-      const workspaces = [controller.parcelWorkspace, controller.schemaWorkspace, controller.schemaElementWorkspace];
+      const workspaces = [
+        controller.parcelElementWorkspace,
+        controller.parcelWorkspace,
+        controller.schemaWorkspace,
+        controller.schemaElementWorkspace
+      ];
       const workspace = workspaces.find((_workspace: Workspace) => {
         return _workspace.meta.type === currentWorkspace.meta.type &&
           this.workspaceStore.get(_workspace.id) !== undefined;

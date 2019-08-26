@@ -14,7 +14,7 @@ export interface ClientSchemaElementWorkspaceOptions extends WorkspaceOptions {
   meta: {
     client: Client;
     map: IgoMap;
-    type: 'schemaElement',
+    type: string;
     tableTemplate: EntityTableTemplate;
     schemaElementService: ClientSchemaElementService;
   };

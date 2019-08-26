@@ -16,7 +16,7 @@ export interface ClientParcelElementWorkspaceOptions extends WorkspaceOptions {
   meta: {
     client: Client;
     map: IgoMap;
-    type: 'parcelElement',
+    type: string;
     tableTemplate: EntityTableTemplate;
     parcelElementService: ClientParcelElementService;
   };

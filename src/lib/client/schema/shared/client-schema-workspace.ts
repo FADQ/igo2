@@ -11,7 +11,7 @@ import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 export interface ClientSchemaWorkspaceOptions extends WorkspaceOptions {
   meta: {
     client: Client;
-    type: 'schema',
+    type: string;
     tableTemplate: EntityTableTemplate;
   };
 }
