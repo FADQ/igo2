@@ -483,8 +483,8 @@ export class ClientController {
   }
 
   private setDiagrams(diagrams: ClientParcelDiagram[]) {
-    this.parcelStore.state.clear();
-    this.parcelElementStore.state.clear();
+    // this.parcelStore.state.clear();
+    // this.parcelElementStore.state.clear();
 
     const diagramIds = diagrams.map((diagram: ClientParcelDiagram) => diagram.id);
     const filterClause = function(parcel: ClientParcel | ClientParcelElement): boolean {
