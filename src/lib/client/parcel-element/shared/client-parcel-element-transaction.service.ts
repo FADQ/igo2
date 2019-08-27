@@ -4,8 +4,8 @@ import { MatDialog } from '@angular/material';
 import { Subject, Subscription } from 'rxjs';
 
 import {
-  ClientParcelElementTransactionComponent
-} from '../client-parcel-element-transaction/client-parcel-element-transaction.component';
+  ClientParcelElementTransactionDialogComponent
+} from '../client-parcel-element-transaction-dialog/client-parcel-element-transaction-dialog.component';
 import { ClientParcelElementTransactionWrapper } from './client-parcel-element.interfaces';
 
 /**
@@ -39,7 +39,7 @@ export class ClientParcelElementTransactionService implements OnDestroy {
   }
 
   private openTransactionDialog(transaction: ClientParcelElementTransactionWrapper): void {
-    this.dialog.open(ClientParcelElementTransactionComponent, {
+    this.dialog.open(ClientParcelElementTransactionDialogComponent, {
       data: {transaction}
     });
   }
