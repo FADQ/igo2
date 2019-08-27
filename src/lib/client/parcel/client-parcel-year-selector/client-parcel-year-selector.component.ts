@@ -19,6 +19,11 @@ export class ClientParcelYearSelectorComponent {
 
   @Input() store: EntityStore<ClientParcelYear>;
 
+  /**
+   * Wheter the selector is disabled or not
+   */
+  @Input() disabled: boolean = false;
+
   @Output() selectedChange = new EventEmitter<{
     selected: boolean;
     value: ClientParcelYear;
