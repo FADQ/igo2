@@ -53,6 +53,8 @@ export class ClientController {
 
   readonly color$ = new BehaviorSubject<[number, number, number]>(undefined);
 
+  readonly parcelElementTxActive$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
   /** Subscription to the selected diagram  */
   private diagram$$: Subscription;
 
@@ -144,8 +146,7 @@ export class ClientController {
   }
 
   /** Whether parcel element tx is active */
-  get parcelElementTxActive(): boolean { return this._parcelElementTxActive; }
-  private _parcelElementTxActive: boolean;
+  get parcelElementTxActive(): boolean { return this.parcelElementTxActive$.value; }
 
   /** Schema workspace */
   get schemaWorkspace(): ClientSchemaWorkspace {
@@ -232,7 +233,7 @@ export class ClientController {
   }
 
   activateParcelTx() {
-    this._parcelElementTxActive = true;
+    this.parcelElementTxActive$.next(true);
     this.initParcelElements();
     this.teardownParcels();
     this.workspaceStore.activateWorkspace(this.parcelElementWorkspace);
@@ -249,7 +250,7 @@ export class ClientController {
       return;
     }
 
-    this._parcelElementTxActive = false;
+    this.parcelElementTxActive$.next(false);
     this.teardownParcelElements();
   }
 
@@ -373,7 +374,7 @@ export class ClientController {
   }
 
   private teardownParcelElements() {
-    this._parcelElementTxActive = false;
+    this.parcelElementTxActive$.next(false);
 
     if (this.parcelElements$$ !== undefined) {
       this.parcelElements$$.unsubscribe();
@@ -483,9 +484,6 @@ export class ClientController {
   }
 
   private setDiagrams(diagrams: ClientParcelDiagram[]) {
-    // this.parcelStore.state.clear();
-    // this.parcelElementStore.state.clear();
-
     const diagramIds = diagrams.map((diagram: ClientParcelDiagram) => diagram.id);
     const filterClause = function(parcel: ClientParcel | ClientParcelElement): boolean {
       const noDiagramme = parcel.properties.noDiagramme;

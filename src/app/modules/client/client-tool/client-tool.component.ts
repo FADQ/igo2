@@ -5,7 +5,7 @@ import {
   OnInit,
   OnDestroy
 } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, combineLatest } from 'rxjs';
 
 import { ToolComponent, EntityStore } from '@igo2/common';
 import { FEATURE } from '@igo2/geo';
@@ -38,9 +38,13 @@ export class ClientToolComponent implements OnInit, OnDestroy {
 
   readonly showLegend$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
+  readonly parcelYearSelectorDisabled$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
   @Input() showInfo: boolean = true;
 
   private controllers$$: Subscription;
+
+  private parcelElementTx$$: Subscription;
 
   /**
    * Observable of the active client
@@ -77,11 +81,13 @@ export class ClientToolComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.controllers$$ = this.controllers.count$.subscribe((count: number) => {
       this.showLegend$.next(count === 1);
+      this.watchParcelElementTx();
     });
   }
 
   ngOnDestroy() {
     this.controllers$$.unsubscribe();
+    this.unwatchParcelElementTx();
   }
 
   onClearController(controller: ClientController) {
@@ -95,6 +101,25 @@ export class ClientToolComponent implements OnInit, OnDestroy {
   onClickAddress(address: string) {
     this.searchState.setSearchType(FEATURE);
     this.searchState.setSearchTerm(address);
+  }
+
+  private watchParcelElementTx() {
+    this.unwatchParcelElementTx();
+    const parcelElementTxActives$ = this.controllers.all().map((controller: ClientController) => {
+      return controller.parcelElementTxActive$;
+    });
+
+    this.parcelElementTx$$ = combineLatest(...parcelElementTxActives$).subscribe((bunch: boolean[]) => {
+      const noTxActive = bunch.every((active: boolean) => active === false);
+      this.parcelYearSelectorDisabled$.next(!noTxActive);
+    });
+  }
+
+  private unwatchParcelElementTx() {
+    if (this.parcelElementTx$$ !== undefined) {
+      this.parcelElementTx$$.unsubscribe();
+      this.parcelElementTx$$ = undefined;
+    }
   }
 
 }
