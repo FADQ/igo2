@@ -112,7 +112,8 @@
       "transfer.transferAllParcels": "Transférer la totalité des parcelles du client",
       "transfer.tooltip": "Transférer des parcelle",
       "transfer.apply": "Transférer",
-      "transaction.title": "Informations non sauvegardées",
+      "transactionDialog.title": "Informations non sauvegardées",
+      "transactionDialog.saveMessage": "Sauvegarde en cours...",
       "transfer.validation.error": "Le transfert vers ce client est présentement impossible",
       "import": "Importer des données",
       "import.tooltip": "Importer des données",
@@ -176,7 +177,8 @@
       "download.tooltip": "Télécharger un document"
     },
     "schemaElement": {
-      "transaction.title": "Informations non sauvegardées",
+      "transactionDialog.title": "Informations non sauvegardées",
+      "transactionDialog.saveMessage": "Sauvegarde en cours...",
       "error.etiquetteMaxLength": "Vous devez saisir une étiquette de moins de 25 caractères.",
       "error.descriptionMaxLength": "Vous devez saisir une description de moins de 250 caractères.",
       "error.area": "La superficie doit être plus grande que 50m² et plus petite que 999 999 999 m².",

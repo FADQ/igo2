@@ -23,8 +23,8 @@ import {
   FadqLibClientSchemaElementImportModule
 } from './client-schema-element-import/client-schema-element-import.module';
 import {
-  FadqLibClientSchemaElementTransactionModule
-} from './client-schema-element-transaction/client-schema-element-transaction.module';
+  FadqLibClientSchemaElementTransactionDialogModule
+} from './client-schema-element-transaction-dialog/client-schema-element-transaction-dialog.module';
 
 import {
   provideClientSchemaElementPointService,
@@ -54,7 +54,7 @@ import {
     FadqLibClientSchemaElementSliceModule,
     FadqLibClientSchemaElementSaveModule,
     FadqLibClientSchemaElementImportModule,
-    FadqLibClientSchemaElementTransactionModule
+    FadqLibClientSchemaElementTransactionDialogModule
   ],
   declarations: []
 })

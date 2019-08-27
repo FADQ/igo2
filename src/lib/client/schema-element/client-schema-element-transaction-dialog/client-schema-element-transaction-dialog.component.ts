@@ -1,32 +1,36 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
+import { SubmitStep, SubmitHandler } from '../../../utils';
 import { ClientSchemaElementService } from '../../schema-element/shared/client-schema-element.service';
-
 import { ClientSchemaElementTransactionWrapper } from '../shared/client-schema-element.interfaces';
 
 @Component({
-  selector: 'fadq-client-schema-element-transaction',
-  templateUrl: 'client-schema-element-transaction.component.html',
-  styleUrls: ['./client-schema-element-transaction.component.scss']
+  selector: 'fadq-client-schema-element-transaction-dialog',
+  templateUrl: 'client-schema-element-transaction-dialog.component.html',
+  styleUrls: ['./client-schema-element-transaction-dialog.component.scss']
 })
-export class ClientSchemaElementTransactionComponent {
+export class ClientSchemaElementTransactionDialogComponent {
+
+  readonly submitStep = SubmitStep;
+
+  readonly submitHandler = new SubmitHandler();
 
   get transaction(): ClientSchemaElementTransactionWrapper { return this.data.transaction; }
 
   constructor(
     private clientSchemaElementService: ClientSchemaElementService,
-    public dialogRef: MatDialogRef<ClientSchemaElementTransactionComponent>,
+    public dialogRef: MatDialogRef<ClientSchemaElementTransactionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private data: {transaction: ClientSchemaElementTransactionWrapper}
   ) {}
 
   onYesClick() {
-    this.clientSchemaElementService
+    const submit$ = this.clientSchemaElementService
       .commitTransaction(this.transaction.schema, this.transaction.transaction)
-      .subscribe(() => {
-        this.transaction.proceed();
-        this.dialogRef.close();
-      });
+    
+    this.submitHandler.handle(submit$, {
+      success: () => this.onCommit()
+    }).submit();
   }
 
   onNoClick() {
@@ -41,6 +45,12 @@ export class ClientSchemaElementTransactionComponent {
     if (abort !== undefined) {
       abort();
     }
+  }
+
+  private onCommit() {
+    this.transaction.proceed();
+    this.submitHandler.destroy();
+    this.dialogRef.close();  
   }
 
 }

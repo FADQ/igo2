@@ -4,8 +4,8 @@ import { MatDialog } from '@angular/material';
 import { Subject, Subscription } from 'rxjs';
 
 import {
-  ClientSchemaElementTransactionComponent
-} from '../client-schema-element-transaction/client-schema-element-transaction.component';
+  ClientSchemaElementTransactionDialogComponent
+} from '../client-schema-element-transaction-dialog/client-schema-element-transaction-dialog.component';
 import { ClientSchemaElementTransactionWrapper } from './client-schema-element.interfaces';
 
 /**
@@ -39,7 +39,7 @@ export class ClientSchemaElementTransactionService implements OnDestroy {
   }
 
   private openTransactionDialog(transaction: ClientSchemaElementTransactionWrapper): void {
-    this.dialog.open(ClientSchemaElementTransactionComponent, {
+    this.dialog.open(ClientSchemaElementTransactionDialogComponent, {
       data: {transaction}
     });
   }

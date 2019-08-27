@@ -36,8 +36,8 @@ import {
   FadqLibClientParcelElementImportModule
 } from './client-parcel-element-import/client-parcel-element-import.module';
 import {
-  FadqLibClientParcelElementTransactionModule
-} from './client-parcel-element-transaction/client-parcel-element-transaction.module';
+  FadqLibClientParcelElementTransactionDialogModule
+} from './client-parcel-element-transaction-dialog/client-parcel-element-transaction-dialog.module';
 import {
   FadqLibClientParcelElementTransferModule
 } from './client-parcel-element-transfer/client-parcel-element-transfer.module';
@@ -77,7 +77,7 @@ import {
     FadqLibClientParcelElementSliceModule,
     FadqLibClientParcelElementSaveModule,
     FadqLibClientParcelElementImportModule,
-    FadqLibClientParcelElementTransactionModule,
+    FadqLibClientParcelElementTransactionDialogModule,
     FadqLibClientParcelElementTransferModule
   ],
   declarations: []
