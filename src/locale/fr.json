@@ -13,6 +13,8 @@
   "yes": "Oui",
   "no": "Non",
   "informations": "Informations",
+  "refresh": "Rafraîchir",
+  "recover": "Récupérer",
 
   "search": {
     "feature.title": "Adresse, lieu ou coordonnées",
@@ -110,7 +112,7 @@
       "transfer.client.placeholder": "Transférer au client",
       "transfer.keepParcelNumbers": "Conserver les numéros de parcelles",
       "transfer.transferAllParcels": "Transférer la totalité des parcelles du client",
-      "transfer.tooltip": "Transférer des parcelle",
+      "transfer.tooltip": "Transférer des parcelles",
       "transfer.apply": "Transférer",
       "transactionDialog.title": "Informations non sauvegardées",
       "transactionDialog.saveMessage": "Sauvegarde en cours...",
@@ -135,7 +137,13 @@
       "stopTx": "Édition de parcelles",
       "stopTx.tooltip": "Arrêter l'édition de parcelles",
       "edition.ai.error": "L'édition pour l'année sélectionnée n'est pas possible",
-      "edition.eec.error": "Il existe déjà des parcelles en édition pour ce client"
+      "edition.eec.error": "Il existe déjà des parcelles en édition pour ce client",
+      "recoverParcelsWithoutOwner": "Récupérer des parcelles sans désignation",
+      "recoverParcelsWithoutOwner.tooltip": "Récupérer des parcelles sans désignation",
+      "recoverParcelsWithoutOwner.info": "Sélectionner des parcelles sans désignation avant de les récupérer",
+      "recoverParcelsWithoutOwner.noParcelFound": "Aucune parcelle sans désignation trouvée",
+      "recoverParcelsWithoutOwner.parcelFound": "{{count}} parcelle(s) sans désignation trouvée(s)",
+      "recoverParcelsWithoutOwner.wrongZoomLevel": "L'échelle de la carte doit se trouver entre 1 et 10000."
     },
     "diagram": {
       "placeholder": "Diagrammes",

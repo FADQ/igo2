@@ -43,24 +43,6 @@ export class ClientParcelElementReconciliateComponent
   readonly submitHandler = new SubmitHandler();
 
   /**
-   * Title
-   * @internal
-   */
-  readonly title$: BehaviorSubject<string> = new BehaviorSubject(undefined);
-
-  /**
-   * Icon
-   * @internal
-   */
-  readonly icon$: BehaviorSubject<string> = new BehaviorSubject(undefined);
-
-  /**
-   * Icon color
-   * @internal
-   */
-  readonly iconColor$: BehaviorSubject<string> = new BehaviorSubject(undefined);
-
-  /**
    * Clients in reconciliation store
    * @internal
    */

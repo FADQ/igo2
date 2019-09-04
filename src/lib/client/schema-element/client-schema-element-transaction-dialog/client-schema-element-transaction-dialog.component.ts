@@ -26,8 +26,8 @@ export class ClientSchemaElementTransactionDialogComponent {
 
   onYesClick() {
     const submit$ = this.clientSchemaElementService
-      .commitTransaction(this.transaction.schema, this.transaction.transaction)
-    
+      .commitTransaction(this.transaction.schema, this.transaction.transaction);
+
     this.submitHandler.handle(submit$, {
       success: () => this.onCommit()
     }).submit();
@@ -50,7 +50,7 @@ export class ClientSchemaElementTransactionDialogComponent {
   private onCommit() {
     this.transaction.proceed();
     this.submitHandler.destroy();
-    this.dialogRef.close();  
+    this.dialogRef.close();
   }
 
 }

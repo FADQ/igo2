@@ -54,7 +54,7 @@ export class ClientParcelElementTransactionDialogComponent {
   private onCommit() {
     this.transaction.proceed();
     this.submitHandler.destroy();
-    this.dialogRef.close();  
+    this.dialogRef.close();
   }
 
 }

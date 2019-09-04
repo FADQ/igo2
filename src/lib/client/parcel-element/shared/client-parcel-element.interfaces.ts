@@ -12,6 +12,7 @@ export interface ClientParcelElementApiConfig {
   reconciliateClients: string;
   validateTransfer: string;
   transfer: string;
+  parcelsWithoutOwner: string;
   startTx: string;
   createTx: string;
   deleteTx: string;
@@ -43,6 +44,7 @@ export interface ClientParcelElementProperties {
   timbreMajGeometrie: string;
   usagerMajGeometrie: string;
   messages: ClientParcelElementMessage[];
+  noOwner?: boolean;
 }
 
 export interface ClientParcelElement extends Feature {
@@ -55,6 +57,8 @@ export interface ClientParcelElementListResponse {
   statut: number;
   data: ClientParcelElementListResponseItem[];
 }
+
+export type ClientParcelElementWithoutOwnerResponse = ClientParcelElementListResponseItem[];
 
 export interface ClientParcelElementTransactionWrapper {
   client: Client;
