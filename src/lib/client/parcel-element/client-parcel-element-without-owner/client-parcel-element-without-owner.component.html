@@ -1,0 +1,29 @@
+<fadq-card-panel
+  [svgIcon]="'help-circle'"
+  [iconColor]="'accent'"
+  [title]="'client.parcelElement.recoverParcelsWithoutOwner.info' | translate"
+  [message]="message$ | async">
+
+  <ng-container buttons>
+    <button
+      mat-button
+      type="button"
+      (click)="onCancel()">
+      {{ 'cancel' | translate }}
+    </button>
+    <button
+      mat-button
+      (click)="onRefresh()">
+      {{ 'refresh' | translate }}
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      [disabled]="!(recoverEnabled$ | async)"
+      (click)="onRecover()">
+      {{ 'recover' | translate }}
+    </button>  
+  </ng-container>
+
+</fadq-card-panel>

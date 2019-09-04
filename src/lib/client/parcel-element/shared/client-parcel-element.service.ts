@@ -19,11 +19,13 @@ import {
   ClientParcelElementApiConfig,
   ClientParcelElementListResponse,
   ClientParcelElementListResponseItem,
+  ClientParcelElementWithoutOwnerResponse,
   ClientParcelElementActivateTxResponse,
   ClientParcelElementValidateTransferResponse,
   ClientsInTxGetResponse,
   ClientInTx
 } from './client-parcel-element.interfaces';
+import { GeoJSONGeometry } from '@igo2/geo';
 
 @Injectable()
 export class ClientParcelElementService {
@@ -83,7 +85,18 @@ export class ClientParcelElementService {
       .get(url)
       .pipe(
         map((response: ClientParcelElementListResponse) => {
-          return this.extractParcelsFromListResponse(response, client);
+          return this.extractParcelsFromListResponse(response);
+        })
+      );
+  }
+
+  getParcelElementsWithoutOwner(geometry: GeoJSONGeometry): Observable<ClientParcelElement[]> {
+    const url = this.apiService.buildUrl(this.apiConfig.parcelsWithoutOwner);
+    return this.http
+      .post(url, geometry)
+      .pipe(
+        map((response: ClientParcelElementWithoutOwnerResponse) => {
+          return this.extractParcelsWithoutOwnerFromListResponse(response);
         })
       );
   }
@@ -163,7 +176,8 @@ export class ClientParcelElementService {
       },
       data.properties,
       {
-        typeParcelle: 'PAC'
+        typeParcelle: 'PAC',
+        noOwner: false
       }
     );
     const parcelElement = Object.assign({}, data, {properties}) as ClientParcelElement;
@@ -235,15 +249,27 @@ export class ClientParcelElementService {
   }
 
   private extractParcelsFromListResponse(
-    response: ClientParcelElementListResponse,
-    client: Client
+    response: ClientParcelElementListResponse
   ): ClientParcelElement[] {
-    return response.data.map(listItem => this.listItemToParcel(listItem, client));
+    return response.data.map(listItem => this.listItemToParcel(listItem));
+  }
+
+  private extractParcelsWithoutOwnerFromListResponse(
+    response: ClientParcelElementWithoutOwnerResponse
+  ): ClientParcelElement[] {
+    return response.map(listItem => {
+      const properties = Object.assign({}, listItem.properties, {
+        noOwner: true,
+        noDiagramme: 9999,
+        messages: []
+      });
+      const item = Object.assign({}, listItem, {properties});
+      return this.listItemToParcel(item);
+    });
   }
 
   private listItemToParcel(
-    listItem: ClientParcelElementListResponseItem,
-    client: Client
+    listItem: ClientParcelElementListResponseItem
   ): ClientParcelElement {
     const properties = Object.assign({}, listItem.properties);
     return {

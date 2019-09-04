@@ -33,7 +33,7 @@ export class ClientParcelElementWorkspaceService {
   createParcelElementWorkspace(client: Client,  map: IgoMap): ClientParcelElementWorkspace {
     // Type is set to parcel. This allows us to switch from a client to another and
     // activate the parcel element workspace if the previous client's active workspace
-    // is either the parcel workspace or the parcel element workspace. 
+    // is either the parcel workspace or the parcel element workspace.
     return new ClientParcelElementWorkspace({
       id: `fadq.${client.info.numero}-2-parcel-element-workspace`,
       title: `${client.info.numero} - Parcelles en édition`,

@@ -19,7 +19,8 @@ import {
   ClientParcelElementSliceWidget,
   ClientParcelElementSaveWidget,
   ClientParcelElementImportWidget,
-  ClientParcelElementTransferWidget
+  ClientParcelElementTransferWidget,
+  ClientParcelElementWithoutOwnerWidget
 } from './client-parcel-element.widgets';
 import {
   generateParcelElementOperationTitle,
@@ -44,6 +45,7 @@ export class ClientParcelElementActionsService {
     @Inject(EditionUndoWidget) private editionUndoWidget: Widget,
     @Inject(ClientParcelElementImportWidget) private clientParcelElementImportWidget: Widget,
     @Inject(ClientParcelElementTransferWidget) private clientParcelElementTransferWidget: Widget,
+    @Inject(ClientParcelElementWithoutOwnerWidget) private clientParcelElementWithoutOwnerWidget: Widget,
     private languageService: LanguageService
   ) {}
 
@@ -227,6 +229,22 @@ export class ClientParcelElementActionsService {
           });
         },
         args: [this.clientParcelElementImportWidget, controller],
+        conditions: [noActiveWidget, transactionIsNotInCommitPhase],
+        conditionArgs
+      },
+      {
+        id: 'recoverParcelsWithoutOwner',
+        icon: 'account-remove',
+        title: 'client.parcelElement.recoverParcelsWithoutOwner',
+        tooltip: 'client.parcelElement.recoverParcelsWithoutOwner.tooltip',
+        handler: (widget: Widget, ctrl: ClientController) => {
+          ctrl.parcelElementWorkspace.activateWidget(widget, {
+            transaction: ctrl.parcelElementTransaction,
+            map: ctrl.map,
+            store: ctrl.parcelElementStore
+          });
+        },
+        args: [this.clientParcelElementWithoutOwnerWidget, controller],
         conditions: [noActiveWidget, transactionIsNotInCommitPhase],
         conditionArgs
       },

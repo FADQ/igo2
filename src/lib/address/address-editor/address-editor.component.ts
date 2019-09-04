@@ -12,7 +12,6 @@ import { MatDialog } from '@angular/material';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
 
-import { fromExtent } from 'ol/geom/Polygon';
 import OlGeoJSON from 'ol/format/GeoJSON';
 import OlGeometry from 'ol/geom/Geometry';
 
@@ -33,7 +32,9 @@ import {
   tryAddSelectionStrategy,
   VectorLayer,
   WMSDataSource,
- } from '@igo2/geo';
+} from '@igo2/geo';
+
+import { getMapExtentPolygon } from '../../map/shared/map.utils';
 
 import {
   AddressFeature,
@@ -121,7 +122,6 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
   private selectedAddress$$: Subscription;
   private olGeometry$$: Subscription;
   private modifyControl: ModifyControl;
-  private olGeoJSON = new OlGeoJSON();
   private dialogZoom$$: Subscription;
   private dialogSave$$: Subscription;
 
@@ -328,20 +328,11 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
   private initEdition() {
     this.inEdition$.next(true);
     this.showLayers();
-    const extentGeometry = this.getMapExtentPolygon('EPSG:4326');
+    const extentGeometry = getMapExtentPolygon(this.map, 'EPSG:4326');
     this.addressService.getAddressesByGeometry(extentGeometry)
       .subscribe((addressList: AddressFeature[]) => {
         this.store.load(addressList);
       });
-  }
-
-  /**
-   * Gets map extent polygon of the view
-   * @param projection The desired geometry projection of the extent geometry
-   * @returns A geometry in the desired projection corresponding to the view extent
-   */
-  private getMapExtentPolygon(projection: string) {
-    return this.olGeoJSON.writeGeometryObject(fromExtent(this.map.viewController.getExtent(projection)));
   }
 
   /**

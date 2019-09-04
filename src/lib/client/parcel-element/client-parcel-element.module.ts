@@ -41,6 +41,9 @@ import {
 import {
   FadqLibClientParcelElementTransferModule
 } from './client-parcel-element-transfer/client-parcel-element-transfer.module';
+import {
+  FadqLibClientParcelElementWithoutOwnerModule
+} from './client-parcel-element-without-owner/client-parcel-element-without-owner.module';
 
 import {
   provideClientParcelElementService,
@@ -58,7 +61,8 @@ import {
   provideClientParcelElementSliceWidget,
   provideClientParcelElementSaveWidget,
   provideClientParcelElementImportWidget,
-  provideClientParcelElementTransferWidget
+  provideClientParcelElementTransferWidget,
+  provideClientParcelElementWithoutOwnerWidget
 } from './shared/client-parcel-element.widgets';
 
 @NgModule({
@@ -78,7 +82,8 @@ import {
     FadqLibClientParcelElementSaveModule,
     FadqLibClientParcelElementImportModule,
     FadqLibClientParcelElementTransactionDialogModule,
-    FadqLibClientParcelElementTransferModule
+    FadqLibClientParcelElementTransferModule,
+    FadqLibClientParcelElementWithoutOwnerModule
   ],
   declarations: []
 })
@@ -100,7 +105,8 @@ export class FadqLibClientParcelElementModule {
         provideClientParcelElementSliceWidget(),
         provideClientParcelElementSaveWidget(),
         provideClientParcelElementImportWidget(),
-        provideClientParcelElementTransferWidget()
+        provideClientParcelElementTransferWidget(),
+        provideClientParcelElementWithoutOwnerWidget()
       ]
     };
   }

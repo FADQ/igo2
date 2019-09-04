@@ -129,6 +129,7 @@ export const igoEnvironment: IgoEnvironment = {
         reconciliateClients: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirliensclientsedition/${clientNum}',
         validateTransfer: '/igodonneesgeospatiales/edition_parcelle_agricole/validertransfertparcelle/${toClientNum}/${annee}',
         transfer: '/igodonneesgeospatiales/edition_parcelle_agricole/transfererparcellesedition/${fromClientNum}/${toClientNum}/${annee}',
+        parcelsWithoutOwner: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirParcellesSansDetenteur',
         startTx: '/igodonneesgeospatiales/edition_parcelle_agricole/activeredition/${clientNum}/${annee}',
         createTx: '/igodonneesgeospatiales/edition_parcelle_agricole/creerSchemaEdition/${clientNum}/${annee}',
         deleteTx: '/igodonneesgeospatiales/edition_parcelle_agricole/supprimerschema/${clientNum}/${annee}',

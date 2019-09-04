@@ -38,6 +38,9 @@ import {
 import {
   ClientParcelElementTransferComponent
 } from '../client-parcel-element-transfer/client-parcel-element-transfer.component';
+import {
+  ClientParcelElementWithoutOwnerComponent
+} from '../client-parcel-element-without-owner/client-parcel-element-without-owner.component';
 
 export const ClientParcelElementCreateWidget =
   new InjectionToken<Widget>('ClientParcelElementCreateWidget');
@@ -65,6 +68,8 @@ export const ClientParcelElementImportWidget =
   new InjectionToken<Widget>('ClientParcelElementImportWidget');
 export const ClientParcelElementTransferWidget =
   new InjectionToken<Widget>('ClientParcelElementTransferWidget');
+export const ClientParcelElementWithoutOwnerWidget =
+  new InjectionToken<Widget>('ClientParcelElementWithoutOwnerWidget');
 
 export function clientParcelElementCreateWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientParcelElementCreateComponent);
@@ -206,6 +211,18 @@ export function provideClientParcelElementTransferWidget() {
   return {
     provide: ClientParcelElementTransferWidget,
     useFactory: clientParcelElementTransferWidgetFactory,
+    deps: [WidgetService]
+  };
+}
+
+export function clientParcelElementWithoutOwnerWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(ClientParcelElementWithoutOwnerComponent);
+}
+
+export function provideClientParcelElementWithoutOwnerWidget() {
+  return {
+    provide: ClientParcelElementWithoutOwnerWidget,
+    useFactory: clientParcelElementWithoutOwnerWidgetFactory,
     deps: [WidgetService]
   };
 }

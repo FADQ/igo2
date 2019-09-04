@@ -51,7 +51,21 @@ export function createParcelElementLayerStyle(
     text: createParcelElementLayerTextStyle()
   });
 
+  const olNoOwnerStyle = new olstyle.Style({
+    fill: new olstyle.Fill({
+      color: [30, 30, 30, 0.30]
+    }),
+    stroke: new olstyle.Stroke({
+      color: [30, 30, 30],
+      width: 2
+    }),
+  });
+
   return (function(olFeature: OlFeature, resolution: number) {
+    if (olFeature.get('noOwner') === true) {
+      return olNoOwnerStyle;
+    }
+
     olStyle.getText().setText(getParcelElementFeatureText(olFeature, resolution));
     return olStyle;
   });
