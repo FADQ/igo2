@@ -1,7 +1,7 @@
 import { FormGroup, ValidationErrors } from '@angular/forms';
 
 import { EntityStore } from '@igo2/common';
-import { ClientSchemaEtat, ClientSchemaType } from './client-schema.enums';
+import { ClientSchemaType } from './client-schema.enums';
 import { ClientSchema } from './client-schema.interfaces';
 
 export function validateOnlyOneLSE(control: FormGroup, store: EntityStore<ClientSchema>): ValidationErrors | null {
@@ -32,46 +32,8 @@ export function validateAnnee(control: FormGroup): null {
   schemaAnneeControl.updateValueAndValidity({onlySelf: true});
 
   const requireAnnee = [ClientSchemaType.ADO, ClientSchemaType.PLP];
-  // An etat is required for schemas of type EPA
   if (!schemaAnnee && requireAnnee.indexOf(schemaType) >= 0) {
     schemaAnneeControl.setErrors({required: ''});
-  }
-
-  return null;
-}
-
-export function validateEtatEPA(control: FormGroup, store: EntityStore<ClientSchema>): null {
-  const schemaId = control.controls['id'].value;
-  const schemaEtatControl = control.controls['etat'];
-  const schemaEtat = schemaEtatControl.value;
-
-  const schemaTypeControl = control.controls['type'];
-  const schemaType = schemaTypeControl.value;
-
-  schemaEtatControl.updateValueAndValidity({onlySelf: true});
-
-  // An etat is required for schemas of type EPA
-  if (!schemaEtat && schemaType === ClientSchemaType.EPA) {
-    schemaEtatControl.setErrors({required: ''});
-    return null;
-  }
-
-  // Only EPA are allowed to have an etat
-  if (schemaEtat && schemaType !== ClientSchemaType.EPA) {
-    schemaEtatControl.setErrors({etatRequiredByEPA: ''});
-    return null;
-  }
-
-  // Only one schema with an etat of 'ENTRAI' or VALIDE' allowed per client
-  const onlyOneOf = [ClientSchemaEtat.ENTRAI, ClientSchemaEtat.VALIDE];
-  if (onlyOneOf.indexOf(schemaEtat) < 0) { return null; }
-
-  const otherSchema = store.all().find((schema: ClientSchema) => {
-    return onlyOneOf.indexOf(schema.etat) >= 0 && schema.id !== schemaId;
-  });
-
-  if (otherSchema !== undefined) {
-    schemaEtatControl.setErrors({onlyOneEPA: ''});
   }
 
   return null;

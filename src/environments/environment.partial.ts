@@ -146,8 +146,7 @@ export const igoEnvironment: IgoEnvironment = {
         delete: '/igoschema/edition_schema/supprimerSchema/${id}',
         duplicate: '/igoschema/edition_schema/copierSchema/${id}',
         domains: {
-          type: '/igoschema/edition_schema/obtenirTypesSchemas',
-          etat: '/igoschema/edition_schema/obtenirEtatsSchema'
+          type: '/igoschema/edition_schema/obtenirTypesSchemas'
         }
       },
       schemaFile: {
