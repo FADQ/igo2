@@ -3,7 +3,7 @@ import { Inject, Injectable} from '@angular/core';
 import { Action, Widget } from '@igo2/common';
 
 import { ClientController } from '../../shared/controller';
-import { ClientSchemaType, ClientSchemaEtat } from '../../schema/shared/client-schema.enums';
+import { ClientSchemaType } from '../../schema/shared/client-schema.enums';
 import {
   ClientSchemaCreateWidget,
   ClientSchemaUpdateWidget,
@@ -42,10 +42,7 @@ export class ClientSchemaActionsService {
     }
 
     function schemaCanBeDuplicated(ctrl: ClientController): boolean {
-      return schemaIsDefined(ctrl) &&
-        !schemaIsOfTypeLSE(ctrl) &&
-        ctrl.schema.etat !== ClientSchemaEtat.ENTRAI &&
-        ctrl.schema.etat !== ClientSchemaEtat.VALIDE;
+      return schemaIsDefined(ctrl) && !schemaIsOfTypeLSE(ctrl);
     }
 
     const conditionArgs = [controller];

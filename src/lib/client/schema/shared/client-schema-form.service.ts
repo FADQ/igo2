@@ -20,7 +20,6 @@ import { DomainService } from 'src/lib/core/domain';
 
 import {
   validateOnlyOneLSE,
-  validateEtatEPA,
   validateAnnee
 } from './client-schema-validators';
 import {
@@ -44,8 +43,7 @@ export class ClientSchemaFormService {
       this.createIdField({options: {disabled: true}}),
       this.createTypeField(),
       this.createDescriptionField(),
-      this.createAnneeField(),
-      this.createEtatField()
+      this.createAnneeField()
     );
     return fields$.pipe(
       map((fields: FormField[]) => {
@@ -54,7 +52,6 @@ export class ClientSchemaFormService {
             name: 'info',
             options: {
               validator: Validators.compose([
-                (control: FormGroup) => validateEtatEPA(control, store),
                 (control: FormGroup) => validateAnnee(control),
                 (control: FormGroup) => validateOnlyOneLSE(control, store)
               ])
@@ -157,32 +154,6 @@ export class ClientSchemaFormService {
     }, partial));
   }
 
-  private createEtatField(
-    partial?: Partial<FormFieldConfig>
-  ): Observable<FormField<FormFieldSelectInputs>> {
-
-    return this.getClientSchemaEtatChoices()
-      .pipe(
-        map((choices: FormFieldSelectChoice[]) => {
-          return this.createField({
-            name: 'etat',
-            title: 'État de schéma',
-            type: 'select',
-            options:  {
-              cols: 1,
-              errors: {
-                etatRequiredByEPA: 'client.schema.error.etatRequiredByEPA',
-                onlyOneEPA: 'client.schema.error.onlyOneEPA'
-              }
-            },
-            inputs: {
-              choices
-            }
-          }, partial) as FormField<FormFieldSelectInputs>;
-        })
-      );
-  }
-
   private createField(config: FormFieldConfig, partial?: Partial<FormFieldConfig>): FormField {
     config = this.formService.extendFieldConfig(config, partial || {});
     return this.formService.field(config);
@@ -193,8 +164,4 @@ export class ClientSchemaFormService {
     return this.domainService.getChoices(url);
   }
 
-  private getClientSchemaEtatChoices(): Observable<FormFieldSelectChoice[]> {
-    const url = this.apiService.buildUrl(this.apiConfig.domains.etat);
-    return this.domainService.getChoices(url);
-  }
 }

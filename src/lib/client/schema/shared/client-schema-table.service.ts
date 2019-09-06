@@ -41,10 +41,6 @@ export class ClientSchemaTableService {
           title: 'Année'
         },
         {
-          name: 'descriptionEtat',
-          title: 'État de schéma'
-        },
-        {
           name: 'timbreMaj.date',
           title: 'Date de mise à jour',
           valueAccessor: (schema: ClientSchema) => {

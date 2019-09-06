@@ -129,9 +129,7 @@ export class ClientSchemaService {
   private extractSchemaFromListResponseItem(item: ClientSchemaListResponseItem): ClientSchema {
     return Object.assign({}, item, {
       type: item.typeSchema.code,
-      descriptionType: item.typeSchema.descriptionAbregeeFrancais,
-      etat: item.etatSchema.code,
-      descriptionEtat: item.etatSchema.descriptionAbregeeFrancais
+      descriptionType: item.typeSchema.descriptionAbregeeFrancais
     });
   }
 

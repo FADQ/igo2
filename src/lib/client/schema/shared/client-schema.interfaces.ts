@@ -8,7 +8,6 @@ export interface ClientSchemaApiConfig  {
   duplicate: string;
   domains: {
     type: string;
-    etat: string;
   };
 }
 
@@ -19,8 +18,6 @@ export interface ClientSchema {
   descriptionType: string;
   description: string;
   annee: string;
-  etat: string;
-  descriptionEtat: string;
   nbDocuments: number;
   usagerMaj: string;
   timbreMaj: {
@@ -38,7 +35,6 @@ export interface ClientSchemaListResponseItem {
   typeSchema: DomainChoicesResponseItem;
   description: string;
   annee: string;
-  etatSchema: DomainChoicesResponseItem;
   nbDocuments: number;
   usagerMaj: string;
   timbreMaj: {
@@ -51,7 +47,6 @@ export interface ClientSchemaCreateData {
   type: string;
   description: string;
   annee: string;
-  etat: string;
 }
 
 export interface ClientSchemaCreateResponse {
@@ -63,7 +58,6 @@ export interface ClientSchemaUpdateData {
   type: string;
   description: string;
   annee: string;
-  etat: string;
 }
 
 export interface ClientSchemaUpdateResponse {

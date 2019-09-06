@@ -154,7 +154,6 @@
       "error.anneeRequired": "Vous devez saisir une année pour un plan de production ou un avis de dommage",
       "error.onlyOneLSE": "Impossible d’avoir plus d’un schéma de type « Structure d’entreposage »",
       "error.onlyOneEPA": "Impossible d’avoir plus d’un schéma de type « Édition de parcelles agricoles »",
-      "error.etatRequiredByEPA": "Seul le schéma de type « Édition de parcelles agricoles » doit contenir un état de schéma",
       "placeholder": "Schéma",
       "create": "Créer",
       "create.tooltip": "Créer un schéma",

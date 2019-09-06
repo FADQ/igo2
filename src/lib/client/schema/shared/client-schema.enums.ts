@@ -1,9 +1,3 @@
-export const ClientSchemaEtat = {
-  ENTRAI: 'ENTRAI',
-  VALIDE: 'VALIDE',
-  TRAITE: 'TRAITE',
-};
-
 export const ClientSchemaType = {
   ADO: 'ADO',
   CMP: 'CMP',
