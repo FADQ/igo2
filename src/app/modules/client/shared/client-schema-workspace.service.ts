@@ -2,9 +2,12 @@ import { Injectable} from '@angular/core';
 
 import { ActionStore, EntityStore } from '@igo2/common';
 
-import { Client } from '../../shared/client.interfaces';
-import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
-import { ClientSchemaWorkspace } from './client-schema-workspace';
+import {
+  Client,
+  ClientSchema,
+  ClientSchemaWorkspace
+} from 'src/lib/client';
+
 import { ClientSchemaTableService } from './client-schema-table.service';
 
 @Injectable({

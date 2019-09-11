@@ -1,9 +1,10 @@
 import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 
 import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { Action, ActionbarMode, ActionStore } from '@igo2/common';
-import { IgoMap, MapViewState } from '@igo2/geo';
+import { IgoMap } from '@igo2/geo';
 
 import { MapAction } from '../shared/map.enum';
 import { getGoogleMapsUrl } from '../shared/map.utils';
@@ -51,8 +52,6 @@ export class MapActionbarComponent implements OnInit, OnDestroy {
    */
   ngOnInit() {
     this.store.load(this.buildActions());
-    this.mapViewState$$ = this.map.viewController.state$
-      .subscribe((state: MapViewState) => this.store.updateActionsAvailability());
   }
 
   /**
@@ -68,14 +67,6 @@ export class MapActionbarComponent implements OnInit, OnDestroy {
    * Build the list of actions that'll go into the store
    */
   private buildActions(): Action[] {
-    const mapViewHasPreviousState = () => {
-      return this.map.viewController.hasPreviousState();
-    };
-
-    const mapViewHasNextState = () => {
-      return this.map.viewController.hasNextState();
-    };
-
     return [
       {
         id: MapAction.ZoomIn,
@@ -100,20 +91,24 @@ export class MapActionbarComponent implements OnInit, OnDestroy {
         icon: 'arrow-left',
         title: 'map.actionbar.previousview.title',
         tooltip: 'map.actionbar.previousview.tooltip',
-        conditions: [mapViewHasPreviousState],
         handler: () => {
           this.map.viewController.previousState();
-        }
+        },
+        availability: () => this.map.viewController.state$.pipe(
+          map(() => this.map.viewController.hasPreviousState())
+        )
       },
       {
         id: MapAction.NextView,
         icon: 'arrow-right',
         title: 'map.actionbar.nextview.title',
         tooltip: 'map.actionbar.nextview.tooltip',
-        conditions: [mapViewHasNextState],
         handler: () => {
           this.map.viewController.nextState();
-        }
+        },
+        availability: () => this.map.viewController.state$.pipe(
+          map(() => this.map.viewController.hasNextState())
+        )
       },
       {
         id: MapAction.InitialView,

@@ -4,8 +4,12 @@ import { EntityTableTemplate, EntityTableColumnRenderer } from '@igo2/common';
 import { formatMeasure, squareMetersToHectares } from '@igo2/geo';
 
 import { formatDate } from 'src/lib/utils/date';
-import { ClientParcelElement, ClientParcelElementMessage } from './client-parcel-element.interfaces';
-import { getParcelElementErrors, getParcelElementWarnings } from './client-parcel-element.utils';
+import {
+  ClientParcelElement,
+  ClientParcelElementMessage,
+  getParcelElementErrors,
+  getParcelElementWarnings
+} from 'src/lib/client';
 
 @Injectable({
   providedIn: 'root'

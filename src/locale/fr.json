@@ -1,5 +1,5 @@
 {
-  "IGO": "IGO",
+  "IGO": "IGO FADQ - La Financière agricole du Québec",
   "welcome": "Bienvenue à {{title}}",
   "menu": {
     "close": "Fermer le menu",
@@ -131,6 +131,7 @@
       "deleteTx": "Supprimer la transaction",
       "deleteTx.tooltip": "Supprimer la transaction",
       "deleteTx.confirm": "Désirez-vous supprimer la transaction et effacer toutes les modifications effectuées?",
+      "deleteTx.deleteMessage": "Suppression en cours...",
       "startTx.confirm": "Désirez-vous débuter l'édition de parcelles?",
       "startTx": "Édition de parcelles",
       "startTx.tooltip": "Démarrer l'édition de parcelles",
@@ -270,6 +271,10 @@
         "title": "Voir dans Google Maps",
         "tooltip": "Voir dans Google Maps"
       }
+    },
+    "moveToFeatures": {
+      "title": "Déplacer la carte sur les entités",
+      "tooltip": "Déplacer la carte sur les entités"
     }
   },
 

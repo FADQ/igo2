@@ -5,6 +5,8 @@ import {
   OnInit,
   OnDestroy
 } from '@angular/core';
+import { MatDialog } from '@angular/material';
+
 import { Subscription } from 'rxjs';
 
 import { EntityStore, ToolComponent } from '@igo2/common';
@@ -13,7 +15,8 @@ import {
   Client,
   ClientInTx,
   ClientController,
-  ClientParcelElementService
+  ClientParcelElementService,
+  ClientParcelElementDeleteTxDialogComponent
 } from 'src/lib/client';
 
 import { ClientState } from '../client.state';
@@ -34,7 +37,7 @@ import { ClientState } from '../client.state';
 })
 export class ClientTxToolComponent implements OnInit, OnDestroy {
 
-  clients: EntityStore<ClientInTx> = new EntityStore([], {
+  readonly clients: EntityStore<ClientInTx> = new EntityStore([], {
     getKey: (client: ClientInTx) => client.noClient
   });
 
@@ -45,6 +48,7 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
   constructor(
     private clientParcelElementService: ClientParcelElementService,
     private clientState: ClientState,
+    private dialog: MatDialog,
     private cdRef: ChangeDetectorRef
   ) {}
 
@@ -62,7 +66,7 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
     this.clientParcelElementService.getClientsInTx()
       .subscribe((clients: ClientInTx[]) => this.clients.load(clients));
 
-    this.activeClients$$ = this.clientState.controllerStore.entities$
+    this.activeClients$$ = this.clientState.controllers.entities$
       .subscribe((controller: ClientController[]) => { this.cdRef.detectChanges(); });
   }
 
@@ -83,8 +87,19 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
   }
 
   clientIsAdded(client: ClientInTx): boolean {
-    const controller = this.clientState.controllerStore.get(client.noClient);
+    const controller = this.clientState.controllers.get(client.noClient);
     return controller !== undefined;
+  }
+
+  onDeleteTx(client: ClientInTx) {
+    const controller = this.clientState.controllers.get(client.noClient);
+    const data = {
+      store: this.clients,
+      client: client,
+      annee: this.clientState.parcelYear$.value,
+      controller: controller
+    };
+    this.dialog.open(ClientParcelElementDeleteTxDialogComponent, {data});
   }
 
 }

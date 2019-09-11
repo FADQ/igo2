@@ -30,8 +30,8 @@ export class ClientState implements OnDestroy {
   get activeController(): ClientController { return this.activeController$.value; }
 
   /** Observable of the current controller */
-  get controllerStore(): EntityStore<ClientController> { return this._controllerStore; }
-  _controllerStore: EntityStore<ClientController>;
+  get controllers(): EntityStore<ClientController> { return this._controllers; }
+  _controllers: EntityStore<ClientController>;
 
   /** Observable of a message or error */
   readonly message$ = new BehaviorSubject<string>(undefined);
@@ -88,26 +88,26 @@ export class ClientState implements OnDestroy {
   }
 
   clearClientByNum(clientNum: string) {
-    const controller = this.controllerStore.get(clientNum);
+    const controller = this.controllers.get(clientNum);
     if (controller !== undefined) {
-      this.clearController(controller);
+      this.destroyController(controller);
     }
   }
 
   addClient(client: Client | undefined) {
     this.setClientNotFound(false);
 
-    const currentController = this.controllerStore.get(client.info.numero);
+    const currentController = this.controllers.get(client.info.numero);
     if (currentController !== undefined) {
       return;
     }
 
     const controller = this.clientControllerService.createClientController(client, {
       workspaceStore: this.workspaceStore,
-      controllerStore: this.controllerStore,
+      controllers: this.controllers,
       parcelYear: this.parcelYear
     });
-    this.controllerStore.insert(controller);
+    this.controllers.insert(controller);
     if (this.activeController === undefined) {
       this.workspaceStore.activateWorkspace(controller.parcelWorkspace);
     }
@@ -121,12 +121,12 @@ export class ClientState implements OnDestroy {
     }
   }
 
-  clearController(controller: ClientController) {
+  destroyController(controller: ClientController) {
     if (!controller.schemaElementTransaction.empty) {
       controller.schemaElementTransactionService.enqueue({
         schema: controller.schema,
         transaction: controller.schemaElementTransaction,
-        proceed: () => this.clearController(controller)
+        proceed: () => this.destroyController(controller)
       });
       return;
     }
@@ -136,7 +136,7 @@ export class ClientState implements OnDestroy {
         client: controller.client,
         annee: controller.parcelYear,
         transaction: controller.parcelElementTransaction,
-        proceed: () => this.clearController(controller)
+        proceed: () => this.destroyController(controller)
       });
       return;
     }
@@ -145,20 +145,20 @@ export class ClientState implements OnDestroy {
       this.setActiveController(undefined);
     }
     controller.destroy();
-    this.controllerStore.delete(controller);
+    this.controllers.delete(controller);
   }
 
   setActiveController(controller: ClientController) {
     if (controller === undefined) {
       if (this.activeController !== undefined) {
-        this.controllerStore.state.update(this.activeController, {selected: false, active: false});
+        this.controllers.state.update(this.activeController, {selected: false, active: false});
       }
       this.workspaceStore.view.filter(undefined);
       this.activeController$.next(undefined);
       return;
     }
 
-    this.controllerStore.state.update(controller, {selected: true, active: true}, true);
+    this.controllers.state.update(controller, {selected: true, active: true}, true);
     this.setControllerActiveWorkspace(controller);
     this.activeController$.next(controller);
   }
@@ -185,23 +185,18 @@ export class ClientState implements OnDestroy {
   }
 
   private initControllers() {
-    this._controllerStore = new EntityStore<ClientController>([], {
+    this._controllers = new EntityStore<ClientController>([], {
       getKey: (controller: ClientController) => controller.client.info.numero
     });
 
-    this.controllers$$ = this.controllerStore.count$
-      .subscribe((count: number) => {
-        this.updateControllersColor();
-        if (this.activeWorkspace !== undefined) {
-          this.activeWorkspace.updateActionsAvailability();
-        }
-      });
+    this.controllers$$ = this.controllers.count$
+      .subscribe((count: number) => this.updateControllersColor());
   }
 
   private teardownControllers() {
     this.controllers$$.unsubscribe();
-    this.controllerStore.all().forEach((controller: ClientController) => controller.destroy());
-    this.controllerStore.clear();
+    this.controllers.all().forEach((controller: ClientController) => controller.destroy());
+    this.controllers.clear();
   }
 
   private initWorkspaces() {
@@ -257,7 +252,7 @@ export class ClientState implements OnDestroy {
 
   private onSelectParcelYear(parcelYear: ClientParcelYear) {
     this.parcelYear$.next( parcelYear === undefined ? undefined : parcelYear.annee);
-    this.controllerStore.all().forEach((controller: ClientController) => {
+    this.controllers.all().forEach((controller: ClientController) => {
       controller.setParcelYear(this.parcelYear);
     });
   }
@@ -279,13 +274,13 @@ export class ClientState implements OnDestroy {
   }
 
   private updateControllersColor() {
-    if (this.controllerStore.count === 1) {
-      const controller = this.controllerStore.all()[0];
+    if (this.controllers.count === 1) {
+      const controller = this.controllers.all()[0];
       controller.applySingleClientStyle();
       return;
     }
 
-    this.controllerStore.all().forEach((controller: ClientController, index: number) => {
+    this.controllers.all().forEach((controller: ClientController, index: number) => {
       controller.applyMultiClientStyle();
     });
   }

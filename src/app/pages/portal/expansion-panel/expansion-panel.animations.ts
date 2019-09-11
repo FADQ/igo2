@@ -15,11 +15,11 @@ export function showContent(
   return trigger('showContent', [
     state('true', style({
       opacity: 1,
-      display: 'block'
+      visibility: 'visible'
     })),
     state('false', style({
       opacity: 0,
-      display: 'none'
+      visibility: 'hidden'
     })),
     transition('false => true', animate(`${duration} ${delay} ${easing}`)),
     transition('true => false', animate('0ms'))

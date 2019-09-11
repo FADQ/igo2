@@ -66,13 +66,28 @@ tr.text-centered th div.mat-sort-header-container {
   padding: 0 16px !important;
 }
 
-igo-actionbar igo-actionbar-item.tool-actived {
-  mat-list-item {
-    background-color: inherit !important;
-  }
+igo-actionbar igo-actionbar-item mat-list-item.tool-actived {
+  background-color: inherit !important;
 
   button {
     background-color: #e0e0e0;
+  }
+}
+
+.mat-menu-panel:not(.fadq-expansion-panel-actionbar-overlay) go-actionbar,
+fadq-expansion-panel-header igo-actionbar {
+  .fadq-actionbar-item-divider {
+    position: relative;
+  }
+
+  .fadq-actionbar-item-divider:after {
+    content: "";
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    right: -1px;
+    width: 2px;
+    background-color: #ccc;
   }
 }
 

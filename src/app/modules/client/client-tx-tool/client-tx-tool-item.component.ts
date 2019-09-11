@@ -12,6 +12,7 @@ import { ClientInTx } from 'src/lib/client';
 @Component({
   selector: 'fadq-client-tx-tool-item',
   templateUrl: './client-tx-tool-item.component.html',
+  styleUrls: ['./client-tx-tool-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientTxToolItemComponent {
@@ -38,6 +39,11 @@ export class ClientTxToolItemComponent {
   }>();
 
   /**
+   * Event emitted when the add/remove button is clicked
+   */
+  @Output() delete = new EventEmitter<ClientInTx>();
+
+  /**
    * @ignore
    */
   @HostBinding('class.fadq-client-tx-tool-item-added')
@@ -51,6 +57,14 @@ export class ClientTxToolItemComponent {
    */
   onToggleClick() {
     this.added ? this.doRemove() : this.doAdd();
+  }
+
+  /**
+   * On delete button click, emit the delete event
+   * @internal
+   */
+  onDeleteClick() {
+    this.delete.emit(this.client);
   }
 
   private doRemove() {

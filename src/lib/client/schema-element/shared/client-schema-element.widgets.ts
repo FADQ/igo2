@@ -26,14 +26,8 @@ import {
   ClientSchemaElementImportComponent
 } from '../client-schema-element-import/client-schema-element-import.component';
 
+/** Create **/
 export const ClientSchemaElementCreateWidget = new InjectionToken<Widget>('ClientSchemaElementCreateWidget');
-export const ClientSchemaElementUpdateWidget = new InjectionToken<Widget>('ClientSchemaElementUpdateWidget');
-export const ClientSchemaElementUpdateBatchWidget = new InjectionToken<Widget>('ClientSchemaElementUpdateBatchWidget');
-export const ClientSchemaElementFillWidget = new InjectionToken<Widget>('ClientSchemaElementFillWidget');
-export const ClientSchemaElementSliceWidget = new InjectionToken<Widget>('ClientSchemaElementSliceWidget');
-export const ClientSchemaElementSaveWidget = new InjectionToken<Widget>('ClientSchemaElementSaveWidget');
-export const ClientSchemaElementUndoWidget = new InjectionToken<Widget>('ClientSchemaElementUndoWidget');
-export const ClientSchemaElementImportWidget = new InjectionToken<Widget>('ClientSchemaElementImportWidget');
 
 export function clientSchemaElementCreateWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientSchemaElementCreateComponent);
@@ -47,9 +41,12 @@ export function provideClientSchemaElementCreateWidget() {
   };
 }
 
+/** Update **/
 export function clientSchemaElementUpdateWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientSchemaElementUpdateComponent);
 }
+
+export const ClientSchemaElementUpdateWidget = new InjectionToken<Widget>('ClientSchemaElementUpdateWidget');
 
 export function provideClientSchemaElementUpdateWidget() {
   return {
@@ -58,6 +55,9 @@ export function provideClientSchemaElementUpdateWidget() {
     deps: [WidgetService]
   };
 }
+
+/** Update Batch **/
+export const ClientSchemaElementUpdateBatchWidget = new InjectionToken<Widget>('ClientSchemaElementUpdateBatchWidget');
 
 export function clientSchemaElementUpdateBatchWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientSchemaElementUpdateBatchComponent);
@@ -71,6 +71,9 @@ export function provideClientSchemaElementUpdateBatchWidget() {
   };
 }
 
+/** Fill **/
+export const ClientSchemaElementFillWidget = new InjectionToken<Widget>('ClientSchemaElementFillWidget');
+
 export function clientSchemaElementFillWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientSchemaElementFillComponent);
 }
@@ -82,6 +85,9 @@ export function provideClientSchemaElementFillWidget() {
     deps: [WidgetService]
   };
 }
+
+/** Slice **/
+export const ClientSchemaElementSliceWidget = new InjectionToken<Widget>('ClientSchemaElementSliceWidget');
 
 export function clientSchemaElementSliceWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientSchemaElementSliceComponent);
@@ -95,6 +101,9 @@ export function provideClientSchemaElementSliceWidget() {
   };
 }
 
+/** Save **/
+export const ClientSchemaElementSaveWidget = new InjectionToken<Widget>('ClientSchemaElementSaveWidget');
+
 export function clientSchemaElementSaveWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientSchemaElementSaveComponent);
 }
@@ -106,6 +115,9 @@ export function provideClientSchemaElementSaveWidget() {
     deps: [WidgetService]
   };
 }
+
+/** Import **/
+export const ClientSchemaElementImportWidget = new InjectionToken<Widget>('ClientSchemaElementImportWidget');
 
 export function clientSchemaElementImportWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientSchemaElementImportComponent);

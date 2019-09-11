@@ -338,12 +338,6 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   private onBeforeSearchCadastre() {
-    if (this.mediaService.media$.value === Media.Mobile) {
-      this.closeExpansionPanel();
-    } else {
-      this.openExpansionPanel();
-    }
-
     this.toolState.toolbox.activateTool('cadastre');
     this.openSidenav();
   }

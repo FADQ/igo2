@@ -11,12 +11,8 @@ import { ClientSchemaDeleteComponent } from '../client-schema-delete/client-sche
 import { ClientSchemaDuplicateComponent } from '../client-schema-duplicate/client-schema-duplicate.component';
 import { ClientSchemaTransferComponent } from '../client-schema-transfer/client-schema-transfer.component';
 
+/** Create **/
 export const ClientSchemaCreateWidget = new InjectionToken<Widget>('ClientSchemaCreateWidget');
-export const ClientSchemaUpdateWidget = new InjectionToken<Widget>('ClientSchemaUpdateWidget');
-export const ClientSchemaDeleteWidget = new InjectionToken<Widget>('ClientSchemaDeleteeWidget');
-export const ClientSchemaDuplicateWidget = new InjectionToken<Widget>('ClientSchemaDuplicateWidget');
-export const ClientSchemaTransferWidget = new InjectionToken<Widget>('ClientSchemaTransferWidget');
-export const ClientSchemaFileManagerWidget = new InjectionToken<Widget>('ClientSchemaFileManagerWidget');
 
 export function clientSchemaCreateWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientSchemaCreateComponent);
@@ -30,6 +26,9 @@ export function provideClientSchemaCreateWidget() {
   };
 }
 
+/** Update **/
+export const ClientSchemaUpdateWidget = new InjectionToken<Widget>('ClientSchemaUpdateWidget');
+
 export function clientSchemaUpdateWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientSchemaUpdateComponent);
 }
@@ -41,6 +40,9 @@ export function provideClientSchemaUpdateWidget() {
     deps: [WidgetService]
   };
 }
+
+/** Delete **/
+export const ClientSchemaDeleteWidget = new InjectionToken<Widget>('ClientSchemaDeleteeWidget');
 
 export function clientSchemaDeleteWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientSchemaDeleteComponent);
@@ -54,6 +56,9 @@ export function provideClientSchemaDeleteWidget() {
   };
 }
 
+/** Duplicate **/
+export const ClientSchemaDuplicateWidget = new InjectionToken<Widget>('ClientSchemaDuplicateWidget');
+
 export function clientSchemaDuplicateWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientSchemaDuplicateComponent);
 }
@@ -66,6 +71,9 @@ export function provideClientSchemaDuplicateWidget() {
   };
 }
 
+/** Transfer **/
+export const ClientSchemaTransferWidget = new InjectionToken<Widget>('ClientSchemaTransferWidget');
+
 export function clientSchemaTransferWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientSchemaTransferComponent);
 }
@@ -77,6 +85,9 @@ export function provideClientSchemaTransferWidget() {
     deps: [WidgetService]
   };
 }
+
+/** File Manager **/
+export const ClientSchemaFileManagerWidget = new InjectionToken<Widget>('ClientSchemaFileManagerWidget');
 
 export function clientSchemaFileManagerFactory(widgetService: WidgetService) {
   return widgetService.create(ClientSchemaFileManagerComponent);

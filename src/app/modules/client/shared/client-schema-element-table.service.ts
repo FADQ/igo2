@@ -4,7 +4,7 @@ import { EntityTableTemplate, EntityTableColumnRenderer } from '@igo2/common';
 import { formatMeasure, squareMetersToAcres, squareMetersToHectares } from '@igo2/geo';
 
 import { formatDate } from 'src/lib/utils/date';
-import { ClientSchemaElement } from './client-schema-element.interfaces';
+import { ClientSchemaElement } from 'src/lib/client';
 
 @Injectable({
   providedIn: 'root'

@@ -16,6 +16,7 @@ import { LanguageService, Message, MessageType } from '@igo2/core';
 import {
   EntityRecord,
   EntityOperation,
+  EntityOperationType,
   EntityTransaction,
   EntityTableTemplate,
   EntityTableColumnRenderer,
@@ -155,8 +156,7 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
   }
 
   private onSelectParcelElement(parcelElement: ClientParcelElement) {
-    if (this.lastUpdate !== undefined &&
-        parcelElement.properties.idParcelle === this.lastUpdate.properties.idParcelle) {
+    if (this.lastUpdate !== undefined && parcelElement.meta.id === this.lastUpdate.meta.id) {
       return;
     }
     if (this.message$.value !== undefined) {
@@ -243,7 +243,8 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
 
   private addToSubTransaction(parcelElement: ClientParcelElement) {
     const operationTitle = parcelElement.properties.noParcelleAgricole;
-    const sourceParcelElement = this.store.get(parcelElement.properties.idParcelle);
+    const sourceParcelId = parcelElement.meta.id;
+    const sourceParcelElement = this.store.get(sourceParcelId);
     this.subTransaction.update(sourceParcelElement, parcelElement, this.store, {
       title: operationTitle,
       index: this.computeOperationIndex()
@@ -258,7 +259,25 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
   }
 
   private mergeSubTransaction() {
-    this.transaction.mergeTransaction(this.subTransaction);
+    // The subtransaction only contains operation of the UPDATE type because we want
+    // to be able to rollback the numbering. If we number a parcel element that has not been saved
+    // yet (INSERT), we need to make sure that it stays an INSERT in the parent transaction.
+    // Merging the transaction using this.transaction.mergeTransaction(this.subTransaction)
+    // would result in that INSERT becoming an UPDATE with undesired side-effects
+    // (for example deleting that parcel before saving it wouldn't work).
+    // Because of that, we are force to merge both transaction manually.
+
+    const operations = this.subTransaction.operations.all();
+    operations.forEach((operation: EntityOperation) => {
+      const current = operation.current as ClientParcelElement;
+      const previous = operation.previous as ClientParcelElement;
+      const parentOperation = this.transaction.getOperationByEntity(current);
+      if (parentOperation && parentOperation.type === EntityOperationType.Insert) {
+        this.transaction.insert(current, this.store, operation.meta);
+      } else {
+        this.transaction.update(previous, current, this.store, operation.meta);
+      }
+    });
     this.subTransaction.clear();
   }
 
@@ -267,7 +286,10 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
   }
 
   private deleteOperation(operation: EntityOperation<ClientParcelElement>) {
-    if (operation.current.properties.idParcelle === this.lastUpdate.properties.idParcelle) {
+    const lastUpdateId = this.lastUpdate === undefined ? undefined : this.lastUpdate.meta.id;
+    const parcelId = operation.current.meta.id;
+
+    if (parcelId === lastUpdateId) {
       this.store.state.update(this.lastUpdate, {selected: false});
       this.lastUpdate = undefined;
     }

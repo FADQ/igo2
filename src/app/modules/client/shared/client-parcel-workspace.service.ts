@@ -2,6 +2,7 @@ import { Injectable} from '@angular/core';
 
 import { ActionStore } from '@igo2/common';
 import {
+  FeatureMotion,
   FeatureStore,
   FeatureStoreLoadingStrategy,
   FeatureStoreSelectionStrategy,
@@ -10,12 +11,16 @@ import {
   VectorLayer
 } from '@igo2/geo';
 
-import { Client } from '../../shared/client.interfaces';
-import { createClientDefaultSelectionStyle } from '../../shared/client.utils';
-import { ClientParcel } from './client-parcel.interfaces';
-import { ClientParcelWorkspace } from './client-parcel-workspace';
+import {
+  Client,
+  ClientParcel,
+  ClientParcelWorkspace,
+  createParcelLayer,
+  createClientDefaultSelectionStyle
+} from 'src/lib/client';
+
+import { moveToFeaturesViewScale } from '../../feature/shared/feature.enums';
 import { ClientParcelTableService } from './client-parcel-table.service';
-import { createParcelLayer } from './client-parcel.utils';
 
 @Injectable({
   providedIn: 'root'
@@ -55,7 +60,7 @@ export class ClientParcelWorkspaceService {
     store.bindLayer(layer);
 
     store.addStrategy(this.createLoadingStrategy(), true);
-    store.addStrategy(this.createSelectionStrategy(client, map), true);
+    store.addStrategy(this.createSelectionStrategy(client, map), false);
 
     return store;
   }
@@ -66,7 +71,7 @@ export class ClientParcelWorkspaceService {
 
   private createLoadingStrategy(): FeatureStoreLoadingStrategy {
     return new FeatureStoreLoadingStrategy({
-      viewScale: ClientParcelWorkspaceService.viewScale
+      viewScale: moveToFeaturesViewScale
     });
   }
 
@@ -83,8 +88,7 @@ export class ClientParcelWorkspaceService {
         browsable: false
       }),
       many: true,
-      viewScale: ClientParcelWorkspaceService.viewScale,
-      areaRatio: 0.004,
+      motion: FeatureMotion.None,
       dragBox: true
     });
   }

@@ -10,7 +10,7 @@ import {
 
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoLayerModule } from '@igo2/geo';
-import { IgoContextManagerModule } from '@igo2/context';
+import { IgoAppCatalogModule } from '@igo2/integration';
 
 import { MapToolComponent } from './map-tool.component';
 import { LayerInfoDialogComponent } from './layer-info-dialog.component';
@@ -27,7 +27,7 @@ import { LayerInfoDialogComponent } from './layer-info-dialog.component';
     MatTooltipModule,
     IgoLanguageModule,
     IgoLayerModule,
-    IgoContextManagerModule
+    IgoAppCatalogModule
   ],
   declarations: [
     MapToolComponent,

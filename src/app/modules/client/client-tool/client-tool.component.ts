@@ -50,7 +50,7 @@ export class ClientToolComponent implements OnInit, OnDestroy {
    * Observable of the active client
    * @internal
    */
-  get controllers(): EntityStore<ClientController> { return this.clientState.controllerStore; }
+  get controllers(): EntityStore<ClientController> { return this.clientState.controllers; }
 
   /**
    * Observable of the client error, if any
@@ -90,8 +90,8 @@ export class ClientToolComponent implements OnInit, OnDestroy {
     this.unwatchParcelElementTx();
   }
 
-  onClearController(controller: ClientController) {
-    this.clientState.clearController(controller);
+  onDestroyController(controller: ClientController) {
+    this.clientState.destroyController(controller);
   }
 
   onSelectController(controller: ClientController) {

@@ -10,12 +10,23 @@ import {
 } from '@igo2/geo';
 
 import { TransactionData } from '../../../utils/transaction';
+import { ClientParcelDiagram } from '../../parcel/shared/client-parcel.interfaces';
 import { Client } from '../../shared/client.interfaces';
 import {
   ClientParcelElement,
   ClientParcelElementMessage,
   ClientParcelElementSaveData
 } from './client-parcel-element.interfaces';
+
+export function getDiagramsFromParcelElements(parcelElements: ClientParcelElement[]): ClientParcelDiagram[] {
+  const diagramIds = new Set(parcelElements.map((parcelElement: ClientParcelElement) => {
+    return parcelElement.properties.noDiagramme;
+  }));
+
+  return Array.from(diagramIds).map((id: number) => {
+    return {id};
+  });
+}
 
 export function computeParcelElementArea(parcelElement: ClientParcelElement): number {
   const measureProjection = 'EPSG:32198';
@@ -29,7 +40,7 @@ export function computeParcelElementArea(parcelElement: ClientParcelElement): nu
 export function createParcelElementLayer(client: Client): VectorLayer {
   const parcelElementDataSource = new FeatureDataSource();
   return new VectorLayer({
-    title: `${client.info.numero} - Parcelles du schéma`,
+    title: `${client.info.numero} - Parcelles en édition`,
     zIndex: 102,
     source: parcelElementDataSource,
     removable: false,

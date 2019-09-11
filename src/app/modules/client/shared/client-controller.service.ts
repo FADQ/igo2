@@ -9,20 +9,21 @@ import {
   ClientController,
   ClientControllerOptions,
   ClientParcelService,
-  ClientParcelWorkspaceService,
-  ClientParcelActionsService,
   ClientParcelElementService,
   ClientParcelElementTransactionService,
-  ClientParcelElementWorkspaceService,
-  ClientParcelElementActionsService,
   ClientSchemaService,
-  ClientSchemaWorkspaceService,
-  ClientSchemaActionsService,
   ClientSchemaElementService,
-  ClientSchemaElementTransactionService,
-  ClientSchemaElementWorkspaceService,
-  ClientSchemaElementActionsService
+  ClientSchemaElementTransactionService
 } from 'src/lib/client';
+
+import { ClientParcelWorkspaceService } from './client-parcel-workspace.service';
+import { ClientParcelActionsService } from './client-parcel-actions.service';
+import { ClientParcelElementWorkspaceService } from './client-parcel-element-workspace.service';
+import { ClientParcelElementActionsService } from './client-parcel-element-actions.service';
+import { ClientSchemaWorkspaceService } from './client-schema-workspace.service';
+import { ClientSchemaActionsService } from './client-schema-actions.service';
+import { ClientSchemaElementWorkspaceService } from './client-schema-element-workspace.service';
+import { ClientSchemaElementActionsService } from './client-schema-element-actions.service';
 
 @Injectable({
   providedIn: 'root'
@@ -70,7 +71,7 @@ export class ClientControllerService {
     const schemaElementService = this.clientSchemaElementService;
     const schemaElementTransactionService = this.clientSchemaElementTransactionService;
 
-    if (this.colorPalette === undefined || options.controllerStore.count === 0) {
+    if (this.colorPalette === undefined || options.controllers.count === 0) {
       this.colorPalette = this.createColorIterator();
     }
 
@@ -89,7 +90,7 @@ export class ClientControllerService {
       parcelElementWorkspace,
       schemaElementService,
       schemaElementTransactionService,
-      controllerStore: options.controllerStore,
+      controllers: options.controllers,
       color: this.colorPalette.next().value
     });
 

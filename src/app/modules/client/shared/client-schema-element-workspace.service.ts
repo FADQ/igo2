@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { ActionStore } from '@igo2/common';
 import {
+  FeatureMotion,
   FeatureStore,
   FeatureStoreLoadingStrategy,
   FeatureStoreSelectionStrategy,
@@ -10,14 +11,17 @@ import {
   VectorLayer
 } from '@igo2/geo';
 
-import { Client } from '../../shared/client.interfaces';
-import { createClientDefaultSelectionStyle } from '../../shared/client.utils';
-import { ClientSchemaElement } from './client-schema-element.interfaces';
-import { ClientSchemaElementService } from './client-schema-element.service';
-import { ClientSchemaElementTableService } from './client-schema-element-table.service';
-import { createSchemaElementLayer } from './client-schema-element.utils';
+import {
+  Client,
+  ClientSchemaElement,
+  ClientSchemaElementService,
+  ClientSchemaElementWorkspace,
+  createClientDefaultSelectionStyle,
+  createSchemaElementLayer
+} from 'src/lib/client';
 
-import { ClientSchemaElementWorkspace } from './client-schema-element-workspace';
+import { moveToFeaturesViewScale } from '../../feature/shared/feature.enums';
+import { ClientSchemaElementTableService } from './client-schema-element-table.service';
 
 @Injectable({
   providedIn: 'root'
@@ -59,7 +63,7 @@ export class ClientSchemaElementWorkspaceService {
     store.bindLayer(layer);
 
     store.addStrategy(this.createLoadingStrategy(), true);
-    store.addStrategy(this.createSelectionStrategy(client, map), true);
+    store.addStrategy(this.createSelectionStrategy(client, map), false);
 
     return store;
   }
@@ -70,7 +74,7 @@ export class ClientSchemaElementWorkspaceService {
 
   private createLoadingStrategy(): FeatureStoreLoadingStrategy {
     return new FeatureStoreLoadingStrategy({
-      viewScale: ClientSchemaElementWorkspaceService.viewScale
+      viewScale: moveToFeaturesViewScale
     });
   }
 
@@ -87,8 +91,7 @@ export class ClientSchemaElementWorkspaceService {
         browsable: false
       }),
       many: true,
-      viewScale: ClientSchemaElementWorkspaceService.viewScale,
-      areaRatio: 0.004,
+      motion: FeatureMotion.None,
       dragBox: true
     });
   }

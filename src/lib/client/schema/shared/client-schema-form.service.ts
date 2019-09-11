@@ -144,7 +144,7 @@ export class ClientSchemaFormService {
       name: 'annee',
       title: 'Année',
       options:  {
-        cols: 1,
+        cols: 2,
         validator: Validators.pattern(/^([1-9][\d]{3})$/),
         errors: {
           required: 'client.schema.error.anneeRequired',

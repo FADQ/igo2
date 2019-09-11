@@ -92,8 +92,8 @@ export class ClientParcelElementSliceComponent implements OnUpdateInputs, Widget
 
   private processParcelElement(data: ClientParcelElement): Observable<EditionResult> {
     Object.assign(data.properties, {
-      id: undefined,
-      noParcelAgricole: undefined
+      idParcelle: undefined,
+      noParcelleAgricole: undefined
     });
     return this.clientParcelElementService.createParcelElement(data)
       .pipe(
