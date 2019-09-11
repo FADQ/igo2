@@ -3,14 +3,11 @@ import { InjectionToken } from '@angular/core';
 import { Widget, WidgetService } from '@igo2/common';
 
 import {
-  ClientParcelElementCreateComponent
-} from '../client-parcel-element-create/client-parcel-element-create.component';
-import {
   ClientParcelElementStartTxComponent
 } from '../client-parcel-element-start-tx/client-parcel-element-start-tx.component';
 import {
-  ClientParcelElementDeleteTxComponent
-} from '../client-parcel-element-delete-tx/client-parcel-element-delete-tx.component';
+  ClientParcelElementCreateComponent
+} from '../client-parcel-element-create/client-parcel-element-create.component';
 import {
   ClientParcelElementUpdateComponent
 } from '../client-parcel-element-update/client-parcel-element-update.component';
@@ -42,34 +39,25 @@ import {
   ClientParcelElementWithoutOwnerComponent
 } from '../client-parcel-element-without-owner/client-parcel-element-without-owner.component';
 
-export const ClientParcelElementCreateWidget =
-  new InjectionToken<Widget>('ClientParcelElementCreateWidget');
+/** Start Tx **/
+export function clientParcelElementStartTxWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(ClientParcelElementStartTxComponent);
+}
+
 export const ClientParcelElementStartTxWidget =
   new InjectionToken<Widget>('ClientParcelElementStartTxWidget');
-  export const ClientParcelElementDeleteTxWidget =
-  new InjectionToken<Widget>('ClientParcelElementDeleteTxWidget');
-export const ClientParcelElementUpdateWidget =
-  new InjectionToken<Widget>('ClientParcelElementUpdateWidget');
-export const ClientParcelElementUpdateBatchWidget =
-  new InjectionToken<Widget>('ClientParcelElementUpdateBatchWidget');
-export const ClientParcelElementFillWidget =
-  new InjectionToken<Widget>('ClientParcelElementFillWidget');
-export const ClientParcelElementNumberingWidget =
-  new InjectionToken<Widget>('ClientParcelElementNumberingWidget');
-export const ClientParcelElementReconciliateWidget =
-  new InjectionToken<Widget>('ClientParcelElementReconciliateWidget');
-export const ClientParcelElementSliceWidget =
-  new InjectionToken<Widget>('ClientParcelElementSliceWidget');
-export const ClientParcelElementSaveWidget =
-  new InjectionToken<Widget>('ClientParcelElementSaveWidget');
-export const ClientParcelElementUndoWidget =
-  new InjectionToken<Widget>('ClientParcelElementUndoWidget');
-export const ClientParcelElementImportWidget =
-  new InjectionToken<Widget>('ClientParcelElementImportWidget');
-export const ClientParcelElementTransferWidget =
-  new InjectionToken<Widget>('ClientParcelElementTransferWidget');
-export const ClientParcelElementWithoutOwnerWidget =
-  new InjectionToken<Widget>('ClientParcelElementWithoutOwnerWidget');
+
+export function provideClientParcelElementStartTxWidget() {
+  return {
+    provide: ClientParcelElementStartTxWidget,
+    useFactory: clientParcelElementStartTxWidgetFactory,
+    deps: [WidgetService]
+  };
+}
+
+/** Create **/
+export const ClientParcelElementCreateWidget =
+  new InjectionToken<Widget>('ClientParcelElementCreateWidget');
 
 export function clientParcelElementCreateWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientParcelElementCreateComponent);
@@ -83,29 +71,9 @@ export function provideClientParcelElementCreateWidget() {
   };
 }
 
-export function clientParcelElementStartTxWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(ClientParcelElementStartTxComponent);
-}
-
-export function provideClientParcelElementStartTxWidget() {
-  return {
-    provide: ClientParcelElementStartTxWidget,
-    useFactory: clientParcelElementStartTxWidgetFactory,
-    deps: [WidgetService]
-  };
-}
-
-export function clientParcelElementDeleteTxWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(ClientParcelElementDeleteTxComponent);
-}
-
-export function provideClientParcelElementDeleteTxWidget() {
-  return {
-    provide: ClientParcelElementDeleteTxWidget,
-    useFactory: clientParcelElementDeleteTxWidgetFactory,
-    deps: [WidgetService]
-  };
-}
+/** Update **/
+export const ClientParcelElementUpdateWidget =
+  new InjectionToken<Widget>('ClientParcelElementUpdateWidget');
 
 export function clientParcelElementUpdateWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientParcelElementUpdateComponent);
@@ -119,6 +87,10 @@ export function provideClientParcelElementUpdateWidget() {
   };
 }
 
+/** Update Batch **/
+export const ClientParcelElementUpdateBatchWidget =
+  new InjectionToken<Widget>('ClientParcelElementUpdateBatchWidget');
+
 export function clientParcelElementUpdateBatchWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientParcelElementUpdateBatchComponent);
 }
@@ -130,6 +102,10 @@ export function provideClientParcelElementUpdateBatchWidget() {
     deps: [WidgetService]
   };
 }
+
+/** Fill **/
+export const ClientParcelElementFillWidget =
+  new InjectionToken<Widget>('ClientParcelElementFillWidget');
 
 export function clientParcelElementFillWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientParcelElementFillComponent);
@@ -143,29 +119,9 @@ export function provideClientParcelElementFillWidget() {
   };
 }
 
-export function clientParcelElementNumberingWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(ClientParcelElementNumberingComponent);
-}
-
-export function provideClientParcelElementNumberingWidget() {
-  return {
-    provide: ClientParcelElementNumberingWidget,
-    useFactory: clientParcelElementNumberingWidgetFactory,
-    deps: [WidgetService]
-  };
-}
-
-export function clientParcelElementReconciliateWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(ClientParcelElementReconciliateComponent);
-}
-
-export function provideClientParcelElementReconciliateWidget() {
-  return {
-    provide: ClientParcelElementReconciliateWidget,
-    useFactory: clientParcelElementReconciliateWidgetFactory,
-    deps: [WidgetService]
-  };
-}
+/** Slice **/
+export const ClientParcelElementSliceWidget =
+  new InjectionToken<Widget>('ClientParcelElementSliceWidget');
 
 export function clientParcelElementSliceWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientParcelElementSliceComponent);
@@ -179,6 +135,42 @@ export function provideClientParcelElementSliceWidget() {
   };
 }
 
+/** Numbering **/
+export const ClientParcelElementNumberingWidget =
+  new InjectionToken<Widget>('ClientParcelElementNumberingWidget');
+
+export function clientParcelElementNumberingWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(ClientParcelElementNumberingComponent);
+}
+
+export function provideClientParcelElementNumberingWidget() {
+  return {
+    provide: ClientParcelElementNumberingWidget,
+    useFactory: clientParcelElementNumberingWidgetFactory,
+    deps: [WidgetService]
+  };
+}
+
+/** Reconciliate **/
+export const ClientParcelElementReconciliateWidget =
+  new InjectionToken<Widget>('ClientParcelElementReconciliateWidget');
+
+export function clientParcelElementReconciliateWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(ClientParcelElementReconciliateComponent);
+}
+
+export function provideClientParcelElementReconciliateWidget() {
+  return {
+    provide: ClientParcelElementReconciliateWidget,
+    useFactory: clientParcelElementReconciliateWidgetFactory,
+    deps: [WidgetService]
+  };
+}
+
+/** Save **/
+export const ClientParcelElementSaveWidget =
+  new InjectionToken<Widget>('ClientParcelElementSaveWidget');
+
 export function clientParcelElementSaveWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientParcelElementSaveComponent);
 }
@@ -190,6 +182,10 @@ export function provideClientParcelElementSaveWidget() {
     deps: [WidgetService]
   };
 }
+
+/** Import **/
+export const ClientParcelElementImportWidget =
+  new InjectionToken<Widget>('ClientParcelElementImportWidget');
 
 export function clientParcelElementImportWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientParcelElementImportComponent);
@@ -203,6 +199,10 @@ export function provideClientParcelElementImportWidget() {
   };
 }
 
+/** Transfer **/
+export const ClientParcelElementTransferWidget =
+  new InjectionToken<Widget>('ClientParcelElementTransferWidget');
+
 export function clientParcelElementTransferWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientParcelElementTransferComponent);
 }
@@ -214,6 +214,10 @@ export function provideClientParcelElementTransferWidget() {
     deps: [WidgetService]
   };
 }
+
+/** Parcels without owner **/
+export const ClientParcelElementWithoutOwnerWidget =
+  new InjectionToken<Widget>('ClientParcelElementWithoutOwnerWidget');
 
 export function clientParcelElementWithoutOwnerWidgetFactory(widgetService: WidgetService) {
   return widgetService.create(ClientParcelElementWithoutOwnerComponent);

@@ -3,9 +3,7 @@ import { Injectable} from '@angular/core';
 import { EntityTableTemplate, EntityTableColumnRenderer } from '@igo2/common';
 
 import { formatDate } from 'src/lib/utils/date';
-import { padClientNum } from '../../shared/client.utils';
-import { ClientInfoService } from '../../info/shared/client-info.service';
-import { ClientParcel } from './client-parcel.interfaces';
+import { ClientInfoService, ClientParcel, padClientNum } from 'src/lib/client';
 
 @Injectable({
   providedIn: 'root'

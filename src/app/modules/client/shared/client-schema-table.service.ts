@@ -3,7 +3,7 @@ import { Injectable} from '@angular/core';
 import { EntityTableTemplate } from '@igo2/common';
 
 import { formatDate } from 'src/lib/utils/date';
-import { ClientSchema } from './client-schema.interfaces';
+import { ClientSchema } from 'src/lib/client';
 
 @Injectable({
   providedIn: 'root'

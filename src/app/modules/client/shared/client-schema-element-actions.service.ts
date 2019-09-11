@@ -1,14 +1,17 @@
 import { Inject, Injectable } from '@angular/core';
 
+import { Observable, combineLatest, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { LanguageService } from '@igo2/core';
 import { Action, EntityTableColumn, Widget } from '@igo2/common';
 import { entitiesToRowData, exportToCSV } from '@igo2/geo';
 
-import { EditionUndoWidget } from '../../../edition/shared/edition.widgets';
+import { EditionUndoWidget } from 'src/lib/edition';
 
-import { ClientController } from '../../shared/controller';
-import { ClientSchemaElement } from './client-schema-element.interfaces';
 import {
+  ClientController,
+  ClientSchemaElement,
   ClientSchemaElementCreateWidget,
   ClientSchemaElementUpdateWidget,
   ClientSchemaElementUpdateBatchWidget,
@@ -16,8 +19,10 @@ import {
   ClientSchemaElementSliceWidget,
   ClientSchemaElementSaveWidget,
   ClientSchemaElementImportWidget,
-} from './client-schema-element.widgets';
-import { generateSchemaElementOperationTitle } from './client-schema-element.utils';
+  generateSchemaElementOperationTitle
+} from 'src/lib/client';
+
+import { moveToFeatureStore } from '../../feature/shared/feature.utils';
 
 @Injectable({
   providedIn: 'root'
@@ -38,51 +43,86 @@ export class ClientSchemaElementActionsService {
 
   buildActions(controller: ClientController): Action[] {
 
-    function noActiveWidget(ctrl: ClientController): boolean {
-      return !ctrl.schemaElementWorkspace.hasWidget;
+    function every(...observables: Observable<boolean>[]): Observable<boolean> {
+      return combineLatest(observables).pipe(
+        map((bunch: boolean[]) => bunch.every(Boolean))
+      );
     }
 
-    function schemaIsDefined(ctrl: ClientController): boolean {
-      return ctrl.schema !== undefined;
+    function noActiveWidget(ctrl: ClientController): Observable<boolean> {
+      return ctrl.schemaElementWorkspace.widget$.pipe(
+        map((widget: Widget) => widget === undefined)
+      );
     }
 
-    function oneSchemaElementIsActive(ctrl: ClientController): boolean {
-      return ctrl.activeSchemaElement !== undefined;
+    function oneSchemaElementIsActive(ctrl: ClientController): Observable<boolean> {
+      return ctrl.selectedSchemaElements$.pipe(
+        map((schemaElements: ClientSchemaElement[]) => schemaElements.length === 1)
+      );
     }
 
-    function oneOrMoreSchemaElementAreSelected(ctrl: ClientController): boolean {
-      return ctrl.selectedSchemaElements.length > 0;
+    function oneOrMoreSchemaElementAreSelected(ctrl: ClientController): Observable<boolean> {
+      return ctrl.selectedSchemaElements$.pipe(
+        map((schemaElements: ClientSchemaElement[]) => schemaElements.length > 0)
+      );
     }
 
-    function transactionIsNotEmpty(ctrl: ClientController): boolean {
-      return ctrl.schemaElementTransaction.empty === false;
+    function transactionIsNotEmpty(ctrl: ClientController): Observable<boolean> {
+      return ctrl.schemaElementTransaction.empty$.pipe(
+        map((empty: boolean) => !empty)
+      );
     }
 
-    function transactionIsNotInCommitPhase(ctrl: ClientController): boolean {
-      return ctrl.schemaElementTransaction.inCommitPhase === false;
+    function transactionIsNotInCommitPhase(ctrl: ClientController): Observable<boolean> {
+      return ctrl.schemaElementTransaction.inCommitPhase$.pipe(
+        map((inCommitPhase: boolean) => !inCommitPhase)
+      );
     }
 
-    function schemaElementCanBeFilled(ctrl: ClientController): boolean {
-      const schemaElement = ctrl.activeSchemaElement;
-      const geometry = schemaElement === undefined ? undefined : schemaElement.geometry;
-      return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length > 1;
+    function schemaElementCanBeFilled(ctrl: ClientController): Observable<boolean> {
+      return ctrl.selectedSchemaElements$.pipe(
+        map(() => {
+          const schemaElement = ctrl.activeSchemaElement;
+          const geometry = schemaElement === undefined ? undefined : schemaElement.geometry;
+          return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length > 1;
+        })
+      );
     }
 
-    function schemaElementCanBeSliced(ctrl: ClientController): boolean {
-      const schemaElement = ctrl.activeSchemaElement;
-      const geometry = schemaElement === undefined ? undefined : schemaElement.geometry;
-      return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length === 1;
+    function schemaElementCanBeSliced(ctrl: ClientController): Observable<boolean> {
+      return ctrl.selectedSchemaElements$.pipe(
+        map(() => {
+          const schemaElement = ctrl.activeSchemaElement;
+          const geometry = schemaElement === undefined ? undefined : schemaElement.geometry;
+          return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length === 1;
+        })
+      );
     }
-
-    const conditionArgs = [controller];
 
     return [
+      {
+        id: 'zoom-to-features',
+        icon: 'feature-search-outline',
+        title: 'map.moveToFeatures.title',
+        tooltip: 'map.moveToFeatures.tooltip',
+        args: [controller],
+        handler: function(ctrl: ClientController) {
+          moveToFeatureStore(
+            ctrl.schemaElementWorkspace.map,
+            ctrl.schemaElementWorkspace.schemaElementStore
+          );
+        },
+        ngClass: (ctrl: ClientController) => of({
+          'fadq-actionbar-item-divider': true
+        })
+      },
       {
         id: 'create',
         icon: 'plus',
         title: 'edition.create',
         tooltip: 'edition.create.tooltip',
-        handler: (widget: Widget, ctrl: ClientController) => {
+        args: [controller, this.clientSchemaElementCreateWidget],
+        handler: (ctrl: ClientController, widget: Widget) => {
           ctrl.schemaElementWorkspace.activateWidget(widget, {
             schema: ctrl.schema,
             transaction: ctrl.schemaElementTransaction,
@@ -90,16 +130,19 @@ export class ClientSchemaElementActionsService {
             store: ctrl.schemaElementStore
           });
         },
-        args: [this.clientSchemaElementCreateWidget, controller],
-        conditions: [noActiveWidget, schemaIsDefined],
-        conditionArgs
+        availability: noActiveWidget
       },
       {
         id: 'update',
         icon: 'pencil',
         title: 'edition.update',
         tooltip: 'edition.update.tooltip',
-        handler: (singleWidget: Widget, batchWidget: Widget, ctrl: ClientController) => {
+        args: [
+          controller,
+          this.clientSchemaElementUpdateWidget,
+          this.clientSchemaElementUpdateBatchWidget
+        ],
+        handler: (ctrl: ClientController, singleWidget: Widget, batchWidget: Widget) => {
           const inputs = {
             schema: ctrl.schema,
             transaction: ctrl.schemaElementTransaction,
@@ -117,19 +160,18 @@ export class ClientSchemaElementActionsService {
             }, inputs));
           }
         },
-        args: [
-          this.clientSchemaElementUpdateWidget,
-          this.clientSchemaElementUpdateBatchWidget,
-          controller
-        ],
-        conditions: [noActiveWidget, oneOrMoreSchemaElementAreSelected, transactionIsNotInCommitPhase],
-        conditionArgs
+        availability: (ctrl: ClientController) => every(
+          noActiveWidget(ctrl),
+          oneOrMoreSchemaElementAreSelected(ctrl),
+          transactionIsNotInCommitPhase(ctrl)
+        )
       },
       {
         id: 'delete',
         icon: 'delete',
         title: 'edition.delete',
         tooltip: 'edition.delete.tooltip',
+        args: [controller],
         handler: (ctrl: ClientController) => {
           const store = ctrl.schemaElementStore;
           const transaction = ctrl.schemaElementTransaction;
@@ -140,16 +182,19 @@ export class ClientSchemaElementActionsService {
             });
           });
         },
-        args: [controller],
-        conditions: [oneOrMoreSchemaElementAreSelected, transactionIsNotInCommitPhase],
-        conditionArgs
+        availability: (ctrl: ClientController) => every(
+          noActiveWidget(ctrl),
+          oneOrMoreSchemaElementAreSelected(ctrl),
+          transactionIsNotInCommitPhase(ctrl)
+        )
       },
       {
         id: 'fill',
         icon: 'select-all',
         title: 'edition.fill',
         tooltip: 'edition.fill.tooltip',
-        handler: (widget: Widget, ctrl: ClientController) => {
+        args: [controller, this.clientSchemaElementFillWidget],
+        handler: (ctrl: ClientController, widget: Widget) => {
           ctrl.schemaElementWorkspace.activateWidget(widget, {
             schemaElement: ctrl.activeSchemaElement,
             schema: ctrl.schema,
@@ -158,16 +203,20 @@ export class ClientSchemaElementActionsService {
             store: ctrl.schemaElementStore
           });
         },
-        args: [this.clientSchemaElementFillWidget, controller],
-        conditions: [noActiveWidget, oneSchemaElementIsActive, transactionIsNotInCommitPhase, schemaElementCanBeFilled],
-        conditionArgs
+        availability: (ctrl: ClientController) => every(
+          noActiveWidget(ctrl),
+          oneSchemaElementIsActive(ctrl),
+          transactionIsNotInCommitPhase(ctrl),
+          schemaElementCanBeFilled(ctrl)
+        )
       },
       {
         id: 'slice',
         icon: 'box-cutter',
         title: 'edition.slice',
         tooltip: 'edition.slice.tooltip',
-        handler: (widget: Widget, ctrl: ClientController) => {
+        args: [controller, this.clientSchemaElementSliceWidget],
+        handler: (ctrl: ClientController, widget: Widget) => {
           ctrl.schemaElementWorkspace.activateWidget(widget, {
             schemaElement: ctrl.activeSchemaElement,
             schema: ctrl.schema,
@@ -176,16 +225,23 @@ export class ClientSchemaElementActionsService {
             store: ctrl.schemaElementStore
           });
         },
-        args: [this.clientSchemaElementSliceWidget, controller],
-        conditions: [noActiveWidget, oneSchemaElementIsActive, transactionIsNotInCommitPhase, schemaElementCanBeSliced],
-        conditionArgs
+        availability: (ctrl: ClientController) => every(
+          noActiveWidget(ctrl),
+          oneSchemaElementIsActive(ctrl),
+          transactionIsNotInCommitPhase(ctrl),
+          schemaElementCanBeSliced(ctrl)
+        ),
+        ngClass: (ctrl: ClientController) => of({
+          'fadq-actionbar-item-divider': true
+        })
       },
       {
         id: 'import',
         icon: 'import',
         title: 'client.schemaElement.import',
         tooltip: 'client.schemaElement.import.tooltip',
-        handler: (widget: Widget, ctrl: ClientController) => {
+        args: [controller, this.clientSchemaElementImportWidget],
+        handler: (ctrl: ClientController, widget: Widget) => {
           ctrl.schemaElementWorkspace.activateWidget(widget, {
             schemaElement: ctrl.activeSchemaElement,
             schema: ctrl.schema,
@@ -194,15 +250,17 @@ export class ClientSchemaElementActionsService {
             store: ctrl.schemaElementStore
           });
         },
-        args: [this.clientSchemaElementImportWidget, controller],
-        conditions: [noActiveWidget, transactionIsNotInCommitPhase],
-        conditionArgs
+        availability: (ctrl: ClientController) => every(
+          noActiveWidget(ctrl),
+          transactionIsNotInCommitPhase(ctrl)
+        )
       },
       {
         id: 'export',
         icon: 'file-download',
         title: 'edition.exportToCSV',
         tooltip: 'edition.exportToCSV.tooltip',
+        args: [controller],
         handler: (ctrl: ClientController) => {
           const workspace = ctrl.schemaElementWorkspace;
           const columns = workspace.meta.tableTemplate.columns;
@@ -212,39 +270,46 @@ export class ClientSchemaElementActionsService {
           const fileName = `Éléments du schéma ${ctrl.schema.id}.csv`;
           exportToCSV([headers].concat(rows), fileName, ';');
         },
-        args: [controller],
-        conditions: [noActiveWidget],
-        conditionArgs
+        availability: noActiveWidget,
+        ngClass: (ctrl: ClientController) => of({
+          'fadq-actionbar-item-divider': true
+        })
       },
       {
         id: 'save',
         icon: 'floppy',
         title: 'edition.save',
         tooltip: 'edition.save.tooltip',
-        handler: (widget: Widget, ctrl: ClientController) => {
+        args: [controller, this.clientSchemaElementSaveWidget],
+        handler: (ctrl: ClientController, widget: Widget) => {
           ctrl.schemaElementWorkspace.activateWidget(widget, {
             schema: ctrl.schema,
             transaction: ctrl.schemaElementTransaction,
             store: ctrl.schemaElementStore
           });
         },
-        args: [this.clientSchemaElementSaveWidget, controller],
-        conditions: [noActiveWidget, transactionIsNotInCommitPhase, transactionIsNotEmpty],
-        conditionArgs
+        availability: (ctrl: ClientController) => every(
+          noActiveWidget(ctrl),
+          transactionIsNotInCommitPhase(ctrl),
+          transactionIsNotEmpty(ctrl)
+        )
       },
       {
         id: 'undo',
         icon: 'undo',
         title: 'edition.undo',
         tooltip: 'edition.undo.tooltip',
-        handler: (widget: Widget, ctrl: ClientController) => {
+        args: [controller, this.editionUndoWidget],
+        handler: (ctrl: ClientController, widget: Widget) => {
           ctrl.schemaElementWorkspace.activateWidget(widget, {
             transaction: ctrl.schemaElementTransaction
           });
         },
-        args: [this.editionUndoWidget, controller],
-        conditions: [noActiveWidget, transactionIsNotInCommitPhase, transactionIsNotEmpty],
-        conditionArgs
+        availability: (ctrl: ClientController) => every(
+          noActiveWidget(ctrl),
+          transactionIsNotInCommitPhase(ctrl),
+          transactionIsNotEmpty(ctrl)
+        )
       }
     ];
   }

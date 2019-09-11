@@ -91,10 +91,7 @@ export class ClientParcelElementFormService {
       title: 'Numéro de parcelle',
       options:  {
         cols: 1,
-        validator: Validators.maxLength(3),
-        // errors: {
-        //   maxlength: 'client.parcelElement.error.descriptionMaxLength'
-        // }
+        validator: Validators.maxLength(3)
       }
     }, partial));
   }
@@ -128,9 +125,9 @@ export class ClientParcelElementFormService {
       },
       inputs: {
         choices: [
-          {value: 'inconnue', title: 'Inconnu'},
-          {value: 'oui', title: 'Oui'},
-          {value: 'non', title: 'Non'}
+          {value: 'inconnu', title: 'Inconnu'},
+          {value: 'o', title: 'Oui'},
+          {value: 'n', title: 'Non'}
         ]
       }
     }, partial));

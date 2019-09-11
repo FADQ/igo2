@@ -67,10 +67,10 @@ export class ClientParcelElementService {
     return this.http.get(url);
   }
 
-  deleteParcelTx(client: Client, annee: number): Observable<any> {
+  deleteParcelTx(client: ClientInTx, annee: number): Observable<any> {
     const url = this.apiService.buildUrl(this.apiConfig.deleteTx, {
-      clientNum: client.info.numero,
-      annee: annee
+      clientNum: client.noClient,
+      annee
     });
     return this.http.get(url);
   }

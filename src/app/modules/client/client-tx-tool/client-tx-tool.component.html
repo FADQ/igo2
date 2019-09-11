@@ -5,8 +5,8 @@
         igoListItem
         [client]="client"
         [added]="clientIsAdded(client)"
-        [disabled]="clientIsAdded(client)"
-        (addedChange)="onClientAddedChange($event)">
+        (addedChange)="onClientAddedChange($event)"
+        (delete)="onDeleteTx($event)">
       </fadq-client-tx-tool-item>
     </ng-template>
   </igo-list>

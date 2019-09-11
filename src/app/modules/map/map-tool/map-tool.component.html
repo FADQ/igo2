@@ -1,5 +1,9 @@
 <mat-tab-group>
 
+  <mat-tab [label]="'igo.integration.tools.catalog' | translate">
+    <igo-catalog-library-tool [toggleCollapsedGroup]="false"></igo-catalog-library-tool>
+  </mat-tab>
+
   <mat-tab [label]="'map.layers' | translate">
     <igo-layer-list
       igoLayerListBinding
@@ -21,10 +25,6 @@
       </ng-template>
 
     </igo-layer-list>
-  </mat-tab>
-
-  <mat-tab [label]="'context.contexts' | translate">
-    <igo-context-list igoContextListBinding></igo-context-list>
   </mat-tab>
   
 </mat-tab-group>

@@ -17,7 +17,7 @@
         [showLegend]="!(showLegend$ | async)"
         [showInfo]="showInfo"
         [selected]="(activeController$ | async) === controller"
-        (clear)="onClearController($event)"
+        (clear)="onDestroyController($event)"
         (select)="onSelectController($event)"
         (clickAddress)="onClickAddress($event)">
       </fadq-client-tool-item>

@@ -18,7 +18,10 @@ import { ClientParcelElement } from '../parcel-element/shared/client-parcel-elem
 import { ClientParcelElementService } from '../parcel-element/shared/client-parcel-element.service';
 import { ClientParcelElementTransactionService } from '../parcel-element/shared/client-parcel-element-transaction.service';
 import { ClientParcelElementTxState } from '../parcel-element/shared/client-parcel-element.enums';
-import { createParcelElementLayerStyle } from '../parcel-element/shared/client-parcel-element.utils';
+import {
+  createParcelElementLayerStyle,
+  getDiagramsFromParcelElements
+} from '../parcel-element/shared/client-parcel-element.utils';
 import { ClientSchema } from '../schema/shared/client-schema.interfaces';
 import { ClientSchemaService } from '../schema/shared/client-schema.service';
 import { ClientSchemaWorkspace } from '../schema/shared/client-schema-workspace';
@@ -31,7 +34,7 @@ import { createSchemaElementLayerStyle } from '../schema-element/shared/client-s
 export interface ClientControllerOptions {
   map: IgoMap;
   client: Client;
-  controllerStore: EntityStore<ClientController>;
+  controllers: EntityStore<ClientController>;
   workspaceStore: WorkspaceStore;
   parcelYear: number;
   parcelWorkspace: ClientParcelWorkspace;
@@ -79,8 +82,8 @@ export class ClientController {
   get client(): Client { return this.options.client; }
 
   /** Controller store */
-  get controllerStore(): EntityStore<ClientController> {
-    return this.options.controllerStore;
+  get controllers(): EntityStore<ClientController> {
+    return this.options.controllers;
   }
 
   /** Workspace store */
@@ -102,12 +105,12 @@ export class ClientController {
   }
 
   /** Selected parcel elements */
-  get selectedParcels(): ClientParcel[] { return this._selectedParcels; }
-  private _selectedParcels: ClientParcel[] = [];
+  get selectedParcels(): ClientParcel[] { return this.selectedParcels$.value; }
+  readonly selectedParcels$: BehaviorSubject<ClientParcel[]> = new BehaviorSubject([]);
 
   /** Selected parcel elements */
   get activeParcel(): ClientParcel {
-    return this._selectedParcels.length === 1 ? this.selectedParcels[0] : undefined;
+    return this.selectedParcels.length === 1 ? this.selectedParcels[0] : undefined;
   }
 
   get parcelService(): ClientParcelService {
@@ -125,12 +128,12 @@ export class ClientController {
   }
 
   /** Selected parcel elements */
-  get selectedParcelElements(): ClientParcelElement[] { return this._selectedParcelElements; }
-  private _selectedParcelElements: ClientParcelElement[] = [];
+  get selectedParcelElements(): ClientParcelElement[] { return this.selectedParcelElements$.value; }
+  readonly selectedParcelElements$: BehaviorSubject<ClientParcelElement[]> = new BehaviorSubject([]);
 
   /** Selected parcel elements */
   get activeParcelElement(): ClientParcelElement {
-    return this._selectedParcelElements.length === 1 ? this.selectedParcelElements[0] : undefined;
+    return this.selectedParcelElements.length === 1 ? this.selectedParcelElements[0] : undefined;
   }
 
   /** Parcel element transaction */
@@ -158,9 +161,9 @@ export class ClientController {
     return this.schemaWorkspace.schemaStore;
   }
 
-  /** Active schema */
-  get schema(): ClientSchema { return this._schema; }
-  private _schema: ClientSchema;
+  /** Selected parcel elements */
+  get schema(): ClientSchema { return this.schema$.value; }
+  readonly schema$: BehaviorSubject<ClientSchema> = new BehaviorSubject(undefined);
 
   get schemaService(): ClientSchemaService {
     return this.options.schemaService;
@@ -177,12 +180,12 @@ export class ClientController {
   }
 
   /** Selected schema elements */
-  get selectedSchemaElements(): ClientSchemaElement[] { return this._selectedSchemaElements; }
-  private _selectedSchemaElements: ClientSchemaElement[] = [];
+  get selectedSchemaElements(): ClientSchemaElement[] { return this.selectedSchemaElements$.value; }
+  readonly selectedSchemaElements$: BehaviorSubject<ClientSchemaElement[]> = new BehaviorSubject([]);
 
   /** Selected schema elements */
   get activeSchemaElement(): ClientSchemaElement {
-    return this._selectedSchemaElements.length === 1 ? this.selectedSchemaElements[0] : undefined;
+    return this.selectedSchemaElements.length === 1 ? this.selectedSchemaElements[0] : undefined;
   }
 
   /** Element transaction */
@@ -232,31 +235,35 @@ export class ClientController {
     return this.parcelElementService.prepareParcelTx(this.client, this.parcelYear);
   }
 
-  activateParcelTx() {
-    this.parcelElementTxActive$.next(true);
+  startParcelTx() {
+    this.activateParcelTx();
     this.initParcelElements();
     this.teardownParcels();
     this.workspaceStore.activateWorkspace(this.parcelElementWorkspace);
   }
 
-  deactivateParcelTx() {
+  stopParcelTx() {
     if (!this.parcelElementTransaction.empty) {
       this.parcelElementTransactionService.enqueue({
         client: this.client,
         annee: this.parcelYear,
         transaction: this.parcelElementTransaction,
-        proceed: () => this.deactivateParcelTx()
+        proceed: () => this.stopParcelTx()
       });
       return;
     }
 
-    this.parcelElementTxActive$.next(false);
     this.teardownParcelElements();
-  }
-
-  activateParcels() {
     this.initParcels();
     this.workspaceStore.activateWorkspace(this.parcelWorkspace);
+  }
+
+  activateParcelTx() {
+    this.parcelElementTxActive$.next(true);
+  }
+
+  deactivateParcelTx() {
+    this.parcelElementTxActive$.next(false);
   }
 
   defineColor(color: [number, number, number] | undefined) {
@@ -369,12 +376,14 @@ export class ClientController {
   private loadParcelElements() {
     this.parcelElementService.getParcelElements(this.client, this.parcelYear)
       .subscribe((parcelElements: ClientParcelElement[]) => {
+        const diagrams = getDiagramsFromParcelElements(parcelElements);
+        this.loadDiagrams(diagrams);
         this.parcelElementWorkspace.load(parcelElements);
       });
   }
 
   private teardownParcelElements() {
-    this.parcelElementTxActive$.next(false);
+    this.deactivateParcelTx();
 
     if (this.parcelElements$$ !== undefined) {
       this.parcelElements$$.unsubscribe();
@@ -465,11 +474,11 @@ export class ClientController {
   }
 
   private onSelectParcels(parcels: ClientParcel[]) {
-    this._selectedParcels = parcels;
+    this.selectedParcels$.next(parcels);
   }
 
   private onSelectParcelElements(parcelElements: ClientParcelElement[]) {
-    this._selectedParcelElements = parcelElements;
+    this.selectedParcelElements$.next(parcelElements);
   }
 
   private onSelectSchema(schema: ClientSchema) {
@@ -480,7 +489,7 @@ export class ClientController {
   }
 
   private onSelectSchemaElements(schemaElements: ClientSchemaElement[]) {
-    this._selectedSchemaElements = schemaElements;
+    this.selectedSchemaElements$.next(schemaElements);
   }
 
   private setDiagrams(diagrams: ClientParcelDiagram[]) {
@@ -509,14 +518,14 @@ export class ClientController {
     if (schema !== undefined) {
       this.initSchemaElements(schema);
     }
-    this._schema = schema;
+    this.schema$.next(schema);
   }
 
   private clearSchema() {
     if (this.schema === undefined) { return; }
 
     this.teardownSchemaElements();
-    this._schema = undefined;
+    this.schema$.next(undefined);
   }
 
 }

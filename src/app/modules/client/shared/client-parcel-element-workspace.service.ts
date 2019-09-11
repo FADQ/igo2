@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { ActionStore } from '@igo2/common';
 import {
+  FeatureMotion,
   FeatureStore,
   FeatureStoreLoadingStrategy,
   FeatureStoreSelectionStrategy,
@@ -10,20 +11,22 @@ import {
   VectorLayer
 } from '@igo2/geo';
 
-import { Client } from '../../shared/client.interfaces';
-import { createClientDefaultSelectionStyle } from '../../shared/client.utils';
-import { ClientParcelElement } from './client-parcel-element.interfaces';
-import { ClientParcelElementWorkspace } from './client-parcel-element-workspace';
-import { ClientParcelElementService } from './client-parcel-element.service';
-import { ClientParcelElementTableService } from './client-parcel-element-table.service';
-import { createParcelElementLayer } from './client-parcel-element.utils';
+import {
+  Client,
+  ClientParcelElement,
+  ClientParcelElementWorkspace,
+  ClientParcelElementService,
+  createClientDefaultSelectionStyle,
+  createParcelElementLayer
+} from 'src/lib/client';
+
+import { moveToFeaturesViewScale } from '../../feature/shared/feature.enums';
+import { ClientParcelElementTableService  } from './client-parcel-element-table.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClientParcelElementWorkspaceService {
-
-  static viewScale: [number, number, number, number] = [0, 0, 0.8, 0.6];
 
   constructor(
     private clientParcelElementService: ClientParcelElementService,
@@ -61,7 +64,7 @@ export class ClientParcelElementWorkspaceService {
     store.bindLayer(layer);
 
     store.addStrategy(this.createLoadingStrategy(), true);
-    store.addStrategy(this.createSelectionStrategy(client, map), true);
+    store.addStrategy(this.createSelectionStrategy(client, map), false);
 
     return store;
   }
@@ -72,7 +75,7 @@ export class ClientParcelElementWorkspaceService {
 
   private createLoadingStrategy(): FeatureStoreLoadingStrategy {
     return new FeatureStoreLoadingStrategy({
-      viewScale: ClientParcelElementWorkspaceService.viewScale
+      viewScale: moveToFeaturesViewScale
     });
   }
 
@@ -88,9 +91,8 @@ export class ClientParcelElementWorkspaceService {
         removable: false,
         browsable: false
       }),
+      motion: FeatureMotion.None,
       many: true,
-      viewScale: ClientParcelElementWorkspaceService.viewScale,
-      areaRatio: 0.004,
       dragBox: true
     });
   }

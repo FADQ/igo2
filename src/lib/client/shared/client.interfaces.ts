@@ -1,7 +1,7 @@
 import { ClientInfo, ClientInfoApiConfig } from '../info';
-import { ClientParcel, ClientParcelDiagram, ClientParcelApiConfig } from '../parcel';
+import { ClientParcelApiConfig } from '../parcel';
 import { ClientParcelElementApiConfig } from '../parcel-element';
-import { ClientSchema, ClientSchemaApiConfig } from '../schema';
+import { ClientSchemaApiConfig } from '../schema';
 import { ClientSchemaFileApiConfig } from '../schema-file';
 import { ClientSchemaElementApiConfig } from '../schema-element';
 

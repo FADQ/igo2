@@ -1,5 +1,3 @@
-import { Observable } from 'rxjs';
-
 import { EntityTableTemplate, Workspace, WorkspaceOptions } from '@igo2/common';
 import {
   IgoMap,
