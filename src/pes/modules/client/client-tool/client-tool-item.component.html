@@ -1,0 +1,27 @@
+<div matLine class="fadq-client-name" (click)="onSelect()">
+  {{controller.client.info.nom}}
+</div>
+
+<div class="fadq-client-content">
+  <div *ngIf="controller.message$ | async as message" class="fadq-error-text">
+    {{message | translate}}
+  </div>
+
+  <div class="fadq-client-tool-bottom-section"></div>
+
+  <ng-container *ngIf="showInfo">
+    <a
+      href=""
+      target="popup"
+      class="fadq-client-info-link"
+      (click)="openClientInfoLink(controller.client)">
+      Information détaillée
+    </a>
+    <fadq-client-info-addresses
+      [client]="controller.client"
+      [map]="controller.map"
+      (clickAddress)="clickAddress.emit($event)">
+    </fadq-client-info-addresses>
+  </ng-container>
+</div>
+  

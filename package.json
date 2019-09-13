@@ -7,6 +7,9 @@
   },
   "license": "LiLiQ-R",
   "scripts": {
+    "pes.start": "ng serve pes --host 0.0.0.0 --proxy-config proxy.conf.json",
+    "pes.build.prod": "ng build pes --prod",
+
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.json",
     "build": "ng build",

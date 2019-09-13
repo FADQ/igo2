@@ -1,0 +1,22 @@
+:host {
+  display: block;
+  overflow: hidden;
+  border: 1px solid white;
+}
+
+.fadq-client-content {
+  padding: 0 20px;
+}
+
+fadq-client-addresses,
+fadq-client-parcel-legend {
+  display: block;
+  margin-left: 15px;
+}
+
+.fadq-client-info-link {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 18px;
+  text-align: center;
+}
