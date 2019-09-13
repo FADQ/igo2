@@ -5,7 +5,7 @@ import { EntityStore } from '@igo2/common';
 
 import { SubmitStep, SubmitHandler } from '../../../utils';
 import { ClientInTx } from '../shared/client-parcel-element.interfaces';
-import { ClientController } from '../../shared/controller';
+import { ClientController } from '../../shared/client-controller';
 import { ClientParcelElementService } from '../../parcel-element/shared/client-parcel-element.service';
 
 @Component({

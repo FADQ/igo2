@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { concatMap, map } from 'rxjs/operators';
+import { concatMap, map, tap } from 'rxjs/operators';
 
 import { EntityRecord, EntityStore, EntityTransaction, WorkspaceStore } from '@igo2/common';
 import { FeatureStore, IgoMap } from '@igo2/geo';
@@ -99,20 +99,16 @@ export class ClientController {
     return this.options.parcelWorkspace;
   }
 
-  /** Store that holds the parcels of the active client */
+  /** Store that holds the parcels of the client */
   get parcelStore(): FeatureStore<ClientParcel> {
     return this.parcelWorkspace.parcelStore;
   }
 
-  /** Selected parcel elements */
+  /** Selected parcels */
   get selectedParcels(): ClientParcel[] { return this.selectedParcels$.value; }
   readonly selectedParcels$: BehaviorSubject<ClientParcel[]> = new BehaviorSubject([]);
 
-  /** Selected parcel elements */
-  get activeParcel(): ClientParcel {
-    return this.selectedParcels.length === 1 ? this.selectedParcels[0] : undefined;
-  }
-
+  /** Parcel service */
   get parcelService(): ClientParcelService {
     return this.options.parcelService;
   }
@@ -140,10 +136,12 @@ export class ClientController {
   get parcelElementTransaction(): EntityTransaction { return this._parcelElementTransaction; }
   private _parcelElementTransaction: EntityTransaction = new EntityTransaction();
 
+  /** Parcel element service */
   get parcelElementService(): ClientParcelElementService {
     return this.options.parcelElementService;
   }
 
+  /** Parcel element transaction service */
   get parcelElementTransactionService(): ClientParcelElementTransactionService {
     return this.options.parcelElementTransactionService;
   }
@@ -156,7 +154,7 @@ export class ClientController {
     return this.options.schemaWorkspace;
   }
 
-  /** Store that holds the schemas of the active client */
+  /** Store that holds the schemas of the client */
   get schemaStore(): EntityStore<ClientSchema> {
     return this.schemaWorkspace.schemaStore;
   }
@@ -165,6 +163,7 @@ export class ClientController {
   get schema(): ClientSchema { return this.schema$.value; }
   readonly schema$: BehaviorSubject<ClientSchema> = new BehaviorSubject(undefined);
 
+  /** Schema service */
   get schemaService(): ClientSchemaService {
     return this.options.schemaService;
   }
@@ -209,9 +208,16 @@ export class ClientController {
 
   constructor(private options: ClientControllerOptions) {
     this.initDiagrams();
+
     this.initParcels();
+
     this.initSchemas();
+    this.loadSchemas();
+
     this.defineColor(options.color);
+    if (options.parcelYear !== undefined) {
+      this.setParcelYear(options.parcelYear);
+    }
   }
 
   destroy() {
@@ -238,6 +244,7 @@ export class ClientController {
   startParcelTx() {
     this.activateParcelTx();
     this.initParcelElements();
+    this.loadParcelElements();
     this.teardownParcels();
     this.workspaceStore.activateWorkspace(this.parcelElementWorkspace);
   }
@@ -255,6 +262,7 @@ export class ClientController {
 
     this.teardownParcelElements();
     this.initParcels();
+    this.loadParcels();
     this.workspaceStore.activateWorkspace(this.parcelWorkspace);
   }
 
@@ -331,14 +339,17 @@ export class ClientController {
 
     this.parcelWorkspace.init();
     this.workspaceStore.update(this.parcelWorkspace);
-    this.loadParcels();
   }
 
   private loadParcels() {
     this.parcelService.getParcels(this.client, this.parcelYear)
+      .pipe(
+        tap((parcels: ClientParcel[]) => {
+          const diagrams = getDiagramsFromParcels(parcels);
+          this.loadDiagrams(diagrams);
+        })
+      )
       .subscribe((parcels: ClientParcel[]) => {
-        const diagrams = getDiagramsFromParcels(parcels);
-        this.loadDiagrams(diagrams);
         this.parcelWorkspace.load(parcels);
 
         if (parcels.length === 0) {
@@ -370,7 +381,6 @@ export class ClientController {
 
       this.parcelElementWorkspace.init();
       this.workspaceStore.update(this.parcelElementWorkspace);
-      this.loadParcelElements();
   }
 
   private loadParcelElements() {
@@ -407,7 +417,6 @@ export class ClientController {
 
     this.schemaWorkspace.init();
     this.workspaceStore.update(this.schemaWorkspace);
-    this.loadSchemas();
   }
 
   private loadSchemas() {
@@ -436,7 +445,6 @@ export class ClientController {
 
     this.schemaElementWorkspace.init();
     this.workspaceStore.update(this.schemaElementWorkspace);
-    this.loadSchemaElements(schema);
   }
 
   private loadSchemaElements(schema: ClientSchema) {
@@ -517,6 +525,7 @@ export class ClientController {
 
     if (schema !== undefined) {
       this.initSchemaElements(schema);
+      this.loadSchemaElements(schema);
     }
     this.schema$.next(schema);
   }

@@ -15,7 +15,7 @@ import { LanguageService, Message, MessageType } from '@igo2/core';
 import { WidgetComponent, OnUpdateInputs } from '@igo2/common';
 
 import { SubmitStep, SubmitHandler } from '../../../utils';
-import { ClientController } from '../../shared/controller';
+import { ClientController } from '../../shared/client-controller';
 import { ClientParcelElementTxState} from '../shared/client-parcel-element.enums';
 
 @Component({

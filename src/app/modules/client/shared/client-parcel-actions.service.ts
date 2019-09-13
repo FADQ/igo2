@@ -49,7 +49,7 @@ export class ClientParcelActionsService {
         title: 'client.parcelElement.startTx',
         tooltip: 'client.parcelElement.startTx.tooltip',
         args: [controller, this.clientParcelElementStartTxWidget],
-        handler: function(ctrl: ClientController, contextState: ContextState, widget: Widget) {
+        handler: function(ctrl: ClientController, widget: Widget) {
           ctrl.getParcelTxState()
             .subscribe((state: ClientParcelElementTxState) => {
               if (state === ClientParcelElementTxState.OK) {

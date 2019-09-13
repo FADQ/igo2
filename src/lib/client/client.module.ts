@@ -1,6 +1,8 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { FadqLibEditionModule } from '../edition/edition.module';
+
 import { provideClientService } from './shared/client.providers';
 
 import { FadqLibClientInfoModule } from './info/client-info.module';
@@ -13,6 +15,7 @@ import { FadqLibClientSchemaElementModule } from './schema-element/client-schema
 @NgModule({
   imports: [
     CommonModule,
+    FadqLibEditionModule.forRoot(),
     FadqLibClientInfoModule.forRoot(),
     FadqLibClientParcelModule.forRoot(),
     FadqLibClientSchemaModule.forRoot(),

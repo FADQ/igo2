@@ -40,11 +40,11 @@ export class ClientToolComponent implements OnInit, OnDestroy {
 
   readonly parcelYearSelectorDisabled$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  @Input() showInfo: boolean = true;
-
   private controllers$$: Subscription;
 
   private parcelElementTx$$: Subscription;
+
+  @Input() showInfo: boolean = true;
 
   /**
    * Observable of the active client
