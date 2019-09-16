@@ -18,9 +18,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/igo2",
+            "outputPath": "dist/interne",
             "index": "src/index.html",
-            "main": "src/main.ts",
+            "main": "src/apps/interne.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
@@ -144,7 +144,7 @@
           "options": {
             "outputPath": "dist/pes",
             "index": "src/index.html",
-            "main": "src/pes.ts",
+            "main": "src/apps/pes.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
@@ -178,7 +178,7 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.pes.ts"
+                  "with": "src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,

@@ -1,6 +1,8 @@
 import * as olstyle from 'ol/style';
 import OlFeature from 'ol/Feature';
 
+import { FormFieldSelectChoice } from '@igo2/common';
+
 import { FeatureDataSource, VectorLayer } from '@igo2/geo';
 import { ObjectUtils } from '@igo2/utils';
 
@@ -116,4 +118,12 @@ function getParcelFeatureColor(olFeature: OlFeature) {
     3: [0, 218, 250]
   };
   return colors[ olFeature.get('relation')];
+}
+
+export function getParcelleDraineeChoices(): FormFieldSelectChoice[] {
+  return [
+    {value: null, title: ''},
+    {value: 'O', title: 'Oui'},
+    {value: 'N', title: 'Non'}
+  ];
 }

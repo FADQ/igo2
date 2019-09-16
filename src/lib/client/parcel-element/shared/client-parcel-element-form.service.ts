@@ -1,9 +1,8 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Validators } from '@angular/forms';
 
 import { Observable, of, zip } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { LanguageService } from '@igo2/core';
 import {
@@ -19,6 +18,7 @@ import { IgoMap } from '@igo2/geo';
 import { ApiService } from 'src/lib/core/api';
 import { DomainService } from 'src/lib/core/domain';
 
+import { getParcelleDraineeChoices } from '../../parcel/shared/client-parcel.utils';
 import { ClientParcelElementApiConfig } from './client-parcel-element.interfaces';
 
 @Injectable()
@@ -124,11 +124,7 @@ export class ClientParcelElementFormService {
         cols: 1
       },
       inputs: {
-        choices: [
-          {value: 'inconnu', title: 'Inconnu'},
-          {value: 'o', title: 'Oui'},
-          {value: 'n', title: 'Non'}
-        ]
+        choices: getParcelleDraineeChoices()
       }
     }, partial));
   }
@@ -205,11 +201,15 @@ export class ClientParcelElementFormService {
 
   private getSourceChoices(): Observable<FormFieldSelectChoice[]> {
     const url = this.apiService.buildUrl(this.apiConfig.domains.source);
-    return this.domainService.getChoices(url);
+    return this.domainService.getChoices(url).pipe(
+      map((choices: FormFieldSelectChoice[]) => [{value: null, title: ''}].concat(choices))
+    );
   }
 
   private getStatutAugmChoices(): Observable<FormFieldSelectChoice[]> {
     const url = this.apiService.buildUrl(this.apiConfig.domains.statutAugm);
-    return this.domainService.getChoices(url);
+    return this.domainService.getChoices(url).pipe(
+      map((choices: FormFieldSelectChoice[]) => [{value: null, title: ''}].concat(choices))
+    );
   }
 }
