@@ -1,0 +1,12 @@
+<div>
+  <div class="fadq-expansion-panel-trigger-container">
+    <button mat-icon-button (click)="onToggleClick()">
+      <mat-icon *ngIf="!expanded" color="primary" svgIcon="arrow-up-bold-box-outline"></mat-icon>
+      <mat-icon *ngIf="expanded" color="primary" svgIcon="arrow-down-bold-box-outline"></mat-icon>
+    </button>
+  </div>
+
+  <div class="fadq-expansion-panel-content">
+    <ng-content></ng-content>
+  </div>
+</div>

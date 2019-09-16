@@ -1,0 +1,49 @@
+@import '~@igo2/core/style/partial/core.variables';
+
+:host {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+  display: block;
+  font-family: Roboto,"Helvetica Neue",sans-serif;
+  font-size: 16px;
+}
+
+:host ::ng-deep {
+  h3 {
+    // font-size: 1.1em;
+    font-weight: 300;
+  }
+
+  h4 {
+    font-weight: 400;
+  }
+}
+
+/*** Message Center ***/
+igo-message-center {
+  position: absolute;
+  bottom: 49px;
+  right: $igo-margin;
+}
+
+igo-message-center ::ng-deep .simple-notification-wrapper {
+  position: relative;
+  bottom: inherit;
+  right: inherit;
+}
+
+/*** Spinner ***/
+igo-spinner {
+  position: absolute;
+  top: $igo-margin;
+  right: $igo-margin;
+  z-index: 5;
+}
+
+#app-main-container {
+  width: 100%;
+  height: 100%;
+}

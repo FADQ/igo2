@@ -91,7 +91,7 @@ export interface ClientParcelElementValidateTransferResponse {
 export interface ClientInReconciliationResponseData {
   numeroClient: string;
   nomClient: string;
-};
+}
 
 export interface ClientInReconciliationResponse {
   data: ClientInfoGetResponseData[];
