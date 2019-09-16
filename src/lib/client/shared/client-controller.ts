@@ -233,47 +233,6 @@ export class ClientController {
     this.loadParcels();
   }
 
-  getParcelTxState(): Observable<ClientParcelElementTxState> {
-    return this.parcelElementService.getParcelTxState(this.client, this.parcelYear);
-  }
-
-  prepareParcelTx(): Observable<void> {
-    return this.parcelElementService.prepareParcelTx(this.client, this.parcelYear);
-  }
-
-  startParcelTx() {
-    this.activateParcelTx();
-    this.initParcelElements();
-    this.loadParcelElements();
-    this.teardownParcels();
-    this.workspaceStore.activateWorkspace(this.parcelElementWorkspace);
-  }
-
-  stopParcelTx() {
-    if (!this.parcelElementTransaction.empty) {
-      this.parcelElementTransactionService.enqueue({
-        client: this.client,
-        annee: this.parcelYear,
-        transaction: this.parcelElementTransaction,
-        proceed: () => this.stopParcelTx()
-      });
-      return;
-    }
-
-    this.teardownParcelElements();
-    this.initParcels();
-    this.loadParcels();
-    this.workspaceStore.activateWorkspace(this.parcelWorkspace);
-  }
-
-  activateParcelTx() {
-    this.parcelElementTxActive$.next(true);
-  }
-
-  deactivateParcelTx() {
-    this.parcelElementTxActive$.next(false);
-  }
-
   defineColor(color: [number, number, number] | undefined) {
     this.color$.next(color);
 
@@ -297,6 +256,39 @@ export class ClientController {
     const olParcelLayerStyle = createParcelLayerStyle();
     this.parcelStore.layer.ol.setStyle(olParcelLayerStyle);
     this.currentStyle = 'single';
+  }
+
+  activateParcelElements() {
+    this.activateParcelTx();
+    this.initParcelElements();
+    this.loadParcelElements();
+    this.teardownParcels();
+    this.workspaceStore.activateWorkspace(this.parcelElementWorkspace);
+  }
+
+  deactivateParcelElements() {
+    if (!this.parcelElementTransaction.empty) {
+      this.parcelElementTransactionService.enqueue({
+        client: this.client,
+        annee: this.parcelYear,
+        transaction: this.parcelElementTransaction,
+        proceed: () => this.deactivateParcelElements()
+      });
+      return;
+    }
+
+    this.teardownParcelElements();
+    this.initParcels();
+    this.loadParcels();
+    this.workspaceStore.activateWorkspace(this.parcelWorkspace);
+  }
+
+  activateParcelTx() {
+    this.parcelElementTxActive$.next(true);
+  }
+
+  deactivateParcelTx() {
+    this.parcelElementTxActive$.next(false);
   }
 
   private applyParcelElementStyle() {

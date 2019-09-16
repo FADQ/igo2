@@ -11,19 +11,13 @@ import { TransactionSerializer, TransactionData } from 'src/lib/utils/transactio
 
 import { computeParcelElementArea, transactionDataToSaveParcelElementData } from './client-parcel-element.utils';
 import { Client } from '../../shared/client.interfaces';
-import { ClientParcelElementTxState } from './client-parcel-element.enums';
 import {
-  ClientInReconciliationResponse,
-  ClientInReconciliationResponseData,
   ClientParcelElement,
   ClientParcelElementApiConfig,
   ClientParcelElementListResponse,
   ClientParcelElementListResponseItem,
   ClientParcelElementWithoutOwnerResponse,
-  ClientParcelElementActivateTxResponse,
-  ClientParcelElementValidateTransferResponse,
-  ClientsInTxGetResponse,
-  ClientInTx
+  ClientParcelElementValidateTransferResponse
 } from './client-parcel-element.interfaces';
 import { GeoJSONGeometry } from '@igo2/geo';
 
@@ -33,47 +27,8 @@ export class ClientParcelElementService {
   constructor(
     private http: HttpClient,
     private apiService: ApiService,
-    @Inject('clientParcelApiConfig') private apiConfig: ClientParcelElementApiConfig
+    @Inject('clientParcelElementApiConfig') private apiConfig: ClientParcelElementApiConfig
   ) {}
-
-  getClientsInTx(): Observable<ClientInTx[]> {
-    const url = this.apiService.buildUrl(this.apiConfig.clientsInTx);
-    return this.http.get(url)
-      .pipe(
-        map((response: ClientsInTxGetResponse) => {
-          return response.data || [];
-        })
-      );
-  }
-
-  getParcelTxState(client: Client, annee: number): Observable<ClientParcelElementTxState> {
-    const url = this.apiService.buildUrl(this.apiConfig.startTx, {
-      clientNum: client.info.numero,
-      annee: annee
-    });
-    return this.http.get(url)
-      .pipe(
-        map((response: ClientParcelElementActivateTxResponse) => {
-          return response.data.resultat;
-        })
-      );
-  }
-
-  prepareParcelTx(client: Client, annee: number): Observable<any> {
-    const url = this.apiService.buildUrl(this.apiConfig.createTx, {
-      clientNum: client.info.numero,
-      annee: annee
-    });
-    return this.http.get(url);
-  }
-
-  deleteParcelTx(client: ClientInTx, annee: number): Observable<any> {
-    const url = this.apiService.buildUrl(this.apiConfig.deleteTx, {
-      clientNum: client.noClient,
-      annee
-    });
-    return this.http.get(url);
-  }
 
   getParcelElements(client: Client, annee: number): Observable<ClientParcelElement[]> {
     const url = this.apiService.buildUrl(this.apiConfig.list, {
@@ -99,37 +54,6 @@ export class ClientParcelElementService {
           return this.extractParcelsWithoutOwnerFromListResponse(response);
         })
       );
-  }
-
-  getClientsInReconcilitation(client: Client): Observable<Client[]> {
-    const url = this.apiService.buildUrl(this.apiConfig.reconciliateClients, {
-      clientNum: client.info.numero
-    });
-
-    return this.http.get(url).pipe(
-      map((response: ClientInReconciliationResponse) => {
-        return response.data.map((data: ClientInReconciliationResponseData) => {
-          return {
-            info: {
-              nom: data.nomClient,
-              numero: data.numeroClient,
-              adresseCor: undefined,
-              adresseExp: undefined,
-              adressePro: []
-            }
-          };
-        });
-      })
-    );
-  }
-
-  reconciliate(client: Client, annee: number): Observable<unknown> {
-    const url = this.apiService.buildUrl(this.apiConfig.reconciliate, {
-      clientNum: client.info.numero,
-      annee
-    });
-
-    return this.http.get(url);
   }
 
   validateTransfer(toClient: Client, annee: number): Observable<boolean> {

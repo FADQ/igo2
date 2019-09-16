@@ -14,8 +14,10 @@ export interface ClientApiConfig {
   schemaElement: ClientSchemaElementApiConfig;
 }
 
-export class ClientRef {
+export class Client {
   info: ClientInfo;
+  tx?: {
+    date: string;
+    annee: number;
+  };
 }
-
-export interface Client extends ClientRef {}

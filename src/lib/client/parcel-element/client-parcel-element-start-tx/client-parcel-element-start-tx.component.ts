@@ -16,7 +16,8 @@ import { WidgetComponent, OnUpdateInputs } from '@igo2/common';
 
 import { SubmitStep, SubmitHandler } from '../../../utils';
 import { ClientController } from '../../shared/client-controller';
-import { ClientParcelElementTxState} from '../shared/client-parcel-element.enums';
+import { ClientParcelElementTxService } from '../shared/client-parcel-element-tx.service';
+import { ClientParcelElementTxState } from '../shared/client-parcel-element.enums';
 
 @Component({
   selector: 'fadq-client-parcel-element-start-tx',
@@ -58,6 +59,7 @@ export class ClientParcelElementStartTxComponent
   @Output() cancel = new EventEmitter<void>();
 
   constructor(
+    private clientParcelElementTxService: ClientParcelElementTxService,
     private languageService: LanguageService,
     private cdRef: ChangeDetectorRef
   ) {}
@@ -87,7 +89,9 @@ export class ClientParcelElementStartTxComponent
     if (this.state === ClientParcelElementTxState.OK) {
       this.onSubmitSuccess();
     } else {
-      const submit$ = this.controller.prepareParcelTx();
+      const submit$ = this.clientParcelElementTxService.prepareParcelTx(
+        this.controller.client, this.controller.parcelYear
+      );
       this.submitHandler.handle(submit$, {
         success: () => this.onSubmitSuccess()
       }).submit();

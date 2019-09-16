@@ -10,6 +10,7 @@ import { ContextState } from '@igo2/integration';
 
 import {
   ClientController,
+  ClientParcelElementTxService,
   ClientParcelElementTxState,
   ClientParcelElementStartTxWidget
 } from 'src/lib/client';
@@ -23,6 +24,7 @@ export class ClientParcelActionsService {
 
   constructor(
     @Inject(ClientParcelElementStartTxWidget) private clientParcelElementStartTxWidget: Widget,
+    private clientParcelElementTxService: ClientParcelElementTxService,
     private contextState: ContextState
   ) {}
 
@@ -44,16 +46,16 @@ export class ClientParcelActionsService {
 
     return [
       {
-        id: 'startTx',
+        id: 'activate-parcel-eLements',
         icon: 'square-edit-outline',
         title: 'client.parcelElement.startTx',
         tooltip: 'client.parcelElement.startTx.tooltip',
         args: [controller, this.clientParcelElementStartTxWidget],
-        handler: function(ctrl: ClientController, widget: Widget) {
-          ctrl.getParcelTxState()
+        handler: (ctrl: ClientController, widget: Widget) => {
+          this.clientParcelElementTxService.getParcelTxState(ctrl.client, ctrl.parcelYear)
             .subscribe((state: ClientParcelElementTxState) => {
               if (state === ClientParcelElementTxState.OK) {
-                ctrl.startParcelTx();
+                ctrl.activateParcelElements();
               } else {
                 ctrl.parcelWorkspace.activateWidget(widget, {
                   controller: ctrl,

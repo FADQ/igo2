@@ -88,12 +88,14 @@ export interface ClientParcelElementValidateTransferResponse {
   };
 }
 
-export type ClientInReconciliationResponseData = ClientInfoGetResponseData;
+export interface ClientInReconciliationResponseData {
+  numeroClient: string;
+  nomClient: string;
+};
 
 export interface ClientInReconciliationResponse {
   data: ClientInfoGetResponseData[];
 }
-
 
 export interface ClientsInTxGetResponse {
   data: ClientInTx[];

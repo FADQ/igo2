@@ -13,7 +13,7 @@
   </igo-entity-table>
 
   <ng-container buttons>
-      <ng-container *ngIf="((submitHandler.step$ | async) !== submitStep.Complete); else close">
+    <ng-container *ngIf="((submitHandler.step$ | async) !== submitStep.Complete); else close">
       <button
         mat-button
         type="button"

@@ -7,7 +7,7 @@ import {
   HostBinding
 } from '@angular/core';
 
-import { ClientInTx } from 'src/lib/client';
+import { Client } from 'src/lib/client';
 
 @Component({
   selector: 'fadq-client-tx-tool-item',
@@ -17,7 +17,7 @@ import { ClientInTx } from 'src/lib/client';
 })
 export class ClientTxToolItemComponent {
 
-  @Input() client: ClientInTx;
+  @Input() client: Client;
 
   /**
    * Whether a row is added
@@ -35,13 +35,13 @@ export class ClientTxToolItemComponent {
    */
   @Output() addedChange = new EventEmitter<{
     added: boolean;
-    client: ClientInTx;
+    client: Client;
   }>();
 
   /**
    * Event emitted when the add/remove button is clicked
    */
-  @Output() delete = new EventEmitter<ClientInTx>();
+  @Output() delete = new EventEmitter<Client>();
 
   /**
    * @ignore

@@ -1,20 +1,30 @@
 <h3 mat-dialog-title>{{'client.schemaElement.transactionDialog.title' | translate}}</h3>
 
-<ng-container *ngIf="((submitHandler.step$ | async) === submitStep.Idle); else message">
-  <div mat-dialog-content>
-    <p>{{'edition.save.confirm' | translate}}</p>
-  </div>
-  <div mat-dialog-actions>
-    <div class="igo-form-buttons">
-      <button mat-button color="primary" (click)="onYesClick()" cdkFocusInitial>{{'yes' | translate}}</button>
-      <button mat-button (click)="onNoClick()">{{'no' | translate}}</button>
-      <button mat-button (click)="onCancelClick()">{{'cancel' | translate}}</button>
-    </div>
-  </div>
-</ng-container>
+<div mat-dialog-content>
+  <p>{{'edition.save.confirm' | translate}}</p>
+</div>
 
-<ng-template #message>
-  <div mat-dialog-content>
-    <p>{{'client.schemaElement.transactionDialog.saveMessage' | translate}}</p>
+<div mat-dialog-actions>
+  <div class="igo-form-buttons">
+    <button
+      mat-button
+      color="primary"
+      [disabled]="(submitHandler.step$ | async) === submitStep.Pending"
+      (click)="onYesClick()"
+      cdkFocusInitial>
+      {{'yes' | translate}}
+    </button>
+    <button
+      mat-button
+      [disabled]="(submitHandler.step$ | async) === submitStep.Pending"
+      (click)="onNoClick()">
+      {{'no' | translate}}
+    </button>
+    <button
+      mat-button
+      [disabled]="(submitHandler.step$ | async) === submitStep.Pending"
+      (click)="onCancelClick()">
+      {{'cancel' | translate}}
+    </button>
   </div>
-</ng-template>
+</div>

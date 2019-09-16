@@ -21,7 +21,7 @@ import {
 
 import { SubmitStep, SubmitHandler } from '../../../utils';
 import { Client } from '../../shared/client.interfaces';
-import { ClientParcelElementService } from '../shared/client-parcel-element.service';
+import { ClientParcelElementTxService } from '../shared/client-parcel-element-tx.service';
 
 @Component({
   selector: 'fadq-client-parcel-element-reconciliate',
@@ -90,13 +90,13 @@ export class ClientParcelElementReconciliateComponent
   @Output() cancel = new EventEmitter<void>();
 
   constructor(
-    private clientParcelElementService: ClientParcelElementService,
+    private clientParcelElementTxService: ClientParcelElementTxService,
     private languageService: LanguageService,
     private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
-    this.clientParcelElementService.getClientsInReconcilitation(this.client)
+    this.clientParcelElementTxService.getClientsInReconcilitation(this.client)
       .subscribe((clients: Client[]) => this.clientStore.load(clients));
   }
 
@@ -112,7 +112,7 @@ export class ClientParcelElementReconciliateComponent
   }
 
   onSubmit() {
-    const submit$ = this.clientParcelElementService.reconciliate(this.client, this.annee);
+    const submit$ = this.clientParcelElementTxService.reconciliate(this.client, this.annee);
     this.submitHandler.handle(submit$, {
       error: () => this.onSubmitError(),
       success: () => this.onSubmitSuccess()

@@ -13,9 +13,8 @@ import { EntityStore, ToolComponent } from '@igo2/common';
 
 import {
   Client,
-  ClientInTx,
   ClientController,
-  ClientParcelElementService,
+  ClientParcelElementTxService,
   ClientParcelElementDeleteTxDialogComponent
 } from 'src/lib/client';
 
@@ -37,8 +36,8 @@ import { ClientState } from '../client.state';
 })
 export class ClientTxToolComponent implements OnInit, OnDestroy {
 
-  readonly clients: EntityStore<ClientInTx> = new EntityStore([], {
-    getKey: (client: ClientInTx) => client.noClient
+  readonly clients: EntityStore<Client> = new EntityStore([], {
+    getKey: (client: Client) => client.info.numero
   });
 
   private activeClients$$: Subscription;
@@ -46,7 +45,7 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
   private parcelYear$$: Subscription;
 
   constructor(
-    private clientParcelElementService: ClientParcelElementService,
+    private clientParcelElementTxService: ClientParcelElementTxService,
     private clientState: ClientState,
     private dialog: MatDialog,
     private cdRef: ChangeDetectorRef
@@ -54,17 +53,17 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.clients.view.sort({
-      valueAccessor: (client: ClientInTx) => client.dateCreation.date,
+      valueAccessor: (client: Client) => client.tx.date,
       direction: 'desc'
     });
 
     this.parcelYear$$ = this.clientState.parcelYear$
       .subscribe((parcelYear: number) => this.clients.view.filter(
-        (client: ClientInTx) => client.annee === parcelYear
+        (client: Client) => client.tx.annee === parcelYear
       ));
 
-    this.clientParcelElementService.getClientsInTx()
-      .subscribe((clients: ClientInTx[]) => this.clients.load(clients));
+    this.clientParcelElementTxService.getClientsInTx()
+      .subscribe((clients: Client[]) => this.clients.load(clients));
 
     this.activeClients$$ = this.clientState.controllers.entities$
       .subscribe((controller: ClientController[]) => { this.cdRef.detectChanges(); });
@@ -75,8 +74,8 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
     this.parcelYear$$.unsubscribe();
   }
 
-  onClientAddedChange(event: {added: boolean, client: ClientInTx}) {
-    const clientNum = event.client.noClient;
+  onClientAddedChange(event: {added: boolean, client: Client}) {
+    const clientNum = event.client.info.numero;
     if (event.added === true) {
       this.clientState.getClientByNum(clientNum)
         .subscribe((client: Client) => this.clientState.addClient(client));
@@ -86,13 +85,13 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
     this.cdRef.detectChanges();
   }
 
-  clientIsAdded(client: ClientInTx): boolean {
-    const controller = this.clientState.controllers.get(client.noClient);
+  clientIsAdded(client: Client): boolean {
+    const controller = this.clientState.controllers.get(client.info.numero);
     return controller !== undefined;
   }
 
-  onDeleteTx(client: ClientInTx) {
-    const controller = this.clientState.controllers.get(client.noClient);
+  onDeleteTx(client: Client) {
+    const controller = this.clientState.controllers.get(client.info.numero);
     const data = {
       store: this.clients,
       client: client,

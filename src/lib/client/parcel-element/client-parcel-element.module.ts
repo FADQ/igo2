@@ -47,6 +47,7 @@ import {
 
 import {
   provideClientParcelElementService,
+  provideClientParcelElementTxService,
   provideClientParcelElementFormService
 } from './shared/client-parcel-element.providers';
 import {
@@ -92,6 +93,7 @@ export class FadqLibClientParcelElementModule {
       ngModule: FadqLibClientParcelElementModule,
       providers: [
         provideClientParcelElementService(),
+        provideClientParcelElementTxService(),
         provideClientParcelElementFormService(),
         provideClientParcelElementCreateWidget(),
         provideClientParcelElementStartTxWidget(),
