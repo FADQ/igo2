@@ -41,6 +41,7 @@ export type ClientSchemaElementListResponse = ClientSchemaElementListResponseIte
 export interface ClientSchemaElementType extends FormFieldSelectChoice {
   color: [number, number, number];
   icon?: string;
+  geometryType?: string;
 }
 
 export interface ClientSchemaElementTypes {

@@ -139,7 +139,7 @@ export class ClientSchemaActionsService {
         title: 'client.schema.manageFiles',
         tooltip: 'client.schema.manageFiles.tooltip',
         args: [controller, this.clientSchemaFileManagerWidget],
-        handler: function(widget: Widget, ctrl: ClientController) {
+        handler: function(ctrl: ClientController, widget: Widget) {
           ctrl.schemaWorkspace.activateWidget(widget, {schema: ctrl.schema}, {
             complete: (count: number) => {
               ctrl.schemaWorkspace.entityStore.update(Object.assign({}, ctrl.schema, {nbDocuments: count}));

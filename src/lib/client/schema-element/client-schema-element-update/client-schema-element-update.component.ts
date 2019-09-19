@@ -139,16 +139,19 @@ export class ClientSchemaElementUpdateComponent
     this.updateElementTypeChoices(geometryType);
   }
 
+  private getElementTypeField(): FormField<FormFieldSelectInputs> {
+    const fields = getAllFormFields(this.form$.value);
+    return fields.find((field: FormField) => {
+      return field.name === 'properties.typeElement';
+    }) as FormField<FormFieldSelectInputs>;
+  }
+
   private updateElementTypeChoices(geometryType: string) {
     this.clientSchemaElementService
       .getSchemaElementTypes(this.schema.type)
       .subscribe((schemaElementTypes: ClientSchemaElementTypes) => {
-        const form = this.form$.value;
-        const fields = getAllFormFields(form);
-        const schemaElementTypeField = fields.find((field: FormField) => {
-          return field.name === 'properties.typeElement';
-        }) as FormField<FormFieldSelectInputs>;
-        const choices$ = schemaElementTypeField.inputs.choices as BehaviorSubject<FormFieldSelectChoice[]>;
+        const elementTypeField = this.getElementTypeField();
+        const choices$ = elementTypeField.inputs.choices as BehaviorSubject<FormFieldSelectChoice[]>;
         choices$.next(schemaElementTypes[geometryType]);
       });
   }

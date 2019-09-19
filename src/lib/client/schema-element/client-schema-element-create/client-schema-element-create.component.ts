@@ -9,8 +9,8 @@ import {
   OnDestroy
 } from '@angular/core';
 
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
+import { delay, map } from 'rxjs/operators';
 
 import {
   EntityTransaction,
@@ -23,12 +23,16 @@ import {
   FormFieldSelectChoice
 } from '@igo2/common';
 import { LanguageService } from '@igo2/core';
-import { FeatureStore, IgoMap, GeoJSONGeometry } from '@igo2/geo';
+import { FeatureStore, IgoMap, GeoJSONGeometry, GeometryFormFieldInputs } from '@igo2/geo';
 
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
 import { getAnneeImageFromMap } from '../../shared/client.utils';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
-import { ClientSchemaElement, ClientSchemaElementTypes } from '../shared/client-schema-element.interfaces';
+import {
+  ClientSchemaElement,
+  ClientSchemaElementTypes,
+  ClientSchemaElementType
+} from '../shared/client-schema-element.interfaces';
 import { ClientSchemaElementService } from '../shared/client-schema-element.service';
 import { ClientSchemaElementFormService } from '../shared/client-schema-element-form.service';
 
@@ -59,9 +63,14 @@ export class ClientSchemaElementCreateComponent
   groupIndex$ = new BehaviorSubject<number>(0);
 
   /**
-   * Subscription to the value changes event
+   * Subscription to the geometry changes event
    */
   private geometry$$: Subscription;
+
+  /**
+   * Subscription to the type changes event
+   */
+  private elementType$$: Subscription;
 
   /**
    * Map to draw elements on
@@ -119,6 +128,10 @@ export class ClientSchemaElementCreateComponent
       this.geometry$$.unsubscribe();
       this.geometry$$ = undefined;
     }
+    if (this.elementType$$ !== undefined) {
+      this.elementType$$.unsubscribe();
+      this.elementType$$ = undefined;
+    }
   }
 
   /**
@@ -149,40 +162,74 @@ export class ClientSchemaElementCreateComponent
   }
 
   private setForm(form: Form) {
-    const fields = getAllFormFields(form);
+    this.form$.next(form);
 
-    const anneeImageField = fields.find((field: FormField) => field.name === 'properties.anneeImage');
+    const anneeImageField = this.getAnneeImageField();
     if (anneeImageField !== undefined) {
       anneeImageField.control.setValue(getAnneeImageFromMap(this.map));
     }
 
-    this.form$.next(form);
-
-    const geometryField = fields.find((field: FormField) => field.name === 'geometry');
+    const geometryField = this.getGeometryField();
     this.geometry$$ = geometryField.control.valueChanges
-      .subscribe((geometry: GeoJSONGeometry) => {
-        // When the drawGuide field is focused, changing tab
-        // triggers an an "afterViewInit" error. Unfocusing the active
-        // element (whatever it is) fixes it.
-        if ('activeElement' in document) {
-          (document.activeElement as HTMLElement).blur();
-        }
-        this.groupIndex$.next(1);
-        this.updateElementTypeChoices(geometry.type);
-      });
+      .subscribe((geometry: GeoJSONGeometry) => this.updateElementTypeChoices(geometry.type));
+
+    const elementTypeField = this.getElementTypeField();
+    this.elementType$$ = elementTypeField.control.valueChanges
+      .subscribe((elementType: string) => this.updateGeometryType(elementType));
   }
 
-  private updateElementTypeChoices(geometryType: string) {
+  private getAnneeImageField(): FormField {
+    const fields = getAllFormFields(this.form$.value);
+    return fields.find((field: FormField) => {
+      return field.name === 'properties.anneeImage';
+    });
+  }
+
+  private getElementTypeField(): FormField<FormFieldSelectInputs> {
+    const fields = getAllFormFields(this.form$.value);
+    return fields.find((field: FormField) => {
+      return field.name === 'properties.typeElement';
+    }) as FormField<FormFieldSelectInputs>;
+  }
+
+  private getGeometryField(): FormField<GeometryFormFieldInputs> {
+    const fields = getAllFormFields(this.form$.value);
+    return fields.find((field: FormField) => {
+      return field.name === 'geometry';
+    }) as FormField<GeometryFormFieldInputs>;
+  }
+
+  private updateGeometryType(elementTypeValue: string) {
+    const elementTypeField = this.getElementTypeField();
+    const geometryField = this.getGeometryField();
+
+    const elementTypes = (elementTypeField.inputs.choices as BehaviorSubject<ClientSchemaElementType[]>).value;
+    const elementType = elementTypes.find((_elementType: ClientSchemaElementType) => {
+      return _elementType.value === elementTypeValue;
+    });
+
+    const geometryType$ = geometryField.inputs.geometryType as BehaviorSubject<string>;
+    geometryType$.next(elementType.geometryType);
+
+    // Blur the active element to allow the use of the spacebar shortcut
+    // We need to wrap this up in a delay otherwise, material will
+    // focus the drop list after we blur the selected option
+    of(null).pipe(
+      delay(50)
+    ).subscribe(() => {
+      if ('activeElement' in document) {
+        (document.activeElement as HTMLElement).blur();
+      }
+    });
+  }
+
+  private updateElementTypeChoices(geometryTypeValue: string) {
     this.clientSchemaElementService
       .getSchemaElementTypes(this.schema.type)
       .subscribe((schemaElementTypes: ClientSchemaElementTypes) => {
-        const form = this.form$.value;
-        const fields = getAllFormFields(form);
-        const schemaElementTypeField = fields.find((field: FormField) => {
-          return field.name === 'properties.typeElement';
-        }) as FormField<FormFieldSelectInputs>;
-        const choices$ = schemaElementTypeField.inputs.choices as BehaviorSubject<FormFieldSelectChoice[]>;
-        choices$.next(schemaElementTypes[geometryType]);
+        const elementTypeField = this.getElementTypeField();
+        const choices$ = elementTypeField.inputs.choices as BehaviorSubject<FormFieldSelectChoice[]>;
+        choices$.next(schemaElementTypes[geometryTypeValue]);
       });
   }
 

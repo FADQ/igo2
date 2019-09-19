@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Validators } from '@angular/forms';
 
 import { BehaviorSubject, Observable, of, zip } from 'rxjs';
-import { concatMap, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { LanguageService } from '@igo2/core';
 import {
@@ -10,11 +10,17 @@ import {
   FormField,
   FormFieldConfig,
   FormFieldSelectInputs,
-  FormService
+  FormService,
+  FormFieldSelectChoice
 } from '@igo2/common';
 import { IgoMap } from '@igo2/geo';
+import { ObjectUtils } from '@igo2/utils';
 
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
+import {
+  ClientSchemaElementType,
+  ClientSchemaElementTypes
+} from './client-schema-element.interfaces';
 import { ClientSchemaElementService } from './client-schema-element.service';
 
 @Injectable({
@@ -29,37 +35,30 @@ export class ClientSchemaElementFormService {
   ) {}
 
   buildCreateForm(schema: ClientSchema, igoMap: IgoMap): Observable<Form> {
-    return this.schemaElementService.getSchemaElementGeometryTypes(schema.type)
+    const infoFields$ = zip(
+      this.createIdField({options: {disabled: true}}),
+      this.createTypeElementField(schema.type),
+      this.createDescriptionField(),
+      this.createEtiquetteField(),
+      this.createAnneeImageField()
+    );
+
+    const geometryFields$ = zip(
+      this.createGeometryField({inputs: {
+        map: igoMap
+      }})
+    );
+
+    const infoTitle = this.languageService.translate.instant('informations');
+    const geometryTitle = this.languageService.translate.instant('geometry.geometry');
+
+    return zip(infoFields$, geometryFields$)
       .pipe(
-        concatMap((geometryTypes: string[]) => {
-          const geometryFields$ = zip(
-            this.createGeometryField({inputs: {
-              map: igoMap,
-              geometryTypes,
-              geometryType: geometryTypes.length > 0 ? geometryTypes[0] : undefined
-            }})
-          );
-
-          const infoFields$ = zip(
-            this.createIdField({options: {disabled: true}}),
-            this.createTypeElementField(),
-            this.createDescriptionField(),
-            this.createEtiquetteField(),
-            this.createAnneeImageField()
-          );
-
-          const geometryTitle = this.languageService.translate.instant('geometry.geometry');
-          const infoTitle = this.languageService.translate.instant('informations');
-
-          return zip(geometryFields$, infoFields$)
-            .pipe(
-              map((fields: [FormField[], FormField[]]) => {
-                return this.formService.form([], [
-                  this.formService.group({name: 'geometry', title: geometryTitle}, fields[0]),
-                  this.formService.group({name: 'info', title: infoTitle}, fields[1])
-                ]);
-              })
-            );
+        map((fields: [FormField[], FormField[]]) => {
+          return this.formService.form([], [
+            this.formService.group({name: 'info', title: infoTitle}, fields[0]),
+            this.formService.group({name: 'geometry', title: geometryTitle}, fields[1])
+          ]);
         })
       );
   }
@@ -151,7 +150,8 @@ export class ClientSchemaElementFormService {
       },
       type: 'geometry',
       inputs: {
-        geometryTypeField: true,
+        geometryType: new BehaviorSubject<string>(undefined),
+        geometryTypeField: false,
         drawGuideField: true,
         drawGuide: undefined,
         drawGuidePlaceholder: 'Guide d\'aide au traçage',
@@ -161,25 +161,55 @@ export class ClientSchemaElementFormService {
   }
 
   private createTypeElementField(
+    schemaType: string,
     partial?: Partial<FormFieldConfig>
   ): Observable<FormField<FormFieldSelectInputs>> {
 
-    return of(this.createField({
-      name: 'properties.typeElement',
-      title: 'Type d\'élément',
-      type: 'select',
-      options:  {
-        cols: 1,
-        validator: Validators.required
-      },
-      inputs: {
-        choices: new BehaviorSubject([])
-      }
-    }, partial) as FormField<FormFieldSelectInputs>);
+    return this.getTypeElementChoices(schemaType)
+      .pipe(
+        map((choices: FormFieldSelectChoice[]) => {
+          return this.createField({
+            name: 'properties.typeElement',
+            title: 'Type d\'élément',
+            type: 'select',
+            options:  {
+              cols: 1,
+              validator: Validators.required
+            },
+            inputs: {
+              choices: new BehaviorSubject(choices)
+            }
+          }, partial) as FormField<FormFieldSelectInputs>;
+        })
+      );
   }
 
   private createField(config: FormFieldConfig, partial?: Partial<FormFieldConfig>): FormField {
     config = this.formService.extendFieldConfig(config, partial || {});
     return this.formService.field(config);
   }
+
+  private getTypeElementChoices(schemaType: string): Observable<ClientSchemaElementType[]> {
+    return this.schemaElementService.getSchemaElementTypes(schemaType).pipe(
+      map((schemaElementTypes: ClientSchemaElementTypes) => {
+        return Object.entries(schemaElementTypes)
+          .reduce((acc: ClientSchemaElementType[], entries: [string, ClientSchemaElementType[]]) => {
+            const [geometryType, types] = entries;
+            const choices = types.map((type: ClientSchemaElementType) => {
+              return Object.assign({}, type, {geometryType});
+            });
+            return acc.concat(choices);
+          }, [])
+          .sort((v1: ClientSchemaElementType, v2: ClientSchemaElementType) => {
+            return ObjectUtils.naturalCompare(
+              v1.title,
+              v2.title,
+              'asc'
+            );
+          });
+      })
+    );
+  }
+
+
 }
