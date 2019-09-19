@@ -5,12 +5,15 @@ import { map } from 'rxjs/operators';
 
 import { LanguageService } from '@igo2/core';
 import { Action, EntityTableColumn, Widget } from '@igo2/common';
-import { entitiesToRowData, exportToCSV } from '@igo2/geo';
+import { downloadFromUri, entitiesToRowData, exportToCSV } from '@igo2/utils';
 
 import { EditionUndoWidget } from 'src/lib/edition';
 
 import {
   ClientController,
+  ClientSchema,
+  ClientSchemaService,
+  ClientSchemaType,
   ClientSchemaElement,
   ClientSchemaElementCreateWidget,
   ClientSchemaElementUpdateWidget,
@@ -38,6 +41,7 @@ export class ClientSchemaElementActionsService {
     @Inject(ClientSchemaElementSaveWidget) private clientSchemaElementSaveWidget: Widget,
     @Inject(EditionUndoWidget) private editionUndoWidget: Widget,
     @Inject(ClientSchemaElementImportWidget) private clientSchemaElementImportWidget: Widget,
+    private clientSchemaService: ClientSchemaService,
     private languageService: LanguageService
   ) {}
 
@@ -65,6 +69,10 @@ export class ClientSchemaElementActionsService {
       return ctrl.selectedSchemaElements$.pipe(
         map((schemaElements: ClientSchemaElement[]) => schemaElements.length > 0)
       );
+    }
+
+    function transactionIsEmpty(ctrl: ClientController): Observable<boolean> {
+      return ctrl.schemaElementTransaction.empty$;
     }
 
     function transactionIsNotEmpty(ctrl: ClientController): Observable<boolean> {
@@ -96,6 +104,18 @@ export class ClientSchemaElementActionsService {
           const geometry = schemaElement === undefined ? undefined : schemaElement.geometry;
           return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length === 1;
         })
+      );
+    }
+
+    function schemaIsOfTypeLSE(ctrl: ClientController): Observable<boolean> {
+      return ctrl.schema$.pipe(
+        map((schema: ClientSchema) => schema.type === ClientSchemaType.LSE)
+      );
+    }
+
+    function atLeastOneSchemaElement(ctrl: ClientController): Observable<boolean> {
+      return ctrl.schemaElementStore.empty$.pipe(
+        map((empty: boolean) => !empty)
       );
     }
 
@@ -309,6 +329,23 @@ export class ClientSchemaElementActionsService {
           noActiveWidget(ctrl),
           transactionIsNotInCommitPhase(ctrl),
           transactionIsNotEmpty(ctrl)
+        )
+      },
+      {
+        id: 'downloadMapLSE',
+        icon: 'map',
+        title: 'client.schemaElement.downloadMapLSE',
+        tooltip: 'client.schemaElement.downloadMapLSE.tooltip',
+        args: [controller],
+        handler: (ctrl: ClientController) => {
+          const url = this.clientSchemaService.getDownloadMapLSEUrl(ctrl.client);
+          const fileName = 'structures_entreposage.zip';
+          downloadFromUri(url, fileName);
+        },
+        availability: (ctrl: ClientController) => every(
+          schemaIsOfTypeLSE(ctrl),
+          atLeastOneSchemaElement(ctrl),
+          transactionIsEmpty(ctrl)
         )
       }
     ];

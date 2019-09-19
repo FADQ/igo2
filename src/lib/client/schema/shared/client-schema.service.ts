@@ -97,6 +97,12 @@ export class ClientSchemaService {
       );
   }
 
+  getDownloadMapLSEUrl(client: Client): string {
+    return this.apiService.buildUrl(this.apiConfig.downloadMapLSE, {
+      clientNum: client.info.numero
+    });
+  }
+
   private extractSchemasFromListResponse(
     response: ClientSchemaListResponse
   ): ClientSchema[] {

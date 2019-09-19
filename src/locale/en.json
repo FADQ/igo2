@@ -191,7 +191,9 @@
       "import": "Importer des données dans ce schéma",
       "import.tooltip": "Importer des données dans ce schéma",
       "save.error": "Certains éléments du schéma n'ont pas pu être sauvegardés",
-      "save.success": "Sauvegarde réussie"
+      "save.success": "Sauvegarde réussie",
+      "downloadMapLSE": "Structures d'entreposage",
+      "downloadMapLSE.tooltip": "Télécharger la carte des structures d'entreposage"
     }
   },
 

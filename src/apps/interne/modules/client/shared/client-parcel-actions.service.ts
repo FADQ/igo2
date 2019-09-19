@@ -4,7 +4,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Action, EntityTableColumn, Widget } from '@igo2/common';
-import { entitiesToRowData,  exportToCSV } from '@igo2/geo';
+import { entitiesToRowData,  exportToCSV } from '@igo2/utils';
 import { DetailedContext } from '@igo2/context';
 import { ContextState } from '@igo2/integration';
 

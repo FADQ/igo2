@@ -6,6 +6,7 @@ export interface ClientSchemaApiConfig  {
   update: string;
   delete: string;
   duplicate: string;
+  downloadMapLSE: string;
   domains: {
     type: string;
   };

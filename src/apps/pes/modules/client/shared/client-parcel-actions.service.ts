@@ -1,7 +1,7 @@
 import {  Injectable} from '@angular/core';
 
 import { Action, EntityTableColumn } from '@igo2/common';
-import { entitiesToRowData,  exportToCSV } from '@igo2/geo';
+import { entitiesToRowData,  exportToCSV } from '@igo2/utils';
 
 import { moveToFeatureStore } from 'src/apps/shared/modules/feature/shared/feature.utils';
 import { ClientController } from './client-controller';
