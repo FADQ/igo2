@@ -4,10 +4,10 @@
 </fadq-message-inline>
 
 <igo-feature-form
+  #featureForm
   class="igo-form-compact"
   [form]="form"
-  [feature]="feature"
-  [store]="store"
+  [feature]="feature$ | async"
   (submitForm)="onSubmit($event)">
 
   <mat-tab-group *ngIf="form.groups.length > 0" [selectedIndex]="groupIndex">
@@ -27,6 +27,7 @@
     </button>
     <button
       mat-raised-button
+
       type="submit"
       color="primary"
       [disabled]="!form.control.valid">

@@ -36,13 +36,13 @@ export class EditionUpdateBatchComponent implements  OnUpdateInputs, WidgetCompo
    * Message, if any
    * @internal
    */
-  message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
+  readonly message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
   /**
    * Error message, if any
    * @internal
    */
-  baseFeature$: BehaviorSubject<Partial<Feature>> = new BehaviorSubject(undefined);
+  readonly baseFeature$: BehaviorSubject<Partial<Feature>> = new BehaviorSubject(undefined);
 
   /**
    * Create form

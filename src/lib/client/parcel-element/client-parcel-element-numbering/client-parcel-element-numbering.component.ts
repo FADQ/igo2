@@ -116,6 +116,8 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
   ) {}
 
   ngOnInit() {
+    this.store.state.updateAll({selected: false});
+
     this.initValue();
 
     this.subTransaction.operations.view.sort({

@@ -91,7 +91,7 @@ export class ClientParcelElementFormService {
       title: 'Numéro de parcelle',
       options:  {
         cols: 1,
-        validator: Validators.maxLength(3)
+        validator: Validators.maxLength(4)
       }
     }, partial));
   }
@@ -189,7 +189,7 @@ export class ClientParcelElementFormService {
         drawGuideField: true,
         drawGuide: undefined,
         drawGuidePlaceholder: 'Guide d\'aide au traçage',
-        measure: true
+        measure: false
       }
     }, partial));
   }

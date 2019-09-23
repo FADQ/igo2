@@ -7,7 +7,6 @@
   class="igo-form-compact"
   [form]="form"
   [feature]="baseFeature$ | async"
-  [store]="store"
   (submitForm)="onSubmit($event)">
 
   <mat-tab-group *ngIf="form.groups.length > 0" [selectedIndex]="groupIndex">

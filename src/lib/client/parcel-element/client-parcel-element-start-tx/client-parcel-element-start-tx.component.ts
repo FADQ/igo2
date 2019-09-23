@@ -104,7 +104,7 @@ export class ClientParcelElementStartTxComponent
   }
 
   private onSubmitSuccess() {
-    this.controller.activateParcelTx();
+    this.controller.activateParcelElements();
     this.complete.emit();
   }
 

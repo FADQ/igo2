@@ -95,3 +95,8 @@ fadq-expansion-panel-header igo-actionbar {
   color: red;
   font-weight: bold;
 }
+
+.fadq-edition-continue-button-overlay button {
+  background-color: mat-color($primary);
+  color: white;
+}
