@@ -23,7 +23,12 @@ import {
   FormFieldSelectChoice
 } from '@igo2/common';
 import { LanguageService } from '@igo2/core';
-import { FeatureStore, IgoMap, GeoJSONGeometry, GeometryFormFieldInputs } from '@igo2/geo';
+import {
+  FeatureStore,
+  IgoMap,
+  GeoJSONGeometry,
+  GeometryFormFieldInputs
+} from '@igo2/geo';
 
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
 import { getAnneeImageFromMap } from '../../shared/client.utils';
