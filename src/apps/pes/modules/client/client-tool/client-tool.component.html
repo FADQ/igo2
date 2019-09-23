@@ -5,14 +5,9 @@
     </fadq-client-parcel-year-selector>
   </div>
 
-  <div *ngIf="message$ | async as message" class="fadq-error-text">
-    {{message | translate}}
-  </div>
-
   <igo-list [navigation]="false" [selection]="false">
     <fadq-client-tool-item
       [controller]="controller$ | async"
-      [showInfo]="showInfo"
       (clickAddress)="onClickAddress($event)">
     </fadq-client-tool-item>
 

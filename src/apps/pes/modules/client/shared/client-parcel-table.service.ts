@@ -5,6 +5,9 @@ import { EntityTableTemplate, EntityTableColumnRenderer } from '@igo2/common';
 import { formatDate } from 'src/lib/utils/date';
 import { ClientInfoService, ClientParcel, padClientNum } from 'src/lib/client';
 
+/**
+ * This is a factory for parcel workspace table template
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -12,6 +15,10 @@ export class ClientParcelTableService {
 
   constructor(private clientInfoService: ClientInfoService) {}
 
+  /**
+   * Create a table template
+   * @returns Table template
+   */
   buildTable(): EntityTableTemplate {
     return {
       selection: true,

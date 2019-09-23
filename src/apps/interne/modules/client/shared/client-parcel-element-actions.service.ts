@@ -51,7 +51,21 @@ export class ClientParcelElementActionsService {
     private languageService: LanguageService
   ) {}
 
-  buildActions(controller: ClientController): Action[] {
+  /**
+   * Load a controller's parcel element workspace actions
+   * @param controller Client controller
+   */
+  loadActions(controller: ClientController) {
+    const actions = this.buildActions(controller);
+    controller.parcelElementWorkspace.actionStore.load(actions);
+  }
+
+  /**
+   * Create actions
+   * @param controller Client controller
+   * @returns Actions
+   */
+  private buildActions(controller: ClientController): Action[] {
 
     function every(...observables: Observable<boolean>[]): Observable<boolean> {
       return combineLatest(observables).pipe(

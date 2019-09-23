@@ -6,10 +6,11 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs';
-
 import { Client, ClientController, ClientInfoService } from 'src/lib/client';
 
+/**
+ * Tool to display a client's info and addresses
+ */
 @Component({
   selector: 'fadq-client-tool-item',
   templateUrl: './client-tool-item.component.html',
@@ -18,11 +19,7 @@ import { Client, ClientController, ClientInfoService } from 'src/lib/client';
 })
 export class ClientToolItemComponent {
 
-  readonly showContent$: BehaviorSubject<boolean> = new BehaviorSubject(true);
-
   @Input() controller: ClientController;
-
-  @Input() showInfo: boolean = true;
 
   @Output() clickAddress = new EventEmitter<string>();
 
@@ -37,17 +34,5 @@ export class ClientToolItemComponent {
     const link = this.clientInfoService.getClientInfoLink(client.info.numero);
     window.open(link, 'Client', 'width=800, height=600');
     return false;
-  }
-
-  toggleContent(collapsed: boolean) {
-    this.showContent$.next(!collapsed);
-  }
-
-  getLegendInnerColor(): string {
-    return `rgba(${this.controller.color.join(',')}, 0.15)`;
-  }
-
-  getLegendOuterColor(): string {
-    return `rgb(${this.controller.color.join(',')})`;
   }
 }

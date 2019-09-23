@@ -5,7 +5,8 @@ import { map } from 'rxjs/operators';
 
 import { LanguageService } from '@igo2/core';
 import { Action, EntityTableColumn, Widget } from '@igo2/common';
-import { downloadFromUri, entitiesToRowData, exportToCSV } from '@igo2/utils';
+import { entitiesToRowData, exportToCSV } from '@igo2/geo';
+import { downloadFromUri } from '@igo2/utils';
 
 import { EditionUndoWidget } from 'src/lib/edition';
 
@@ -45,7 +46,21 @@ export class ClientSchemaElementActionsService {
     private languageService: LanguageService
   ) {}
 
-  buildActions(controller: ClientController): Action[] {
+  /**
+   * Load a controller's schema element workspace actions
+   * @param controller Client controller
+   */
+  loadActions(controller: ClientController) {
+    const actions = this.buildActions(controller);
+    controller.schemaElementWorkspace.actionStore.load(actions);
+  }
+
+  /**
+   * Create actions
+   * @param controller Client controller
+   * @returns Actions
+   */
+  private buildActions(controller: ClientController): Action[] {
 
     function every(...observables: Observable<boolean>[]): Observable<boolean> {
       return combineLatest(observables).pipe(

@@ -1,4 +1,11 @@
 <div>
+  <div class="fadq-client-tx-tool-top-section">
+    <fadq-client-parcel-year-selector
+      [disabled]="parcelYearSelectorDisabled$ | async"
+      [store]="parcelYearStore">
+    </fadq-client-parcel-year-selector>
+  </div>
+
   <igo-list [navigation]="false" [selection]="false">
     <ng-template ngFor let-client [ngForOf]="clients.view.all$() | async">
       <fadq-client-tx-tool-item

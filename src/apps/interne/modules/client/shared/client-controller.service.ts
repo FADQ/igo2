@@ -25,11 +25,15 @@ import { ClientSchemaActionsService } from './client-schema-actions.service';
 import { ClientSchemaElementWorkspaceService } from './client-schema-element-workspace.service';
 import { ClientSchemaElementActionsService } from './client-schema-element-actions.service';
 
+/**
+ * This is a client controller factory
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class ClientControllerService {
 
+  /** Multi clients color palette */
   static colors: string[] = [
     '8e24aa',
     'ffeb3b',
@@ -58,6 +62,12 @@ export class ClientControllerService {
     private clientSchemaElementActionsService: ClientSchemaElementActionsService
   ) {}
 
+  /**
+   * Create a controller for a client
+   * @param client Client
+   * @param options Controller options
+   * @returns Client controller
+   */
   createClientController(client: Client, options: Partial<ClientControllerOptions> = {}): ClientController {
     const map = this.mapState.map;
     const parcelService = this.clientParcelService;
@@ -71,6 +81,8 @@ export class ClientControllerService {
     const schemaElementService = this.clientSchemaElementService;
     const schemaElementTransactionService = this.clientSchemaElementTransactionService;
 
+    // When all clients are cleared, reset the color palette.
+    // That means, color may be reused again.
     if (this.colorPalette === undefined || options.controllers.count === 0) {
       this.colorPalette = this.createColorIterator();
     }
@@ -94,21 +106,20 @@ export class ClientControllerService {
       color: this.colorPalette.next().value
     });
 
-    const parcelActions = this.clientParcelActionsService.buildActions(controller);
-    parcelWorkspace.actionStore.load(parcelActions);
-
-    const schemaActions = this.clientSchemaActionsService.buildActions(controller);
-    schemaWorkspace.actionStore.load(schemaActions);
-
-    const schemaElementActions = this.clientSchemaElementActionsService.buildActions(controller);
-    schemaElementWorkspace.actionStore.load(schemaElementActions);
-
-    const parcelElementActions = this.clientParcelElementActionsService.buildActions(controller);
-    parcelElementWorkspace.actionStore.load(parcelElementActions);
+    this.clientParcelActionsService.loadActions(controller);
+    this.clientSchemaActionsService.loadActions(controller);
+    this.clientSchemaElementActionsService.loadActions(controller);
+    this.clientParcelElementActionsService.loadActions(controller);
 
     return controller;
   }
 
+  /**
+   * Create a color iterator. A color from the color palette
+   * may be used only once. See the comment above.
+   * If more colors are needed, a random one is generated
+   * @returns RGB color iterator
+   */
   *createColorIterator(): Iterator<[number, number, number]> {
     let index = 0;
     let hex: string;

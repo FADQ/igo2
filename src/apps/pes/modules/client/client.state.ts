@@ -16,20 +16,20 @@ import { ClientController } from './shared/client-controller';
 import { ClientControllerService } from './shared/client-controller.service';
 
 /**
- * Service that holds the state of the client module
+ * Service that holds the state of the client module. It handles everything
+ * not specific to a single client and holds a reference to all the current clients.
  */
 @Injectable({
   providedIn: 'root'
 })
 export class ClientState implements OnDestroy {
 
+  /** Active widget observable. Only one may be active for all clients */
   readonly activeWidget$: BehaviorSubject<Widget> = new BehaviorSubject(undefined);
 
+  /** The current client's controller */
   get controller(): ClientController { return this.controller$.value; }
   readonly controller$: BehaviorSubject<ClientController> = new BehaviorSubject(undefined);
-
-  /** Observable of a message or error */
-  readonly message$ = new BehaviorSubject<string>(undefined);
 
   /** Current parcel year */
   readonly parcelYear$: BehaviorSubject<number> = new BehaviorSubject(undefined);
@@ -38,7 +38,7 @@ export class ClientState implements OnDestroy {
   /** Subscription to the parcel year changes */
   private parcelYear$$: Subscription;
 
-  /** Store that holds all the "parcel years". This is not on a per client basis. */
+  /** Store that holds all the "parcel years". Again, this is not on a per client basis. */
   get parcelYearStore(): EntityStore<ClientParcelYear> { return this._parcelYearStore; }
   _parcelYearStore: EntityStore<ClientParcelYear>;
 
@@ -48,37 +48,44 @@ export class ClientState implements OnDestroy {
     private clientControllerService: ClientControllerService
   ) {
     this.initParcelYears();
-    this.getClientByNum('1560').subscribe((client: Client) => {
+    this.loadParcelYears();
+
+    this.clientService.getClientByNum('1560').subscribe((client: Client) => {
       this.setClient(client);
     });
   }
 
   /**
-   * Store that holds all the available workspaces
+   * Teardown the client's controller and the parcel store
+   * @internal
    */
-  get store(): WorkspaceStore { return this._store; }
-  private _store: WorkspaceStore;
-
   ngOnDestroy() {
     this.teardownController();
     this.teardownParcelYears();
   }
 
-  getClientByNum(clientNum: string): Observable<Client> {
-    return this.clientService.getClientByNum(clientNum);
-  }
-
-  setClient(client: Client | undefined) {
+  /**
+   * Create the client's controller
+   * @param client Client
+   */
+  private setClient(client: Client) {
     const controller = this.clientControllerService.createClientController(client, {
       parcelYear: this.parcelYear
     });
     this.controller$.next(controller);
   }
 
+  /**
+   * Teardown the client's controller
+   * @param client Client
+   */
   private teardownController() {
     this.controller.destroy();
   }
 
+  /**
+   * Initialize the parcel year store and observe the selected parcel year
+   */
   private initParcelYears() {
     this._parcelYearStore = new EntityStore<ClientParcelYear>([]);
     this._parcelYearStore.view.sort({
@@ -93,15 +100,20 @@ export class ClientState implements OnDestroy {
         const parcelYear = record ? record.entity : undefined;
         this.onSelectParcelYear(parcelYear);
       });
-
-    this.loadParcelYears();
   }
 
+  /**
+   * Teardown the parcel years store and the selected parcel year observer
+   */
   private teardownParcelYears() {
     this.parcelYear$$.unsubscribe();
     this.parcelYearStore.clear();
   }
 
+  /**
+   * When a parcel year is selected, update the controller's parcel year (and it's parcels)
+   * @param Parcel year
+   */
   private onSelectParcelYear(parcelYear: ClientParcelYear) {
     this.parcelYear$.next(parcelYear === undefined ? undefined : parcelYear.annee);
     if (this.controller !== undefined) {
@@ -110,7 +122,8 @@ export class ClientState implements OnDestroy {
   }
 
   /**
-   * Load the parcel years
+   * Fetch parcel years via a service then load them into the store. Also,
+   * select the current parcel year as selected
    */
   private loadParcelYears() {
     this.clientParcelYearService.getParcelYears()

@@ -12,6 +12,9 @@ import { ClientController } from './client-controller';
 import { ClientParcelWorkspaceService } from './client-parcel-workspace.service';
 import { ClientParcelActionsService } from './client-parcel-actions.service';
 
+/**
+ * This is a client controller factory
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -24,6 +27,12 @@ export class ClientControllerService {
     private clientParcelActionsService: ClientParcelActionsService
   ) {}
 
+  /**
+   * Create a controller for a client
+   * @param client Client
+   * @param options Controller options
+   * @returns Client controller
+   */
   createClientController(client: Client, options: Partial<ClientControllerOptions> = {}): ClientController {
     const map = this.mapState.map;
     const parcelService = this.clientParcelService;
@@ -38,8 +47,7 @@ export class ClientControllerService {
       parcelWorkspace
     });
 
-    const parcelActions = this.clientParcelActionsService.buildActions(controller);
-    parcelWorkspace.actionStore.load(parcelActions);
+    this.clientParcelActionsService.loadActions(controller);
 
     return controller;
   }

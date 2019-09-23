@@ -11,7 +11,7 @@
   </div>
 
   <igo-list [navigation]="false" [selection]="false">
-    <ng-template ngFor let-controller [ngForOf]="controllers.view.all$() | async">
+    <ng-template ngFor let-controller [ngForOf]="(controllers.view.all$() | async).slice().reverse()">
       <fadq-client-tool-item
         [controller]="controller"
         [showLegend]="!(showLegend$ | async)"

@@ -29,19 +29,11 @@ import { ClientState } from '../client.state';
 })
 export class ClientToolComponent {
 
-  @Input() showInfo: boolean = true;
-
   /**
    * Observable of the client error, if any
    * @internal
    */
   get controller$(): BehaviorSubject<ClientController> { return this.clientState.controller$; }
-
-  /**
-   * Observable of the client error, if any
-   * @internal
-   */
-  get message$(): BehaviorSubject<string> { return this.clientState.message$; }
 
   /**
    * Store holding all the avaiables "parcel years"
@@ -56,6 +48,10 @@ export class ClientToolComponent {
     private searchState: SearchState
   ) {}
 
+  /**
+   * Locate the address with icherche
+   * @internal
+   */
   onClickAddress(address: string) {
     this.searchState.setSearchType(FEATURE);
     this.searchState.setSearchTerm(address);

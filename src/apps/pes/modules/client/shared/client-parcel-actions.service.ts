@@ -1,12 +1,14 @@
 import {  Injectable} from '@angular/core';
 
 import { Action, EntityTableColumn } from '@igo2/common';
-import { entitiesToRowData,  exportToCSV } from '@igo2/utils';
+import { entitiesToRowData,  exportToCSV } from '@igo2/geo';
 
 import { moveToFeatureStore } from 'src/apps/shared/modules/feature/shared/feature.utils';
 import { ClientController } from './client-controller';
 
-
+/**
+ * This is a factory for parcel workspace actions
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -14,7 +16,21 @@ export class ClientParcelActionsService {
 
   constructor() {}
 
-  buildActions(controller: ClientController): Action[] {
+  /**
+   * Load a controller's parcel workspace actions
+   * @param controller Client controller
+   */
+  loadActions(controller: ClientController) {
+    const actions = this.buildActions(controller);
+    controller.parcelWorkspace.actionStore.load(actions);
+  }
+
+  /**
+   * Create actions
+   * @param controller Client controller
+   * @returns Actions
+   */
+  private buildActions(controller: ClientController): Action[] {
     return [
       {
         id: 'zoom-to-features',

@@ -4,7 +4,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Action, EntityTableColumn, Widget } from '@igo2/common';
-import { entitiesToRowData,  exportToCSV } from '@igo2/utils';
+import { entitiesToRowData,  exportToCSV } from '@igo2/geo';
 import { DetailedContext } from '@igo2/context';
 import { ContextState } from '@igo2/integration';
 
@@ -28,7 +28,21 @@ export class ClientParcelActionsService {
     private contextState: ContextState
   ) {}
 
-  buildActions(controller: ClientController): Action[] {
+  /**
+   * Load a controller's parcel workspace actions
+   * @param controller Client controller
+   */
+  loadActions(controller: ClientController) {
+    const actions = this.buildActions(controller);
+    controller.parcelWorkspace.actionStore.load(actions);
+  }
+
+  /**
+   * Create actions
+   * @param controller Client controller
+   * @returns Actions
+   */
+  private buildActions(controller: ClientController): Action[] {
 
     function every(...observables: Observable<boolean>[]): Observable<boolean> {
       return combineLatest(observables).pipe(

@@ -19,6 +19,10 @@ export function moveToFeatureStore(map: IgoMap, store: FeatureStore) {
     olFeatures = olSource.getFeatures();
   }
 
+  if (olFeatures.length === 0) {
+    return;
+  }
+
   moveToOlFeatures(
     map,
     olFeatures,

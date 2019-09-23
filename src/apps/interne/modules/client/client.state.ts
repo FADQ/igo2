@@ -67,6 +67,8 @@ export class ClientState implements OnDestroy {
     private clientControllerService: ClientControllerService
   ) {
     this.initParcelYears();
+    this.loadParcelYears();
+
     this.initWorkspaces();
     this.initControllers();
   }
@@ -241,8 +243,6 @@ export class ClientState implements OnDestroy {
         const parcelYear = record ? record.entity : undefined;
         this.onSelectParcelYear(parcelYear);
       });
-
-    this.loadParcelYears();
   }
 
   private teardownParcelYears() {

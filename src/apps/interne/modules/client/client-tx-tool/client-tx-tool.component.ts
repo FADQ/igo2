@@ -7,12 +7,13 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material';
 
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, combineLatest } from 'rxjs';
 
 import { EntityStore, ToolComponent } from '@igo2/common';
 
 import {
   Client,
+  ClientParcelYear,
   ClientController,
   ClientParcelElementTxService,
   ClientParcelElementDeleteTxDialogComponent
@@ -42,7 +43,25 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
 
   private activeClients$$: Subscription;
 
+  private parcelElementTx$$: Subscription;
+
+  readonly parcelYearSelectorDisabled$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
   private parcelYear$$: Subscription;
+
+  /**
+   * Observable of the active client
+   * @internal
+   */
+  get controllers(): EntityStore<ClientController> { return this.clientState.controllers; }
+
+  /**
+   * Store holding all the avaiables "parcel years"
+   * @internal
+   */
+  get parcelYearStore(): EntityStore<ClientParcelYear> {
+    return this.clientState.parcelYearStore;
+  }
 
   constructor(
     private clientParcelElementTxService: ClientParcelElementTxService,
@@ -65,11 +84,15 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
     this.clientParcelElementTxService.getClientsInTx()
       .subscribe((clients: Client[]) => this.clients.load(clients));
 
-    this.activeClients$$ = this.clientState.controllers.entities$
-      .subscribe((controller: ClientController[]) => { this.cdRef.detectChanges(); });
+    this.activeClients$$ = this.controllers.count$
+      .subscribe((count: number) => {
+        this.cdRef.detectChanges();
+        this.watchParcelElementTx();
+      });
   }
 
   ngOnDestroy() {
+    this.unwatchParcelElementTx();
     this.activeClients$$.unsubscribe();
     this.parcelYear$$.unsubscribe();
   }
@@ -99,6 +122,25 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
       controller: controller
     };
     this.dialog.open(ClientParcelElementDeleteTxDialogComponent, {data});
+  }
+
+  private watchParcelElementTx() {
+    this.unwatchParcelElementTx();
+    const parcelElementTxActives$ = this.controllers.all().map((controller: ClientController) => {
+      return controller.parcelElementTxActive$;
+    });
+
+    this.parcelElementTx$$ = combineLatest(...parcelElementTxActives$).subscribe((bunch: boolean[]) => {
+      const noTxActive = bunch.every((active: boolean) => active === false);
+      this.parcelYearSelectorDisabled$.next(!noTxActive);
+    });
+  }
+
+  private unwatchParcelElementTx() {
+    if (this.parcelElementTx$$ !== undefined) {
+      this.parcelElementTx$$.unsubscribe();
+      this.parcelElementTx$$ = undefined;
+    }
   }
 
 }

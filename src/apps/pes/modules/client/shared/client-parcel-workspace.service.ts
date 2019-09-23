@@ -23,15 +23,22 @@ import {
 import { moveToFeaturesViewScale } from 'src/apps/shared/modules/feature/shared/feature.enums';
 import { ClientParcelTableService } from './client-parcel-table.service';
 
+/**
+ * This is a parcel workspace factory
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class ClientParcelWorkspaceService {
 
-  static viewScale: [number, number, number, number] = [0, 0, 0.8, 0.6];
-
   constructor(private clientParcelTableService: ClientParcelTableService) {}
 
+  /**
+   * Create a parcel workspace
+   * @param client Client
+   * @param map Igo map
+   * @returns Parcel workspace
+   */
   createParcelWorkspace(client: Client,  map: IgoMap): ClientParcelWorkspace {
     return new ClientParcelWorkspace({
       id: `fadq.${client.info.numero}-1-parcel-workspace`,
@@ -47,6 +54,12 @@ export class ClientParcelWorkspaceService {
     });
   }
 
+  /**
+   * Create a parcel store
+   * @param client Client
+   * @param map Igo map
+   * @returns Parcel store
+   */
   private createParcelStore(client: Client, map: IgoMap): FeatureStore<ClientParcel> {
     const store = new FeatureStore<ClientParcel>([], {
       getKey: (entity: ClientParcel) => entity.properties.id,
@@ -68,16 +81,30 @@ export class ClientParcelWorkspaceService {
     return store;
   }
 
+  /**
+   * Create n action store. The action store is created empty
+   * and actions are defined later because they need the workspace
+   * instance.
+   * @returns Action store
+   */
   private createParcelActionStore(): ActionStore {
     return new ActionStore([]);
   }
 
+  /**
+   * Create the parcel store loading strategy
+   * @returns Loading strategy
+   */
   private createLoadingStrategy(): FeatureStoreLoadingStrategy {
     return new FeatureStoreLoadingStrategy({
       viewScale: moveToFeaturesViewScale
     });
   }
 
+  /**
+   * Create the parcel store selectiong strategy
+   * @returns Loading strategy
+   */
   private createSelectionStrategy(client: Client, map: IgoMap): FeatureStoreSelectionStrategy {
     return new FeatureStoreSelectionStrategy({
       map: map,

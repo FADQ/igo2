@@ -21,8 +21,15 @@ export interface ClientControllerOptions {
   parcelService: ClientParcelService;
 }
 
+/**
+ * This class handles things related to a specific client.
+ * This is where workspaces (parcel, parcel element, schema, schema element)
+ * are initialized. The controller handles some events (observables). Finally,
+ * it holds a reference to client stuff used throughout the app.
+ */
 export class ClientController {
 
+  /** Observable message  */
   readonly message$ = new BehaviorSubject<string>(undefined);
 
   /** Subscription to the selected diagram  */
@@ -72,17 +79,29 @@ export class ClientController {
     }
   }
 
+  /**
+   * Teardown diagram store and parcel workspace
+   * @internal
+   */
   destroy() {
     this.message$.next(undefined);
     this.teardownDiagrams();
     this.teardownParcels();
   }
 
+  /**
+   * Set the parcel year and load parcels of that year
+   * @param parcelYear number
+   */
   setParcelYear(parcelYear: number) {
     this._parcelYear = parcelYear;
     this.loadParcels();
   }
 
+  /**
+   * Initialize the diagram store and observe the selected diagrams
+   * to filter the parcel store accordingly.
+   */
   private initDiagrams() {
     this._diagramStore = new EntityStore<ClientParcelDiagram>([]);
     this.diagramStore.view.sort({
@@ -98,16 +117,50 @@ export class ClientController {
       });
   }
 
+  /**
+   * Load diagrams into the store and select them all
+   * @param diagrams Diagrams
+   */
   private loadDiagrams(diagrams: ClientParcelDiagram[]) {
     this.diagramStore.load(diagrams);
     this.diagramStore.state.updateMany(diagrams, {selected: true});
   }
 
+  /**
+   * Clear the diagram store and teardown observers
+   * @param diagrams Diagrams
+   */
   private teardownDiagrams() {
     this.diagram$$.unsubscribe();
     this.diagramStore.clear();
   }
 
+  /**
+   * Filter parcels by diagrams
+   * @param diagrams Diagrams
+   */
+  private filterParcelsByDiagrams(diagrams: ClientParcelDiagram[]) {
+    const diagramIds = diagrams.map((diagram: ClientParcelDiagram) => diagram.id);
+    const filterClause = function(parcel: ClientParcel): boolean {
+      const noDiagramme = parcel.properties.noDiagramme;
+      return diagramIds.includes(noDiagramme);
+    };
+    this.parcelStore.view.filter(filterClause);
+  }
+
+  /**
+   * When diagrams are selected, filter parcels
+   * @param diagrams Selected diagrams
+   */
+  private onSelectDiagrams(diagrams: ClientParcelDiagram[]) {
+    this.filterParcelsByDiagrams(diagrams);
+  }
+
+  /**
+   * Initialize the parcel workspace and observe the selected parcels.
+   * When parcels are selected, nothing happens here but other components
+   * needs them.
+   */
   private initParcels() {
     this.parcels$$ = this.parcelStore
       .stateView.manyBy$((record: EntityRecord<ClientParcel>) => record.state.selected === true)
@@ -118,6 +171,11 @@ export class ClientController {
     this.parcelWorkspace.init();
   }
 
+  /**
+   * Fetch the parcels for the client and the current parcel year via a service
+   * then load them into the store. If no parcels are found, set a message
+   * to be displayed in the client tool.
+   */
   private loadParcels() {
     this.parcelService.getParcels(this.client, this.parcelYear)
       .pipe(
@@ -137,6 +195,9 @@ export class ClientController {
       });
   }
 
+  /**
+   * Teardown the parcel workspace and the selected parcels observer
+   */
   private teardownParcels() {
     if (this.parcels$$ !== undefined) {
       this.parcels$$.unsubscribe();
@@ -145,21 +206,11 @@ export class ClientController {
     this.parcelWorkspace.teardown();
   }
 
-  private onSelectDiagrams(diagrams: ClientParcelDiagram[]) {
-    this.setDiagrams(diagrams);
-  }
-
+  /**
+   * Track selected parcels
+   */
   private onSelectParcels(parcels: ClientParcel[]) {
     this.selectedParcels$.next(parcels);
-  }
-
-  private setDiagrams(diagrams: ClientParcelDiagram[]) {
-    const diagramIds = diagrams.map((diagram: ClientParcelDiagram) => diagram.id);
-    const filterClause = function(parcel: ClientParcel): boolean {
-      const noDiagramme = parcel.properties.noDiagramme;
-      return diagramIds.includes(noDiagramme);
-    };
-    this.parcelStore.view.filter(filterClause);
   }
 
 }

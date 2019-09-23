@@ -20,7 +20,6 @@ import {
   createParcelElementLayer
 } from 'src/lib/client';
 
-import { moveToFeaturesViewScale } from 'src/apps/shared/modules/feature/shared/feature.enums';
 import { ClientParcelElementTableService  } from './client-parcel-element-table.service';
 
 @Injectable({
@@ -75,7 +74,7 @@ export class ClientParcelElementWorkspaceService {
 
   private createLoadingStrategy(): FeatureStoreLoadingStrategy {
     return new FeatureStoreLoadingStrategy({
-      viewScale: moveToFeaturesViewScale
+      motion: FeatureMotion.None
     });
   }
 

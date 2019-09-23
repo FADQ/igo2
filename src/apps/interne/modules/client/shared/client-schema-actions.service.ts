@@ -31,7 +31,21 @@ export class ClientSchemaActionsService {
     @Inject(ClientSchemaFileManagerWidget) private clientSchemaFileManagerWidget: Widget
   ) {}
 
-  buildActions(controller: ClientController): Action[] {
+  /**
+   * Load a controller's schema workspace actions
+   * @param controller Client controller
+   */
+  loadActions(controller: ClientController) {
+    const actions = this.buildActions(controller);
+    controller.schemaWorkspace.actionStore.load(actions);
+  }
+
+  /**
+   * Create actions
+   * @param controller Client controller
+   * @returns Actions
+   */
+  private buildActions(controller: ClientController): Action[] {
 
     function every(...observables: Observable<boolean>[]): Observable<boolean> {
       return combineLatest(observables).pipe(
