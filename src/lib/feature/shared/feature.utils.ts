@@ -1,13 +1,30 @@
 import { EntityRecord } from '@igo2/common';
-import { Feature, FeatureStore, IgoMap, moveToOlFeatures } from '@igo2/geo';
+import {
+  Feature,
+  FeatureMotion,
+  FeatureStore,
+  IgoMap,
+  moveToOlFeatures
+} from '@igo2/geo';
 
-export function zoomToFeatureStore(map: IgoMap, store: FeatureStore) {
-  const selectedFeatures = store.stateView
+export function moveToFeatureStore(map: IgoMap, store: FeatureStore) {
+  const olSource = store.layer.ol.getSource();
+  let olFeatures = store.stateView
     .manyBy((record: EntityRecord<Feature>) => record.state.selected === true)
-    .map((record: EntityRecord<Feature>) => record.entity);
+    .map((record: EntityRecord<Feature>) => olSource.getFeatureById(store.getKey(record.entity)));
 
-    if (selectedFeatures.length === 0) {
-      const olFeatures = store.layer.ol.getSource().getFeatures();
-      moveToOlFeatures(map, olFeatures);
-    }
+  if (olFeatures.length === 0) {
+    olFeatures = olSource.getFeatures();
+  }
+
+  if (olFeatures.length === 0) {
+    return;
+  }
+
+  moveToOlFeatures(
+    map,
+    olFeatures,
+    FeatureMotion.Zoom,
+    [0, 0, 0.8, 0.6]
+  );
 }

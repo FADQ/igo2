@@ -16,6 +16,8 @@
   "refresh": "Rafraîchir",
   "recover": "Récupérer",
 
+  "Coordonnées": "Coordonnées",
+
   "search": {
     "feature.title": "Address, place or coordinate",
     "feature.placeholder": "Search for an address, a place or a coordinate",
@@ -143,11 +145,11 @@
       "stopTx.tooltip": "Arrêter l'édition de parcelles",
       "edition.ai.error": "L'année est invalide",
       "edition.eec.error": "Une session d'édition est déjà en cours",
-      "recoverParcelsWithoutOwner": "Récupérer des parcelles sans désignation",
-      "recoverParcelsWithoutOwner.tooltip": "Récupérer des parcelles sans désignation",
-      "recoverParcelsWithoutOwner.info": "Sélectionner des parcelles sans désignation avant de les récupérer",
-      "recoverParcelsWithoutOwner.noParcelFound": "Aucune parcelle sans désignation trouvée",
-      "recoverParcelsWithoutOwner.parcelFound": "{{count}} parcelle(s) sans désignation trouvée(s)",
+      "recoverParcelsWithoutOwner": "Récupérer des parcelles sans détenteurs",
+      "recoverParcelsWithoutOwner.tooltip": "Récupérer des parcelles sans détenteurs",
+      "recoverParcelsWithoutOwner.info": "Sélectionner des parcelles sans détenteurs avant de les récupérer",
+      "recoverParcelsWithoutOwner.noParcelFound": "Aucune parcelle sans détenteurs trouvée",
+      "recoverParcelsWithoutOwner.parcelFound": "{{count}} parcelle(s) sans détenteurs trouvée(s)",
       "recoverParcelsWithoutOwner.wrongZoomLevel": "The scale of the map should be between 1 and 10000."
     },
     "schema": {

@@ -64,7 +64,7 @@ export const igoEnvironment: IgoEnvironment = {
       enabled: true,
       available: true,
       title: 'Adresse ou lieu',
-      searchUrl: 'https://geoegl.msp.gouv.qc.ca/apis/icherche/geocode',
+      searchUrl: 'https://geoegl.msp.gouv.qc.ca/apis/icherche',
       params: {
         type: 'adresses,codes-postaux,municipalites,mrc,regadmin,lieux',
         limit: '5',
@@ -80,7 +80,7 @@ export const igoEnvironment: IgoEnvironment = {
     icherchereverse: {
       enabled: false,
       available: false,
-      searchUrl: 'https://geoegl.msp.gouv.qc.ca/apis/territoires/locate',
+      searchUrl: 'https://geoegl.msp.gouv.qc.ca/apis/territoires',
       params: {
         type: 'adresses,municipalites,mrc,regadmin',
         limit: '5',
@@ -93,8 +93,8 @@ export const igoEnvironment: IgoEnvironment = {
       available: false
     },
     cadastre: {
-      enabled: false,
-      available: false
+      enabled: true,
+      available: true
     }
   },
   language: {

@@ -100,20 +100,24 @@ function getParcelElementFeatureText(olFeature: OlFeature, resolution: number): 
 }
 
 export function getParcelElementErrors(parcelElement: ClientParcelElement): ClientParcelElementMessage[] {
-  const messages = parcelElement.properties.messages;
+  const messages = getUniqueParcelElementMessages(parcelElement);
   return messages.filter((message: ClientParcelElementMessage) => message.severite === 'S');
 }
 
 export function getParcelElementWarnings(parcelElement: ClientParcelElement): ClientParcelElementMessage[] {
-  const messages = parcelElement.properties.messages;
+  const messages = getUniqueParcelElementMessages(parcelElement);
   return messages.filter((message: ClientParcelElementMessage) => message.severite === 'A');
 }
 
-export function getParcelElementValidationMessage(
-  parcelElement: ClientParcelElement,
-  languageService: LanguageService
-): string {
-  return undefined;
+export function getUniqueParcelElementMessages(
+  parcelElement: ClientParcelElement
+): ClientParcelElementMessage[] {
+  const messages = parcelElement.properties.messages;
+  const messagesObject = messages.reduce((acc: object, message: ClientParcelElementMessage) => {
+    acc[message.id] = message;
+    return acc;
+  }, {} as {[key: string]: ClientParcelElementMessage});
+  return Object.values(messagesObject);  
 }
 
 export function generateParcelElementOperationTitle(
@@ -134,4 +138,11 @@ export function transactionDataToSaveParcelElementData(
     lstParcellesModifies: data.updates,
     lstIdParcellesSupprimes: data.deletes
   };
+}
+
+export function getParcelElementValidationMessage(
+  parcelElement: ClientParcelElement,
+  languageService: LanguageService
+): string {
+  return undefined;
 }

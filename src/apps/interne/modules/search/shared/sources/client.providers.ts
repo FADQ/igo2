@@ -2,7 +2,7 @@ import { ConfigService } from '@igo2/core';
 
 import { SearchSource } from '@igo2/geo';
 
-import { ClientState } from 'src/apps/interne/modules/client/client.state';
+import { ClientService } from 'src/lib/client';
 import { ClientSearchSource } from './client';
 
 /**
@@ -10,11 +10,11 @@ import { ClientSearchSource } from './client';
  * @ignore
  */
 export function clientSearchSourceFactory(
-  clientState: ClientState,
+  clientService: ClientService,
   config: ConfigService
 ) {
   return new ClientSearchSource(
-    clientState,
+    clientService,
     config.getConfig(`searchSources.${ClientSearchSource.id}`)
   );
 }
@@ -27,6 +27,6 @@ export function provideClientSearchSource() {
     provide: SearchSource,
     useFactory: clientSearchSourceFactory,
     multi: true,
-    deps: [ClientState, ConfigService]
+    deps: [ClientService, ConfigService]
   };
 }

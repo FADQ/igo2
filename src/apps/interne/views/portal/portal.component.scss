@@ -37,8 +37,14 @@ igo-map-browser {
     left: initial !important;
     right: 5px;
 
-    ::ng-deep .igo-mini-basemap-title {
-      font-size: 11px;
+    ::ng-deep {
+      .igo-mini-basemap-container {
+        background-color: #ddd !important;
+      }
+
+      .igo-mini-basemap-title {
+        font-size: 11px;
+      }
     }
   }
 
@@ -69,35 +75,6 @@ igo-search-bar {
   @include mobile {
     width: $search-bar-width-mobile
   }
-}
-
-/*** Attribution ***/
-igo-map-browser.sidenav-offset ::ng-deep .ol-attribution {
-  left: 410px;
-  @include mobile {
-    left: $igo-padding
-  }
-}
-
-igo-map-browser.igo-attribution-offset.sidenav-offset ::ng-deep .ol-attribution {
-  left: 495px;
-  @include mobile {
-    left: 90px;
-  }
-}
-
-/***Layers list ***/
-::ng-deep .igo-layer-actions-container > .igo-col {
-  /* Make the slider smaller and align it with the action buttons */
-  float: left;
-  width: 25%;
-  padding-left: 20px;
-}
-
-::ng-deep .igo-layer-actions-container .igo-col:nth-child(2) {
-  /*Align the action buttons with the slider */
-  float: right;
-  width: 75%;
 }
 
 /*** Footer ***/

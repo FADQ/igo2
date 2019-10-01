@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
 
+import { provideCadastreRenoSearchSource } from 'src/lib/cadastre-reno';
+
 import { FadqSearchModule } from 'src/apps/shared/modules/search/search.module';
 import {
   provideCoordinatesReverseSearchSource,
+  provideCoordinatesSearchResultFormatter,
   provideFadqIChercheSearchResultFormatter,
   provideIChercheSearchSource,
   provideIChercheReverseSearchSource,
@@ -24,8 +27,10 @@ import { provideClientSearchSource } from './shared/sources/client.providers';
     provideFadqIChercheSearchResultFormatter(),
     provideIChercheSearchSource(),
     provideIChercheReverseSearchSource(),
+    provideCoordinatesSearchResultFormatter(),
     provideCoordinatesReverseSearchSource(),
-    provideQuerySearchSource()
+    provideQuerySearchSource(),
+    provideCadastreRenoSearchSource()
   ]
 })
 export class FadqInterneSearchModule {}

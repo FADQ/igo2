@@ -14,8 +14,7 @@ import {
   ClientParcelElementTxState,
   ClientParcelElementStartTxWidget
 } from 'src/lib/client';
-
-import { moveToFeatureStore } from 'src/apps/shared/modules/feature/shared/feature.utils';
+import { moveToFeatureStore } from 'src/lib/feature';
 
 @Injectable({
   providedIn: 'root'
@@ -50,14 +49,6 @@ export class ClientParcelActionsService {
       );
     }
 
-    function onlyOneParcelTx(ctrl: ClientController): Observable<boolean> {
-      return ctrl.controllers.view.all$().pipe(
-        map((controllers: ClientController[]) => {
-          return controllers.find((_ctrl: ClientController) => _ctrl.parcelElementTxActive) === undefined;
-        })
-      );
-    }
-
     return [
       {
         id: 'activate-parcel-eLements',
@@ -82,10 +73,7 @@ export class ClientParcelActionsService {
           const contextMesurage$ = this.contextState.context$.pipe(
             map((context: DetailedContext) => context.uri === 'mesurage')
           );
-          return every(
-            contextMesurage$,
-            onlyOneParcelTx(ctrl)
-          );
+          return contextMesurage$;
         }
       },
       {

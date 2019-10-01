@@ -16,6 +16,8 @@
   "refresh": "Rafraîchir",
   "recover": "Récupérer",
 
+  "Coordonnées": "Coordonnées",
+
   "search": {
     "feature.title": "Adresse, lieu ou coordonnées",
     "feature.placeholder": "Rechercher adresse, lieu, coordonnées",
@@ -139,11 +141,11 @@
       "stopTx.tooltip": "Arrêter l'édition de parcelles",
       "edition.ai.error": "L'édition pour l'année sélectionnée n'est pas possible",
       "edition.eec.error": "Il existe déjà des parcelles en édition pour ce client",
-      "recoverParcelsWithoutOwner": "Récupérer des parcelles sans désignation",
-      "recoverParcelsWithoutOwner.tooltip": "Récupérer des parcelles sans désignation",
-      "recoverParcelsWithoutOwner.info": "Sélectionner des parcelles sans désignation avant de les récupérer",
-      "recoverParcelsWithoutOwner.noParcelFound": "Aucune parcelle sans désignation trouvée",
-      "recoverParcelsWithoutOwner.parcelFound": "{{count}} parcelle(s) sans désignation trouvée(s)",
+      "recoverParcelsWithoutOwner": "Récupérer des parcelles sans détenteurs",
+      "recoverParcelsWithoutOwner.tooltip": "Récupérer des parcelles sans détenteurs",
+      "recoverParcelsWithoutOwner.info": "Sélectionner des parcelles sans détenteurs avant de les récupérer",
+      "recoverParcelsWithoutOwner.noParcelFound": "Aucune parcelle sans détenteurs trouvée",
+      "recoverParcelsWithoutOwner.parcelFound": "{{count}} parcelle(s) sans détenteurs trouvée(s)",
       "recoverParcelsWithoutOwner.wrongZoomLevel": "L'échelle de la carte doit se trouver entre 1 et 10000."
     },
     "diagram": {

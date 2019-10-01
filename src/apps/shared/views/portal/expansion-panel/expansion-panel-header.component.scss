@@ -3,6 +3,7 @@
 :host {
   display: block;
   height: $fadq-expansion-panel-header-height;
+  overflow: hidden;
 }
 
 :host > div {

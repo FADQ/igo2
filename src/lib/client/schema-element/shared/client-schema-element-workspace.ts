@@ -1,4 +1,9 @@
-import { EntityTableTemplate, Workspace, WorkspaceOptions } from '@igo2/common';
+import {
+  EntityTableTemplate,
+  EntityTransaction,
+  Workspace,
+  WorkspaceOptions
+} from '@igo2/common';
 import {
   IgoMap,
   FeatureStore,
@@ -8,7 +13,6 @@ import {
 
 import { Client } from '../../shared/client.interfaces';
 import { ClientSchemaElement } from './client-schema-element.interfaces';
-import { ClientSchemaElementService } from './client-schema-element.service';
 
 export interface ClientSchemaElementWorkspaceOptions extends WorkspaceOptions {
   meta: {
@@ -16,7 +20,7 @@ export interface ClientSchemaElementWorkspaceOptions extends WorkspaceOptions {
     map: IgoMap;
     type: string;
     tableTemplate: EntityTableTemplate;
-    schemaElementService: ClientSchemaElementService;
+    transaction: EntityTransaction;
   };
 }
 
@@ -30,8 +34,8 @@ export class ClientSchemaElementWorkspace extends Workspace<ClientSchemaElement>
     return this.entityStore as FeatureStore<ClientSchemaElement>;
   }
 
-  get schemaElementService(): ClientSchemaElementService {
-    return this.options.meta.schemaElementService;
+  get transaction(): EntityTransaction {
+    return this.options.meta.transaction;
   }
 
   constructor(protected options: ClientSchemaElementWorkspaceOptions) {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { ActionStore } from '@igo2/common';
+import { ActionStore, EntityTransaction } from '@igo2/common';
 import {
   FeatureMotion,
   FeatureStore,
@@ -14,13 +14,11 @@ import {
 import {
   Client,
   ClientSchemaElement,
-  ClientSchemaElementService,
   ClientSchemaElementWorkspace,
   createClientDefaultSelectionStyle,
   createSchemaElementLayer
 } from 'src/lib/client';
 
-import { moveToFeaturesViewScale } from 'src/apps/shared/modules/feature/shared/feature.enums';
 import { ClientSchemaElementTableService } from './client-schema-element-table.service';
 
 @Injectable({
@@ -31,7 +29,6 @@ export class ClientSchemaElementWorkspaceService {
   static viewScale: [number, number, number, number] = [0, 0, 0.8, 0.6];
 
   constructor(
-    private clientSchemaElementService: ClientSchemaElementService,
     private clientSchemaElementTableService: ClientSchemaElementTableService
   ) {}
 
@@ -46,7 +43,7 @@ export class ClientSchemaElementWorkspaceService {
         map,
         type: 'schemaElement',
         tableTemplate: this.clientSchemaElementTableService.buildTable(),
-        schemaElementService: this.clientSchemaElementService
+        transaction: new EntityTransaction()
       }
     });
   }
@@ -74,7 +71,7 @@ export class ClientSchemaElementWorkspaceService {
 
   private createLoadingStrategy(): FeatureStoreLoadingStrategy {
     return new FeatureStoreLoadingStrategy({
-      viewScale: moveToFeaturesViewScale
+      viewScale: [0, 0, 0.8, 0.6]
     });
   }
 

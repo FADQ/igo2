@@ -16,6 +16,8 @@ import {
 import { IgoMap } from '@igo2/geo';
 import { ObjectUtils } from '@igo2/utils';
 
+import { createOlEditionStyle } from '../../../edition/shared/edition.utils';
+
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import {
   ClientSchemaElementType,
@@ -152,6 +154,7 @@ export class ClientSchemaElementFormService {
       inputs: {
         geometryType: new BehaviorSubject<string>(undefined),
         geometryTypeField: false,
+        drawStyle: createOlEditionStyle(),
         drawGuideField: true,
         drawGuide: undefined,
         drawGuidePlaceholder: 'Guide d\'aide au traçage',

@@ -1,15 +1,21 @@
-import { ConfigService} from '@igo2/core';
-import { SearchSource, CoordinatesReverseSearchSource } from '@igo2/geo';
+import { ConfigService, LanguageService } from '@igo2/core';
+import {
+  SearchSource,
+  CoordinatesReverseSearchSource,
+  CoordinatesSearchResultFormatter
+} from '@igo2/geo';
 
 /**
  * Coordinates search source factory
  * @ignore
  */
 export function coordinatesReverseSearchSourceFactory(
-  config: ConfigService
+  config: ConfigService,
+  languageService: LanguageService
 ) {
   return new CoordinatesReverseSearchSource(
-    config.getConfig(`searchSources.${CoordinatesReverseSearchSource.id}`)
+    config.getConfig(`searchSources.${CoordinatesReverseSearchSource.id}`),
+    languageService
   );
 }
 
@@ -21,6 +27,27 @@ export function provideCoordinatesReverseSearchSource() {
     provide: SearchSource,
     useFactory: coordinatesReverseSearchSourceFactory,
     multi: true,
-    deps: [ConfigService]
+    deps: [ConfigService, LanguageService]
+  };
+}
+
+/**
+ * Coordinates search result formatter factory
+ * @ignore
+ */
+export function coordinatesSearchResultFormatterFactory(
+  languageService: LanguageService
+) {
+  return new CoordinatesSearchResultFormatter(languageService);
+}
+
+/**
+ * Function that returns a provider for the ICherche search result formatter
+ */
+export function provideCoordinatesSearchResultFormatter() {
+  return {
+    provide: CoordinatesSearchResultFormatter,
+    useFactory: coordinatesSearchResultFormatterFactory,
+    deps: [LanguageService]
   };
 }

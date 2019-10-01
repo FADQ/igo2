@@ -34,7 +34,10 @@ import {
 import { uuid } from '@igo2/utils';
 
 import { EditionResult } from '../shared/edition.interfaces';
-import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition.utils';
+import {
+  createOlEditionStyle,
+  getOperationTitle as getDefaultOperationTitle
+} from '../shared/edition.utils';
 
 @Component({
   selector: 'fadq-edition-slice',
@@ -233,7 +236,9 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, 
    * Create a draw line control
    */
   private createSliceControl() {
-    this.sliceControl = new SliceControl({});
+    this.sliceControl = new SliceControl({
+      layerStyle: createOlEditionStyle()
+    });
   }
 
   /**

@@ -1,7 +1,5 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material';
-
-import { Subject, Subscription } from 'rxjs';
 
 import {
   ClientSchemaElementTransactionDialogComponent
@@ -9,36 +7,16 @@ import {
 import { ClientSchemaElementTransactionWrapper } from './client-schema-element.interfaces';
 
 /**
- * Service that holds the state of the client module
+ * Service that opens a dialog to let a user take action on a transaction
  */
 @Injectable({
   providedIn: 'root'
 })
-export class ClientSchemaElementTransactionService implements OnDestroy {
+export class ClientSchemaElementTransactionService {
 
-  /** Observable of a pending transaction */
-  private transaction$ = new Subject<ClientSchemaElementTransactionWrapper>();
+  constructor(private dialog: MatDialog) {}
 
-  private transaction$$: Subscription;
-
-  constructor(private dialog: MatDialog) {
-    this.transaction$$ = this.transaction$
-      .subscribe((transaction: ClientSchemaElementTransactionWrapper) => {
-        if (transaction !== undefined) {
-          this.openTransactionDialog(transaction);
-        }
-      });
-  }
-
-  ngOnDestroy() {
-    this.transaction$$.unsubscribe();
-  }
-
-  enqueue(transaction: ClientSchemaElementTransactionWrapper) {
-    this.transaction$.next(transaction);
-  }
-
-  private openTransactionDialog(transaction: ClientSchemaElementTransactionWrapper): void {
+  prompt(transaction: ClientSchemaElementTransactionWrapper) {
     this.dialog.open(ClientSchemaElementTransactionDialogComponent, {
       data: {transaction}
     });

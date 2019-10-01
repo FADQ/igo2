@@ -100,18 +100,19 @@ export class ClientParcelElementTableService {
         {
           name: 'properties.messages',
           title: 'Validation',
-          renderer: EntityTableColumnRenderer.HTML,
+          renderer: EntityTableColumnRenderer.UnsanitizedHTML,
           valueAccessor: (parcelElement: ClientParcelElement) => {
             const errors = getParcelElementErrors(parcelElement);
             const warnings =  getParcelElementWarnings(parcelElement);
             const errorsHtml = errors.map((error: ClientParcelElementMessage) => {
-              return `<span class="error-text" title="${error.libelle}">${error.id}</span>`;
+              return `<span class="error-text" tooltip="${error.libelle}">${error.id}</span>`;
             });
             const warningsHtml = warnings.map((warning: ClientParcelElementMessage) => {
-              return `<span class="warning-text" title="${warning.libelle}">${warning.id}</span>`;
+              return `<span class="warning-text" tooltip="${warning.libelle}">${warning.id}</span>`;
             });
             return [...errorsHtml, ...warningsHtml].join(', ');
-          }
+          },
+          cellClassFunc: () => ({'overflow-inherit': true})
         }
       ]
     };

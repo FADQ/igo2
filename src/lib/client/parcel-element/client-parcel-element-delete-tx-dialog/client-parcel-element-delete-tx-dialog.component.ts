@@ -74,7 +74,8 @@ export class ClientParcelElementDeleteTxDialogComponent {
 
   private onSubmitSuccess() {
     if (this.controller !== undefined) {
-      this.controller.deactivateParcelTx();
+      this.controller.parcelElementTransaction.clear();
+      this.controller.deactivateParcelElements();
     }
     if (this.store !== undefined) {
       this.store.delete(this.client);

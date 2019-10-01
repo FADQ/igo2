@@ -48,9 +48,8 @@ export class ClientParcelTableService {
           title: 'Autre détenteur',
           renderer: EntityTableColumnRenderer.UnsanitizedHTML,
           valueAccessor: (parcel: ClientParcel) => {
-            const value = parcel.properties.noClientDetenteur;
+            const value = parcel.properties.autreDetenteur;
             if (!value) { return ''; }
-            if (value === parcel.properties.noClientRecherche) { return value; }
             return this.computeClientNumAnchor(value);
           }
         },
@@ -59,9 +58,8 @@ export class ClientParcelTableService {
           title: 'Autre exploitant',
           renderer: EntityTableColumnRenderer.UnsanitizedHTML,
           valueAccessor: (parcel: ClientParcel) => {
-            const value = parcel.properties.noClientExploitant;
+            const value = parcel.properties.autreExploitant;
             if (!value) { return ''; }
-            if (value === parcel.properties.noClientRecherche) { return value; }
             return this.computeClientNumAnchor(value);
           }
         },

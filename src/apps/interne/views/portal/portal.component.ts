@@ -343,6 +343,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   private onSearchClient(result: SearchResult<Client>) {
+    this.clientState.setClientNotFound(false);
     this.clientState.addClient(result.data);
   }
 

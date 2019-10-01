@@ -1,5 +1,5 @@
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { skip, tap } from 'rxjs/operators';
 
 import { EntityRecord, EntityStore } from '@igo2/common';
 import { FeatureStore, IgoMap } from '@igo2/geo';
@@ -108,22 +108,6 @@ export class ClientController {
       valueAccessor: (diagram: ClientParcelDiagram) => diagram.id,
       direction: 'asc'
     });
-
-    this.diagram$$ = this.diagramStore.stateView
-      .manyBy$((record: EntityRecord<ClientParcelDiagram>) => record.state.selected === true)
-      .subscribe((records: EntityRecord<ClientParcelDiagram>[]) => {
-        const diagrams = records.map((record: EntityRecord<ClientParcelDiagram>) => record.entity);
-        this.onSelectDiagrams(diagrams);
-      });
-  }
-
-  /**
-   * Load diagrams into the store and select them all
-   * @param diagrams Diagrams
-   */
-  private loadDiagrams(diagrams: ClientParcelDiagram[]) {
-    this.diagramStore.load(diagrams);
-    this.diagramStore.state.updateMany(diagrams, {selected: true});
   }
 
   /**
@@ -131,8 +115,41 @@ export class ClientController {
    * @param diagrams Diagrams
    */
   private teardownDiagrams() {
-    this.diagram$$.unsubscribe();
+    this.unobserveDiagrams();
     this.diagramStore.clear();
+  }
+
+  /**
+   * Load diagrams into the store and select them all
+   * @param diagrams Diagrams
+   */
+  private loadDiagrams(diagrams: ClientParcelDiagram[]) {
+    this.diagramStore.state.clear();
+    this.diagramStore.load(diagrams);
+    this.diagramStore.state.updateMany(diagrams, {selected: true});
+  }
+
+  /**
+   * Observe diagrams selection
+   */
+  private observeDiagrams() {
+    this.diagram$$ = this.diagramStore.stateView
+      .manyBy$((record: EntityRecord<ClientParcelDiagram>) => record.state.selected === true)
+      .pipe(skip(2))
+      .subscribe((records: EntityRecord<ClientParcelDiagram>[]) => {
+        const diagrams = records.map((record: EntityRecord<ClientParcelDiagram>) => record.entity);
+        this.onSelectDiagrams(diagrams);
+      });
+  }
+
+  /**
+   * Unobserve diagrams selection
+   */
+  private unobserveDiagrams() {
+    if (this.diagram$$ !== undefined) {
+      this.diagram$$.unsubscribe();
+      this.diagram$$ = undefined;
+    }
   }
 
   /**
@@ -180,13 +197,12 @@ export class ClientController {
     this.parcelService.getParcels(this.client, this.parcelYear)
       .pipe(
         tap((parcels: ClientParcel[]) => {
-          const diagrams = getDiagramsFromParcels(parcels);
-          this.loadDiagrams(diagrams);
+          this.loadDiagrams(getDiagramsFromParcels(parcels));
+          this.observeDiagrams();
         })
       )
       .subscribe((parcels: ClientParcel[]) => {
         this.parcelWorkspace.load(parcels);
-
         if (parcels.length === 0) {
           this.message$.next('client.error.noparcel');
         } else {
@@ -208,6 +224,7 @@ export class ClientController {
 
   /**
    * Track selected parcels
+   * @param parcels Parcels
    */
   private onSelectParcels(parcels: ClientParcel[]) {
     this.selectedParcels$.next(parcels);

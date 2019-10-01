@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { ActionStore } from '@igo2/common';
+import { ActionStore, EntityTransaction } from '@igo2/common';
 import {
   FeatureMotion,
   FeatureStore,
@@ -15,7 +15,6 @@ import {
   Client,
   ClientParcelElement,
   ClientParcelElementWorkspace,
-  ClientParcelElementService,
   createClientDefaultSelectionStyle,
   createParcelElementLayer
 } from 'src/lib/client';
@@ -28,7 +27,6 @@ import { ClientParcelElementTableService  } from './client-parcel-element-table.
 export class ClientParcelElementWorkspaceService {
 
   constructor(
-    private clientParcelElementService: ClientParcelElementService,
     private clientParcelElementTableService: ClientParcelElementTableService
   ) {}
 
@@ -46,7 +44,7 @@ export class ClientParcelElementWorkspaceService {
         map,
         type: 'parcel',
         tableTemplate: this.clientParcelElementTableService.buildTable(),
-        parcelElementService: this.clientParcelElementService
+        transaction: new EntityTransaction()
       }
     });
   }

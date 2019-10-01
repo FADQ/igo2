@@ -27,8 +27,7 @@ import {
   generateParcelElementOperationTitle,
   getParcelElementErrors
 } from 'src/lib/client';
-
-import { moveToFeatureStore } from 'src/apps/shared/modules/feature/shared/feature.utils';
+import { moveToFeatureStore } from 'src/lib/feature';
 
 @Injectable({
   providedIn: 'root'

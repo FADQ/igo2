@@ -13,6 +13,7 @@ import { EntityStore, ToolComponent } from '@igo2/common';
 
 import {
   Client,
+  ClientService,
   ClientParcelYear,
   ClientController,
   ClientParcelElementTxService,
@@ -64,6 +65,7 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    private clientService: ClientService,
     private clientParcelElementTxService: ClientParcelElementTxService,
     private clientState: ClientState,
     private dialog: MatDialog,
@@ -100,11 +102,14 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
   onClientAddedChange(event: {added: boolean, client: Client}) {
     const clientNum = event.client.info.numero;
     if (event.added === true) {
-      this.clientState.getClientByNum(clientNum)
-        .subscribe((client: Client) => this.clientState.addClient(client));
+      this.clientService.getClientByNum(clientNum).subscribe((client: Client) => {
+        this.clientState.setClientNotFound(false);
+        this.clientState.addClient(client);
+      });
     } else {
       this.clientState.clearClientByNum(clientNum);
     }
+
     this.cdRef.detectChanges();
   }
 
@@ -126,11 +131,11 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
 
   private watchParcelElementTx() {
     this.unwatchParcelElementTx();
-    const parcelElementTxActives$ = this.controllers.all().map((controller: ClientController) => {
-      return controller.parcelElementTxActive$;
+    const parcelElementsActives$ = this.controllers.all().map((controller: ClientController) => {
+      return controller.parcelElementsActive$;
     });
 
-    this.parcelElementTx$$ = combineLatest(...parcelElementTxActives$).subscribe((bunch: boolean[]) => {
+    this.parcelElementTx$$ = combineLatest(...parcelElementsActives$).subscribe((bunch: boolean[]) => {
       const noTxActive = bunch.every((active: boolean) => active === false);
       this.parcelYearSelectorDisabled$.next(!noTxActive);
     });

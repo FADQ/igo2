@@ -8,6 +8,8 @@ export interface ClientParcelApiConfig {
 export interface ClientParcelProperties {
   annee: string;
   anneeImage: number;
+  autreDetenteur: string;
+  autreExploitant: string;
   codeDefautCultural: string;
   descriptionProduction: string;
   id: string;

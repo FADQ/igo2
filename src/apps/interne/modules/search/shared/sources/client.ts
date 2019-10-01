@@ -10,9 +10,8 @@ import {
   TextSearch
 } from '@igo2/geo';
 
-import { CLIENT, Client } from 'src/lib/client';
+import { CLIENT, Client, ClientService } from 'src/lib/client';
 import { ClientData } from './client.interfaces';
-import { ClientState } from 'src/apps/interne/modules/client/client.state';
 
 /**
  * Client search source
@@ -24,7 +23,7 @@ export class ClientSearchSource extends SearchSource implements TextSearch {
   static type = CLIENT;
 
   constructor(
-    private clientState: ClientState,
+    private clientService: ClientService,
     @Inject('options') options: SearchSourceOptions
   ) {
     super(options);
@@ -44,7 +43,7 @@ export class ClientSearchSource extends SearchSource implements TextSearch {
    * @returns Observable of <SearchResult<Client>[]
    */
   search(term?: string): Observable<SearchResult<Client>[]> {
-    return this.clientState.getClientByNum(term)
+    return this.clientService.getClientByNum(term)
       .pipe(
         map((response: ClientData) => {
           if (response === undefined) {

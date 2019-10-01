@@ -19,7 +19,6 @@ import {
   createClientDefaultSelectionStyle
 } from 'src/lib/client';
 
-import { moveToFeaturesViewScale } from 'src/apps/shared/modules/feature/shared/feature.enums';
 import { ClientParcelTableService } from './client-parcel-table.service';
 
 @Injectable({
@@ -71,7 +70,7 @@ export class ClientParcelWorkspaceService {
 
   private createLoadingStrategy(): FeatureStoreLoadingStrategy {
     return new FeatureStoreLoadingStrategy({
-      viewScale: moveToFeaturesViewScale
+      viewScale: [0, 0, 0.8, 0.6]
     });
   }
 

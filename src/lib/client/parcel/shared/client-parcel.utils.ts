@@ -7,6 +7,7 @@ import { FeatureDataSource, VectorLayer } from '@igo2/geo';
 import { ObjectUtils } from '@igo2/utils';
 
 import { Client } from '../../shared/client.interfaces';
+import { padClientNum } from '../../shared/client.utils';
 import { ClientParcelDiagram, ClientParcel, ClientParcelListResponseItem } from './client-parcel.interfaces';
 
 export function getDiagramsFromParcels(parcels: ClientParcel[]): ClientParcelDiagram[] {
@@ -20,17 +21,15 @@ export function getDiagramsFromParcels(parcels: ClientParcel[]): ClientParcelDia
 }
 
 export function getParcelRelation(listItem: ClientParcelListResponseItem, noClientRech: string) {
-  const noClientDet = listItem.properties.noClientDetenteur || noClientRech;
-  const noClientExp = listItem.properties.noClientExploitant || noClientDet;
+  const autreDet = listItem.properties.autreDetenteur || undefined;
+  const autreExp = listItem.properties.autreExploitant || undefined;
 
   // Relation is a number used to order the parcels on the map and to define their color
-  let relation;
-  if (noClientRech === noClientExp) {
-    relation = 1;  // Orange;
-  } else if (!noClientDet || noClientDet !== noClientExp) {
-    relation = 2;  // Vert
-  } else {
-    relation = 3;  // Turquoise
+  let relation = 1;  // Orange
+  if (autreDet !== undefined) {
+    relation = 3;  // Teal
+  } else if (autreExp !== undefined) {
+    relation = 2;  // Green
   }
 
   return relation;

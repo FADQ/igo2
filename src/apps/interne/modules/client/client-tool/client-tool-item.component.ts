@@ -9,7 +9,11 @@ import {
 
 import { BehaviorSubject } from 'rxjs';
 
-import { Client, ClientController, ClientInfoService } from 'src/lib/client';
+import {
+  Client,
+  ClientController,
+  ClientInfoService,
+} from 'src/lib/client';
 
 @Component({
   selector: 'fadq-client-tool-item',
@@ -20,6 +24,8 @@ import { Client, ClientController, ClientInfoService } from 'src/lib/client';
 export class ClientToolItemComponent {
 
   readonly showContent$: BehaviorSubject<boolean> = new BehaviorSubject(true);
+
+  readonly baseColor$: BehaviorSubject<[]> = new BehaviorSubject(undefined);
 
   @Input() controller: ClientController;
 
@@ -78,11 +84,19 @@ export class ClientToolItemComponent {
     this.showContent$.next(!collapsed);
   }
 
-  getLegendInnerColor(): string {
-    return `rgba(${this.controller.color.join(',')}, 0.15)`;
+  getParcelInnerColor(): string {
+    return this.getLegendInnerColor(this.controller.parcelColor);
   }
 
-  getLegendOuterColor(): string {
-    return `rgb(${this.controller.color.join(',')})`;
+  getParcelOuterColor(): string {
+    return this.getLegendOuterColor(this.controller.parcelColor);
+  }
+
+  private getLegendInnerColor(baseColor: [number, number, number]): string {
+    return `rgba(${baseColor.join(',')}, 0.15)`;
+  }
+
+  private getLegendOuterColor(baseColor: [number, number, number]): string {
+    return `rgb(${baseColor.join(',')})`;
   }
 }

@@ -1,6 +1,10 @@
-import { Observable } from 'rxjs';
 
-import { EntityTableTemplate, Workspace, WorkspaceOptions } from '@igo2/common';
+import {
+  EntityTableTemplate,
+  EntityTransaction,
+  Workspace,
+  WorkspaceOptions
+} from '@igo2/common';
 import {
   IgoMap,
   FeatureStore,
@@ -10,7 +14,6 @@ import {
 
 import { Client } from '../../shared/client.interfaces';
 import { ClientParcelElement } from './client-parcel-element.interfaces';
-import { ClientParcelElementService } from './client-parcel-element.service';
 
 export interface ClientParcelElementWorkspaceOptions extends WorkspaceOptions {
   meta: {
@@ -18,7 +21,7 @@ export interface ClientParcelElementWorkspaceOptions extends WorkspaceOptions {
     map: IgoMap;
     type: string;
     tableTemplate: EntityTableTemplate;
-    parcelElementService: ClientParcelElementService;
+    transaction: EntityTransaction;
   };
 }
 
@@ -32,8 +35,8 @@ export class ClientParcelElementWorkspace extends Workspace<ClientParcelElement>
     return this.entityStore as FeatureStore<ClientParcelElement>;
   }
 
-  get parcelElementService(): ClientParcelElementService {
-    return this.options.meta.parcelElementService;
+  get transaction(): EntityTransaction {
+    return this.options.meta.transaction;
   }
 
   constructor(protected options: ClientParcelElementWorkspaceOptions) {

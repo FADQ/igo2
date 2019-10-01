@@ -87,7 +87,7 @@ fadq-expansion-panel-header igo-actionbar {
     bottom: 8px;
     right: -1px;
     width: 2px;
-    background-color: #ccc;
+    background-color: #ddd;
   }
 }
 
@@ -99,4 +99,29 @@ fadq-expansion-panel-header igo-actionbar {
 .fadq-edition-continue-button-overlay button {
   background-color: mat-color($primary);
   color: white;
+}
+
+// This is used to show tooltip when hovering some table cells
+// The standard html title attribute doesn't work properly for some reason
+.overflow-inherit {
+  overflow: inherit !important;
+}
+
+[tooltip] {
+  position: relative;
+}
+
+[tooltip]:before {    
+  display: none;        
+  position: absolute;
+  z-index: 101;  // Because table sticky headers have a z-index of 100
+  content: attr(tooltip);
+  padding: 5px;
+  background: rgba(30, 30, 30, 0.5);
+  color: white;
+  font-weight: normal;
+}
+
+[tooltip]:hover:before {     
+  display: inline;
 }

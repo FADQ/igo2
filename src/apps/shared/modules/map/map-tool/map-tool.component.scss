@@ -2,3 +2,11 @@ mat-tab-group,
 mat-tab-group ::ng-deep .mat-tab-body-wrapper {
   height: 100%;
 }
+
+igo-layer-list ::ng-deep .mat-list-base .mat-list-item .mat-list-item-content {
+  padding: 0 0 0 16px;
+}
+
+igo-layer-list ::ng-deep .igo-layer-actions-container > .igo-col {
+  padding: 0 0 0 16px;
+}

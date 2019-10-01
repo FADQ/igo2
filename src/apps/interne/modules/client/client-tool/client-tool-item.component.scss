@@ -4,7 +4,56 @@
   border: 1px solid white;
 }
 
-.fadq-client-name:hover {
+:host.fadq-client-tool-item-selected {
+  background-color: #eee;
+  border: 1px solid #ddd;
+}
+
+.fadq-client-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  .fadq-client-header-left {
+    flex: 0 0 0;
+
+    .mat-icon {
+      padding: 8px;
+    }
+  }
+
+  .fadq-client-header-center {
+    display: flex;
+    flex: 1 1 0;
+    padding: 0 8px 0 16px;
+    align-items: center;
+
+    .fadq-client-header-badges {
+      display: flex;
+      flex: 0 0 auto;
+      align-items: center;
+    
+      .fadq-client-header-badge {
+        margin: 0px 4px;
+        height: 18px;
+        width: 18px;
+
+        ::ng-deep svg {
+          height: 18px;
+          width: 18px;
+        }
+      }
+    }
+  }
+
+  .fadq-client-header-right {
+    display: flex;
+    flex: 0 0 auto;
+  }
+}
+
+.fadq-client-header:hover {
   cursor: pointer;
 }
 
@@ -45,9 +94,4 @@ fadq-client-parcel-legend {
   border-radius: 5px;
   border-width: 2px;
   border-style: solid;
-}
-
-:host.fadq-client-tool-item-selected {
-  background-color: #eee;
-  border: 1px solid #ddd;
 }

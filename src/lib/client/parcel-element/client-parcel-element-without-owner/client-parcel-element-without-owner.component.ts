@@ -171,12 +171,14 @@ export class ClientParcelElementWithoutOwnerComponent
   }
 
   private onParcelElementsFound(parcelElements: ClientParcelElement[]) {
+    // Need to do that because parcels without owner may have the same id, meaning
+    // that the count may be smaller than the number of parcels without owner found.
+    const countBefore = this.store.count;
     this.store.insertMany(parcelElements);
+    const count = this.store.count - countBefore;
 
     const textKey = 'client.parcelElement.recoverParcelsWithoutOwner.parcelFound';
-    const text = this.languageService.translate.instant(textKey, {
-      count: parcelElements.length
-    });
+    const text = this.languageService.translate.instant(textKey, {count});
     this.message$.next({
       type: MessageType.INFO,
       text

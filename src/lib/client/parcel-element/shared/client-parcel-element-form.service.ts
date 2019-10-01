@@ -15,8 +15,9 @@ import {
 } from '@igo2/common';
 import { IgoMap } from '@igo2/geo';
 
-import { ApiService } from 'src/lib/core/api';
-import { DomainService } from 'src/lib/core/domain';
+import { ApiService } from '../../../core/api/api.service';
+import { DomainService } from '../../../core/domain/domain.service';
+import { createOlEditionStyle } from '../../../edition/shared/edition.utils';
 
 import { getParcelleDraineeChoices } from '../../parcel/shared/client-parcel.utils';
 import { ClientParcelElementApiConfig } from './client-parcel-element.interfaces';
@@ -186,6 +187,7 @@ export class ClientParcelElementFormService {
       inputs: {
         geometryType: 'Polygon',
         geometryTypeField: false,
+        drawStyle: createOlEditionStyle(),
         drawGuideField: true,
         drawGuide: undefined,
         drawGuidePlaceholder: 'Guide d\'aide au traçage',

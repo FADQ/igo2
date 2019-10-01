@@ -42,7 +42,7 @@ export class ClientToolComponent implements OnInit, OnDestroy {
 
   private controllers$$: Subscription;
 
-  private parcelElementTx$$: Subscription;
+  private parcelElements$$: Subscription;
 
   @Input() showInfo: boolean = true;
 
@@ -81,13 +81,13 @@ export class ClientToolComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.controllers$$ = this.controllers.count$.subscribe((count: number) => {
       this.showLegend$.next(count === 1);
-      this.watchParcelElementTx();
+      this.watchParcelElements();
     });
   }
 
   ngOnDestroy() {
     this.controllers$$.unsubscribe();
-    this.unwatchParcelElementTx();
+    this.unwatchParcelElements();
   }
 
   onDestroyController(controller: ClientController) {
@@ -103,22 +103,22 @@ export class ClientToolComponent implements OnInit, OnDestroy {
     this.searchState.setSearchTerm(address);
   }
 
-  private watchParcelElementTx() {
-    this.unwatchParcelElementTx();
-    const parcelElementTxActives$ = this.controllers.all().map((controller: ClientController) => {
-      return controller.parcelElementTxActive$;
+  private watchParcelElements() {
+    this.unwatchParcelElements();
+    const parcelElementsActives$ = this.controllers.all().map((controller: ClientController) => {
+      return controller.parcelElementsActive$;
     });
 
-    this.parcelElementTx$$ = combineLatest(...parcelElementTxActives$).subscribe((bunch: boolean[]) => {
-      const noTxActive = bunch.every((active: boolean) => active === false);
-      this.parcelYearSelectorDisabled$.next(!noTxActive);
+    this.parcelElements$$ = combineLatest(...parcelElementsActives$).subscribe((bunch: boolean[]) => {
+      const nosActive = bunch.every((active: boolean) => active === false);
+      this.parcelYearSelectorDisabled$.next(!nosActive);
     });
   }
 
-  private unwatchParcelElementTx() {
-    if (this.parcelElementTx$$ !== undefined) {
-      this.parcelElementTx$$.unsubscribe();
-      this.parcelElementTx$$ = undefined;
+  private unwatchParcelElements() {
+    if (this.parcelElements$$ !== undefined) {
+      this.parcelElements$$.unsubscribe();
+      this.parcelElements$$ = undefined;
     }
   }
 

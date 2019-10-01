@@ -15,8 +15,8 @@ import {
   FormService
 } from '@igo2/common';
 
-import { ApiService } from 'src/lib/core/api';
-import { DomainService } from 'src/lib/core/domain';
+import { ApiService } from '../../../core/api/api.service';
+import { DomainService } from '../../../core/domain/domain.service';
 
 import {
   validateOnlyOneLSE,

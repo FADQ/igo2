@@ -7,8 +7,6 @@ import {
   moveToOlFeatures
 } from '@igo2/geo';
 
-import { moveToFeaturesViewScale } from './feature.enums';
-
 export function moveToFeatureStore(map: IgoMap, store: FeatureStore) {
   const olSource = store.layer.ol.getSource();
   let olFeatures = store.stateView
@@ -27,6 +25,6 @@ export function moveToFeatureStore(map: IgoMap, store: FeatureStore) {
     map,
     olFeatures,
     FeatureMotion.Zoom,
-    moveToFeaturesViewScale
+    [0, 0, 0.8, 0.6]
   );
 }

@@ -1,5 +1,5 @@
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { concatMap, map, tap } from 'rxjs/operators';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { concatMap, map, skip, tap } from 'rxjs/operators';
 
 import { EntityRecord, EntityStore, EntityTransaction, WorkspaceStore } from '@igo2/common';
 import { FeatureStore, IgoMap } from '@igo2/geo';
@@ -17,7 +17,6 @@ import { ClientParcelElementWorkspace } from '../parcel-element/shared/client-pa
 import { ClientParcelElement } from '../parcel-element/shared/client-parcel-element.interfaces';
 import { ClientParcelElementService } from '../parcel-element/shared/client-parcel-element.service';
 import { ClientParcelElementTransactionService } from '../parcel-element/shared/client-parcel-element-transaction.service';
-import { ClientParcelElementTxState } from '../parcel-element/shared/client-parcel-element.enums';
 import {
   createParcelElementLayerStyle,
   getDiagramsFromParcelElements
@@ -53,10 +52,6 @@ export interface ClientControllerOptions {
 export class ClientController {
 
   readonly message$ = new BehaviorSubject<string>(undefined);
-
-  readonly color$ = new BehaviorSubject<[number, number, number]>(undefined);
-
-  readonly parcelElementTxActive$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   /** Subscription to the selected diagram  */
   private diagram$$: Subscription;
@@ -133,8 +128,7 @@ export class ClientController {
   }
 
   /** Parcel element transaction */
-  get parcelElementTransaction(): EntityTransaction { return this._parcelElementTransaction; }
-  private _parcelElementTransaction: EntityTransaction = new EntityTransaction();
+  get parcelElementTransaction(): EntityTransaction { return this.parcelElementWorkspace.transaction; }
 
   /** Parcel element service */
   get parcelElementService(): ClientParcelElementService {
@@ -146,8 +140,9 @@ export class ClientController {
     return this.options.parcelElementTransactionService;
   }
 
-  /** Whether parcel element tx is active */
-  get parcelElementTxActive(): boolean { return this.parcelElementTxActive$.value; }
+  /** Whether parcel edition is active */
+  get parcelElementsActive(): boolean { return this.parcelElementsActive$.value; }
+  readonly parcelElementsActive$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   /** Schema workspace */
   get schemaWorkspace(): ClientSchemaWorkspace {
@@ -188,13 +183,14 @@ export class ClientController {
   }
 
   /** Element transaction */
-  get schemaElementTransaction(): EntityTransaction { return this._schemaElementTransaction; }
-  private _schemaElementTransaction: EntityTransaction = new EntityTransaction();
+  get schemaElementTransaction(): EntityTransaction { return this.schemaElementWorkspace.transaction; }
 
+  /** Schema element service */
   get schemaElementService(): ClientSchemaElementService {
     return this.options.schemaElementService;
   }
 
+  /** Parcel element transaction service */
   get schemaElementTransactionService(): ClientSchemaElementTransactionService {
     return this.options.schemaElementTransactionService;
   }
@@ -203,8 +199,9 @@ export class ClientController {
   get diagramStore(): EntityStore<ClientParcelDiagram> { return this._diagramStore; }
   private _diagramStore: EntityStore<ClientParcelDiagram>;
 
-  /** Client color */
-  get color(): [number, number, number] { return this.color$.value; }
+  /** Client parcel color */
+  get parcelColor(): [number, number, number] { return this.parcelColor$.value; }
+  readonly parcelColor$ = new BehaviorSubject<[number, number, number]>(undefined);
 
   constructor(private options: ClientControllerOptions) {
     this.initDiagrams();
@@ -214,12 +211,16 @@ export class ClientController {
     this.initSchemas();
     this.loadSchemas();
 
-    this.defineColor(options.color);
+    this.defineParcelColor(options.color);
     if (options.parcelYear !== undefined) {
       this.setParcelYear(options.parcelYear);
     }
   }
 
+  /**
+   * Teardown everything
+   * @internal
+   */
   destroy() {
     this.message$.next(undefined);
     this.teardownDiagrams();
@@ -228,100 +229,173 @@ export class ClientController {
     this.teardownSchemas();
   }
 
+  /**
+   * Set the parcel year and load parcels of that year
+   * @param parcelYear number
+   */
   setParcelYear(parcelYear: number) {
     this._parcelYear = parcelYear;
     this.loadParcels();
   }
 
-  defineColor(color: [number, number, number] | undefined) {
-    this.color$.next(color);
+  /**
+   * Define a color for that controller and apply the proper
+   * styling (either single client style or multi client style)
+   * @param color RGB color
+   */
+  defineParcelColor(color: [number, number, number] | undefined) {
+    this.parcelColor$.next(color);
 
     const olParcelLayerStyle = createPerClientParcelLayerStyle(color);
     this.parcelStore.layer.ol.setStyle(olParcelLayerStyle);
 
     this.applyParcelElementStyle();
     if (this.currentStyle === 'multi') {
-      this.applyMultiClientStyle();
+      this.applyParcelMultiClientStyle();
     }
   }
 
-  applyMultiClientStyle() {
-    const color = this.color$.value;
-    const olParcelLayerStyle = createPerClientParcelLayerStyle(color);
+  /**
+   * Apply multi-client style on parcels
+   */
+  applyParcelMultiClientStyle() {
+    const parcelColor = this.parcelColor$.value;
+    const olParcelLayerStyle = createPerClientParcelLayerStyle(parcelColor);
     this.parcelStore.layer.ol.setStyle(olParcelLayerStyle);
     this.currentStyle = 'multi';
   }
 
-  applySingleClientStyle() {
+  /**
+   * Apply single-client style on parcels
+   */
+  applyParcelSingleClientStyle() {
     const olParcelLayerStyle = createParcelLayerStyle();
     this.parcelStore.layer.ol.setStyle(olParcelLayerStyle);
     this.currentStyle = 'single';
   }
 
+  /**
+   * Activate parcel elements
+   */
   activateParcelElements() {
-    this.activateParcelTx();
+    this.parcelElementsActive$.next(true);
+    this.unobserveDiagrams();
     this.initParcelElements();
     this.loadParcelElements();
     this.teardownParcels();
     this.workspaceStore.activateWorkspace(this.parcelElementWorkspace);
   }
 
+  /**
+   * Deactivate parcel elements
+   */
   deactivateParcelElements() {
     if (!this.parcelElementTransaction.empty) {
-      this.parcelElementTransactionService.enqueue({
+      return this.parcelElementTransactionService.prompt({
         client: this.client,
         annee: this.parcelYear,
         transaction: this.parcelElementTransaction,
         proceed: () => this.deactivateParcelElements()
       });
-      return;
     }
 
+    this.unobserveDiagrams();
     this.teardownParcelElements();
     this.initParcels();
     this.loadParcels();
     this.workspaceStore.activateWorkspace(this.parcelWorkspace);
   }
 
-  activateParcelTx() {
-    this.parcelElementTxActive$.next(true);
-  }
+  /******* Diagrams ********/
 
-  deactivateParcelTx() {
-    this.parcelElementTxActive$.next(false);
-  }
-
-  private applyParcelElementStyle() {
-    const color = this.color$.value;
-    const olParcelElementLayerStyle = createParcelElementLayerStyle(color);
-    this.parcelElementStore.layer.ol.setStyle(olParcelElementLayerStyle);
-  }
-
+  /**
+   * Initialize the diagram store and observe the selected diagrams
+   * to filter the parcel store accordingly.
+   */
   private initDiagrams() {
     this._diagramStore = new EntityStore<ClientParcelDiagram>([]);
     this.diagramStore.view.sort({
       valueAccessor: (diagram: ClientParcelDiagram) => diagram.id,
       direction: 'asc'
     });
+  }
 
+  /**
+   * Clear the diagram store and teardown observers
+   * @param diagrams Diagrams
+   */
+  private teardownDiagrams() {
+    this.unobserveDiagrams();
+    this.diagramStore.clear();
+  }
+
+  /**
+   * Load diagrams into the store and select them all
+   * @param diagrams Diagrams
+   */
+  private loadDiagrams(diagrams: ClientParcelDiagram[]) {
+    this.diagramStore.state.clear();
+    this.diagramStore.load(diagrams.filter((diagram: ClientParcelDiagram) => diagram.id !== 9999));
+    this.diagramStore.state.updateMany(diagrams, {selected: true});
+  }
+
+  /**
+   * Observe diagrams selection
+   */
+  private observeDiagrams() {
+    // Need to skip 2 because the current value is emitted then, the new one. We skip them
+    // both because the parcel store and parcel element store both have a loading
+    // strategy that do an inital zoom
     this.diagram$$ = this.diagramStore.stateView
       .manyBy$((record: EntityRecord<ClientParcelDiagram>) => record.state.selected === true)
+      .pipe(skip(2))
       .subscribe((records: EntityRecord<ClientParcelDiagram>[]) => {
         const diagrams = records.map((record: EntityRecord<ClientParcelDiagram>) => record.entity);
         this.onSelectDiagrams(diagrams);
       });
   }
 
-  private loadDiagrams(diagrams: ClientParcelDiagram[]) {
-    this.diagramStore.load(diagrams);
-    this.diagramStore.state.updateMany(diagrams, {selected: true});
+  /**
+   * Unobserve diagrams selection
+   */
+  private unobserveDiagrams() {
+    if (this.diagram$$ !== undefined) {
+      this.diagram$$.unsubscribe();
+      this.diagram$$ = undefined;
+    }
   }
 
-  private teardownDiagrams() {
-    this.diagram$$.unsubscribe();
-    this.diagramStore.clear();
+  /**
+   * When diagrams are selected, filter parcels and parcel elements
+   * @param diagrams Selected diagrams
+   */
+  private onSelectDiagrams(diagrams: ClientParcelDiagram[]) {
+    this.filterParcelsByDiagrams(diagrams);
   }
 
+  /**
+   * Filter parcels by diagrams
+   * @param diagrams Diagrams
+   */
+  private filterParcelsByDiagrams(diagrams: ClientParcelDiagram[]) {
+    const diagramIds = diagrams.map((diagram: ClientParcelDiagram) => diagram.id);
+    const filterClause = function(parcel: ClientParcel | ClientParcelElement): boolean {
+      const noDiagramme = parcel.properties.noDiagramme;
+      return diagramIds.includes(noDiagramme) || noDiagramme === 9999;
+    };
+
+    if (this.parcelElementsActive === true) {
+      this.parcelElementStore.view.filter(filterClause);
+    } else {
+      this.parcelStore.view.filter(filterClause);
+    }
+  }
+
+  /******* Parcels ********/
+
+  /**
+   * Initialize the parcel workspace and observe the selected parcels
+   */
   private initParcels() {
     this.parcels$$ = this.parcelStore
       .stateView.manyBy$((record: EntityRecord<ClientParcel>) => record.state.selected === true)
@@ -333,25 +407,9 @@ export class ClientController {
     this.workspaceStore.update(this.parcelWorkspace);
   }
 
-  private loadParcels() {
-    this.parcelService.getParcels(this.client, this.parcelYear)
-      .pipe(
-        tap((parcels: ClientParcel[]) => {
-          const diagrams = getDiagramsFromParcels(parcels);
-          this.loadDiagrams(diagrams);
-        })
-      )
-      .subscribe((parcels: ClientParcel[]) => {
-        this.parcelWorkspace.load(parcels);
-
-        if (parcels.length === 0) {
-          this.message$.next('client.error.noparcel');
-        } else {
-          this.message$.next(undefined);
-        }
-      });
-  }
-
+  /**
+   * Deactivate the parcel workspace and teardown observers
+   */
   private teardownParcels() {
     if (this.parcels$$ !== undefined) {
       this.parcels$$.unsubscribe();
@@ -364,6 +422,42 @@ export class ClientController {
     this.workspaceStore.delete(this.parcelWorkspace);
   }
 
+  /**
+   * Load parcels and diagrams into their respective store. Start observing
+   * the selected diagrams. Also, display a message if no parcel are found.
+   */
+  private loadParcels() {
+    this.parcelService.getParcels(this.client, this.parcelYear)
+      .pipe(
+        tap((parcels: ClientParcel[]) => {
+          this.loadDiagrams(getDiagramsFromParcels(parcels));
+          this.observeDiagrams();
+        })
+      )
+      .subscribe((parcels: ClientParcel[]) => {
+        this.parcelWorkspace.load(parcels);
+        if (parcels.length === 0) {
+          this.message$.next('client.error.noparcel');
+        } else {
+          this.message$.next(undefined);
+        }
+      });
+  }
+
+  /**
+   * Track selected parcels
+   * @param parcels Parcels
+   */
+  private onSelectParcels(parcels: ClientParcel[]) {
+    this.selectedParcels$.next(parcels);
+  }
+
+  /******* Parcel elements ********/
+
+  /**
+   * Initialize the parcel element workspace
+   * and observe the selected parcels elements
+   */
   private initParcelElements() {
     this.parcelElements$$ = this.parcelElementStore
       .stateView.manyBy$((record: EntityRecord<ClientParcelElement>) => record.state.selected === true)
@@ -375,17 +469,11 @@ export class ClientController {
       this.workspaceStore.update(this.parcelElementWorkspace);
   }
 
-  private loadParcelElements() {
-    this.parcelElementService.getParcelElements(this.client, this.parcelYear)
-      .subscribe((parcelElements: ClientParcelElement[]) => {
-        const diagrams = getDiagramsFromParcelElements(parcelElements);
-        this.loadDiagrams(diagrams);
-        this.parcelElementWorkspace.load(parcelElements);
-      });
-  }
-
+  /**
+   * Deactivate the parcel element workspace and teardown observers.
+   */
   private teardownParcelElements() {
-    this.deactivateParcelTx();
+    this.parcelElementsActive$.next(false);
 
     if (this.parcelElements$$ !== undefined) {
       this.parcelElements$$.unsubscribe();
@@ -399,6 +487,46 @@ export class ClientController {
     this.workspaceStore.delete(this.parcelElementWorkspace);
   }
 
+  /**
+   * Load parcel elements and diagrams into their respective store.
+   * Start observing the selected diagrams.
+   */
+  private loadParcelElements() {
+    this.parcelElementService.getParcelElements(this.client, this.parcelYear)
+      .pipe(
+        tap((parcelElements: ClientParcelElement[]) => {
+          this.loadDiagrams(getDiagramsFromParcelElements(parcelElements));
+          this.observeDiagrams();
+        })
+      )
+      .subscribe((parcelElements: ClientParcelElement[]) => {
+        this.parcelElementWorkspace.load(parcelElements);
+      });
+  }
+
+  /**
+   * Track selected parcel element
+   * @param parcelElements Parcel elements
+   */
+  private onSelectParcelElements(parcelElements: ClientParcelElement[]) {
+    this.selectedParcelElements$.next(parcelElements);
+  }
+
+  /**
+   * Apply a style to the parcel element layer. This style
+   * uses the controller's parcel color.
+   */
+  private applyParcelElementStyle() {
+    const color = this.parcelColor$.value;
+    const olParcelElementLayerStyle = createParcelElementLayerStyle(color);
+    this.parcelElementStore.layer.ol.setStyle(olParcelElementLayerStyle);
+  }
+
+  /******* Schemas ********/
+
+  /**
+   * Initialize the schema workspace and observe the selected schema
+   */
   private initSchemas() {
     this.schema$$ = this.schemaStore
       .stateView.firstBy$((record: EntityRecord<ClientSchema>) => record.state.selected === true)
@@ -411,13 +539,9 @@ export class ClientController {
     this.workspaceStore.update(this.schemaWorkspace);
   }
 
-  private loadSchemas() {
-    this.schemaService.getSchemas(this.client)
-      .subscribe((schemas: ClientSchema[]) => {
-        this.schemaWorkspace.load(schemas);
-      });
-  }
-
+  /**
+   * Deactivate theschema workspace and teardown observers.
+   */
   private teardownSchemas() {
     this.schema$$.unsubscribe();
     this.schemaWorkspace.teardown();
@@ -428,6 +552,64 @@ export class ClientController {
     this.clearSchema();
   }
 
+  /**
+   * Load schemas into their store.
+   */
+  private loadSchemas() {
+    this.schemaService.getSchemas(this.client)
+      .subscribe((schemas: ClientSchema[]) => this.schemaWorkspace.load(schemas));
+  }
+
+  /**
+   * Track sthe selected schema and load it's elements
+   * @param schema Schema
+   */
+  private onSelectSchema(schema: ClientSchema) {
+    if (schema !== undefined && this.schema !== undefined && schema.id === this.schema.id) {
+      return;
+    }
+    this.setSchema(schema);
+  }
+
+  /**
+   * Set the current schema. Initialize it's schema elements. If a
+   * transaction is ongoing, make sure it's resolved first.
+   * @param schema Schema
+   */
+  private setSchema(schema: ClientSchema) {
+    if (!this.schemaElementTransaction.empty) {
+      return this.schemaElementTransactionService.prompt({
+        schema: this.schema,
+        transaction: this.schemaElementTransaction,
+        proceed: () => this.setSchema(schema),
+        abort: () => this.schemaStore.state.update(this.schema, {selected: true}, true)
+      });
+    }
+
+    this.clearSchema();
+
+    if (schema !== undefined) {
+      this.initSchemaElements(schema);
+      this.loadSchemaElements(schema);
+    }
+    this.schema$.next(schema);
+  }
+
+  /**
+   * Clear the current schema and its elements
+   */
+  private clearSchema() {
+    if (this.schema === undefined) { return; }
+
+    this.teardownSchemaElements();
+    this.schema$.next(undefined);
+  }
+
+  /******* Schema elements ********/
+
+  /**
+   * Initialize the schema element workspace and observe the selected schema elements
+   */
   private initSchemaElements(schema: ClientSchema) {
     this.schemaElements$$ = this.schemaElementStore
       .stateView.manyBy$((record: EntityRecord<ClientSchemaElement>) => record.state.selected === true)
@@ -439,6 +621,27 @@ export class ClientController {
     this.workspaceStore.update(this.schemaElementWorkspace);
   }
 
+  /**
+   * Deactivate theschema workspace and teardown observers.
+   */
+  private teardownSchemaElements() {
+    if (this.schemaElements$$ !== undefined) {
+      this.schemaElements$$.unsubscribe();
+    }
+
+    this.schemaElementWorkspace.teardown();
+    this.schemaElementTransaction.clear();
+    if (this.workspaceStore.activeWorkspace$.value === this.schemaElementWorkspace) {
+      this.workspaceStore.deactivateWorkspace();
+    }
+    this.workspaceStore.delete(this.schemaElementWorkspace);
+  }
+
+  /**
+   * Load schemas elements into their store. Style the schema element
+   * layer based on the types accepted by the schema.
+   * @param schema Schema
+   */
   private loadSchemaElements(schema: ClientSchema) {
     this.schemaElementService.getSchemaElementTypes(schema.type)
       .pipe(
@@ -456,77 +659,12 @@ export class ClientController {
       });
   }
 
-  private teardownSchemaElements() {
-    if (this.schemaElements$$ !== undefined) {
-      this.schemaElements$$.unsubscribe();
-    }
-
-    this.schemaElementWorkspace.teardown();
-    this.schemaElementTransaction.clear();
-    if (this.workspaceStore.activeWorkspace$.value === this.schemaElementWorkspace) {
-      this.workspaceStore.deactivateWorkspace();
-    }
-    this.workspaceStore.delete(this.schemaElementWorkspace);
-  }
-
-  private onSelectDiagrams(diagrams: ClientParcelDiagram[]) {
-    this.setDiagrams(diagrams);
-  }
-
-  private onSelectParcels(parcels: ClientParcel[]) {
-    this.selectedParcels$.next(parcels);
-  }
-
-  private onSelectParcelElements(parcelElements: ClientParcelElement[]) {
-    this.selectedParcelElements$.next(parcelElements);
-  }
-
-  private onSelectSchema(schema: ClientSchema) {
-    if (schema !== undefined && this.schema !== undefined && schema.id === this.schema.id) {
-      return;
-    }
-    this.setSchema(schema);
-  }
-
+  /**
+   * Track selected schema elements
+   * @param schemaElements Schema elements
+   */
   private onSelectSchemaElements(schemaElements: ClientSchemaElement[]) {
     this.selectedSchemaElements$.next(schemaElements);
-  }
-
-  private setDiagrams(diagrams: ClientParcelDiagram[]) {
-    const diagramIds = diagrams.map((diagram: ClientParcelDiagram) => diagram.id);
-    const filterClause = function(parcel: ClientParcel | ClientParcelElement): boolean {
-      const noDiagramme = parcel.properties.noDiagramme;
-      return diagramIds.includes(noDiagramme) || noDiagramme === 9999;
-    };
-    this.parcelStore.view.filter(filterClause);
-    this.parcelElementStore.view.filter(filterClause);
-  }
-
-  private setSchema(schema: ClientSchema) {
-    if (!this.schemaElementTransaction.empty) {
-      this.schemaElementTransactionService.enqueue({
-        schema: this.schema,
-        transaction: this.schemaElementTransaction,
-        proceed: () => this.setSchema(schema),
-        abort: () => this.schemaStore.state.update(this.schema, {selected: true}, true)
-      });
-      return;
-    }
-
-    this.clearSchema();
-
-    if (schema !== undefined) {
-      this.initSchemaElements(schema);
-      this.loadSchemaElements(schema);
-    }
-    this.schema$.next(schema);
-  }
-
-  private clearSchema() {
-    if (this.schema === undefined) { return; }
-
-    this.teardownSchemaElements();
-    this.schema$.next(undefined);
   }
 
 }

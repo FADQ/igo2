@@ -8,6 +8,7 @@ import {
   Client,
   ClientController,
   ClientControllerOptions,
+  ClientParcelColors,
   ClientParcelService,
   ClientParcelElementService,
   ClientParcelElementTransactionService,
@@ -32,15 +33,6 @@ import { ClientSchemaElementActionsService } from './client-schema-element-actio
   providedIn: 'root'
 })
 export class ClientControllerService {
-
-  /** Multi clients color palette */
-  static colors: string[] = [
-    '8e24aa',
-    'ffeb3b',
-    '00bcd4',
-    'd81b60',
-    'ff8f00'
-  ];
 
   private colorPalette: Iterator<[number, number, number]>;
 
@@ -122,16 +114,18 @@ export class ClientControllerService {
    */
   *createColorIterator(): Iterator<[number, number, number]> {
     let index = 0;
-    let hex: string;
+    let rgb: [number, number, number];
+    const colors = ClientParcelColors;
 
     while (true) {
-      if (index < ClientControllerService.colors.length) {
-        hex = ClientControllerService.colors[index];
+      if (index < colors.length) {
+        rgb = colors[index];
       } else {
-        hex = '' + Math.floor(Math.random() * 16777215).toString(16);
+        const hex = '' + Math.floor(Math.random() * 16777215).toString(16);
+        rgb = hexToRGB(hex);
       }
 
-      yield hexToRGB(hex);
+      yield rgb;
 
       index += 1;
     }

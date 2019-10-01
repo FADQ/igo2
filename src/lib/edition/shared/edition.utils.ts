@@ -1,3 +1,5 @@
+import * as olstyle from 'ol/style';
+
 import { getEntityTitle } from '@igo2/common';
 import { LanguageService } from '@igo2/core';
 import { Feature } from '@igo2/geo';
@@ -5,4 +7,26 @@ import { uuid } from '@igo2/utils';
 
 export function getOperationTitle(feature: Feature, languageService: LanguageService) {
   return getEntityTitle(feature) || uuid();
+}
+
+export function createOlEditionStyle(): olstyle.Style {
+  const color = [0, 218, 250];  // Teal;
+  return new olstyle.Style({
+    fill: new olstyle.Fill({
+      color: color.concat([0.30])
+    }),
+    stroke: new olstyle.Stroke({
+      color: color,
+      width: 2
+    }),
+    image: new olstyle.Circle({
+      radius: 5,
+      stroke: new olstyle.Stroke({
+        color: color,
+      }),
+      fill: new olstyle.Fill({
+        color: color.concat([0.30])
+      })
+    })
+  });
 }

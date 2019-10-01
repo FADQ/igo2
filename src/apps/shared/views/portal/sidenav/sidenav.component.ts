@@ -56,7 +56,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.toolbox.activatePreviousTool();
   }
 
-  onUnselectButtonClick() {
+  onDeactivateButtonClick() {
     this.toolbox.deactivateTool();
   }
 
