@@ -86,6 +86,10 @@ export class ClientParcelElementFormService {
       );
   }
 
+  buildRedrawForm(igoMap: IgoMap): Observable<Form> {
+    return this.buildUpdateForm(igoMap);
+  }
+
   private createNoParcelField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
     return of(this.createField({
       name: 'properties.noParcelleAgricole',

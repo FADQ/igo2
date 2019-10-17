@@ -5,6 +5,7 @@ import { FadqLibEditionUpsertModule } from './edition-upsert/edition-upsert.modu
 import { FadqLibEditionUpdateBatchModule } from './edition-update-batch/edition-update-batch.module';
 import { FadqLibEditionFillModule } from './edition-fill/edition-fill.module';
 import { FadqLibEditionImportModule } from './edition-import/edition-import.module';
+import { FadqLibEditionRedrawModule } from './edition-redraw/edition-redraw.module';
 import { FadqLibEditionSaveModule } from './edition-save/edition-save.module';
 import { FadqLibEditionSliceModule } from './edition-slice/edition-slice.module';
 import { FadqLibEditionUndoModule } from './edition-undo/edition-undo.module';
@@ -14,6 +15,7 @@ import {
   provideEditionUpdateBatchWidget,
   provideEditionFillWidget,
   provideEditionImportWidget,
+  provideEditionRedrawWidget,
   provideEditionSaveWidget,
   provideEditionSliceWidget,
   provideEditionUndoWidget
@@ -28,6 +30,7 @@ import {
     FadqLibEditionUpdateBatchModule,
     FadqLibEditionFillModule,
     FadqLibEditionImportModule,
+    FadqLibEditionRedrawModule,
     FadqLibEditionSaveModule,
     FadqLibEditionSliceModule,
     FadqLibEditionUndoModule
@@ -43,6 +46,7 @@ export class FadqLibEditionModule {
         provideEditionUpdateBatchWidget(),
         provideEditionFillWidget(),
         provideEditionImportWidget(),
+        provideEditionRedrawWidget(),
         provideEditionSaveWidget(),
         provideEditionSliceWidget(),
         provideEditionUndoWidget()

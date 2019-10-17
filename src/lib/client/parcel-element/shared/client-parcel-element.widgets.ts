@@ -15,6 +15,9 @@ import {
   ClientParcelElementUpdateBatchComponent
 } from '../client-parcel-element-update-batch/client-parcel-element-update-batch.component';
 import {
+  ClientParcelElementRedrawComponent
+} from '../client-parcel-element-redraw/client-parcel-element-redraw.component';
+import {
   ClientParcelElementFillComponent
 } from '../client-parcel-element-fill/client-parcel-element-fill.component';
 import {
@@ -99,6 +102,22 @@ export function provideClientParcelElementUpdateBatchWidget() {
   return {
     provide: ClientParcelElementUpdateBatchWidget,
     useFactory: clientParcelElementUpdateBatchWidgetFactory,
+    deps: [WidgetService]
+  };
+}
+
+/** Redraw **/
+export const ClientParcelElementRedrawWidget =
+  new InjectionToken<Widget>('ClientParcelElementRedrawWidget');
+
+export function clientParcelElementRedrawWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(ClientParcelElementRedrawComponent);
+}
+
+export function provideClientParcelElementRedrawWidget() {
+  return {
+    provide: ClientParcelElementRedrawWidget,
+    useFactory: clientParcelElementRedrawWidgetFactory,
     deps: [WidgetService]
   };
 }

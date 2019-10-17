@@ -16,6 +16,7 @@ import {
   ClientParcelElementCreateWidget,
   ClientParcelElementUpdateWidget,
   ClientParcelElementUpdateBatchWidget,
+  ClientParcelElementRedrawWidget,
   ClientParcelElementFillWidget,
   ClientParcelElementNumberingWidget,
   ClientParcelElementReconciliateWidget,
@@ -38,6 +39,7 @@ export class ClientParcelElementActionsService {
     @Inject(ClientParcelElementCreateWidget) private clientParcelElementCreateWidget: Widget,
     @Inject(ClientParcelElementUpdateWidget) private clientParcelElementUpdateWidget: Widget,
     @Inject(ClientParcelElementUpdateBatchWidget) private clientParcelElementUpdateBatchWidget: Widget,
+    @Inject(ClientParcelElementRedrawWidget) private clientParcelElementRedrawWidget: Widget,
     @Inject(ClientParcelElementFillWidget) private clientParcelElementFillWidget: Widget,
     @Inject(ClientParcelElementNumberingWidget) private clientParcelElementNumberingWidget: Widget,
     @Inject(ClientParcelElementReconciliateWidget) private clientParcelElementReconciliateWidget: Widget,
@@ -221,6 +223,27 @@ export class ClientParcelElementActionsService {
         availability: (ctrl: ClientController) => every(
           noActiveWidget(ctrl),
           oneOrMoreParcelElementAreSelected(ctrl),
+          transactionIsNotInCommitPhase(ctrl)
+        )
+      },
+      {
+        id: 'redraw',
+        icon: 'pencil-remove',
+        title: 'edition.redraw',
+        tooltip: 'edition.redraw.tooltip',
+        args: [
+          controller,
+          this.clientParcelElementRedrawWidget
+        ],
+        handler: (ctrl: ClientController, widget: Widget) => {
+          ctrl.parcelElementWorkspace.activateWidget(widget, {
+            transaction: ctrl.parcelElementTransaction,
+            map: ctrl.map,
+            store: ctrl.parcelElementStore
+          });
+        },
+        availability: (ctrl: ClientController) => every(
+          noActiveWidget(ctrl),
           transactionIsNotInCommitPhase(ctrl)
         )
       },

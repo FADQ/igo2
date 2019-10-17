@@ -1,0 +1,58 @@
+<fadq-message-inline
+  *ngIf="message$ | async as message"  
+  [message]="message">
+</fadq-message-inline>
+
+<ng-container *ngIf="(feature$ | async) as feature; else info">
+  <igo-feature-form
+    #featureForm
+    class="igo-form-compact"
+    [form]="form"
+    [feature]="feature"
+    (submitForm)="onSubmit($event)">
+
+    <mat-tab-group *ngIf="form.groups.length > 0" [selectedIndex]="groupIndex">
+      <mat-tab *ngFor="let group of form.groups" [label]="group.title">
+        <igo-form-group [group]="group"></igo-form-group>
+      </mat-tab>
+    </mat-tab-group>
+
+    <igo-form-field *ngFor="let field of form.fields" [field]="field"></igo-form-field>
+
+    <div formButtons>
+      <button
+        mat-button
+        type="button"
+        (click)="onCancel()">
+        {{ 'cancel' | translate }}
+      </button>
+      <button
+        mat-raised-button
+        type="submit"
+        color="primary"
+        [disabled]="applyDisabled$ | async">
+        {{ 'apply' | translate }}
+      </button>
+    </div>
+    
+  </igo-feature-form>
+</ng-container>
+
+<ng-template #info>
+  <fadq-card-panel
+    [svgIcon]="'help-circle'"
+    [iconColor]="'accent'"
+    [title]="title || ('edition.redraw.message' | translate)"
+    [message]="message$ | async">
+  
+    <ng-container buttons>
+      <button
+        mat-button
+        type="button"
+        (click)="onCancel()">
+        {{ 'cancel' | translate }}
+      </button>
+    </ng-container>
+  
+  </fadq-card-panel>
+</ng-template>

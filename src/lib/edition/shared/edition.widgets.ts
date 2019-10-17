@@ -8,6 +8,7 @@ import { EditionUpsertComponent } from '../edition-upsert/edition-upsert.compone
 import { EditionUpdateBatchComponent } from '../edition-update-batch/edition-update-batch.component';
 import { EditionFillComponent } from '../edition-fill/edition-fill.component';
 import { EditionImportComponent } from '../edition-import/edition-import.component';
+import { EditionRedrawComponent } from '../edition-redraw/edition-redraw.component';
 import { EditionSaveComponent } from '../edition-save/edition-save.component';
 import { EditionSliceComponent } from '../edition-slice/edition-slice.component';
 import { EditionUndoComponent } from '../edition-undo/edition-undo.component';
@@ -16,6 +17,7 @@ export const EditionUpsertWidget = new InjectionToken<Widget>('EditionUpsertWidg
 export const EditionUpdateBatchWidget = new InjectionToken<Widget>('EditionUpdateBatchWidget');
 export const EditionFillWidget = new InjectionToken<Widget>('EditionFillWidget');
 export const EditionImportWidget = new InjectionToken<Widget>('EditionImportWidget');
+export const EditionRedrawWidget = new InjectionToken<Widget>('EditionRedrawWidget');
 export const EditionSaveWidget = new InjectionToken<Widget>('EditionSaveWidget');
 export const EditionSliceWidget = new InjectionToken<Widget>('EditionSliceWidget');
 export const EditionUndoWidget = new InjectionToken<Widget>('EditionUndoWidget');
@@ -64,6 +66,18 @@ export function provideEditionImportWidget() {
   return {
     provide: EditionImportWidget,
     useFactory: editionImportWidgetFactory,
+    deps: [WidgetService]
+  };
+}
+
+export function editionRedrawWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(EditionRedrawComponent);
+}
+
+export function provideEditionRedrawWidget() {
+  return {
+    provide: EditionRedrawWidget,
+    useFactory: editionRedrawWidgetFactory,
     deps: [WidgetService]
   };
 }
