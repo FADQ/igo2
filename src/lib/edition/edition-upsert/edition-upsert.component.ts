@@ -150,9 +150,7 @@ export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInput
    * @internal
    */
   ngOnDestroy() {
-    this.showSelectedFeature();
-    this.clearOlOverlay();
-    this.unobserveGeometry();
+    this.teardown();
   }
 
   /**
@@ -178,8 +176,14 @@ export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInput
    * @internal
    */
   onCancel() {
-    this.showSelectedFeature();
+    this.teardown();
     this.cancel.emit();
+  }
+
+  private teardown() {
+    this.showSelectedFeature();
+    this.clearOlOverlay();
+    this.unobserveGeometry();
   }
 
   private featureToResult(data: Feature):  Observable<EditionResult> {
@@ -290,8 +294,8 @@ export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInput
 
   private observeGeometry() {
     const geometryField = this.getGeometryField();
-      this.geometry$$ = geometryField.control.valueChanges
-        .subscribe((geometry: GeoJSONGeometry) => this.onGeometryChanges(geometry));
+    this.geometry$$ = geometryField.control.valueChanges
+      .subscribe((geometry: GeoJSONGeometry) => this.onGeometryChanges(geometry));
   }
 
   private unobserveGeometry() {
@@ -364,27 +368,29 @@ export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInput
 
   private onCompleteButtonClick() {
     this.clearOlOverlay();
-    if (this.addContinueButton === true) {
-      const data = this.featureForm.getData() as Feature;
-      this.featureToResult(data).subscribe((result: EditionResult) => {
-
-        const error = result.error;
-        this.setError(error);
-
-        if (error !== undefined) {
-          return;
-        }
-
-        if (this.transaction !== undefined && this.store !== undefined) {
-          this.addToTransaction(result.feature);
-        }
-
-        this.unobserveGeometry();
-        this.form.control.reset();
-        this.feature$.next(undefined);
-        this.observeGeometry();
-      });
+    if (this.addContinueButton === false) {
+      return;
     }
+
+    const data = this.featureForm.getData() as Feature;
+    this.featureToResult(data).subscribe((result: EditionResult) => {
+
+      const error = result.error;
+      this.setError(error);
+
+      if (error !== undefined) {
+        return;
+      }
+
+      if (this.transaction !== undefined && this.store !== undefined) {
+        this.addToTransaction(result.feature);
+      }
+
+      this.unobserveGeometry();
+      this.form.control.reset();
+      this.feature$.next(undefined);
+      this.observeGeometry();
+    });
   }
 
 }

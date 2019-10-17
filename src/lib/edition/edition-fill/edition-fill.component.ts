@@ -134,8 +134,7 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
    * @internal
    */
   ngOnDestroy() {
-    this.map.ol.removeLayer(this.exclusionStore.layer.ol);
-    this.exclusionStore.clear();
+    this.teardown();
   }
 
   /**
@@ -164,7 +163,13 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
    * @internal
    */
   onCancel() {
+    this.teardown();
     this.cancel.emit();
+  }
+
+  private teardown() {
+    this.map.ol.removeLayer(this.exclusionStore.layer.ol);
+    this.exclusionStore.clear();
   }
 
   /**

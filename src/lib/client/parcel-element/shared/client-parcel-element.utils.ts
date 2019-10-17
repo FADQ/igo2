@@ -109,7 +109,7 @@ export function getParcelElementWarnings(parcelElement: ClientParcelElement): Cl
   return messages.filter((message: ClientParcelElementMessage) => message.severite === 'A');
 }
 
-export function getUniqueParcelElementMessages(
+function getUniqueParcelElementMessages(
   parcelElement: ClientParcelElement
 ): ClientParcelElementMessage[] {
   const messages = parcelElement.properties.messages;
@@ -117,7 +117,7 @@ export function getUniqueParcelElementMessages(
     acc[message.id] = message;
     return acc;
   }, {} as {[key: string]: ClientParcelElementMessage});
-  return Object.values(messagesObject);  
+  return Object.values(messagesObject);
 }
 
 export function generateParcelElementOperationTitle(

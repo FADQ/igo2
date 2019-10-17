@@ -147,7 +147,7 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, 
    * @internal
    */
   ngOnDestroy() {
-    this.removeSliceControl();
+    this.teardown();
   }
 
   /**
@@ -188,7 +188,12 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, 
    * @internal
    */
   onCancel() {
+    this.teardown();
     this.cancel.emit();
+  }
+
+  private teardown() {
+    this.removeSliceControl();
   }
 
   /**
