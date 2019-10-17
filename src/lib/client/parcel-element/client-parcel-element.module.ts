@@ -1,7 +1,6 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-
 import {
   FadqLibClientParcelElementCreateModule
 } from './client-parcel-element-create/client-parcel-element-create.module';
@@ -17,6 +16,9 @@ import {
 import {
   FadqLibClientParcelElementUpdateBatchModule
 } from './client-parcel-element-update-batch/client-parcel-element-update-batch.module';
+import {
+  FadqLibClientParcelElementRedrawModule
+} from './client-parcel-element-redraw/client-parcel-element-redraw.module';
 import {
   FadqLibClientParcelElementFillModule
 } from './client-parcel-element-fill/client-parcel-element-fill.module';
@@ -55,6 +57,7 @@ import {
   provideClientParcelElementStartTxWidget,
   provideClientParcelElementUpdateWidget,
   provideClientParcelElementUpdateBatchWidget,
+  provideClientParcelElementRedrawWidget,
   provideClientParcelElementFillWidget,
   provideClientParcelElementNumberingWidget,
   provideClientParcelElementReconciliateWidget,
@@ -75,6 +78,7 @@ import {
     FadqLibClientParcelElementDeleteTxDialogModule,
     FadqLibClientParcelElementUpdateModule,
     FadqLibClientParcelElementUpdateBatchModule,
+    FadqLibClientParcelElementRedrawModule,
     FadqLibClientParcelElementFillModule,
     FadqLibClientParcelElementNumberingModule,
     FadqLibClientParcelElementReconciliateModule,
@@ -99,6 +103,7 @@ export class FadqLibClientParcelElementModule {
         provideClientParcelElementStartTxWidget(),
         provideClientParcelElementUpdateWidget(),
         provideClientParcelElementUpdateBatchWidget(),
+        provideClientParcelElementRedrawWidget(),
         provideClientParcelElementFillWidget(),
         provideClientParcelElementNumberingWidget(),
         provideClientParcelElementReconciliateWidget(),

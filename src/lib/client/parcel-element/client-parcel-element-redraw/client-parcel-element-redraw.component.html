@@ -1,0 +1,12 @@
+<fadq-edition-redraw
+  *ngIf="form$ | async as form"
+  [form]="form"
+  [store]="store"
+  [transaction]="transaction"
+  [groupIndex]="1"
+  [processData]="processData"
+  [getOperationTitle]="getOperationTitle"
+  [addContinueButton]="true"
+  (complete)="onComplete($event)"
+  (cancel)="onCancel()">
+</fadq-edition-redraw>
