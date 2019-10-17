@@ -147,7 +147,7 @@ export const igoEnvironment: IgoEnvironment = {
         duplicate: '/igoschema/edition_schema/copierSchema/${id}',
         downloadMapLSE: '/igoschema/edition_schema/creerCartesStructureEntreposage/${clientNum}', 
         domains: {
-          type: '/exploitation_donnees_geospatiales/edition_schema/obtenirTypesSchemas'
+          type: '/igoschema/edition_schema/obtenirTypesSchemas'
         }
       },
       schemaFile: {
