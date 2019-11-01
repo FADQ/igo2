@@ -110,7 +110,7 @@ export class ClientParcelTableService {
           title: 'Statut de déboisement'
         },
         {
-          name: 'properties.parcelleDrainee',
+          name: 'properties.indParcelleDrainee',
           title: 'Drainage source FADQ'
         },
         {

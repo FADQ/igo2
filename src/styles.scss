@@ -66,12 +66,8 @@ tr.text-centered th div.mat-sort-header-container {
   padding: 0 16px !important;
 }
 
-igo-actionbar igo-actionbar-item mat-list-item.tool-actived {
-  background-color: inherit !important;
-
-  button {
-    background-color: #e0e0e0;
-  }
+igo-actionbar igo-actionbar-item mat-list-item.active-accent .mat-list-item-content {
+  color: mat-color($accent);
 }
 
 .mat-menu-panel:not(.fadq-expansion-panel-actionbar-overlay) go-actionbar,

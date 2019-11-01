@@ -15,20 +15,23 @@
   "informations": "Informations",
   "refresh": "Rafraîchir",
   "recover": "Récupérer",
-
   "Coordonnées": "Coordonnées",
 
-  "search": {
-    "feature.title": "Adresse, lieu ou coordonnées",
-    "feature.placeholder": "Rechercher adresse, lieu, coordonnées",
-    "layer.title": "Couche de données",
-    "layer.placeholder": "Rechercher une couche de données.",
-    "client.title": "Client",
-    "client.placeholder": "Rechercher un client",
-    "cadastre.title": "Cadastre originaire",
-    "cadastre.placeholder": "Rechercher un cadastre originaire",
-    "cadastre-reno.title": "Cadastre rénové",
-    "cadastre-reno.placeholder": "Rechercher un cadastre rénové"
+  "igo": {
+    "geo": {
+      "search": {
+        "feature.title": "Adresse, lieu ou coordonnées",
+        "feature.placeholder": "Rechercher adresse, lieu, coordonnées",
+        "layer.title": "Couche de données",
+        "layer.placeholder": "Rechercher une couche de données.",
+        "client.title": "Client",
+        "client.placeholder": "Rechercher un client",
+        "cadastre.title": "Cadastre originaire",
+        "cadastre.placeholder": "Rechercher un cadastre originaire",
+        "cadastre-reno.title": "Cadastre rénové",
+        "cadastre-reno.placeholder": "Rechercher un cadastre rénové"
+      }
+    }
   },
 
   "help": {
@@ -110,6 +113,7 @@
       "numbering.tooltip": "Numéroter les parcelles",
       "numbering.header": "Numéroter les parcelles",
       "numbering.numberInUse.error": "Ce numéro de parcelle est déjà utilisé",
+      "numbering.numberTooLong.error": "Le numéro de parcelle doit contenir au plus 4 caractères",
       "transfer": "Transférer des parcelles",
       "transfer.client.placeholder": "Transférer au client",
       "transfer.keepParcelNumbers": "Conserver les numéros de parcelles",
@@ -146,7 +150,7 @@
       "recoverParcelsWithoutOwner.info": "Sélectionner des parcelles sans détenteurs avant de les récupérer",
       "recoverParcelsWithoutOwner.noParcelFound": "Aucune parcelle sans détenteurs trouvée",
       "recoverParcelsWithoutOwner.parcelFound": "{{count}} parcelle(s) sans détenteurs trouvée(s)",
-      "recoverParcelsWithoutOwner.wrongZoomLevel": "L'échelle de la carte doit se trouver entre 1 et 10000."
+      "recoverParcelsWithoutOwner.wrongZoomLevel": "L'échelle de la carte doit se trouver entre 1 et 30000."
     },
     "diagram": {
       "placeholder": "Diagrammes",
@@ -208,6 +212,8 @@
     "update": "Modifier",
     "update.tooltip": "Modifier un élément",
     "update.apply": "Modifier",
+    "createUpdate": "Créer ou modifier",
+    "createUpdate.tooltip": "Créer ou modifier un élément",
     "redraw": "Redessiner",
     "redraw.tooltip": "Redessiner un élément",
     "redraw.message": "Sélectionnez un élément sur la carte pour le redessiner",

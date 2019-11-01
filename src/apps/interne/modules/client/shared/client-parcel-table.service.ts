@@ -96,7 +96,7 @@ export class ClientParcelTableService {
           title: 'Superficie déclarée IVEG (ha)'
         },
         {
-          name: 'properties.codeDefaultCultural',
+          name: 'properties.codeDefautCultural',
           title: 'Code de défaut cultural'
         },
         {
@@ -112,10 +112,10 @@ export class ClientParcelTableService {
           title: 'Statut de déboisement'
         },
         {
-          name: 'properties.parcelleDrainee',
+          name: 'properties.indParcelleDrainee',
           title: 'Drainage source FADQ',
           valueAccessor: (parcel: ClientParcel) => {
-            const value = parcel.properties.parcelleDrainee;
+            const value = parcel.properties.indParcelleDrainee;
             const choices = getParcelleDraineeChoices();
             const choice = choices.find((_choice: FormFieldSelectChoice) => _choice.value === value);
             return choice ? choice.title : '';

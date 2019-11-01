@@ -55,15 +55,17 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
     sort: false,
     columns: [
       {
-        name: '_',
-        title: '',
-        valueAccessor: (operation: EntityOperation) => ''
+        name: 'previous',
+        title: 'Précédent',
+        valueAccessor: (operation: EntityOperation<ClientParcelElement>) => {
+          return operation.meta.previous;
+        }
       },
       {
-        name: 'title',
-        title: '',
+        name: 'current',
+        title: 'Nouveau',
         valueAccessor: (operation: EntityOperation<ClientParcelElement>) => {
-          return getEntityTitle(operation);
+          return operation.meta.current;
         }
       },
       {
@@ -161,7 +163,9 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
     if (this.lastUpdate !== undefined && parcelElement.meta.id === this.lastUpdate.meta.id) {
       return;
     }
-    if (this.message$.value !== undefined) {
+
+    const message = this.message$.value;
+    if (message !== undefined && message.type === MessageType.ERROR) {
       return;
     }
 
@@ -217,38 +221,55 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
 
   private setValue(value: MultipartNoParcel) {
     this._value = value;
-    const error = this.validateValue();
-    if (error === undefined) {
+    const [message, type] = this.validateValue();
+    if (message === undefined) {
       this.message$.next(undefined);
     } else {
       this.message$.next({
-        type: MessageType.ERROR,
-        text: error
+        type: type,
+        text: message
       });
     }
   }
 
-  private validateValue(): string | undefined {
-    const value = this.computeParcelElementNumber();
-    const allValues = this.store.all().map((parcelElement: ClientParcelElement) => {
+  private validateValue(): [string | undefined, MessageType | undefined] {
+    const number = this.computeParcelElementNumber();
+
+    if (number.length > 4) {
+      return [
+        this.languageService.translate.instant('client.parcelElement.numbering.numberTooLong.error'),
+        MessageType.ERROR
+      ];
+    }
+
+    const allNumbers = this.store.all().map((parcelElement: ClientParcelElement) => {
       return parcelElement.properties.noParcelleAgricole;
     });
 
-    if (allValues.includes(value)) {
-      return this.languageService.translate.instant('client.parcelElement.numbering.numberInUse.error');
+    if (allNumbers.includes(number)) {
+      return [
+        this.languageService.translate.instant('client.parcelElement.numbering.numberInUse.error'),
+        MessageType.ALERT
+      ];
     }
 
-    // TODO: Validate format
-
-    return undefined;
+    return [undefined, undefined];
   }
 
   private addToSubTransaction(parcelElement: ClientParcelElement) {
-    const operationTitle = parcelElement.properties.noParcelleAgricole;
+    const current = parcelElement.properties.noParcelleAgricole;
     const sourceParcelId = parcelElement.meta.id;
     const sourceParcelElement = this.store.get(sourceParcelId);
+    const operation = this.subTransaction.getOperationByEntity(parcelElement);
+
+    let previous = sourceParcelElement.properties.noParcelleAgricole;
+    if (operation !== undefined) {
+      previous = operation.meta.previous;
+    }
+
     this.subTransaction.update(sourceParcelElement, parcelElement, this.store, {
-      title: operationTitle,
+      previous,
+      current,
       index: this.computeOperationIndex()
     });
   }
@@ -267,7 +288,7 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
     // Merging the transaction using this.transaction.mergeTransaction(this.subTransaction)
     // would result in that INSERT becoming an UPDATE with undesired side-effects
     // (for example deleting that parcel before saving it wouldn't work).
-    // Because of that, we are force to merge both transaction manually.
+    // Because of that, we are forced to merge both transaction manually.
 
     const operations = this.subTransaction.operations.all();
     operations.forEach((operation: EntityOperation) => {

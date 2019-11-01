@@ -158,7 +158,7 @@ export class EditionRedrawComponent implements
 
     const selectionStrategy = this.store.getStrategyOfType(FeatureStoreSelectionStrategy);
     this.selectionStrategy = selectionStrategy as FeatureStoreSelectionStrategy;
-    this.selectionStrategyIsActive = this.selectionStrategy.isActive();
+    this.selectionStrategyIsActive = this.selectionStrategy.active;
     this.activateSelection();
     this.observeSelectedFeature();
   }

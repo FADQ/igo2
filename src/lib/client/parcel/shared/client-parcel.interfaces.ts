@@ -21,7 +21,7 @@ export interface ClientParcelProperties {
   noDiagramme: number;
   noParcelleAgricole: string;
   noParcelleAgricoleTri: string;
-  parcelleDrainee: string;
+  indParcelleDrainee: string;
   pourcentageDefautCultural: number;
   pourcentageSupMao: number;
   production: string;

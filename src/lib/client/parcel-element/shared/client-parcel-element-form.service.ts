@@ -122,7 +122,7 @@ export class ClientParcelElementFormService {
 
   private createParcelleDraineeField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
     return of(this.createField({
-      name: 'properties.parcelleDrainee',
+      name: 'properties.indParcelleDrainee',
       title: 'Parcelle drainée',
       type: 'select',
       options:  {

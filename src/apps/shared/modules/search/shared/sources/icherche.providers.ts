@@ -43,12 +43,14 @@ export function provideFadqIChercheSearchResultFormatter() {
  */
 export function ichercheSearchSourceFactory(
   http: HttpClient,
+  languageService: LanguageService,
   config: ConfigService,
   formatter: IChercheSearchResultFormatter,
   injector: Injector
 ) {
   return new IChercheSearchSource(
     http,
+    languageService,
     config.getConfig(`searchSources.${IChercheSearchSource.id}`),
     formatter,
     injector
@@ -63,7 +65,7 @@ export function provideIChercheSearchSource() {
     provide: SearchSource,
     useFactory: ichercheSearchSourceFactory,
     multi: true,
-    deps: [HttpClient, ConfigService, IChercheSearchResultFormatter, Injector]
+    deps: [HttpClient, LanguageService, ConfigService, IChercheSearchResultFormatter, Injector]
   };
 }
 
@@ -73,11 +75,13 @@ export function provideIChercheSearchSource() {
  */
 export function ichercheReverseSearchSourceFactory(
   http: HttpClient,
+  languageService: LanguageService,
   config: ConfigService,
   injector: Injector
 ) {
   return new IChercheReverseSearchSource(
     http,
+    languageService,
     config.getConfig(`searchSources.${IChercheReverseSearchSource.id}`),
     injector
   );
@@ -91,6 +95,6 @@ export function provideIChercheReverseSearchSource() {
     provide: SearchSource,
     useFactory: ichercheReverseSearchSourceFactory,
     multi: true,
-    deps: [HttpClient, ConfigService, Injector]
+    deps: [HttpClient, LanguageService, ConfigService, Injector]
   };
 }

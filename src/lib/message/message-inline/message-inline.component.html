@@ -2,7 +2,9 @@
   <p
     [ngClass]="{
       'fadq-success-text': message.type === messageType.SUCCESS,
-      'fadq-error-text': message.type === messageType.ERROR
+      'fadq-error-text': message.type === messageType.ERROR,
+      'fadq-info-text': message.type === messageType.INFO,
+      'fadq-alert-text': message.type === messageType.ALERT
     }">
     {{message.text}}
   </p>

@@ -5,10 +5,11 @@ import {
   EventEmitter,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  OnInit
+  OnInit,
+  OnDestroy
 } from '@angular/core';
 
-import { BehaviorSubject, Observable, zip } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { LanguageService, Message, MessageType } from '@igo2/core';
@@ -18,7 +19,7 @@ import {
   WidgetComponent,
   OnUpdateInputs
 } from '@igo2/common';
-import { FeatureStore, IgoMap } from '@igo2/geo';
+import { FeatureStore, IgoMap, formatScale } from '@igo2/geo';
 
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
 import { getMapExtentPolygon } from '../../../map/shared/map.utils';
@@ -34,9 +35,9 @@ import { getParcelElementValidationMessage } from '../shared/client-parcel-eleme
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientParcelElementWithoutOwnerComponent
-    implements WidgetComponent, OnUpdateInputs, OnInit {
+    implements WidgetComponent, OnUpdateInputs, OnInit, OnDestroy {
 
-  static minZoomLevel = 11;
+  static minZoomLevel = 9;
 
   /**
    * Message, if any
@@ -44,9 +45,17 @@ export class ClientParcelElementWithoutOwnerComponent
    */
   readonly message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
+  /**
+   * Map scale
+   * @internal
+   */
+  readonly scaleText$: BehaviorSubject<string> = new BehaviorSubject(undefined);
+
   readonly recoverEnabled$: Observable<boolean> = this.message$.pipe(
     map((message: Message) => message !== undefined && message.type === MessageType.INFO)
   );
+
+  private resolution$$: Subscription;
 
   /**
    * Parcel element store
@@ -80,7 +89,15 @@ export class ClientParcelElementWithoutOwnerComponent
   ) {}
 
   ngOnInit() {
+    this.resolution$$ = this.map.viewController.resolution$.subscribe(() => {
+      const scale = this.map.viewController.getScale();
+      this.scaleText$.next('~ 1 / ' + formatScale(scale));
+    });
     this.onRefresh();
+  }
+
+  ngOnDestroy() {
+    this.resolution$$.unsubscribe();
   }
 
   /**
@@ -141,8 +158,6 @@ export class ClientParcelElementWithoutOwnerComponent
     const extentGeometry = getMapExtentPolygon(this.map, 'EPSG:4326');
     this.clientParcelElementService.getParcelElementsWithoutOwner(extentGeometry)
       .subscribe((parcelElements: ClientParcelElement[]) => {
-        // TODO: remove
-        parcelElements = parcelElements.slice(0, 5);
         this.clearParcelElements();
         if (parcelElements.length === 0) {
           this.onNoParcelElementsFound();

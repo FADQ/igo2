@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { ActionStore, EntityTransaction } from '@igo2/common';
+import {
+  ActionStore,
+  EntityStoreFilterSelectionStrategy,
+  EntityTransaction
+} from '@igo2/common';
 import {
   FeatureMotion,
   FeatureStore,
@@ -25,8 +29,6 @@ import { ClientSchemaElementTableService } from './client-schema-element-table.s
   providedIn: 'root'
 })
 export class ClientSchemaElementWorkspaceService {
-
-  static viewScale: [number, number, number, number] = [0, 0, 0.8, 0.6];
 
   constructor(
     private clientSchemaElementTableService: ClientSchemaElementTableService
@@ -61,6 +63,7 @@ export class ClientSchemaElementWorkspaceService {
 
     store.addStrategy(this.createLoadingStrategy(), true);
     store.addStrategy(this.createSelectionStrategy(client, map), false);
+    store.addStrategy(this.createFilterSelectionStrategy(), false);
 
     return store;
   }
@@ -71,7 +74,7 @@ export class ClientSchemaElementWorkspaceService {
 
   private createLoadingStrategy(): FeatureStoreLoadingStrategy {
     return new FeatureStoreLoadingStrategy({
-      viewScale: [0, 0, 0.8, 0.6]
+      motion: FeatureMotion.None
     });
   }
 
@@ -91,6 +94,10 @@ export class ClientSchemaElementWorkspaceService {
       motion: FeatureMotion.None,
       dragBox: true
     });
+  }
+
+  private createFilterSelectionStrategy(): EntityStoreFilterSelectionStrategy {
+    return new EntityStoreFilterSelectionStrategy({});
   }
 
 }

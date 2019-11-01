@@ -63,7 +63,6 @@ export const igoEnvironment: IgoEnvironment = {
     icherche: {
       enabled: true,
       available: true,
-      title: 'Adresse ou lieu',
       searchUrl: 'https://geoegl.msp.gouv.qc.ca/apis/icherche',
       params: {
         type: 'adresses,codes-postaux,municipalites,mrc,regadmin,lieux',
@@ -74,8 +73,7 @@ export const igoEnvironment: IgoEnvironment = {
     },
     coordinatesreverse: {
       enabled: true,
-      available: true,
-      title: 'Coordonnées'
+      available: true
     },
     icherchereverse: {
       enabled: false,

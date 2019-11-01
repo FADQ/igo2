@@ -94,6 +94,10 @@ export class ClientParcelElementImportComponent implements OnUpdateInputs, Widge
     return this.clientParcelElementService.createParcelElement(data)
       .pipe(
         map((parcelElement: ClientParcelElement): EditionResult => {
+          if (parcelElement === undefined) {
+            return undefined;
+          }
+
           const error =  getParcelElementValidationMessage(parcelElement, this.languageService);
           return error === undefined ? {feature: parcelElement} : undefined;
         })

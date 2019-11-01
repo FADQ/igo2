@@ -4,7 +4,12 @@ import { Observable, combineLatest, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { LanguageService } from '@igo2/core';
-import { Action, EntityTableColumn, Widget } from '@igo2/common';
+import {
+  Action,
+  EntityStoreFilterSelectionStrategy,
+  EntityTableColumn,
+  Widget
+} from '@igo2/common';
 import { entitiesToRowData, exportToCSV } from '@igo2/geo';
 import { downloadFromUri } from '@igo2/utils';
 
@@ -145,38 +150,49 @@ export class ClientSchemaElementActionsService {
             ctrl.schemaElementWorkspace.map,
             ctrl.schemaElementWorkspace.schemaElementStore
           );
-        },
-        ngClass: (ctrl: ClientController) => of({
-          'fadq-actionbar-item-divider': true
-        })
+        }
       },
       {
-        id: 'create',
-        icon: 'plus',
-        title: 'edition.create',
-        tooltip: 'edition.create.tooltip',
-        args: [controller, this.clientSchemaElementCreateWidget],
-        handler: (ctrl: ClientController, widget: Widget) => {
-          ctrl.schemaElementWorkspace.activateWidget(widget, {
-            schema: ctrl.schema,
-            transaction: ctrl.schemaElementTransaction,
-            map: ctrl.map,
-            store: ctrl.schemaElementStore
-          });
+        id: 'filterSelection',
+        icon: 'selection',
+        args: [controller],
+        handler: function(ctrl: ClientController) {
+          const filterStrategy = ctrl.schemaElementStore
+            .getStrategyOfType(EntityStoreFilterSelectionStrategy);
+          if (filterStrategy.active) {
+            filterStrategy.deactivate();
+          } else {
+            filterStrategy.activate();
+          }
         },
-        availability: noActiveWidget
+        ngClass: function(ctrl: ClientController) {
+          const filterStrategy = ctrl.schemaElementStore
+            .getStrategyOfType(EntityStoreFilterSelectionStrategy);
+          return filterStrategy.active$.pipe(
+            map((active: boolean) => ({
+              'fadq-actionbar-item-divider': true,
+              'active-accent': active
+            }))
+          );
+        }
       },
       {
-        id: 'update',
+        id: 'createUpdate',
         icon: 'pencil',
-        title: 'edition.update',
-        tooltip: 'edition.update.tooltip',
+        title: 'edition.createUpdate',
+        tooltip: 'edition.createUpdate.tooltip',
         args: [
           controller,
+          this.clientSchemaElementCreateWidget,
           this.clientSchemaElementUpdateWidget,
           this.clientSchemaElementUpdateBatchWidget
         ],
-        handler: (ctrl: ClientController, singleWidget: Widget, batchWidget: Widget) => {
+        handler: (
+          ctrl: ClientController,
+          createWidget: Widget,
+          singleWidget: Widget,
+          batchWidget: Widget
+        ) => {
           const inputs = {
             schema: ctrl.schema,
             transaction: ctrl.schemaElementTransaction,
@@ -184,7 +200,9 @@ export class ClientSchemaElementActionsService {
             store: ctrl.schemaElementStore
           };
 
-          if (ctrl.activeSchemaElement !== undefined) {
+          if (ctrl.selectedSchemaElements.length === 0) {
+            ctrl.schemaElementWorkspace.activateWidget(createWidget, inputs);
+          } else if (ctrl.activeSchemaElement !== undefined) {
             ctrl.schemaElementWorkspace.activateWidget(singleWidget, Object.assign({
               schemaElement: ctrl.activeSchemaElement
             }, inputs));
@@ -196,7 +214,6 @@ export class ClientSchemaElementActionsService {
         },
         availability: (ctrl: ClientController) => every(
           noActiveWidget(ctrl),
-          oneOrMoreSchemaElementAreSelected(ctrl),
           transactionIsNotInCommitPhase(ctrl)
         )
       },

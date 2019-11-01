@@ -173,7 +173,10 @@ export class EditionUpdateBatchComponent implements  OnUpdateInputs, WidgetCompo
     const getOperationTitle = this.getOperationTitle ? this.getOperationTitle : getDefaultOperationTitle;
 
     features.forEach((feature: Feature) => {
-      this.transaction.insert(feature, this.store, {
+      const previous = this.features.find((_feature: Feature) => {
+        return this.store.getKey(_feature) === this.store.getKey(feature);
+      });
+      this.transaction.update(previous, feature, this.store, {
         title: getOperationTitle(feature, this.languageService)
       });
     });

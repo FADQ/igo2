@@ -4,6 +4,8 @@
   [title]="'client.parcelElement.recoverParcelsWithoutOwner.info' | translate"
   [message]="message$ | async">
 
+  <div class="client-parcel-element-without-owner-scale">{{scaleText$ | async}}</div>
+
   <ng-container buttons>
     <button
       mat-button

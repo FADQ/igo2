@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { ActionStore, EntityTransaction } from '@igo2/common';
+import {
+  ActionStore,
+  EntityTransaction,
+  EntityStoreFilterSelectionStrategy
+} from '@igo2/common';
 import {
   FeatureMotion,
   FeatureStore,
@@ -62,6 +66,7 @@ export class ClientParcelElementWorkspaceService {
 
     store.addStrategy(this.createLoadingStrategy(), true);
     store.addStrategy(this.createSelectionStrategy(client, map), false);
+    store.addStrategy(this.createFilterSelectionStrategy(), false);
 
     return store;
   }
@@ -92,6 +97,10 @@ export class ClientParcelElementWorkspaceService {
       many: true,
       dragBox: true
     });
+  }
+
+  private createFilterSelectionStrategy(): EntityStoreFilterSelectionStrategy {
+    return new EntityStoreFilterSelectionStrategy({});
   }
 
 }

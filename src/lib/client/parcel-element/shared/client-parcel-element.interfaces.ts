@@ -36,13 +36,13 @@ export interface ClientParcelElementProperties {
   anneeImage: number;
   infoLocateur: string;
   noDiagramme: number;
-  parcelleDrainee: string;
+  indParcelleDrainee: string;
   sourceParcelleAgricole: string;
   statutAugmentationSupCultivable: string;
   superficie: number;
   superficieHectare: number;
-  timbreMajGeometrie: string;
-  usagerMajGeometrie: string;
+  timbreMaj: string;
+  usagerMaj: string;
   messages: ClientParcelElementMessage[];
   noOwner?: boolean;
 }

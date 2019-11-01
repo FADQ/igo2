@@ -1,6 +1,9 @@
 import { Injectable} from '@angular/core';
 
-import { ActionStore } from '@igo2/common';
+import {
+  ActionStore,
+  EntityStoreFilterSelectionStrategy
+} from '@igo2/common';
 import {
   FeatureMotion,
   FeatureStore,
@@ -10,13 +13,15 @@ import {
   IgoMap,
   VectorLayer
 } from '@igo2/geo';
+import { ContextState } from '@igo2/integration';
 
 import {
   Client,
   ClientParcel,
   ClientParcelWorkspace,
   createParcelLayer,
-  createClientDefaultSelectionStyle
+  createClientDefaultSelectionStyle,
+  FeatureStoreFilterNotOwnedStrategy
 } from 'src/lib/client';
 
 import { ClientParcelTableService } from './client-parcel-table.service';
@@ -28,7 +33,10 @@ export class ClientParcelWorkspaceService {
 
   static viewScale: [number, number, number, number] = [0, 0, 0.8, 0.6];
 
-  constructor(private clientParcelTableService: ClientParcelTableService) {}
+  constructor(
+    private clientParcelTableService: ClientParcelTableService,
+    private contextState: ContextState
+  ) {}
 
   createParcelWorkspace(client: Client,  map: IgoMap): ClientParcelWorkspace {
     return new ClientParcelWorkspace({
@@ -60,6 +68,10 @@ export class ClientParcelWorkspaceService {
 
     store.addStrategy(this.createLoadingStrategy(), true);
     store.addStrategy(this.createSelectionStrategy(client, map), false);
+    store.addStrategy(this.createFilterSelectionStrategy(), false);
+
+    const context = this.contextState.context$.value;
+    store.addStrategy(this.createFilterNotOwnedStrategy(), context.uri === 'mesurage');
 
     return store;
   }
@@ -90,5 +102,13 @@ export class ClientParcelWorkspaceService {
       motion: FeatureMotion.None,
       dragBox: true
     });
+  }
+
+  private createFilterSelectionStrategy(): EntityStoreFilterSelectionStrategy {
+    return new EntityStoreFilterSelectionStrategy({});
+  }
+
+  private createFilterNotOwnedStrategy(): FeatureStoreFilterNotOwnedStrategy {
+    return new FeatureStoreFilterNotOwnedStrategy({});
   }
 }

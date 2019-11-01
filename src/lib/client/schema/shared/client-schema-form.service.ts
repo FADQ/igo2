@@ -63,7 +63,27 @@ export class ClientSchemaFormService {
   }
 
   buildUpdateForm(store: EntityStore<ClientSchema>): Observable<Form> {
-    return this.buildCreateForm(store);
+    const fields$ = zip(
+      this.createIdField({options: {disabled: true}}),
+      this.createTypeField({options: {disabled: true}}),
+      this.createDescriptionField(),
+      this.createAnneeField()
+    );
+    return fields$.pipe(
+      map((fields: FormField[]) => {
+        return this.formService.form([], [
+          this.formService.group({
+            name: 'info',
+            options: {
+              validator: Validators.compose([
+                (control: FormGroup) => validateAnnee(control),
+                (control: FormGroup) => validateOnlyOneLSE(control, store)
+              ])
+            }
+          }, fields)
+        ]);
+      })
+    );
   }
 
   buildTransferForm(): Observable<Form> {

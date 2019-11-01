@@ -12,13 +12,10 @@ igo-entity-table {
   max-height: calc(100% - 130px);
 
   ::ng-deep {
-    thead {
-      display: none;
-    }
-
     td.mat-cell:first-child,
     th.mat-header-cell:first-child {
       padding-left: 0;
+      text-align: center;
       width: 25%;
     }
 

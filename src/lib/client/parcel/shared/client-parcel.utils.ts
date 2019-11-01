@@ -116,7 +116,7 @@ function getParcelFeatureColor(olFeature: OlFeature) {
     2: [35, 140, 0],
     3: [0, 218, 250]
   };
-  return colors[ olFeature.get('relation')];
+  return colors[olFeature.get('relation')];
 }
 
 export function getParcelleDraineeChoices(): FormFieldSelectChoice[] {

@@ -18,7 +18,8 @@ table.igo-striped tbody tr:nth-child(odd) {
   color: mat-color($foreground, text);
 }
 
-.fadq-error-text {
+.fadq-error-text,
+.fadq-alert-text {
   color: mat-color($warn);
 }
 

@@ -15,20 +15,23 @@
   "informations": "Informations",
   "refresh": "Rafraîchir",
   "recover": "Récupérer",
-
   "Coordonnées": "Coordonnées",
 
-  "search": {
-    "feature.title": "Address, place or coordinate",
-    "feature.placeholder": "Search for an address, a place or a coordinate",
-    "layer.title": "Layer",
-    "layer.placeholder": "Search for a layer",
-    "client.title": "Client",
-    "client.placeholder": "Search for a client",
-    "cadastre.title": "Original cadastre",
-    "cadastre.placeholder": "Search for a original cadastre",
-    "cadastre-reno.title": "Renovated cadastre",
-    "cadastre-reno.placeholder": "Search for a renovated cadastre"
+  "igo": {
+    "geo": {
+      "search": {
+        "feature.title": "Address, place or coordinate",
+        "feature.placeholder": "Search for an address, a place or a coordinate",
+        "layer.title": "Layer",
+        "layer.placeholder": "Search for a layer",
+        "client.title": "Client",
+        "client.placeholder": "Search for a client",
+        "cadastre.title": "Original cadastre",
+        "cadastre.placeholder": "Search for a original cadastre",
+        "cadastre-reno.title": "Renovated cadastre",
+        "cadastre-reno.placeholder": "Search for a renovated cadastre"
+      }
+    }
   },
 
   "help": {
@@ -114,6 +117,7 @@
       "numbering.tooltip": "Numéroter les parcelles",
       "numbering.header": "Numéroter les parcelles",
       "numbering.numberInUse.error": "Ce numéro de parcelle est déjà utilisé",
+      "numbering.numberTooLong.error": "Le numéro de parcelle doit contenir au plus 4 caractères",
       "transfer": "Transférer des parcelles",
       "transfer.client.placeholder": "Transférer au client",
       "transfer.keepParcelNumbers": "Conserver les numéros de parcelles",
@@ -206,6 +210,8 @@
     "update": "Modifier",
     "update.tooltip": "Modifier un élément",
     "update.apply": "Modifier",
+    "createUpdate": "Créer ou modifier",
+    "createUpdate.tooltip": "Créer ou modifier un élément",
     "redraw": "Redessiner",
     "redraw.tooltip": "Redessiner un élément",
     "redraw.message": "Sélectionnez un élément sur la carte pour le redessiner",

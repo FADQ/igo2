@@ -9,7 +9,7 @@ import { EntityOperation, EntityTransaction } from '@igo2/common';
 import { ApiService } from 'src/lib/core/api';
 import { TransactionSerializer, TransactionData } from 'src/lib/utils/transaction';
 
-import { computeParcelElementArea, transactionDataToSaveParcelElementData } from './client-parcel-element.utils';
+import { transactionDataToSaveParcelElementData } from './client-parcel-element.utils';
 import { Client } from '../../shared/client.interfaces';
 import {
   ClientParcelElement,
@@ -93,6 +93,10 @@ export class ClientParcelElementService {
    * @returns Observable of the parcel element
    */
   createParcelElement(data: Partial<ClientParcelElement>): Observable<ClientParcelElement> {
+    if (data.geometry === undefined || data.geometry.type !== 'Polygon') {
+      return of(undefined);
+    }
+
     const properties = Object.assign(
       {
         noDiagramme: 9999,
@@ -101,11 +105,11 @@ export class ClientParcelElementService {
       data.properties,
       {
         typeParcelle: 'PAC',
-        noOwner: false
+        noOwner: false,
+        superficie: undefined
       }
     );
     const parcelElement = Object.assign({}, data, {properties}) as ClientParcelElement;
-    parcelElement.properties.superficie = computeParcelElementArea(parcelElement);
     return of(parcelElement);
   }
 

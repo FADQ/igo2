@@ -75,7 +75,7 @@
 
     <ng-container *ngIf="expansionPanelExpanded">
       <div *ngIf="(workspace$ | async) as workspace" class="fadq-workspace-count">
-        {{workspace.entityStore.view.count$ | async}} / {{workspace.entityStore.count$ | async}}
+        {{workspace.entityStore.stateView.count$ | async}} / {{workspace.entityStore.count$ | async}}
       </div>
     </ng-container>
   </ng-container>

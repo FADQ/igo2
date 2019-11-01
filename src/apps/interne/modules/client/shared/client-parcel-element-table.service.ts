@@ -63,10 +63,10 @@ export class ClientParcelElementTableService {
           title: 'Statut de déboisement'
         },
         {
-          name: 'properties.parcelleDrainee',
+          name: 'properties.indParcelleDrainee',
           title: 'Drainage source FADQ',
           valueAccessor: (parcelElement: ClientParcelElement) => {
-            const value = parcelElement.properties.parcelleDrainee;
+            const value = parcelElement.properties.indParcelleDrainee;
             const choices = getParcelleDraineeChoices();
             const choice = choices.find((_choice: FormFieldSelectChoice) => _choice.value === value);
             return choice ? choice.title : '';
@@ -85,16 +85,16 @@ export class ClientParcelElementTableService {
           title: 'Référence de la mesure'
         },
         {
-          name: 'properties.timbreMajGeometrie',
+          name: 'properties.timbreMaj',
           title: 'Date de mise à jour',
           valueAccessor: (parcelElement: ClientParcelElement) => {
-            const value = parcelElement.properties.timbreMajGeometrie;
+            const value = parcelElement.properties.timbreMaj;
             if (!value) { return ''; }
             return formatDate(value);
           }
         },
         {
-          name: 'properties.usagerMajGeometrie',
+          name: 'properties.usagerMaj',
           title: 'Utilisateur'
         },
         {
@@ -103,7 +103,7 @@ export class ClientParcelElementTableService {
           renderer: EntityTableColumnRenderer.UnsanitizedHTML,
           valueAccessor: (parcelElement: ClientParcelElement) => {
             const errors = getParcelElementErrors(parcelElement);
-            const warnings =  getParcelElementWarnings(parcelElement);
+            const warnings = getParcelElementWarnings(parcelElement);
             const errorsHtml = errors.map((error: ClientParcelElementMessage) => {
               return `<span class="error-text" tooltip="${error.libelle}">${error.id}</span>`;
             });

@@ -3,7 +3,12 @@ import { Inject, Injectable} from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Action, EntityTableColumn, Widget } from '@igo2/common';
+import {
+  Action,
+  EntityStoreFilterSelectionStrategy,
+  EntityTableColumn,
+  Widget
+} from '@igo2/common';
 import { entitiesToRowData,  exportToCSV } from '@igo2/geo';
 import { DetailedContext } from '@igo2/context';
 import { ContextState } from '@igo2/integration';
@@ -12,7 +17,8 @@ import {
   ClientController,
   ClientParcelElementTxService,
   ClientParcelElementTxState,
-  ClientParcelElementStartTxWidget
+  ClientParcelElementStartTxWidget,
+  FeatureStoreFilterNotOwnedStrategy
 } from 'src/lib/client';
 import { moveToFeatureStore } from 'src/lib/feature';
 
@@ -86,6 +92,53 @@ export class ClientParcelActionsService {
           moveToFeatureStore(
             ctrl.parcelWorkspace.map,
             ctrl.parcelWorkspace.parcelStore
+          );
+        }
+      },
+      {
+        id: 'filterSelection',
+        icon: 'selection',
+        args: [controller],
+        handler: function(ctrl: ClientController) {
+          const filterStrategy = ctrl.parcelStore
+            .getStrategyOfType(EntityStoreFilterSelectionStrategy);
+          if (filterStrategy.active) {
+            filterStrategy.deactivate();
+          } else {
+            filterStrategy.activate();
+          }
+        },
+        ngClass: function(ctrl: ClientController) {
+          const filterStrategy = ctrl.parcelStore
+            .getStrategyOfType(EntityStoreFilterSelectionStrategy);
+          return filterStrategy.active$.pipe(
+            map((active: boolean) => ({
+              'active-accent': active
+            }))
+          );
+        }
+      },
+      {
+        id: 'filterNotOwner',
+        icon: 'account-check',
+        args: [controller],
+        handler: function(ctrl: ClientController) {
+          const filterStrategy = ctrl.parcelStore
+            .getStrategyOfType(FeatureStoreFilterNotOwnedStrategy);
+          if (filterStrategy.active) {
+            filterStrategy.deactivate();
+          } else {
+            filterStrategy.activate();
+          }
+        },
+        ngClass: function(ctrl: ClientController) {
+          const filterStrategy = ctrl.parcelStore
+            .getStrategyOfType(FeatureStoreFilterNotOwnedStrategy);
+          return filterStrategy.active$.pipe(
+            map((active: boolean) => ({
+              'fadq-actionbar-item-divider': true,
+              'active-accent': active
+            }))
           );
         }
       },

@@ -4,7 +4,12 @@ import { Observable, combineLatest, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { LanguageService } from '@igo2/core';
-import { Action, EntityStore, Widget } from '@igo2/common';
+import {
+  Action,
+  EntityStore,
+  EntityStoreFilterSelectionStrategy,
+  Widget
+} from '@igo2/common';
 
 import { EditionUndoWidget } from 'src/lib/edition';
 
@@ -92,6 +97,12 @@ export class ClientParcelElementActionsService {
       );
     }
 
+    function zeroOrOneParcelElementIsSelected(ctrl: ClientController): Observable<boolean> {
+      return ctrl.selectedParcelElements$.pipe(
+        map((parcelElements: ClientParcelElement[]) => parcelElements.length <= 1)
+      );
+    }
+
     function transactionIsEmpty(ctrl: ClientController): Observable<boolean> {
       return ctrl.parcelElementTransaction.empty$;
     }
@@ -173,44 +184,58 @@ export class ClientParcelElementActionsService {
             ctrl.parcelElementWorkspace.map,
             ctrl.parcelElementWorkspace.parcelElementStore
           );
-        },
-        ngClass: (ctrl: ClientController) => of({
-          'fadq-actionbar-item-divider': true
-        })
+        }
       },
       {
-        id: 'create',
-        icon: 'plus',
-        title: 'edition.create',
-        tooltip: 'edition.create.tooltip',
-        args: [controller, this.clientParcelElementCreateWidget],
-        handler: (ctrl: ClientController, widget: Widget) => {
-          ctrl.parcelElementWorkspace.activateWidget(widget, {
-            transaction: ctrl.parcelElementTransaction,
-            map: ctrl.map,
-            store: ctrl.parcelElementStore
-          });
+        id: 'filterSelection',
+        icon: 'selection',
+        args: [controller],
+        handler: function(ctrl: ClientController) {
+          const filterStrategy = ctrl.parcelElementStore
+            .getStrategyOfType(EntityStoreFilterSelectionStrategy);
+          if (filterStrategy.active) {
+            filterStrategy.deactivate();
+          } else {
+            filterStrategy.activate();
+          }
         },
-        availability: noActiveWidget
+        ngClass: function(ctrl: ClientController) {
+          const filterStrategy = ctrl.parcelElementStore
+            .getStrategyOfType(EntityStoreFilterSelectionStrategy);
+          return filterStrategy.active$.pipe(
+            map((active: boolean) => ({
+              'fadq-actionbar-item-divider': true,
+              'active-accent': active
+            }))
+          );
+        }
       },
       {
-        id: 'update',
+        id: 'createUpdate',
         icon: 'pencil',
-        title: 'edition.update',
-        tooltip: 'edition.update.tooltip',
+        title: 'edition.createUpdate',
+        tooltip: 'edition.createUpdate.tooltip',
         args: [
           controller,
+          this.clientParcelElementCreateWidget,
           this.clientParcelElementUpdateWidget,
           this.clientParcelElementUpdateBatchWidget
         ],
-        handler: (ctrl: ClientController, singleWidget: Widget, batchWidget: Widget) => {
+        handler: (
+          ctrl: ClientController,
+          createWidget: Widget,
+          singleWidget: Widget,
+          batchWidget: Widget
+        ) => {
           const inputs = {
             transaction: ctrl.parcelElementTransaction,
             map: ctrl.map,
             store: ctrl.parcelElementStore
           };
 
-          if (ctrl.activeParcelElement !== undefined) {
+          if (ctrl.selectedParcelElements.length === 0) {
+            ctrl.parcelElementWorkspace.activateWidget(createWidget, inputs);
+          } else if (ctrl.activeParcelElement !== undefined) {
             ctrl.parcelElementWorkspace.activateWidget(singleWidget, Object.assign({
               parcelElement: ctrl.activeParcelElement
             }, inputs));
@@ -222,7 +247,6 @@ export class ClientParcelElementActionsService {
         },
         availability: (ctrl: ClientController) => every(
           noActiveWidget(ctrl),
-          oneOrMoreParcelElementAreSelected(ctrl),
           transactionIsNotInCommitPhase(ctrl)
         )
       },
@@ -244,6 +268,7 @@ export class ClientParcelElementActionsService {
         },
         availability: (ctrl: ClientController) => every(
           noActiveWidget(ctrl),
+          zeroOrOneParcelElementIsSelected(ctrl),
           transactionIsNotInCommitPhase(ctrl)
         )
       },

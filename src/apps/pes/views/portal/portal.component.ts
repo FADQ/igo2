@@ -188,7 +188,7 @@ export class PortalComponent implements OnInit, OnDestroy {
 
     this.searchStore.state.updateAll({focused: false, selected: false});
 
-    const newResults = this.searchStore.entities$.value
+    const newResults = this.searchStore.all()
       .filter((result: SearchResult) => result.source !== event.research.source)
       .concat(results);
     this.searchStore.load(newResults);
