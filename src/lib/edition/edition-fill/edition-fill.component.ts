@@ -8,7 +8,7 @@ import {
   OnDestroy
 } from '@angular/core';
 
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import {
   EntityRecord,
@@ -69,6 +69,11 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
    * @internal
    */
   message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
+
+  /**
+   * Subscription to the processData function
+   */
+  private result$$: Subscription;
 
   /**
    * Map to draw features on
@@ -147,7 +152,7 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
     if (typeof this.processData === 'function') {
       const resultOrObservable = this.processData(feature);
       if (resultOrObservable instanceof Observable) {
-        resultOrObservable.subscribe((result: EditionResult) => {
+        this.result$$ = resultOrObservable.subscribe((result: EditionResult) => {
           this.submitResult(result);
         });
       } else {
@@ -168,6 +173,11 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
   }
 
   private teardown() {
+    if (this.result$$ !== undefined) {
+      this.result$$.unsubscribe();
+      this.result$$ = undefined;
+    }
+
     this.map.ol.removeLayer(this.exclusionStore.layer.ol);
     this.exclusionStore.clear();
   }
@@ -177,6 +187,8 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
    * @param result Edition result
    */
   private submitResult(result: EditionResult) {
+    this.result$$ = undefined;
+
     const error = result.error;
     if (error === undefined) {
       this.message$.next(undefined);

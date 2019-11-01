@@ -5,10 +5,17 @@ import {
   EventEmitter,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  OnInit
+  OnInit,
+  OnDestroy
 } from '@angular/core';
 
-import { BehaviorSubject, Observable, of, zip } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subscription,
+  of,
+  zip
+} from 'rxjs';
 
 import {
   EntityTransaction,
@@ -30,7 +37,8 @@ import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition
   styleUrls: ['./edition-update-batch.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditionUpdateBatchComponent implements  OnUpdateInputs, WidgetComponent, OnInit {
+export class EditionUpdateBatchComponent
+    implements OnUpdateInputs, WidgetComponent, OnInit, OnDestroy {
 
   /**
    * Message, if any
@@ -43,6 +51,11 @@ export class EditionUpdateBatchComponent implements  OnUpdateInputs, WidgetCompo
    * @internal
    */
   readonly baseFeature$: BehaviorSubject<Partial<Feature>> = new BehaviorSubject(undefined);
+
+  /**
+   * Subscription to the processData function
+   */
+  private result$$: Subscription;
 
   /**
    * Create form
@@ -98,6 +111,12 @@ export class EditionUpdateBatchComponent implements  OnUpdateInputs, WidgetCompo
     this.baseFeature$.next(this.computeBaseFeature());
   }
 
+  ngOnDestroy() {
+    if (this.result$$ !== undefined) {
+      this.result$$.unsubscribe();
+    }
+  }
+
   /**
    * Implemented as part of OnUpdateInputs
    */
@@ -123,7 +142,7 @@ export class EditionUpdateBatchComponent implements  OnUpdateInputs, WidgetCompo
           results$.push(of(resultOrObservable));
         }
       });
-      zip(...results$).subscribe((results: EditionResult[]) => {
+      this.result$$ = zip(...results$).subscribe((results: EditionResult[]) => {
         this.submitResults(results.filter((result: EditionResult) => result !== undefined));
       });
     } else {
@@ -145,6 +164,8 @@ export class EditionUpdateBatchComponent implements  OnUpdateInputs, WidgetCompo
    * @param results Edition results
    */
   private submitResults(results: EditionResult[]) {
+    this.result$$ = undefined;
+
     const firstResultWithError = results.find((result: EditionResult) => result.error !== undefined);
     const error = firstResultWithError === undefined ? undefined : firstResultWithError.error;
     this.setError(error);

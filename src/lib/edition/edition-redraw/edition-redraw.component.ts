@@ -15,8 +15,6 @@ import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
 import OlFormatGeoJSON from 'ol/format/GeoJSON';
 import OlPolygon from 'ol/geom/Polygon';
 import OlOverlay from 'ol/Overlay';
-import { OlFeature } from 'ol/Feature';
-import { Style as OlStyle } from 'ol/style';
 
 import {
   EntityRecord,
@@ -73,6 +71,11 @@ export class EditionRedrawComponent implements
    * Subscription to the geometry changes event
    */
   private geometry$$: Subscription;
+
+  /**
+   * Subscription to the processData function
+   */
+  private result$$: Subscription;
 
   /**
    * Subscription to the selected feature
@@ -184,7 +187,7 @@ export class EditionRedrawComponent implements
    * @internal
    */
   onSubmit(data: Feature) {
-    this.featureToResult(data).subscribe((result: EditionResult) => {
+    this.result$$ = this.featureToResult(data).subscribe((result: EditionResult) => {
       this.submitResult(result);
     });
   }
@@ -199,6 +202,11 @@ export class EditionRedrawComponent implements
   }
 
   private teardown() {
+    if (this.result$$ !== undefined) {
+      this.result$$.unsubscribe();
+      this.result$$ = undefined;
+    }
+
     this.formStatusChanges$$.unsubscribe();
 
     this.unobserveSelectedFeature();
@@ -230,6 +238,8 @@ export class EditionRedrawComponent implements
    * @param results Edition results
    */
   private submitResult(result: EditionResult) {
+    this.result$$ = undefined;
+
     const error = result.error;
     this.setError(error);
 
@@ -412,7 +422,8 @@ export class EditionRedrawComponent implements
     }
 
     const data = this.featureForm.getData() as Feature;
-    this.featureToResult(data).subscribe((result: EditionResult) => {
+    this.result$$ = this.featureToResult(data).subscribe((result: EditionResult) => {
+      this.result$$ = undefined;
 
       const error = result.error;
       this.setError(error);

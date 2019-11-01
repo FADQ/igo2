@@ -7,7 +7,13 @@ import {
   OnInit
 } from '@angular/core';
 
-import { BehaviorSubject, Observable, of, zip } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subscription,
+  of,
+  zip
+} from 'rxjs';
 
 import { EntityTransaction, WidgetComponent } from '@igo2/common';
 import { LanguageService, Message, MessageType } from '@igo2/core';
@@ -57,6 +63,11 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
    * @internal
    */
   placeholder$: BehaviorSubject<string> = new BehaviorSubject(undefined);
+
+  /**
+   * Subscription to the import service
+   */
+  private result$$: Subscription;
 
   /**
    * Optional title
@@ -139,7 +150,7 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
    */
   onImport() {
     const projection = this.projection || 'EPSG:4326';
-    this.importService.import(this.file$.value, projection)
+    this.result$$ = this.importService.import(this.file$.value, projection)
       .subscribe(
       (features: Feature[]) => this.onImportSuccess(features),
       (error: ImportError) => this.onImportError(error)
@@ -147,11 +158,19 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
   }
 
   /**
-   * Handle the imported file like the import tool does
+   * Emit the cancel event
    * @internal
    */
   onCancel() {
+    this.teardown();
     this.cancel.emit();
+  }
+
+  private teardown() {
+    if (this.result$$ !== undefined) {
+      this.result$$.unsubscribe();
+      this.result$$ = undefined;
+    }
   }
 
   /**
@@ -175,7 +194,7 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
           results$.push(of(resultOrObservable));
         }
       });
-      zip(...results$).subscribe((results: EditionResult[]) => {
+      this.result$$ = zip(...results$).subscribe((results: EditionResult[]) => {
         this.submitResults(results.filter((result: EditionResult) => result !== undefined));
       });
     } else {
@@ -191,6 +210,8 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
    * @internal
    */
   private submitResults(results: EditionResult[]) {
+    this.result$$ = undefined;
+
     const firstResultWithError = results.find((result: EditionResult) => result.error !== undefined);
     const error = firstResultWithError === undefined ? undefined : firstResultWithError.error;
     this.setError(error);

@@ -60,6 +60,11 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, 
   submitEnabled$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   /**
+   * Subscription to the processData function
+   */
+  private result$$: Subscription;
+
+  /**
    * Slice control
    */
   private sliceControl: SliceControl;
@@ -174,7 +179,7 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, 
           results$.push(of(resultOrObservable));
         }
       });
-      zip(...results$).subscribe((results: EditionResult[]) => {
+      this.result$$ = zip(...results$).subscribe((results: EditionResult[]) => {
         this.submitResults(results.filter((result: EditionResult) => result !== undefined));
       });
     } else {
@@ -194,6 +199,10 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, 
 
   private teardown() {
     this.removeSliceControl();
+    if (this.result$$ !== undefined) {
+      this.result$$.unsubscribe();
+      this.result$$ = undefined;
+    }
   }
 
   /**
@@ -201,6 +210,8 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, 
    * @param result Edition result
    */
   private submitResults(results: EditionResult[]) {
+    this.result$$ = undefined;
+
     const firstResultWithError = results.find((result: EditionResult) => result.error !== undefined);
     const error = firstResultWithError === undefined ? undefined : firstResultWithError.error;
     this.setError(error);

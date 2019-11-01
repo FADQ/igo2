@@ -59,6 +59,11 @@ export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInput
   private geometry$$: Subscription;
 
   /**
+   * Subscription to the processData function
+   */
+  private result$$: Subscription;
+
+  /**
    * Selected Ol feature
    */
   private selectedOlFeature: OlFeature;
@@ -166,7 +171,7 @@ export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInput
    * @internal
    */
   onSubmit(data: Feature) {
-    this.featureToResult(data).subscribe((result: EditionResult) => {
+    this.result$$ =  this.featureToResult(data).subscribe((result: EditionResult) => {
       this.submitResult(result);
     });
   }
@@ -181,6 +186,11 @@ export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInput
   }
 
   private teardown() {
+    if (this.result$$ !== undefined) {
+      this.result$$.unsubscribe();
+      this.result$$ = undefined;
+    }
+
     this.showSelectedFeature();
     this.clearOlOverlay();
     this.unobserveGeometry();
@@ -204,6 +214,8 @@ export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInput
    * @param results Edition results
    */
   private submitResult(result: EditionResult) {
+    this.result$$ = undefined;
+
     const error = result.error;
     this.setError(error);
 
@@ -373,8 +385,9 @@ export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInput
     }
 
     const data = this.featureForm.getData() as Feature;
-    this.featureToResult(data).subscribe((result: EditionResult) => {
-
+    this.result$$ = this.featureToResult(data).subscribe((result: EditionResult) => {
+      this.result$$ = undefined;
+  
       const error = result.error;
       this.setError(error);
 
