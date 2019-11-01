@@ -467,6 +467,10 @@ export class ClientParcelElementActionsService {
           ctrl.parcelElementWorkspace.activateWidget(widget, {
             client: ctrl.client,
             annee: ctrl.parcelYear
+          }, {
+            complete: () => {
+              ctrl.deactivateParcelElements();
+            }
           });
         },
         availability: (ctrl: ClientController) => every(
