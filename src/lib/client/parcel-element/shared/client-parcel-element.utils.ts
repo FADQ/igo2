@@ -96,7 +96,16 @@ function getParcelElementFeatureText(olFeature: OlFeature, resolution: number): 
   if (resolution > maxResolution) {
     return '';
   }
-  return olFeature.get('noParcelleAgricole');
+
+  const parts = [
+    olFeature.get('noParcelleAgricole'),
+    olFeature.get('statutAugmentationSupCultivable')
+  ];
+  const text = parts
+    .filter((part) => part && part !== '')
+    .join(' - ');
+
+  return text;
 }
 
 export function getParcelElementErrors(parcelElement: ClientParcelElement): ClientParcelElementMessage[] {
