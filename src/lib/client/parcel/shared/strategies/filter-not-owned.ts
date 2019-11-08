@@ -75,7 +75,7 @@ export class FeatureStoreFilterNotOwnedStrategy extends EntityStoreStrategy {
     }
 
     const filter = (parcel: ClientParcel) => {
-      return parcel.properties.relation === 1;
+      return [1, 2].includes(parcel.properties.relation);
     };
     this.filters.set(store, store.view.addFilter(filter));
   }
