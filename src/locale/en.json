@@ -109,7 +109,11 @@
     "parcel": {
       "year.placeholder": "Year",
       "exportToCSV": "Export to CSV",
-      "exportToCSV.tooltip": "Export to CSV"
+      "exportToCSV.tooltip": "Export to CSV",
+      "filterNotOwned": {
+        "title": "Afficher les parcelles détenues",
+        "tooltip": "Afficher les parcelles détenues"
+      }
     },
     "parcelElement": {
       "parcel": "Parcelle",
@@ -288,6 +292,10 @@
     "moveToFeatures": {
       "title": "Déplacer la carte sur les entités",
       "tooltip": "Déplacer la carte sur les entités"
+    },
+    "filterSelection": {
+      "title": "Afficher les entités sélectionnés",
+      "tooltip": "Afficher les entités sélectionné"
     }
   },
 

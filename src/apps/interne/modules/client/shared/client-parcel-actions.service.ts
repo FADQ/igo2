@@ -98,6 +98,8 @@ export class ClientParcelActionsService {
       {
         id: 'filterSelection',
         icon: 'selection',
+        title: 'map.filterSelection.title',
+        tooltip: 'map.filterSelection.tooltip',
         args: [controller],
         handler: function(ctrl: ClientController) {
           const filterStrategy = ctrl.parcelStore
@@ -119,8 +121,10 @@ export class ClientParcelActionsService {
         }
       },
       {
-        id: 'filterNotOwner',
+        id: 'filterNotOwned',
         icon: 'account-check',
+        title: 'client.parcel.filterNotOwned.title',
+        tooltip: 'client.parcel.filterNotOwned.tooltip',
         args: [controller],
         handler: function(ctrl: ClientController) {
           const filterStrategy = ctrl.parcelStore

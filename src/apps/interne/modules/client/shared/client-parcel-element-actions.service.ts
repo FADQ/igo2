@@ -189,6 +189,8 @@ export class ClientParcelElementActionsService {
       {
         id: 'filterSelection',
         icon: 'selection',
+        title: 'map.filterSelection.title',
+        tooltip: 'map.filterSelection.tooltip',
         args: [controller],
         handler: function(ctrl: ClientController) {
           const filterStrategy = ctrl.parcelElementStore
