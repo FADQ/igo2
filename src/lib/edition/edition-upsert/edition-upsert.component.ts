@@ -171,7 +171,7 @@ export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInput
    * @internal
    */
   onSubmit(data: Feature) {
-    this.result$$ =  this.featureToResult(data).subscribe((result: EditionResult) => {
+    this.result$$ = this.featureToResult(data).subscribe((result: EditionResult) => {
       this.submitResult(result);
     });
   }
