@@ -9,7 +9,6 @@
   "scripts": {
     "pes.start": "ng serve pes --host 0.0.0.0 --proxy-config proxy.conf.json",
     "pes.build.prod": "ng build pes --prod",
-
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.json",
     "build": "ng build",
@@ -70,8 +69,10 @@
     "natives": "^1.1.6",
     "ngx-cacheable": "^1.0.9",
     "ol": "^5.3.0",
+    "ol-mapbox-style": "^5.0.2",
     "proj4": "^2.5.0",
     "rxjs": "^6.4.0",
+    "scroll-into-view-if-needed": "^2.2.20",
     "stream": "^0.0.2",
     "typy": "^2.0.1",
     "unorm": "^1.6.0",
