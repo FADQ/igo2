@@ -15,6 +15,8 @@ import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
 import OlFormatGeoJSON from 'ol/format/GeoJSON';
 import OlPolygon from 'ol/geom/Polygon';
 import OlOverlay from 'ol/Overlay';
+import { OlFeature } from 'ol/Feature';
+import { Style as OlStyle } from 'ol/style';
 
 import {
   EntityRecord,
@@ -91,6 +93,16 @@ export class EditionRedrawComponent implements
    * Wheter the selection strategy is active initally
    */
   private selectionStrategyIsActive: boolean;
+
+  /**
+   * Selected Ol feature
+   */
+  private selectedOlFeature: OlFeature;
+
+  /**
+   * Selected Ol feature styl. Keep a ref to it to restore it on complete
+   */
+  private selectedOlFeatureStyle: OlStyle;
 
   /**
    * OL overlay
@@ -209,6 +221,7 @@ export class EditionRedrawComponent implements
 
     this.formStatusChanges$$.unsubscribe();
 
+    this.showSelectedFeature();
     this.unobserveSelectedFeature();
     this.unobserveGeometry();
     this.clearOlOverlay();
@@ -272,7 +285,10 @@ export class EditionRedrawComponent implements
         title: operationTitle
       });
     } else {
-      this.transaction.update(this.feature, feature, this.store, {
+      // This is needed because this.feature is a clone of the
+      // original feature, without geometry. We want the whole feature
+      const featureId = this.store.getKey(this.feature);
+      this.transaction.update(this.store.get(featureId), feature, this.store, {
         title: operationTitle
       });
     }
@@ -295,9 +311,11 @@ export class EditionRedrawComponent implements
 
   private deactivateSelection() {
     this.selectionStrategy.deactivate();
+    this.hideSelectedFeature();
   }
 
   private observeSelectedFeature() {
+    this.selectedOlFeature = undefined;
     this.unobserveSelectedFeature();
     this.unselectAllFeatures();
 
@@ -320,8 +338,9 @@ export class EditionRedrawComponent implements
 
   private onSelectFeature(feature: Feature) {
     this.unobserveSelectedFeature();
-    this.unselectAllFeatures();
+    this.selectedOlFeature = this.getSelectedOlFeature(feature);
     this.deactivateSelection();
+    this.unselectAllFeatures();
     this.setFeature(feature);
   }
 
@@ -440,6 +459,35 @@ export class EditionRedrawComponent implements
       this.activateSelection();
       this.observeSelectedFeature();
     });
+  }
+
+  /**
+   * Return the Ol feature of the selected feature
+   */
+  private getSelectedOlFeature(feature: Feature): OlFeature | undefined {
+    const featureId = this.store.getKey(feature);
+    return this.store.layer.dataSource.ol.getFeatureById(featureId);
+  }
+
+  /**
+   * Deactivate feature selection from the store and from the map
+   */
+  private showSelectedFeature() {
+    const olFeature = this.selectedOlFeature;
+    if (olFeature !== undefined) {
+      const olStyle = this.selectedOlFeatureStyle || undefined;
+      olFeature.setStyle(olStyle);
+    }
+  }
+
+  /**
+   * Deactivate feature selection from the store and from the map
+   */
+  private hideSelectedFeature() {
+    const olFeature = this.selectedOlFeature;
+    if (olFeature !== undefined) {
+      olFeature.setStyle(new OlStyle(null));
+    }
   }
 
 }

@@ -387,7 +387,7 @@ export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInput
     const data = this.featureForm.getData() as Feature;
     this.result$$ = this.featureToResult(data).subscribe((result: EditionResult) => {
       this.result$$ = undefined;
-  
+
       const error = result.error;
       this.setError(error);
 
