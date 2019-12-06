@@ -1,5 +1,6 @@
 import { Injectable} from '@angular/core';
 
+import { LanguageService } from '@igo2/core';
 import { MapState } from '@igo2/integration';
 
 import {
@@ -24,7 +25,8 @@ export class ClientControllerService {
     private mapState: MapState,
     private clientParcelService: ClientParcelService,
     private clientParcelWorkspaceService: ClientParcelWorkspaceService,
-    private clientParcelActionsService: ClientParcelActionsService
+    private clientParcelActionsService: ClientParcelActionsService,
+    private languageService: LanguageService
   ) {}
 
   /**
@@ -38,13 +40,15 @@ export class ClientControllerService {
     const parcelService = this.clientParcelService;
     const parcelWorkspace = this.clientParcelWorkspaceService.createParcelWorkspace(client, map);
     const parcelYear = options.parcelYear;
+    const languageService = this.languageService;
 
     const controller = new ClientController({
       map,
       client,
       parcelYear,
       parcelService,
-      parcelWorkspace
+      parcelWorkspace,
+      languageService
     });
 
     this.clientParcelActionsService.loadActions(controller);

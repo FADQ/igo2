@@ -3,12 +3,12 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { skip } from 'rxjs/operators';
 
+import { LanguageService, Message, MessageType } from '@igo2/core';
 import { EntityRecord, EntityStore,  Widget, Workspace, WorkspaceStore } from '@igo2/common';
 
 import {
   Client,
   ClientController,
-  ClientService,
   ClientParcelYear,
   ClientParcelYearService
 } from 'src/lib/client';
@@ -23,8 +23,8 @@ import { ClientControllerService } from './shared/client-controller.service';
 })
 export class ClientState implements OnDestroy {
 
-  /** Observable of a message or error */
-  readonly message$ = new BehaviorSubject<string>(undefined);
+  /** Message */
+  readonly message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
   /** Active widget observable. Only one may be active for all clients */
   readonly activeWidget$: BehaviorSubject<Widget> = new BehaviorSubject<Widget>(undefined);
@@ -37,8 +37,8 @@ export class ClientState implements OnDestroy {
   _controllers: EntityStore<ClientController>;
 
   /** Current parcel year */
-  readonly parcelYear$: BehaviorSubject<number> = new BehaviorSubject(undefined);
-  get parcelYear(): number { return this.parcelYear$.value; }
+  readonly parcelYear$: BehaviorSubject<ClientParcelYear> = new BehaviorSubject(undefined);
+  get parcelYear(): ClientParcelYear { return this.parcelYear$.value; }
 
   /** Subscription to the parcel year changes */
   private parcelYear$$: Subscription;
@@ -64,9 +64,9 @@ export class ClientState implements OnDestroy {
   get activeWorkspace$(): BehaviorSubject<Workspace> { return this.workspaceStore.activeWorkspace$; }
 
   constructor(
-    private clientService: ClientService,
     private clientParcelYearService: ClientParcelYearService,
-    private clientControllerService: ClientControllerService
+    private clientControllerService: ClientControllerService,
+    private languageService: LanguageService
   ) {
     this.initParcelYears();
     this.loadParcelYears();
@@ -127,7 +127,12 @@ export class ClientState implements OnDestroy {
    */
   setClientNotFound(notFound: boolean) {
     if (notFound === true) {
-      this.message$.next('client.error.notfound');
+      const textKey = 'client.error.notfound';
+      const text = this.languageService.translate.instant(textKey);
+      this.message$.next({
+        type: MessageType.ERROR,
+        text
+      });
     } else {
       this.message$.next(undefined);
     }
@@ -150,7 +155,7 @@ export class ClientState implements OnDestroy {
     if (!controller.parcelElementTransaction.empty) {
       return controller.parcelElementTransactionService.prompt({
         client: controller.client,
-        annee: controller.parcelYear,
+        annee: controller.parcelYear.annee,
         transaction: controller.parcelElementTransaction,
         proceed: () => this.destroyController(controller)
       });
@@ -319,7 +324,7 @@ export class ClientState implements OnDestroy {
    * @param Parcel year
    */
   private onSelectParcelYear(parcelYear: ClientParcelYear) {
-    this.parcelYear$.next( parcelYear === undefined ? undefined : parcelYear.annee);
+    this.parcelYear$.next(parcelYear);
     this.controllers.all().forEach((controller: ClientController) => {
       controller.setParcelYear(this.parcelYear);
     });

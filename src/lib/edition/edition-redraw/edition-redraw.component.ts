@@ -50,7 +50,7 @@ export class EditionRedrawComponent implements
     OnInit, OnDestroy, OnUpdateInputs, WidgetComponent {
 
   /**
-   * Message, if any
+   * Message
    * @internal
    */
   readonly message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);

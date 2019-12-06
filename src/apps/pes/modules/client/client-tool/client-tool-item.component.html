@@ -3,9 +3,10 @@
 </div>
 
 <div class="fadq-client-content">
-  <div *ngIf="controller.message$ | async as message" class="fadq-error-text">
-    {{message | translate}}
-  </div>
+  <fadq-message-inline
+    *ngIf="controller.message$ | async as message"  
+    [message]="message">
+  </fadq-message-inline>
 
   <a
     href=""

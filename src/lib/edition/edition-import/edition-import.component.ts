@@ -47,7 +47,7 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
   file$: BehaviorSubject<File> = new BehaviorSubject(undefined);
 
   /**
-   * Message, if any
+   * Message
    * @internal
    */
   message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);

@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material';
 import { IgoLanguageModule } from '@igo2/core';
 
 import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
+import { FadqLibMessageInlineModule } from 'src/lib/message/message-inline/message-inline.module';
 
 import { ClientParcelElementStartTxComponent } from './client-parcel-element-start-tx.component';
 
@@ -16,7 +17,8 @@ import { ClientParcelElementStartTxComponent } from './client-parcel-element-sta
     CommonModule,
     MatButtonModule,
     IgoLanguageModule,
-    FadqLibCardPanelModule
+    FadqLibCardPanelModule,
+    FadqLibMessageInlineModule
   ],
   exports: [
     ClientParcelElementStartTxComponent

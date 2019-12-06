@@ -40,7 +40,7 @@ export class ClientParcelElementWithoutOwnerComponent
   static minZoomLevel = 9;
 
   /**
-   * Message, if any
+   * Message
    * @internal
    */
   readonly message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);

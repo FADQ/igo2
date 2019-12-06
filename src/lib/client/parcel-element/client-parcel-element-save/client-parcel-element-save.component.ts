@@ -98,6 +98,7 @@ export class ClientParcelElementSaveComponent implements OnUpdateInputs, WidgetC
       };
     }
 
+    this.store.layer.dataSource.ol.clear();
     this.store.load(results);
 
     return {

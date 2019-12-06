@@ -12,6 +12,7 @@ import { IgoLanguageModule } from '@igo2/core';
 import { IgoListModule, IgoCollapsibleModule } from '@igo2/common';
 
 import { FadqLibClientModule } from 'src/lib/client/client.module';
+import { FadqLibMessageInlineModule } from 'src/lib/message/message-inline/message-inline.module';
 
 import { ClientToolComponent } from './client-tool.component';
 import { ClientToolItemComponent } from './client-tool-item.component';
@@ -29,7 +30,8 @@ import { ClientToolItemComponent } from './client-tool-item.component';
     IgoLanguageModule,
     IgoListModule,
     IgoCollapsibleModule,
-    FadqLibClientModule
+    FadqLibClientModule,
+    FadqLibMessageInlineModule
   ],
   declarations: [
     ClientToolComponent,

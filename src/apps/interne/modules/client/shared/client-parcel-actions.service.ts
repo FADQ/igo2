@@ -63,7 +63,7 @@ export class ClientParcelActionsService {
         tooltip: 'client.parcelElement.startTx.tooltip',
         args: [controller, this.clientParcelElementStartTxWidget],
         handler: (ctrl: ClientController, widget: Widget) => {
-          this.clientParcelElementTxService.getParcelTxState(ctrl.client, ctrl.parcelYear)
+          this.clientParcelElementTxService.getParcelTxState(ctrl.client, ctrl.parcelYear.annee)
             .subscribe((state: ClientParcelElementTxState) => {
               if (state === ClientParcelElementTxState.OK) {
                 ctrl.activateParcelElements();

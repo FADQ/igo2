@@ -7,12 +7,12 @@ import {
 } from '@angular/core';
 import { BehaviorSubject, Subscription, combineLatest } from 'rxjs';
 
+import { Message } from '@igo2/core';
 import { ToolComponent, EntityStore } from '@igo2/common';
 import { FEATURE } from '@igo2/geo';
 import { SearchState } from '@igo2/integration';
 
 import {
-  CLIENT,
   ClientController,
   ClientParcelYear,
   ClientInfoService
@@ -62,7 +62,7 @@ export class ClientToolComponent implements OnInit, OnDestroy {
    * Observable of the client error, if any
    * @internal
    */
-  get message$(): BehaviorSubject<string> { return this.clientState.message$; }
+  get message$(): BehaviorSubject<Message> { return this.clientState.message$; }
 
   /**
    * Store holding all the avaiables "parcel years"

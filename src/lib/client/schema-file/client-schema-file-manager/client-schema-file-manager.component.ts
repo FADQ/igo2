@@ -31,7 +31,7 @@ export class ClientSchemaFileManagerComponent implements OnInit, OnDestroy, Widg
   static maxSize = 1024 * 1024 * 10;  // 10mo
 
   /**
-   * Message, if any
+   * Message
    * @internal
    */
   message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);

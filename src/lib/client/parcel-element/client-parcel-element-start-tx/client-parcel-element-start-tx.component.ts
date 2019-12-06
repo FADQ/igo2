@@ -29,13 +29,27 @@ export class ClientParcelElementStartTxComponent
     implements WidgetComponent, OnUpdateInputs, OnInit, OnDestroy {
 
   /**
-   * Message, if any
+   * Message
    * @internal
    */
   readonly message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
+  /**
+   * Wheter there is an error
+   * @internal
+   */
+  readonly error$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+  /**
+   * Submit step enum
+   * @internal
+   */
   readonly submitStep = SubmitStep;
 
+  /**
+   * Submit handler
+   * @internal
+   */
   readonly submitHandler = new SubmitHandler();
 
   /**
@@ -64,6 +78,10 @@ export class ClientParcelElementStartTxComponent
     private cdRef: ChangeDetectorRef
   ) {}
 
+  /**
+   * Validate the tx state and the year
+   * @internal
+   */
   ngOnInit() {
     const error = this.validateState();
     if (error !== undefined) {
@@ -71,9 +89,20 @@ export class ClientParcelElementStartTxComponent
         type: MessageType.ERROR,
         text: error
       });
+      this.error$.next(true);
+    } else if (!this.controller.parcelYear.current) {
+      const messageKey = 'client.parcelElement.startTx.notCurrentYear';
+      this.message$.next({
+        type: MessageType.ALERT,
+        text: this.languageService.translate.instant(messageKey)
+      });
     }
   }
 
+  /**
+   * Destroy the submit handler
+   * @internal
+   */
   ngOnDestroy() {
     this.submitHandler.destroy();
   }
@@ -90,7 +119,7 @@ export class ClientParcelElementStartTxComponent
       this.onSubmitSuccess();
     } else {
       const submit$ = this.clientParcelElementTxService.prepareParcelTx(
-        this.controller.client, this.controller.parcelYear
+        this.controller.client, this.controller.parcelYear.annee
       );
       this.submitHandler.handle(submit$, {
         success: () => this.onSubmitSuccess()

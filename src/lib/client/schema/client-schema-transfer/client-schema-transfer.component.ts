@@ -34,7 +34,7 @@ export class ClientSchemaTransferComponent implements OnInit, OnUpdateInputs, Wi
   form$: Subject<Form> = new Subject<Form>();
 
   /**
-   * Message, if any
+   * Message
    * @internal
    */
   message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);

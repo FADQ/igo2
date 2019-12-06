@@ -79,8 +79,8 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
     });
 
     this.parcelYear$$ = this.clientState.parcelYear$
-      .subscribe((parcelYear: number) => this.clients.view.filter(
-        (client: Client) => client.tx.annee === parcelYear
+      .subscribe((parcelYear: ClientParcelYear) => this.clients.view.filter(
+        (client: Client) => client.tx.annee === parcelYear.annee
       ));
 
     this.clientParcelElementTxService.getClientsInTx()
@@ -123,7 +123,7 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
     const data = {
       store: this.clients,
       client: client,
-      annee: this.clientState.parcelYear$.value,
+      annee: this.clientState.parcelYear$.value.annee,
       controller: controller
     };
     this.dialog.open(ClientParcelElementDeleteTxDialogComponent, {data});

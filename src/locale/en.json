@@ -147,6 +147,7 @@
       "deleteTx.confirm": "Désirez-vous supprimer la transaction et effacer toutes les modifications effectuées?",
       "deleteTx.error.moreThanOneClient": "Impossible de supprimer une transaction sur plusieurs clients",
       "startTx.confirm": "Désirez-vous débuter l'édition de parcelles?",
+      "startTx.notCurrentYear": "L'année d'édition n'est pas l'année courante.",
       "startTx": "Édition de parcelles",
       "startTx.tooltip": "Démarrer l'édition de parcelles",
       "stopTx": "Édition de parcelles",

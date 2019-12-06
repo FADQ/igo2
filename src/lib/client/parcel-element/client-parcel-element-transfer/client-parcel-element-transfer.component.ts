@@ -33,13 +33,21 @@ export class ClientParcelElementTransferComponent implements WidgetComponent, On
   formGroup: FormGroup;
 
   /**
-   * Message, if any
+   * Message
    * @internal
    */
   readonly message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
+  /**
+   * Submit step enum
+   * @internal
+   */
   readonly submitStep = SubmitStep;
 
+  /**
+   * Submit handler
+   * @internal
+   */
   readonly submitHandler = new SubmitHandler();
 
   get toClient(): Client { return this.toClient$.value; }
@@ -93,6 +101,11 @@ export class ClientParcelElementTransferComponent implements WidgetComponent, On
     private languageService: LanguageService
   ) {}
 
+  /**
+   * Build the form and subscribe to the
+   * transfer all field
+   * @internal
+   */
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
       keepParcelNumbers: false,
@@ -103,6 +116,11 @@ export class ClientParcelElementTransferComponent implements WidgetComponent, On
       .subscribe((value: boolean) => this.onTransferAllParcelsChange(value));
   }
 
+  /**
+   * Destroy the submit handler and unsubscribe to the
+   * transfer all field
+   * @internal
+   */
   ngOnDestroy() {
     this.submitHandler.destroy();
     this.transferAllParcels$$.unsubscribe();

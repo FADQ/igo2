@@ -1,12 +1,14 @@
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { skip, tap } from 'rxjs/operators';
 
+import { LanguageService, Message, MessageType } from '@igo2/core';
 import { EntityRecord, EntityStore } from '@igo2/common';
 import { FeatureStore, IgoMap } from '@igo2/geo';
 
 import {
   Client,
   ClientParcel,
+  ClientParcelYear,
   ClientParcelDiagram,
   ClientParcelWorkspace,
   ClientParcelService,
@@ -16,9 +18,10 @@ import {
 export interface ClientControllerOptions {
   map: IgoMap;
   client: Client;
-  parcelYear: number;
+  parcelYear: ClientParcelYear;
   parcelWorkspace: ClientParcelWorkspace;
   parcelService: ClientParcelService;
+  languageService: LanguageService;
 }
 
 /**
@@ -29,8 +32,8 @@ export interface ClientControllerOptions {
  */
 export class ClientController {
 
-  /** Observable message  */
-  readonly message$ = new BehaviorSubject<string>(undefined);
+  /** Message */
+  readonly message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
   /** Subscription to the selected diagram  */
   private diagram$$: Subscription;
@@ -44,8 +47,8 @@ export class ClientController {
   /** Active client */
   get client(): Client { return this.options.client; }
 
-  get parcelYear(): number { return this._parcelYear || this.options.parcelYear; }
-  private _parcelYear: number;
+  get parcelYear(): ClientParcelYear { return this._parcelYear; }
+  private _parcelYear: ClientParcelYear;
 
   /** Parcel workspace */
   get parcelWorkspace(): ClientParcelWorkspace {
@@ -70,6 +73,9 @@ export class ClientController {
   get diagramStore(): EntityStore<ClientParcelDiagram> { return this._diagramStore; }
   private _diagramStore: EntityStore<ClientParcelDiagram>;
 
+  /** Language service */
+  get languageService(): LanguageService { return this.options.languageService; }
+
   constructor(private options: ClientControllerOptions) {
     this.initDiagrams();
     this.initParcels();
@@ -93,7 +99,7 @@ export class ClientController {
    * Set the parcel year and load parcels of that year
    * @param parcelYear number
    */
-  setParcelYear(parcelYear: number) {
+  setParcelYear(parcelYear: ClientParcelYear) {
     this._parcelYear = parcelYear;
     this.loadParcels();
   }
@@ -194,7 +200,7 @@ export class ClientController {
    * to be displayed in the client tool.
    */
   private loadParcels() {
-    this.parcelService.getParcels(this.client, this.parcelYear)
+    this.parcelService.getParcels(this.client, this.parcelYear.annee)
       .pipe(
         tap((parcels: ClientParcel[]) => {
           this.loadDiagrams(getDiagramsFromParcels(parcels));
@@ -204,7 +210,12 @@ export class ClientController {
       .subscribe((parcels: ClientParcel[]) => {
         this.parcelWorkspace.load(parcels);
         if (parcels.length === 0) {
-          this.message$.next('client.error.noparcel');
+          const textKey = 'client.error.noparcel';
+          const text = this.languageService.translate.instant(textKey);
+          this.message$.next({
+            type: MessageType.ERROR,
+            text
+          });
         } else {
           this.message$.next(undefined);
         }

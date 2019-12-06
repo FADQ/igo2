@@ -33,13 +33,21 @@ export class ClientParcelElementReconciliateComponent
     implements WidgetComponent, OnUpdateInputs, OnInit, OnDestroy {
 
   /**
-   * Message, if any
+   * Message
    * @internal
    */
   readonly message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
+  /**
+   * Submit step enum
+   * @internal
+   */
   readonly submitStep = SubmitStep;
 
+  /**
+   * Submit handler
+   * @internal
+   */
   readonly submitHandler = new SubmitHandler();
 
   /**
@@ -95,11 +103,19 @@ export class ClientParcelElementReconciliateComponent
     private cdRef: ChangeDetectorRef
   ) {}
 
+  /**
+   * Load clients in reconciliation
+   * @internal
+   */
   ngOnInit() {
     this.clientParcelElementTxService.getClientsInReconcilitation(this.client)
       .subscribe((clients: Client[]) => this.clientStore.load(clients));
   }
 
+  /**
+   * Destroy the submit handler
+   * @internal
+   */
   ngOnDestroy() {
     this.submitHandler.destroy();
   }

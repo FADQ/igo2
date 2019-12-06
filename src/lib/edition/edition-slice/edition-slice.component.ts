@@ -48,7 +48,7 @@ import {
 export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, OnInit, OnDestroy {
 
   /**
-   * Message, if any
+   * Message
    * @internal
    */
   message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);

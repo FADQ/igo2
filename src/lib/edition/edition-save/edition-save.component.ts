@@ -44,8 +44,16 @@ export class EditionSaveComponent implements WidgetComponent, OnDestroy {
    */
   readonly message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
+  /**
+   * Submit step enum
+   * @internal
+   */
   readonly submitStep = SubmitStep;
 
+  /**
+   * Submit handler
+   * @internal
+   */
   readonly submitHandler = new SubmitHandler();
 
   /**
@@ -106,6 +114,10 @@ export class EditionSaveComponent implements WidgetComponent, OnDestroy {
 
   constructor() {}
 
+  /**
+   * Destroy the submit handler
+   * @internal
+   */
   ngOnDestroy() {
     this.submitHandler.destroy();
   }

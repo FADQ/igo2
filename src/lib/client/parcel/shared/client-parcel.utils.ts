@@ -7,7 +7,6 @@ import { FeatureDataSource, VectorLayer } from '@igo2/geo';
 import { ObjectUtils } from '@igo2/utils';
 
 import { Client } from '../../shared/client.interfaces';
-import { padClientNum } from '../../shared/client.utils';
 import { ClientParcelDiagram, ClientParcel, ClientParcelListResponseItem } from './client-parcel.interfaces';
 
 export function getDiagramsFromParcels(parcels: ClientParcel[]): ClientParcelDiagram[] {
@@ -96,8 +95,13 @@ export function createParcelLayerStyle(): (olFeature: OlFeature, resolution: num
 function createParcelLayerTextStyle(): olstyle.Text {
   return new olstyle.Text({
     font: '12px Calibri,sans-serif',
-    fill: new olstyle.Fill({ color: '#000' }),
-    stroke: new olstyle.Stroke({ color: '#fff', width: 3 }),
+    fill: new olstyle.Fill({
+      color: '#000'
+    }),
+    stroke: new olstyle.Stroke({
+      color: '#fff',
+      width: 3
+    }),
     overflow: true
   });
 }

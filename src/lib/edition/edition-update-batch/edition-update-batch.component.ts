@@ -23,7 +23,8 @@ import {
   FormField,
   WidgetComponent,
   OnUpdateInputs,
-  getAllFormFields
+  getAllFormFields,
+  getEntityRevision
 } from '@igo2/common';
 import { LanguageService, Message, MessageType } from '@igo2/core';
 import { FEATURE, Feature, FeatureStore } from '@igo2/geo';
@@ -41,13 +42,13 @@ export class EditionUpdateBatchComponent
     implements OnUpdateInputs, WidgetComponent, OnInit, OnDestroy {
 
   /**
-   * Message, if any
+   * Message
    * @internal
    */
   readonly message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
   /**
-   * Error message, if any
+   * Base feature
    * @internal
    */
   readonly baseFeature$: BehaviorSubject<Partial<Feature>> = new BehaviorSubject(undefined);
@@ -210,7 +211,9 @@ export class EditionUpdateBatchComponent
   private updateFeatures(data: Partial<Feature>): Feature[] {
     return this.features.map((feature: Feature) => {
       const properties = Object.assign({}, feature.properties, data.properties);
-      const meta = Object.assign({}, feature.meta, data.meta);
+      const meta = Object.assign({}, feature.meta, data.meta, {
+        revision: getEntityRevision(feature) + 1
+      });
       return Object.assign({}, feature, {properties, meta});
     });
   }

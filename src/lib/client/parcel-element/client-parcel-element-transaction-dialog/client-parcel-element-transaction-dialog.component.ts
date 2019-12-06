@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 import { SubmitStep, SubmitHandler } from '../../../utils';
@@ -10,10 +10,18 @@ import { ClientParcelElementTransactionWrapper } from '../shared/client-parcel-e
   templateUrl: 'client-parcel-element-transaction-dialog.component.html',
   styleUrls: ['./client-parcel-element-transaction-dialog.component.scss']
 })
-export class ClientParcelElementTransactionDialogComponent {
+export class ClientParcelElementTransactionDialogComponent implements OnDestroy {
 
+  /**
+   * Submit step enum
+   * @internal
+   */
   readonly submitStep = SubmitStep;
 
+  /**
+   * Submit handler
+   * @internal
+   */
   readonly submitHandler = new SubmitHandler();
 
   get transaction(): ClientParcelElementTransactionWrapper { return this.data.transaction; }
@@ -23,6 +31,14 @@ export class ClientParcelElementTransactionDialogComponent {
     public dialogRef: MatDialogRef<ClientParcelElementTransactionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private data: {transaction: ClientParcelElementTransactionWrapper}
   ) {}
+
+  /**
+   * Destroy the submit handler
+   * @internal
+   */
+  ngOnDestroy() {
+    this.submitHandler.destroy();
+  }
 
   onYesClick() {
     const submit$ =  this.clientParcelElementService

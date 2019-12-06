@@ -1,5 +1,6 @@
 import { Injectable} from '@angular/core';
 
+import { LanguageService } from '@igo2/core';
 import { MapState } from '@igo2/integration';
 
 import { hexToRGB } from 'src/lib/utils/color';
@@ -51,7 +52,8 @@ export class ClientControllerService {
     private clientSchemaElementService: ClientSchemaElementService,
     private clientSchemaElementTransactionService: ClientSchemaElementTransactionService,
     private clientSchemaElementWorkspaceService: ClientSchemaElementWorkspaceService,
-    private clientSchemaElementActionsService: ClientSchemaElementActionsService
+    private clientSchemaElementActionsService: ClientSchemaElementActionsService,
+    private languageService: LanguageService
   ) {}
 
   /**
@@ -72,6 +74,7 @@ export class ClientControllerService {
     const parcelElementWorkspace = this.clientParcelElementWorkspaceService.createParcelElementWorkspace(client, map);
     const schemaElementService = this.clientSchemaElementService;
     const schemaElementTransactionService = this.clientSchemaElementTransactionService;
+    const languageService = this.languageService;
 
     // When all clients are cleared, reset the color palette.
     // That means, color may be reused again.
@@ -95,7 +98,8 @@ export class ClientControllerService {
       schemaElementService,
       schemaElementTransactionService,
       controllers: options.controllers,
-      color: this.colorPalette.next().value
+      color: this.colorPalette.next().value,
+      languageService
     });
 
     this.clientParcelActionsService.loadActions(controller);

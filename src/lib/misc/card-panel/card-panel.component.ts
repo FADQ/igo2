@@ -23,7 +23,7 @@ export class CardPanelComponent {
   @Input() title: string;
 
   /**
-   * Message, if any
+   * Message
    * @internal
    */
   @Input()

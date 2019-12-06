@@ -45,7 +45,7 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
   private _value: MultipartNoParcel = {number: '', prefix: '', suffix: ''};
 
   /**
-   * Message, if any
+   * Message
    * @internal
    */
   message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);

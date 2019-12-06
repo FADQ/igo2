@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 import { BehaviorSubject, throwError } from 'rxjs';
@@ -17,16 +17,24 @@ import { ClientParcelElementTxService } from '../../parcel-element/shared/client
   templateUrl: 'client-parcel-element-delete-tx-dialog.component.html',
   styleUrls: ['./client-parcel-element-delete-tx-dialog.component.scss']
 })
-export class ClientParcelElementDeleteTxDialogComponent {
+export class ClientParcelElementDeleteTxDialogComponent implements OnDestroy {
 
   /**
-   * Message, if any
+   * Message
    * @internal
    */
   message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
+  /**
+   * Submit step enum
+   * @internal
+   */
   readonly submitStep = SubmitStep;
 
+  /**
+   * Submit handler
+   * @internal
+   */
   readonly submitHandler = new SubmitHandler();
 
   get store(): EntityStore<Client> { return this.data.store; }
@@ -48,6 +56,14 @@ export class ClientParcelElementDeleteTxDialogComponent {
       controller: ClientController
     }
   ) {}
+
+  /**
+   * Destroy the submit handler
+   * @internal
+   */
+  ngOnDestroy() {
+    this.submitHandler.destroy();
+  }
 
   onYesClick() {
     const submit$ = this.clientParcelElementTxService.getClientsInReconcilitation(this.client).pipe(

@@ -408,7 +408,7 @@ export class ClientParcelElementActionsService {
 
           ctrl.parcelElementWorkspace.activateWidget(widget, {
             client: ctrl.client,
-            annee: ctrl.parcelYear,
+            annee: ctrl.parcelYear.annee,
             clientStore: clientStore,
             parcelElementStore: ctrl.parcelElementStore
           });
@@ -431,7 +431,7 @@ export class ClientParcelElementActionsService {
         handler: (ctrl: ClientController, widget: Widget) => {
           ctrl.parcelElementWorkspace.activateWidget(widget, {
             client: ctrl.client,
-            annee: ctrl.parcelYear,
+            annee: ctrl.parcelYear.annee,
             transaction: ctrl.parcelElementTransaction,
             store: ctrl.parcelElementStore
           });
@@ -468,7 +468,7 @@ export class ClientParcelElementActionsService {
         handler: (ctrl: ClientController, widget: Widget) => {
           ctrl.parcelElementWorkspace.activateWidget(widget, {
             client: ctrl.client,
-            annee: ctrl.parcelYear
+            annee: ctrl.parcelYear.annee
           }, {
             complete: () => {
               ctrl.deactivateParcelElements();

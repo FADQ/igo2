@@ -65,7 +65,7 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
   exclusionStore: FeatureStore;
 
   /**
-   * Message, if any
+   * Message
    * @internal
    */
   message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);

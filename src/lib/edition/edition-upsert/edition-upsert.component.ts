@@ -48,7 +48,7 @@ import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition
 export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInputs, WidgetComponent {
 
   /**
-   * Message, if any
+   * Message
    * @internal
    */
   readonly message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);

@@ -131,8 +131,13 @@ export function createSchemaElementLayerStyle(
 function createSchemaElementLayerTextStyle(): olstyle.Text {
   return new olstyle.Text({
     font: '12px Calibri,sans-serif',
-    fill: new olstyle.Fill({ color: '#000' }),
-    stroke: new olstyle.Stroke({ color: '#fff', width: 3 }),
+    fill: new olstyle.Fill({
+      color: '#000'
+    }),
+    stroke: new olstyle.Stroke({
+      color: '#fff',
+      width: 3
+    }),
     overflow: true
   });
 }

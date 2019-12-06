@@ -17,7 +17,7 @@ import { BehaviorSubject } from 'rxjs';
 export class CardPanelContentComponent {
 
   /**
-   * Message, if any
+   * Message
    * @internal
    */
   @Input()

@@ -1,11 +1,21 @@
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { concatMap, map, skip, tap } from 'rxjs/operators';
 
+import { LanguageService, Message, MessageType } from '@igo2/core';
 import { EntityRecord, EntityStore, EntityTransaction, WorkspaceStore } from '@igo2/common';
-import { FeatureStore, IgoMap } from '@igo2/geo';
+import {
+  FeatureMotion,
+  FeatureStore,
+  FeatureStoreLoadingStrategy,
+  IgoMap
+} from '@igo2/geo';
 
 import { Client } from '../shared/client.interfaces';
-import { ClientParcel, ClientParcelDiagram } from '../parcel/shared/client-parcel.interfaces';
+import {
+  ClientParcel,
+  ClientParcelDiagram,
+  ClientParcelYear
+} from '../parcel/shared/client-parcel.interfaces';
 import { ClientParcelWorkspace } from '../parcel/shared/client-parcel-workspace';
 import { ClientParcelService } from '../parcel/shared/client-parcel.service';
 import {
@@ -35,7 +45,7 @@ export interface ClientControllerOptions {
   client: Client;
   controllers: EntityStore<ClientController>;
   workspaceStore: WorkspaceStore;
-  parcelYear: number;
+  parcelYear: ClientParcelYear;
   parcelWorkspace: ClientParcelWorkspace;
   parcelService: ClientParcelService;
   parcelElementWorkspace: ClientParcelElementWorkspace;
@@ -46,18 +56,23 @@ export interface ClientControllerOptions {
   schemaElementWorkspace: ClientSchemaElementWorkspace;
   schemaElementService: ClientSchemaElementService;
   schemaElementTransactionService: ClientSchemaElementTransactionService;
+  languageService: LanguageService;
   color?: [number, number, number];
 }
 
 export class ClientController {
 
-  readonly message$ = new BehaviorSubject<string>(undefined);
+  /** Message */
+  readonly message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
 
   /** Subscription to the selected diagram  */
   private diagram$$: Subscription;
 
   /** Subscription to the selected parcels  */
   private parcels$$: Subscription;
+
+  /** Subscription to the intial parcel loading  */
+  private parcelsReloaded$$: Subscription;
 
   /** Subscription to the selected parcel elements  */
   private parcelElements$$: Subscription;
@@ -68,6 +83,7 @@ export class ClientController {
   /** Subscription to the selected schema element  */
   private schemaElements$$: Subscription;
 
+  /** Current parcel style  */
   private currentStyle: 'single' | 'multi' = 'single';
 
   /** Map */
@@ -86,8 +102,8 @@ export class ClientController {
     return this.options.workspaceStore;
   }
 
-  get parcelYear(): number { return this._parcelYear || this.options.parcelYear; }
-  private _parcelYear: number;
+  get parcelYear(): ClientParcelYear { return this._parcelYear; }
+  private _parcelYear: ClientParcelYear;
 
   /** Parcel workspace */
   get parcelWorkspace(): ClientParcelWorkspace {
@@ -203,6 +219,9 @@ export class ClientController {
   get parcelColor(): [number, number, number] { return this.parcelColor$.value; }
   readonly parcelColor$ = new BehaviorSubject<[number, number, number]>(undefined);
 
+  /** Language service */
+  get languageService(): LanguageService { return this.options.languageService; }
+
   constructor(private options: ClientControllerOptions) {
     this.initDiagrams();
 
@@ -233,7 +252,7 @@ export class ClientController {
    * Set the parcel year and load parcels of that year
    * @param parcelYear number
    */
-  setParcelYear(parcelYear: number) {
+  setParcelYear(parcelYear: ClientParcelYear) {
     this._parcelYear = parcelYear;
     this.loadParcels();
   }
@@ -293,7 +312,7 @@ export class ClientController {
     if (!this.parcelElementTransaction.empty) {
       return this.parcelElementTransactionService.prompt({
         client: this.client,
-        annee: this.parcelYear,
+        annee: this.parcelYear.annee,
         transaction: this.parcelElementTransaction,
         proceed: () => this.deactivateParcelElements()
       });
@@ -397,6 +416,20 @@ export class ClientController {
    * Initialize the parcel workspace and observe the selected parcels
    */
   private initParcels() {
+    // After parcels have been loaded once, set the motion
+    // of the loading strategy to none. The first 2 emissions are skipped. The first
+    // one is the count's initial vaLue (0) and the second one is the initial loading count.
+    this.parcelsReloaded$$ = this.parcelStore.count$
+      .pipe(
+        skip(2)
+      )
+      .subscribe(() => {
+        this.parcelsReloaded$$.unsubscribe();
+        const loadingStrategy = this.parcelStore
+          .getStrategyOfType(FeatureStoreLoadingStrategy) as FeatureStoreLoadingStrategy;
+        loadingStrategy.setMotion(FeatureMotion.None);
+      });
+
     this.parcels$$ = this.parcelStore
       .stateView.manyBy$((record: EntityRecord<ClientParcel>) => record.state.selected === true)
       .subscribe((records: EntityRecord<ClientParcel>[]) => {
@@ -427,7 +460,7 @@ export class ClientController {
    * the selected diagrams. Also, display a message if no parcel are found.
    */
   private loadParcels() {
-    this.parcelService.getParcels(this.client, this.parcelYear)
+    this.parcelService.getParcels(this.client, this.parcelYear.annee)
       .pipe(
         tap((parcels: ClientParcel[]) => {
           this.loadDiagrams(getDiagramsFromParcels(parcels));
@@ -437,7 +470,12 @@ export class ClientController {
       .subscribe((parcels: ClientParcel[]) => {
         this.parcelWorkspace.load(parcels);
         if (parcels.length === 0) {
-          this.message$.next('client.error.noparcel');
+          const textKey = 'client.error.noparcel';
+          const text = this.languageService.translate.instant(textKey);
+          this.message$.next({
+            type: MessageType.ERROR,
+            text
+          });
         } else {
           this.message$.next(undefined);
         }
@@ -492,7 +530,7 @@ export class ClientController {
    * Start observing the selected diagrams.
    */
   private loadParcelElements() {
-    this.parcelElementService.getParcelElements(this.client, this.parcelYear)
+    this.parcelElementService.getParcelElements(this.client, this.parcelYear.annee)
       .pipe(
         tap((parcelElements: ClientParcelElement[]) => {
           this.loadDiagrams(getDiagramsFromParcelElements(parcelElements));

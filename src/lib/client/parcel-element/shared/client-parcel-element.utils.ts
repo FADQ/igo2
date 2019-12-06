@@ -77,7 +77,18 @@ export function createParcelElementLayerStyle(
       return olNoOwnerStyle;
     }
 
-    olStyle.getText().setText(getParcelElementFeatureText(olFeature, resolution));
+    const olText = olStyle.getText();
+    const olTextFill = olText.getFill();
+    olText.setText(getParcelElementFeatureText(olFeature, resolution));
+
+    const messages = olFeature.get('messages') || [];
+    const hasError = messages.some((message: ClientParcelElementMessage) => message.severite === 'S');
+    if (hasError) {
+      olTextFill.setColor('#f44336');
+    } else {
+      olTextFill.setColor('#000');
+    }
+
     return olStyle;
   });
 }
@@ -85,8 +96,11 @@ export function createParcelElementLayerStyle(
 function createParcelElementLayerTextStyle(): olstyle.Text {
   return new olstyle.Text({
     font: '12px Calibri,sans-serif',
-    fill: new olstyle.Fill({ color: '#000' }),
-    stroke: new olstyle.Stroke({ color: '#fff', width: 3 }),
+    fill: new olstyle.Fill(),
+    stroke: new olstyle.Stroke({
+      color: '#fff',
+      width: 3
+    }),
     overflow: true
   });
 }

@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 import { SubmitStep, SubmitHandler } from '../../../utils';
@@ -10,10 +10,18 @@ import { ClientSchemaElementTransactionWrapper } from '../shared/client-schema-e
   templateUrl: 'client-schema-element-transaction-dialog.component.html',
   styleUrls: ['./client-schema-element-transaction-dialog.component.scss']
 })
-export class ClientSchemaElementTransactionDialogComponent {
+export class ClientSchemaElementTransactionDialogComponent implements OnDestroy {
 
+  /**
+   * Submit step enum
+   * @internal
+   */
   readonly submitStep = SubmitStep;
 
+  /**
+   * Submit handler
+   * @internal
+   */
   readonly submitHandler = new SubmitHandler();
 
   get transaction(): ClientSchemaElementTransactionWrapper { return this.data.transaction; }
@@ -23,6 +31,14 @@ export class ClientSchemaElementTransactionDialogComponent {
     public dialogRef: MatDialogRef<ClientSchemaElementTransactionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private data: {transaction: ClientSchemaElementTransactionWrapper}
   ) {}
+
+  /**
+   * Destroy the submit handler
+   * @internal
+   */
+  ngOnDestroy() {
+    this.submitHandler.destroy();
+  }
 
   onYesClick() {
     const submit$ = this.clientSchemaElementService
