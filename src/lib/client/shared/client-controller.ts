@@ -354,7 +354,7 @@ export class ClientController {
    */
   private loadDiagrams(diagrams: ClientParcelDiagram[]) {
     this.diagramStore.state.clear();
-    this.diagramStore.load(diagrams.filter((diagram: ClientParcelDiagram) => diagram.id !== 9999));
+    this.diagramStore.load(diagrams.filter((diagram: ClientParcelDiagram) => diagram.id !== 999));
     this.diagramStore.state.updateMany(diagrams, {selected: true});
   }
 
@@ -400,7 +400,7 @@ export class ClientController {
     const diagramIds = diagrams.map((diagram: ClientParcelDiagram) => diagram.id);
     const filterClause = function(parcel: ClientParcel | ClientParcelElement): boolean {
       const noDiagramme = parcel.properties.noDiagramme;
-      return diagramIds.includes(noDiagramme) || noDiagramme === 9999;
+      return diagramIds.includes(noDiagramme) || noDiagramme === 999;
     };
 
     if (this.parcelElementsActive === true) {

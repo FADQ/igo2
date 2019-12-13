@@ -99,7 +99,7 @@ export class ClientParcelElementService {
 
     const properties = Object.assign(
       {
-        noDiagramme: 9999,
+        noDiagramme: 999,
         messages: []
       },
       data.properties,
@@ -188,7 +188,7 @@ export class ClientParcelElementService {
     return response.map(listItem => {
       const properties = Object.assign({}, listItem.properties, {
         noOwner: true,
-        noDiagramme: 9999,
+        noDiagramme: 999,
         messages: []
       });
       const item = Object.assign({}, listItem, {properties});
