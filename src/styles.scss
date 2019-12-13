@@ -121,3 +121,19 @@ fadq-expansion-panel-header igo-actionbar {
 [tooltip]:hover:before {     
   display: inline;
 }
+
+igo-catalog-browser-layer {
+  .mat-list-item {
+    height: inherit !important;
+  }
+
+  .mat-list-item .mat-list-item-content {
+    height: inherit !important;
+  }
+
+  .mat-list-item .mat-list-text>h4 {
+    max-height: none !important;
+    word-break: break-all !important;
+    font-size: 12px !important;
+  }
+}
