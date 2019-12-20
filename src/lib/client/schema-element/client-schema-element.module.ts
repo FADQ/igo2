@@ -20,6 +20,9 @@ import {
   FadqLibClientSchemaElementSaveModule
 } from './client-schema-element-save/client-schema-element-save.module';
 import {
+  FadqLibClientSchemaElementTranslateModule
+} from './client-schema-element-translate/client-schema-element-translate.module';
+import {
   FadqLibClientSchemaElementImportModule
 } from './client-schema-element-import/client-schema-element-import.module';
 import {
@@ -39,6 +42,7 @@ import {
   provideClientSchemaElementFillWidget,
   provideClientSchemaElementSliceWidget,
   provideClientSchemaElementSaveWidget,
+  provideClientSchemaElementTranslateWidget,
   provideClientSchemaElementImportWidget
 } from './shared/client-schema-element.widgets';
 
@@ -53,6 +57,7 @@ import {
     FadqLibClientSchemaElementFillModule,
     FadqLibClientSchemaElementSliceModule,
     FadqLibClientSchemaElementSaveModule,
+    FadqLibClientSchemaElementTranslateModule,
     FadqLibClientSchemaElementImportModule,
     FadqLibClientSchemaElementTransactionDialogModule
   ],
@@ -73,6 +78,7 @@ export class FadqLibClientSchemaElementModule {
         provideClientSchemaElementFillWidget(),
         provideClientSchemaElementSliceWidget(),
         provideClientSchemaElementSaveWidget(),
+        provideClientSchemaElementTranslateWidget(),
         provideClientSchemaElementImportWidget()
       ]
     };

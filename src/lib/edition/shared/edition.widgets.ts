@@ -11,6 +11,7 @@ import { EditionImportComponent } from '../edition-import/edition-import.compone
 import { EditionRedrawComponent } from '../edition-redraw/edition-redraw.component';
 import { EditionSaveComponent } from '../edition-save/edition-save.component';
 import { EditionSliceComponent } from '../edition-slice/edition-slice.component';
+import { EditionTranslateComponent } from '../edition-translate/edition-translate.component';
 import { EditionUndoComponent } from '../edition-undo/edition-undo.component';
 
 export const EditionUpsertWidget = new InjectionToken<Widget>('EditionUpsertWidget');
@@ -20,6 +21,7 @@ export const EditionImportWidget = new InjectionToken<Widget>('EditionImportWidg
 export const EditionRedrawWidget = new InjectionToken<Widget>('EditionRedrawWidget');
 export const EditionSaveWidget = new InjectionToken<Widget>('EditionSaveWidget');
 export const EditionSliceWidget = new InjectionToken<Widget>('EditionSliceWidget');
+export const EditionTranslateWidget = new InjectionToken<Widget>('EditionTranslateWidget');
 export const EditionUndoWidget = new InjectionToken<Widget>('EditionUndoWidget');
 
 export function editionUpsertWidgetFactory(widgetService: WidgetService) {
@@ -102,6 +104,18 @@ export function provideEditionSliceWidget() {
   return {
     provide: EditionSliceWidget,
     useFactory: editionSliceWidgetFactory,
+    deps: [WidgetService]
+  };
+}
+
+export function editionTranslateWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(EditionTranslateComponent);
+}
+
+export function provideEditionTranslateWidget() {
+  return {
+    provide: EditionTranslateWidget,
+    useFactory: editionTranslateWidgetFactory,
     deps: [WidgetService]
   };
 }

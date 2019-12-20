@@ -33,6 +33,9 @@ import {
   ClientParcelElementSaveComponent
 } from '../client-parcel-element-save/client-parcel-element-save.component';
 import {
+  ClientParcelElementTranslateComponent
+} from '../client-parcel-element-translate/client-parcel-element-translate.component';
+import {
   ClientParcelElementImportComponent
 } from '../client-parcel-element-import/client-parcel-element-import.component';
 import {
@@ -150,6 +153,22 @@ export function provideClientParcelElementSliceWidget() {
   return {
     provide: ClientParcelElementSliceWidget,
     useFactory: clientParcelElementSliceWidgetFactory,
+    deps: [WidgetService]
+  };
+}
+
+/** Translate **/
+export const ClientParcelElementTranslateWidget =
+  new InjectionToken<Widget>('ClientParcelElementTranslateWidget');
+
+export function clientParcelElementTranslateWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(ClientParcelElementTranslateComponent);
+}
+
+export function provideClientParcelElementTranslateWidget() {
+  return {
+    provide: ClientParcelElementTranslateWidget,
+    useFactory: clientParcelElementTranslateWidgetFactory,
     deps: [WidgetService]
   };
 }
