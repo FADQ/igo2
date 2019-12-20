@@ -1,4 +1,6 @@
 import * as olstyle from 'ol/style';
+import OlFeature from 'ol/Feature';
+import OlMultiPoint from 'ol/geom/MultiPoint';
 
 import { getEntityTitle } from '@igo2/common';
 import { LanguageService } from '@igo2/core';
@@ -9,24 +11,47 @@ export function getOperationTitle(feature: Feature, languageService: LanguageSer
   return getEntityTitle(feature) || uuid();
 }
 
-export function createOlEditionStyle(): olstyle.Style {
+export function createOlEditionStyle(): olstyle.Style[] {
   const color = [0, 218, 250];  // Teal;
-  return new olstyle.Style({
-    fill: new olstyle.Fill({
-      color: color.concat([0.30])
-    }),
-    stroke: new olstyle.Stroke({
-      color: color,
-      width: 2
-    }),
-    image: new olstyle.Circle({
-      radius: 5,
-      stroke: new olstyle.Stroke({
-        color: color,
-      }),
+  return [
+    new olstyle.Style({
       fill: new olstyle.Fill({
         color: color.concat([0.30])
+      }),
+      stroke: new olstyle.Stroke({
+        color: color,
+        width: 2
+      }),
+      image: new olstyle.Circle({
+        radius: 5,
+        stroke: new olstyle.Stroke({
+          color: color,
+        }),
+        fill: new olstyle.Fill({
+          color: color.concat([0.30])
+        })
       })
+    }),
+    new olstyle.Style({
+      image: new olstyle.Circle({
+        radius: 5,
+        stroke: new olstyle.Stroke({
+          color: color,
+        }),
+        fill: new olstyle.Fill({
+          color: color.concat([0.30])
+        })
+      }),
+      geometry: function(olFeature: OlFeature) {
+        const coordinates = olFeature.getGeometry().getCoordinates().reduce((r, c) => {
+          return r.concat(c);
+        }, []);
+        return new OlMultiPoint(coordinates);
+      }
     })
-  });
+  ];
+}
+
+export function createOlEditionTranslateStyle(): olstyle.Style {
+  return createOlEditionStyle()[0];
 }

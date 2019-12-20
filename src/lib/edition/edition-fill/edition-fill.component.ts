@@ -281,7 +281,7 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
    * Remove the selected exclusions from the base feature
    * @returns Updated feature
    */
-  private updateFeature() {
+  private updateFeature(): Feature {
     const keepExclusions = this.exclusionStore.stateView
       .manyBy((record: EntityRecord<Feature>) => record.state.selected !== true)
       .map((record: EntityRecord<Feature>) => record.entity);

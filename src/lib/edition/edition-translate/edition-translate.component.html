@@ -1,0 +1,22 @@
+<fadq-card-panel
+  [svgIcon]="'help-circle'"
+  [iconColor]="'accent'"
+  [title]="title || ('edition.translate.message' | translate)"
+  [message]="message$ | async">
+
+  <ng-container buttons>
+    <button
+      mat-button
+      type="button"
+      (click)="onCancel()">
+      {{ 'cancel' | translate }}
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onSubmit()">
+      {{ 'apply' | translate }}
+    </button> 
+  </ng-container>
+
+</fadq-card-panel>

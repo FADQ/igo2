@@ -27,6 +27,7 @@ import {
   ClientSchemaElementFillWidget,
   ClientSchemaElementSliceWidget,
   ClientSchemaElementSaveWidget,
+  ClientSchemaElementTranslateWidget,
   ClientSchemaElementImportWidget,
   generateSchemaElementOperationTitle
 } from 'src/lib/client';
@@ -43,6 +44,7 @@ export class ClientSchemaElementActionsService {
     @Inject(ClientSchemaElementUpdateBatchWidget) private clientSchemaElementUpdateBatchWidget: Widget,
     @Inject(ClientSchemaElementFillWidget) private clientSchemaElementFillWidget: Widget,
     @Inject(ClientSchemaElementSliceWidget) private clientSchemaElementSliceWidget: Widget,
+    @Inject(ClientSchemaElementTranslateWidget) private clientSchemaElementTranslateWidget: Widget,
     @Inject(ClientSchemaElementSaveWidget) private clientSchemaElementSaveWidget: Widget,
     @Inject(EditionUndoWidget) private editionUndoWidget: Widget,
     @Inject(ClientSchemaElementImportWidget) private clientSchemaElementImportWidget: Widget,
@@ -216,6 +218,27 @@ export class ClientSchemaElementActionsService {
         },
         availability: (ctrl: ClientController) => every(
           noActiveWidget(ctrl),
+          transactionIsNotInCommitPhase(ctrl)
+        )
+      },
+      {
+        id: 'translate',
+        icon: 'pan',
+        title: 'edition.translate',
+        tooltip: 'edition.translate.tooltip',
+        args: [controller, this.clientSchemaElementTranslateWidget],
+        handler: (ctrl: ClientController, widget: Widget) => {
+          ctrl.schemaElementWorkspace.activateWidget(widget, {
+            schema: ctrl.schema,
+            schemaElement: ctrl.activeSchemaElement,
+            transaction: ctrl.schemaElementTransaction,
+            map: ctrl.map,
+            store: ctrl.schemaElementStore
+          });
+        },
+        availability: (ctrl: ClientController) => every(
+          noActiveWidget(ctrl),
+          oneSchemaElementIsActive(ctrl),
           transactionIsNotInCommitPhase(ctrl)
         )
       },

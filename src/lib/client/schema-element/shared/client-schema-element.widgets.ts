@@ -23,6 +23,9 @@ import {
   ClientSchemaElementSaveComponent
 } from '../client-schema-element-save/client-schema-element-save.component';
 import {
+  ClientSchemaElementTranslateComponent
+} from '../client-schema-element-translate/client-schema-element-translate.component';
+import {
   ClientSchemaElementImportComponent
 } from '../client-schema-element-import/client-schema-element-import.component';
 
@@ -112,6 +115,22 @@ export function provideClientSchemaElementSaveWidget() {
   return {
     provide: ClientSchemaElementSaveWidget,
     useFactory: clientSchemaElementSaveWidgetFactory,
+    deps: [WidgetService]
+  };
+}
+
+/** Translate **/
+export const ClientSchemaElementTranslateWidget =
+  new InjectionToken<Widget>('ClientSchemaElementTranslateWidget');
+
+export function clientSchemaElementTranslateWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(ClientSchemaElementTranslateComponent);
+}
+
+export function provideClientSchemaElementTranslateWidget() {
+  return {
+    provide: ClientSchemaElementTranslateWidget,
+    useFactory: clientSchemaElementTranslateWidgetFactory,
     deps: [WidgetService]
   };
 }

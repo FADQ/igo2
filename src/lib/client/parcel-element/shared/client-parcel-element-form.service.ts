@@ -195,7 +195,10 @@ export class ClientParcelElementFormService {
         drawGuideField: true,
         drawGuide: undefined,
         drawGuidePlaceholder: 'Guide d\'aide au traçage',
-        measure: false
+        measure: false,
+        controlOptions: {
+          translate: false
+        }
       }
     }, partial));
   }

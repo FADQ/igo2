@@ -27,6 +27,7 @@ import {
   ClientParcelElementReconciliateWidget,
   ClientParcelElementSliceWidget,
   ClientParcelElementSaveWidget,
+  ClientParcelElementTranslateWidget,
   ClientParcelElementImportWidget,
   ClientParcelElementTransferWidget,
   ClientParcelElementWithoutOwnerWidget,
@@ -50,6 +51,7 @@ export class ClientParcelElementActionsService {
     @Inject(ClientParcelElementReconciliateWidget) private clientParcelElementReconciliateWidget: Widget,
     @Inject(ClientParcelElementSliceWidget) private clientParcelElementSliceWidget: Widget,
     @Inject(ClientParcelElementSaveWidget) private clientParcelElementSaveWidget: Widget,
+    @Inject(ClientParcelElementTranslateWidget) private clientParcelElementTranslateWidget: Widget,
     @Inject(EditionUndoWidget) private editionUndoWidget: Widget,
     @Inject(ClientParcelElementImportWidget) private clientParcelElementImportWidget: Widget,
     @Inject(ClientParcelElementTransferWidget) private clientParcelElementTransferWidget: Widget,
@@ -271,6 +273,26 @@ export class ClientParcelElementActionsService {
         availability: (ctrl: ClientController) => every(
           noActiveWidget(ctrl),
           zeroOrOneParcelElementIsSelected(ctrl),
+          transactionIsNotInCommitPhase(ctrl)
+        )
+      },
+      {
+        id: 'translate',
+        icon: 'pan',
+        title: 'edition.translate',
+        tooltip: 'edition.translate.tooltip',
+        args: [controller, this.clientParcelElementTranslateWidget],
+        handler: (ctrl: ClientController, widget: Widget) => {
+          ctrl.parcelElementWorkspace.activateWidget(widget, {
+            parcelElement: ctrl.activeParcelElement,
+            transaction: ctrl.parcelElementTransaction,
+            map: ctrl.map,
+            store: ctrl.parcelElementStore
+          });
+        },
+        availability: (ctrl: ClientController) => every(
+          noActiveWidget(ctrl),
+          oneParcelElementIsActive(ctrl),
           transactionIsNotInCommitPhase(ctrl)
         )
       },

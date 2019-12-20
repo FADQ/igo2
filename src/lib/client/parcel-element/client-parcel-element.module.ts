@@ -35,6 +35,9 @@ import {
   FadqLibClientParcelElementSaveModule
 } from './client-parcel-element-save/client-parcel-element-save.module';
 import {
+  FadqLibClientParcelElementTranslateModule
+} from './client-parcel-element-translate/client-parcel-element-translate.module';
+import {
   FadqLibClientParcelElementImportModule
 } from './client-parcel-element-import/client-parcel-element-import.module';
 import {
@@ -63,6 +66,7 @@ import {
   provideClientParcelElementReconciliateWidget,
   provideClientParcelElementSliceWidget,
   provideClientParcelElementSaveWidget,
+  provideClientParcelElementTranslateWidget,
   provideClientParcelElementImportWidget,
   provideClientParcelElementTransferWidget,
   provideClientParcelElementWithoutOwnerWidget
@@ -84,6 +88,7 @@ import {
     FadqLibClientParcelElementReconciliateModule,
     FadqLibClientParcelElementSliceModule,
     FadqLibClientParcelElementSaveModule,
+    FadqLibClientParcelElementTranslateModule,
     FadqLibClientParcelElementImportModule,
     FadqLibClientParcelElementTransactionDialogModule,
     FadqLibClientParcelElementTransferModule,
@@ -109,6 +114,7 @@ export class FadqLibClientParcelElementModule {
         provideClientParcelElementReconciliateWidget(),
         provideClientParcelElementSliceWidget(),
         provideClientParcelElementSaveWidget(),
+        provideClientParcelElementTranslateWidget(),
         provideClientParcelElementImportWidget(),
         provideClientParcelElementTransferWidget(),
         provideClientParcelElementWithoutOwnerWidget()
