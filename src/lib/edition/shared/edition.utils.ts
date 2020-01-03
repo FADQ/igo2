@@ -43,7 +43,8 @@ export function createOlEditionStyle(): olstyle.Style[] {
         })
       }),
       geometry: function(olFeature: OlFeature) {
-        const coordinates = olFeature.getGeometry().getCoordinates().reduce((r, c) => {
+        const olGeometry = olFeature.getGeometry();
+        const coordinates = olGeometry.getCoordinates().reduce((r, c) => {
           return r.concat(c);
         }, []);
         return new OlMultiPoint(coordinates);

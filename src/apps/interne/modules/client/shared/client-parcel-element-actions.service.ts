@@ -3,6 +3,8 @@ import { Inject, Injectable } from '@angular/core';
 import { Observable, combineLatest, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import turfUnion from '@turf/union';
+
 import { LanguageService } from '@igo2/core';
 import {
   Action,
@@ -10,6 +12,7 @@ import {
   EntityStoreFilterSelectionStrategy,
   Widget
 } from '@igo2/common';
+import { uuid } from '@igo2/utils';
 
 import { EditionUndoWidget } from 'src/lib/edition';
 
@@ -31,6 +34,7 @@ import {
   ClientParcelElementImportWidget,
   ClientParcelElementTransferWidget,
   ClientParcelElementWithoutOwnerWidget,
+  ClientParcelElementService,
   generateParcelElementOperationTitle,
   getParcelElementErrors
 } from 'src/lib/client';
@@ -56,6 +60,7 @@ export class ClientParcelElementActionsService {
     @Inject(ClientParcelElementImportWidget) private clientParcelElementImportWidget: Widget,
     @Inject(ClientParcelElementTransferWidget) private clientParcelElementTransferWidget: Widget,
     @Inject(ClientParcelElementWithoutOwnerWidget) private clientParcelElementWithoutOwnerWidget: Widget,
+    private clientParcelElementService: ClientParcelElementService,
     private languageService: LanguageService
   ) {}
 
@@ -96,6 +101,12 @@ export class ClientParcelElementActionsService {
     function oneOrMoreParcelElementAreSelected(ctrl: ClientController): Observable<boolean> {
       return ctrl.selectedParcelElements$.pipe(
         map((parcelElements: ClientParcelElement[]) => parcelElements.length > 0)
+      );
+    }
+
+    function moreThanOneParcelElementAreSelected(ctrl: ClientController): Observable<boolean> {
+      return ctrl.selectedParcelElements$.pipe(
+        map((parcelElements: ClientParcelElement[]) => parcelElements.length > 1)
       );
     }
 
@@ -315,6 +326,47 @@ export class ClientParcelElementActionsService {
         availability: (ctrl: ClientController) => every(
           noActiveWidget(ctrl),
           oneOrMoreParcelElementAreSelected(ctrl),
+          transactionIsNotInCommitPhase(ctrl)
+        )
+      },
+      {
+        id: 'union',
+        icon: 'vector-union',
+        title: 'edition.union',
+        tooltip: 'edition.union.tooltip',
+        args: [controller],
+        handler: (ctrl: ClientController) => {
+          const store = ctrl.parcelElementStore;
+          const transaction = ctrl.parcelElementTransaction;
+          const parcelElements = ctrl.selectedParcelElements;
+          const union = Object.assign(turfUnion(...parcelElements), {
+            meta: {
+              id: uuid()
+            },
+            projection: 'EPSG:4326',
+            properties: {}
+          });
+
+          if (union.geometry.type === 'MultiPolygon') {
+            return;
+          }
+
+          this.clientParcelElementService
+            .createParcelElement(union)
+            .subscribe((unionParcelElement: ClientParcelElement) => {
+              parcelElements.forEach((parcelElement: ClientParcelElement) => {
+                transaction.delete(parcelElement, store, {
+                  title: generateParcelElementOperationTitle(parcelElement, this.languageService)
+                });
+              });
+              transaction.insert(unionParcelElement, store, {
+                title: generateParcelElementOperationTitle(unionParcelElement, this.languageService)  
+              })
+            });
+        },
+        availability: (ctrl: ClientController) => every(
+          noActiveWidget(ctrl),
+          moreThanOneParcelElementAreSelected(ctrl),
           transactionIsNotInCommitPhase(ctrl)
         )
       },

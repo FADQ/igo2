@@ -128,6 +128,14 @@ export class ClientParcelElementTransferComponent implements WidgetComponent, On
 
   onTransfer() {
     const parcelElements = this.getParcelElementsToTransfer();
+    if (parcelElements.length === 0) {
+      this.message$.next({
+        type: MessageType.ERROR,
+        text: this.languageService.translate.instant('client.parcelElement.transfer.error.empty')
+      });
+      return;
+    }
+  
     const parcelElementIds = parcelElements
       .map((parcelElement: ClientParcelElement) => parcelElement.properties.idParcelle);
 
@@ -180,7 +188,7 @@ export class ClientParcelElementTransferComponent implements WidgetComponent, On
   private onValidationError() {
     this.message$.next({
       type: MessageType.ERROR,
-      text: this.languageService.translate.instant('client.parcelElement.transfer.validation.error')
+      text: this.languageService.translate.instant('client.parcelElement.transfer.error.invalid')
     });
   }
 
