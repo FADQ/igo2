@@ -37,6 +37,7 @@ export class ClientSchemaElementFormService {
   ) {}
 
   buildCreateForm(schema: ClientSchema, igoMap: IgoMap): Observable<Form> {
+    // TODO: i18n
     const infoFields$ = zip(
       this.createIdField({options: {disabled: true}}),
       this.createTypeElementField(schema.type),

@@ -9,6 +9,7 @@ import {
   VectorLayer
 } from '@igo2/geo';
 
+import { createOlTextStyle } from '../../../edition/shared/edition.utils';
 import { TransactionData } from '../../../utils/transaction';
 import { Client } from '../../shared/client.interfaces';
 import {
@@ -29,32 +30,18 @@ export function computeSchemaElementArea(element: ClientSchemaElement): number {
   return measureOlGeometryArea(olGeometry, measureProjection);
 }
 
-export function validateSchemaElementArea(element: ClientSchemaElement): boolean {
-  const area = element.properties.superficie;
-  if (area === undefined) { return true; }
-  const minArea = 50;
-  const maxArea = 999999999;
-  return area > minArea && area < maxArea;
-}
-
 export function getSchemaElementValidationMessage(
   element: ClientSchemaElement,
   languageService: LanguageService
 ): string {
-  const areaIsValid = validateSchemaElementArea(element);
-  if (areaIsValid === true) {
-    return undefined;
-  } else {
-    const messageKey = 'client.schemaElement.error.area';
-    return languageService.translate.instant(messageKey);
-  }
+  return undefined;
 }
 
 export function generateSchemaElementOperationTitle(
   element: ClientSchemaElement,
   languageService: LanguageService
 ): string {
-  // TODO: this is for demo purpose. Make it clean.
+  // TODO: i18n
   let geometryType;
   if (element.geometry.type === 'Point') {
     geometryType = 'Point';
@@ -73,6 +60,7 @@ export function generateSchemaElementOperationTitle(
 }
 
 export function createSchemaElementLayer(client: Client): VectorLayer {
+  //TODO: i18n
   const schemaElementDataSource = new FeatureDataSource();
   return new VectorLayer({
     title: `${client.info.numero} - Éléments du schémas`,
@@ -88,21 +76,21 @@ export function createSchemaElementLayerStyle(
 ): (olFeature: OlFeature, resolution: number) => olstyle.Style {
   const styles = {
     'Point': new olstyle.Style({
-      text: createSchemaElementLayerTextStyle()
+      text: createOlTextStyle()
     }),
     'LineString': new olstyle.Style({
       fill: new olstyle.Fill(),
       stroke: new olstyle.Stroke({
         width: 2
       }),
-      text: createSchemaElementLayerTextStyle()
+      text: createOlTextStyle()
     }),
     'Polygon': new olstyle.Style({
       fill: new olstyle.Fill(),
       stroke: new olstyle.Stroke({
         width: 2
       }),
-      text: createSchemaElementLayerTextStyle()
+      text: createOlTextStyle()
     }),
   };
 
@@ -125,20 +113,6 @@ export function createSchemaElementLayerStyle(
     style.getText().setText(getSchemaElementFeatureText(olFeature, resolution));
 
     return style;
-  });
-}
-
-function createSchemaElementLayerTextStyle(): olstyle.Text {
-  return new olstyle.Text({
-    font: '12px Calibri,sans-serif',
-    fill: new olstyle.Fill({
-      color: '#000'
-    }),
-    stroke: new olstyle.Stroke({
-      color: '#fff',
-      width: 3
-    }),
-    overflow: true
   });
 }
 

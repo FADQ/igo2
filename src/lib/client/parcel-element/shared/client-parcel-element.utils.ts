@@ -10,6 +10,7 @@ import {
   measureOlGeometryArea
 } from '@igo2/geo';
 
+import { createOlTextStyle } from '../../../edition/shared/edition.utils';
 import { TransactionData } from '../../../utils/transaction';
 import { ClientParcelDiagram } from '../../parcel/shared/client-parcel.interfaces';
 import { Client } from '../../shared/client.interfaces';
@@ -43,6 +44,7 @@ export function computeParcelElementArea(parcelElement: ClientParcelElement): nu
 }
 
 export function createParcelElementLayer(client: Client): VectorLayer {
+  // TODO: i18n
   const parcelElementDataSource = new FeatureDataSource();
   return new VectorLayer({
     title: `${client.info.numero} - Parcelles en édition`,
@@ -64,7 +66,7 @@ export function createParcelElementLayerStyle(
       color: color,
       width: 2
     }),
-    text: createParcelElementLayerTextStyle()
+    text: createOlTextStyle()
   });
 
   const olNoOwnerStyle = new olstyle.Style({
@@ -95,18 +97,6 @@ export function createParcelElementLayerStyle(
     }
 
     return olStyle;
-  });
-}
-
-function createParcelElementLayerTextStyle(): olstyle.Text {
-  return new olstyle.Text({
-    font: '12px Calibri,sans-serif',
-    fill: new olstyle.Fill(),
-    stroke: new olstyle.Stroke({
-      color: '#fff',
-      width: 3
-    }),
-    overflow: true
   });
 }
 

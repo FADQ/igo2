@@ -13,7 +13,7 @@ import {
   ClientParcelElementMessage,
   getParcelElementErrors,
   getParcelElementWarnings,
-  getParcelleDraineeChoices
+  getParcelDraineeChoices
 } from 'src/lib/client';
 
 @Injectable({
@@ -68,7 +68,7 @@ export class ClientParcelElementTableService {
           title: 'Drainage source FADQ',
           valueAccessor: (parcelElement: ClientParcelElement) => {
             const value = parcelElement.properties.indParcelleDrainee;
-            const choices = getParcelleDraineeChoices();
+            const choices = getParcelDraineeChoices();
             const choice = choices.find((_choice: FormFieldSelectChoice) => _choice.value === value);
             return choice ? choice.title : '';
           }

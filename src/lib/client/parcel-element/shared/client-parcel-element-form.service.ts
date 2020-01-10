@@ -19,7 +19,7 @@ import { ApiService } from '../../../core/api/api.service';
 import { DomainService } from '../../../core/domain/domain.service';
 import { createOlEditionStyle } from '../../../edition/shared/edition.utils';
 
-import { getParcelleDraineeChoices } from '../../parcel/shared/client-parcel.utils';
+import { getParcelDraineeChoices } from '../../parcel/shared/client-parcel.utils';
 import { ClientParcelElementApiConfig } from './client-parcel-element.interfaces';
 
 @Injectable()
@@ -34,6 +34,7 @@ export class ClientParcelElementFormService {
   ) {}
 
   buildCreateForm(igoMap: IgoMap): Observable<Form> {
+    // TODO: i18n
     const geometryFields$ = zip(
       this.createGeometryField({inputs: {map: igoMap}})
     );
@@ -129,7 +130,7 @@ export class ClientParcelElementFormService {
         cols: 1
       },
       inputs: {
-        choices: getParcelleDraineeChoices()
+        choices: getParcelDraineeChoices()
       }
     }, partial));
   }

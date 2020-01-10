@@ -11,7 +11,7 @@ import {
   ClientInfoService,
   ClientParcel,
   padClientNum,
-  getParcelleDraineeChoices
+  getParcelDraineeChoices
 } from 'src/lib/client';
 
 @Injectable({
@@ -117,7 +117,7 @@ export class ClientParcelTableService {
           title: 'Drainage source FADQ',
           valueAccessor: (parcel: ClientParcel) => {
             const value = parcel.properties.indParcelleDrainee;
-            const choices = getParcelleDraineeChoices();
+            const choices = getParcelDraineeChoices();
             const choice = choices.find((_choice: FormFieldSelectChoice) => _choice.value === value);
             return choice ? choice.title : '';
           }

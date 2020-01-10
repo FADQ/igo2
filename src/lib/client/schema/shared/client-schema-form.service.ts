@@ -39,6 +39,7 @@ export class ClientSchemaFormService {
   ) {}
 
   buildCreateForm(store: EntityStore<ClientSchema>): Observable<Form> {
+    // TODO: i18n
     const fields$ = zip(
       this.createIdField({options: {disabled: true}}),
       this.createTypeField(),

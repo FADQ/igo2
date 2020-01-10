@@ -6,7 +6,9 @@ import { FormFieldSelectChoice } from '@igo2/common';
 import { FeatureDataSource, VectorLayer } from '@igo2/geo';
 import { ObjectUtils } from '@igo2/utils';
 
+import { createOlTextStyle } from '../../../edition/shared/edition.utils';
 import { Client } from '../../shared/client.interfaces';
+import { ClientRelationColors, ClientParcelDraineeChoices } from './client-parcel.enums';
 import { ClientParcelDiagram, ClientParcel, ClientParcelListResponseItem } from './client-parcel.interfaces';
 
 export function getDiagramsFromParcels(parcels: ClientParcel[]): ClientParcelDiagram[] {
@@ -43,6 +45,7 @@ export function sortParcelsByRelation(p1: ClientParcel, p2: ClientParcel) {
 }
 
 export function createParcelLayer(client: Client): VectorLayer {
+  // TODO: i18n
   const parcelDataSource = new FeatureDataSource();
   return new VectorLayer({
     title: `${client.info.numero} - Parcelles`,
@@ -65,7 +68,7 @@ export function createPerClientParcelLayerStyle(
     fill:  new olstyle.Fill({
       color: [...color].concat([0.15])
     }),
-    text: createParcelLayerTextStyle()
+    text: createOlTextStyle()
   });
 
   return (function(olFeature: OlFeature, resolution: number) {
@@ -80,7 +83,7 @@ export function createParcelLayerStyle(): (olFeature: OlFeature, resolution: num
       width: 2
     }),
     fill:  new olstyle.Fill(),
-    text: createParcelLayerTextStyle()
+    text: createOlTextStyle()
   });
 
   return (function(olFeature: OlFeature, resolution: number) {
@@ -89,20 +92,6 @@ export function createParcelLayerStyle(): (olFeature: OlFeature, resolution: num
     style.getStroke().setColor(color);
     style.getText().setText(getParcelFeatureText(olFeature, resolution));
     return style;
-  });
-}
-
-function createParcelLayerTextStyle(): olstyle.Text {
-  return new olstyle.Text({
-    font: '12px Calibri,sans-serif',
-    fill: new olstyle.Fill({
-      color: '#000'
-    }),
-    stroke: new olstyle.Stroke({
-      color: '#fff',
-      width: 3
-    }),
-    overflow: true
   });
 }
 
@@ -115,18 +104,9 @@ function getParcelFeatureText(olFeature: OlFeature, resolution: number): string 
 }
 
 function getParcelFeatureColor(olFeature: OlFeature) {
-  const colors = {
-    1: [255, 139, 0],
-    2: [35, 140, 0],
-    3: [0, 218, 250]
-  };
-  return colors[olFeature.get('relation')];
+  return ClientRelationColors['' + olFeature.get('relation')];
 }
 
-export function getParcelleDraineeChoices(): FormFieldSelectChoice[] {
-  return [
-    {value: null, title: ''},
-    {value: 'O', title: 'Oui'},
-    {value: 'N', title: 'Non'}
-  ];
+export function getParcelDraineeChoices(): FormFieldSelectChoice[] {
+  return ClientParcelDraineeChoices;
 }

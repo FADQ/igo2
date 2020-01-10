@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { Observable, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -103,11 +103,11 @@ export class ClientInfoService {
   private extractAddressFromGetResponseData(data: ClientInfoAddressData) {
     if (data === undefined) { return undefined; }
 
-    const no = data[`noAdresse`];
-    const suite = data[`suiteAdresse`];
-    const mun = data[`municipaliteAdresse`];
-    const code = data[`codePostalAdresse`];
-    const province = data[`provincePaysAdresse`];
+    const no = data['noAdresse'];
+    const suite = data['suiteAdresse'];
+    const mun = data['municipaliteAdresse'];
+    const code = data['codePostalAdresse'];
+    const province = data['provincePaysAdresse'];
 
     return [no, suite, mun, code, `(${province})`]
       .filter((item: string) => item !== undefined)
