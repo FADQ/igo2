@@ -39,8 +39,8 @@ export class ClientState implements OnDestroy {
   private parcelYear$$: Subscription;
 
   /** Store that holds all the "parcel years". Again, this is not on a per client basis. */
-  get parcelYearStore(): EntityStore<ClientParcelYear> { return this._parcelYearStore; }
-  _parcelYearStore: EntityStore<ClientParcelYear>;
+  get parcelYears(): EntityStore<ClientParcelYear> { return this._parcelYears; }
+  _parcelYears: EntityStore<ClientParcelYear>;
 
   constructor(
     private clientService: ClientService,
@@ -87,13 +87,13 @@ export class ClientState implements OnDestroy {
    * Initialize the parcel year store and observe the selected parcel year
    */
   private initParcelYears() {
-    this._parcelYearStore = new EntityStore<ClientParcelYear>([]);
-    this._parcelYearStore.view.sort({
+    this._parcelYears = new EntityStore<ClientParcelYear>([]);
+    this._parcelYears.view.sort({
       valueAccessor: (year: ClientParcelYear) => year.annee,
       direction: 'desc'
     });
 
-    this.parcelYear$$ = this.parcelYearStore.stateView
+    this.parcelYear$$ = this.parcelYears.stateView
       .firstBy$((record: EntityRecord<ClientParcelYear>) => record.state.selected === true)
       .pipe(skip(1))
       .subscribe((record: EntityRecord<ClientParcelYear>) => {
@@ -107,7 +107,7 @@ export class ClientState implements OnDestroy {
    */
   private teardownParcelYears() {
     this.parcelYear$$.unsubscribe();
-    this.parcelYearStore.clear();
+    this.parcelYears.clear();
   }
 
   /**
@@ -131,9 +131,9 @@ export class ClientState implements OnDestroy {
         const current = parcelYears.find((parcelYear: ClientParcelYear) => {
           return parcelYear.current === true;
         });
-        this.parcelYearStore.load(parcelYears);
+        this.parcelYears.load(parcelYears);
         if (current !== undefined) {
-          this.parcelYearStore.state.update(current, {selected: true});
+          this.parcelYears.state.update(current, {selected: true});
         }
       });
   }

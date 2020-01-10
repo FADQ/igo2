@@ -62,8 +62,8 @@ export class ClientToolComponent {
    * Store holding all the availables "parcel years"
    * @internal
    */
-  get parcelYearStore(): EntityStore<ClientParcelYear> {
-    return this.clientState.parcelYearStore;
+  get parcelYears(): EntityStore<ClientParcelYear> {
+    return this.clientState.parcelYears;
   }
 
   /**

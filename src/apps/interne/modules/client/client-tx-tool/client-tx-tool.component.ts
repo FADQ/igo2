@@ -60,8 +60,8 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
    * Store holding all the avaiables "parcel years"
    * @internal
    */
-  get parcelYearStore(): EntityStore<ClientParcelYear> {
-    return this.clientState.parcelYearStore;
+  get parcelYears(): EntityStore<ClientParcelYear> {
+    return this.clientState.parcelYears;
   }
 
   constructor(
