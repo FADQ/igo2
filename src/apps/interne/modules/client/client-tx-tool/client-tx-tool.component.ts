@@ -132,7 +132,7 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
   private watchParcelElementTx() {
     this.unwatchParcelElementTx();
     const parcelElementsActives$ = this.controllers.all().map((controller: ClientController) => {
-      return controller.parcelElementsActive$;
+      return controller.parcelElementTxOngoing;
     });
 
     this.parcelElementTx$$ = combineLatest(...parcelElementsActives$).subscribe((bunch: boolean[]) => {

@@ -1,11 +1,10 @@
 import {
   Component,
   Input,
-  ChangeDetectionStrategy,
-  OnInit,
-  OnDestroy
+  ChangeDetectionStrategy
 } from '@angular/core';
-import { BehaviorSubject, Subscription, combineLatest } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { Message } from '@igo2/core';
 import { ToolComponent, EntityStore } from '@igo2/common';
@@ -14,14 +13,13 @@ import { SearchState } from '@igo2/integration';
 
 import {
   ClientController,
-  ClientParcelYear,
-  ClientInfoService
+  ClientParcelYear
 } from 'src/lib/client';
 
 import { ClientState } from '../client.state';
 
 /**
- * Tool to display a client's info
+ * Tool to display a list of clients
  */
 @ToolComponent({
   name: 'client',
@@ -34,92 +32,90 @@ import { ClientState } from '../client.state';
   styleUrls: ['./client-tool.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientToolComponent implements OnInit, OnDestroy {
+export class ClientToolComponent {
 
-  readonly showLegend$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
-  readonly parcelYearSelectorDisabled$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
-  private controllers$$: Subscription;
-
-  private parcelElements$$: Subscription;
-
+  /**
+   * Whether additional info should be shown (adresses)
+   */
   @Input() showInfo: boolean = true;
 
   /**
-   * Observable of the active client
+   * Store containing all the client controllers
    * @internal
    */
   get controllers(): EntityStore<ClientController> { return this.clientState.controllers; }
 
   /**
-   * Observable of the client error, if any
+   * Observable of the active controller
    * @internal
    */
   get activeController$(): BehaviorSubject<ClientController> { return this.clientState.activeController$; }
 
   /**
-   * Observable of the client error, if any
+   * Observable of a message. This one is generally used to display
+   * errors such as when a client is not found
    * @internal
    */
   get message$(): BehaviorSubject<Message> { return this.clientState.message$; }
 
   /**
-   * Store holding all the avaiables "parcel years"
+   * Store holding all the availables "parcel years"
    * @internal
    */
   get parcelYearStore(): EntityStore<ClientParcelYear> {
     return this.clientState.parcelYearStore;
   }
 
+  /**
+   * Observable of the parcel year selector state
+   * @internal
+   */
+  get parcelYearSelectorDisabled$(): BehaviorSubject<boolean> {
+    return this.clientState.parcelElementTxOngoing$;
+  }
+
+  /**
+   * Observable of the legend shown status
+   * @internal
+   */
+  get showLegend$(): Observable<boolean> {
+    if (this._showLegend$ === undefined) {
+      this._showLegend$ = this.controllers.count$.pipe(
+        map((count: number) => count === 1)
+      );
+    } 
+    return this._showLegend$;
+  }
+  private _showLegend$: Observable<boolean>;
+
   constructor(
-    private clientInfoService: ClientInfoService,
     private clientState: ClientState,
     private searchState: SearchState
   ) {}
 
-  ngOnInit() {
-    this.controllers$$ = this.controllers.count$.subscribe((count: number) => {
-      this.showLegend$.next(count === 1);
-      this.watchParcelElements();
-    });
-  }
-
-  ngOnDestroy() {
-    this.controllers$$.unsubscribe();
-    this.unwatchParcelElements();
-  }
-
+  /**
+   * Destroy client controller
+   * @internal
+   */
   onDestroyController(controller: ClientController) {
     this.clientState.destroyController(controller);
   }
 
+  /**
+   * Set active controller
+   * @internal
+   */
   onSelectController(controller: ClientController) {
     this.clientState.setActiveController(controller);
   }
 
+  /**
+   * Trigger a research of the clicked address
+   * @internal
+   */
   onClickAddress(address: string) {
     this.searchState.setSearchType(FEATURE);
     this.searchState.setSearchTerm(address);
-  }
-
-  private watchParcelElements() {
-    this.unwatchParcelElements();
-    const parcelElementsActives$ = this.controllers.all().map((controller: ClientController) => {
-      return controller.parcelElementsActive$;
-    });
-
-    this.parcelElements$$ = combineLatest(...parcelElementsActives$).subscribe((bunch: boolean[]) => {
-      const nosActive = bunch.every((active: boolean) => active === false);
-      this.parcelYearSelectorDisabled$.next(!nosActive);
-    });
-  }
-
-  private unwatchParcelElements() {
-    if (this.parcelElements$$ !== undefined) {
-      this.parcelElements$$.unsubscribe();
-      this.parcelElements$$ = undefined;
-    }
   }
 
 }

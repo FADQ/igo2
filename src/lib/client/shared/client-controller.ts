@@ -157,8 +157,8 @@ export class ClientController {
   }
 
   /** Whether parcel edition is active */
-  get parcelElementsActive(): boolean { return this.parcelElementsActive$.value; }
-  readonly parcelElementsActive$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  get parcelElementsActive(): boolean { return this.parcelElementTxOngoing.value; }
+  readonly parcelElementTxOngoing: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   /** Schema workspace */
   get schemaWorkspace(): ClientSchemaWorkspace {
@@ -297,7 +297,7 @@ export class ClientController {
    * Activate parcel elements
    */
   activateParcelElements() {
-    this.parcelElementsActive$.next(true);
+    this.parcelElementTxOngoing.next(true);
     this.unobserveDiagrams();
     this.initParcelElements();
     this.loadParcelElements();
@@ -511,7 +511,7 @@ export class ClientController {
    * Deactivate the parcel element workspace and teardown observers.
    */
   private teardownParcelElements() {
-    this.parcelElementsActive$.next(false);
+    this.parcelElementTxOngoing.next(false);
 
     if (this.parcelElements$$ !== undefined) {
       this.parcelElements$$.unsubscribe();

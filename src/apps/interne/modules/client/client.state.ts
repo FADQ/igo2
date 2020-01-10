@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, combineLatest } from 'rxjs';
 import { skip } from 'rxjs/operators';
 
 import { LanguageService, Message, MessageType } from '@igo2/core';
@@ -29,6 +29,9 @@ export class ClientState implements OnDestroy {
   /** Active widget observable. Only one may be active for all clients */
   readonly activeWidget$: BehaviorSubject<Widget> = new BehaviorSubject<Widget>(undefined);
 
+  /** Whether at least one parcel element tx is ongoing */
+  readonly parcelElementTxOngoing$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
   get activeController(): ClientController { return this.activeController$.value; }
   readonly activeController$: BehaviorSubject<ClientController> = new BehaviorSubject(undefined);
 
@@ -51,6 +54,9 @@ export class ClientState implements OnDestroy {
 
   /** Subscription to the active workspace widget */
   private activeWorkspaceWidget$$: Subscription;
+
+  /** Subscription to status of the parcel element txs */
+  private parcelElementTxs$$: Subscription;
 
   /** Store that holds all the "parcel years". This is not on a per client basis. */
   get parcelYearStore(): EntityStore<ClientParcelYear> { return this._parcelYearStore; }
@@ -228,13 +234,17 @@ export class ClientState implements OnDestroy {
     });
 
     this.controllers$$ = this.controllers.count$
-      .subscribe((count: number) => this.updateControllersColor());
+      .subscribe((count: number) => {
+        this.updateControllersColor();
+        this.subscribeToParcelElementTxs();
+      });
   }
 
   /**
    * Teardown controller store
    */
   private teardownControllers() {
+    this.unsubscribeToParcelElementTxs();
     this.controllers$$.unsubscribe();
     this.controllers.all().forEach((controller: ClientController) => controller.destroy());
     this.controllers.clear();
@@ -345,6 +355,34 @@ export class ClientState implements OnDestroy {
           this.parcelYearStore.state.update(current, {selected: true});
         }
       });
+  }
+
+  /**
+   * Subscribe to parcel element txs and check if one is active. This is useful
+   * to enable or disable some stuff the the client tool, for example.
+   */
+  private subscribeToParcelElementTxs() {
+    this.unsubscribeToParcelElementTxs();
+    const parcelElementTxs$ = this.controllers.all()
+      .map((controller: ClientController) => {
+        return controller.parcelElementTxOngoing;
+      });
+
+    this.parcelElementTxs$$ = combineLatest(...parcelElementTxs$)
+      .subscribe((bunch: boolean[]) => {
+        const nosActive = bunch.every((active: boolean) => active === false);
+        this.parcelElementTxOngoing$.next(!nosActive);
+      });
+  }
+
+  /**
+   * Unsubscribe to parcel element txs
+   */
+  private unsubscribeToParcelElementTxs() {
+    if (this.parcelElementTxs$$ !== undefined) {
+      this.parcelElementTxs$$.unsubscribe();
+      this.parcelElementTxs$$ = undefined;
+    }
   }
 
 }

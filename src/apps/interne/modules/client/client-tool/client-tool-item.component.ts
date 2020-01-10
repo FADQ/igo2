@@ -25,12 +25,19 @@ export class ClientToolItemComponent {
 
   readonly showContent$: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
-  readonly baseColor$: BehaviorSubject<[]> = new BehaviorSubject(undefined);
-
+  /**
+   * Client controller
+   */
   @Input() controller: ClientController;
 
+  /**
+   * Whetherthe legend should be shown
+   */
   @Input() showLegend: boolean = false;
 
+  /**
+   * Whether additional info should be shown (adresses)
+   */
   @Input() showInfo: boolean = true;
 
   /**
@@ -44,10 +51,19 @@ export class ClientToolItemComponent {
   get selected(): boolean { return this._selected; }
   private _selected = false;
 
+  /**
+   * Event emitted when the client is cleared
+   */
   @Output() clear = new EventEmitter<ClientController>();
 
+  /**
+   * Event emitted when the client is selected
+   */
   @Output() select = new EventEmitter<ClientController>();
 
+  /**
+   * Event emitted when an address is clicked
+   */
   @Output() clickAddress = new EventEmitter<string>();
 
   /**
@@ -60,10 +76,16 @@ export class ClientToolItemComponent {
     private clientInfoService: ClientInfoService
   ) {}
 
+  /**
+   * On clear, emit the clear event but do nothing else
+   */
   onClear() {
     this.clear.emit(this.controller);
   }
 
+  /**
+   * On select, emit the clear select event and update the selected flag
+   */
   onSelect() {
     this.selected = true;
     this.select.emit(this.controller);
@@ -80,23 +102,31 @@ export class ClientToolItemComponent {
     return false;
   }
 
+  /**
+   * Collapse or uncollapse the client info
+   * @internal
+   */
   toggleContent(collapsed: boolean) {
     this.showContent$.next(!collapsed);
   }
 
+  /**
+   * Return the colored thumbnail's inner color
+   * @internal
+   * @returns The inner color
+   */
   getParcelInnerColor(): string {
-    return this.getLegendInnerColor(this.controller.parcelColor);
-  }
-
-  getParcelOuterColor(): string {
-    return this.getLegendOuterColor(this.controller.parcelColor);
-  }
-
-  private getLegendInnerColor(baseColor: [number, number, number]): string {
+    var baseColor = this.controller.parcelColor;
     return `rgba(${baseColor.join(',')}, 0.15)`;
   }
 
-  private getLegendOuterColor(baseColor: [number, number, number]): string {
+  /**
+   * Return the colored thumbnail's outer color
+   * @internal
+   * @returns The inner color
+   */
+  getParcelOuterColor(): string {
+    var baseColor = this.controller.parcelColor;
     return `rgb(${baseColor.join(',')})`;
   }
 }

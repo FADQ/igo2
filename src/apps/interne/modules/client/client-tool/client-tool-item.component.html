@@ -16,7 +16,7 @@
       {{controller.client.info.nom}}
       <div class="fadq-client-header-badges">
         <mat-icon
-          *ngIf="controller.parcelElementsActive$ | async"
+          *ngIf="controller.parcelElementTxOngoing | async"
           class="fadq-client-header-badge"
           svgIcon="square-edit-outline"
           [color]="controller.parcelYear.current ? 'default' : 'warn'">
