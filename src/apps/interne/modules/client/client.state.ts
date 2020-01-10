@@ -63,11 +63,11 @@ export class ClientState implements OnDestroy {
   _parcelYearStore: EntityStore<ClientParcelYear>;
 
   /** Store that holds all the workspaces. */
-  get workspaceStore(): WorkspaceStore { return this._workspaceStore; }
-  _workspaceStore: WorkspaceStore;
+  get workspaces(): WorkspaceStore { return this._workspaces; }
+  _workspaces: WorkspaceStore;
 
   /** Observable of the active workspace. */
-  get activeWorkspace$(): BehaviorSubject<Workspace> { return this.workspaceStore.activeWorkspace$; }
+  get activeWorkspace$(): BehaviorSubject<Workspace> { return this.workspaces.activeWorkspace$; }
 
   constructor(
     private clientParcelYearService: ClientParcelYearService,
@@ -103,7 +103,7 @@ export class ClientState implements OnDestroy {
     }
 
     const controller = this.clientControllerService.createClientController(client, {
-      workspaceStore: this.workspaceStore,
+      workspaces: this.workspaces,
       controllers: this.controllers,
       parcelYear: this.parcelYear
     });
@@ -112,7 +112,7 @@ export class ClientState implements OnDestroy {
     // Activate the newly added client's parcel workspace
     // if no controller is active (selected)
     if (this.activeController === undefined) {
-      this.workspaceStore.activateWorkspace(controller.parcelWorkspace);
+      this.workspaces.activateWorkspace(controller.parcelWorkspace);
     }
   }
 
@@ -184,7 +184,7 @@ export class ClientState implements OnDestroy {
       if (this.activeController !== undefined) {
         this.controllers.state.update(this.activeController, {selected: false, active: false});
       }
-      this.workspaceStore.view.filter(undefined);
+      this.workspaces.view.filter(undefined);
       this.activeController$.next(undefined);
       return;
     }
@@ -213,12 +213,12 @@ export class ClientState implements OnDestroy {
       ];
       const workspace = workspaces.find((_workspace: Workspace) => {
         return _workspace.meta.type === currentWorkspace.meta.type &&
-          this.workspaceStore.get(_workspace.id) !== undefined;
+          this.workspaces.get(_workspace.id) !== undefined;
       });
-      this.workspaceStore.activateWorkspace(workspace || controller.parcelWorkspace);
+      this.workspaces.activateWorkspace(workspace || controller.parcelWorkspace);
     }
 
-    this.workspaceStore.view.filter((workspace: Workspace) => {
+    this.workspaces.view.filter((workspace: Workspace) => {
       return workspace.meta.client.info.numero === clientNum;
     });
   }
@@ -271,13 +271,13 @@ export class ClientState implements OnDestroy {
    * to make sure only one widget is active at a time.
    */
   private initWorkspaces() {
-    this._workspaceStore = new WorkspaceStore([]);
-    this._workspaceStore.view.sort({
+    this._workspaces = new WorkspaceStore([]);
+    this._workspaces.view.sort({
       valueAccessor: (workspace: Workspace) => workspace.id,
       direction: 'asc'
     });
 
-    this.activeWorkspace$$ = this._workspaceStore.activeWorkspace$
+    this.activeWorkspace$$ = this._workspaces.activeWorkspace$
       .subscribe((workspace: Workspace) => {
         if (this.activeWorkspaceWidget$$ !== undefined) {
           this.activeWorkspaceWidget$$.unsubscribe();
@@ -295,7 +295,7 @@ export class ClientState implements OnDestroy {
    * Teardon the workspace store and any subscribers
    */
   private teardownWorkspaces() {
-    this.workspaceStore.clear();
+    this.workspaces.clear();
     if (this.activeWorkspaceWidget$$ !== undefined) {
       this.activeWorkspaceWidget$$.unsubscribe();
     }

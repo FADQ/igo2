@@ -110,8 +110,8 @@ export class PortalComponent implements OnInit, OnDestroy {
     return this.searchState.store;
   }
 
-  get workspaceStore(): WorkspaceStore {
-    return this.clientState.workspaceStore;
+  get workspaces(): WorkspaceStore {
+    return this.clientState.workspaces;
   }
 
   get workspace$(): BehaviorSubject<Workspace> {

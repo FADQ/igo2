@@ -84,7 +84,7 @@ export class ClientControllerService {
 
     const controller = new ClientController({
       map,
-      workspaceStore: options.workspaceStore,
+      workspaces: options.workspaces,
       client,
       parcelYear: options.parcelYear,
       parcelService,

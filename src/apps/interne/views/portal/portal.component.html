@@ -60,7 +60,7 @@
   [backdropShown]="expansionPanelBackdropShown">
 
   <ng-container expansionPanelHeader>
-    <igo-workspace-selector [store]="workspaceStore"></igo-workspace-selector>
+    <igo-workspace-selector [store]="workspaces"></igo-workspace-selector>
     <igo-actionbar
       *ngIf="(workspace$ | async) as workspace"
       [store]="workspace.actionStore"

@@ -44,7 +44,7 @@ export interface ClientControllerOptions {
   map: IgoMap;
   client: Client;
   controllers: EntityStore<ClientController>;
-  workspaceStore: WorkspaceStore;
+  workspaces: WorkspaceStore;
   parcelYear: ClientParcelYear;
   parcelWorkspace: ClientParcelWorkspace;
   parcelService: ClientParcelService;
@@ -98,8 +98,8 @@ export class ClientController {
   }
 
   /** Workspace store */
-  get workspaceStore(): WorkspaceStore {
-    return this.options.workspaceStore;
+  get workspaces(): WorkspaceStore {
+    return this.options.workspaces;
   }
 
   get parcelYear(): ClientParcelYear { return this._parcelYear; }
@@ -302,7 +302,7 @@ export class ClientController {
     this.initParcelElements();
     this.loadParcelElements();
     this.teardownParcels();
-    this.workspaceStore.activateWorkspace(this.parcelElementWorkspace);
+    this.workspaces.activateWorkspace(this.parcelElementWorkspace);
   }
 
   /**
@@ -322,7 +322,7 @@ export class ClientController {
     this.teardownParcelElements();
     this.initParcels();
     this.loadParcels();
-    this.workspaceStore.activateWorkspace(this.parcelWorkspace);
+    this.workspaces.activateWorkspace(this.parcelWorkspace);
   }
 
   /******* Diagrams ********/
@@ -437,7 +437,7 @@ export class ClientController {
       });
 
     this.parcelWorkspace.init();
-    this.workspaceStore.update(this.parcelWorkspace);
+    this.workspaces.update(this.parcelWorkspace);
   }
 
   /**
@@ -449,10 +449,10 @@ export class ClientController {
     }
 
     this.parcelWorkspace.teardown();
-    if (this.workspaceStore.activeWorkspace$.value === this.parcelWorkspace) {
-      this.workspaceStore.deactivateWorkspace();
+    if (this.workspaces.activeWorkspace$.value === this.parcelWorkspace) {
+      this.workspaces.deactivateWorkspace();
     }
-    this.workspaceStore.delete(this.parcelWorkspace);
+    this.workspaces.delete(this.parcelWorkspace);
   }
 
   /**
@@ -504,7 +504,7 @@ export class ClientController {
       });
 
       this.parcelElementWorkspace.init();
-      this.workspaceStore.update(this.parcelElementWorkspace);
+      this.workspaces.update(this.parcelElementWorkspace);
   }
 
   /**
@@ -519,10 +519,10 @@ export class ClientController {
 
     this.parcelElementWorkspace.teardown();
     this.schemaElementTransaction.clear();
-    if (this.workspaceStore.activeWorkspace$.value === this.parcelElementWorkspace) {
-      this.workspaceStore.deactivateWorkspace();
+    if (this.workspaces.activeWorkspace$.value === this.parcelElementWorkspace) {
+      this.workspaces.deactivateWorkspace();
     }
-    this.workspaceStore.delete(this.parcelElementWorkspace);
+    this.workspaces.delete(this.parcelElementWorkspace);
   }
 
   /**
@@ -574,7 +574,7 @@ export class ClientController {
       });
 
     this.schemaWorkspace.init();
-    this.workspaceStore.update(this.schemaWorkspace);
+    this.workspaces.update(this.schemaWorkspace);
   }
 
   /**
@@ -583,10 +583,10 @@ export class ClientController {
   private teardownSchemas() {
     this.schema$$.unsubscribe();
     this.schemaWorkspace.teardown();
-    if (this.workspaceStore.activeWorkspace$.value === this.schemaWorkspace) {
-      this.workspaceStore.deactivateWorkspace();
+    if (this.workspaces.activeWorkspace$.value === this.schemaWorkspace) {
+      this.workspaces.deactivateWorkspace();
     }
-    this.workspaceStore.delete(this.schemaWorkspace);
+    this.workspaces.delete(this.schemaWorkspace);
     this.clearSchema();
   }
 
@@ -656,7 +656,7 @@ export class ClientController {
       });
 
     this.schemaElementWorkspace.init();
-    this.workspaceStore.update(this.schemaElementWorkspace);
+    this.workspaces.update(this.schemaElementWorkspace);
   }
 
   /**
@@ -669,10 +669,10 @@ export class ClientController {
 
     this.schemaElementWorkspace.teardown();
     this.schemaElementTransaction.clear();
-    if (this.workspaceStore.activeWorkspace$.value === this.schemaElementWorkspace) {
-      this.workspaceStore.deactivateWorkspace();
+    if (this.workspaces.activeWorkspace$.value === this.schemaElementWorkspace) {
+      this.workspaces.deactivateWorkspace();
     }
-    this.workspaceStore.delete(this.schemaElementWorkspace);
+    this.workspaces.delete(this.schemaElementWorkspace);
   }
 
   /**
