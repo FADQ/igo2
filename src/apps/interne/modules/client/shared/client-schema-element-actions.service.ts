@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 
-import { Observable, combineLatest, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { LanguageService } from '@igo2/core';
@@ -14,6 +14,7 @@ import { entitiesToRowData, exportToCSV } from '@igo2/geo';
 import { downloadFromUri } from '@igo2/utils';
 
 import { EditionUndoWidget } from 'src/lib/edition';
+import { every } from 'src/lib/utils';
 
 import {
   ClientController,
@@ -67,79 +68,6 @@ export class ClientSchemaElementActionsService {
    * @returns Actions
    */
   private buildActions(controller: ClientController): Action[] {
-
-    function every(...observables: Observable<boolean>[]): Observable<boolean> {
-      return combineLatest(observables).pipe(
-        map((bunch: boolean[]) => bunch.every(Boolean))
-      );
-    }
-
-    function noActiveWidget(ctrl: ClientController): Observable<boolean> {
-      return ctrl.schemaElementWorkspace.widget$.pipe(
-        map((widget: Widget) => widget === undefined)
-      );
-    }
-
-    function oneSchemaElementIsActive(ctrl: ClientController): Observable<boolean> {
-      return ctrl.selectedSchemaElements$.pipe(
-        map((schemaElements: ClientSchemaElement[]) => schemaElements.length === 1)
-      );
-    }
-
-    function oneOrMoreSchemaElementAreSelected(ctrl: ClientController): Observable<boolean> {
-      return ctrl.selectedSchemaElements$.pipe(
-        map((schemaElements: ClientSchemaElement[]) => schemaElements.length > 0)
-      );
-    }
-
-    function transactionIsEmpty(ctrl: ClientController): Observable<boolean> {
-      return ctrl.schemaElementTransaction.empty$;
-    }
-
-    function transactionIsNotEmpty(ctrl: ClientController): Observable<boolean> {
-      return ctrl.schemaElementTransaction.empty$.pipe(
-        map((empty: boolean) => !empty)
-      );
-    }
-
-    function transactionIsNotInCommitPhase(ctrl: ClientController): Observable<boolean> {
-      return ctrl.schemaElementTransaction.inCommitPhase$.pipe(
-        map((inCommitPhase: boolean) => !inCommitPhase)
-      );
-    }
-
-    function schemaElementCanBeFilled(ctrl: ClientController): Observable<boolean> {
-      return ctrl.selectedSchemaElements$.pipe(
-        map(() => {
-          const schemaElement = ctrl.activeSchemaElement;
-          const geometry = schemaElement === undefined ? undefined : schemaElement.geometry;
-          return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length > 1;
-        })
-      );
-    }
-
-    function schemaElementCanBeSliced(ctrl: ClientController): Observable<boolean> {
-      return ctrl.selectedSchemaElements$.pipe(
-        map(() => {
-          const schemaElement = ctrl.activeSchemaElement;
-          const geometry = schemaElement === undefined ? undefined : schemaElement.geometry;
-          return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length === 1;
-        })
-      );
-    }
-
-    function schemaIsOfTypeLSE(ctrl: ClientController): Observable<boolean> {
-      return ctrl.schema$.pipe(
-        map((schema: ClientSchema) => schema.type === ClientSchemaType.LSE)
-      );
-    }
-
-    function atLeastOneSchemaElement(ctrl: ClientController): Observable<boolean> {
-      return ctrl.schemaElementStore.empty$.pipe(
-        map((empty: boolean) => !empty)
-      );
-    }
-
     return [
       {
         id: 'zoom-to-features',
@@ -407,4 +335,70 @@ export class ClientSchemaElementActionsService {
     ];
   }
 
+}
+
+function noActiveWidget(ctrl: ClientController): Observable<boolean> {
+  return ctrl.schemaElementWorkspace.widget$.pipe(
+    map((widget: Widget) => widget === undefined)
+  );
+}
+
+function oneSchemaElementIsActive(ctrl: ClientController): Observable<boolean> {
+  return ctrl.selectedSchemaElements$.pipe(
+    map((schemaElements: ClientSchemaElement[]) => schemaElements.length === 1)
+  );
+}
+
+function oneOrMoreSchemaElementAreSelected(ctrl: ClientController): Observable<boolean> {
+  return ctrl.selectedSchemaElements$.pipe(
+    map((schemaElements: ClientSchemaElement[]) => schemaElements.length > 0)
+  );
+}
+
+function transactionIsEmpty(ctrl: ClientController): Observable<boolean> {
+  return ctrl.schemaElementTransaction.empty$;
+}
+
+function transactionIsNotEmpty(ctrl: ClientController): Observable<boolean> {
+  return ctrl.schemaElementTransaction.empty$.pipe(
+    map((empty: boolean) => !empty)
+  );
+}
+
+function transactionIsNotInCommitPhase(ctrl: ClientController): Observable<boolean> {
+  return ctrl.schemaElementTransaction.inCommitPhase$.pipe(
+    map((inCommitPhase: boolean) => !inCommitPhase)
+  );
+}
+
+function schemaElementCanBeFilled(ctrl: ClientController): Observable<boolean> {
+  return ctrl.selectedSchemaElements$.pipe(
+    map(() => {
+      const schemaElement = ctrl.activeSchemaElement;
+      const geometry = schemaElement === undefined ? undefined : schemaElement.geometry;
+      return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length > 1;
+    })
+  );
+}
+
+function schemaElementCanBeSliced(ctrl: ClientController): Observable<boolean> {
+  return ctrl.selectedSchemaElements$.pipe(
+    map(() => {
+      const schemaElement = ctrl.activeSchemaElement;
+      const geometry = schemaElement === undefined ? undefined : schemaElement.geometry;
+      return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length === 1;
+    })
+  );
+}
+
+function schemaIsOfTypeLSE(ctrl: ClientController): Observable<boolean> {
+  return ctrl.schema$.pipe(
+    map((schema: ClientSchema) => schema.type === ClientSchemaType.LSE)
+  );
+}
+
+function atLeastOneSchemaElement(ctrl: ClientController): Observable<boolean> {
+  return ctrl.schemaElementStore.empty$.pipe(
+    map((empty: boolean) => !empty)
+  );
 }

@@ -48,13 +48,6 @@ export class ClientParcelActionsService {
    * @returns Actions
    */
   private buildActions(controller: ClientController): Action[] {
-
-    function every(...observables: Observable<boolean>[]): Observable<boolean> {
-      return combineLatest(observables).pipe(
-        map((bunch: boolean[]) => bunch.every(Boolean))
-      );
-    }
-
     return [
       {
         id: 'activate-parcel-eLements',

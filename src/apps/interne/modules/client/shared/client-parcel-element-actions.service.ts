@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 
-import { Observable, combineLatest, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import turfUnion from '@turf/union';
@@ -39,6 +39,7 @@ import {
   getParcelElementErrors
 } from 'src/lib/client';
 import { moveToFeatureStore } from 'src/lib/feature';
+import { every } from 'src/lib/utils';
 
 @Injectable({
   providedIn: 'root'
@@ -79,98 +80,6 @@ export class ClientParcelElementActionsService {
    * @returns Actions
    */
   private buildActions(controller: ClientController): Action[] {
-
-    function every(...observables: Observable<boolean>[]): Observable<boolean> {
-      return combineLatest(observables).pipe(
-        map((bunch: boolean[]) => bunch.every(Boolean))
-      );
-    }
-
-    function noActiveWidget(ctrl: ClientController): Observable<boolean> {
-      return ctrl.parcelElementWorkspace.widget$.pipe(
-        map((widget: Widget) => widget === undefined)
-      );
-    }
-
-    function oneParcelElementIsActive(ctrl: ClientController): Observable<boolean> {
-      return ctrl.selectedParcelElements$.pipe(
-        map((parcelElements: ClientParcelElement[]) => parcelElements.length === 1)
-      );
-    }
-
-    function oneOrMoreParcelElementAreSelected(ctrl: ClientController): Observable<boolean> {
-      return ctrl.selectedParcelElements$.pipe(
-        map((parcelElements: ClientParcelElement[]) => parcelElements.length > 0)
-      );
-    }
-
-    function moreThanOneParcelElementAreSelected(ctrl: ClientController): Observable<boolean> {
-      return ctrl.selectedParcelElements$.pipe(
-        map((parcelElements: ClientParcelElement[]) => parcelElements.length > 1)
-      );
-    }
-
-    function zeroOrOneParcelElementIsSelected(ctrl: ClientController): Observable<boolean> {
-      return ctrl.selectedParcelElements$.pipe(
-        map((parcelElements: ClientParcelElement[]) => parcelElements.length <= 1)
-      );
-    }
-
-    function transactionIsEmpty(ctrl: ClientController): Observable<boolean> {
-      return ctrl.parcelElementTransaction.empty$;
-    }
-
-    function transactionIsNotEmpty(ctrl: ClientController): Observable<boolean> {
-      return ctrl.parcelElementTransaction.empty$.pipe(
-        map((empty: boolean) => !empty)
-      );
-    }
-
-    function transactionIsNotInCommitPhase(ctrl: ClientController): Observable<boolean> {
-      return ctrl.parcelElementTransaction.inCommitPhase$.pipe(
-        map((inCommitPhase: boolean) => !inCommitPhase)
-      );
-    }
-
-    function parcelElementCanBeFilled(ctrl: ClientController): Observable<boolean> {
-      return ctrl.selectedParcelElements$.pipe(
-        map(() => {
-          const parcelElement = ctrl.activeParcelElement;
-          const geometry = parcelElement === undefined ? undefined : parcelElement.geometry;
-          return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length > 1;
-        })
-      );
-    }
-
-    function parcelElementCanBeSliced(ctrl: ClientController): Observable<boolean> {
-      return ctrl.selectedParcelElements$.pipe(
-        map(() => {
-          const parcelElement = ctrl.activeParcelElement;
-          const geometry = parcelElement === undefined ? undefined : parcelElement.geometry;
-          return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length === 1;
-        })
-      );
-    }
-
-    function noParcelElementError(ctrl: ClientController): Observable<boolean> {
-      return ctrl.parcelElementStore.entities$.pipe(
-        map((parcelElements: ClientParcelElement[]) => {
-          const errors = parcelElements
-            .reduce((acc: ClientParcelElementMessage[], parcelElement: ClientParcelElement) => {
-              acc.push(...getParcelElementErrors(parcelElement));
-              return acc;
-            }, []);
-          return errors.length === 0;
-        })
-      );
-    }
-
-    function moreThanOneClient(ctrl: ClientController): Observable<boolean> {
-      return ctrl.controllers.count$.pipe(
-        map((count: number) => count > 1)
-      );
-    }
-
     return [
       {
         id: 'deactivate-parcel-elements',
@@ -366,7 +275,7 @@ export class ClientParcelElementActionsService {
         },
         availability: (ctrl: ClientController) => every(
           noActiveWidget(ctrl),
-          moreThanOneParcelElementAreSelected(ctrl),
+          twoParcelElementAreSelected(ctrl),
           transactionIsNotInCommitPhase(ctrl)
         )
       },
@@ -558,4 +467,89 @@ export class ClientParcelElementActionsService {
     ];
   }
 
+}
+
+function noActiveWidget(ctrl: ClientController): Observable<boolean> {
+  return ctrl.parcelElementWorkspace.widget$.pipe(
+    map((widget: Widget) => widget === undefined)
+  );
+}
+
+function oneParcelElementIsActive(ctrl: ClientController): Observable<boolean> {
+  return ctrl.selectedParcelElements$.pipe(
+    map((parcelElements: ClientParcelElement[]) => parcelElements.length === 1)
+  );
+}
+
+function oneOrMoreParcelElementAreSelected(ctrl: ClientController): Observable<boolean> {
+  return ctrl.selectedParcelElements$.pipe(
+    map((parcelElements: ClientParcelElement[]) => parcelElements.length > 0)
+  );
+}
+
+function twoParcelElementAreSelected(ctrl: ClientController): Observable<boolean> {
+  return ctrl.selectedParcelElements$.pipe(
+    map((parcelElements: ClientParcelElement[]) => parcelElements.length === 2)
+  );
+}
+
+function zeroOrOneParcelElementIsSelected(ctrl: ClientController): Observable<boolean> {
+  return ctrl.selectedParcelElements$.pipe(
+    map((parcelElements: ClientParcelElement[]) => parcelElements.length <= 1)
+  );
+}
+
+function transactionIsEmpty(ctrl: ClientController): Observable<boolean> {
+  return ctrl.parcelElementTransaction.empty$;
+}
+
+function transactionIsNotEmpty(ctrl: ClientController): Observable<boolean> {
+  return ctrl.parcelElementTransaction.empty$.pipe(
+    map((empty: boolean) => !empty)
+  );
+}
+
+function transactionIsNotInCommitPhase(ctrl: ClientController): Observable<boolean> {
+  return ctrl.parcelElementTransaction.inCommitPhase$.pipe(
+    map((inCommitPhase: boolean) => !inCommitPhase)
+  );
+}
+
+function parcelElementCanBeFilled(ctrl: ClientController): Observable<boolean> {
+  return ctrl.selectedParcelElements$.pipe(
+    map(() => {
+      const parcelElement = ctrl.activeParcelElement;
+      const geometry = parcelElement === undefined ? undefined : parcelElement.geometry;
+      return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length > 1;
+    })
+  );
+}
+
+function parcelElementCanBeSliced(ctrl: ClientController): Observable<boolean> {
+  return ctrl.selectedParcelElements$.pipe(
+    map(() => {
+      const parcelElement = ctrl.activeParcelElement;
+      const geometry = parcelElement === undefined ? undefined : parcelElement.geometry;
+      return geometry !== undefined && geometry.type === 'Polygon' && geometry.coordinates.length === 1;
+    })
+  );
+}
+
+function noParcelElementError(ctrl: ClientController): Observable<boolean> {
+  return ctrl.parcelElementStore.entities$.pipe(
+    map((parcelElements: ClientParcelElement[]) => {
+      const errors = parcelElements
+        .reduce((acc: ClientParcelElementMessage[], parcelElement: ClientParcelElement) => {
+          acc.push(...getParcelElementErrors(parcelElement));
+          return acc;
+        }, []);
+      return errors.length === 0;
+    })
+  );
+}
+
+function moreThanOneClient(ctrl: ClientController): Observable<boolean> {
+  return ctrl.controllers.count$.pipe(
+    map((count: number) => count > 1)
+  );
 }

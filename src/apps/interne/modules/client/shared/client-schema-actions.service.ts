@@ -1,6 +1,6 @@
 import { Inject, Injectable} from '@angular/core';
 
-import { Observable, combineLatest } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Action, Widget } from '@igo2/common';
@@ -16,6 +16,7 @@ import {
   ClientSchemaTransferWidget,
   ClientSchemaFileManagerWidget
 } from 'src/lib/client';
+import { every } from 'src/lib/utils';
 
 @Injectable({
   providedIn: 'root'
@@ -46,37 +47,6 @@ export class ClientSchemaActionsService {
    * @returns Actions
    */
   private buildActions(controller: ClientController): Action[] {
-
-    function every(...observables: Observable<boolean>[]): Observable<boolean> {
-      return combineLatest(observables).pipe(
-        map((bunch: boolean[]) => bunch.every(Boolean))
-      );
-    }
-
-    function noActiveWidget(ctrl: ClientController): Observable<boolean> {
-      return ctrl.schemaWorkspace.widget$.pipe(
-        map((widget: Widget) => widget === undefined)
-      );
-    }
-
-    function schemaIsDefined(ctrl: ClientController): Observable<boolean> {
-      return ctrl.schema$.pipe(
-        map((schema: ClientSchema) => schema !== undefined)
-      );
-    }
-
-    function schemaIsOfTypeLSE(ctrl: ClientController): Observable<boolean> {
-      return ctrl.schema$.pipe(
-        map((schema: ClientSchema) => schema !== undefined && schema.type === ClientSchemaType.LSE)
-      );
-    }
-
-    function schemaCanBeDuplicated(ctrl: ClientController): Observable<boolean> {
-      return ctrl.schema$.pipe(
-        map((schema: ClientSchema) => schema !== undefined && schema.type !== ClientSchemaType.LSE)
-      );
-    }
-
     return [
       {
         id: 'create',
@@ -182,19 +152,32 @@ export class ClientSchemaActionsService {
           noActiveWidget(ctrl),
           schemaIsOfTypeLSE(ctrl)
         )
-      },
-      // {
-      //   id: 'createMap',
-      //   icon: 'image',
-      //   title: 'client.schema.createMap',
-      //   tooltip: 'client.schema.createMap.tooltip',
-      //   handler: function() {},
-      //   availability: (ctrl: ClientController) => every(
-      //     noActiveWidget(ctrl),
-      //     schemaIsDefined(ctrl)
-      //   )
-      // }
+      }
     ];
   }
 
+}
+
+function noActiveWidget(ctrl: ClientController): Observable<boolean> {
+  return ctrl.schemaWorkspace.widget$.pipe(
+    map((widget: Widget) => widget === undefined)
+  );
+}
+
+function schemaIsDefined(ctrl: ClientController): Observable<boolean> {
+  return ctrl.schema$.pipe(
+    map((schema: ClientSchema) => schema !== undefined)
+  );
+}
+
+function schemaIsOfTypeLSE(ctrl: ClientController): Observable<boolean> {
+  return ctrl.schema$.pipe(
+    map((schema: ClientSchema) => schema !== undefined && schema.type === ClientSchemaType.LSE)
+  );
+}
+
+function schemaCanBeDuplicated(ctrl: ClientController): Observable<boolean> {
+  return ctrl.schema$.pipe(
+    map((schema: ClientSchema) => schema !== undefined && schema.type !== ClientSchemaType.LSE)
+  );
 }
