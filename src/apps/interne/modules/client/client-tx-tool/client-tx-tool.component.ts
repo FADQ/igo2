@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material';
 
-import { BehaviorSubject, Subscription, combineLatest } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { EntityStore, ToolComponent } from '@igo2/common';
 
@@ -23,7 +23,7 @@ import {
 import { ClientState } from '../client.state';
 
 /**
- * Tool to display a list of clients
+ * Tool to display a list of clients with an associated tx
  */
 @ToolComponent({
   name: 'clientTx',
@@ -38,30 +38,39 @@ import { ClientState } from '../client.state';
 })
 export class ClientTxToolComponent implements OnInit, OnDestroy {
 
+  /**
+   * Client store
+   */
   readonly clients: EntityStore<Client> = new EntityStore([], {
     getKey: (client: Client) => client.info.numero
   });
 
+  /**
+   * Subscription to the number of active clients. Useful to
+   * update the add/clear buttons
+   */
   private activeClients$$: Subscription;
 
-  private parcelElementTx$$: Subscription;
-
-  readonly parcelYearSelectorDisabled$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
+  /**
+   * Subscription to the parcel year. Useful to refresh the list of clients
+   * with an associated tx
+   */
   private parcelYear$$: Subscription;
 
   /**
-   * Observable of the active client
-   * @internal
-   */
-  get controllers(): EntityStore<ClientController> { return this.clientState.controllers; }
-
-  /**
-   * Store holding all the avaiables "parcel years"
+   * Store holding all the availables "parcel years"
    * @internal
    */
   get parcelYears(): EntityStore<ClientParcelYear> {
     return this.clientState.parcelYears;
+  }
+
+  /**
+   * Observable of the parcel year selector state
+   * @internal
+   */
+  get parcelYearSelectorDisabled$(): BehaviorSubject<boolean> {
+    return this.clientState.parcelElementTxOngoing$;
   }
 
   constructor(
@@ -72,6 +81,11 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
     private cdRef: ChangeDetectorRef
   ) {}
 
+  /**
+   * Subscribe to the parcel year and the number of clients. Load
+   * initial data.
+   * @internal
+   */
   ngOnInit() {
     this.clients.view.sort({
       valueAccessor: (client: Client) => client.tx.date,
@@ -86,19 +100,26 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
     this.clientParcelElementTxService.getClientsInTx()
       .subscribe((clients: Client[]) => this.clients.load(clients));
 
-    this.activeClients$$ = this.controllers.count$
+    this.activeClients$$ = this.clientState.controllers.count$
       .subscribe((count: number) => {
         this.cdRef.detectChanges();
-        this.watchParcelElementTx();
       });
   }
 
+  /**
+   * Clear subscriptions
+   * @internal
+   */
   ngOnDestroy() {
-    this.unwatchParcelElementTx();
     this.activeClients$$.unsubscribe();
     this.parcelYear$$.unsubscribe();
   }
 
+  /**
+   * When a client is added, find it and activate it like it was searched.
+   * @param event Added event
+   * @internal
+   */
   onClientAddedChange(event: {added: boolean, client: Client}) {
     const clientNum = event.client.info.numero;
     if (event.added === true) {
@@ -113,11 +134,11 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
     this.cdRef.detectChanges();
   }
 
-  clientIsAdded(client: Client): boolean {
-    const controller = this.clientState.controllers.get(client.info.numero);
-    return controller !== undefined;
-  }
-
+  /**
+   * When the delete button is clicked, open the delete tx dialog.
+   * @return client Client
+   * @internal
+   */
   onDeleteTx(client: Client) {
     const controller = this.clientState.controllers.get(client.info.numero);
     const data = {
@@ -129,23 +150,13 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
     this.dialog.open(ClientParcelElementDeleteTxDialogComponent, {data});
   }
 
-  private watchParcelElementTx() {
-    this.unwatchParcelElementTx();
-    const parcelElementsActives$ = this.controllers.all().map((controller: ClientController) => {
-      return controller.parcelElementTxOngoing;
-    });
-
-    this.parcelElementTx$$ = combineLatest(...parcelElementsActives$).subscribe((bunch: boolean[]) => {
-      const noTxActive = bunch.every((active: boolean) => active === false);
-      this.parcelYearSelectorDisabled$.next(!noTxActive);
-    });
+  /**
+   * Check if a client is already added
+   * @return Whther a client is added
+   * @internal
+   */
+  clientIsAdded(client: Client): boolean {
+    const controller = this.clientState.controllers.get(client.info.numero);
+    return controller !== undefined;
   }
-
-  private unwatchParcelElementTx() {
-    if (this.parcelElementTx$$ !== undefined) {
-      this.parcelElementTx$$.unsubscribe();
-      this.parcelElementTx$$ = undefined;
-    }
-  }
-
 }

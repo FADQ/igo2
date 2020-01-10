@@ -1,6 +1,5 @@
 import { Inject, Injectable} from '@angular/core';
 
-import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import {
@@ -10,7 +9,6 @@ import {
   Widget
 } from '@igo2/common';
 import { entitiesToRowData,  exportToCSV } from '@igo2/geo';
-import { DetailedContext } from '@igo2/context';
 import { ContextState } from '@igo2/integration';
 
 import {
@@ -18,7 +16,8 @@ import {
   ClientParcelElementTxService,
   ClientParcelElementTxState,
   ClientParcelElementStartTxWidget,
-  FeatureStoreFilterNotOwnedStrategy
+  FeatureStoreFilterNotOwnedStrategy,
+  parcelElementsEnabledInContext
 } from 'src/lib/client';
 import { moveToFeatureStore } from 'src/lib/feature';
 
@@ -70,7 +69,7 @@ export class ClientParcelActionsService {
         },
         availability: (ctrl: ClientController) => {
           const contextMesurage$ = this.contextState.context$.pipe(
-            map((context: DetailedContext) => context.uri === 'mesurage')
+            map(parcelElementsEnabledInContext)
           );
           return contextMesurage$;
         }

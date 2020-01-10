@@ -21,7 +21,8 @@ import {
   ClientParcelWorkspace,
   createParcelLayer,
   createClientDefaultSelectionStyle,
-  FeatureStoreFilterNotOwnedStrategy
+  FeatureStoreFilterNotOwnedStrategy,
+  parcelElementsEnabledInContext
 } from 'src/lib/client';
 
 import { ClientParcelTableService } from './client-parcel-table.service';
@@ -39,6 +40,7 @@ export class ClientParcelWorkspaceService {
   ) {}
 
   createParcelWorkspace(client: Client,  map: IgoMap): ClientParcelWorkspace {
+    // TODO: i18n
     return new ClientParcelWorkspace({
       id: `fadq.${client.info.numero}-1-parcel-workspace`,
       title: `${client.info.numero} - Parcelles`,
@@ -71,7 +73,10 @@ export class ClientParcelWorkspaceService {
     store.addStrategy(this.createFilterSelectionStrategy(), false);
 
     const context = this.contextState.context$.value;
-    store.addStrategy(this.createFilterNotOwnedStrategy(), context.uri === 'mesurage');
+    store.addStrategy(
+      this.createFilterNotOwnedStrategy(),
+      parcelElementsEnabledInContext(context)
+    );
 
     return store;
   }
@@ -87,6 +92,7 @@ export class ClientParcelWorkspaceService {
   }
 
   private createSelectionStrategy(client: Client, map: IgoMap): FeatureStoreSelectionStrategy {
+    // TODO: i18n
     return new FeatureStoreSelectionStrategy({
       map: map,
       layer: new VectorLayer({

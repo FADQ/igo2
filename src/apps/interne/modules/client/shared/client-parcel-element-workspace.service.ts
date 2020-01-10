@@ -35,6 +35,8 @@ export class ClientParcelElementWorkspaceService {
   ) {}
 
   createParcelElementWorkspace(client: Client,  map: IgoMap): ClientParcelElementWorkspace {
+    // TODO: i18n
+
     // Type is set to parcel. This allows us to switch from a client to another and
     // activate the parcel element workspace if the previous client's active workspace
     // is either the parcel workspace or the parcel element workspace.
@@ -82,6 +84,7 @@ export class ClientParcelElementWorkspaceService {
   }
 
   private createSelectionStrategy(client: Client, map: IgoMap): FeatureStoreSelectionStrategy {
+    // TODO: i18n
     return new FeatureStoreSelectionStrategy({
       map: map,
       layer: new VectorLayer({

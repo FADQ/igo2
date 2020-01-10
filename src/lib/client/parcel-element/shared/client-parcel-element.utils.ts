@@ -3,6 +3,7 @@ import OlFeature from 'ol/Feature';
 import OlGeoJSON from 'ol/format/GeoJSON';
 
 import { LanguageService } from '@igo2/core';
+import { Context } from '@igo2/context';
 import {
   FeatureDataSource,
   VectorLayer,
@@ -17,6 +18,10 @@ import {
   ClientParcelElementMessage,
   ClientParcelElementSaveData
 } from './client-parcel-element.interfaces';
+
+export function parcelElementsEnabledInContext(context: Context) {
+  return context.uri === 'mesurage' || (context as any).mesurage === true;
+}
 
 export function getDiagramsFromParcelElements(parcelElements: ClientParcelElement[]): ClientParcelDiagram[] {
   const diagramIds = new Set(parcelElements.map((parcelElement: ClientParcelElement) => {

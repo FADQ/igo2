@@ -35,6 +35,7 @@ export class ClientSchemaElementWorkspaceService {
   ) {}
 
   createSchemaElementWorkspace(client: Client,  map: IgoMap): ClientSchemaElementWorkspace {
+    // TODO: i18n
     return new ClientSchemaElementWorkspace({
       id: `fadq.${client.info.numero}-4-schema-element-workspace`,
       title: `${client.info.numero} - Éléments du schémas`,
@@ -79,6 +80,7 @@ export class ClientSchemaElementWorkspaceService {
   }
 
   private createSelectionStrategy(client: Client, map: IgoMap): FeatureStoreSelectionStrategy {
+    // TODO: i18n
     return new FeatureStoreSelectionStrategy({
       map: map,
       layer: new VectorLayer({

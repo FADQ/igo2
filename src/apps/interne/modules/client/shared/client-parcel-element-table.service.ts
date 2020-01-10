@@ -22,6 +22,7 @@ import {
 export class ClientParcelElementTableService {
 
   buildTable(): EntityTableTemplate {
+    // TODO: i18n
     return {
       selection: true,
       selectionCheckbox: true,

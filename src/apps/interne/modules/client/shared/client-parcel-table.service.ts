@@ -22,6 +22,7 @@ export class ClientParcelTableService {
   constructor(private clientInfoService: ClientInfoService) {}
 
   buildTable(): EntityTableTemplate {
+    // TODO: i18n
     return {
       selection: true,
       selectionCheckbox: true,

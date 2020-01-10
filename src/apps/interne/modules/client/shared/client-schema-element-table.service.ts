@@ -20,6 +20,7 @@ export class ClientSchemaElementTableService {
   constructor() {}
 
   buildTable(): EntityTableTemplate {
+    // TODO: i18n
     return {
       selection: true,
       selectionCheckbox: true,
@@ -38,7 +39,9 @@ export class ClientSchemaElementTableService {
           title: 'Type',
           renderer: EntityTableColumnRenderer.HTML,
           valueAccessor: (schemaElement: ClientSchemaElement) => {
-            return `<b>${ClientSchemaElementTableService.schemaElementTypes[schemaElement.geometry.type]}`;
+            const geometryType = schemaElement.geometry.type;
+            const value = ClientSchemaElementTableService.schemaElementTypes[geometryType];
+            return `<b>${value}</b>`;
           }
         },
         {

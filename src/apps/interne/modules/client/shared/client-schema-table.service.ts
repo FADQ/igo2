@@ -13,6 +13,7 @@ export class ClientSchemaTableService {
   constructor() {}
 
   buildTable(): EntityTableTemplate {
+    // TODO: i18n
     return {
       selection: true,
       sort: true,

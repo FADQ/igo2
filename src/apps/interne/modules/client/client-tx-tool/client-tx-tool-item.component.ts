@@ -17,6 +17,9 @@ import { Client } from 'src/lib/client';
 })
 export class ClientTxToolItemComponent {
 
+  /**
+   * Client
+   */
   @Input() client: Client;
 
   /**
@@ -52,7 +55,7 @@ export class ClientTxToolItemComponent {
   constructor() {}
 
   /**
-   * On toggle button click, emit the added change event
+   * On toggle button click, emit the proper event
    * @internal
    */
   onToggleClick() {
@@ -67,10 +70,16 @@ export class ClientTxToolItemComponent {
     this.delete.emit(this.client);
   }
 
+  /**
+   * Emit the addedChange event (added false)
+   */
   private doRemove() {
     this.addedChange.emit({added: false, client: this.client});
   }
 
+  /**
+   * Emit the addedChange event (added true)
+   */
   private doAdd() {
     this.addedChange.emit({added: true, client: this.client});
   }
