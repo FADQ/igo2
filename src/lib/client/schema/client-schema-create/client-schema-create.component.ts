@@ -83,7 +83,7 @@ export class ClientSchemaCreateComponent implements OnInit, OnUpdateInputs, Widg
 
   private onSubmitSuccess(schema: ClientSchema) {
     this.store.insert(schema);
-    this.store.state.update(schema, {selected: true});
+    this.store.state.update(schema, {selected: true}, true);
     this.complete.emit();
   }
 

@@ -1,6 +1,6 @@
 import * as olstyle from 'ol/style';
 
-import { IgoMap, Layer, WMTSDataSource } from '@igo2/geo';
+import { IgoMap, Layer, WMSDataSource, WMTSDataSource } from '@igo2/geo';
 
 export function padClientNum(clientNum: string | number) {
   return ('' + clientNum).padStart(7, '0');
@@ -31,23 +31,36 @@ export function createClientDefaultSelectionStyle(): olstyle.Style {
 export function getAnneeImageFromMap(map: IgoMap): number | undefined {
   const imageLayerNames = map.layers.reduce((acc: string[], layer: Layer) => {
     const dataSource = layer.dataSource;
-    if (!(dataSource instanceof WMTSDataSource) || !layer.visible) {
+    if ((
+      !(dataSource instanceof WMTSDataSource) &&
+      !(dataSource instanceof WMSDataSource)
+    ) || !layer.visible) {
       return acc;
     }
 
-    const layerName = dataSource.options.layer;
-    if (layerName.startsWith('Mosaiques-orthophotos_') || layerName.startsWith('orthos')) {
+    let layerName;
+    if (dataSource instanceof WMTSDataSource) {
+      layerName = dataSource.options.layer;
+    } else if (dataSource instanceof WMSDataSource) {
+      layerName = dataSource.options.params.layers;
+    }
+
+    if (
+      layerName.startsWith('Mosaiques-orthophotos_') ||
+      layerName.startsWith('orthos') ||
+      layerName.length === 4 
+    ) {
       acc.push(layerName);
     }
 
     return acc;
-  }, []);
+  }, [])
 
-  const anneeRegex = new RegExp(/^([1-9][\d]{3})$/);
+  const anneeRegex = new RegExp(/([1-9][\d]{3})/);
   const anneeImages = imageLayerNames.reduce((acc: number[], layerName: string) => {
-    const anneeText = layerName.slice(-4);
-    if (anneeRegex.test(anneeText)) {
-      acc.push(parseInt(anneeText, 10));
+    const matches = layerName.match(anneeRegex);
+    if (matches) {
+      acc.push(parseInt(matches[0], 10));
     }
     return acc;
   }, []);

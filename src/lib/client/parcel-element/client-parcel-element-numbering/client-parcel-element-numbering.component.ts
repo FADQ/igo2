@@ -193,7 +193,11 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
 
   private computeParcelElementNumber(): string {
     const value = this.value;
-    return [value.prefix || '', value.number || '', value.suffix || ''].join('');
+    return [
+      value.prefix || '',
+      value.number || '',
+      value.suffix || ''
+    ].join('').toUpperCase();
   }
 
   private initValue() {
@@ -202,7 +206,7 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
         return parseInt(parcelElement.properties.noParcelleAgricole, 10);
       })
       .filter((number: number) => !isNaN(number));
-    const maxNumber = allNumbers.length > 0 ? Math.max(...allNumbers) : 1;
+    const maxNumber = allNumbers.length > 0 ? Math.max(...allNumbers) : 0;
     this.setValueNumber(maxNumber + 1);
   }
 
