@@ -135,7 +135,7 @@ export class ClientParcelElementTransferComponent implements WidgetComponent, On
       });
       return;
     }
-  
+
     const parcelElementIds = parcelElements
       .map((parcelElement: ClientParcelElement) => parcelElement.properties.idParcelle);
 

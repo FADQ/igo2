@@ -116,7 +116,7 @@ export class ClientToolItemComponent {
    * @returns The inner color
    */
   getParcelInnerColor(): string {
-    var baseColor = this.controller.parcelColor;
+    const baseColor = this.controller.parcelColor;
     return `rgba(${baseColor.join(',')}, 0.15)`;
   }
 
@@ -126,7 +126,7 @@ export class ClientToolItemComponent {
    * @returns The inner color
    */
   getParcelOuterColor(): string {
-    var baseColor = this.controller.parcelColor;
+    const baseColor = this.controller.parcelColor;
     return `rgb(${baseColor.join(',')})`;
   }
 }

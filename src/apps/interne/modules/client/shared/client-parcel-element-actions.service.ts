@@ -3,7 +3,6 @@ import { Inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import turfSimplify from '@turf/simplify';
 import turfUnion from '@turf/union';
 
 import { LanguageService } from '@igo2/core';
@@ -11,8 +10,7 @@ import {
   Action,
   EntityStore,
   EntityStoreFilterSelectionStrategy,
-  Widget,
-  getEntityRevision
+  Widget
 } from '@igo2/common';
 import { uuid } from '@igo2/utils';
 
@@ -269,12 +267,18 @@ export class ClientParcelElementActionsService {
             .subscribe((unionParcelElement: ClientParcelElement) => {
               parcelElements.forEach((parcelElement: ClientParcelElement) => {
                 transaction.delete(parcelElement, store, {
-                  title: generateParcelElementOperationTitle(parcelElement, this.languageService)
+                  title: generateParcelElementOperationTitle(
+                    parcelElement,
+                    this.languageService
+                  )
                 });
               });
               transaction.insert(unionParcelElement, store, {
-                title: generateParcelElementOperationTitle(unionParcelElement, this.languageService)  
-              })
+                title: generateParcelElementOperationTitle(
+                  unionParcelElement,
+                  this.languageService
+                )
+              });
             });
         },
         availability: (ctrl: ClientController) => every(
@@ -296,32 +300,6 @@ export class ClientParcelElementActionsService {
             map: ctrl.map,
             store: ctrl.parcelElementStore
           });
-          /*
-          const store = ctrl.parcelElementStore;
-          const transaction = ctrl.parcelElementTransaction;
-          const parcelElement = ctrl.activeParcelElement as any;
-          const toSimplify = {
-            type: 'Feature',
-            geometry: parcelElement.geometry
-          } as any;
-          const simplifyOptions = {tolerance: 0.00001}
-          const simplifiedGeometry = turfSimplify(toSimplify, simplifyOptions).geometry;
-          const meta = Object.assign({}, parcelElement.meta, {
-            revision: getEntityRevision(parcelElement) + 1
-          })
-          const simplified = Object.assign({}, parcelElement, {
-            geometry: simplifiedGeometry,
-            meta  
-          });
-
-          this.clientParcelElementService
-            .createParcelElement(simplified)
-            .subscribe((simplifiedParcelElement: ClientParcelElement) => {
-              transaction.update(parcelElement, simplifiedParcelElement, store, {
-                title: generateParcelElementOperationTitle(simplifiedParcelElement, this.languageService)  
-              })
-            });
-          */
         },
         availability: (ctrl: ClientController) => every(
           noActiveWidget(ctrl),

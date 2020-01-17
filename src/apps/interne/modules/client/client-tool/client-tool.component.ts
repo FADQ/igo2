@@ -83,7 +83,7 @@ export class ClientToolComponent {
       this._showLegend$ = this.controllers.count$.pipe(
         map((count: number) => count === 1)
       );
-    } 
+    }
     return this._showLegend$;
   }
   private _showLegend$: Observable<boolean>;

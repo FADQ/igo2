@@ -116,7 +116,7 @@ export class EditionSimplifyComponent implements OnUpdateInputs, WidgetComponent
    * Event emitted on cancel
    */
   @Output() cancel = new EventEmitter<void>();
-  
+
   /**
    * Tolerance, in meters
    */
@@ -160,7 +160,7 @@ export class EditionSimplifyComponent implements OnUpdateInputs, WidgetComponent
   onSimplify() {
     const getKey = this.simplifyStore.getKey;
     const baseFeature = this.simplifyStore.get(getKey(this.feature));
-    baseFeature.geometry = this.feature.geometry
+    baseFeature.geometry = this.feature.geometry;
 
     const tolerance = this.computeTolerance();
     const feature = simplifyFeature(baseFeature, tolerance);

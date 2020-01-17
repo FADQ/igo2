@@ -87,10 +87,10 @@ export function simplifyFeature(feature: Feature, tolerance: number): Feature {
   }
   const meta = Object.assign({}, feature.meta, {
     revision: getEntityRevision(feature) + 1
-  })
+  });
   const result = ObjectUtils.mergeDeep(feature, {
     geometry,
-    meta  
+    meta
   });
 
   return result;

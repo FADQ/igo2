@@ -48,13 +48,13 @@ export function getAnneeImageFromMap(map: IgoMap): number | undefined {
     if (
       layerName.startsWith('Mosaiques-orthophotos_') ||
       layerName.startsWith('orthos') ||
-      layerName.length === 4 
+      layerName.length === 4
     ) {
       acc.push(layerName);
     }
 
     return acc;
-  }, [])
+  }, []);
 
   const anneeRegex = new RegExp(/([1-9][\d]{3})/);
   const anneeImages = imageLayerNames.reduce((acc: number[], layerName: string) => {

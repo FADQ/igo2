@@ -11,7 +11,7 @@ export const ClientParcelColors: [number, number, number][] = [
 export const ClientRelationColors: {[key: string]: [number, number, number]} = {
   '1': [255, 139, 0], // Orange
   '2': [35, 140, 0],  // Green
-  '3': [0, 218, 250]  //Teal
+  '3': [0, 218, 250]  // Teal
 };
 
 export const ClientParcelDraineeChoices: FormFieldSelectChoice[] = [
