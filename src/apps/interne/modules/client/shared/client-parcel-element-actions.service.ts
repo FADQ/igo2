@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import turfSimplify from '@turf/simplify';
 import turfUnion from '@turf/union';
 
 import { LanguageService } from '@igo2/core';
@@ -10,7 +11,8 @@ import {
   Action,
   EntityStore,
   EntityStoreFilterSelectionStrategy,
-  Widget
+  Widget,
+  getEntityRevision
 } from '@igo2/common';
 import { uuid } from '@igo2/utils';
 
@@ -28,6 +30,7 @@ import {
   ClientParcelElementFillWidget,
   ClientParcelElementNumberingWidget,
   ClientParcelElementReconciliateWidget,
+  ClientParcelElementSimplifyWidget,
   ClientParcelElementSliceWidget,
   ClientParcelElementSaveWidget,
   ClientParcelElementTranslateWidget,
@@ -54,6 +57,7 @@ export class ClientParcelElementActionsService {
     @Inject(ClientParcelElementFillWidget) private clientParcelElementFillWidget: Widget,
     @Inject(ClientParcelElementNumberingWidget) private clientParcelElementNumberingWidget: Widget,
     @Inject(ClientParcelElementReconciliateWidget) private clientParcelElementReconciliateWidget: Widget,
+    @Inject(ClientParcelElementSimplifyWidget) private clientParcelElementSimplifyWidget: Widget,
     @Inject(ClientParcelElementSliceWidget) private clientParcelElementSliceWidget: Widget,
     @Inject(ClientParcelElementSaveWidget) private clientParcelElementSaveWidget: Widget,
     @Inject(ClientParcelElementTranslateWidget) private clientParcelElementTranslateWidget: Widget,
@@ -276,6 +280,52 @@ export class ClientParcelElementActionsService {
         availability: (ctrl: ClientController) => every(
           noActiveWidget(ctrl),
           twoParcelElementAreSelected(ctrl),
+          transactionIsNotInCommitPhase(ctrl)
+        )
+      },
+      {
+        id: 'simplify',
+        icon: 'vector-polygon',
+        title: 'edition.simplify',
+        tooltip: 'edition.simplify.tooltip',
+        args: [controller, this.clientParcelElementSimplifyWidget],
+        handler: (ctrl: ClientController, widget: Widget) => {
+          ctrl.parcelElementWorkspace.activateWidget(widget, {
+            parcelElement: ctrl.activeParcelElement,
+            transaction: ctrl.parcelElementTransaction,
+            map: ctrl.map,
+            store: ctrl.parcelElementStore
+          });
+          /*
+          const store = ctrl.parcelElementStore;
+          const transaction = ctrl.parcelElementTransaction;
+          const parcelElement = ctrl.activeParcelElement as any;
+          const toSimplify = {
+            type: 'Feature',
+            geometry: parcelElement.geometry
+          } as any;
+          const simplifyOptions = {tolerance: 0.00001}
+          const simplifiedGeometry = turfSimplify(toSimplify, simplifyOptions).geometry;
+          const meta = Object.assign({}, parcelElement.meta, {
+            revision: getEntityRevision(parcelElement) + 1
+          })
+          const simplified = Object.assign({}, parcelElement, {
+            geometry: simplifiedGeometry,
+            meta  
+          });
+
+          this.clientParcelElementService
+            .createParcelElement(simplified)
+            .subscribe((simplifiedParcelElement: ClientParcelElement) => {
+              transaction.update(parcelElement, simplifiedParcelElement, store, {
+                title: generateParcelElementOperationTitle(simplifiedParcelElement, this.languageService)  
+              })
+            });
+          */
+        },
+        availability: (ctrl: ClientController) => every(
+          noActiveWidget(ctrl),
+          oneParcelElementIsActive(ctrl),
           transactionIsNotInCommitPhase(ctrl)
         )
       },

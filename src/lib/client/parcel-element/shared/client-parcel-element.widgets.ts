@@ -27,6 +27,9 @@ import {
   ClientParcelElementReconciliateComponent
 } from '../client-parcel-element-reconciliate/client-parcel-element-reconciliate.component';
 import {
+  ClientParcelElementSimplifyComponent
+} from '../client-parcel-element-simplify/client-parcel-element-simplify.component';
+import {
   ClientParcelElementSliceComponent
 } from '../client-parcel-element-slice/client-parcel-element-slice.component';
 import {
@@ -137,6 +140,22 @@ export function provideClientParcelElementFillWidget() {
   return {
     provide: ClientParcelElementFillWidget,
     useFactory: clientParcelElementFillWidgetFactory,
+    deps: [WidgetService]
+  };
+}
+
+/** Simplify **/
+export const ClientParcelElementSimplifyWidget =
+  new InjectionToken<Widget>('ClientParcelElementSimplifyWidget');
+
+export function clientParcelElementSimplifyWidgetFactory(widgetService: WidgetService) {
+  return widgetService.create(ClientParcelElementSimplifyComponent);
+}
+
+export function provideClientParcelElementSimplifyWidget() {
+  return {
+    provide: ClientParcelElementSimplifyWidget,
+    useFactory: clientParcelElementSimplifyWidgetFactory,
     deps: [WidgetService]
   };
 }

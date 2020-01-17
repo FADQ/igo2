@@ -2,10 +2,12 @@ import * as olstyle from 'ol/style';
 import OlFeature from 'ol/Feature';
 import OlMultiPoint from 'ol/geom/MultiPoint';
 
-import { getEntityTitle } from '@igo2/common';
+import turfSimplify from '@turf/simplify';
+
+import { getEntityRevision, getEntityTitle } from '@igo2/common';
 import { LanguageService } from '@igo2/core';
 import { Feature } from '@igo2/geo';
-import { uuid } from '@igo2/utils';
+import { ObjectUtils, uuid } from '@igo2/utils';
 
 export function getOperationTitle(feature: Feature, languageService: LanguageService) {
   return getEntityTitle(feature) || uuid();
@@ -69,4 +71,27 @@ export function createOlTextStyle(): olstyle.Text {
     }),
     overflow: true
   });
+}
+
+/**
+ * Simplify a feature and return a copy of it
+ * @param feature Feature to simplify
+ * @param tolerance Simplification tolerance, in the same units
+ *  as the geometry
+ * @returns Simplified feature feature
+ */
+export function simplifyFeature(feature: Feature, tolerance: number): Feature {
+  let geometry = feature.geometry;
+  if (tolerance > 0) {
+    geometry = turfSimplify(geometry, {tolerance});
+  }
+  const meta = Object.assign({}, feature.meta, {
+    revision: getEntityRevision(feature) + 1
+  })
+  const result = ObjectUtils.mergeDeep(feature, {
+    geometry,
+    meta  
+  });
+
+  return result;
 }

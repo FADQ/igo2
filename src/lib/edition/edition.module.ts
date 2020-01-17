@@ -7,6 +7,7 @@ import { FadqLibEditionFillModule } from './edition-fill/edition-fill.module';
 import { FadqLibEditionImportModule } from './edition-import/edition-import.module';
 import { FadqLibEditionRedrawModule } from './edition-redraw/edition-redraw.module';
 import { FadqLibEditionSaveModule } from './edition-save/edition-save.module';
+import { FadqLibEditionSimplifyModule } from './edition-simplify/edition-simplify.module';
 import { FadqLibEditionSliceModule } from './edition-slice/edition-slice.module';
 import { FadqLibEditionTranslateModule } from './edition-translate/edition-translate.module';
 import { FadqLibEditionUndoModule } from './edition-undo/edition-undo.module';
@@ -18,6 +19,7 @@ import {
   provideEditionImportWidget,
   provideEditionRedrawWidget,
   provideEditionSaveWidget,
+  provideEditionSimplifyWidget,
   provideEditionSliceWidget,
   provideEditionTranslateWidget,
   provideEditionUndoWidget
@@ -34,6 +36,7 @@ import {
     FadqLibEditionImportModule,
     FadqLibEditionRedrawModule,
     FadqLibEditionSaveModule,
+    FadqLibEditionSimplifyModule,
     FadqLibEditionSliceModule,
     FadqLibEditionTranslateModule,
     FadqLibEditionUndoModule
@@ -51,6 +54,7 @@ export class FadqLibEditionModule {
         provideEditionImportWidget(),
         provideEditionRedrawWidget(),
         provideEditionSaveWidget(),
+        provideEditionSimplifyWidget(),
         provideEditionSliceWidget(),
         provideEditionTranslateWidget(),
         provideEditionUndoWidget()

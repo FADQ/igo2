@@ -1,0 +1,37 @@
+<fadq-card-panel
+  [svgIcon]="'help-circle'"
+  [iconColor]="'accent'"
+  [title]="title || ('edition.simplify.message' | translate)"
+  [message]="message$ | async">
+
+  <mat-form-field>
+    <input
+      matInput
+      type="number"
+      step="5"
+      placeholder="{{'edition.simplify.tolerance.placeholder' | translate}}"
+      [(ngModel)]="tolerance">
+  </mat-form-field>
+
+  <ng-container buttons>
+    <button
+      mat-button
+      type="button"
+      (click)="onCancel()">
+      {{ 'close' | translate }}
+    </button>
+    <button
+      mat-button
+      (click)="onSimplify()">
+      {{ 'edition.simplify' | translate }}
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="!(submitEnabled$ | async)"
+      (click)="onSubmit()">
+      {{ 'apply' | translate }}
+    </button> 
+  </ng-container>
+
+</fadq-card-panel>

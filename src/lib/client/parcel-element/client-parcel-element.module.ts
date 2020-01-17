@@ -29,6 +29,9 @@ import {
   FadqLibClientParcelElementReconciliateModule
 } from './client-parcel-element-reconciliate/client-parcel-element-reconciliate.module';
 import {
+  FadqLibClientParcelElementSimplifyModule
+} from './client-parcel-element-simplify/client-parcel-element-simplify.module';
+import {
   FadqLibClientParcelElementSliceModule
 } from './client-parcel-element-slice/client-parcel-element-slice.module';
 import {
@@ -64,6 +67,7 @@ import {
   provideClientParcelElementFillWidget,
   provideClientParcelElementNumberingWidget,
   provideClientParcelElementReconciliateWidget,
+  provideClientParcelElementSimplifyWidget,
   provideClientParcelElementSliceWidget,
   provideClientParcelElementSaveWidget,
   provideClientParcelElementTranslateWidget,
@@ -86,6 +90,7 @@ import {
     FadqLibClientParcelElementFillModule,
     FadqLibClientParcelElementNumberingModule,
     FadqLibClientParcelElementReconciliateModule,
+    FadqLibClientParcelElementSimplifyModule,
     FadqLibClientParcelElementSliceModule,
     FadqLibClientParcelElementSaveModule,
     FadqLibClientParcelElementTranslateModule,
@@ -112,6 +117,7 @@ export class FadqLibClientParcelElementModule {
         provideClientParcelElementFillWidget(),
         provideClientParcelElementNumberingWidget(),
         provideClientParcelElementReconciliateWidget(),
+        provideClientParcelElementSimplifyWidget(),
         provideClientParcelElementSliceWidget(),
         provideClientParcelElementSaveWidget(),
         provideClientParcelElementTranslateWidget(),
