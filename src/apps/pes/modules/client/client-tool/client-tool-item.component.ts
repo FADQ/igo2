@@ -6,7 +6,7 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 
-import { Client, ClientController, ClientInfoService } from 'src/lib/client';
+import { ClientController } from 'src/lib/client';
 
 /**
  * Tool to display a client's info and addresses
@@ -23,16 +23,6 @@ export class ClientToolItemComponent {
 
   @Output() clickAddress = new EventEmitter<string>();
 
-  constructor(private clientInfoService: ClientInfoService) {}
+  constructor() {}
 
-  /**
-   * Open the client's info link into a new window
-   * @internal
-   * @param client Client
-   */
-  openClientInfoLink(client: Client) {
-    const link = this.clientInfoService.getClientInfoLink(client.info.numero);
-    window.open(link, 'Client', 'width=800, height=600');
-    return false;
-  }
 }

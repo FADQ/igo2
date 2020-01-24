@@ -50,7 +50,7 @@ export class ClientState implements OnDestroy {
     this.initParcelYears();
     this.loadParcelYears();
 
-    this.clientService.getClientByNum('1560').subscribe((client: Client) => {
+    this.clientService.getClientByNum('').subscribe((client: Client) => {
       this.setClient(client);
     });
   }
