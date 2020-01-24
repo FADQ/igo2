@@ -1,9 +1,9 @@
 import { Injectable} from '@angular/core';
 
-import { EntityTableTemplate, EntityTableColumnRenderer } from '@igo2/common';
+import { EntityTableTemplate } from '@igo2/common';
 
 import { formatDate } from 'src/lib/utils/date';
-import { ClientInfoService, ClientParcel, padClientNum } from 'src/lib/client';
+import { ClientParcel } from 'src/lib/client';
 
 /**
  * This is a factory for parcel workspace table template
@@ -13,7 +13,7 @@ import { ClientInfoService, ClientParcel, padClientNum } from 'src/lib/client';
 })
 export class ClientParcelTableService {
 
-  constructor(private clientInfoService: ClientInfoService) {}
+  constructor() {}
 
   /**
    * Create a table template
@@ -40,30 +40,6 @@ export class ClientParcelTableService {
         {
           name: 'properties.noDiagramme',
           title: 'Numéro de diagramme'
-        },
-        {
-          name: 'properties.noClientDetenteur',
-          title: 'Autre détenteur',
-          renderer: EntityTableColumnRenderer.UnsanitizedHTML,
-          valueAccessor: (parcel: ClientParcel) => {
-            const value = parcel.properties.autreDetenteur;
-            if (!value) { return ''; }
-            return this.computeClientNumAnchor(value);
-          }
-        },
-        {
-          name: 'properties.noClientExploitant',
-          title: 'Autre exploitant',
-          renderer: EntityTableColumnRenderer.UnsanitizedHTML,
-          valueAccessor: (parcel: ClientParcel) => {
-            const value = parcel.properties.autreExploitant;
-            if (!value) { return ''; }
-            return this.computeClientNumAnchor(value);
-          }
-        },
-        {
-          name: 'properties.infoLocateur',
-          title: 'Information localisation'
         },
         {
           name: 'properties.production',
@@ -110,14 +86,6 @@ export class ClientParcelTableService {
           title: 'Statut de déboisement'
         },
         {
-          name: 'properties.indParcelleDrainee',
-          title: 'Drainage source FADQ'
-        },
-        {
-          name: 'properties.sourceParcelleAgricole',
-          title: 'Référence de la mesure'
-        },
-        {
           name: 'properties.timbreMajGeometrie',
           title: 'Date de mise à jour',
           valueAccessor: (parcel: ClientParcel) => {
@@ -128,11 +96,5 @@ export class ClientParcelTableService {
         }
       ]
     };
-  }
-
-  private computeClientNumAnchor(clientNum: string): string {
-    const link = this.clientInfoService.getClientInfoLink(padClientNum(clientNum));
-    const onClick = `window.open('${link}', 'Client', 'width=800, height=600'); return false;`;
-    return `<a target="popup" href="${link}" onClick="${onClick}">${clientNum}</a>`;
   }
 }
