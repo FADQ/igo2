@@ -39,6 +39,7 @@ export class ClientParcelWorkspaceService {
    * @returns Parcel workspace
    */
   createParcelWorkspace(client: Client,  map: IgoMap): ClientParcelWorkspace {
+    // TODO: i18n
     return new ClientParcelWorkspace({
       id: `fadq.${client.info.numero}-1-parcel-workspace`,
       title: `${client.info.numero} - Parcelles`,
@@ -105,6 +106,7 @@ export class ClientParcelWorkspaceService {
    * @returns Loading strategy
    */
   private createSelectionStrategy(client: Client, map: IgoMap): FeatureStoreSelectionStrategy {
+    // TODO: i18n
     return new FeatureStoreSelectionStrategy({
       map: map,
       layer: new VectorLayer({

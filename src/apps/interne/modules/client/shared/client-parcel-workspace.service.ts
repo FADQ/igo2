@@ -32,8 +32,6 @@ import { ClientParcelTableService } from './client-parcel-table.service';
 })
 export class ClientParcelWorkspaceService {
 
-  static viewScale: [number, number, number, number] = [0, 0, 0.8, 0.6];
-
   constructor(
     private clientParcelTableService: ClientParcelTableService,
     private contextState: ContextState
