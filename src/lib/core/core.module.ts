@@ -1,17 +1,12 @@
 import { NgModule, ModuleWithProviders, Provider } from '@angular/core';
 
-import { IgoCoreModule, RouteService, provideConfigOptions } from '@igo2/core';
+import { IgoCoreModule, RouteService } from '@igo2/core';
 
-import { environment } from 'src/environments/environment';
 import { FadqLibApiModule } from './api/api.module';
 import { FadqLibDomainModule } from './domain/domain.module';
 
 const providers: Provider[] = [
-  RouteService,
-  provideConfigOptions({
-    default: environment.igo,
-    path: environment.configPath
-  })
+  RouteService
 ];
 
 @NgModule({

@@ -42,3 +42,7 @@ Thumbs.db
 
 #Compodoc
 /documentation
+
+# dev
+src/contexts/locals
+src/config/locals

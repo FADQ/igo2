@@ -1,4 +1,4 @@
-import { IgoEnvironment, igoEnvironment } from './environment.partial';
+import { IgoEnvironment, igoEnvironment } from '../environment.partial';
 
 interface Environment {
   production: boolean;

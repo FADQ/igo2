@@ -3,8 +3,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { provideConfigOptions } from '@igo2/core';
 import { IgoGeometryModule, IgoQueryModule } from '@igo2/geo';
 import { IgoIntegrationModule } from '@igo2/integration';
+
+import { environment } from 'src/environments/pes/environment';
 
 import { FadqCoreModule } from 'src/apps/shared/modules/core/core.module';
 import { FadqHelpModule } from 'src/apps/shared/modules/help/help.module';
@@ -35,7 +38,12 @@ import { AppComponent } from './app.component';
     FadqPesSearchModule,
     FadqPesPortalModule
   ],
-  providers: [],
+  providers: [
+    provideConfigOptions({
+      default: environment.igo,
+      path: environment.configPath
+    })
+  ],
   bootstrap: [AppComponent]
 })
 export class FadqPesAppModule {}

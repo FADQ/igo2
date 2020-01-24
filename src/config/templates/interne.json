@@ -11,19 +11,19 @@
       {
         "id": "fadq.agro",
         "title": "Analyse agroclimatique",
-        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_analyse_agro",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_analyse_agro",
         "queryFormat": {"html": "*"}
       },
       {
         "id": "fadq.adressesFadq",
         "title": "Adresses FADQ",
-        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_adresses_fadq",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_adresses_fadq",
         "queryFormat": {"html": "*"}
       },
       {
         "id": "mern.imagesHisto",
         "title": "Images historiques 2002-2018 *",
-        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/mern_imagerie_aeroportee_continue_annee",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/mern_imagerie_aeroportee_continue_annee",
         "type": "wmts",
         "matrixSet": "Lambert:epsg:32198",
         "requestEncoding": "KVP",
@@ -32,7 +32,7 @@
       {
         "id": "fadq.imagesHisto",
         "title": "Images historiques 1996-2002",
-        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_geoservpro_wmts",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_geoservpro_wmts",
         "type": "wmts",
         "matrixSet": "LAMBERT",
         "requestEncoding": "KVP",
@@ -42,61 +42,64 @@
       {
         "id": "fadq.indexImages",
         "title": "Index liés aux images *",
-        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_index_lies",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_index_lies",
         "queryFormat": {"html": "*"}
       },
       {
         "id": "fadq.parcelles",
         "title": "Parcelles agricoles",
-        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_parcelles_agri",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_parcelles_agri",
         "queryFormat": {"html": "*"}
       },
       {
         "id": "fadq.struct",
         "title": "Structures d'entreposage",
-        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_struct_entr",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_struct_entr",
         "queryFormat": {"html": "*"}
       },
       {
         "id": "fadq.sysCol",
         "title": "Informations du système collectif",
-        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_info_syst_coll",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_info_syst_coll",
         "queryFormat": {"html": "*"}
       },
       {
         "id": "fadq.adressesQC",
         "title": "Adresses Québec *",
-        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_adresses_quebec",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_adresses_quebec",
         "queryFormat": {"html": "*"}
       },
       {
         "id": "fadq.ecocondition",
         "title": "Éconconditionnalité *",
-        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_ecocondition",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_ecocondition",
         "queryFormat": {"html": "*"}
       },
       {
         "id": "fadq.infoFoncière",
         "title": "Information foncière *",
-        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_info_fonciere",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_info_fonciere",
         "queryFormat": {"html": "*"}
       },
       {
         "id": "fadq.limite_admin",
         "title": "Limites administratives du Québec *",
-        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_limite_admin",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_limite_admin",
         "queryFormat": {"html": "*"}
       },
       {
         "id": "fadq.compt_cent_serv",
         "title": "Comptoirs et centres de service",
-        "url": "http://chabou01-svn.fadq.qc/app/interne/servicescartographiques/w_m_s/service/fadq_compt_cent_serv",
+        "url": "/compt_cent_serv",
+        "sourceOptions": {
+          "mapserverDynamicDPI": true
+        },
         "queryFormat": {"html": "*"}
       }
     ]
   },
   "api": {
-    "url": "http://chabou01-svn.fadq.qc/app/interne"
+    "url": "{api_root}/app/interne"
   },
   "help": {
     "guideLink": "http://igo.fadq.qc/aide/IGO.pdf",

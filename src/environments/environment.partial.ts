@@ -189,6 +189,6 @@ export const igoEnvironment: IgoEnvironment = {
     save: '/igodonneesgeospatiales/edition_point_adresse/modifierGeometrieAdresseQuebec/${idAdresseAQ}'
   },
   importExport: {
-    url: 'http://plssisigdev1.fadq.qc:3000'
+    url: ''
   }
 };
