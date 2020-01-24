@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import {
@@ -10,7 +10,7 @@ import {
   TextSearch
 } from '@igo2/geo';
 
-import { CLIENT, Client, ClientService } from 'src/lib/client';
+import { CLIENT, Client, ClientService, validateClientNum } from 'src/lib/client';
 import { ClientData } from './client.interfaces';
 
 /**
@@ -21,6 +21,8 @@ export class ClientSearchSource extends SearchSource implements TextSearch {
 
   static id = 'client';
   static type = CLIENT;
+  static termMinLength = 3;
+  static termMaxLength = 7;
 
   constructor(
     private clientService: ClientService,
@@ -43,6 +45,10 @@ export class ClientSearchSource extends SearchSource implements TextSearch {
    * @returns Observable of <SearchResult<Client>[]
    */
   search(term?: string): Observable<SearchResult<Client>[]> {
+    if (!validateClientNum(term)) {
+      return of([]);
+    }
+
     return this.clientService.getClientByNum(term)
       .pipe(
         map((response: ClientData) => {
