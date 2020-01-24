@@ -325,13 +325,17 @@ export class PortalComponent implements OnInit, OnDestroy {
   private onBeforeSearchClient(searchTerm: string) {
     if (this.verifyNullTerm(searchTerm)) { return; }
 
+    const searchTermIsValid = validateClientNum(searchTerm);
+
     if (this.mediaService.media$.value === Media.Mobile) {
       this.closeExpansionPanel();
-    } else {
-      this.openExpansionPanel();
+    } else if (searchTermIsValid) {
+      setTimeout(() => {
+        this.openExpansionPanel();
+      }, 400);
     }
 
-    if (validateClientNum(searchTerm)) {
+    if (searchTermIsValid) {
       this.toolState.toolbox.activateTool('client');
       this.openSidenav();
     }
