@@ -38,7 +38,7 @@ import { SEARCH_TYPES } from 'src/apps/interne/modules/search/shared/search.enum
 import { ClientState } from 'src/apps/interne/modules/client/client.state';
 import { ClientSearchSource } from 'src/apps/interne/modules/search/shared/sources/client';
 
-import { CLIENT, Client } from 'src/lib/client';
+import { CLIENT, Client, validateClientNum } from 'src/lib/client';
 
 import { CADASTRE } from 'src/lib/cadastre/shared/cadastre.enums';
 import { DetailedContext } from '@igo2/context';
@@ -331,7 +331,7 @@ export class PortalComponent implements OnInit, OnDestroy {
       this.openExpansionPanel();
     }
 
-    if (searchTerm.length >= 3) {
+    if (validateClientNum(searchTerm)) {
       this.toolState.toolbox.activateTool('client');
       this.openSidenav();
     }

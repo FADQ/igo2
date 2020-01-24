@@ -67,3 +67,21 @@ export function getAnneeImageFromMap(map: IgoMap): number | undefined {
 
   return anneeImages.length === 1 ? anneeImages[0] : undefined;
 }
+
+export function validateClientNum(clientNum?: string) {
+  const clientNumMinLength = 3;
+  const clientNumMaxLength = 7;
+
+  if (!clientNum) {
+    return false;
+  }
+
+  // Validate clientNum length
+  const length = clientNum.length;
+  if (length < clientNumMinLength || length > clientNumMaxLength) {
+    return false;
+  }
+
+  // Validate that it contains digits only
+  return /^\d+$/.test(clientNum);
+}
