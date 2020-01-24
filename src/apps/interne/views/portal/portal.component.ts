@@ -323,6 +323,8 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   private onBeforeSearchClient(searchTerm: string) {
+    searchTerm = searchTerm ? searchTerm.trim() : undefined;
+
     if (this.verifyNullTerm(searchTerm)) { return; }
 
     const searchTermIsValid = validateClientNum(searchTerm);

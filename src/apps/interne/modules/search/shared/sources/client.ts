@@ -45,6 +45,8 @@ export class ClientSearchSource extends SearchSource implements TextSearch {
    * @returns Observable of <SearchResult<Client>[]
    */
   search(term?: string): Observable<SearchResult<Client>[]> {
+    term = term ? term.trim() : undefined;
+
     if (!validateClientNum(term)) {
       return of([]);
     }
