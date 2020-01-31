@@ -104,6 +104,12 @@ export class ClientSchemaElementImportComponent implements OnUpdateInputs, Widge
             return undefined;
           }
 
+          if (this.store.get(this.store.getKey(schemaElement)) !== undefined ||
+              this.transaction.getOperationByEntity(schemaElement) !== undefined
+          ) {
+            return undefined;
+          };
+
           const error = getSchemaElementValidationMessage(schemaElement, this.languageService);
           return error === undefined ? {feature: schemaElement} : undefined;
         })

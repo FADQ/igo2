@@ -163,10 +163,18 @@ export class ClientParcelElementWithoutOwnerComponent
     this.clientParcelElementService.getParcelElementsWithoutOwner(extentGeometry)
       .subscribe((parcelElements: ClientParcelElement[]) => {
         this.clearParcelElements();
-        if (parcelElements.length === 0) {
+        // Filter new parcel elements. If we don't filter and a parcel element
+        // with the same id already exists, it'll will be replaced and we don't want
+        // that. It could even be added twice to the schema.
+        const newParcelElements = parcelElements
+          .filter((parcelElement: ClientParcelElement) => {
+            return this.store.get(this.store.getKey(parcelElement)) === undefined &&
+              this.transaction.getOperationByEntity(parcelElement) === undefined;
+          });
+        if (newParcelElements.length === 0) {
           this.onNoParcelElementsFound();
         } else {
-          this.onParcelElementsFound(parcelElements);
+          this.onParcelElementsFound(newParcelElements);
         }
       });
   }
@@ -190,17 +198,10 @@ export class ClientParcelElementWithoutOwnerComponent
   }
 
   private onParcelElementsFound(parcelElements: ClientParcelElement[]) {
-    // Filter new parcel elements. If we don't filter and a parcel element
-    // with the same id already exists, it'll will be replaced and we don't want
-    // that.
-    const newParcelElements = parcelElements.filter((parcelElement: ClientParcelElement) => {
-      return this.store.get(this.store.getKey(parcelElement)) === undefined;
-    });
-
     // Need to do that because parcels without owner may have the same id, meaning
     // that the count may be smaller than the number of parcels without owner found.
     const countBefore = this.store.count;
-    this.store.insertMany(newParcelElements);
+    this.store.insertMany(parcelElements);
     const count = this.store.count - countBefore;
 
     const textKey = 'client.parcelElement.recoverParcelsWithoutOwner.parcelFound';

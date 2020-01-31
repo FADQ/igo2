@@ -98,6 +98,12 @@ export class ClientParcelElementImportComponent implements OnUpdateInputs, Widge
             return undefined;
           }
 
+          if (this.store.get(this.store.getKey(parcelElement)) !== undefined ||
+              this.transaction.getOperationByEntity(parcelElement) !== undefined
+          ) {
+            return undefined;
+          };
+
           const error =  getParcelElementValidationMessage(parcelElement, this.languageService);
           return error === undefined ? {feature: parcelElement} : undefined;
         })
