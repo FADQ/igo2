@@ -13,7 +13,7 @@
     </div>
 
     <div class="fadq-client-header-center" (click)="onSelect()">
-      {{controller.client.info.nom}}
+      {{controller.client.info.numero}} - {{controller.client.info.nom}}
       <div class="fadq-client-header-badges">
         <mat-icon
           *ngIf="controller.parcelElementTxOngoing | async"
