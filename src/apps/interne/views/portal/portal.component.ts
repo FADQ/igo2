@@ -337,10 +337,8 @@ export class PortalComponent implements OnInit, OnDestroy {
       }, 400);
     }
 
-    if (searchTermIsValid) {
-      this.toolState.toolbox.activateTool('client');
-      this.openSidenav();
-    }
+    this.toolState.toolbox.activateTool('client');
+    this.openSidenav();
   }
 
   private onBeforeSearchCadastre() {
