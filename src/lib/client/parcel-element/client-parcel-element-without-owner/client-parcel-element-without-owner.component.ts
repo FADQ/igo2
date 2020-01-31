@@ -17,7 +17,8 @@ import {
   EntityRecord,
   EntityTransaction,
   WidgetComponent,
-  OnUpdateInputs
+  OnUpdateInputs,
+  getEntityRevision
 } from '@igo2/common';
 import { FeatureStore, IgoMap, formatScale } from '@igo2/geo';
 
@@ -125,20 +126,23 @@ export class ClientParcelElementWithoutOwnerComponent
       const [error, parcelElements] = bunch;
       this.setError(error);
       if (error === undefined) {
-        parcelElements.forEach((parcelElement: ClientParcelElement) => this.addToTransaction(parcelElement));
+        parcelElements.forEach((parcelElement: ClientParcelElement) => {
+          this.addToTransaction(parcelElement);
+        });
+        this.clearParcelElements();
         this.complete.emit();
       }
     });
   }
 
   private recover(): Observable<[string, ClientParcelElement[]]> {
-    this.clearParcelElements();
-
     const results$ = this.store.stateView
       .manyBy((record: EntityRecord<ClientParcelElement>) => {
         return record.entity.properties.noOwner === true && record.state.selected === true;
       })
-      .map((record: EntityRecord<ClientParcelElement>) => this.processParcelElement(record.entity));
+      .map((record: EntityRecord<ClientParcelElement>) => {
+        return this.processParcelElement(record.entity);
+      });
 
     return zip(...results$).pipe(
       map((results: EditionResult[]) => {
@@ -186,10 +190,17 @@ export class ClientParcelElementWithoutOwnerComponent
   }
 
   private onParcelElementsFound(parcelElements: ClientParcelElement[]) {
+    // Filter new parcel elements. If we don't filter and a parcel element
+    // with the same id already exists, it'll will be replaced and we don't want
+    // that.
+    const newParcelElements = parcelElements.filter((parcelElement: ClientParcelElement) => {
+      return this.store.get(this.store.getKey(parcelElement)) === undefined;
+    });
+
     // Need to do that because parcels without owner may have the same id, meaning
     // that the count may be smaller than the number of parcels without owner found.
     const countBefore = this.store.count;
-    this.store.insertMany(parcelElements);
+    this.store.insertMany(newParcelElements);
     const count = this.store.count - countBefore;
 
     const textKey = 'client.parcelElement.recoverParcelsWithoutOwner.parcelFound';
@@ -210,6 +221,7 @@ export class ClientParcelElementWithoutOwnerComponent
     return this.clientParcelElementService.createParcelElement(data)
       .pipe(
         map((parcelElement: ClientParcelElement): EditionResult => {
+          parcelElement.meta.revision = getEntityRevision(parcelElement) + 1;
           return {
             feature: parcelElement,
             error: getParcelElementValidationMessage(parcelElement, this.languageService)
