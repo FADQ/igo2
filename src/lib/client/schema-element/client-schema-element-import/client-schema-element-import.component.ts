@@ -108,7 +108,7 @@ export class ClientSchemaElementImportComponent implements OnUpdateInputs, Widge
               this.transaction.getOperationByEntity(schemaElement) !== undefined
           ) {
             return undefined;
-          };
+          }
 
           const error = getSchemaElementValidationMessage(schemaElement, this.languageService);
           return error === undefined ? {feature: schemaElement} : undefined;
