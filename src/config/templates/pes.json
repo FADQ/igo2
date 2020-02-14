@@ -111,7 +111,13 @@
   "client": {
     "api": {
       "info": {
-        "link": "http://igodev.fadq.qc/app/interne/personnes/coordonnees/presenter/${clientNum}"
+        "get": "/igolocalisation/recherche_client/obtenirInformationClient",
+        "addresses": "/igolocalisation/recherche_client/obtenirAdressesClient",
+        "link": ""
+      },
+      "parcel": {
+        "list": "/igolocalisation/recherche_client/obtenirParcellesProductionsAnnee/${annee}",
+        "years": "/igolocalisation/recherche_client/obtenirAnneesTraitementParcelleAgricole"
       }
     }
   }
