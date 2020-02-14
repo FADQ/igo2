@@ -4,14 +4,15 @@
   [title]="title || ('edition.simplify.message' | translate)"
   [message]="message$ | async">
 
-  <mat-form-field>
-    <input
-      matInput
-      type="number"
-      step="5"
-      placeholder="{{'edition.simplify.tolerance.placeholder' | translate}}"
-      [(ngModel)]="tolerance">
-  </mat-form-field>
+  <mat-slider
+    thumbLabel
+    tickInterval="8"
+    thumbLabel="false"
+    step="5"
+    [min]="0"
+    [max]="200"
+    [(ngModel)]="tolerance">
+  </mat-slider>
 
   <ng-container buttons>
     <button
@@ -19,11 +20,6 @@
       type="button"
       (click)="onCancel()">
       {{ 'close' | translate }}
-    </button>
-    <button
-      mat-button
-      (click)="onSimplify()">
-      {{ 'edition.simplify' | translate }}
     </button>
     <button
       mat-raised-button

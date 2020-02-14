@@ -10,8 +10,7 @@ import {
 } from '@angular/core';
 
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
-
-import OlProjection from 'ol/proj/Projection';
+import { debounceTime, skip } from 'rxjs/operators';
 
 import {
   EntityTransaction,
@@ -122,7 +121,9 @@ export class EditionSimplifyComponent implements OnUpdateInputs, WidgetComponent
    */
   get tolerance(): number { return this.tolerance$.value; }
   set tolerance(value: number) { this.tolerance$.next(value); }
-  readonly tolerance$: BehaviorSubject<number> = new BehaviorSubject(100);
+  readonly tolerance$: BehaviorSubject<number> = new BehaviorSubject(0);
+
+  private tolerance$$: Subscription;
 
   constructor(
     private languageService: LanguageService,
@@ -136,6 +137,11 @@ export class EditionSimplifyComponent implements OnUpdateInputs, WidgetComponent
   ngOnInit() {
     this.simplifyStore = this.createSimplifyStore();
     this.map.ol.addLayer(this.simplifyStore.layer.ol);
+
+    this.tolerance$$ = this.tolerance$.pipe(
+      skip(1),
+      debounceTime(200)
+    ).subscribe(() => this.simplify());
   }
 
   /**
@@ -144,6 +150,7 @@ export class EditionSimplifyComponent implements OnUpdateInputs, WidgetComponent
    */
   ngOnDestroy() {
     this.teardown();
+    this.tolerance$$.unsubscribe();
   }
 
   /**
@@ -157,7 +164,7 @@ export class EditionSimplifyComponent implements OnUpdateInputs, WidgetComponent
    * Simplify the base feature but don't add it to the transaction
    * @internal
    */
-  onSimplify() {
+  simplify() {
     const getKey = this.simplifyStore.getKey;
     const baseFeature = this.simplifyStore.get(getKey(this.feature));
     baseFeature.geometry = this.feature.geometry;

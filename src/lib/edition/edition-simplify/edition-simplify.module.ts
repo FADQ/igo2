@@ -1,11 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-  MatFormFieldModule,
-  MatInputModule,
-  MatButtonModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material';
+
+import { MatSliderModule } from '@angular/material';
 
 import { IgoLanguageModule } from '@igo2/core';
 
@@ -21,9 +19,8 @@ import { EditionSimplifyComponent } from './edition-simplify.component';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatButtonModule,
+    MatSliderModule,
     IgoLanguageModule,
     FadqLibCardPanelModule
   ],
