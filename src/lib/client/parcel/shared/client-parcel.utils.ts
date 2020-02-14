@@ -66,7 +66,7 @@ export function createPerClientParcelLayerStyle(
       color
     }),
     fill:  new olstyle.Fill({
-      color: [...color].concat([0.15])
+      color: [...color].concat([0])
     }),
     text: createOlTextStyle()
   });
@@ -88,7 +88,7 @@ export function createParcelLayerStyle(): (olFeature: OlFeature, resolution: num
 
   return (function(olFeature: OlFeature, resolution: number) {
     const color = getParcelFeatureColor(olFeature);
-    style.getFill().setColor(color.concat([0.15]));
+    style.getFill().setColor(color.concat([0]));
     style.getStroke().setColor(color);
     style.getText().setText(getParcelFeatureText(olFeature, resolution));
     return style;

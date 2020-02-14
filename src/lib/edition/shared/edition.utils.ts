@@ -18,7 +18,7 @@ export function createOlEditionStyle(): olstyle.Style[] {
   return [
     new olstyle.Style({
       fill: new olstyle.Fill({
-        color: color.concat([0.30])
+        color: color.concat([0])
       }),
       stroke: new olstyle.Stroke({
         color: color,
@@ -30,7 +30,7 @@ export function createOlEditionStyle(): olstyle.Style[] {
           color: color,
         }),
         fill: new olstyle.Fill({
-          color: color.concat([0.30])
+          color: color.concat([0])
         })
       })
     }),

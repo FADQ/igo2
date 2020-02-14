@@ -60,7 +60,7 @@ export function createParcelElementLayerStyle(
 ): (olFeature: OlFeature, resolution: number) => olstyle.Style {
   const olStyle = new olstyle.Style({
     fill: new olstyle.Fill({
-      color: color.concat([0.30])
+      color: color.concat([0])
     }),
     stroke: new olstyle.Stroke({
       color: color,
@@ -71,7 +71,7 @@ export function createParcelElementLayerStyle(
 
   const olNoOwnerStyle = new olstyle.Style({
     fill: new olstyle.Fill({
-      color: [30, 30, 30, 0.30]
+      color: [30, 30, 30, 0]
     }),
     stroke: new olstyle.Stroke({
       color: [30, 30, 30],

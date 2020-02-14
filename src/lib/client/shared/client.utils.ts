@@ -13,7 +13,7 @@ export function createClientDefaultSelectionStyle(): olstyle.Style {
       width: 2
     }),
     fill:  new olstyle.Fill({
-      color: [0, 153, 255, 0.15]
+      color: [0, 153, 255, 0]
     }),
     image: new olstyle.Circle({
       radius: 6,
