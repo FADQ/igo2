@@ -8,7 +8,7 @@ import { LanguageOptions } from '@igo2/core';
 import { CatalogServiceOptions, SearchSourceOptions } from '@igo2/geo';
 
 import { ApiConfig } from 'src/lib/core/api/api.interfaces';
-import { ClientApiConfig } from 'src/lib/client/shared/client.interfaces';
+import { ClientApiConfig } from 'src/apps/interne/modules/client/shared/client.interfaces';
 
 export interface IgoEnvironment {
   searchSources?: { [key: string]: SearchSourceOptions };

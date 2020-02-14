@@ -140,7 +140,7 @@
     },
     
     {
-      "id": "cadastre",
+      "alias": "cadastre",
       "visible": false,
       "sourceOptions": {
         "type": "wms",
@@ -324,7 +324,7 @@
     {
       "name": "cadastre",
       "options": {
-        "layerId": "cadastre"
+        "layerAlias": "cadastre"
       }
     },
     {
