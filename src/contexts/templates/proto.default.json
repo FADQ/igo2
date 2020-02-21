@@ -1,0 +1,182 @@
+{
+  "uri": "proto.default",
+  "title": "Local",
+  "mesurage": true,
+  "map": {
+    "view": {
+      "projection": "EPSG:32198",
+      "center": [-68, 48],
+      "extent": [
+        -886251.0296,
+        115000,
+        897177.3418,
+        2106143.8139
+      ],
+      "minZoom": 3,
+      "zoom": 3
+    }
+  },
+  "layers": [
+    {
+      "title": "Images les plus récentes",
+      "baseLayer": true,
+      "visible": true,
+      "sourceOptions": {
+        "type": "wmts",
+        "optionsFromCapabilities": true,
+        "url": "https://servicesmatriciels.mern.gouv.qc.ca/erdas-iws/ogc/wmts/Imagerie_Continue",
+        "layer": "Imagerie_GQ",
+        "matrixSet": "Lambert:epsg:32198",
+        "requestEncoding": "KVP",
+        "params": {
+          "version": "1.3.0"
+        }
+      }
+    }
+  ],
+  "toolbar": [
+    "client",
+    "searchResults",
+    "fadqMap",
+    "navigation",
+    "importExport",
+    "measurer",
+    "help"
+  ],
+  "tools": [
+    {
+      "name": "client",
+      "options": {
+        "showInfo": false
+      }
+    },
+    {
+      "name": "searchResults"
+    },
+    {
+      "name": "fadqMap"
+    },
+    {
+      "name": "catalogBrowser"
+    },
+    {
+      "name": "navigation",
+      "options": {
+        "pois": [],
+        "categories": [
+          {
+            "title": "navigation.categories.tcs",
+            "collection": {
+              "uri": "/igonavigation/zoom_selection/obtenirTerritoiresCentresServices",
+              "idProperty": "idTerritoireCentreServices",
+              "titleProperty": "nomCentreServices"
+            },
+            "feature": {
+              "uri": "/igonavigation/zoom_selection/obtenirTerritoireCentreServices/${id}"
+            }
+          },
+          {
+            "title": "navigation.categories.mrc",
+            "collection": {
+              "uri": "/igonavigation/zoom_selection/obtenirMunicipalitesRegionalesComte",
+              "idProperty": "code",
+              "titleProperty": "nom"
+            },
+            "feature": {
+              "uri": "/igonavigation/zoom_selection/obtenirMunicipaliteRegionaleComte/${id}"
+            }
+          },
+          {
+            "title": "navigation.categories.mun",
+            "collection": {
+              "uri": "/igonavigation/zoom_selection/obtenirMunicipalites",
+              "idProperty": "codeGeographique",
+              "titleProperty": "nomMunicipalite"
+            },
+            "feature": {
+              "uri": "/igonavigation/zoom_selection/obtenirMunicipalite/${id}"
+            }
+          },
+          {
+            "title": "navigation.categories.ra",
+            "collection": {
+              "uri": "/igonavigation/zoom_selection/obtenirRegionsAdministratives",
+              "idProperty": "codeRegionAdministrative",
+              "title": "${nomRegionAdministrative} (${codeRegionAdministrative})"
+            },
+            "feature": {
+              "uri": "/igonavigation/zoom_selection/obtenirRegionAdministrative/${id}"
+            }
+          },
+          {
+            "title": "navigation.categories.rzc",
+            "collection": {
+              "uri": "/igonavigation/zoom_selection/obtenirRegionsZonageCollectif",
+              "resultsProperty": "lstRegionZonageCollectif",
+              "idProperty": "idRegionZonageCollectif",
+              "title": "${noRegionZonageCollectif}-${nomRegionZonageCollectif}"
+            },
+            "feature": {
+              "uri": "/igonavigation/zoom_selection/obtenirRegionZonageCollectif/${id}"
+            }
+          },
+          {
+            "title": "navigation.categories.smd",
+            "collection": {
+              "uri": "/igonavigation/zoom_selection/obtenirStationsMeteoDisponibles",
+              "idProperty": "idStationMeteo",
+              "title": "${noStationFADQ}-${nomStation}"
+            },
+            "feature": {
+              "uri": "/igonavigation/zoom_selection/obtenirStationMeteo/${id}"
+            }
+          },
+          {
+            "title": "navigation.categories.smf",
+            "collection": {
+              "uri": "/igonavigation/zoom_selection/obtenirStationsMeteoAnneeAssurance/2018",
+              "idProperty": "idStationMeteo",
+              "title": "${noStationFADQ}-${nomStation}"
+            },
+            "feature": {
+              "uri": "/igonavigation/zoom_selection/obtenirStationMeteo/${id}"
+            }
+          },
+          {
+            "title": "navigation.categories.zc1",
+            "collection": {
+              "uri": "/igonavigation/zoom_selection/obtenirZonagesCollectifsAnneeActive/1",
+              "resultsProperty": "lstZonageCollectif",
+              "idProperty": "idZonageCollectif",
+              "title": "${regionZonage}-${noZone}"
+            },
+            "feature": {
+              "uri": "/igonavigation/zoom_selection/obtenirZonageCollectifAnneeActive/1/${id}"
+            }
+          },
+          {
+            "title": "navigation.categories.zc2",
+            "collection": {
+              "uri": "/igonavigation/zoom_selection/obtenirZonagesCollectifsAnneeActive/2",
+              "resultsProperty": "lstZonageCollectif",
+              "idProperty": "idZonageCollectif",
+              "title": "${regionZonage}-${noZone}"
+            },
+            "feature": {
+              "uri": "/igonavigation/zoom_selection/obtenirZonageCollectifAnneeActive/2/${id}"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "importExport"
+    },
+    {
+      "name": "measurer"
+    },
+    {
+      "name": "help"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+@import 'media';
+@import 'variables';
+@import '../../../shared/views/portal/portal.variables';
+
+$search-bar-left: calc(#{$igo-icon-size} + #{$igo-margin});
+$search-bar-width: calc(#{$fadq-sidenav-width} - #{$search-bar-left} - (2 * #{$igo-margin}));
+$search-bar-width-mobile: calc(100% - #{$fadq-mobile-min-space-right} - #{$search-bar-left} - (3 * #{$igo-margin}));

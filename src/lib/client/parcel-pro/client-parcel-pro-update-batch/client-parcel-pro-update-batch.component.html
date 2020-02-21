@@ -1,0 +1,11 @@
+<fadq-edition-update-batch
+  *ngIf="form$ | async as form"
+  [form]="form"
+  [store]="store"
+  [transaction]="transaction"
+  [features]="parcelPros"
+  [processData]="processData"
+  [getOperationTitle]="getOperationTitle"
+  (complete)="onComplete($event)"
+  (cancel)="onCancel()">
+</fadq-edition-update-batch>

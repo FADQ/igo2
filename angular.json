@@ -231,11 +231,19 @@
         }
       }
     },
+<<<<<<< HEAD
     "pes_interne": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
       "prefix": "pes_interne",
+=======
+    "proto": {
+      "root": "",
+      "sourceRoot": "src",
+      "projectType": "application",
+      "prefix": "proto",
+>>>>>>> e6d63713... wip: proto scaffolding and update tool
       "schematics": {
         "@schematics/angular:component": {
           "inlineTemplate": false,
@@ -246,9 +254,15 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+<<<<<<< HEAD
             "outputPath": "dist/pes_interne",
             "index": "src/index.html",
             "main": "src/apps/pes_interne.ts",
+=======
+            "outputPath": "dist/proto",
+            "index": "src/index.html",
+            "main": "src/apps/proto.ts",
+>>>>>>> e6d63713... wip: proto scaffolding and update tool
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
@@ -281,8 +295,13 @@
             "production": {
               "fileReplacements": [
                 {
+<<<<<<< HEAD
                   "replace": "src/environments/pes_interne/environment.ts",
                   "with": "src/environments/pes_interne/environment.prod.ts"
+=======
+                  "replace": "src/environments/proto/environment.ts",
+                  "with": "src/environments/proto/environment.prod.ts"
+>>>>>>> e6d63713... wip: proto scaffolding and update tool
                 }
               ],
               "optimization": true,
@@ -300,18 +319,30 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
+<<<<<<< HEAD
             "browserTarget": "pes_interne:build"
           },
           "configurations": {
             "production": {
               "browserTarget": "pes_interne:build:production"
+=======
+            "browserTarget": "proto:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "proto:build:production"
+>>>>>>> e6d63713... wip: proto scaffolding and update tool
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
+<<<<<<< HEAD
             "browserTarget": "pes_interne:build"
+=======
+            "browserTarget": "proto:build"
+>>>>>>> e6d63713... wip: proto scaffolding and update tool
           }
         },
         "test": {

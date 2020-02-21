@@ -1,0 +1,7 @@
+<fadq-client-parcel-pro-update-batch
+  [store]="store"
+  [transaction]="transaction"
+  [parcelPros]="parcelPros$ | async"
+  (complete)="onComplete($event)"
+  (cancel)="onCancel()">
+</fadq-client-parcel-pro-update-batch>

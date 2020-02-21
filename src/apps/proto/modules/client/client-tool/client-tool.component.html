@@ -1,0 +1,20 @@
+<div>
+  <div class="fadq-client-tool-top-section">
+    <fadq-client-parcel-year-selector
+      [store]="parcelYears">
+    </fadq-client-parcel-year-selector>
+  </div>
+
+  <igo-list [navigation]="false" [selection]="false">
+    <fadq-client-tool-item
+      [controller]="controller$ | async"
+      (clickAddress)="onClickAddress($event)">
+    </fadq-client-tool-item>
+
+    <igo-collapsible
+      [title]="'client.legend.title' | translate"
+      [collapsed]="true">
+      <fadq-client-parcel-legend></fadq-client-parcel-legend>
+    </igo-collapsible>
+  </igo-list>
+</div>
