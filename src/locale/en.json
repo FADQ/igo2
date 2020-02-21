@@ -225,7 +225,7 @@
     "delete.tooltip": "Supprimer un élément",
     "simplify": "Simplifier",
     "simplify.tooltip": "Simplifier des éléments",
-    "simplify.message": "Choisir un tolérance pour simplifier un élément",
+    "simplify.message": "Choisir le niveau de simplification de l'élément",
     "simplify.tolerance.placeholder": "Tolérance",
     "union": "Fusionner",
     "union.tooltip": "Fusionner des éléments",
