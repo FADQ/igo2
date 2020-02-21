@@ -9,6 +9,7 @@ import { ToolComponent, EntityRecord, EntityTransaction } from '@igo2/common';
 import { FeatureStore } from '@igo2/geo';
 
 import { ClientParcelPro } from 'src/lib/client';
+import { ClientController } from '../shared/client-controller';
 import { ClientState } from '../client.state';
 
 /**
