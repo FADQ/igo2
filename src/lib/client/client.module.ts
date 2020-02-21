@@ -33,6 +33,9 @@ import { FadqLibClientSchemaElementModule } from './schema-element/client-schema
     FadqLibClientSchemaFileModule.forRoot(),
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 38d6f19c... wip: proto scaffolding and update tool
     FadqLibClientSchemaElementModule.forRoot()
 =======
     FadqLibClientSchemaElementModule.forRoot(),
