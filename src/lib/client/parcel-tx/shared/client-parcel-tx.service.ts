@@ -7,50 +7,50 @@ import { map } from 'rxjs/operators';
 import { ApiService } from 'src/lib/core/api';
 
 import { Client } from '../../shared/client.interfaces';
-import { ClientParcelElementTxState } from './client-parcel-element.enums';
+import { ClientParcelTxState } from './client-parcel-tx.enums';
 import {
   ClientInReconciliationResponse,
   ClientInReconciliationResponseData,
-  ClientParcelElementApiConfig,
-  ClientParcelElementActivateTxResponse,
-  ClientInTx,
-  ClientsInTxGetResponse
-} from './client-parcel-element.interfaces';
+  ClientParcelTxApiConfig,
+  ClientParcelTxActivateResponse,
+  ClientInParcelTx,
+  ClientsInParcelTxGetResponse
+} from './client-parcel-tx.interfaces';
 
 @Injectable()
-export class ClientParcelElementTxService {
+export class ClientParcelTxService {
 
   constructor(
     private http: HttpClient,
     private apiService: ApiService,
-    @Inject('clientParcelElementApiConfig') private apiConfig: ClientParcelElementApiConfig
+    @Inject('clientParcelTxApiConfig') private apiConfig: ClientParcelTxApiConfig
   ) {}
 
   getClientsInTx(): Observable<Client[]> {
-    const url = this.apiService.buildUrl(this.apiConfig.clientsInTx);
+    const url = this.apiService.buildUrl(this.apiConfig.clients);
     return this.http.get(url)
       .pipe(
-        map((response: ClientsInTxGetResponse) => {
+        map((response: ClientsInParcelTxGetResponse) => {
           return this.extractClientsFromClientsInTxResponse(response);
         })
       );
   }
 
-  getParcelTxState(client: Client, annee: number): Observable<ClientParcelElementTxState> {
-    const url = this.apiService.buildUrl(this.apiConfig.startTx, {
+  getParcelTxState(client: Client, annee: number): Observable<ClientParcelTxState> {
+    const url = this.apiService.buildUrl(this.apiConfig.start, {
       clientNum: client.info.numero,
       annee
     });
     return this.http.get(url)
       .pipe(
-        map((response: ClientParcelElementActivateTxResponse) => {
+        map((response: ClientParcelTxActivateResponse) => {
           return response.data.resultat;
         })
       );
   }
 
   prepareParcelTx(client: Client, annee: number): Observable<any> {
-    const url = this.apiService.buildUrl(this.apiConfig.createTx, {
+    const url = this.apiService.buildUrl(this.apiConfig.create, {
       clientNum: client.info.numero,
       annee
     });
@@ -58,7 +58,7 @@ export class ClientParcelElementTxService {
   }
 
   deleteParcelTx(client: Client, annee: number): Observable<any> {
-    const url = this.apiService.buildUrl(this.apiConfig.deleteTx, {
+    const url = this.apiService.buildUrl(this.apiConfig.delete, {
       clientNum: client.info.numero,
       annee
     });
@@ -96,8 +96,8 @@ export class ClientParcelElementTxService {
     return this.http.get(url);
   }
 
-  private extractClientsFromClientsInTxResponse(response: ClientsInTxGetResponse): Client[] {
-    return response.data.map((item: ClientInTx) => ({
+  private extractClientsFromClientsInTxResponse(response: ClientsInParcelTxGetResponse): Client[] {
+    return response.data.map((item: ClientInParcelTx) => ({
       info: {
         numero: item.noClient,
         nom: item.nomClient,

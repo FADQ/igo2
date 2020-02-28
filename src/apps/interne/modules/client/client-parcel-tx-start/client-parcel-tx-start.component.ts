@@ -14,18 +14,21 @@ import { BehaviorSubject } from 'rxjs';
 import { LanguageService, Message, MessageType } from '@igo2/core';
 import { WidgetComponent, OnUpdateInputs } from '@igo2/common';
 
-import { SubmitStep, SubmitHandler } from '../../../utils';
-import { ClientController } from '../../shared/client-controller';
-import { ClientParcelElementTxService } from '../shared/client-parcel-element-tx.service';
-import { ClientParcelElementTxState } from '../shared/client-parcel-element.enums';
+import {
+  ClientParcelTxService,
+  ClientParcelTxState
+} from 'src/lib/client';
+import { SubmitStep, SubmitHandler } from 'src/lib/utils';
+
+import { ClientController } from '../shared/client-controller';
 
 @Component({
-  selector: 'fadq-client-parcel-element-start-tx',
-  templateUrl: './client-parcel-element-start-tx.component.html',
-  styleUrls: ['./client-parcel-element-start-tx.component.scss'],
+  selector: 'fadq-client-parcel-tx-start',
+  templateUrl: './client-parcel-tx-start.component.html',
+  styleUrls: ['./client-parcel-tx-start.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientParcelElementStartTxComponent
+export class ClientParcelTxStartComponent
     implements WidgetComponent, OnUpdateInputs, OnInit, OnDestroy {
 
   /**
@@ -60,7 +63,7 @@ export class ClientParcelElementStartTxComponent
    /**
    * Edition state
    */
-  @Input() state: ClientParcelElementTxState;
+  @Input() state: ClientParcelTxState;
 
   /**
    * Event emitted on complete
@@ -73,7 +76,7 @@ export class ClientParcelElementStartTxComponent
   @Output() cancel = new EventEmitter<void>();
 
   constructor(
-    private clientParcelElementTxService: ClientParcelElementTxService,
+    private clientParcelTxService: ClientParcelTxService,
     private languageService: LanguageService,
     private cdRef: ChangeDetectorRef
   ) {}
@@ -91,7 +94,7 @@ export class ClientParcelElementStartTxComponent
       });
       this.error$.next(true);
     } else if (!this.controller.parcelYear.current) {
-      const messageKey = 'client.parcelElement.startTx.notCurrentYear';
+      const messageKey = 'client.parcelTx.start.notCurrentYear';
       this.message$.next({
         type: MessageType.ALERT,
         text: this.languageService.translate.instant(messageKey)
@@ -115,10 +118,10 @@ export class ClientParcelElementStartTxComponent
   }
 
   onSubmit() {
-    if (this.state === ClientParcelElementTxState.OK) {
+    if (this.state === ClientParcelTxState.OK) {
       this.onSubmitSuccess();
     } else {
-      const submit$ = this.clientParcelElementTxService.prepareParcelTx(
+      const submit$ = this.clientParcelTxService.prepareParcelTx(
         this.controller.client, this.controller.parcelYear.annee
       );
       this.submitHandler.handle(submit$, {
@@ -139,10 +142,10 @@ export class ClientParcelElementStartTxComponent
 
   private validateState(): string | undefined {
     const state = this.state;
-    if (state === ClientParcelElementTxState.AI) {
+    if (state === ClientParcelTxState.AI) {
       return this.languageService.translate.instant('client.parcelElement.edition.ai.error');
     }
-    if (state === ClientParcelElementTxState.EEC) {
+    if (state === ClientParcelTxState.EEC) {
       return this.languageService.translate.instant('client.parcelElement.edition.eec.error');
     }
     return undefined;

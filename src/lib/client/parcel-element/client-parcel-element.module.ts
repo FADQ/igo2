@@ -5,12 +5,6 @@ import {
   FadqLibClientParcelElementCreateModule
 } from './client-parcel-element-create/client-parcel-element-create.module';
 import {
-  FadqLibClientParcelElementStartTxModule
-} from './client-parcel-element-start-tx/client-parcel-element-start-tx.module';
-import {
-  FadqLibClientParcelElementDeleteTxDialogModule
-} from './client-parcel-element-delete-tx-dialog/client-parcel-element-delete-tx-dialog.module';
-import {
   FadqLibClientParcelElementUpdateModule
 } from './client-parcel-element-update/client-parcel-element-update.module';
 import {
@@ -25,9 +19,6 @@ import {
 import {
   FadqLibClientParcelElementNumberingModule
 } from './client-parcel-element-numbering/client-parcel-element-numbering.module';
-import {
-  FadqLibClientParcelElementReconciliateModule
-} from './client-parcel-element-reconciliate/client-parcel-element-reconciliate.module';
 import {
   FadqLibClientParcelElementSimplifyModule
 } from './client-parcel-element-simplify/client-parcel-element-simplify.module';
@@ -55,18 +46,15 @@ import {
 
 import {
   provideClientParcelElementService,
-  provideClientParcelElementTxService,
   provideClientParcelElementFormService
 } from './shared/client-parcel-element.providers';
 import {
   provideClientParcelElementCreateWidget,
-  provideClientParcelElementStartTxWidget,
   provideClientParcelElementUpdateWidget,
   provideClientParcelElementUpdateBatchWidget,
   provideClientParcelElementRedrawWidget,
   provideClientParcelElementFillWidget,
   provideClientParcelElementNumberingWidget,
-  provideClientParcelElementReconciliateWidget,
   provideClientParcelElementSimplifyWidget,
   provideClientParcelElementSliceWidget,
   provideClientParcelElementSaveWidget,
@@ -82,14 +70,11 @@ import {
   ],
   exports: [
     FadqLibClientParcelElementCreateModule,
-    FadqLibClientParcelElementStartTxModule,
-    FadqLibClientParcelElementDeleteTxDialogModule,
     FadqLibClientParcelElementUpdateModule,
     FadqLibClientParcelElementUpdateBatchModule,
     FadqLibClientParcelElementRedrawModule,
     FadqLibClientParcelElementFillModule,
     FadqLibClientParcelElementNumberingModule,
-    FadqLibClientParcelElementReconciliateModule,
     FadqLibClientParcelElementSimplifyModule,
     FadqLibClientParcelElementSliceModule,
     FadqLibClientParcelElementSaveModule,
@@ -107,16 +92,13 @@ export class FadqLibClientParcelElementModule {
       ngModule: FadqLibClientParcelElementModule,
       providers: [
         provideClientParcelElementService(),
-        provideClientParcelElementTxService(),
         provideClientParcelElementFormService(),
         provideClientParcelElementCreateWidget(),
-        provideClientParcelElementStartTxWidget(),
         provideClientParcelElementUpdateWidget(),
         provideClientParcelElementUpdateBatchWidget(),
         provideClientParcelElementRedrawWidget(),
         provideClientParcelElementFillWidget(),
         provideClientParcelElementNumberingWidget(),
-        provideClientParcelElementReconciliateWidget(),
         provideClientParcelElementSimplifyWidget(),
         provideClientParcelElementSliceWidget(),
         provideClientParcelElementSaveWidget(),

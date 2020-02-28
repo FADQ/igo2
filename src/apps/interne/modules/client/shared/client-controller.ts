@@ -10,35 +10,32 @@ import {
   IgoMap
 } from '@igo2/geo';
 
-import { Client } from '../shared/client.interfaces';
 import {
+  Client,
   ClientParcel,
   ClientParcelDiagram,
-  ClientParcelYear
-} from '../parcel/shared/client-parcel.interfaces';
-import { ClientParcelWorkspace } from '../parcel/shared/client-parcel-workspace';
-import { ClientParcelService } from '../parcel/shared/client-parcel.service';
-import {
+  ClientParcelYear,
+  ClientParcelWorkspace,
+  ClientParcelService,
+  ClientParcelElementWorkspace,
+  ClientParcelElement,
+  ClientParcelElementService,
+  ClientParcelElementTransactionService ,
+  ClientSchema,
+  ClientSchemaService,
+  ClientSchemaWorkspace,
+  ClientSchemaElement,
+  ClientSchemaElementTypes,
+  ClientSchemaElementWorkspace,
+  ClientSchemaElementService,
+  ClientSchemaElementTransactionService,
+  createSchemaElementLayerStyle,
+  createParcelElementLayerStyle,
   createPerClientParcelLayerStyle,
   createParcelLayerStyle,
-  getDiagramsFromParcels
-} from '../parcel/shared/client-parcel.utils';
-import { ClientParcelElementWorkspace } from '../parcel-element/shared/client-parcel-element-workspace';
-import { ClientParcelElement } from '../parcel-element/shared/client-parcel-element.interfaces';
-import { ClientParcelElementService } from '../parcel-element/shared/client-parcel-element.service';
-import { ClientParcelElementTransactionService } from '../parcel-element/shared/client-parcel-element-transaction.service';
-import {
-  createParcelElementLayerStyle,
+  getDiagramsFromParcels,
   getDiagramsFromParcelElements
-} from '../parcel-element/shared/client-parcel-element.utils';
-import { ClientSchema } from '../schema/shared/client-schema.interfaces';
-import { ClientSchemaService } from '../schema/shared/client-schema.service';
-import { ClientSchemaWorkspace } from '../schema/shared/client-schema-workspace';
-import { ClientSchemaElement, ClientSchemaElementTypes } from '../schema-element/shared/client-schema-element.interfaces';
-import { ClientSchemaElementWorkspace } from '../schema-element/shared/client-schema-element-workspace';
-import { ClientSchemaElementService } from '../schema-element/shared/client-schema-element.service';
-import { ClientSchemaElementTransactionService } from '../schema-element/shared/client-schema-element-transaction.service';
-import { createSchemaElementLayerStyle } from '../schema-element/shared/client-schema-element.utils';
+} from 'src/lib/client';
 
 export interface ClientControllerOptions {
   map: IgoMap;
@@ -157,8 +154,8 @@ export class ClientController {
   }
 
   /** Whether parcel edition is active */
-  get parcelElementsActive(): boolean { return this.parcelElementTxOngoing.value; }
-  readonly parcelElementTxOngoing: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  get parcelElementsActive(): boolean { return this.parcelTxOngoing.value; }
+  readonly parcelTxOngoing: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   /** Schema workspace */
   get schemaWorkspace(): ClientSchemaWorkspace {
@@ -297,7 +294,7 @@ export class ClientController {
    * Activate parcel elements
    */
   activateParcelElements() {
-    this.parcelElementTxOngoing.next(true);
+    this.parcelTxOngoing.next(true);
     this.unobserveDiagrams();
     this.initParcelElements();
     this.loadParcelElements();
@@ -511,7 +508,7 @@ export class ClientController {
    * Deactivate the parcel element workspace and teardown observers.
    */
   private teardownParcelElements() {
-    this.parcelElementTxOngoing.next(false);
+    this.parcelTxOngoing.next(false);
 
     if (this.parcelElements$$ !== undefined) {
       this.parcelElements$$.unsubscribe();

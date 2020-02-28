@@ -8,6 +8,7 @@ import { provideClientService } from './shared/client.providers';
 import { FadqLibClientInfoModule } from './info/client-info.module';
 import { FadqLibClientParcelModule } from './parcel/client-parcel.module';
 import { FadqLibClientParcelElementModule } from './parcel-element/client-parcel-element.module';
+import { FadqLibClientParcelTxModule } from './parcel-tx/client-parcel-tx.module';
 import { FadqLibClientSchemaModule } from './schema/client-schema.module';
 import { FadqLibClientSchemaFileModule } from './schema-file/client-schema-file.module';
 import { FadqLibClientSchemaElementModule } from './schema-element/client-schema-element.module';
@@ -18,15 +19,17 @@ import { FadqLibClientSchemaElementModule } from './schema-element/client-schema
     FadqLibEditionModule.forRoot(),
     FadqLibClientInfoModule.forRoot(),
     FadqLibClientParcelModule.forRoot(),
+    FadqLibClientParcelElementModule.forRoot(),
+    FadqLibClientParcelTxModule.forRoot(),
     FadqLibClientSchemaModule.forRoot(),
     FadqLibClientSchemaFileModule.forRoot(),
-    FadqLibClientSchemaElementModule.forRoot(),
-    FadqLibClientParcelElementModule.forRoot()
+    FadqLibClientSchemaElementModule.forRoot()
   ],
   exports: [
     FadqLibClientInfoModule,
     FadqLibClientParcelModule,
     FadqLibClientParcelElementModule,
+    FadqLibClientParcelTxModule,
     FadqLibClientSchemaModule,
     FadqLibClientSchemaFileModule,
     FadqLibClientSchemaElementModule

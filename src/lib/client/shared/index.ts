@@ -1,4 +1,3 @@
-export * from './client-controller';
 export * from './client.interfaces';
 export * from './client.enums';
 export * from './client.providers';

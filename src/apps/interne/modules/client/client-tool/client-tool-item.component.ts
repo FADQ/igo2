@@ -11,9 +11,10 @@ import { BehaviorSubject } from 'rxjs';
 
 import {
   Client,
-  ClientController,
   ClientInfoService,
 } from 'src/lib/client';
+
+import { ClientController } from '../shared/client-controller';
 
 @Component({
   selector: 'fadq-client-tool-item',

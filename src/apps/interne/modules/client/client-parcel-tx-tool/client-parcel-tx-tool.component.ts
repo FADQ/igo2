@@ -15,11 +15,10 @@ import {
   Client,
   ClientService,
   ClientParcelYear,
-  ClientController,
-  ClientParcelElementTxService,
-  ClientParcelElementDeleteTxDialogComponent
+  ClientParcelTxService
 } from 'src/lib/client';
 
+import { ClientParcelTxDeleteDialogComponent } from '../client-parcel-tx-delete-dialog/client-parcel-tx-delete-dialog.component';
 import { ClientState } from '../client.state';
 
 /**
@@ -27,16 +26,16 @@ import { ClientState } from '../client.state';
  */
 @ToolComponent({
   name: 'clientTx',
-  title: 'tools.clientTx',
+  title: 'tools.clientParcelTx',
   icon: 'account-multiple-plus'
 })
 @Component({
-  selector: 'fadq-client-tx-tool',
-  templateUrl: './client-tx-tool.component.html',
-  styleUrls: ['./client-tx-tool.component.scss'],
+  selector: 'fadq-client-parcel-tx-tool',
+  templateUrl: './client-parcel-tx-tool.component.html',
+  styleUrls: ['./client-parcel-tx-tool.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientTxToolComponent implements OnInit, OnDestroy {
+export class ClientParcelTxToolComponent implements OnInit, OnDestroy {
 
   /**
    * Client store
@@ -70,12 +69,12 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
    * @internal
    */
   get parcelYearSelectorDisabled$(): BehaviorSubject<boolean> {
-    return this.clientState.parcelElementTxOngoing$;
+    return this.clientState.parcelTxOngoing$;
   }
 
   constructor(
     private clientService: ClientService,
-    private clientParcelElementTxService: ClientParcelElementTxService,
+    private clientParcelTxService: ClientParcelTxService,
     private clientState: ClientState,
     private dialog: MatDialog,
     private cdRef: ChangeDetectorRef
@@ -97,7 +96,7 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
         (client: Client) => client.tx.annee === parcelYear.annee
       ));
 
-    this.clientParcelElementTxService.getClientsInTx()
+    this.clientParcelTxService.getClientsInTx()
       .subscribe((clients: Client[]) => this.clients.load(clients));
 
     this.activeClients$$ = this.clientState.controllers.count$
@@ -147,7 +146,7 @@ export class ClientTxToolComponent implements OnInit, OnDestroy {
       annee: this.clientState.parcelYear$.value.annee,
       controller: controller
     };
-    this.dialog.open(ClientParcelElementDeleteTxDialogComponent, {data});
+    this.dialog.open(ClientParcelTxDeleteDialogComponent, {data});
   }
 
   /**

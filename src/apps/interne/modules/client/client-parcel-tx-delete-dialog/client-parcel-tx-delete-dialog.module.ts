@@ -6,7 +6,7 @@ import { IgoLanguageModule } from '@igo2/core';
 
 import { FadqLibMessageInlineModule } from 'src/lib/message/message-inline/message-inline.module';
 
-import { ClientParcelElementDeleteTxDialogComponent } from './client-parcel-element-delete-tx-dialog.component';
+import { ClientParcelTxDeleteDialogComponent } from './client-parcel-tx-delete-dialog.component';
 
 /**
  * @ignore
@@ -19,8 +19,8 @@ import { ClientParcelElementDeleteTxDialogComponent } from './client-parcel-elem
     IgoLanguageModule,
     FadqLibMessageInlineModule
   ],
-  declarations: [ClientParcelElementDeleteTxDialogComponent],
-  exports: [ClientParcelElementDeleteTxDialogComponent],
-  entryComponents: [ClientParcelElementDeleteTxDialogComponent]
+  declarations: [ClientParcelTxDeleteDialogComponent],
+  exports: [ClientParcelTxDeleteDialogComponent],
+  entryComponents: [ClientParcelTxDeleteDialogComponent]
 })
-export class FadqLibClientParcelElementDeleteTxDialogModule {}
+export class FadqClientParcelTxDeleteDialogModule {}

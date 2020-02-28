@@ -13,8 +13,8 @@ import { IgoListModule } from '@igo2/common';
 
 import { FadqLibClientModule } from 'src/lib/client/client.module';
 
-import { ClientTxToolComponent } from './client-tx-tool.component';
-import { ClientTxToolItemComponent } from './client-tx-tool-item.component';
+import { ClientParcelTxToolComponent } from './client-parcel-tx-tool.component';
+import { ClientParcelTxToolItemComponent } from './client-parcel-tx-tool-item.component';
 
 /**
  * @ignore
@@ -31,11 +31,11 @@ import { ClientTxToolItemComponent } from './client-tx-tool-item.component';
     FadqLibClientModule
   ],
   declarations: [
-    ClientTxToolComponent,
-    ClientTxToolItemComponent
+    ClientParcelTxToolComponent,
+    ClientParcelTxToolItemComponent
   ],
-  exports: [ClientTxToolComponent],
-  entryComponents: [ClientTxToolComponent],
+  exports: [ClientParcelTxToolComponent],
+  entryComponents: [ClientParcelTxToolComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class FadqClientTxToolModule {}
+export class FadqClientParcelTxToolModule {}

@@ -19,7 +19,6 @@ import { EditionUndoWidget } from 'src/lib/edition';
 
 import {
   Client,
-  ClientController,
   ClientParcelElement,
   ClientParcelElementMessage,
   ClientParcelElementCreateWidget,
@@ -28,7 +27,6 @@ import {
   ClientParcelElementRedrawWidget,
   ClientParcelElementFillWidget,
   ClientParcelElementNumberingWidget,
-  ClientParcelElementReconciliateWidget,
   ClientParcelElementSimplifyWidget,
   ClientParcelElementSliceWidget,
   ClientParcelElementSaveWidget,
@@ -37,12 +35,15 @@ import {
   ClientParcelElementTransferWidget,
   ClientParcelElementWithoutOwnerWidget,
   ClientParcelElementService,
+  ClientParcelTxReconciliateWidget,
   generateParcelElementOperationTitle,
   getParcelElementErrors,
   getParcelElementMergeBase
 } from 'src/lib/client';
 import { moveToFeatureStore } from 'src/lib/feature';
 import { every } from 'src/lib/utils';
+
+import { ClientController } from './client-controller';
 
 @Injectable({
   providedIn: 'root'
@@ -56,7 +57,6 @@ export class ClientParcelElementActionsService {
     @Inject(ClientParcelElementRedrawWidget) private clientParcelElementRedrawWidget: Widget,
     @Inject(ClientParcelElementFillWidget) private clientParcelElementFillWidget: Widget,
     @Inject(ClientParcelElementNumberingWidget) private clientParcelElementNumberingWidget: Widget,
-    @Inject(ClientParcelElementReconciliateWidget) private clientParcelElementReconciliateWidget: Widget,
     @Inject(ClientParcelElementSimplifyWidget) private clientParcelElementSimplifyWidget: Widget,
     @Inject(ClientParcelElementSliceWidget) private clientParcelElementSliceWidget: Widget,
     @Inject(ClientParcelElementSaveWidget) private clientParcelElementSaveWidget: Widget,
@@ -65,6 +65,7 @@ export class ClientParcelElementActionsService {
     @Inject(ClientParcelElementImportWidget) private clientParcelElementImportWidget: Widget,
     @Inject(ClientParcelElementTransferWidget) private clientParcelElementTransferWidget: Widget,
     @Inject(ClientParcelElementWithoutOwnerWidget) private clientParcelElementWithoutOwnerWidget: Widget,
+    @Inject(ClientParcelTxReconciliateWidget) private clientParcelTxReconciliateWidget: Widget,
     private clientParcelElementService: ClientParcelElementService,
     private languageService: LanguageService
   ) {}
@@ -496,9 +497,9 @@ export class ClientParcelElementActionsService {
       {
         id: 'reconciliate',
         icon: 'table-merge-cells',
-        title: 'client.parcelElement.reconciliate',
-        tooltip: 'client.parcelElement.reconciliate.tooltip',
-        args: [controller, this.clientParcelElementReconciliateWidget],
+        title: 'client.parcelTx.reconciliate',
+        tooltip: 'client.parcelTx.reconciliate.tooltip',
+        args: [controller, this.clientParcelTxReconciliateWidget],
         handler: (ctrl: ClientController, widget: Widget) => {
           ctrl.parcelElementWorkspace.activateWidget(widget, {
             client: ctrl.client,

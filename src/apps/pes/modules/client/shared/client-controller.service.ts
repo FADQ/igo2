@@ -5,11 +5,13 @@ import { MapState } from '@igo2/integration';
 
 import {
   Client,
-  ClientControllerOptions,
   ClientParcelService
 } from 'src/lib/client';
 
-import { ClientController } from './client-controller';
+import {
+  ClientController,
+  ClientControllerOptions
+} from './client-controller';
 import { ClientParcelWorkspaceService } from './client-parcel-workspace.service';
 import { ClientParcelActionsService } from './client-parcel-actions.service';
 

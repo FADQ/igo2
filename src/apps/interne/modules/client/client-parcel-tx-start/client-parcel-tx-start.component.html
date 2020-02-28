@@ -1,21 +1,11 @@
 <fadq-card-panel
   [svgIcon]="'help-circle'"
   [iconColor]="'accent'"
-  [title]="'client.parcelElement.reconciliate.confirm' | translate"
+  [title]="'client.parcelTx.start.confirm' | translate"
   [message]="message$ | async">
 
-  <div class="client-parcel-element-reconciliate-linked-clients">
-    {{'client.parcelElement.reconciliate.linkedClients' | translate}}
-  </div>
-
-  <igo-entity-table
-    class="table-compact"
-    [store]="clientStore"
-    [template]="tableTemplate">
-  </igo-entity-table>
-
   <ng-container buttons>
-    <ng-container *ngIf="((submitHandler.step$ | async) !== submitStep.Complete); else close">
+    <ng-container *ngIf="!(error$ | async); else error">
       <button
         mat-button
         type="button"
@@ -31,15 +21,16 @@
         {{ 'yes' | translate }}
       </button>
     </ng-container>
-    <ng-template #close>
+    
+    <ng-template #error>
       <button
         mat-raised-button
         color="primary"
         type="button"
-        (click)="onClose()">
+        (click)="onCancel()">
         {{ 'close' | translate }}
-      </button>  
-    </ng-template>
+      </button>
+    </ng-template> 
   </ng-container>
 
 </fadq-card-panel>

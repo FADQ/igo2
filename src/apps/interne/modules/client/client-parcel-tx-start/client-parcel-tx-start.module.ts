@@ -7,7 +7,7 @@ import { IgoLanguageModule } from '@igo2/core';
 import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
 import { FadqLibMessageInlineModule } from 'src/lib/message/message-inline/message-inline.module';
 
-import { ClientParcelElementStartTxComponent } from './client-parcel-element-start-tx.component';
+import { ClientParcelTxStartComponent } from './client-parcel-tx-start.component';
 
 /**
  * @ignore
@@ -21,13 +21,13 @@ import { ClientParcelElementStartTxComponent } from './client-parcel-element-sta
     FadqLibMessageInlineModule
   ],
   exports: [
-    ClientParcelElementStartTxComponent
+    ClientParcelTxStartComponent
   ],
   declarations: [
-    ClientParcelElementStartTxComponent
+    ClientParcelTxStartComponent
   ],
   entryComponents: [
-    ClientParcelElementStartTxComponent
+    ClientParcelTxStartComponent
   ]
 })
-export class FadqLibClientParcelElementStartTxModule {}
+export class FadqClientParcelTxStartModule {}

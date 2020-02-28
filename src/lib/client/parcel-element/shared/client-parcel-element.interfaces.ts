@@ -3,20 +3,13 @@ import { Feature } from '@igo2/geo';
 
 import { Client } from '../../shared/client.interfaces';
 import { ClientInfoGetResponseData } from '../../info/shared/client-info.interfaces';
-import { ClientParcelElementTxState } from './client-parcel-element.enums';
 
 export interface ClientParcelElementApiConfig {
   list: string;
   save: string;
-  reconciliate: string;
-  reconciliateClients: string;
   validateTransfer: string;
   transfer: string;
   parcelsWithoutOwner: string;
-  startTx: string;
-  createTx: string;
-  deleteTx: string;
-  clientsInTx: string;
   domains: {
     source: string;
     statutAugm: string;
@@ -68,13 +61,6 @@ export interface ClientParcelElementTransactionWrapper {
   abort?: () => void;
 }
 
-export interface ClientParcelElementActivateTxResponse {
-  statut: number;
-  data: {
-    resultat: ClientParcelElementTxState;
-  };
-}
-
 export interface ClientParcelElementSaveData {
   lstParcellesAjoutes: ClientParcelElement[];
   lstParcellesModifies: ClientParcelElement[];
@@ -85,27 +71,5 @@ export interface ClientParcelElementValidateTransferResponse {
   statut: number;
   data: {
     transfertPossible: boolean;
-  };
-}
-
-export interface ClientInReconciliationResponseData {
-  numeroClient: string;
-  nomClient: string;
-}
-
-export interface ClientInReconciliationResponse {
-  data: ClientInfoGetResponseData[];
-}
-
-export interface ClientsInTxGetResponse {
-  data: ClientInTx[];
-}
-
-export interface ClientInTx {
-  noClient: string;
-  nomClient: string;
-  annee: number;
-  dateCreation: {
-    date: string;
   };
 }

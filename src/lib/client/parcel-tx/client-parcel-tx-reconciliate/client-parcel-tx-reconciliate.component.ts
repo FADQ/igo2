@@ -21,15 +21,15 @@ import {
 
 import { SubmitStep, SubmitHandler } from '../../../utils';
 import { Client } from '../../shared/client.interfaces';
-import { ClientParcelElementTxService } from '../shared/client-parcel-element-tx.service';
+import { ClientParcelTxService } from '../shared/client-parcel-tx.service';
 
 @Component({
-  selector: 'fadq-client-parcel-element-reconciliate',
-  templateUrl: './client-parcel-element-reconciliate.component.html',
-  styleUrls: ['./client-parcel-element-reconciliate.component.scss'],
+  selector: 'fadq-client-parcel-tx-reconciliate',
+  templateUrl: './client-parcel-tx-reconciliate.component.html',
+  styleUrls: ['./client-parcel-tx-reconciliate.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientParcelElementReconciliateComponent
+export class ClientParcelTxReconciliateComponent
     implements WidgetComponent, OnUpdateInputs, OnInit, OnDestroy {
 
   /**
@@ -98,7 +98,7 @@ export class ClientParcelElementReconciliateComponent
   @Output() cancel = new EventEmitter<void>();
 
   constructor(
-    private clientParcelElementTxService: ClientParcelElementTxService,
+    private clientParcelTxService: ClientParcelTxService,
     private languageService: LanguageService,
     private cdRef: ChangeDetectorRef
   ) {}
@@ -108,7 +108,7 @@ export class ClientParcelElementReconciliateComponent
    * @internal
    */
   ngOnInit() {
-    this.clientParcelElementTxService.getClientsInReconcilitation(this.client)
+    this.clientParcelTxService.getClientsInReconcilitation(this.client)
       .subscribe((clients: Client[]) => this.clientStore.load(clients));
   }
 
@@ -128,7 +128,7 @@ export class ClientParcelElementReconciliateComponent
   }
 
   onSubmit() {
-    const submit$ = this.clientParcelElementTxService.reconciliate(this.client, this.annee);
+    const submit$ = this.clientParcelTxService.reconciliate(this.client, this.annee);
     this.submitHandler.handle(submit$, {
       error: () => this.onSubmitError(),
       success: () => this.onSubmitSuccess()
@@ -146,14 +146,14 @@ export class ClientParcelElementReconciliateComponent
   }
 
   private onSubmitError() {
-    const messageKey = 'client.parcelElement.reconciliate.error';
+    const messageKey = 'client.parcelTx.reconciliate.error';
     const messageType = MessageType.ERROR;
     const text = this.languageService.translate.instant(messageKey);
     this.message$.next({type: messageType, text});
   }
 
   private onSubmitSuccess() {
-    const messageKey = 'client.parcelElement.reconciliate.success';
+    const messageKey = 'client.parcelTx.reconciliate.success';
     const messageType = MessageType.SUCCESS;
     const text = this.languageService.translate.instant(messageKey);
     this.message$.next({type: messageType, text});

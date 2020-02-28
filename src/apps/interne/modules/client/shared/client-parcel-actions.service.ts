@@ -12,14 +12,15 @@ import { entitiesToRowData,  exportToCSV } from '@igo2/geo';
 import { ContextState } from '@igo2/integration';
 
 import {
-  ClientController,
-  ClientParcelElementTxService,
-  ClientParcelElementTxState,
-  ClientParcelElementStartTxWidget,
+  ClientParcelTxService,
+  ClientParcelTxState,
   FeatureStoreFilterNotOwnedStrategy,
   parcelElementsEnabledInContext
 } from 'src/lib/client';
 import { moveToFeatureStore } from 'src/lib/feature';
+
+import { ClientParcelTxStartWidget } from './client-parcel-tx.widgets';
+import { ClientController } from './client-controller';
 
 @Injectable({
   providedIn: 'root'
@@ -27,8 +28,8 @@ import { moveToFeatureStore } from 'src/lib/feature';
 export class ClientParcelActionsService {
 
   constructor(
-    @Inject(ClientParcelElementStartTxWidget) private clientParcelElementStartTxWidget: Widget,
-    private clientParcelElementTxService: ClientParcelElementTxService,
+    @Inject(ClientParcelTxStartWidget) private clientParcelTxStartTxWidget: Widget,
+    private clientParcelTxService: ClientParcelTxService,
     private contextState: ContextState
   ) {}
 
@@ -51,13 +52,13 @@ export class ClientParcelActionsService {
       {
         id: 'activate-parcel-eLements',
         icon: 'square-edit-outline',
-        title: 'client.parcelElement.startTx',
-        tooltip: 'client.parcelElement.startTx.tooltip',
-        args: [controller, this.clientParcelElementStartTxWidget],
+        title: 'client.parcelTx.start',
+        tooltip: 'client.parcelTx.start.tooltip',
+        args: [controller, this.clientParcelTxStartTxWidget],
         handler: (ctrl: ClientController, widget: Widget) => {
-          this.clientParcelElementTxService.getParcelTxState(ctrl.client, ctrl.parcelYear.annee)
-            .subscribe((state: ClientParcelElementTxState) => {
-              if (state === ClientParcelElementTxState.OK) {
+          this.clientParcelTxService.getParcelTxState(ctrl.client, ctrl.parcelYear.annee)
+            .subscribe((state: ClientParcelTxState) => {
+              if (state === ClientParcelTxState.OK) {
                 ctrl.activateParcelElements();
               } else {
                 ctrl.parcelWorkspace.activateWidget(widget, {

@@ -6,7 +6,7 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 
-import { ClientController } from 'src/lib/client';
+import { ClientController } from '../shared/client-controller';
 
 /**
  * Tool to display a client's info and addresses

@@ -11,7 +11,7 @@ import { IgoEntityTableModule } from '@igo2/common';
 
 import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
 
-import { ClientParcelElementReconciliateComponent } from './client-parcel-element-reconciliate.component';
+import { ClientParcelTxReconciliateComponent } from './client-parcel-tx-reconciliate.component';
 
 /**
  * @ignore
@@ -27,13 +27,13 @@ import { ClientParcelElementReconciliateComponent } from './client-parcel-elemen
     FadqLibCardPanelModule
   ],
   exports: [
-    ClientParcelElementReconciliateComponent
+    ClientParcelTxReconciliateComponent
   ],
   declarations: [
-    ClientParcelElementReconciliateComponent
+    ClientParcelTxReconciliateComponent
   ],
   entryComponents: [
-    ClientParcelElementReconciliateComponent
+    ClientParcelTxReconciliateComponent
   ]
 })
-export class FadqLibClientParcelElementReconciliateModule {}
+export class FadqLibClientParcelTxReconciliateModule {}

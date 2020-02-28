@@ -10,12 +10,12 @@ import {
 import { Client } from 'src/lib/client';
 
 @Component({
-  selector: 'fadq-client-tx-tool-item',
-  templateUrl: './client-tx-tool-item.component.html',
-  styleUrls: ['./client-tx-tool-item.component.scss'],
+  selector: 'fadq-client-parcel-tx-tool-item',
+  templateUrl: './client-parcel-tx-tool-item.component.html',
+  styleUrls: ['./client-parcel-tx-tool-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientTxToolItemComponent {
+export class ClientParcelTxToolItemComponent {
 
   /**
    * Client
@@ -49,7 +49,7 @@ export class ClientTxToolItemComponent {
   /**
    * @ignore
    */
-  @HostBinding('class.fadq-client-tx-tool-item-added')
+  @HostBinding('class.fadq-client-parcel-tx-tool-item-added')
   get withAddedClass() { return this.added; }
 
   constructor() {}

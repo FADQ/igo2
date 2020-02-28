@@ -7,17 +7,20 @@ import { concatMap } from 'rxjs/operators';
 import { Message, MessageType, LanguageService } from '@igo2/core';
 import { EntityStore } from '@igo2/common';
 
-import { SubmitStep, SubmitHandler } from '../../../utils';
-import { Client } from '../../shared/client.interfaces';
-import { ClientController } from '../../shared/client-controller';
-import { ClientParcelElementTxService } from '../../parcel-element/shared/client-parcel-element-tx.service';
+import {
+  Client,
+  ClientParcelTxService
+} from 'src/lib/client';
+import { SubmitStep, SubmitHandler } from 'src/lib/utils';
+
+import { ClientController } from '../shared/client-controller';
 
 @Component({
-  selector: 'fadq-client-parcel-element-delete-tx-dialog',
-  templateUrl: 'client-parcel-element-delete-tx-dialog.component.html',
-  styleUrls: ['./client-parcel-element-delete-tx-dialog.component.scss']
+  selector: 'fadq-client-parcel-tx-delete-dialog',
+  templateUrl: 'client-parcel-tx-delete-dialog.component.html',
+  styleUrls: ['./client-parcel-tx-delete-dialog.component.scss']
 })
-export class ClientParcelElementDeleteTxDialogComponent implements OnDestroy {
+export class ClientParcelTxDeleteDialogComponent implements OnDestroy {
 
   /**
    * Message
@@ -46,9 +49,9 @@ export class ClientParcelElementDeleteTxDialogComponent implements OnDestroy {
   get controller(): ClientController { return this.data.controller; }
 
   constructor(
-    private clientParcelElementTxService: ClientParcelElementTxService,
+    private clientParcelTxService: ClientParcelTxService,
     private languageService: LanguageService,
-    public dialogRef: MatDialogRef<ClientParcelElementDeleteTxDialogComponent>,
+    public dialogRef: MatDialogRef<ClientParcelTxDeleteDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private data: {
       store: EntityStore<Client>;
       client: Client;
@@ -66,12 +69,12 @@ export class ClientParcelElementDeleteTxDialogComponent implements OnDestroy {
   }
 
   onYesClick() {
-    const submit$ = this.clientParcelElementTxService.getClientsInReconcilitation(this.client).pipe(
+    const submit$ = this.clientParcelTxService.getClientsInReconcilitation(this.client).pipe(
       concatMap((clients: Client[]) => {
         if (clients.length > 0) {
           return throwError(null);
         }
-        return this.clientParcelElementTxService.deleteParcelTx(
+        return this.clientParcelTxService.deleteParcelTx(
           this.client,
           this.annee
         );
@@ -103,7 +106,7 @@ export class ClientParcelElementDeleteTxDialogComponent implements OnDestroy {
   private onSubmitError() {
     this.message$.next({
       type: MessageType.ERROR,
-      text: this.languageService.translate.instant('client.parcelElement.deleteTx.error.moreThanOneClient')
+      text: this.languageService.translate.instant('client.parcelTx.delete.error.moreThanOneClient')
     });
   }
 }
