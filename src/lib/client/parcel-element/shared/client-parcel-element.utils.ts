@@ -164,3 +164,26 @@ export function getParcelElementValidationMessage(
 ): string {
   return undefined;
 }
+
+export function getParcelElementMergeBase(
+  parcelElements: ClientParcelElement[]
+): ClientParcelElement {
+  const parcelElementsWithId = parcelElements
+    .filter((parcelElement: ClientParcelElement) => {
+      return parcelElement.properties.idParcelle !== undefined;
+    });
+
+  const candidates = parcelElementsWithId.length > 0 ? parcelElementsWithId : parcelElements;
+  let maxArea = 0;
+  let base;
+  for (let i = 0; i < candidates.length; i++) {
+    const candidate = candidates[i];
+    const area = computeParcelElementArea(candidate);
+    if (area > maxArea) {
+      maxArea = area;
+      base = candidate;
+    }
+  }
+
+  return base;
+}

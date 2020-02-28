@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 
 import turfUnion from '@turf/union';
 
+import { getEntityId, getEntityRevision } from '@igo2/common';
 import { LanguageService } from '@igo2/core';
 import {
   Action,
@@ -37,7 +38,8 @@ import {
   ClientParcelElementWithoutOwnerWidget,
   ClientParcelElementService,
   generateParcelElementOperationTitle,
-  getParcelElementErrors
+  getParcelElementErrors,
+  getParcelElementMergeBase
 } from 'src/lib/client';
 import { moveToFeatureStore } from 'src/lib/feature';
 import { every } from 'src/lib/utils';
@@ -250,35 +252,56 @@ export class ClientParcelElementActionsService {
           const store = ctrl.parcelElementStore;
           const transaction = ctrl.parcelElementTransaction;
           const parcelElements = ctrl.selectedParcelElements;
-          const union = Object.assign(turfUnion(...parcelElements), {
-            meta: {
+
+          const baseParcelElement = getParcelElementMergeBase(parcelElements);
+          const properties = baseParcelElement.properties;
+          let meta;
+          if (baseParcelElement.properties.idParcelle) {
+            meta = Object.assign({}, baseParcelElement.meta, {
+              revision: getEntityRevision(baseParcelElement) + 1
+            });
+          } else {
+            meta = {
               id: uuid()
-            },
+            };
+          }
+          const union = Object.assign(turfUnion(...parcelElements), {
+            meta,
             projection: 'EPSG:4326',
-            properties: {}
+            properties
           });
 
           if (union.geometry.type === 'MultiPolygon') {
             return;
           }
 
+          const unionId = getEntityId(union);
           this.clientParcelElementService
             .createParcelElement(union)
             .subscribe((unionParcelElement: ClientParcelElement) => {
               parcelElements.forEach((parcelElement: ClientParcelElement) => {
-                transaction.delete(parcelElement, store, {
-                  title: generateParcelElementOperationTitle(
-                    parcelElement,
-                    this.languageService
-                  )
+                if (getEntityId(parcelElement) !== unionId) {
+                  transaction.delete(parcelElement, store, {
+                    title: generateParcelElementOperationTitle(
+                      parcelElement,
+                      this.languageService
+                    )
+                  });
+                }
+              });
+              const title = generateParcelElementOperationTitle(
+                unionParcelElement,
+                this.languageService
+              );
+              if (baseParcelElement.properties.idParcelle) {
+                transaction.update(baseParcelElement, unionParcelElement, store, {
+                  title
                 });
-              });
-              transaction.insert(unionParcelElement, store, {
-                title: generateParcelElementOperationTitle(
-                  unionParcelElement,
-                  this.languageService
-                )
-              });
+              } else {
+                transaction.insert(unionParcelElement, store, {
+                  title
+                });
+              }
             });
         },
         availability: (ctrl: ClientController) => every(
