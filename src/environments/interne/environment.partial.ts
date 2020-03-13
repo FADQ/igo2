@@ -9,6 +9,7 @@ import { CatalogServiceOptions, SearchSourceOptions } from '@igo2/geo';
 
 import { ApiConfig } from 'src/lib/core/api/api.interfaces';
 import { ClientApiConfig } from 'src/apps/interne/modules/client/shared/client.interfaces';
+import { HelpGuide } from 'src/apps/shared/modules/help/shared/help.interfaces';
 
 export interface IgoEnvironment {
   searchSources?: { [key: string]: SearchSourceOptions };
@@ -17,9 +18,7 @@ export interface IgoEnvironment {
   catalog?: CatalogServiceOptions;
   api: ApiConfig;
   help: {
-    logoLink: string;
-    guideLink: string;
-    newsLink: string;
+    guides: HelpGuide[];
   };
   client: {
     api: ClientApiConfig;
@@ -102,9 +101,7 @@ export const igoEnvironment: IgoEnvironment = {
     url: '/app/interne'
   },
   help: {
-    logoLink: 'assets/images/logo_igo_text_md.png',
-    guideLink: '',
-    newsLink: ''
+    guides: []
   },
   layer: {
     infoLink: ''

@@ -102,8 +102,12 @@
     "url": "{api_root}/app/externe"
   },
   "help": {
-    "guideLink": "http://igo.fadq.qc/aide/IGO.pdf",
-    "newsLink": "http://igo.fadq.qc/aide/Nouveautes_IGO.pdf"
+    "guides": [
+      {
+        "title": "help.guides.general",
+        "link": "http://igo.fadq.qc/aide/IGO_FADQ_General.pdf"
+      }
+    ]
   },
   "layer": {
     "infoLink": "http://igodev.fadq.qc/interfaces/ModuleExterne/metadonnee.php?nomCouche=${layerName}&titre=${layerTitle}"
