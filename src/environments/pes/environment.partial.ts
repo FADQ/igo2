@@ -9,6 +9,7 @@ import { CatalogServiceOptions, Projection, SearchSourceOptions } from '@igo2/ge
 
 import { ApiConfig } from 'src/lib/core/api/api.interfaces';
 import { ClientApiConfig } from 'src/apps/pes/modules/client/shared/client.interfaces';
+import { HelpGuide } from 'src/apps/shared/modules/help/shared/help.interfaces';
 
 export interface IgoEnvironment {
   projections?: Projection[];
@@ -18,9 +19,7 @@ export interface IgoEnvironment {
   catalog?: CatalogServiceOptions;
   api: ApiConfig;
   help: {
-    logoLink: string;
-    guideLink: string;
-    newsLink: string;
+    guides: HelpGuide[];
   };
   client: {
     api: ClientApiConfig;
@@ -82,9 +81,7 @@ export const igoEnvironment: IgoEnvironment = {
     url: ''
   },
   help: {
-    logoLink: 'assets/images/logo_igo_text_md.png',
-    guideLink: '',
-    newsLink: ''
+    guides: []
   },
   layer: {
     infoLink: ''

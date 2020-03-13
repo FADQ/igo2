@@ -35,13 +35,12 @@
   },
 
   "help": {
-    "guide": "Consulter le guide d'autoformation",
-    "news": "Afficher les nouveautés",
-    "layer.placeholder": "Rechercher une couche de données",
-    "cadastre.title": "Cadastre",
-    "cadastre.placeholder": "Rechercher un cadastre",
-    "cadastre.renov.title": "Cadastre rénové",
-    "cadastre.renov.placeholder": "Rechercher un cadastre rénové"
+    "guides": {
+      "general": "Utilisation générale",
+      "schemas": "Édition de schémas d'intervention",
+      "parcels": "Édition de parcelles agricoles",
+      "addresses": "Édition d'adresses"
+    }
   },
 
   "navigation": {

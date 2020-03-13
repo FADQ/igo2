@@ -1,7 +1,10 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { ToolComponent } from '@igo2/common';
 import { ConfigService } from '@igo2/core';
+import { BehaviorSubject } from 'rxjs';
+
+import { HelpGuide } from '../shared/help.interfaces';
 
 /**
  * Help tool
@@ -17,23 +20,15 @@ import { ConfigService } from '@igo2/core';
   styleUrls: ['./help-tool.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HelpToolComponent {
+export class HelpToolComponent implements OnInit {
 
-  @Input() guide: string;
-
-  @Input() news: string;
-
-  get logoLink(): string {
-    return this.configService.getConfig('help.logoLink');
-  }
-
-  get guideLink(): string {
-    return this.guide || this.configService.getConfig('help.guideLink');
-  }
-
-  get newsLink(): string {
-    return this.news || this.configService.getConfig('help.newsLink');
-  }
+  readonly guides$: BehaviorSubject<HelpGuide[]> = new BehaviorSubject([]);
 
   constructor(private configService: ConfigService) {}
+
+  ngOnInit() {
+    const guides = this.configService.getConfig('help.guides') || [];
+    console.log(guides);
+    this.guides$.next(guides);
+  }
 }
