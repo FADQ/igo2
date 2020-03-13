@@ -97,6 +97,8 @@ export class ClientParcelElementService {
       return of(undefined);
     }
 
+    const noParcelleAgricole = data.properties.noParcelleAgricole;
+
     const properties = Object.assign(
       {
         noDiagramme: 999,
@@ -106,7 +108,8 @@ export class ClientParcelElementService {
       {
         typeParcelle: 'PAC',
         noOwner: false,
-        superficie: undefined
+        superficie: undefined,
+        noParcelleAgricole: noParcelleAgricole ? noParcelleAgricole.toUpperCase() : undefined
       }
     );
     const parcelElement = Object.assign({}, data, {properties}) as ClientParcelElement;
