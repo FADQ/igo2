@@ -117,6 +117,8 @@
     },
     "parcelElement": {
       "parcel": "Parcelle",
+      "delete": "Rendre les parcelles orphelines",
+      "delete.tooltip": "Rendre les parcelles orphelines",
       "numbering": "Numéroter les parcelles",
       "numbering.tooltip": "Numéroter les parcelles",
       "numbering.header": "Numéroter les parcelles",

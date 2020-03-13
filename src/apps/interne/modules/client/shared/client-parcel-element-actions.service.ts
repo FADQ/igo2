@@ -221,28 +221,6 @@ export class ClientParcelElementActionsService {
         )
       },
       {
-        id: 'delete',
-        icon: 'delete',
-        title: 'edition.delete',
-        tooltip: 'edition.delete.tooltip',
-        args: [controller],
-        handler: (ctrl: ClientController) => {
-          const store = ctrl.parcelElementStore;
-          const transaction = ctrl.parcelElementTransaction;
-          const parcelElements = ctrl.selectedParcelElements;
-          parcelElements.forEach((parcelElement: ClientParcelElement) => {
-            transaction.delete(parcelElement, store, {
-              title: generateParcelElementOperationTitle(parcelElement, this.languageService)
-            });
-          });
-        },
-        availability: (ctrl: ClientController) => every(
-          noActiveWidget(ctrl),
-          oneOrMoreParcelElementAreSelected(ctrl),
-          transactionIsNotInCommitPhase(ctrl)
-        )
-      },
-      {
         id: 'union',
         icon: 'vector-union',
         title: 'edition.union',
@@ -409,8 +387,30 @@ export class ClientParcelElementActionsService {
         )
       },
       {
+        id: 'delete',
+        icon: 'account-arrow-right',
+        title: 'client.parcelElement.delete',
+        tooltip: 'client.parcelElement.delete',
+        args: [controller],
+        handler: (ctrl: ClientController) => {
+          const store = ctrl.parcelElementStore;
+          const transaction = ctrl.parcelElementTransaction;
+          const parcelElements = ctrl.selectedParcelElements;
+          parcelElements.forEach((parcelElement: ClientParcelElement) => {
+            transaction.delete(parcelElement, store, {
+              title: generateParcelElementOperationTitle(parcelElement, this.languageService)
+            });
+          });
+        },
+        availability: (ctrl: ClientController) => every(
+          noActiveWidget(ctrl),
+          oneOrMoreParcelElementAreSelected(ctrl),
+          transactionIsNotInCommitPhase(ctrl)
+        )
+      },
+      {
         id: 'recoverParcelsWithoutOwner',
-        icon: 'map-search-outline',
+        icon: 'account-arrow-left',
         title: 'client.parcelElement.recoverParcelsWithoutOwner',
         tooltip: 'client.parcelElement.recoverParcelsWithoutOwner.tooltip',
         args: [controller, this.clientParcelElementWithoutOwnerWidget],
