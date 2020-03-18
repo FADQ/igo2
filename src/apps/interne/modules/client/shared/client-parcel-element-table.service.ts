@@ -99,6 +99,10 @@ export class ClientParcelElementTableService {
           title: 'Utilisateur'
         },
         {
+          name: 'properties.exploitantTran',
+          title: 'Exploitant de transfert'
+        },
+        {
           name: 'properties.messages',
           title: 'Validation',
           renderer: EntityTableColumnRenderer.UnsanitizedHTML,

@@ -410,6 +410,29 @@ export class ClientParcelElementActionsService {
         )
       },
       {
+        id: 'delete',
+        icon: 'account-arrow-right',
+        title: 'client.parcelElement.delete',
+        tooltip: 'client.parcelElement.delete',
+        args: [controller],
+        handler: (ctrl: ClientController) => {
+          const store = ctrl.parcelElementStore;
+          const transaction = ctrl.parcelElementTransaction;
+          const parcelElements = ctrl.selectedParcelElements;
+          parcelElements.forEach((parcelElement: ClientParcelElement) => {
+            transaction.delete(parcelElement, store, {
+              title: generateParcelElementOperationTitle(parcelElement, this.languageService)
+            });
+          });
+        },
+        availability: (ctrl: ClientController) => every(
+          noActiveWidget(ctrl),
+          oneOrMoreParcelElementAreSelected(ctrl),
+          transactionIsNotInCommitPhase(ctrl),
+          noOtherExplParcelElementAreSelected(ctrl)
+        )
+      },
+      {
         id: 'recoverParcelsWithoutOwner',
         icon: 'map-search-outline',
         title: 'client.parcelElement.recoverParcelsWithoutOwner',
@@ -537,6 +560,20 @@ function oneOrMoreParcelElementAreSelected(ctrl: ClientController): Observable<b
   return ctrl.selectedParcelElements$.pipe(
     map((parcelElements: ClientParcelElement[]) => parcelElements.length > 0)
   );
+}
+
+function noOtherExplParcelElementAreSelected(ctrl: ClientController): Observable<boolean> {
+  return ctrl.selectedParcelElements$.pipe(
+    map((parcelElements: ClientParcelElement[]) => parcelAsNoOtherExplo(parcelElements) === true)
+  );
+}
+
+function parcelAsNoOtherExplo (parcelElements: ClientParcelElement[]) {
+  let noParcelsOtherExploited: boolean = true;
+  parcelElements.forEach((parcelElement: ClientParcelElement) => {
+    if (parcelElement.properties.exploitantTran !== null) { noParcelsOtherExploited = false; }
+  });
+  return noParcelsOtherExploited;
 }
 
 function twoParcelElementAreSelected(ctrl: ClientController): Observable<boolean> {
