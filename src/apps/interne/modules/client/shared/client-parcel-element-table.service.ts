@@ -100,7 +100,7 @@ export class ClientParcelElementTableService {
         },
         {
           name: 'properties.exploitantTran',
-          title: 'Autre exploitant principal'
+          title: 'Exploitant de transfert'
         },
         {
           name: 'properties.messages',

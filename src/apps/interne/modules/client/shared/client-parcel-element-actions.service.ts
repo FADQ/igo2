@@ -549,8 +549,7 @@ function noOtherExplParcelElementAreSelected(ctrl: ClientController): Observable
 function parcelAsNoOtherExplo (parcelElements: ClientParcelElement[]) {
   let noParcelsOtherExploited: boolean = true;
   parcelElements.forEach((parcelElement: ClientParcelElement) => {
-    if (parcelElement.properties.exploitantTran !== undefined &&
-        parcelElement.properties.exploitantTran !== null) { noParcelsOtherExploited = false; }
+    if (parcelElement.properties.exploitantTran !== null) { noParcelsOtherExploited = false; }
   });
   return noParcelsOtherExploited;
 }
