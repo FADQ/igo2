@@ -45,6 +45,7 @@ export interface ClientParcelElementProperties {
   usagerMaj: string;
   messages: ClientParcelElementMessage[];
   noOwner?: boolean;
+  exploitantTran: string;
 }
 
 export interface ClientParcelElement extends Feature {
