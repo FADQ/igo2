@@ -18,7 +18,8 @@ import OlGeoJSON from 'ol/format/GeoJSON';
 import {
   EntityTransaction,
   WidgetComponent,
-  OnUpdateInputs
+  OnUpdateInputs,
+  getEntityRevision
 } from '@igo2/common';
 import { LanguageService, Message, MessageType } from '@igo2/core';
 import {
@@ -29,7 +30,8 @@ import {
   GeometrySliceError,
   GeometrySliceMultiPolygonError,
   GeometrySliceLineStringError,
-  GeometrySliceTooManyIntersectionError
+  GeometrySliceTooManyIntersectionError,
+  measureOlGeometryArea
 } from '@igo2/geo';
 import { uuid } from '@igo2/utils';
 
@@ -238,13 +240,45 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, 
   private addToTransaction(features: Feature[]) {
     const getOperationTitle = this.getOperationTitle ? this.getOperationTitle : getDefaultOperationTitle;
 
-    this.transaction.delete(this.feature, this.store, {
+    const measureProjection = 'EPSG:32198';
+    let maxArea = 0;
+    let baseFeature: Feature;
+
+    // Find the bigest area feature
+    features.forEach((feature: Feature) => {
+      let tempArea = 0;
+      const olGeometry = new OlGeoJSON().readGeometry(feature.geometry, {
+        dataProjection: feature.projection,
+        featureProjection: measureProjection
+      });
+      tempArea = measureOlGeometryArea(olGeometry, measureProjection);
+      if (tempArea > maxArea) {
+        maxArea = tempArea;
+        baseFeature = feature;
+      }
+    });
+
+    // Update geometry of sliced feature to the base feature geometry
+    const properties = this.feature.properties;
+    const meta = Object.assign({}, this.feature.meta, {
+      revision: getEntityRevision(this.feature) + 1
+    });
+    const featureUpdate = Object.assign(this.feature, {
+      meta,
+      projection: 'EPSG:4326',
+      properties
+    });
+    featureUpdate.geometry = baseFeature.geometry;
+
+    this.transaction.update(this.feature, featureUpdate, this.store, {
       title: getOperationTitle(this.feature, this.languageService)
     });
     features.forEach((feature: Feature) => {
-      this.transaction.insert(feature, this.store, {
+      if (feature !== baseFeature) {
+        this.transaction.insert(feature, this.store, {
         title: getOperationTitle(feature, this.languageService)
       });
+    }
     });
   }
 
