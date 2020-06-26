@@ -8,8 +8,11 @@ import { map } from 'rxjs/operators';
 import { ToolComponent, EntityRecord, EntityTransaction } from '@igo2/common';
 import { FeatureStore } from '@igo2/geo';
 
-import { ClientParcelPro } from 'src/lib/client';
-import { ClientController } from '../shared/client-controller';
+import {
+  ClientParcelPro,
+  ClientParcelProGroup,
+  computeParcelProGroups
+} from 'src/lib/client';
 import { ClientState } from '../client.state';
 
 /**
@@ -17,7 +20,7 @@ import { ClientState } from '../client.state';
  */
 @ToolComponent({
   name: 'clientParcel',
-  title: 'tools.client',
+  title: 'tools.clientParcel',
   icon: 'sprout'
 })
 @Component({
@@ -28,29 +31,37 @@ import { ClientState } from '../client.state';
 })
 export class ClientParcelToolComponent {
 
+
   readonly parcelPros$: Observable<ClientParcelPro[]> = this.store.stateView
     .manyBy$((record: EntityRecord<ClientParcelPro>) => record.state.selected === true)
     .pipe(
       map((records: EntityRecord<ClientParcelPro>[]) => {
-        console.log(records)
-        return records.map((record: EntityRecord<ClientParcelPro>) => record.entity)
+        return records.map((record: EntityRecord<ClientParcelPro>) => record.entity);
+      })
+    );
+
+  readonly parcelProGroups$: Observable<ClientParcelProGroup[]> = this.store.view
+    .all$()
+    .pipe(
+      map((parcelPros: ClientParcelPro[]) => {
+        console.log(computeParcelProGroups(parcelPros));
+        return computeParcelProGroups(parcelPros);
       })
     );
 
   get store(): FeatureStore<ClientParcelPro> { return this.clientState.controller.parcelStore; }
- 
+
   get transaction(): EntityTransaction { return this.clientState.controller.parcelWorkspace.transaction; }
 
   constructor(
     private clientState: ClientState
   ) {}
 
-  onComplete() {
-    console.log('complete')
+  onCompleteUpdate() {
   }
 
-  onCancel() {
-    console.log('cancel')
+  onCancelUpdate() {
+    this.store.state.updateAll({selected: false});
   }
 
 }

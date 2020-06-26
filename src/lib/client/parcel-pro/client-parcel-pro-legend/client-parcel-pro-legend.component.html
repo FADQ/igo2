@@ -1,0 +1,9 @@
+<div>
+    <fadq-client-parcel-pro-legend-item
+      *ngFor="let group of groups"
+      [innerColor]="getGroupInnerColor(group)"
+      [outerColor]="getGroupOuterColor(group)"
+      [title]="group.production"
+      [count]="group.parcels.length">
+    </fadq-client-parcel-pro-legend-item>
+  </div>

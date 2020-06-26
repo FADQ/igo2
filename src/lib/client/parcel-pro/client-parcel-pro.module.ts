@@ -2,6 +2,9 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
+  FadqLibClientParcelProLegendModule
+} from './client-parcel-pro-legend/client-parcel-pro-legend.module';
+import {
   FadqLibClientParcelProUpdateBatchModule
 } from './client-parcel-pro-update-batch/client-parcel-pro-update-batch.module';
 
@@ -18,6 +21,7 @@ import {
     CommonModule
   ],
   exports: [
+    FadqLibClientParcelProLegendModule,
     FadqLibClientParcelProUpdateBatchModule
   ],
   declarations: []

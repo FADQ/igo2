@@ -18,8 +18,7 @@ export class URLClientLoader {
   constructor(
     private activatedRoute: ActivatedRoute,
     private clientService: ClientService
-  ) {
-  }
+  ) {}
 
   /**
    * Load the client from the URL.

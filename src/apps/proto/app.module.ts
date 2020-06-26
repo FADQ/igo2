@@ -20,6 +20,9 @@ import { FadqProtoSearchModule } from './modules/search/search.module';
 import { FadqProtoPortalModule } from './views/portal/portal.module';
 import { AppComponent } from './app.component';
 
+import { ClientLoader } from 'src/apps/shared/client.loader';
+import { URLClientLoader } from 'src/apps/pes_interne/modules/client/shared/client.loader';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -42,7 +45,11 @@ import { AppComponent } from './app.component';
     provideConfigOptions({
       default: environment.igo,
       path: environment.configPath
-    })
+    }),
+    {
+      provide: ClientLoader,
+      useClass: URLClientLoader
+    }
   ],
   bootstrap: [AppComponent]
 })

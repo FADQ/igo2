@@ -30,11 +30,7 @@ export class ClientParcelProService {
       return of(undefined);
     }
 
-    const properties = Object.assign(
-      data.properties,
-      {
-      }
-    );
+    const properties = Object.assign(data.properties, {});
     const parcelPro = Object.assign({}, data, {properties}) as ClientParcelPro;
     return of(parcelPro);
   }

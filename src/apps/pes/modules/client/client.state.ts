@@ -11,9 +11,10 @@ import {
   ClientParcelYearService
 } from 'src/lib/client';
 
+import { ClientLoader } from 'src/apps/shared/client.loader';
+
 import { ClientController } from './shared/client-controller';
 import { ClientControllerService } from './shared/client-controller.service';
-import { ClientLoader } from './shared/client.loader';
 
 /**
  * Service that holds the state of the client module. It handles everything

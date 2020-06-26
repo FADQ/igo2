@@ -42,7 +42,7 @@ export class ClientParcelProUpdateBatchComponent
    * Update form
    * @internal
    */
-  form$ = new BehaviorSubject<Form>(undefined);
+  readonly form$ = new BehaviorSubject<Form>(undefined);
 
   /**
    * Parcel pro store

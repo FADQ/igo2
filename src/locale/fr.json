@@ -70,6 +70,7 @@
     "help": "Aide",
     "addressEditor": "Outil d'édition d'adresse",
     "client": "Client",
+    "clientParcel": "Parcelles",
     "clientParcelTx": "Clients en cours d'édition",
     "measurer": "Outil de mesure",
     "navigation": "Zoom sur une région",
@@ -161,6 +162,10 @@
       "start.tooltip": "Démarrer l'édition de parcelles",
       "stop": "Édition de parcelles",
       "stop.tooltip": "Arrêter l'édition de parcelles"
+    },
+    "parcelPro": {
+      "overview.title": "Vue d'ensemble",
+      "edit.title": "Modifier les parcelles sélectionnées"
     },
     "diagram": {
       "placeholder": "Diagrammes",

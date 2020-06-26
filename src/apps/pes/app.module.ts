@@ -20,7 +20,7 @@ import { FadqPesSearchModule } from './modules/search/search.module';
 import { FadqPesPortalModule } from './views/portal/portal.module';
 import { AppComponent } from './app.component';
 
-import { ClientLoader } from './modules/client/shared/client.loader';
+import { ClientLoader } from 'src/apps/shared/client.loader';
 
 @NgModule({
   declarations: [AppComponent],

@@ -20,7 +20,7 @@ import { FadqPesSearchModule } from 'src/apps/pes/modules/search/search.module';
 import { FadqPesPortalModule } from 'src/apps/pes/views/portal/portal.module';
 import { AppComponent } from './app.component';
 
-import { ClientLoader } from 'src/apps/pes/modules/client/shared/client.loader';
+import { ClientLoader } from 'src/apps/shared/client.loader';
 import { URLClientLoader } from './modules/client/shared/client.loader';
 
 @NgModule({
@@ -49,7 +49,6 @@ import { URLClientLoader } from './modules/client/shared/client.loader';
     {
       provide: ClientLoader,
       useClass: URLClientLoader
-      // deps: [ClientService]
     }
   ],
   bootstrap: [AppComponent]

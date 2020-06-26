@@ -35,7 +35,7 @@
     }
   ],
   "toolbar": [
-    "client",
+    "clientParcel",
     "searchResults",
     "fadqMap",
     "navigation",
@@ -45,10 +45,7 @@
   ],
   "tools": [
     {
-      "name": "client",
-      "options": {
-        "showInfo": false
-      }
+      "name": "clientParcel"
     },
     {
       "name": "searchResults"

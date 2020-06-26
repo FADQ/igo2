@@ -66,7 +66,7 @@ export class ClientParcelProFormService {
       .pipe(
         map((choices: FormFieldSelectChoice[]) => {
           return this.createField({
-            name: 'properties.prod',
+            name: 'properties.production',
             title: 'Production',
             type: 'select',
             options:  {
@@ -86,9 +86,17 @@ export class ClientParcelProFormService {
   }
 
   private getProdChoices(): Observable<FormFieldSelectChoice[]> {
+    // const url = this.apiService.buildUrl(this.apiConfig.domains.pro);
+    // return this.domainService.getChoices(url).pipe(
+    //   map((choices: FormFieldSelectChoice[]) => [{value: null, title: ''}].concat(choices))
+    // );
+
     return of([
       {value: null, title: ''},
-      {value: 'orge', title: 'Orge'}
-    ])
+      {value: 'ble', title: 'Blé'},
+      {value: 'mais', title: 'Maïs'},
+      {value: 'orge', title: 'Orge'},
+      {value: 'soya', title: 'Soya'},
+    ]);
   }
 }

@@ -52,7 +52,6 @@ export class ClientParcelElementWorkspace extends Workspace<ClientParcelElement>
     this.deactivate();
     this.parcelElementStore.deactivateStrategyOfType(FeatureStoreLoadingStrategy);
     this.removeParcelElementLayer();
-    this.deactivate();
     this.parcelElementStore.layer.ol.getSource().clear();
     this.parcelElementStore.clear();
   }

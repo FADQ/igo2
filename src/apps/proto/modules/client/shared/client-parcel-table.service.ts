@@ -34,10 +34,6 @@ export class ClientParcelTableService {
       }),
       columns: [
         {
-          name: 'properties.prod',
-          title: 'Prod'
-        },
-        {
           name: 'properties.noParcelleAgricole',
           title: 'Numéro de parcelle'
         },
