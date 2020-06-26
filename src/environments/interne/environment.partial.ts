@@ -5,12 +5,13 @@
 
 import { ContextServiceOptions } from '@igo2/context';
 import { LanguageOptions } from '@igo2/core';
-import { CatalogServiceOptions, SearchSourceOptions } from '@igo2/geo';
+import { CatalogServiceOptions, Projection, SearchSourceOptions } from '@igo2/geo';
 
 import { ApiConfig } from 'src/lib/core/api/api.interfaces';
 import { ClientApiConfig } from 'src/apps/interne/modules/client/shared/client.interfaces';
 
 export interface IgoEnvironment {
+  projections?: Projection[];
   searchSources?: { [key: string]: SearchSourceOptions };
   language?: LanguageOptions;
   context?: ContextServiceOptions;

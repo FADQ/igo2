@@ -9,6 +9,8 @@
   "scripts": {
     "pes.start": "ng serve pes --host 0.0.0.0 --proxy-config proxy.conf.json",
     "pes.build.prod": "ng build pes --prod",
+    "pes_interne.start": "ng serve pes_interne --host 0.0.0.0 --proxy-config proxy.conf.json",
+    "pes_interne.build.prod": "ng build pes_interne --prod",
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.json",
     "build": "ng build",
