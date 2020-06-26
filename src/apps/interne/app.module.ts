@@ -37,7 +37,7 @@ import { AppComponent } from './app.component';
     FadqNavigationModule,
     FadqAppOutletModule,
     FadqInterneAddressModule,
-    FadqInterneClientModule,
+    FadqInterneClientModule.forRoot(),
     FadqInterneSearchModule,
     FadqInterneEditionModule,
     FadqInternePortalModule

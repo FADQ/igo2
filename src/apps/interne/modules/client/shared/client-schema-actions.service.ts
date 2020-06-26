@@ -6,7 +6,6 @@ import { map } from 'rxjs/operators';
 import { Action, Widget } from '@igo2/common';
 
 import {
-  ClientController,
   ClientSchema,
   ClientSchemaType,
   ClientSchemaCreateWidget,
@@ -17,6 +16,8 @@ import {
   ClientSchemaFileManagerWidget
 } from 'src/lib/client';
 import { every } from 'src/lib/utils';
+
+import { ClientController } from './client-controller';
 
 @Injectable({
   providedIn: 'root'

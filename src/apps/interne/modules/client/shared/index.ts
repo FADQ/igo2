@@ -6,6 +6,7 @@ export * from './client-parcel-workspace.service';
 export * from './client-parcel-element-table.service';
 export * from './client-parcel-element-actions.service';
 export * from './client-parcel-element-workspace.service';
+export * from './client-parcel-tx.widgets';
 export * from './client-schema-table.service';
 export * from './client-schema-actions.service';
 export * from './client-schema-workspace.service';

@@ -1,0 +1,20 @@
+<div>
+  <div class="fadq-client-parcel-tx-tool-top-section">
+    <fadq-client-parcel-year-selector
+      [disabled]="parcelYearSelectorDisabled$ | async"
+      [store]="parcelYears">
+    </fadq-client-parcel-year-selector>
+  </div>
+
+  <igo-list [navigation]="false" [selection]="false">
+    <ng-template ngFor let-client [ngForOf]="clients.view.all$() | async">
+      <fadq-client-parcel-tx-tool-item
+        igoListItem
+        [client]="client"
+        [added]="clientIsAdded(client)"
+        (addedChange)="onClientAddedChange($event)"
+        (delete)="onDeleteTx($event)">
+      </fadq-client-parcel-tx-tool-item>
+    </ng-template>
+  </igo-list>
+</div>

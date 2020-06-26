@@ -3,9 +3,6 @@ import { InjectionToken } from '@angular/core';
 import { Widget, WidgetService } from '@igo2/common';
 
 import {
-  ClientParcelElementStartTxComponent
-} from '../client-parcel-element-start-tx/client-parcel-element-start-tx.component';
-import {
   ClientParcelElementCreateComponent
 } from '../client-parcel-element-create/client-parcel-element-create.component';
 import {
@@ -23,9 +20,6 @@ import {
 import {
   ClientParcelElementNumberingComponent
 } from '../client-parcel-element-numbering/client-parcel-element-numbering.component';
-import {
-  ClientParcelElementReconciliateComponent
-} from '../client-parcel-element-reconciliate/client-parcel-element-reconciliate.component';
 import {
   ClientParcelElementSimplifyComponent
 } from '../client-parcel-element-simplify/client-parcel-element-simplify.component';
@@ -47,22 +41,6 @@ import {
 import {
   ClientParcelElementWithoutOwnerComponent
 } from '../client-parcel-element-without-owner/client-parcel-element-without-owner.component';
-
-/** Start Tx **/
-export function clientParcelElementStartTxWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(ClientParcelElementStartTxComponent);
-}
-
-export const ClientParcelElementStartTxWidget =
-  new InjectionToken<Widget>('ClientParcelElementStartTxWidget');
-
-export function provideClientParcelElementStartTxWidget() {
-  return {
-    provide: ClientParcelElementStartTxWidget,
-    useFactory: clientParcelElementStartTxWidgetFactory,
-    deps: [WidgetService]
-  };
-}
 
 /** Create **/
 export const ClientParcelElementCreateWidget =
@@ -204,22 +182,6 @@ export function provideClientParcelElementNumberingWidget() {
   return {
     provide: ClientParcelElementNumberingWidget,
     useFactory: clientParcelElementNumberingWidgetFactory,
-    deps: [WidgetService]
-  };
-}
-
-/** Reconciliate **/
-export const ClientParcelElementReconciliateWidget =
-  new InjectionToken<Widget>('ClientParcelElementReconciliateWidget');
-
-export function clientParcelElementReconciliateWidgetFactory(widgetService: WidgetService) {
-  return widgetService.create(ClientParcelElementReconciliateComponent);
-}
-
-export function provideClientParcelElementReconciliateWidget() {
-  return {
-    provide: ClientParcelElementReconciliateWidget,
-    useFactory: clientParcelElementReconciliateWidgetFactory,
     deps: [WidgetService]
   };
 }

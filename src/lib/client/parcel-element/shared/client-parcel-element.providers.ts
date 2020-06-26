@@ -7,7 +7,6 @@ import { ApiService } from 'src/lib/core/api';
 import { DomainService } from 'src/lib/core/domain';
 
 import { ClientParcelElementService } from './client-parcel-element.service';
-import { ClientParcelElementTxService } from './client-parcel-element-tx.service';
 import { ClientParcelElementFormService } from './client-parcel-element-form.service';
 
 export function clientParcelElementServiceFactory(
@@ -26,26 +25,6 @@ export function provideClientParcelElementService() {
   return {
     provide: ClientParcelElementService,
     useFactory: clientParcelElementServiceFactory,
-    deps: [HttpClient, ApiService, ConfigService]
-  };
-}
-
-export function clientParcelElementTxServiceFactory(
-  http: HttpClient,
-  apiService: ApiService,
-  config: ConfigService
-) {
-  return new ClientParcelElementTxService(
-    http,
-    apiService,
-    config.getConfig('client.api.parcelElement')
-  );
-}
-
-export function provideClientParcelElementTxService() {
-  return {
-    provide: ClientParcelElementTxService,
-    useFactory: clientParcelElementTxServiceFactory,
     deps: [HttpClient, ApiService, ConfigService]
   };
 }

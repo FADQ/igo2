@@ -5,13 +5,14 @@
 
 import { ContextServiceOptions } from '@igo2/context';
 import { LanguageOptions } from '@igo2/core';
-import { CatalogServiceOptions, SearchSourceOptions } from '@igo2/geo';
+import { CatalogServiceOptions, Projection, SearchSourceOptions } from '@igo2/geo';
 
 import { ApiConfig } from 'src/lib/core/api/api.interfaces';
 import { ClientApiConfig } from 'src/apps/pes/modules/client/shared/client.interfaces';
 import { HelpGuide } from 'src/apps/shared/modules/help/shared/help.interfaces';
 
 export interface IgoEnvironment {
+  projections?: Projection[];
   searchSources?: { [key: string]: SearchSourceOptions };
   language?: LanguageOptions;
   context?: ContextServiceOptions;
@@ -77,7 +78,7 @@ export const igoEnvironment: IgoEnvironment = {
     prefix: './locale/'
   },
   api: {
-    url: '/app/interne'
+    url: ''
   },
   help: {
     guides: []
@@ -88,13 +89,13 @@ export const igoEnvironment: IgoEnvironment = {
   client: {
     api: {
       info: {
-        get: '/igolocalisation/recherche_client/obtenirInformationClient/${clientNum}',
-        addresses: '/igolocalisation/recherche_client/obtenirAdressesClient/${clientNum}',
+        get: '',
+        addresses: '',
         link: ''
       },
       parcel: {
-        list: '/igolocalisation/recherche_client/obtenirParcellesProductionsClientAnnee/${clientNum}/${annee}',
-        years: '/igolocalisation/recherche_client/obtenirAnneesTraitementParcelleAgricole'
+        list: '',
+        years: ''
       }
     }
   },

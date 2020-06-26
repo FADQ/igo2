@@ -1,0 +1,36 @@
+<fadq-card-panel
+  [svgIcon]="'help-circle'"
+  [iconColor]="'accent'"
+  [title]="'client.parcelTx.start.confirm' | translate"
+  [message]="message$ | async">
+
+  <ng-container buttons>
+    <ng-container *ngIf="!(error$ | async); else error">
+      <button
+        mat-button
+        type="button"
+        [disabled]="(submitHandler.step$ | async) === submitStep.Pending"
+        (click)="onCancel()">
+        {{ 'no' | translate }}
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="(submitHandler.step$ | async) === submitStep.Pending"
+        (click)="onSubmit()">
+        {{ 'yes' | translate }}
+      </button>
+    </ng-container>
+    
+    <ng-template #error>
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        (click)="onCancel()">
+        {{ 'close' | translate }}
+      </button>
+    </ng-template> 
+  </ng-container>
+
+</fadq-card-panel>

@@ -4,15 +4,21 @@ import { BehaviorSubject, Subscription, combineLatest } from 'rxjs';
 import { skip } from 'rxjs/operators';
 
 import { LanguageService, Message, MessageType } from '@igo2/core';
-import { EntityRecord, EntityStore,  Widget, Workspace, WorkspaceStore } from '@igo2/common';
+import {
+  EntityRecord,
+  EntityStore,
+  Widget,
+  Workspace,
+  WorkspaceStore
+} from '@igo2/common';
 
 import {
   Client,
-  ClientController,
   ClientParcelYear,
   ClientParcelYearService
 } from 'src/lib/client';
 
+import { ClientController } from './shared/client-controller';
 import { ClientControllerService } from './shared/client-controller.service';
 
 /**
@@ -30,7 +36,7 @@ export class ClientState implements OnDestroy {
   readonly activeWidget$: BehaviorSubject<Widget> = new BehaviorSubject<Widget>(undefined);
 
   /** Whether at least one parcel element tx is ongoing */
-  readonly parcelElementTxOngoing$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  readonly parcelTxOngoing$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   get activeController(): ClientController { return this.activeController$.value; }
   readonly activeController$: BehaviorSubject<ClientController> = new BehaviorSubject(undefined);
@@ -56,7 +62,7 @@ export class ClientState implements OnDestroy {
   private activeWorkspaceWidget$$: Subscription;
 
   /** Subscription to status of the parcel element txs */
-  private parcelElementTxs$$: Subscription;
+  private parcelTxs$$: Subscription;
 
   /** Store that holds all the "parcel years". This is not on a per client basis. */
   get parcelYears(): EntityStore<ClientParcelYear> { return this._parcelYears; }
@@ -236,7 +242,7 @@ export class ClientState implements OnDestroy {
     this.controllers$$ = this.controllers.count$
       .subscribe((count: number) => {
         this.updateControllersColor();
-        this.subscribeToParcelElementTxs();
+        this.subscribeToParcelTxs();
       });
   }
 
@@ -244,7 +250,7 @@ export class ClientState implements OnDestroy {
    * Teardown controller store
    */
   private teardownControllers() {
-    this.unsubscribeToParcelElementTxs();
+    this.unsubscribeToParcelTxs();
     this.controllers$$.unsubscribe();
     this.controllers.all().forEach((controller: ClientController) => controller.destroy());
     this.controllers.clear();
@@ -361,27 +367,27 @@ export class ClientState implements OnDestroy {
    * Subscribe to parcel element txs and check if one is active. This is useful
    * to enable or disable some stuff the the client tool, for example.
    */
-  private subscribeToParcelElementTxs() {
-    this.unsubscribeToParcelElementTxs();
-    const parcelElementTxs$ = this.controllers.all()
+  private subscribeToParcelTxs() {
+    this.unsubscribeToParcelTxs();
+    const parcelTxs$ = this.controllers.all()
       .map((controller: ClientController) => {
-        return controller.parcelElementTxOngoing;
+        return controller.parcelTxOngoing;
       });
 
-    this.parcelElementTxs$$ = combineLatest(...parcelElementTxs$)
+    this.parcelTxs$$ = combineLatest(...parcelTxs$)
       .subscribe((bunch: boolean[]) => {
         const nosActive = bunch.every((active: boolean) => active === false);
-        this.parcelElementTxOngoing$.next(!nosActive);
+        this.parcelTxOngoing$.next(!nosActive);
       });
   }
 
   /**
    * Unsubscribe to parcel element txs
    */
-  private unsubscribeToParcelElementTxs() {
-    if (this.parcelElementTxs$$ !== undefined) {
-      this.parcelElementTxs$$.unsubscribe();
-      this.parcelElementTxs$$ = undefined;
+  private unsubscribeToParcelTxs() {
+    if (this.parcelTxs$$ !== undefined) {
+      this.parcelTxs$$.unsubscribe();
+      this.parcelTxs$$ = undefined;
     }
   }
 

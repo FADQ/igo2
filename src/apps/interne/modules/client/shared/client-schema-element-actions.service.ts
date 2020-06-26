@@ -17,7 +17,6 @@ import { EditionUndoWidget } from 'src/lib/edition';
 import { every } from 'src/lib/utils';
 
 import {
-  ClientController,
   ClientSchema,
   ClientSchemaService,
   ClientSchemaType,
@@ -33,6 +32,8 @@ import {
   generateSchemaElementOperationTitle
 } from 'src/lib/client';
 import { moveToFeatureStore } from 'src/lib/feature';
+
+import { ClientController } from './client-controller';
 
 @Injectable({
   providedIn: 'root'

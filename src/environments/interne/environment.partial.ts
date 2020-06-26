@@ -5,13 +5,14 @@
 
 import { ContextServiceOptions } from '@igo2/context';
 import { LanguageOptions } from '@igo2/core';
-import { CatalogServiceOptions, SearchSourceOptions } from '@igo2/geo';
+import { CatalogServiceOptions, Projection, SearchSourceOptions } from '@igo2/geo';
 
 import { ApiConfig } from 'src/lib/core/api/api.interfaces';
 import { ClientApiConfig } from 'src/apps/interne/modules/client/shared/client.interfaces';
 import { HelpGuide } from 'src/apps/shared/modules/help/shared/help.interfaces';
 
 export interface IgoEnvironment {
+  projections?: Projection[];
   searchSources?: { [key: string]: SearchSourceOptions };
   language?: LanguageOptions;
   context?: ContextServiceOptions;
@@ -120,19 +121,21 @@ export const igoEnvironment: IgoEnvironment = {
       parcelElement: {
         list: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirParcellesEdition/${clientNum}/${annee}',
         save: '/igodonneesgeospatiales/edition_parcelle_agricole/enregistrerParcellesEdition/${clientNum}/${annee}',
-        reconciliate: '/igodonneesgeospatiales/edition_parcelle_agricole/reconcilierParcellesEdition/${clientNum}/${annee}',
-        reconciliateClients: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirliensclientsedition/${clientNum}',
         validateTransfer: '/igodonneesgeospatiales/edition_parcelle_agricole/validertransfertparcelle/${toClientNum}/${annee}',
         transfer: '/igodonneesgeospatiales/edition_parcelle_agricole/transfererparcellesedition/${fromClientNum}/${toClientNum}/${annee}',
         parcelsWithoutOwner: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirParcellesSansDetenteur',
-        startTx: '/igodonneesgeospatiales/edition_parcelle_agricole/activeredition/${clientNum}/${annee}',
-        createTx: '/igodonneesgeospatiales/edition_parcelle_agricole/creerSchemaEdition/${clientNum}/${annee}',
-        deleteTx: '/igodonneesgeospatiales/edition_parcelle_agricole/supprimerschema/${clientNum}/${annee}',
-        clientsInTx: '/igolocalisation/recherche_client_schema_edition/obtenirclientsedition',
         domains: {
           statutAugm: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirStatutsAugmentationSuperficiesCultivees',
           source: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirSourcesParcelles'
         }
+      },
+      parcelTx: {
+        reconciliate: '/igodonneesgeospatiales/edition_parcelle_agricole/reconcilierParcellesEdition/${clientNum}/${annee}',
+        reconciliateClients: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirliensclientsedition/${clientNum}',
+        start: '/igodonneesgeospatiales/edition_parcelle_agricole/activeredition/${clientNum}/${annee}',
+        create: '/igodonneesgeospatiales/edition_parcelle_agricole/creerSchemaEdition/${clientNum}/${annee}',
+        delete: '/igodonneesgeospatiales/edition_parcelle_agricole/supprimerschema/${clientNum}/${annee}',
+        clients: '/igolocalisation/recherche_client_schema_edition/obtenirclientsedition'
       },
       schema: {
         list: '/igolocalisation/recherche_client/obtenirSchemasClient/${clientNum}',

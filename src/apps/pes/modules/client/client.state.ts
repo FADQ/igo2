@@ -1,19 +1,19 @@
 import { Injectable, OnDestroy } from '@angular/core';
 
-import { Observable, BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { skip } from 'rxjs/operators';
 
-import { EntityRecord, EntityStore,  Widget, Workspace, WorkspaceStore } from '@igo2/common';
+import { EntityRecord, EntityStore,  Widget } from '@igo2/common';
 
 import {
   Client,
-  ClientService,
   ClientParcelYear,
   ClientParcelYearService
 } from 'src/lib/client';
 
 import { ClientController } from './shared/client-controller';
 import { ClientControllerService } from './shared/client-controller.service';
+import { ClientLoader } from './shared/client.loader';
 
 /**
  * Service that holds the state of the client module. It handles everything
@@ -23,6 +23,9 @@ import { ClientControllerService } from './shared/client-controller.service';
   providedIn: 'root'
 })
 export class ClientState implements OnDestroy {
+
+  /** Subscription to the client loader. */
+  private clientLoader$$: Subscription;
 
   /** Active widget observable. Only one may be active for all clients */
   readonly activeWidget$: BehaviorSubject<Widget> = new BehaviorSubject(undefined);
@@ -43,16 +46,13 @@ export class ClientState implements OnDestroy {
   _parcelYears: EntityStore<ClientParcelYear>;
 
   constructor(
-    private clientService: ClientService,
     private clientParcelYearService: ClientParcelYearService,
-    private clientControllerService: ClientControllerService
+    private clientControllerService: ClientControllerService,
+    private clientLoader: ClientLoader
   ) {
     this.initParcelYears();
     this.loadParcelYears();
-
-    this.clientService.getClientByNum('').subscribe((client: Client) => {
-      this.setClient(client);
-    });
+    this.loadClient();
   }
 
   /**
@@ -60,8 +60,27 @@ export class ClientState implements OnDestroy {
    * @internal
    */
   ngOnDestroy() {
+    if (this.clientLoader$$ !== undefined) {
+      this.clientLoader$$.unsubscribe();
+      this.clientLoader$$ = undefined;
+    }
+
     this.teardownController();
     this.teardownParcelYears();
+  }
+
+  /**
+   * Load the client from the URL or from the auth token.
+   */
+  private loadClient() {
+    this.clientLoader$$ = this.clientLoader.loadClient().subscribe((client: Client) => {
+      if (this.controller !== undefined) {
+        this.teardownController();
+      }
+      if (client !== undefined) {
+        this.setClient(client);
+      }
+    });
   }
 
   /**
@@ -112,7 +131,7 @@ export class ClientState implements OnDestroy {
 
   /**
    * When a parcel year is selected, update the controller's parcel year (and it's parcels)
-   * @param Parcel year
+   * @param parcelYear Parcel year
    */
   private onSelectParcelYear(parcelYear: ClientParcelYear) {
     this.parcelYear$.next(parcelYear);

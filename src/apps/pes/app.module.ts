@@ -20,6 +20,8 @@ import { FadqPesSearchModule } from './modules/search/search.module';
 import { FadqPesPortalModule } from './views/portal/portal.module';
 import { AppComponent } from './app.component';
 
+import { ClientLoader } from './modules/client/shared/client.loader';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -42,7 +44,8 @@ import { AppComponent } from './app.component';
     provideConfigOptions({
       default: environment.igo,
       path: environment.configPath
-    })
+    }),
+    ClientLoader
   ],
   bootstrap: [AppComponent]
 })

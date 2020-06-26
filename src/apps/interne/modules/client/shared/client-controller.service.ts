@@ -7,8 +7,6 @@ import { hexToRGB } from 'src/lib/utils/color';
 
 import {
   Client,
-  ClientController,
-  ClientControllerOptions,
   ClientParcelColors,
   ClientParcelService,
   ClientParcelElementService,
@@ -18,6 +16,10 @@ import {
   ClientSchemaElementTransactionService
 } from 'src/lib/client';
 
+import {
+  ClientController,
+  ClientControllerOptions
+} from './client-controller';
 import { ClientParcelWorkspaceService } from './client-parcel-workspace.service';
 import { ClientParcelActionsService } from './client-parcel-actions.service';
 import { ClientParcelElementWorkspaceService } from './client-parcel-element-workspace.service';

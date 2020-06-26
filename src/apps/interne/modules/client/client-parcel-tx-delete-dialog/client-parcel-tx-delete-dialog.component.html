@@ -1,0 +1,29 @@
+<h3 mat-dialog-title>{{'client.parcelTx.delete' | translate}}</h3>
+
+<div mat-dialog-content>
+  <p>{{'client.parcelTx.delete.confirm' | translate}}</p>
+</div>
+
+<fadq-message-inline
+  *ngIf="message$ | async as message"  
+  [message]="message">
+</fadq-message-inline>
+
+<div mat-dialog-actions>
+  <div class="igo-form-buttons">
+    <button
+      mat-button
+      color="primary"
+      [disabled]="(submitHandler.step$ | async) === submitStep.Pending"
+      (click)="onYesClick()"
+      cdkFocusInitial>
+      {{'yes' | translate}}
+    </button>
+    <button
+      mat-button
+      [disabled]="(submitHandler.step$ | async) === submitStep.Pending"
+      (click)="onCancelClick()">
+      {{'cancel' | translate}}
+    </button>
+  </div>
+</div>
