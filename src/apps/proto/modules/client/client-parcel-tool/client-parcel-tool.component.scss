@@ -1,11 +1,23 @@
 
 :host {
   display: block;
-  margin: 0 5px;
+  padding: 10px;
 }
 
-fadq-client-parcel-pro-legend,
-.fadq-client-parcel-pro-edit {
+.fadq-client-parcel-tool-header {
+  padding-bottom: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.fadq-client-parcel-tool-legend-container {
+  margin-bottom: 20px;
+}
+
+.fadq-client-parcel-tool-legend {
+  padding: 0 20px;
+}
+
+fadq-client-parcel-pro-wizard {
   display: block;
-  margin-left: 15px;
+  margin-top: 10px;
 }

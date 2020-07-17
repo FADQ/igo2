@@ -11,9 +11,13 @@ import { createOlTextStyle } from '../../../edition/shared/edition.utils';
 import { Client } from '../../shared/client.interfaces';
 import {
   ClientParcelPro,
-  ClientParcelProGroup
+  ClientParcelProProduction,
+  ClientParcelProCategory
 } from './client-parcel-pro.interfaces';
-import { ClientParcelProColors } from './client-parcel-pro.enums';
+import {
+  ClientParcelProCategories,
+  ClientParcelProProductions
+} from './client-parcel-pro.enums';
 
 export function createParcelProLayer(client: Client): VectorLayer {
   // TODO: i18n
@@ -42,7 +46,8 @@ export function createParcelProLayerStyle(
     const olText = olStyle.getText();
     olText.setText(getParcelProOlFeatureText(olFeature, resolution));
 
-    const color = getParcelProProductionColor( olFeature.get('production'));
+    const category = getProductionCategory(olFeature.get('production'));
+    const color = category.color;
     olStyle.getFill().setColor(color.concat([0.15]));
     olStyle.getStroke().setColor(color);
 
@@ -66,9 +71,18 @@ function getParcelProOlFeatureText(olFeature: OlFeature, resolution: number): st
   return text;
 }
 
-function getParcelProProductionColor(production: string): [number, number, number] {
-  const color = ClientParcelProColors[production];
-  return color || [200, 100, 100];
+export function getProduction(code: string): ClientParcelProProduction {
+  code = code ? code.toUpperCase() : 'INC';
+  return ClientParcelProProductions[code];
+}
+
+export function getProductionCategory(code: string): ClientParcelProCategory {
+  code = code ? code.toUpperCase() : 'INC';
+  var categories = Object.values(ClientParcelProCategories);
+  const category = categories.find((cat: ClientParcelProCategory) => {
+    return cat.productions.includes(code);
+  });
+  return category || ClientParcelProCategories['INC'];
 }
 
 export function generateParcelProOperationTitle(
@@ -79,27 +93,4 @@ export function generateParcelProOperationTitle(
     parcelPro.properties.noParcelleAgricole
   ];
   return terms.filter((term: string) => term !== undefined).join(' - ');
-}
-
-export function computeParcelProGroups(parcelPros: ClientParcelPro[]): ClientParcelProGroup[] {
-  const groupsByProduction: {[key: string]: ClientParcelProGroup} = {};
-  for (let i = 0; i < parcelPros.length; i++) {
-    const parcelPro = parcelPros[i];
-    const production = parcelPro.properties['production'] || 'unknown';
-    let group = groupsByProduction[production];
-    if (group === undefined) {
-      group = {
-        production,
-        color: getParcelProProductionColor(production),
-        parcels: []
-      };
-      groupsByProduction[production] = group;
-    }
-
-    group.parcels.push(parcelPro);
-  }
-
-  return Object.keys(groupsByProduction)
-    .sort()
-    .map((key: string) => groupsByProduction[key]);
 }

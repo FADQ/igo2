@@ -1,0 +1,8 @@
+<div *ngIf="step$ | async as step">
+  <div *ngIf="step === 1">
+    <fadq-client-parcel-pro-wizard-step-1
+      [store]="store"
+      [transaction]="transaction">
+    </fadq-client-parcel-pro-wizard-step-1>
+  </div>
+</div>

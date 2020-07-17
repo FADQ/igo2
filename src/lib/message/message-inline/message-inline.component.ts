@@ -30,6 +30,16 @@ export class MessageInlineComponent {
   @Input() message: Message;
 
   /**
+   * Optionnal icon
+   */
+  @Input() icon: string;
+
+  /**
+   * Optionnal icon
+   */
+  @Input() iconColor: string = 'primary';
+
+  /**
    * @ignore
    */
   @HostBinding(`class.fadq-message-inline`)

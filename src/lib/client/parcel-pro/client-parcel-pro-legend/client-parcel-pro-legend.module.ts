@@ -6,7 +6,7 @@ import { MatGridListModule } from '@angular/material';
 import { IgoLanguageModule } from '@igo2/core';
 
 import { ClientParcelProLegendComponent } from './client-parcel-pro-legend.component';
-import { ClientParcelProLegendItemComponent } from './client-parcel-pro-legend-item.component';
+import { ClientParcelProLegendThumbnailComponent } from './client-parcel-pro-legend-thumbnail.component';
 
 /**
  * @ignore
@@ -22,7 +22,7 @@ import { ClientParcelProLegendItemComponent } from './client-parcel-pro-legend-i
   ],
   declarations: [
     ClientParcelProLegendComponent,
-    ClientParcelProLegendItemComponent
+    ClientParcelProLegendThumbnailComponent
   ]
 })
 export class FadqLibClientParcelProLegendModule {}

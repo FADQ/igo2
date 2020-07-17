@@ -6,6 +6,11 @@
       'fadq-info-text': message.type === messageType.INFO,
       'fadq-alert-text': message.type === messageType.ALERT
     }">
+    <mat-icon
+      *ngIf="icon"
+      [color]="iconColor"
+      [svgIcon]="icon">
+    </mat-icon>
     {{message.text}}
   </p>
 </div>

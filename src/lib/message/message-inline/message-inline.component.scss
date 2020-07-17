@@ -1,3 +1,13 @@
 :host.fadq-message-inline {
   font-size: 16px
 }
+
+p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+mat-icon {
+  margin-right: 10px;
+}

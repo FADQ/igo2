@@ -1,33 +1,45 @@
+<div *ngIf="(controllerInEdition$ | async) as controller; else root">
+  <div class="content-centered">
+    <button
+      class="width-100"
+      mat-raised-button
+      type="button"
+      color="accent"
+      (click)="onCompleteEdition()">
+      {{ 'client.parcelPro.edit.complete' | translate }}
+    </button>
+  </div>
 
-<div>
-  <igo-list [navigation]="false" [selection]="false">
-    <igo-collapsible
-      [title]="'client.parcelPro.overview.title' | translate"
-      [collapsed]="false">
-      <fadq-client-parcel-pro-legend
-        [groups]="parcelProGroups$ | async">
-      </fadq-client-parcel-pro-legend>
-    </igo-collapsible>
-
-    <igo-collapsible
-      *ngIf="(parcelPros$ | async).length"
-      [title]="'client.parcelPro.edit.title' | translate"
-      [collapsed]="false">
-      <div class="fadq-client-parcel-pro-edit">
-        <p>
-          <small class="fadq-client-parcel-pro-count">
-            {{(parcelPros$ | async).length}} parcelles sélectionnées
-          </small>
-        </p>
-    
-        <fadq-client-parcel-pro-update-batch
-          [store]="store"
-          [transaction]="transaction"
-          [parcelPros]="parcelPros$ | async"
-          (complete)="onCompleteUpdate($event)"
-          (cancel)="onCancelUpdate()">
-        </fadq-client-parcel-pro-update-batch>
-      </div>
-    </igo-collapsible>
-  </igo-list>
+  <fadq-client-parcel-pro-wizard
+    [store]="controller.parcelStore"
+    [transaction]="controller.parcelWorkspace.transaction"
+    [parcelPros]="parcelPros$ | async">
+  </fadq-client-parcel-pro-wizard>
 </div>
+
+<ng-template #root>
+  <ng-container *ngIf="(controller$ | async) as controller">
+    <div class="fadq-client-parcel-tool-legend-container">
+      <p class="text-centered fadq-client-parcel-tool-header">{{'client.parcelPro.numberOfParcels' | translate}}</p>
+      <p class="text-centered">{{controller.parcelStore.count$ | async}}</p>
+      <p class="text-centered fadq-client-parcel-tool-header">
+        {{'client.parcelPro.perProduction' | translate}}
+      </p>
+      <div class="fadq-client-parcel-tool-legend">
+        <fadq-client-parcel-pro-legend
+          [store]="controller.parcelStore">
+        </fadq-client-parcel-pro-legend>
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="content-centered">
+    <button
+      class="width-100"
+      mat-raised-button
+      type="button"
+      (click)="onStartEdition()">
+      {{ 'client.parcelPro.edit.start' | translate }}
+    </button>
+  </div>
+</ng-template>

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material';
 
 import { MessageInlineComponent } from './message-inline.component';
 
@@ -8,7 +9,8 @@ import { MessageInlineComponent } from './message-inline.component';
  */
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    MatIconModule
   ],
   exports: [MessageInlineComponent],
   declarations: [MessageInlineComponent]

@@ -15,7 +15,12 @@
     </mat-tab>
   </mat-tab-group>
 
-  <igo-form-field *ngFor="let field of form.fields" [field]="field"></igo-form-field>
+  <div class="fadq-edition-extra-fields">
+    <igo-form-field
+      *ngFor="let field of form.fields"
+      [field]="field">
+    </igo-form-field>
+  </div>
 
   <div formButtons>
     <button

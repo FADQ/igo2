@@ -7,8 +7,13 @@ import { ApiService } from 'src/lib/core/api';
 
 import {
   ClientParcelPro,
-  ClientParcelProApiConfig
+  ClientParcelProApiConfig,
+  ClientParcelProProduction,
 } from './client-parcel-pro.interfaces';
+import {
+  ClientParcelProCategories,
+  ClientParcelProProductions
+} from './client-parcel-pro.enums';
 
 @Injectable()
 export class ClientParcelProService {
@@ -35,4 +40,31 @@ export class ClientParcelProService {
     return of(parcelPro);
   }
 
+  /**
+   * Get productions for a given category
+   * @param categoryCode Category code
+   * @returns Observable of the productions
+   */
+  getParcelProCategoryProductions(categoryCode: string): Observable<ClientParcelProProduction[]> {
+    const category = ClientParcelProCategories[categoryCode];
+    const productionCodes = category ? category.productions : [];
+    return of(
+        productionCodes
+          .sort()
+          .map((productionCode: string) => {
+            return ClientParcelProProductions[productionCode];
+          })
+      );
+  }
+
+  /**
+   * Get cultivars for a given production
+   * @param categoryCode Category code
+   * @returns Observable of the productions
+   */
+  getParcelProProductionCultivars(productionCode: string): Observable<string[]> {
+    const production = ClientParcelProProductions[productionCode];
+    const cultivars = production ? production.cultivars : [];
+    return of(cultivars);
+  }
 }

@@ -12,14 +12,7 @@ $thumbnail-size: 20px;
   display:block;
 }
 
-.fadq-client-parcel-pro-legend-item-title {
-  display: inline-block;
-  margin-left: 10px;
-  font-size: 14px;
-  vertical-align: middle;
-}
-
-.fadq-client-parcel-pro-legend-item-thumbnail {
+.fadq-client-parcel-pro-legend-thumbnail {
   display: inline-block;
   width: $thumbnail-size;
   height: $thumbnail-size;

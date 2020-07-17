@@ -1,0 +1,43 @@
+<div class="fadq-client-parcel-pro-wizard-legend">
+  <fadq-client-parcel-pro-legend
+    [store]="store">
+  </fadq-client-parcel-pro-legend>
+</div>
+
+<div>
+  <div class="fadq-client-parcel-pro-wizard-step-1-message mat-elevation-z2">
+    <fadq-message-inline
+      *ngIf="infoMessage$ | async as message"
+      [icon]="'information-outline'"
+      [message]="message">
+    </fadq-message-inline>
+    <fadq-message-inline
+      *ngIf="selectionMessage$ | async as message"
+      [message]="message">
+    </fadq-message-inline>
+  </div>
+</div>
+
+<div class="content-centered fadq-client-parcel-pro-wizard-step-1-buttons">
+  <button
+    *ngIf="!(selectionConfirmed$ | async)"
+    mat-raised-button
+    color="primary"
+    type="button"
+    [disabled]="!(confirmSelectionEnabled$ | async)"
+    (click)="onConfirmSelection()">
+    {{ 'client.parcelPro.edit.confirmSelection' | translate }}
+  </button>
+</div>
+
+<fadq-edition-update-batch
+  *ngIf="selectionConfirmed$ | async"
+  [form]="form$ | async"
+  [store]="store"
+  [transaction]="transaction"
+  [features]="parcelPros$ | async"
+  [processData]="processData"
+  [getOperationTitle]="getOperationTitle"
+  (complete)="onComplete($event)"
+  (cancel)="onCancel()">
+</fadq-edition-update-batch>

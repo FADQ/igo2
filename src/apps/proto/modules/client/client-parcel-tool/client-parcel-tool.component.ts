@@ -2,17 +2,13 @@ import {
   Component,
   ChangeDetectionStrategy
 } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { ToolComponent, EntityRecord, EntityTransaction } from '@igo2/common';
-import { FeatureStore } from '@igo2/geo';
+import { ToolComponent } from '@igo2/common';
 
-import {
-  ClientParcelPro,
-  ClientParcelProGroup,
-  computeParcelProGroups
-} from 'src/lib/client';
+import { ClientController } from '../shared/client-controller';
 import { ClientState } from '../client.state';
 
 /**
@@ -31,37 +27,34 @@ import { ClientState } from '../client.state';
 })
 export class ClientParcelToolComponent {
 
-
-  readonly parcelPros$: Observable<ClientParcelPro[]> = this.store.stateView
-    .manyBy$((record: EntityRecord<ClientParcelPro>) => record.state.selected === true)
-    .pipe(
-      map((records: EntityRecord<ClientParcelPro>[]) => {
-        return records.map((record: EntityRecord<ClientParcelPro>) => record.entity);
+  readonly controllerInEdition$: Observable<ClientController> =
+    combineLatest(
+      this.clientState.parcelEditionIsActive$,
+      this.controller$
+    ).pipe(
+      map((res: [boolean, ClientController]) => {
+        return res[0] ? res[1] : undefined;
       })
     );
 
-  readonly parcelProGroups$: Observable<ClientParcelProGroup[]> = this.store.view
-    .all$()
-    .pipe(
-      map((parcelPros: ClientParcelPro[]) => {
-        console.log(computeParcelProGroups(parcelPros));
-        return computeParcelProGroups(parcelPros);
-      })
-    );
+  get controller$(): BehaviorSubject<ClientController> {
+    return this.clientState.controller$;
+  }
 
-  get store(): FeatureStore<ClientParcelPro> { return this.clientState.controller.parcelStore; }
-
-  get transaction(): EntityTransaction { return this.clientState.controller.parcelWorkspace.transaction; }
-
+  get parcelEdtionIsActive$(): BehaviorSubject<boolean> {
+    return this.clientState.parcelEditionIsActive$;
+  }
+  
   constructor(
     private clientState: ClientState
   ) {}
 
-  onCompleteUpdate() {
+  onStartEdition() {
+    this.clientState.startParcelEdition();
   }
 
-  onCancelUpdate() {
-    this.store.state.updateAll({selected: false});
+  onCompleteEdition() {
+    this.clientState.stopParcelEdition();
   }
 
 }

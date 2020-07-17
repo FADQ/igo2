@@ -9,14 +9,24 @@ export interface ClientParcelProApiConfig {
   };
 }
 
-export interface ClientParcelProProperties extends ClientParcelProperties {}
+export interface ClientParcelProProperties extends ClientParcelProperties {
+  category: string;
+  cultivar: string;
+}
 
 export interface ClientParcelPro extends ClientParcel {
   properties: ClientParcelProProperties;
 }
 
-export interface ClientParcelProGroup {
-  production: string;
+export interface ClientParcelProProduction {
+  code: string;
+  desc: string;
+  cultivars: string[];
+}
+
+export interface ClientParcelProCategory {
+  code: string;
+  desc: string;
   color: [number, number, number];
-  parcels: ClientParcelPro[];
+  productions: string[];
 }

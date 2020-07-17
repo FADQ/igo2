@@ -7,6 +7,9 @@ import {
 import {
   FadqLibClientParcelProUpdateBatchModule
 } from './client-parcel-pro-update-batch/client-parcel-pro-update-batch.module';
+import {
+  FadqLibClientParcelProWizardModule
+} from './client-parcel-pro-wizard/client-parcel-pro-wizard.module';
 
 import {
   provideClientParcelProService,
@@ -22,7 +25,8 @@ import {
   ],
   exports: [
     FadqLibClientParcelProLegendModule,
-    FadqLibClientParcelProUpdateBatchModule
+    FadqLibClientParcelProUpdateBatchModule,
+    FadqLibClientParcelProWizardModule
   ],
   declarations: []
 })

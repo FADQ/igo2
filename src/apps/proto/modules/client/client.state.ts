@@ -31,6 +31,9 @@ export class ClientState implements OnDestroy {
   /** Active widget observable. Only one may be active for all clients */
   readonly activeWidget$: BehaviorSubject<Widget> = new BehaviorSubject(undefined);
 
+  /** True when parcel edition is active  */
+  readonly parcelEditionIsActive$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
   /** The current client's controller */
   get controller(): ClientController { return this.controller$.value; }
   readonly controller$: BehaviorSubject<ClientController> = new BehaviorSubject(undefined);
@@ -68,6 +71,14 @@ export class ClientState implements OnDestroy {
 
     this.teardownController();
     this.teardownParcelYears();
+  }
+
+  startParcelEdition() {
+    this.parcelEditionIsActive$.next(true);
+  }
+
+  stopParcelEdition() {
+    this.parcelEditionIsActive$.next(false);
   }
 
   /**
@@ -148,8 +159,12 @@ export class ClientState implements OnDestroy {
   private loadParcelYears() {
     this.clientParcelYearService.getParcelYears()
       .subscribe((parcelYears: ClientParcelYear[]) => {
+        // const current = parcelYears.find((parcelYear: ClientParcelYear) => {
+        //   return parcelYear.current === true;
+        // });
+
         const current = parcelYears.find((parcelYear: ClientParcelYear) => {
-          return parcelYear.current === true;
+          return parcelYear.annee === 2019;
         });
         this.parcelYears.load(parcelYears);
         if (current !== undefined) {
