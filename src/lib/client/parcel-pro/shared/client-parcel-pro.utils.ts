@@ -24,7 +24,7 @@ export function createParcelProLayer(client: Client): VectorLayer {
   const parcelProDataSource = new FeatureDataSource();
   return new VectorLayer({
     title: `${client.info.numero} - Parcelles`,
-    zIndex: 102,
+    zIndex: 100,
     source: parcelProDataSource,
     removable: false,
     browsable: false

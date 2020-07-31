@@ -28,9 +28,6 @@ export class ClientState implements OnDestroy {
   /** Subscription to the client loader. */
   private clientLoader$$: Subscription;
 
-  /** Active widget observable. Only one may be active for all clients */
-  readonly activeWidget$: BehaviorSubject<Widget> = new BehaviorSubject(undefined);
-
   /** True when parcel edition is active  */
   readonly parcelEditionIsActive$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 

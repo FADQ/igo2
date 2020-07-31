@@ -18,14 +18,18 @@ import {
   getAllFormFields,
   FormFieldSelectChoice
 } from '@igo2/common';
-import { FeatureStore, FeatureStoreSelectionStrategy } from '@igo2/geo';
+import {
+  FeatureDataSource,
+  FeatureStore,
+  FeatureStoreSelectionStrategy,
+  VectorLayer
+} from '@igo2/geo';
 
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
 
 import {
   ClientParcelPro,
-  ClientParcelProProduction,
-  ClientParcelProCultivar
+  ClientParcelProProduction
 } from '../shared/client-parcel-pro.interfaces';
 import { ClientParcelProService } from '../shared/client-parcel-pro.service';
 import { ClientParcelProFormService } from '../shared/client-parcel-pro-form.service';
@@ -51,7 +55,7 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
   /**
    * Parcel pros to edit
    */
-  readonly parcelPros$: BehaviorSubject<ClientParcelPro[]> = new BehaviorSubject([]);
+  readonly selected$: BehaviorSubject<ClientParcelPro[]> = new BehaviorSubject([]);
 
   /**
    * Message informing the user to that he needs to select parcels.
@@ -63,7 +67,7 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
    * Number of selected parcels
    * @internal
    */
-  readonly selectionMessage$: Observable<Message> = this.parcelPros$.pipe(
+  readonly selectionMessage$: Observable<Message> = this.selected$.pipe(
     concatMap((parcelPros: ClientParcelPro[]) => {
       const textKey = 'client.parcelPro.edit.selected';
       const text = this.languageService.translate.instant(textKey, {
@@ -80,7 +84,7 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
    * Wether the selection confirmation button is enabled
    * @internal
    */
-  readonly confirmSelectionEnabled$:  Observable<boolean> = this.parcelPros$.pipe(
+  readonly confirmSelectionEnabled$:  Observable<boolean> = this.selected$.pipe(
     concatMap((parcelPros: ClientParcelPro[]) => {
      return of(parcelPros.length > 0);
     })
@@ -105,7 +109,7 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
   /**
    * Subscription
    */
-  private parcelPros$$: Subscription;
+  private selected$$: Subscription;
 
   /**
    * Subscription
@@ -116,6 +120,11 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
    * Subscription
    */
   private production$$: Subscription;
+
+  /**
+   * Layer that shows selected parcels
+   */
+  private overlayLayer: VectorLayer;
 
   get getOperationTitle(): (data: ClientParcelPro, languageService: LanguageService) => string  {
     return generateParcelProOperationTitle;
@@ -142,11 +151,15 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.overlayLayer = this.createOverlayLayer();
+    this.store.map.addLayer(this.overlayLayer);
+  
     const selectionStrategy = this.store.getStrategyOfType(FeatureStoreSelectionStrategy);
     this.selectionStrategy = selectionStrategy as FeatureStoreSelectionStrategy;
     this.selectionStrategyIsActive = this.selectionStrategy.active;
 
-    this.reset();
+    this.enableSelection();
+
     this.clientParcelProFormService
       .buildUpdateBatchForm()
       .subscribe((form: Form) => this.setForm(form));
@@ -157,9 +170,7 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
   }
 
   onConfirmSelection() {
-    this.disableSelection();
-    this.selectionStrategy.clear();
-    this.selectionConfirmed$.next(true);
+    this.setSelectionConfirmed(true);
   }
 
   onComplete() {
@@ -170,15 +181,36 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
     this.reset();
   }
 
+  private createOverlayLayer(): VectorLayer {
+    return new VectorLayer({
+      zIndex: 300,
+      source: new FeatureDataSource(),
+      style: undefined,
+      showInLayerList: false,
+      exportable: false,
+      browsable: false
+    });
+  }
+
+  private setSelectionConfirmed(confirmed: boolean) {
+    if (confirmed) {
+      this.disableSelection();
+    } else {
+      this.enableSelection();
+    }
+    this.selectionConfirmed$.next(confirmed);
+  }
+
   private reset() {
     this.selectionStrategy.unselectAll();
-    this.enableSelection();
-    this.selectionConfirmed$.next(false);
+    this.setSelectionConfirmed(false);
   }
 
   private teardown() {
-    if (this.parcelPros$$ !== undefined) {
-      this.parcelPros$$.unsubscribe();
+    this.store.map.removeLayer(this.overlayLayer);
+  
+    if (this.selected$$ !== undefined) {
+      this.selected$$.unsubscribe();
     }
 
     if (this.category$$ !== undefined) {
@@ -189,14 +221,17 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
       this.production$$.unsubscribe();
     }
 
-    if (this.selectionStrategyIsActive === true) {
-      this.selectionStrategy.activate();
-    } else {
-      this.selectionStrategy.deactivate();
+    if (this.selectionStrategy.active !== this.selectionStrategyIsActive) {
+      if (this.selectionStrategyIsActive === true) {
+        this.selectionStrategy.activate();
+      } else {
+        this.selectionStrategy.deactivate();
+      }
     }
   }
 
   private enableSelection() {
+    this.overlayLayer.dataSource.ol.clear();
     this.selectionStrategy.activate();
 
     const textKey = 'client.parcelPro.edit.info';
@@ -206,33 +241,28 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
       text
     });
 
-    this.parcelPros$$ = this.store.stateView
+    this.selected$$ = this.store.stateView
       .manyBy$((record: EntityRecord<ClientParcelPro>) => record.state.selected === true)
       .subscribe((records: EntityRecord<ClientParcelPro>[]) => {
-        const parcelPros = records.map((record: EntityRecord<ClientParcelPro>) => record.entity);
-        this.parcelPros$.next(parcelPros);
+        const selected = records.map((record: EntityRecord<ClientParcelPro>) => record.entity);
+        this.selectParcels(selected);
       });
   }
 
   private disableSelection() {
-    this.selectionStrategy.deactivateSelection();
+    const olFeatures = this.selectionStrategy.overlayStore.source.ol.getFeatures();
+    this.overlayLayer.dataSource.ol.addFeatures(olFeatures);
+
+    this.selectionStrategy.deactivate();
 
     this.infoMessage$.next(undefined);
-    if (this.parcelPros$$ !== undefined) {
-      this.parcelPros$$.unsubscribe();
+    if (this.selected$$ !== undefined) {
+      this.selected$$.unsubscribe();
     }
   }
 
-  private processParcelPro(data: ClientParcelPro): Observable<EditionResult> {
-    return this.clientParcelProService.createParcelPro(data)
-      .pipe(
-        map((parcelPro: ClientParcelPro): EditionResult => {
-          return {
-            feature: parcelPro,
-            error: undefined
-          };
-        })
-      );
+  private selectParcels(parcels: ClientParcelPro[]) {
+    this.selected$.next(parcels);
   }
 
   private setForm(form: Form) {
@@ -296,5 +326,17 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
           );
         choices$.next(choices);
       });
+  }
+
+  private processParcelPro(data: ClientParcelPro): Observable<EditionResult> {
+    return this.clientParcelProService.createParcelPro(data)
+      .pipe(
+        map((parcelPro: ClientParcelPro): EditionResult => {
+          return {
+            feature: parcelPro,
+            error: undefined
+          };
+        })
+      );
   }
 }

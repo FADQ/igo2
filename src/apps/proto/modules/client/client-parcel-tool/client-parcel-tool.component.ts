@@ -1,6 +1,7 @@
 import {
   Component,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  OnDestroy
 } from '@angular/core';
 
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
@@ -25,7 +26,7 @@ import { ClientState } from '../client.state';
   styleUrls: ['./client-parcel-tool.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientParcelToolComponent {
+export class ClientParcelToolComponent implements OnDestroy {
 
   readonly controllerInEdition$: Observable<ClientController> =
     combineLatest(
@@ -40,10 +41,6 @@ export class ClientParcelToolComponent {
   get controller$(): BehaviorSubject<ClientController> {
     return this.clientState.controller$;
   }
-
-  get parcelEdtionIsActive$(): BehaviorSubject<boolean> {
-    return this.clientState.parcelEditionIsActive$;
-  }
   
   constructor(
     private clientState: ClientState
@@ -57,4 +54,7 @@ export class ClientParcelToolComponent {
     this.clientState.stopParcelEdition();
   }
 
+  ngOnDestroy() {
+    this.clientState.stopParcelEdition();
+  }
 }

@@ -12,13 +12,22 @@
 
   <fadq-client-parcel-pro-wizard
     [store]="controller.parcelStore"
-    [transaction]="controller.parcelWorkspace.transaction"
-    [parcelPros]="parcelPros$ | async">
+    [transaction]="controller.parcelWorkspace.transaction">
   </fadq-client-parcel-pro-wizard>
 </div>
 
 <ng-template #root>
   <ng-container *ngIf="(controller$ | async) as controller">
+    <div class="content-centered">
+      <button
+        class="width-100"
+        mat-raised-button
+        type="button"
+        (click)="onStartEdition()">
+        {{ 'client.parcelPro.edit.start' | translate }}
+      </button>
+    </div>
+
     <div class="fadq-client-parcel-tool-legend-container">
       <p class="text-centered fadq-client-parcel-tool-header">{{'client.parcelPro.numberOfParcels' | translate}}</p>
       <p class="text-centered">{{controller.parcelStore.count$ | async}}</p>
@@ -32,14 +41,4 @@
       </div>
     </div>
   </ng-container>
-
-  <div class="content-centered">
-    <button
-      class="width-100"
-      mat-raised-button
-      type="button"
-      (click)="onStartEdition()">
-      {{ 'client.parcelPro.edit.start' | translate }}
-    </button>
-  </div>
 </ng-template>

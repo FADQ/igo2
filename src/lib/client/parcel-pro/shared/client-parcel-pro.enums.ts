@@ -14,7 +14,7 @@ export const ClientParcelProCatColors: {[key: string]: [number, number, number]}
   'viv': [74, 69, 42],
   'cem': [0, 204, 255],
   'FOI': [205, 106, 106],
-  'INC': [255, 255, 255],
+  'INC': [235, 235, 235],
   'ldt': [205, 41, 144],
   'maf': [246, 213, 130],
   'mgr': [255, 255, 0],
@@ -61,37 +61,55 @@ export const ClientParcelProCatDescs: {[key: string]: string} = {
   'FSU': 'Foin'
 };
 
-
-export const ClientParcelProCatCodes: {[key: string]: string} = {
-  'API': 'Apiculture-abeille',
-  'aut': 'Autres',
-  'AVO': 'Avoine',
-  'bpa': 'Blé, triticale, épeautre',
-  'cnl': 'Canola',
-  'feu': 'CMA-Feuillus',
-  'fru': 'CMA-Fruits',
-  'div': 'CMA-Légumes divers',
-  'cma': 'CM-Multiples',
-  'rac': 'CMA-Racines',
-  'viv': 'CMA-Vivaces',
-  'cem': 'Cultures émergentes',
-  'FOI': 'Foin',
-  'INC': 'Inconnu',
-  'ldt': 'Légumes de transformation',
-  'maf': 'Maïs fourrager',
-  'mgr': 'Maïs-grain',
-  'org': 'Orge',
-  'ptf': 'Petits fruits',
-  'pom': 'Pommes',
-  'pdt': 'Pommes de terre',
-  'prt': 'Protéagineuses',
-  'sei': 'Seigle',
-  'soy': 'Soya',
-
-  'APA': 'Avoine',
-  'FSU': 'Foin'
+export const ClientParcelProCategories: {[key: string]: ClientParcelProCategory} = {
+  // 'API': {
+  //   code: 'API',
+  //   desc: 'Apiculture-abeille',
+  //   color: [255, 192, 0],
+  //   productions: []
+  // },
+  
+  'AUT': {
+    code: 'AUT',
+    desc: 'Autres',
+    color: [247, 150, 70],
+    productions: ['PNC']
+  },
+  'AVO': {
+    code: 'AVO',
+    desc: 'Avoine',
+    color: [154, 205, 50],
+    productions: ['APA']
+  },
+  'BBA': {
+    code: 'BBA',
+    desc: 'Blé, triticale, épeautre',
+    color: [154, 192, 205],
+    productions: ['ABA']
+  },
+  'FOI': {
+    code: 'FOI',
+    desc: 'Foin',
+    color: [205, 106, 106],
+    productions: ['FSU']
+  },
+  'INC': {
+    code: 'INC',
+    desc: 'Inconnu',
+    color: [235, 235, 235],
+    productions: [
+      'LOC'
+    ]
+  },
+  'ORG': {
+    code: 'ORG',
+    desc: 'Orge',
+    color: [0, 205, 102],
+    productions: [
+      'OPA'
+    ]
+  },
 };
-
 
 export const ClientParcelProProductions: {[key: string]: ClientParcelProProduction} = {
   'ABA': {
@@ -115,44 +133,19 @@ export const ClientParcelProProductions: {[key: string]: ClientParcelProProducti
     desc: 'Foin option superficie',
     cultivars: []
   },
-  'INC': {
-    code: 'INC',
-    desc: 'Inconnu',
+  'LOC': {
+    code: 'LOC',
+    desc: 'Location',
     cultivars: []
   },
-};
-
-
-export const ClientParcelProCategories: {[key: string]: ClientParcelProCategory} = {
-  // 'API': {
-  //   code: 'API',
-  //   desc: 'Apiculture-abeille',
-  //   color: [255, 192, 0],
-  //   productions: []
-  // },
-  
-  'AVO': {
-    code: 'AVO',
-    desc: 'Avoine',
-    color: [154, 205, 50],
-    productions: ['APA']
+  'PNC': {
+    code: 'PNC',
+    desc: 'Partie non cultivée',
+    cultivars: []
   },
-  'BBA': {
-    code: 'BBA',
-    desc: 'Blé, triticale, épeautre',
-    color: [154, 192, 205],
-    productions: ['ABA']
-  },
-  'FOI': {
-    code: 'FOI',
-    desc: 'Foin',
-    color: [205, 106, 106],
-    productions: ['FSU']
-  },
-  'INC': {
-    code: 'INC',
-    desc: 'Inconnu',
-    color: [255, 255, 255],
-    productions: []
+  'OPA': {
+    code: 'OPA',
+    desc: 'Orge',
+    cultivars: []
   },
 };

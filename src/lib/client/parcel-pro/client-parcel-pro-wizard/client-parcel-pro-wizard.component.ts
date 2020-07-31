@@ -33,15 +33,10 @@ export class ClientParcelProWizardComponent {
    */
   @Input() transaction: EntityTransaction;
 
-  /**
-   * Step
-   */
-  @Input() initialStep: number = 1;
-
   constructor() {}
 
   ngOnInit() {
-    this.setStep(this.initialStep);
+    this.setStep(1);
   }
 
   setStep(step: number) {
