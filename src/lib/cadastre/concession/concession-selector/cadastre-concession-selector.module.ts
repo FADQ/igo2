@@ -5,6 +5,7 @@ import {
   MatIconModule,
   MatFormFieldModule,
   MatInputModule,
+  MatTooltipModule,
   MatAutocompleteModule,
   MatSelectModule} from '@angular/material';
 
@@ -20,6 +21,7 @@ import { ConcessionSelectorComponent } from './cadastre-concession-selector.comp
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
+    MatTooltipModule,
     MatAutocompleteModule,
     MatSelectModule,
     IgoLanguageModule

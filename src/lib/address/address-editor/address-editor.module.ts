@@ -4,7 +4,8 @@ import { CommonModule } from '@angular/common';
 import {
   MatButtonModule,
   MatFormFieldModule,
-  MatInputModule
+  MatInputModule,
+  MatTooltipModule
 } from '@angular/material';
 
 import { IgoLanguageModule } from '@igo2/core';
@@ -23,6 +24,7 @@ import { FadqAddressEditorZoomDialogModule } from '../address-editor-zoom-dialog
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatTooltipModule,
     IgoLanguageModule,
     FadqAddressEditorSaveDialogModule,
     FadqAddressEditorZoomDialogModule

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { MatButtonModule,  MatButtonToggleModule } from '@angular/material';
+import { MatButtonModule,  MatButtonToggleModule, MatTooltipModule } from '@angular/material';
 
 import { IgoLanguageModule} from '@igo2/core';
 
@@ -10,6 +10,7 @@ import { CadastreSearchToolComponent } from './cadastre-search-tool.component';
   imports: [
     MatButtonModule,
     MatButtonToggleModule,
+    MatTooltipModule,
     IgoLanguageModule,
     FadqLibCadastreModule
   ],

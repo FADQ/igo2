@@ -6,6 +6,7 @@ import {
   MatIconModule,
   MatFormFieldModule,
   MatInputModule,
+  MatTooltipModule,
   MatAutocompleteModule,
   MatSelectModule
 } from '@angular/material';
@@ -26,6 +27,7 @@ import { PlaceSelectorComponent } from './place-selector.component';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
+    MatTooltipModule,
     MatAutocompleteModule,
     MatSelectModule,
     IgoStopPropagationModule,

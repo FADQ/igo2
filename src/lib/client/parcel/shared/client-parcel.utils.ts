@@ -22,14 +22,14 @@ export function getDiagramsFromParcels(parcels: ClientParcel[]): ClientParcelDia
 }
 
 export function getParcelRelation(listItem: ClientParcelListResponseItem, noClientRech: string) {
-  const autreDet = listItem.properties.autreDetenteur || undefined;
-  const autreExp = listItem.properties.autreExploitant || undefined;
+  const estDet = listItem.properties.indEstDetenteur || undefined;
+  const estExp = listItem.properties.indEstExploitant || undefined;
 
   // Relation is a number used to order the parcels on the map and to define their color
   let relation = 1;  // Orange
-  if (autreDet !== undefined) {
+  if (estDet === 'N' && estExp === 'O') {
     relation = 3;  // Teal
-  } else if (autreExp !== undefined) {
+  } else if (estDet === 'O' && estExp === 'N') {
     relation = 2;  // Green
   }
 

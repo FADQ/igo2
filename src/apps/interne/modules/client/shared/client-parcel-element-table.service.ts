@@ -61,11 +61,11 @@ export class ClientParcelElementTableService {
         },
         {
           name: 'properties.statutAugmentationSupCultivable',
-          title: 'Statut de déboisement'
+          title: 'Statut IASC'
         },
         {
           name: 'properties.indParcelleDrainee',
-          title: 'Drainage source FADQ',
+          title: 'Parcelle drainée',
           valueAccessor: (parcelElement: ClientParcelElement) => {
             const value = parcelElement.properties.indParcelleDrainee;
             const choices = getParcelDraineeChoices();
@@ -79,11 +79,11 @@ export class ClientParcelElementTableService {
         },
         {
           name: 'properties.anneeImage',
-          title: 'Année image'
+          title: 'Année de l’image du mesurage'
         },
         {
           name: 'properties.sourceParcelleAgricole',
-          title: 'Référence de la mesure'
+          title: 'Mesure déclarée'
         },
         {
           name: 'properties.timbreMaj',

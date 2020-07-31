@@ -1,6 +1,8 @@
 <mat-form-field>
   <mat-select
     placeholder="{{'navigation.placeSelector.category.placeholder' | translate}}"
+    matTooltipShowDelay="500"
+    [matTooltip]="'navigation.placeSelector.category.tooltip' | translate"
     [value]="selectedCategory"
     (selectionChange)="onCategorySelect($event.value)">
     <mat-option *ngFor="let category of categories" [value]="category">
@@ -29,11 +31,15 @@
     <mat-icon
       igoStopPropagation
       svgIcon="close"
+      matTooltipShowDelay="500"
+      [matTooltip]="'navigation.placeSelector.poi.close.tooltip' | translate"
       (click)="onClearButtonClick()">
     </mat-icon>
     <mat-icon
       igoStopPropagation
       svgIcon="magnify"
+      matTooltipShowDelay="500"
+      [matTooltip]="'navigation.placeSelector.poi.magnify.tooltip' | translate"
       (click)="onOverlayButtonClick()">
     </mat-icon>
   </ng-container>

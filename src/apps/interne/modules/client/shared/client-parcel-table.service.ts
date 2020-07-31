@@ -86,11 +86,11 @@ export class ClientParcelTableService {
         },
         {
           name: 'properties.pourcentageSupMao',
-          title: 'Superficie (%)'
+          title: '% d’exploitation de la production'
         },
         {
           name: 'properties.superficieMao',
-          title: 'Superficie mesurée selon % (ha)'
+          title: 'Superficie calculée selon le % (ha)'
         },
         {
           name: 'properties.superficieDeclaree',
@@ -110,11 +110,11 @@ export class ClientParcelTableService {
         },
         {
           name: 'properties.statutAugmentationSupCultivable',
-          title: 'Statut de déboisement'
+          title: 'Statut IASC'
         },
         {
           name: 'properties.indParcelleDrainee',
-          title: 'Drainage source FADQ',
+          title: 'Parcelle drainée',
           valueAccessor: (parcel: ClientParcel) => {
             const value = parcel.properties.indParcelleDrainee;
             const choices = getParcelDraineeChoices();
@@ -124,11 +124,11 @@ export class ClientParcelTableService {
         },
         {
           name: 'properties.sourceParcelleAgricole',
-          title: 'Référence de la mesure'
+          title: 'Mesure déclarée'
         },
         {
           name: 'properties.timbreMajGeometrie',
-          title: 'Date de mise à jour',
+          title: 'Date de mise à jour de la géométrie',
           valueAccessor: (parcel: ClientParcel) => {
             const value = parcel.properties.timbreMajGeometrie;
             if (!value) { return ''; }

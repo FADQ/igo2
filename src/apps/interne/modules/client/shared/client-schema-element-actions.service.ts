@@ -318,7 +318,7 @@ export class ClientSchemaElementActionsService {
       },
       {
         id: 'downloadMapLSE',
-        icon: 'map',
+        icon: 'image-area-close',
         title: 'client.schemaElement.downloadMapLSE',
         tooltip: 'client.schemaElement.downloadMapLSE.tooltip',
         args: [controller],

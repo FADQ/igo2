@@ -89,8 +89,8 @@ export class ClientParcelElementActionsService {
       {
         id: 'deactivate-parcel-elements',
         icon: 'close-box-outline',
-        title: 'client.parcelElement.stopTx',
-        tooltip: 'client.parcelElement.stopTx.tooltip',
+        title: 'client.parcelTx.stop',
+        tooltip: 'client.parcelTx.stop.tooltip',
         args: [controller],
         handler: function(ctrl: ClientController) {
           ctrl.deactivateParcelElements();

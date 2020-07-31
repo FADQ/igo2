@@ -20,6 +20,8 @@
     <div class="igo-form-button-group">
         <button
             mat-raised-button
+            matTooltipShowDelay="500"
+            [matTooltip]="'addressEditor.edit.tooltip' | translate"
             type="button"
             [disabled]="(inEdition$ | async)"
             (click)="handleFormEdit()">
@@ -27,6 +29,8 @@
         </button>
         <button
             mat-raised-button
+            matTooltipShowDelay="500"
+            [matTooltip]="'addressEditor.save.tooltip' | translate"
             type="button"
             #save
             [disabled]="!(inEdition$ | async)"
@@ -35,6 +39,8 @@
         </button>
         <button
             mat-raised-button
+            matTooltipShowDelay="500"
+            [matTooltip]="'addressEditor.cancel.tooltip' | translate"
             type="button"
             [disabled]="!(inEdition$ | async)"
             (click)="handleFormCancel()">

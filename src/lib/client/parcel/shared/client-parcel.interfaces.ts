@@ -35,6 +35,8 @@ export interface ClientParcelProperties {
   typeParcelleAgricole: string;
   usagerMajGeometrie: string;
   relation: number;
+  indEstDetenteur: string;
+  indEstExploitant: string;
 }
 
 export interface ClientParcel extends Feature {
