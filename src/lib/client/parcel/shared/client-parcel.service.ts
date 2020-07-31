@@ -54,10 +54,8 @@ export class ClientParcelService {
     client: Client
   ): ClientParcel {
     const noClientRecherche = padClientNum(client.info.numero);
-    const relation = getParcelRelation(listItem, noClientRecherche);
     const properties = Object.assign({}, listItem.properties, {
-      noClientRecherche,
-      relation
+      noClientRecherche
     });
     return {
       meta: {

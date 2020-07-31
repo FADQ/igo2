@@ -20,11 +20,15 @@
 <div class="igo-form-buttons">
   <button
     mat-raised-button
+    matTooltipShowDelay="500"
+    [matTooltip]="'cadastre.cancel_search.tooltip' | translate"
     (click)="onSearchCancelClick()">
     {{ 'cadastre.cancel_search' | translate }}
   </button>
   <button
     mat-raised-button
+    matTooltipShowDelay="500"
+    [matTooltip]="'cadastre.search.tooltip' | translate"
     color="primary"
     [disabled]="searchDisabled"
     type="button"

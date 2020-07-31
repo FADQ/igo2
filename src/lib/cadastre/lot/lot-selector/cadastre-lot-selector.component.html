@@ -2,6 +2,8 @@
   <mat-select
     [value]="selected$ | async"
     [placeholder]="'cadastre.lot' | translate"
+    matTooltipShowDelay="500"
+    [matTooltip]="'cadastre.lot.tooltip' | translate"
     (selectionChange)="onSelectionChange($event)">
     <ng-template ngFor let-lot [ngForOf]="store.view.all$() | async">
       <mat-option [value]="lot">

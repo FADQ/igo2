@@ -55,8 +55,8 @@ export class ClientParcelElementFormService {
       .pipe(
         map((fields: [FormField[], FormField[]]) => {
           return this.formService.form([], [
-            this.formService.group({name: 'geometry', title: geometryTitle}, fields[0]),
-            this.formService.group({name: 'info', title: infoTitle}, fields[1])
+            this.formService.group({name: 'info', title: infoTitle}, fields[1]),
+            this.formService.group({name: 'geometry', title: geometryTitle}, fields[0])
           ]);
         })
       );
@@ -108,7 +108,7 @@ export class ClientParcelElementFormService {
         map((choices: FormFieldSelectChoice[]) => {
           return this.createField({
             name: 'properties.statutAugmentationSupCultivable',
-            title: 'Statut de déboisement',
+            title: 'Statut IASC',
             type: 'select',
             options:  {
               cols: 1
@@ -173,7 +173,7 @@ export class ClientParcelElementFormService {
   private createInfoLocateurField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
     return of(this.createField({
       name: 'properties.infoLocateur',
-      title: 'Info localisation',
+      title: 'Information localisation',
       options:  {
         cols: 1
       }

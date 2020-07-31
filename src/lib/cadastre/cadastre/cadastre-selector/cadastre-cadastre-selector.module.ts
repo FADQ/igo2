@@ -5,6 +5,7 @@ import {
   MatIconModule,
   MatFormFieldModule,
   MatInputModule,
+  MatTooltipModule,
   MatAutocompleteModule,
   MatSelectModule
 } from '@angular/material';
@@ -21,6 +22,7 @@ import { CadastreSelectorComponent } from './cadastre-cadastre-selector.componen
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
+    MatTooltipModule,
     MatAutocompleteModule,
     MatSelectModule,
     IgoLanguageModule

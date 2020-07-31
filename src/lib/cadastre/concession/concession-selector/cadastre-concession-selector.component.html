@@ -2,6 +2,8 @@
   <mat-select
     [value]="selected$ | async"
     [placeholder]="'cadastre.concession' | translate"
+    matTooltipShowDelay="500"
+    [matTooltip]="'cadastre.concession.tooltip' | translate"
     (selectionChange)="onSelectionChange($event)">
     <ng-template ngFor let-concession [ngForOf]="store.view.all$() | async">
       <mat-option [value]="concession">

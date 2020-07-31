@@ -3,6 +3,8 @@
     matInput
     type="text"
     [placeholder]="'cadastre.mun' | translate"
+    matTooltipShowDelay="500"
+    [matTooltip]="'cadastre.mun.tooltip' | translate"
     [matAutocomplete]="auto"
     [formControl]="munControl">
   <mat-autocomplete

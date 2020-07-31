@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import {
   MatButtonModule,
   MatIconModule,
+  MatTooltipModule,
   MatMenuModule,
   MatListModule,
   MatSelectModule
@@ -20,6 +21,7 @@ import { ExpansionPanelHeaderComponent } from './expansion-panel-header.componen
     CommonModule,
     MatButtonModule,
     MatIconModule,
+    MatTooltipModule,
     MatMenuModule,
     MatListModule,
     MatSelectModule,

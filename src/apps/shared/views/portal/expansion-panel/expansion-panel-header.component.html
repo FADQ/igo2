@@ -1,8 +1,20 @@
 <div>
   <div class="fadq-expansion-panel-trigger-container">
     <button mat-icon-button (click)="onToggleClick()">
-      <mat-icon *ngIf="!expanded" color="primary" svgIcon="arrow-up-bold-box-outline"></mat-icon>
-      <mat-icon *ngIf="expanded" color="primary" svgIcon="arrow-down-bold-box-outline"></mat-icon>
+      <mat-icon 
+        *ngIf="!expanded" 
+        matTooltipShowDelay="500" 
+        [matTooltip]="'expansion-panel.header-not-expanded.tooltip' | translate" 
+        color="primary" 
+        svgIcon="arrow-up-bold-box-outline">
+      </mat-icon>
+      <mat-icon 
+        *ngIf="expanded"
+        matTooltipShowDelay="500" 
+        [matTooltip]="'expansion-panel.header-expanded.tooltip' | translate"
+        color="primary" 
+        svgIcon="arrow-down-bold-box-outline">
+      </mat-icon>
     </button>
   </div>
 

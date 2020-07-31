@@ -2,8 +2,8 @@
   "IGO": "IGO FADQ - La Financière agricole du Québec",
   "welcome": "Bienvenue à {{title}}",
   "menu": {
-    "close": "Fermer le menu",
-    "open": "Menu"
+    "close": "Cacher le menu",
+    "open": "Afficher le menu"
   },
   "choose...": "Choisissez...",
   "cancel": "Annuler",
@@ -15,7 +15,6 @@
   "informations": "Informations",
   "refresh": "Rafraîchir",
   "recover": "Récupérer",
-  "Coordonnées": "Coordonnées",
 
   "igo": {
     "geo": {
@@ -26,7 +25,7 @@
         "layer.placeholder": "Rechercher une couche de données.",
         "client.title": "Client",
         "client.placeholder": "Rechercher un client",
-        "cadastre.title": "Cadastre originaire",
+        "cadastre.title": "Compilation cadastrale",
         "cadastre.placeholder": "Rechercher un cadastre originaire",
         "cadastre-reno.title": "Cadastre rénové",
         "cadastre-reno.placeholder": "Rechercher un cadastre rénové"
@@ -45,7 +44,10 @@
 
   "navigation": {
     "placeSelector.category.placeholder": "Type de zoom",
+    "placeSelector.category.tooltip": "Sélectionner le type de zoom",
     "poiSelector.poi.placeholder": "Point d'intérêt",
+    "placeSelector.poi.close.tooltip":"Supprimer la sélection",
+    "placeSelector.poi.magnify.tooltip":"Zoomer sur la sélection",
     "categories": {
       "mun": "Municipalité",
       "mrc": "MRC",
@@ -69,21 +71,22 @@
     "addressEditor": "Outil d'édition d'adresse",
     "client": "Client",
     "clientParcelTx": "Clients en cours d'édition",
-    "measurer": "Mesurage",
+    "measurer": "Outil de mesure",
     "navigation": "Zoom sur une région",
-    "cadastre": "Cadastre originaire"
+    "cadastre": "Compilation cadastrale"
   },
 
   "addressEditor":{
     "buildingNumber.placeholder": "Numéro d'immeuble",
     "suffix.placeholder": "Suffixe",
     "edit": "Éditer",
+    "edit.tooltip": "Éditer",
     "save": "Enregistrer",
-    "save.title": "Confirmation",
+    "save.tooltip": "Enregistrer",
     "save.confirm": "Cet objet sera enregistré à votre nom. Êtes-vous certain de vouloir sauvegarder cette modification?",
-    "zoom.title": "Message d'interrogation",
     "zoom.confirm": "L'échelle de la carte doit se trouver entre 1 et 2500. Désirez-vous zoomer à cette échelle?",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "cancel.tooltip": "Annuler"
   },
   "client": {
     "error.notfound": "No de client non valide",
@@ -103,8 +106,8 @@
     },
     "parcel": {
       "year.placeholder": "Année",
-      "exportToCSV": "Exporter les données en CSV",
-      "exportToCSV.tooltip": "Exporter les données en CSV",
+      "exportToCSV": "Exporter les données au format CSV",
+      "exportToCSV.tooltip": "Exporter les données au format CSV",
       "filterNotOwned": {
         "title": "Afficher les parcelles détenues",
         "tooltip": "Afficher les parcelles détenues"
@@ -119,27 +122,27 @@
       "numbering.header": "Numéroter les parcelles",
       "numbering.numberInUse.error": "Ce numéro de parcelle est déjà utilisé",
       "numbering.numberTooLong.error": "Le numéro de parcelle doit contenir au plus 4 caractères",
-      "transfer": "Transférer des parcelles",
+      "transfer": "Transférer les parcelles",
       "transfer.client.placeholder": "Transférer au client",
       "transfer.keepParcelNumbers": "Conserver les numéros de parcelles",
       "transfer.transferAllParcels": "Transférer la totalité des parcelles du client",
-      "transfer.tooltip": "Transférer des parcelles",
+      "transfer.tooltip": "Transférer les parcelles",
       "transfer.apply": "Transférer",
       "transfer.error.empty": "Aucune parcelle sélectionnée pour le transfert",
       "transfer.error.invalid": "Le transfert vers ce client est présentement impossible",
       "transactionDialog.title": "Informations non sauvegardées",
       "transactionDialog.saveMessage": "Sauvegarde en cours...",
       "import": "Importer des données",
-      "import.tooltip": "Importer des données",
+      "import.tooltip": "Importer des données (pour les fichiers qui supportent les polygones)",
       "save.error": "Les parcelles n'ont pas pu être sauvegardés",
       "save.success": "Sauvegarde réussie",
       "edition.ai.error": "L'édition pour l'année sélectionnée n'est pas possible",
       "edition.eec.error": "Il existe déjà des parcelles en édition pour ce client",
-      "recoverParcelsWithoutOwner": "Récupérer des parcelles sans détenteurs",
-      "recoverParcelsWithoutOwner.tooltip": "Récupérer des parcelles sans détenteurs",
-      "recoverParcelsWithoutOwner.info": "Sélectionner des parcelles sans détenteurs avant de les récupérer",
-      "recoverParcelsWithoutOwner.noParcelFound": "Aucune parcelle sans détenteurs trouvée",
-      "recoverParcelsWithoutOwner.parcelFound": "{{count}} parcelle(s) sans détenteurs trouvée(s)",
+      "recoverParcelsWithoutOwner": "Récupérer des parcelles orphelines",
+      "recoverParcelsWithoutOwner.tooltip": "Récupérer des parcelles orphelines",
+      "recoverParcelsWithoutOwner.info": "Sélectionner des parcelles orphelines avant de les récupérer",
+      "recoverParcelsWithoutOwner.noParcelFound": "Aucune parcelle orphelines trouvée",
+      "recoverParcelsWithoutOwner.parcelFound": "{{count}} parcelle(s) orphelines trouvée(s)",
       "recoverParcelsWithoutOwner.wrongZoomLevel": "L'échelle de la carte doit se trouver entre 1 et 30000."
     },
     "parcelTx": {
@@ -150,11 +153,9 @@
       "reconciliate.error": "Réconciliation en erreur",
       "reconciliate.success": "Réconciliation réussie",
       "reconciliate.linkedClients": "Les clients suivants devront aussi être réconciliés",
-      "delete": "Supprimer la transaction",
-      "delete.tooltip": "Supprimer la transaction",
       "delete.confirm": "Désirez-vous supprimer la transaction et effacer toutes les modifications effectuées?",
       "delete.error.moreThanOneClient": "Impossible de supprimer une transaction sur plusieurs clients",
-      "start.confirm": "Désirez-vous débuter l'édition de parcelles?",
+      "start.confirm": "Désirez-vous commencer l'édition de parcelles?",
       "start.notCurrentYear": "L'année d'édition n'est pas l'année courante.",
       "start": "Édition de parcelles",
       "start.tooltip": "Démarrer l'édition de parcelles",
@@ -175,17 +176,17 @@
       "create": "Créer",
       "create.tooltip": "Créer un schéma",
       "update": "Modifier",
-      "update.tooltip": "Modifier un schéma",
+      "update.tooltip": "Modifier le schéma",
       "delete": "Supprimer",
-      "delete.tooltip": "Supprimer le schéma sélectionné",
+      "delete.tooltip": "Supprimer le schéma",
       "delete.confirm": "Désirez-vous supprimer le schéma?",
       "duplicate": "Dupliquer",
-      "duplicate.tooltip": "Dupliquer le schéma sélectionné",
+      "duplicate.tooltip": "Dupliquer le schéma",
       "duplicate.confirm": "Désirez-vous dupliquer ce schéma?",
       "manageFiles": "Fichiers joints",
       "manageFiles.tooltip": "Gérer les fichiers joints",
       "transfer": "Transférer",
-      "transfer.tooltip": "Transférer un schéma",
+      "transfer.tooltip": "Transférer le schéma",
       "transfer.error.duplicatedNumber": "Certains numéros des éléments du schéma sélectionné sont déjà utilisés dans celui du client vers lequel est tenté le transfert. Si nécessaire, aller modifier ces numéros par la suite.",
       "createMap": "Créer carte(s)",
       "createMap.tooltip": "Créer carte(s) de structure d'entreposage"
@@ -205,12 +206,12 @@
       "error.etiquetteMaxLength": "Vous devez saisir une étiquette de moins de 25 caractères.",
       "error.descriptionMaxLength": "Vous devez saisir une description de moins de 250 caractères.",
       "error.area": "La superficie doit être plus grande que 50m² et plus petite que 999 999 999 m².",
-      "import": "Importer des données dans ce schéma",
-      "import.tooltip": "Importer des données dans ce schéma",
+      "import": "Importer des données",
+      "import.tooltip": "Importer des données",
       "save.error": "Certains éléments du schéma n'ont pas pu être sauvegardés",
       "save.success": "Sauvegarde réussie",
       "downloadMapLSE": "Structures d'entreposage",
-      "downloadMapLSE.tooltip": "Télécharger la carte des structures d'entreposage"
+      "downloadMapLSE.tooltip": "Créer les cartes des structures d’entreposage"
     }
   },
 
@@ -219,7 +220,7 @@
     "create.tooltip": "Créer un élément",
     "create.apply": "Créer",
     "update": "Modifier",
-    "update.tooltip": "Modifier un élément",
+    "update.tooltip": "Modifier les éléments",
     "update.apply": "Modifier",
     "createUpdate": "Créer ou modifier",
     "createUpdate.tooltip": "Créer ou modifier un élément",
@@ -227,7 +228,7 @@
     "redraw.tooltip": "Redessiner un élément",
     "redraw.message": "Sélectionnez un élément sur la carte pour le redessiner",
     "delete": "Supprimer",
-    "delete.tooltip": "Supprimer un élément",
+    "delete.tooltip": "Supprimer les éléments",
     "simplify": "Simplifier",
     "simplify.tooltip": "Simplifier des éléments",
     "simplify.message": "Choisir le niveau de simplification de l'élément",
@@ -237,8 +238,8 @@
     "fill": "Réinclure une surface exclue",
     "fill.tooltip": "Réinclure une surface exclue",
     "fill.message": "Sélectionnez les surfaces à réinclure",
-    "slice": "Couper un élément",
-    "slice.tooltip": "Couper un élément",
+    "slice": "Couper la surface",
+    "slice.tooltip": "Couper la surface",
     "slice.message": "Tracez une ligne pour couper l'élément sélectionné",
     "slice.apply": "Couper",
     "translate": "Déplacer un élément",
@@ -255,8 +256,8 @@
     "import.error.emptyFile": "Le fichier est vide, impossible d'importer",
     "import.error.invalidFile": "Le fichier est impossible à lire",
     "import.error.nothingToImport": "Aucun élément géométrique valide trouvé dans ce fichier",
-    "exportToCSV": "Exporter les données en CSV",
-    "exportToCSV.tooltip": "Exporter les données en CSV"
+    "exportToCSV": "Exporter les données au format CSV",
+    "exportToCSV.tooltip": "Exporter les données au format CSV"
   },
 
   "context": {
@@ -271,12 +272,12 @@
         "tooltip": "Change Base Layer"
       },
       "zoomin": {
-        "title": "Zoom avant",
-        "tooltip": "Zoom avant"
+        "title": "Zoomer",
+        "tooltip": "Zoomer"
       },
       "zoomout": {
-        "title": "Zoom arrière",
-        "tooltip": "Zoom arrière"
+        "title": "Dézoomer",
+        "tooltip": "Dézoomer"
       },
       "previousview": {
         "title": "Navigation rapide: reculer",
@@ -299,8 +300,8 @@
         "tooltip": "Afficher votre position"
       },
       "googleview": {
-        "title": "Voir dans Google Maps",
-        "tooltip": "Voir dans Google Maps"
+        "title": "Ouvrir dans Google Maps",
+        "tooltip": "Ouvrir dans Google Maps"
       }
     },
     "moveToFeatures": {
@@ -334,10 +335,21 @@
 
   "cadastre": {
     "mun": "Municipalité",
+    "mun.tooltip": "Sélectionner une municipalité",
     "cadastre": "Cadastre",
+    "cadastre.tooltip": "Sélectionner un cadastre",
     "concession": "Désignation secondaire",
+    "concession.tooltip": "Sélectionner une désignation secondaire",
     "lot": "Lot",
+    "lot.tooltip": "Sélectionner un lot",
     "search": "Rechercher",
-    "cancel_search": "Réinitialiser"
+    "search.tooltip": "Rechercher",
+    "cancel_search": "Réinitialiser",
+    "cancel_search.tooltip": "Réinitialiser"
+  },
+
+  "expansion-panel": {
+    "header-expanded.tooltip": "Cacher les informations descriptives",
+    "header-not-expanded.tooltip": "Afficher les informations descriptives"
   }
 }
