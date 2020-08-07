@@ -1,10 +1,10 @@
 [
   {
-    "uri": "interne.default",
+    "uri": "locals/interne.default",
     "title": "Général"
   },
   {
-    "uri": "interne.mesurage",
+    "uri": "locals/interne.mesurage",
     "title": "Mesurage"
   }
 ]
