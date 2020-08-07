@@ -68,7 +68,7 @@ export const ClientParcelProCategories: {[key: string]: ClientParcelProCategory}
   //   color: [255, 192, 0],
   //   productions: []
   // },
-  
+
   'AUT': {
     code: 'AUT',
     desc: 'Autres',

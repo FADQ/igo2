@@ -77,6 +77,10 @@
     </ng-container>
   </ng-container>
 
+  <div
+    *ngIf="tableBackdropShown$ | async"
+    class="fadq-table-backdrop">
+  </div>
   <igo-entity-table
     *ngIf="(controller$ | async) as controller"
     class="table-compact table-centered"

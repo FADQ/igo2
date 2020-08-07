@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { BehaviorSubject, Subscription, of } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
 
 import { MapBrowserPointerEvent as OlMapBrowserPointerEvent } from 'ol/MapBrowserEvent';
 
@@ -8,7 +8,8 @@ import { DetailedContext } from '@igo2/context';
 import {
   ActionbarMode,
   EntityRecord,
-  EntityStore
+  EntityStore,
+  Tool
 } from '@igo2/common';
 import {
   FEATURE,
@@ -58,6 +59,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   private searchAddedLayers: Map<string, Layer[]> = new Map();
   private searchVisibledLayers: Map<string, Layer[]> = new Map();
   private context$$: Subscription;
+  private tool$$; Subscription;
 
   readonly actionbarMode: ActionbarMode = ActionbarMode.Dock;
 
@@ -67,6 +69,10 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   get backdropShown(): boolean {
     return this.mediaService.media$.value === Media.Mobile && this.sidenavOpened;
+  }
+
+  get tableBackdropShown$(): Observable<boolean> {
+    return this.clientState.parcelSelectionIsConfirmed$;
   }
 
   get mapActionbarMode(): ActionbarMode {
@@ -127,11 +133,18 @@ export class PortalComponent implements OnInit, OnDestroy {
         this.updateSearchLayers(undefined);
       }
     });
+
+    this.tool$$ = this.toolState.toolbox.activeTool$.subscribe((tool: Tool) => {
+      if (tool && tool.name === 'clientParcel') {
+        this.openExpansionPanel();
+      }
+    });
   }
 
   ngOnDestroy() {
     this.context$$.unsubscribe();
     this.focusedSearchResult$$.unsubscribe();
+    this.tool$$.unsubscribe();
   }
 
   onBackdropClick() {

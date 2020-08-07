@@ -41,7 +41,7 @@ export class ClientParcelToolComponent implements OnDestroy {
   get controller$(): BehaviorSubject<ClientController> {
     return this.clientState.controller$;
   }
-  
+
   constructor(
     private clientState: ClientState
   ) {}
@@ -52,6 +52,10 @@ export class ClientParcelToolComponent implements OnDestroy {
 
   onCompleteEdition() {
     this.clientState.stopParcelEdition();
+  }
+
+  onConfirmSelection(confirmed: boolean) {
+    this.clientState.confirmParcelSelection(confirmed);
   }
 
   ngOnDestroy() {

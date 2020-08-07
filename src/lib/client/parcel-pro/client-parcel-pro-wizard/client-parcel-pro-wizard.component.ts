@@ -2,6 +2,9 @@ import {
   Component,
   Input,
   ChangeDetectionStrategy,
+  OnInit,
+  Output,
+  EventEmitter
 } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
@@ -19,7 +22,7 @@ import { ClientParcelPro } from '../shared/client-parcel-pro.interfaces';
   styleUrls: ['./client-parcel-pro-wizard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientParcelProWizardComponent {
+export class ClientParcelProWizardComponent implements OnInit {
 
   readonly step$: BehaviorSubject<number> = new BehaviorSubject(undefined);
 
@@ -32,6 +35,8 @@ export class ClientParcelProWizardComponent {
    * Parcel pro transaction
    */
   @Input() transaction: EntityTransaction;
+
+  @Output() confirmSelection = new EventEmitter<boolean>();
 
   constructor() {}
 

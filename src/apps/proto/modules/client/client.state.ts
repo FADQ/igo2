@@ -31,6 +31,9 @@ export class ClientState implements OnDestroy {
   /** True when parcel edition is active  */
   readonly parcelEditionIsActive$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
+  /** True when parcel edition is active  */
+  readonly parcelSelectionIsConfirmed$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
   /** The current client's controller */
   get controller(): ClientController { return this.controller$.value; }
   readonly controller$: BehaviorSubject<ClientController> = new BehaviorSubject(undefined);
@@ -75,7 +78,11 @@ export class ClientState implements OnDestroy {
   }
 
   stopParcelEdition() {
-    this.parcelEditionIsActive$.next(false);
+    this.parcelSelectionIsConfirmed$.next(false);
+  }
+
+  confirmParcelSelection(confirmed: boolean) {
+    this.parcelSelectionIsConfirmed$.next(confirmed);
   }
 
   /**

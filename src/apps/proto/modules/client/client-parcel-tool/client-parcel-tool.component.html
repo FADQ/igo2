@@ -12,7 +12,8 @@
 
   <fadq-client-parcel-pro-wizard
     [store]="controller.parcelStore"
-    [transaction]="controller.parcelWorkspace.transaction">
+    [transaction]="controller.parcelWorkspace.transaction"
+    (confirmSelection)="onConfirmSelection($event)">
   </fadq-client-parcel-pro-wizard>
 </div>
 

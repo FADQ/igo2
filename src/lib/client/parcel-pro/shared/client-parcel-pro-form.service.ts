@@ -141,14 +141,12 @@ export class ClientParcelProFormService {
     //   map((choices: FormFieldSelectChoice[]) => [{value: null, title: ''}].concat(choices))
     // );
 
-    const choices = [{value: null, title: ''}].concat(
-      Object.keys(ClientParcelProCategories)
-        .sort()
-        .map((key: string) => {
-          const category = ClientParcelProCategories[key];
-          return {value: key, title: category.desc};
-        })
-      );
+    const choices = Object.keys(ClientParcelProCategories)
+      .sort()
+      .map((key: string) => {
+        const category = ClientParcelProCategories[key];
+        return {value: key, title: category.desc};
+      });
 
     return of(choices);
   }

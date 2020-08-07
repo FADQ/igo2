@@ -2,7 +2,10 @@ import {
   Component,
   Input,
   ChangeDetectionStrategy,
-  OnInit
+  OnInit,
+  OnDestroy,
+  Output,
+  EventEmitter
 } from '@angular/core';
 
 import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
@@ -12,10 +15,11 @@ import { LanguageService, Message, MessageType } from '@igo2/core';
 import {
   EntityRecord,
   EntityTransaction,
+  EntityStoreFilterSelectionStrategy,
   Form,
   FormField,
   FormFieldSelectInputs,
-  getAllFormFields,
+  getFormFieldByName,
   FormFieldSelectChoice
 } from '@igo2/common';
 import {
@@ -44,7 +48,7 @@ import {
   styleUrls: ['./client-parcel-pro-wizard-step-1.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientParcelProWizardComponentStep1 implements OnInit {
+export class ClientParcelProWizardStep1Component implements OnInit, OnDestroy {
 
   /**
    * The form
@@ -107,6 +111,16 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
   private selectionStrategyIsActive: boolean;
 
   /**
+   * Selection strategy
+   */
+  private filterSelectionStrategy: EntityStoreFilterSelectionStrategy;
+
+  /**
+   * Wheter the filter selection strategy is active initally
+   */
+  private filterSelectionStrategyIsActive: boolean;
+
+  /**
    * Subscription
    */
   private selected$$: Subscription;
@@ -144,6 +158,8 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
    */
   @Input() transaction: EntityTransaction;
 
+  @Output() confirmSelection = new EventEmitter<boolean>();
+
   constructor(
     private clientParcelProService: ClientParcelProService,
     private clientParcelProFormService: ClientParcelProFormService,
@@ -153,12 +169,16 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
   ngOnInit() {
     this.overlayLayer = this.createOverlayLayer();
     this.store.map.addLayer(this.overlayLayer);
-  
+
     const selectionStrategy = this.store.getStrategyOfType(FeatureStoreSelectionStrategy);
     this.selectionStrategy = selectionStrategy as FeatureStoreSelectionStrategy;
     this.selectionStrategyIsActive = this.selectionStrategy.active;
 
-    this.enableSelection();
+    const filterSelectionStrategy = this.store.getStrategyOfType(EntityStoreFilterSelectionStrategy);
+    this.filterSelectionStrategy = filterSelectionStrategy as EntityStoreFilterSelectionStrategy;
+    this.filterSelectionStrategyIsActive = this.filterSelectionStrategy.active;
+
+    this.reset();
 
     this.clientParcelProFormService
       .buildUpdateBatchForm()
@@ -171,6 +191,7 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
 
   onConfirmSelection() {
     this.setSelectionConfirmed(true);
+    this.filterSelectionStrategy.activate();
   }
 
   onComplete() {
@@ -199,16 +220,18 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
       this.enableSelection();
     }
     this.selectionConfirmed$.next(confirmed);
+    this.confirmSelection.emit(confirmed);
   }
 
   private reset() {
+    this.filterSelectionStrategy.deactivate();
     this.selectionStrategy.unselectAll();
     this.setSelectionConfirmed(false);
   }
 
   private teardown() {
     this.store.map.removeLayer(this.overlayLayer);
-  
+
     if (this.selected$$ !== undefined) {
       this.selected$$.unsubscribe();
     }
@@ -226,6 +249,14 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
         this.selectionStrategy.activate();
       } else {
         this.selectionStrategy.deactivate();
+      }
+    }
+
+    if (this.filterSelectionStrategy.active !== this.filterSelectionStrategyIsActive) {
+      if (this.filterSelectionStrategyIsActive === true) {
+        this.filterSelectionStrategy.activate();
+      } else {
+        this.filterSelectionStrategy.deactivate();
       }
     }
   }
@@ -278,24 +309,24 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
   }
 
   private getCategoryField(): FormField<FormFieldSelectInputs> {
-    const fields = getAllFormFields(this.form$.value);
-    return fields.find((field: FormField) => {
-      return field.name === 'properties.category';
-    }) as FormField<FormFieldSelectInputs>;
+    return getFormFieldByName(
+      this.form$.value,
+      'properties.category'
+    ) as FormField<FormFieldSelectInputs>;
   }
 
   private getProductionField(): FormField<FormFieldSelectInputs> {
-    const fields = getAllFormFields(this.form$.value);
-    return fields.find((field: FormField) => {
-      return field.name === 'properties.production';
-    }) as FormField<FormFieldSelectInputs>;
+    return getFormFieldByName(
+      this.form$.value,
+      'properties.production'
+    ) as FormField<FormFieldSelectInputs>;
   }
 
   private getCultivarField(): FormField<FormFieldSelectInputs> {
-    const fields = getAllFormFields(this.form$.value);
-    return fields.find((field: FormField) => {
-      return field.name === 'properties.cultivar';
-    }) as FormField<FormFieldSelectInputs>;
+    return getFormFieldByName(
+      this.form$.value,
+      'properties.cultivar'
+    ) as FormField<FormFieldSelectInputs>;
   }
 
   private updateProductionChoices(categoryCode: string) {
@@ -304,11 +335,9 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
       .subscribe((productions: ClientParcelProProduction[]) => {
         const productionField = this.getProductionField();
         const choices$ = productionField.inputs.choices as BehaviorSubject<FormFieldSelectChoice[]>;
-        const choices = [{value: null, title: ''}].concat(
-          productions.map((production) => {
-              return {value: production.code, title: production.desc};
-            })
-          );
+        const choices = productions.map((production) => {
+          return {value: production.code, title: production.desc};
+        });
         choices$.next(choices);
       });
   }
@@ -319,11 +348,9 @@ export class ClientParcelProWizardComponentStep1 implements OnInit {
       .subscribe((cultivars: string[]) => {
         const cultivarField = this.getCultivarField();
         const choices$ = cultivarField.inputs.choices as BehaviorSubject<FormFieldSelectChoice[]>;
-        const choices = [{value: null, title: ''}].concat(
-          cultivars.map((cultivar) => {
-              return {value: cultivar, title: cultivar};
-            })
-          );
+        const choices = cultivars.map((cultivar) => {
+          return {value: cultivar, title: cultivar};
+        });
         choices$.next(choices);
       });
   }

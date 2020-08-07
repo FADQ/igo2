@@ -1,4 +1,10 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  OnInit,
+  OnDestroy
+} from '@angular/core';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
 
@@ -19,7 +25,7 @@ interface ClientParcelProGroup {
   styleUrls: ['./client-parcel-pro-legend.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientParcelProLegendComponent {
+export class ClientParcelProLegendComponent implements OnInit, OnDestroy {
 
   readonly groups$: BehaviorSubject<ClientParcelProGroup[]> = new BehaviorSubject([]);
 
@@ -69,10 +75,10 @@ export class ClientParcelProLegendComponent {
         };
         groupsByProduction[production] = group;
       }
-  
+
       group.parcels.push(parcelPro);
     }
-  
+
     return Object.keys(groupsByProduction)
       .sort()
       .map((key: string) => groupsByProduction[key]);

@@ -78,7 +78,7 @@ export function getProduction(code: string): ClientParcelProProduction {
 
 export function getProductionCategory(code: string): ClientParcelProCategory {
   code = code ? code.toUpperCase() : 'INC';
-  var categories = Object.values(ClientParcelProCategories);
+  const categories = Object.values(ClientParcelProCategories);
   const category = categories.find((cat: ClientParcelProCategory) => {
     return cat.productions.includes(code);
   });

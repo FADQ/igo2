@@ -11,7 +11,7 @@ import { FadqLibMessageInlineModule } from '../../../message/message-inline/mess
 import { FadqLibClientParcelProLegendModule } from '../client-parcel-pro-legend/client-parcel-pro-legend.module';
 
 import { ClientParcelProWizardComponent } from './client-parcel-pro-wizard.component';
-import { ClientParcelProWizardComponentStep1 } from './client-parcel-pro-wizard-step-1.component';
+import { ClientParcelProWizardStep1Component } from './client-parcel-pro-wizard-step-1.component';
 
 /**
  * @ignore
@@ -31,7 +31,7 @@ import { ClientParcelProWizardComponentStep1 } from './client-parcel-pro-wizard-
   ],
   declarations: [
     ClientParcelProWizardComponent,
-    ClientParcelProWizardComponentStep1
+    ClientParcelProWizardStep1Component
   ]
 })
 export class FadqLibClientParcelProWizardModule {}
