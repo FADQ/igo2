@@ -42,7 +42,7 @@ export function getAnneeImageFromMap(map: IgoMap): number | undefined {
     if (dataSource instanceof WMTSDataSource) {
       layerName = dataSource.options.layer;
     } else if (dataSource instanceof WMSDataSource) {
-      layerName = dataSource.options.params.layers;
+      layerName = dataSource.options.params.LAYERS;
     }
 
     if (
