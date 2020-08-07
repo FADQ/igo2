@@ -1,5 +1,6 @@
 import { ConfigService, LanguageService } from '@igo2/core';
 import {
+  Projection,
   SearchSource,
   CoordinatesReverseSearchSource,
   CoordinatesSearchResultFormatter
@@ -15,7 +16,8 @@ export function coordinatesReverseSearchSourceFactory(
 ) {
   return new CoordinatesReverseSearchSource(
     config.getConfig(`searchSources.${CoordinatesReverseSearchSource.id}`),
-    languageService
+    languageService,
+    (config.getConfig('projections') || [] as Projection[])
   );
 }
 

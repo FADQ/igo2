@@ -41,7 +41,7 @@ export function createPolygonLayer(fillColor: string, strokeColor: string, strok
   }
 
 /**
- *Create a marker layer to be added to the map.
+ * Create a marker layer to be added to the map.
  *
  * @export
  * @returns VectorLayer
@@ -51,6 +51,9 @@ export function createMarkerLayer(colorMarker: string): VectorLayer {
   return new VectorLayer({
     source,
     showInLayerList: false,
-    style: createOverlayMarkerStyle(colorMarker)
+    style: createOverlayMarkerStyle({
+      color: colorMarker,
+      outlineColor: colorMarker
+    })
   });
 }

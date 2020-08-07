@@ -29,7 +29,7 @@ export class LayerInfoDialogComponent {
   computeLayerInfoLink(): SafeResourceUrl {
     const layer = this.data.layer;
     const url = substituteProperties(this.data.baseUrl, {
-      layerName: layer.dataSource.options.params.layers,
+      layerName: layer.dataSource.options.params.LAYERS,
       layerTitle: layer.title
     });
     const encodedUrl = encodeURI(url).replace(/[!'()*]/g, escape);
