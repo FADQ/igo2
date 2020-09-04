@@ -18,6 +18,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/interne",
             "index": "src/index.html",
             "main": "src/apps/interne.ts",
@@ -47,10 +48,31 @@
               "includePaths": [
                 "src/style/partial"
               ]
-            }
+            },
+            "allowedCommonJsDependencies": [
+              "angular2-notifications",
+              "hammerjs",
+              "typy",
+              "jspdf",
+              "file-saver",
+              "jwt-decode",
+              "@turf/helpers",
+              "@turf/line-segment",
+              "@turf/meta",
+              "@turf/invariant",
+              "@turf/line-intersect",
+              "pbf",
+              "geojson-rbush"
+            ]
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/interne/environment.ts",
@@ -59,13 +81,13 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": false
+              "vendorChunk": true,
+              "buildOptimizer": true
             }
           }
         },
@@ -135,13 +157,14 @@
       "schematics": {
         "@schematics/angular:component": {
           "inlineTemplate": false,
-          "styleext": "scss"
+          "style": "scss"
         }
       },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/pes",
             "index": "src/index.html",
             "main": "src/apps/pes.ts",
@@ -171,10 +194,31 @@
               "includePaths": [
                 "src/style/partial"
               ]
-            }
+            },
+            "allowedCommonJsDependencies": [
+              "angular2-notifications",
+              "hammerjs",
+              "typy",
+              "jspdf",
+              "file-saver",
+              "jwt-decode",
+              "@turf/helpers",
+              "@turf/line-segment",
+              "@turf/meta",
+              "@turf/invariant",
+              "@turf/line-intersect",
+              "pbf",
+              "geojson-rbush"
+            ]
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/pes/environment.ts",
@@ -183,13 +227,13 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": false
+              "vendorChunk": true,
+              "buildOptimizer": true
             }
           }
         },
@@ -246,6 +290,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/pes_interne",
             "index": "src/index.html",
             "main": "src/apps/pes_interne.ts",
@@ -275,10 +320,31 @@
               "includePaths": [
                 "src/style/partial"
               ]
-            }
+            },
+            "allowedCommonJsDependencies": [
+              "angular2-notifications",
+              "hammerjs",
+              "typy",
+              "jspdf",
+              "file-saver",
+              "jwt-decode",
+              "@turf/helpers",
+              "@turf/line-segment",
+              "@turf/meta",
+              "@turf/invariant",
+              "@turf/line-intersect",
+              "pbf",
+              "geojson-rbush"
+            ]
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/pes_interne/environment.ts",
@@ -287,13 +353,13 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": false
+              "vendorChunk": true,
+              "buildOptimizer": true
             }
           }
         },
