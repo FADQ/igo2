@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatTabsModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoFeatureFormModule } from '@igo2/geo';

@@ -22,7 +22,7 @@ import { provideClientParcelTxStartWidget } from './shared/client-parcel-tx.widg
   declarations: []
 })
 export class FadqInterneClientModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<FadqInterneClientModule> {
     return {
       ngModule: FadqInterneClientModule,
       providers: [

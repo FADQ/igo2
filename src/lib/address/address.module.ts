@@ -11,7 +11,7 @@ import { provideAddressService } from './shared/address.providers';
   ]
 })
 export class FadqLibAddressModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<FadqLibAddressModule> {
     return {
       ngModule: FadqLibAddressModule,
       providers: [

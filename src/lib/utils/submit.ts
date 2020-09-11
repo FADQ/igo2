@@ -38,7 +38,7 @@ export class SubmitHandler<T = unknown> {
 
   readonly status$: BehaviorSubject<SubmitStatus> = new BehaviorSubject(SubmitStatus.Unknown);
 
-  readonly state$: Observable<[SubmitStep, SubmitStatus]> = combineLatest(this.step$, this.status$);
+  readonly state$: Observable<[SubmitStep, SubmitStatus]> = combineLatest([this.step$, this.status$]);
 
   private wrapped$: Observable<T | SubmitError>;
 

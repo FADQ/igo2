@@ -25,7 +25,7 @@ import { FadqLibClientParcelYearSelectorModule } from './client-parcel-year-sele
   declarations: []
 })
 export class FadqLibClientParcelModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<FadqLibClientParcelModule> {
     return {
       ngModule: FadqLibClientParcelModule,
       providers: [

@@ -19,7 +19,7 @@ import { FadqCadastreSelectorModule } from './cadastre-selector/cadastre-cadastr
   exports: [FadqCadastreSelectorModule]
 })
 export class FadqLibCadastreCadastreModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<FadqLibCadastreCadastreModule> {
     return {
       ngModule: FadqLibCadastreCadastreModule,
       providers: [

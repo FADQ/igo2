@@ -1,7 +1,7 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatSelectModule} from '@angular/material';
+import { MatSelectModule} from '@angular/material/select';
 
 import { IgoLanguageModule } from '@igo2/core';
 
@@ -19,7 +19,7 @@ import { FadqConcessionSelectorModule } from './concession-selector/cadastre-con
   exports: [FadqConcessionSelectorModule]
 })
 export class FadqLibCadastreConcessionModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<FadqLibCadastreConcessionModule> {
     return {
       ngModule: FadqLibCadastreConcessionModule,
       providers: [
