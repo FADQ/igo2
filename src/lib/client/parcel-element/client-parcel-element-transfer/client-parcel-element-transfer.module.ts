@@ -1,11 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  MatButtonModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatSlideToggleModule
-} from '@angular/material';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoFormModule, IgoEntitySelectorModule } from '@igo2/common';

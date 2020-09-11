@@ -162,10 +162,10 @@ export class PortalComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.searchDisabled$$ = combineLatest(
+    this.searchDisabled$$ = combineLatest([
       this.clientState.activeWidget$,
       this.searchState.searchType$
-    ).subscribe((bunch: [Widget, string]) => {
+    ]).subscribe((bunch: [Widget, string]) => {
       const disabled = bunch[0] !== undefined || bunch[1] === CADASTRE;
       if (disabled === true) {
         this.searchState.disableSearch();

@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { SubmitStep, SubmitHandler } from '../../../utils';
 import { ClientSchemaElementService } from '../../schema-element/shared/client-schema-element.service';

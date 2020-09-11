@@ -19,7 +19,7 @@ import { provideClientParcelTxReconciliateWidget } from './shared/client-parcel-
   declarations: []
 })
 export class FadqLibClientParcelTxModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<FadqLibClientParcelTxModule> {
     return {
       ngModule: FadqLibClientParcelTxModule,
       providers: [

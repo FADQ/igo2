@@ -91,7 +91,7 @@ import {
   declarations: []
 })
 export class FadqLibClientParcelElementModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<FadqLibClientParcelElementModule> {
     return {
       ngModule: FadqLibClientParcelElementModule,
       providers: [

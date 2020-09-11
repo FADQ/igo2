@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  MatCardModule,
-  MatIconModule,
-  MatButtonModule,
-  MatFormFieldModule
-} from '@angular/material';
+
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoEntityTableModule, IgoFormModule } from '@igo2/common';

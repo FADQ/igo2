@@ -23,7 +23,7 @@ const providers: Provider[] = [
   ]
 })
 export class FadqLibCoreModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<FadqLibCoreModule> {
     return {
       ngModule: FadqLibCoreModule,
       providers: providers

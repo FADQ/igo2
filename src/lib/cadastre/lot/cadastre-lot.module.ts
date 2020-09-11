@@ -1,7 +1,7 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatSelectModule} from '@angular/material';
+import { MatSelectModule} from '@angular/material/select';
 
 import { IgoLanguageModule } from '@igo2/core';
 
@@ -19,7 +19,7 @@ import { FadqLotSelectorModule } from './lot-selector/cadastre-lot-selector.modu
   exports: [FadqLotSelectorModule]
 })
 export class FadqLibCadastreLotModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<FadqLibCadastreLotModule> {
     return {
       ngModule: FadqLibCadastreLotModule,
       providers: [

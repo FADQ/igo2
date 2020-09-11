@@ -52,15 +52,18 @@
             "allowedCommonJsDependencies": [
               "angular2-notifications",
               "hammerjs",
+              "ngx-cacheable",
               "typy",
               "jspdf",
               "file-saver",
+              "jszip",
               "jwt-decode",
               "@turf/helpers",
               "@turf/line-segment",
               "@turf/meta",
               "@turf/invariant",
               "@turf/line-intersect",
+              "@turf/union",
               "pbf",
               "geojson-rbush"
             ]

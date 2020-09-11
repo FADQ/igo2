@@ -9,7 +9,7 @@ import {
   OnDestroy
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { map, startWith} from 'rxjs/operators';

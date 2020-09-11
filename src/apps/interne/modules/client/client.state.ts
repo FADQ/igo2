@@ -374,7 +374,7 @@ export class ClientState implements OnDestroy {
         return controller.parcelTxOngoing;
       });
 
-    this.parcelTxs$$ = combineLatest(...parcelTxs$)
+    this.parcelTxs$$ = combineLatest(parcelTxs$)
       .subscribe((bunch: boolean[]) => {
         const nosActive = bunch.every((active: boolean) => active === false);
         this.parcelTxOngoing$.next(!nosActive);

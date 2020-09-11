@@ -17,7 +17,7 @@ import { FadqLibClientSchemaFileManagerModule } from './client-schema-file-manag
   declarations: []
 })
 export class FadqLibClientSchemaFileModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<FadqLibClientSchemaFileModule> {
     return {
       ngModule: FadqLibClientSchemaFileModule,
       providers: [

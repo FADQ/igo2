@@ -37,7 +37,7 @@ import { FadqLibClientSchemaElementModule } from './schema-element/client-schema
   declarations: []
 })
 export class FadqLibClientModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<FadqLibClientModule> {
     return {
       ngModule: FadqLibClientModule,
       providers: [

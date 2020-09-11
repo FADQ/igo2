@@ -44,7 +44,7 @@ import {
   declarations: []
 })
 export class FadqLibEditionModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<FadqLibEditionModule> {
     return {
       ngModule: FadqLibEditionModule,
       providers: [
