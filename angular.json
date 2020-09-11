@@ -11,14 +11,14 @@
       "schematics": {
         "@schematics/angular:component": {
           "inlineTemplate": false,
-          "styleext": "scss"
+          "style": "scss"
         }
       },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "aot": true,
+            "aot": false,
             "outputPath": "dist/interne",
             "index": "src/index.html",
             "main": "src/apps/interne.ts",
@@ -283,7 +283,7 @@
       "schematics": {
         "@schematics/angular:component": {
           "inlineTemplate": false,
-          "styleext": "scss"
+          "style": "scss"
         }
       },
       "architect": {
