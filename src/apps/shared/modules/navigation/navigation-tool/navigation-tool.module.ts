@@ -1,7 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { MatDividerModule } from '@angular/material';
+import { MatDividerModule } from '@angular/material/divider';
 
 import { FadqLibPlaceSelectorModule } from 'src/lib/navigation/place-selector/place-selector.module';
 import { FadqLibPoiSelectorModule } from 'src/lib/navigation/poi-selector/poi-selector.module';

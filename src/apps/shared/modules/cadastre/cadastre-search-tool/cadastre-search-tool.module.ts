@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
-import { MatButtonModule,  MatButtonToggleModule, MatTooltipModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { IgoLanguageModule} from '@igo2/core';
 
