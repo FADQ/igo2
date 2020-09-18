@@ -1,5 +1,6 @@
 import { Inject, Injectable} from '@angular/core';
 
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import {
@@ -68,11 +69,11 @@ export class ClientParcelActionsService {
               }
             });
         },
-        availability: (ctrl: ClientController) => {
+        display: (ctrl: ClientController) => {
           const contextMesurage$ = this.contextState.context$.pipe(
             map(parcelElementsEnabledInContext)
           );
-          return contextMesurage$;
+          return contextMesurage$ as Observable<boolean>;
         }
       },
       {
