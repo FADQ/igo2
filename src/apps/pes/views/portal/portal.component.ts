@@ -32,8 +32,6 @@ import {
   SearchState
 } from '@igo2/integration';
 
-import { CADASTRE } from 'src/lib/cadastre/shared/cadastre.enums';
-
 import { SEARCH_TYPES } from 'src/apps/pes/modules/search/shared/search.enums';
 import { ClientState } from 'src/apps/pes/modules/client/client.state';
 import { ClientController } from 'src/apps/pes/modules/client/shared/client-controller';
@@ -233,26 +231,12 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   private onBeforeSearch(searchType?: string, searchTerm?: string) {
-    switch (searchType) {
-      case CADASTRE: {
-        this.onBeforeSearchCadastre();
-        break;
-      }
-      default: {
-        this.onBeforeSearchOthers(searchTerm);
-        break;
-      }
-    }
+    this.onBeforeSearchOthers(searchTerm);
   }
 
   private onBeforeSearchOthers(searchTerm: string) {
     if (this.verifyNullTerm(searchTerm)) { return; }
     this.toolState.toolbox.activateTool('searchResults');
-    this.openSidenav();
-  }
-
-  private onBeforeSearchCadastre() {
-    this.toolState.toolbox.activateTool('cadastre');
     this.openSidenav();
   }
 
