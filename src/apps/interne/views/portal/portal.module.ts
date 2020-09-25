@@ -29,6 +29,7 @@ import { IgoAppSearchModule } from '@igo2/integration';
 import { FadqInterneSearchModule } from '../../modules/search/search.module';
 
 import { FadqMapModule } from 'src/apps/shared/modules/map/map.module';
+import { FadqImportExportModule } from 'src/apps/shared/modules/import-export/import-export.module';
 import { FadqPortalModule } from 'src/apps/shared/views/portal/portal.module';
 
 import { PortalComponent } from './portal.component';
@@ -56,6 +57,7 @@ import { PortalComponent } from './portal.component';
     IgoAppSearchModule,
 
     FadqMapModule,
+    FadqImportExportModule,
     FadqPortalModule,
 
     FadqInterneSearchModule

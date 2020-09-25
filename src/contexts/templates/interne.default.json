@@ -173,7 +173,7 @@
     "searchResults",
     "fadqMap",
     "navigation",
-    "importExport",
+    "fadqImportExport",
     "measurer",
     "print",
     "cadastre",
@@ -313,7 +313,7 @@
       }
     },
     {
-      "name": "importExport"
+      "name": "fadqImportExport"
     },
     {
       "name": "measurer"

@@ -356,7 +356,7 @@
     "fadqMap",
     "catalog",
     "navigation",
-    "importExport",
+    "fadqImportExport",
     "measurer",
     "print",
     "addressEditor",
@@ -497,7 +497,7 @@
       }
     },
     {
-      "name": "importExport"
+      "name": "fadqImportExport"
     },
     {
       "name": "measurer"
