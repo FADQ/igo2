@@ -39,7 +39,7 @@
     "searchResults",
     "fadqMap",
     "navigation",
-    "importExport",
+    "fadqImportExport",
     "measurer",
     "help"
   ],
@@ -170,7 +170,7 @@
       }
     },
     {
-      "name": "importExport"
+      "name": "fadqImportExport"
     },
     {
       "name": "measurer"
