@@ -27,6 +27,7 @@
 }
 
 .fadq-expansion-panel-content {
+  position: relative;
   height: calc(100% - #{$fadq-expansion-panel-header-height});
   overflow: auto;
 }

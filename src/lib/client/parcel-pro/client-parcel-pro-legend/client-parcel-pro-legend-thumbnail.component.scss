@@ -1,0 +1,23 @@
+@import 'variables';
+
+$thumbnail-size: 20px;
+
+:host {
+  display: block;
+  width: 100%;
+  padding: $igo-padding;
+}
+
+:host > div {
+  display:block;
+}
+
+.fadq-client-parcel-pro-legend-thumbnail {
+  display: inline-block;
+  width: $thumbnail-size;
+  height: $thumbnail-size;
+  border-radius: 5px;
+  border-width: 2px;
+  border-style: solid;
+  vertical-align: middle;
+}

@@ -5,4 +5,5 @@ export * from './schema-file';
 export * from './schema-element';
 export * from './parcel-element';
 export * from './parcel-tx';
+export * from './parcel-pro';
 export * from './shared';

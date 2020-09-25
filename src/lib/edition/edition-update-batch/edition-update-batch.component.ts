@@ -66,7 +66,13 @@ export class EditionUpdateBatchComponent
   /**
    * Base features
    */
-  @Input() features: Feature[] = [];
+  @Input()
+  set features(value: Feature[]) {
+    this._features = value;
+    this.baseFeature$.next(this.computeBaseFeature());
+  }
+  get features(): Feature[] { return this._features; }
+  private _features: Feature[] = [];
 
   /**
    * Feature store
@@ -109,7 +115,7 @@ export class EditionUpdateBatchComponent
   ) {}
 
   ngOnInit() {
-    this.baseFeature$.next(this.computeBaseFeature());
+    // this.baseFeature$.next(this.computeBaseFeature());
   }
 
   ngOnDestroy() {

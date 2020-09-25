@@ -1,0 +1,45 @@
+<div *ngIf="(controllerInEdition$ | async) as controller; else root">
+  <div class="content-centered">
+    <button
+      class="width-100"
+      mat-raised-button
+      type="button"
+      color="accent"
+      (click)="onCompleteEdition()">
+      {{ 'client.parcelPro.edit.complete' | translate }}
+    </button>
+  </div>
+
+  <fadq-client-parcel-pro-wizard
+    [store]="controller.parcelStore"
+    [transaction]="controller.parcelWorkspace.transaction"
+    (confirmSelection)="onConfirmSelection($event)">
+  </fadq-client-parcel-pro-wizard>
+</div>
+
+<ng-template #root>
+  <ng-container *ngIf="(controller$ | async) as controller">
+    <div class="content-centered">
+      <button
+        class="width-100"
+        mat-raised-button
+        type="button"
+        (click)="onStartEdition()">
+        {{ 'client.parcelPro.edit.start' | translate }}
+      </button>
+    </div>
+
+    <div class="fadq-client-parcel-tool-legend-container">
+      <p class="text-centered fadq-client-parcel-tool-header">{{'client.parcelPro.numberOfParcels' | translate}}</p>
+      <p class="text-centered">{{controller.parcelStore.count$ | async}}</p>
+      <p class="text-centered fadq-client-parcel-tool-header">
+        {{'client.parcelPro.perProduction' | translate}}
+      </p>
+      <div class="fadq-client-parcel-tool-legend">
+        <fadq-client-parcel-pro-legend
+          [store]="controller.parcelStore">
+        </fadq-client-parcel-pro-legend>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>

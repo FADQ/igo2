@@ -1,0 +1,91 @@
+<mat-sidenav-container class="fadq-main-container">
+
+  <igo-backdrop
+    [shown]="backdropShown"
+    (click)="onBackdropClick()">
+  </igo-backdrop>
+
+  <button
+    mat-icon-button
+    id="menu-button"
+    class="fadq-menu-button"
+    color="primary"
+    tooltip-position="below"
+    matTooltipShowDelay="500"
+    [matTooltip]="(sidenavOpened ? 'menu.close' : 'menu.open') | translate"
+    (click)="onToggleSidenavClick()">
+    <mat-icon svgIcon="menu"></mat-icon>
+  </button>
+
+  <igo-search-bar
+    igoSearchBarBinding
+    [searchSelector]="true"
+    [searchTypes]="searchTypes"
+    [minLength]="minSearchTermLength"
+    (searchTypeChange)="onSearchTypeChange($event)"
+    (searchTermChange)="onSearchTermChange($event)"
+    (search)="onSearch($event)">
+  </igo-search-bar>
+
+  <fadq-sidenav
+    [ngClass]="{'fadq-sidenav-with-expansion-panel': expansionPanelExpanded}"
+    [(opened)]="sidenavOpened">
+  </fadq-sidenav>
+
+  <igo-map-browser
+    igoQuery
+    [queryFeatures]="true"
+    [queryFeaturesHitTolerance]="5"
+    [waitForAllQueries]="true"
+    igoMapContext
+    igoLayerContext
+    [removeLayersOnContextChange]="false"
+    igoDropGeoFile
+    [map]="map"
+    (query)="onMapQuery($event)">
+    <igo-baselayers-switcher [map]="map"></igo-baselayers-switcher>
+  </igo-map-browser>
+</mat-sidenav-container>
+
+<div class="fadq-footer"></div>
+
+<fadq-map-actionbar
+  [map]="map"
+  [mode]="mapActionbarMode"
+  [withTitle]="mapActionbarWithTitle">
+</fadq-map-actionbar>
+
+<fadq-expansion-panel [(expanded)]="expansionPanelExpanded">
+
+  <ng-container expansionPanelHeader>
+    <igo-actionbar
+      *ngIf="(controller$ | async) as controller"
+      [store]="controller.parcelWorkspace.actionStore"
+      [horizontal]="true"
+      [xPosition]="'after'"
+      [yPosition]="'above'"
+      [overlayClass]="'fadq-expansion-panel-actionbar-overlay'"
+      [withToggleButton]="false"
+      [withTitle]="false"
+      [mode]="actionbarMode">
+    </igo-actionbar>
+
+    <ng-container *ngIf="expansionPanelExpanded">
+      <div *ngIf="(controller$ | async) as controller" class="fadq-workspace-count">
+        {{controller.parcelWorkspace.entityStore.view.count$ | async}} / {{controller.parcelWorkspace.entityStore.count$ | async}}
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <div
+    *ngIf="tableBackdropShown$ | async"
+    class="fadq-table-backdrop">
+  </div>
+  <igo-entity-table
+    *ngIf="(controller$ | async) as controller"
+    class="table-compact table-centered"
+    [store]="controller.parcelWorkspace.entityStore"
+    [template]="controller.parcelWorkspace.meta.tableTemplate">
+  </igo-entity-table>
+
+</fadq-expansion-panel>

@@ -37,16 +37,40 @@ body {
   border-radius: 0 !important;
 }
 
+// Same style as igo-form-groups. Useful to wrap
+// extra fields that don,t belong to a group
+//in various edition components
+.fadq-edition-extra-fields {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding: 10px 5px;
+}
+
 tr.text-centered th,
 tr.text-centered td,
 td.text-centered,
-th.text-centered {
+th.text-centered,
+p {
   text-align: center;
 }
 
 tr.text-centered th div.mat-sort-header-container {
   display: flex;
   justify-content: center !important;
+}
+
+.content-centered {
+  display: flex;
+  justify-content: center;
+}
+
+.width-100 {
+  width: 100%;
+}
+
+.height-100 {
+ height: 100%;
 }
 
 .igo-form-buttons:not(:empty) {

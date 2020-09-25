@@ -1,0 +1,160 @@
+@import './portal.variables';
+
+/*** Main ***/
+:host {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.fadq-main-container {
+  position: relative;
+  width: 100%;
+  height: calc(100% - #{$fadq-footer-height});
+  background-color: #efefef;
+}
+
+/*** Menu button ***/
+.fadq-menu-button {
+  background-color: $fadq-background-color;
+  position: absolute;
+  left: $igo-margin;
+  top: $igo-margin;
+  z-index: 4;
+  border-radius: 0;
+}
+
+.fadq-menu-button ::ng-deep div.mat-button-ripple-round  {
+  border-radius: 0;
+}
+
+/*** Map browser ***/
+igo-map-browser {
+  width: 100%;
+  height: 100%;
+
+  igo-baselayers-switcher {
+    left: initial !important;
+    right: 5px;
+
+    ::ng-deep {
+      .igo-mini-basemap-container {
+        background-color: #ddd !important;
+      }
+
+      .igo-mini-basemap-title {
+        font-size: 11px;
+      }
+    }
+  }
+
+  ::ng-deep .ol-scale-line {
+    right: 50px;
+    left: inherit;
+
+    .ol-scale-line-inner {
+      background-color: rgba(255, 255, 255, 0.8);
+      margin-left: 0;
+    }
+  }
+  
+}
+
+/*** Search bar ***/
+igo-search-bar {
+  background-color: $fadq-background-color;
+  font-family: Roboto,"Helvetica Neue",sans-serif;
+  position: absolute;
+  left: $search-bar-left;
+  top: $igo-margin;
+  z-index: 4;
+  width: $search-bar-width;
+  height: $igo-icon-size;
+  margin: 0 $igo-margin;
+
+  @include mobile {
+    width: $search-bar-width-mobile
+  }
+}
+
+/*** Footer ***/
+.fadq-footer {
+  @extend %box-shadowed;
+  position: relative;
+  bottom: 0;
+  z-index: 2;
+  background-color: #fff;
+  width: 100%;
+  height: $fadq-footer-height;
+  border-top:1px solid #ddd;
+}
+
+fadq-map-actionbar {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 5;
+}
+
+/*** Expansion panel ***/
+fadq-expansion-panel {
+  position: absolute;
+  // left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 4;
+  overflow: hidden;
+}
+
+fadq-expansion-panel.fadq-expansion-panel-expanded {
+  margin-bottom: $fadq-footer-height;
+}
+
+fadq-expansion-panel:not(.fadq-expansion-panel-expanded) {
+  @include mobile {
+    igo-workspace-selector,
+    fadq-actionbar {
+      display: none;
+    }
+  }
+}
+
+fadq-expansion-panel {
+  ::ng-deep .fadq-expansion-panel-content {
+    width: 100%;
+  }
+
+  igo-workspace-selector {
+    width: calc(#{$fadq-sidenav-width} - #{$igo-icon-size} - 20px);
+  }
+
+  .fadq-workspace-count {
+    position: absolute;
+    right: 0px;
+    margin: 15px;
+  }
+
+  @include tablet {
+    igo-workspace-selector {
+      width: calc(#{$fadq-sidenav-width} - (2 * #{$igo-icon-size}) - 20px);
+    }
+  }
+
+  @include mobile {
+    igo-workspace-selector {
+      width: calc(#{$fadq-sidenav-width-mobile} - 5px);
+    }
+
+    .fadq-workspace-count {
+      display: none
+    }
+  }
+}
+
+.fadq-table-backdrop {
+  position: absolute;
+  z-index: 105;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(250, 250, 250, 0.3);
+}

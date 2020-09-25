@@ -70,6 +70,7 @@
     "help": "Aide",
     "addressEditor": "Outil d'édition d'adresse",
     "client": "Client",
+    "clientParcel": "Mes parcelles",
     "clientParcelTx": "Clients en cours d'édition",
     "measurer": "Outil de mesure",
     "navigation": "Zoom sur une région",
@@ -161,6 +162,17 @@
       "start.tooltip": "Démarrer l'édition de parcelles",
       "stop": "Édition de parcelles",
       "stop.tooltip": "Arrêter l'édition de parcelles"
+    },
+    "parcelPro": {
+      "overview.title": "Vue d'ensemble",
+      "edit.start": "Modifier les productions",
+      "edit.complete": "Terminer",
+      "edit.confirmSelection": "Confirmer la sélection",
+      "edit.unconfirmSelection": "Nouvelle sélection",
+      "edit.info": "Sélectionnez des parcelles sur la carte pour modifier la production",
+      "edit.selected": "{{count}} parcelle(s) sélectionnée(s) pour modification",
+      "numberOfParcels": "Nombre total de parcelles",
+      "perProduction": "Parcelles par productions"
     },
     "diagram": {
       "placeholder": "Diagrammes",
