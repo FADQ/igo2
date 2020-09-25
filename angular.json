@@ -231,19 +231,11 @@
         }
       }
     },
-<<<<<<< HEAD
     "pes_interne": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
       "prefix": "pes_interne",
-=======
-    "proto": {
-      "root": "",
-      "sourceRoot": "src",
-      "projectType": "application",
-      "prefix": "proto",
->>>>>>> e6d63713... wip: proto scaffolding and update tool
       "schematics": {
         "@schematics/angular:component": {
           "inlineTemplate": false,
@@ -254,15 +246,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-<<<<<<< HEAD
             "outputPath": "dist/pes_interne",
             "index": "src/index.html",
             "main": "src/apps/pes_interne.ts",
-=======
-            "outputPath": "dist/proto",
-            "index": "src/index.html",
-            "main": "src/apps/proto.ts",
->>>>>>> e6d63713... wip: proto scaffolding and update tool
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
@@ -295,13 +281,8 @@
             "production": {
               "fileReplacements": [
                 {
-<<<<<<< HEAD
                   "replace": "src/environments/pes_interne/environment.ts",
                   "with": "src/environments/pes_interne/environment.prod.ts"
-=======
-                  "replace": "src/environments/proto/environment.ts",
-                  "with": "src/environments/proto/environment.prod.ts"
->>>>>>> e6d63713... wip: proto scaffolding and update tool
                 }
               ],
               "optimization": true,
@@ -319,30 +300,122 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-<<<<<<< HEAD
             "browserTarget": "pes_interne:build"
           },
           "configurations": {
             "production": {
               "browserTarget": "pes_interne:build:production"
-=======
-            "browserTarget": "proto:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "proto:build:production"
->>>>>>> e6d63713... wip: proto scaffolding and update tool
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-<<<<<<< HEAD
             "browserTarget": "pes_interne:build"
-=======
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.spec.json",
+            "karmaConfig": "src/karma.conf.js",
+            "styles": ["src/styles.scss"],
+            "scripts": [],
+            "assets": ["src/favicon.ico", "src/assets"]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
+    },
+    "proto": {
+      "root": "",
+      "sourceRoot": "src",
+      "projectType": "application",
+      "prefix": "proto",
+      "schematics": {
+        "@schematics/angular:component": {
+          "inlineTemplate": false,
+          "styleext": "scss"
+        }
+      },
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/proto",
+            "index": "src/index.html",
+            "main": "src/apps/proto.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.app.json",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/config",
+              "src/contexts",
+              "src/locale",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@igo2/core/assets/",
+                "output": "./assets/igo2/core/"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@igo2/geo/assets/",
+                "output": "./assets/igo2/geo/"
+              },
+              { "glob": "mdi.svg", "input": "./node_modules/@mdi/angular-material", "output": "./assets" }
+            ],
+            "styles": ["src/styles.scss"],
+            "scripts": [],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/style/partial"
+              ]
+            }
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/proto/environment.ts",
+                  "with": "src/environments/proto/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
             "browserTarget": "proto:build"
->>>>>>> e6d63713... wip: proto scaffolding and update tool
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "proto:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "proto:build"
           }
         },
         "test": {
