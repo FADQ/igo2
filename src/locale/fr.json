@@ -130,8 +130,9 @@
       "transfer.apply": "Transférer",
       "transfer.error.empty": "Aucune parcelle sélectionnée pour le transfert",
       "transfer.error.invalid": "Le transfert vers ce client est présentement impossible",
-      "transactionDialog.title": "Informations non sauvegardées",
-      "transactionDialog.saveMessage": "Sauvegarde en cours...",
+      "commitDialog.title": "Informations non sauvegardées",
+      "reloadDialog.title": "Informations non sauvegardées",
+      "reloadDialog.confirm": "Il y a des modifications non sauvegardées le client vers qui le transfert a été effectué. Désirez-vous tout-de-même recharger le client?",
       "import": "Importer des données",
       "import.tooltip": "Importer des données (pour les fichiers qui supportent les polygones)",
       "save.error": "Les parcelles n'ont pas pu être sauvegardés",
@@ -201,8 +202,7 @@
       "download.tooltip": "Télécharger un document"
     },
     "schemaElement": {
-      "transactionDialog.title": "Informations non sauvegardées",
-      "transactionDialog.saveMessage": "Sauvegarde en cours...",
+      "commitDialog.title": "Informations non sauvegardées",
       "error.etiquetteMaxLength": "Vous devez saisir une étiquette de moins de 25 caractères.",
       "error.descriptionMaxLength": "Vous devez saisir une description de moins de 250 caractères.",
       "error.area": "La superficie doit être plus grande que 50m² et plus petite que 999 999 999 m².",

@@ -2,7 +2,6 @@ import { EntityTransaction } from '@igo2/common';
 import { Feature } from '@igo2/geo';
 
 import { Client } from '../../shared/client.interfaces';
-import { ClientInfoGetResponseData } from '../../info/shared/client-info.interfaces';
 
 export interface ClientParcelElementApiConfig {
   list: string;

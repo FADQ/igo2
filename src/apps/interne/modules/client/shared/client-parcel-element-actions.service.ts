@@ -447,6 +447,12 @@ export class ClientParcelElementActionsService {
             annee: ctrl.parcelYear.annee,
             clientStore: clientStore,
             parcelElementStore: ctrl.parcelElementStore
+          }, {
+            complete: (toClient: Client) => {
+              const controllers = controller.controllers;
+              const toController = controllers.get(toClient.info.numero);
+              toController.reloadParcelElements();
+            }
           });
         },
         availability: (ctrl: ClientController) => every(

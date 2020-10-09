@@ -129,8 +129,9 @@
       "transfer.apply": "Transfer",
       "transfer.error.empty": "No parcel selected for transfer",
       "transfer.error.invalid": "Transfer to this client is currently not possible",
-      "transactionDialog.title": "Unsaved information",
-      "transactionDialog.saveMessage": "Saving in progress ...",
+      "commitDialog.title": "Unsaved information",
+      "reloadDialog.title": "Unsaved information",
+      "reloadDialog.confirm": "There are unsaved modifications on the receiving client. Do you still want to reload that client and losee those modifications?",
       "import": "Import data",
       "import.tooltip": "Import data (for files that support polygons)",
       "save.error": "The parcels could not be saved",
@@ -200,8 +201,7 @@
       "download.tooltip": "Download a document"
     },
     "schemaElement": {
-      "transactionDialog.title": "Unsaved information",
-      "transactionDialog.saveMessage": "Save in progress ...",
+      "commitDialog.title": "Unsaved information",
       "error.etiquetteMaxLength": "You must enter a label of less than 25 characters.",
       "error.descriptionMaxLength": "You must enter a description of less than 250 characters.",
       "error.area": "The area must be larger than 50m² and smaller than 999,999,999m².",

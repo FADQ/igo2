@@ -10,10 +10,10 @@ import {
   ClientParcelColors,
   ClientParcelService,
   ClientParcelElementService,
-  ClientParcelElementTransactionService,
+  ClientParcelElementDialogService,
   ClientSchemaService,
   ClientSchemaElementService,
-  ClientSchemaElementTransactionService
+  ClientSchemaElementDialogService
 } from 'src/lib/client';
 
 import {
@@ -45,14 +45,14 @@ export class ClientControllerService {
     private clientParcelWorkspaceService: ClientParcelWorkspaceService,
     private clientParcelActionsService: ClientParcelActionsService,
     private clientParcelElementService: ClientParcelElementService,
-    private clientParcelElementTransactionService: ClientParcelElementTransactionService,
+    private clientParcelElementDialogService: ClientParcelElementDialogService,
     private clientParcelElementWorkspaceService: ClientParcelElementWorkspaceService,
     private clientParcelElementActionsService: ClientParcelElementActionsService,
     private clientSchemaService: ClientSchemaService,
     private clientSchemaWorkspaceService: ClientSchemaWorkspaceService,
     private clientSchemaActionsService: ClientSchemaActionsService,
     private clientSchemaElementService: ClientSchemaElementService,
-    private clientSchemaElementTransactionService: ClientSchemaElementTransactionService,
+    private clientSchemaElementDialogService: ClientSchemaElementDialogService,
     private clientSchemaElementWorkspaceService: ClientSchemaElementWorkspaceService,
     private clientSchemaElementActionsService: ClientSchemaElementActionsService,
     private languageService: LanguageService
@@ -68,14 +68,14 @@ export class ClientControllerService {
     const map = this.mapState.map;
     const parcelService = this.clientParcelService;
     const parcelWorkspace = this.clientParcelWorkspaceService.createParcelWorkspace(client, map);
-    const parcelElementTransactionService = this.clientParcelElementTransactionService;
+    const parcelElementDialogService = this.clientParcelElementDialogService;
     const schemaService = this.clientSchemaService;
     const schemaWorkspace = this.clientSchemaWorkspaceService.createSchemaWorkspace(client);
     const schemaElementWorkspace = this.clientSchemaElementWorkspaceService.createSchemaElementWorkspace(client, map);
     const parcelElementService = this.clientParcelElementService;
     const parcelElementWorkspace = this.clientParcelElementWorkspaceService.createParcelElementWorkspace(client, map);
     const schemaElementService = this.clientSchemaElementService;
-    const schemaElementTransactionService = this.clientSchemaElementTransactionService;
+    const schemaElementDialogService = this.clientSchemaElementDialogService;
     const languageService = this.languageService;
 
     // When all clients are cleared, reset the color palette.
@@ -91,14 +91,14 @@ export class ClientControllerService {
       parcelYear: options.parcelYear,
       parcelService,
       parcelWorkspace,
-      parcelElementTransactionService,
+      parcelElementDialogService,
       schemaService,
       schemaWorkspace,
       schemaElementWorkspace,
       parcelElementService,
       parcelElementWorkspace,
       schemaElementService,
-      schemaElementTransactionService,
+      schemaElementDialogService,
       controllers: options.controllers,
       color: this.colorPalette.next().value,
       languageService
