@@ -35,8 +35,11 @@ import {
   FadqLibClientParcelElementImportModule
 } from './client-parcel-element-import/client-parcel-element-import.module';
 import {
-  FadqLibClientParcelElementTransactionDialogModule
-} from './client-parcel-element-transaction-dialog/client-parcel-element-transaction-dialog.module';
+  FadqLibClientParcelElementCommitDialogModule
+} from './client-parcel-element-commit-dialog/client-parcel-element-commit-dialog.module';
+import {
+  FadqLibClientParcelElementReloadDialogModule
+} from './client-parcel-element-reload-dialog/client-parcel-element-reload-dialog.module';
 import {
   FadqLibClientParcelElementTransferModule
 } from './client-parcel-element-transfer/client-parcel-element-transfer.module';
@@ -80,7 +83,8 @@ import {
     FadqLibClientParcelElementSaveModule,
     FadqLibClientParcelElementTranslateModule,
     FadqLibClientParcelElementImportModule,
-    FadqLibClientParcelElementTransactionDialogModule,
+    FadqLibClientParcelElementCommitDialogModule,
+    FadqLibClientParcelElementReloadDialogModule,
     FadqLibClientParcelElementTransferModule,
     FadqLibClientParcelElementWithoutOwnerModule
   ],

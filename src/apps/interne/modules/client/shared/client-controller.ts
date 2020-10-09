@@ -20,7 +20,7 @@ import {
   ClientParcelElementWorkspace,
   ClientParcelElement,
   ClientParcelElementService,
-  ClientParcelElementTransactionService ,
+  ClientParcelElementDialogService ,
   ClientSchema,
   ClientSchemaService,
   ClientSchemaWorkspace,
@@ -28,7 +28,7 @@ import {
   ClientSchemaElementTypes,
   ClientSchemaElementWorkspace,
   ClientSchemaElementService,
-  ClientSchemaElementTransactionService,
+  ClientSchemaElementDialogService,
   createSchemaElementLayerStyle,
   createParcelElementLayerStyle,
   createPerClientParcelLayerStyle,
@@ -47,12 +47,12 @@ export interface ClientControllerOptions {
   parcelService: ClientParcelService;
   parcelElementWorkspace: ClientParcelElementWorkspace;
   parcelElementService: ClientParcelElementService;
-  parcelElementTransactionService: ClientParcelElementTransactionService;
+  parcelElementDialogService: ClientParcelElementDialogService;
   schemaService: ClientSchemaService;
   schemaWorkspace: ClientSchemaWorkspace;
   schemaElementWorkspace: ClientSchemaElementWorkspace;
   schemaElementService: ClientSchemaElementService;
-  schemaElementTransactionService: ClientSchemaElementTransactionService;
+  schemaElementDialogService: ClientSchemaElementDialogService;
   languageService: LanguageService;
   color?: [number, number, number];
 }
@@ -149,8 +149,8 @@ export class ClientController {
   }
 
   /** Parcel element transaction service */
-  get parcelElementTransactionService(): ClientParcelElementTransactionService {
-    return this.options.parcelElementTransactionService;
+  get parcelElementDialogService(): ClientParcelElementDialogService {
+    return this.options.parcelElementDialogService;
   }
 
   /** Whether parcel edition is active */
@@ -204,8 +204,8 @@ export class ClientController {
   }
 
   /** Parcel element transaction service */
-  get schemaElementTransactionService(): ClientSchemaElementTransactionService {
-    return this.options.schemaElementTransactionService;
+  get schemaElementDialogService(): ClientSchemaElementDialogService {
+    return this.options.schemaElementDialogService;
   }
 
   /** Store that holds the diagrams of the active client */
@@ -307,7 +307,7 @@ export class ClientController {
    */
   deactivateParcelElements() {
     if (!this.parcelElementTransaction.empty) {
-      return this.parcelElementTransactionService.prompt({
+      return this.parcelElementDialogService.promptCommit({
         client: this.client,
         annee: this.parcelYear.annee,
         transaction: this.parcelElementTransaction,
@@ -320,6 +320,27 @@ export class ClientController {
     this.initParcels();
     this.loadParcels();
     this.workspaces.activateWorkspace(this.parcelWorkspace);
+  }
+
+
+  /**
+   * Deactivate parcel elements
+   */
+  reloadParcelElements() {
+    if (!this.parcelElementTransaction.empty) {
+      return this.parcelElementDialogService.promptReload({
+        client: this.client,
+        annee: this.parcelYear.annee,
+        transaction: this.parcelElementTransaction,
+        proceed: () => this.reloadParcelElements()
+      });
+    }
+
+    this.parcelTxOngoing.next(true);
+    this.unobserveDiagrams();
+    this.initParcelElements();
+    this.loadParcelElements();
+    this.teardownParcels();
   }
 
   /******* Diagrams ********/
@@ -613,7 +634,7 @@ export class ClientController {
    */
   private setSchema(schema: ClientSchema) {
     if (!this.schemaElementTransaction.empty) {
-      return this.schemaElementTransactionService.prompt({
+      return this.schemaElementDialogService.promptCommit({
         schema: this.schema,
         transaction: this.schemaElementTransaction,
         proceed: () => this.setSchema(schema),

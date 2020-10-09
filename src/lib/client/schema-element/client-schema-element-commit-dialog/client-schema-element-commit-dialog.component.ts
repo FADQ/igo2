@@ -2,15 +2,15 @@ import { Component, Inject, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 import { SubmitStep, SubmitHandler } from '../../../utils';
-import { ClientParcelElementService } from '../../parcel-element/shared/client-parcel-element.service';
-import { ClientParcelElementTransactionWrapper } from '../shared/client-parcel-element.interfaces';
+import { ClientSchemaElementService } from '../../schema-element/shared/client-schema-element.service';
+import { ClientSchemaElementTransactionWrapper } from '../shared/client-schema-element.interfaces';
 
 @Component({
-  selector: 'fadq-client-parcel-element-transaction-dialog',
-  templateUrl: 'client-parcel-element-transaction-dialog.component.html',
-  styleUrls: ['./client-parcel-element-transaction-dialog.component.scss']
+  selector: 'fadq-client-schema-element-commit-dialog',
+  templateUrl: 'client-schema-element-commit-dialog.component.html',
+  styleUrls: ['./client-schema-element-commit-dialog.component.scss']
 })
-export class ClientParcelElementTransactionDialogComponent implements OnDestroy {
+export class ClientSchemaElementCommitDialogComponent implements OnDestroy {
 
   /**
    * Submit step enum
@@ -24,12 +24,12 @@ export class ClientParcelElementTransactionDialogComponent implements OnDestroy 
    */
   readonly submitHandler = new SubmitHandler();
 
-  get transaction(): ClientParcelElementTransactionWrapper { return this.data.transaction; }
+  get transaction(): ClientSchemaElementTransactionWrapper { return this.data.transaction; }
 
   constructor(
-    private clientParcelElementService: ClientParcelElementService,
-    public dialogRef: MatDialogRef<ClientParcelElementTransactionDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: {transaction: ClientParcelElementTransactionWrapper}
+    private clientSchemaElementService: ClientSchemaElementService,
+    public dialogRef: MatDialogRef<ClientSchemaElementCommitDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) private data: {transaction: ClientSchemaElementTransactionWrapper}
   ) {}
 
   /**
@@ -41,12 +41,8 @@ export class ClientParcelElementTransactionDialogComponent implements OnDestroy 
   }
 
   onYesClick() {
-    const submit$ =  this.clientParcelElementService
-      .commitTransaction(
-        this.transaction.client,
-        this.transaction.annee,
-        this.transaction.transaction
-      );
+    const submit$ = this.clientSchemaElementService
+      .commitTransaction(this.transaction.schema, this.transaction.transaction);
 
     this.submitHandler.handle(submit$, {
       success: () => this.onCommit()

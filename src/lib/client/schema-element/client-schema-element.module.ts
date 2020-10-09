@@ -26,8 +26,8 @@ import {
   FadqLibClientSchemaElementImportModule
 } from './client-schema-element-import/client-schema-element-import.module';
 import {
-  FadqLibClientSchemaElementTransactionDialogModule
-} from './client-schema-element-transaction-dialog/client-schema-element-transaction-dialog.module';
+  FadqLibClientSchemaElementCommitDialogModule
+} from './client-schema-element-commit-dialog/client-schema-element-commit-dialog.module';
 
 import {
   provideClientSchemaElementPointService,
@@ -59,7 +59,7 @@ import {
     FadqLibClientSchemaElementSaveModule,
     FadqLibClientSchemaElementTranslateModule,
     FadqLibClientSchemaElementImportModule,
-    FadqLibClientSchemaElementTransactionDialogModule
+    FadqLibClientSchemaElementCommitDialogModule
   ],
   declarations: []
 })

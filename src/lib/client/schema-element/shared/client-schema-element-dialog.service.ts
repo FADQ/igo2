@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material';
 
 import {
-  ClientSchemaElementTransactionDialogComponent
-} from '../client-schema-element-transaction-dialog/client-schema-element-transaction-dialog.component';
+  ClientSchemaElementCommitDialogComponent
+} from '../client-schema-element-commit-dialog/client-schema-element-commit-dialog.component';
 import { ClientSchemaElementTransactionWrapper } from './client-schema-element.interfaces';
 
 /**
@@ -12,12 +12,12 @@ import { ClientSchemaElementTransactionWrapper } from './client-schema-element.i
 @Injectable({
   providedIn: 'root'
 })
-export class ClientSchemaElementTransactionService {
+export class ClientSchemaElementDialogService {
 
   constructor(private dialog: MatDialog) {}
 
-  prompt(transaction: ClientSchemaElementTransactionWrapper) {
-    this.dialog.open(ClientSchemaElementTransactionDialogComponent, {
+  promptCommit(transaction: ClientSchemaElementTransactionWrapper) {
+    this.dialog.open(ClientSchemaElementCommitDialogComponent, {
       data: {transaction}
     });
   }

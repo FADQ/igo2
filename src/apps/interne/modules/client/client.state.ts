@@ -157,7 +157,7 @@ export class ClientState implements OnDestroy {
    */
   destroyController(controller: ClientController) {
     if (!controller.schemaElementTransaction.empty) {
-      return controller.schemaElementTransactionService.prompt({
+      return controller.schemaElementDialogService.promptCommit({
         schema: controller.schema,
         transaction: controller.schemaElementTransaction,
         proceed: () => this.destroyController(controller)
@@ -165,7 +165,7 @@ export class ClientState implements OnDestroy {
     }
 
     if (!controller.parcelElementTransaction.empty) {
-      return controller.parcelElementTransactionService.prompt({
+      return controller.parcelElementDialogService.promptCommit({
         client: controller.client,
         annee: controller.parcelYear.annee,
         transaction: controller.parcelElementTransaction,

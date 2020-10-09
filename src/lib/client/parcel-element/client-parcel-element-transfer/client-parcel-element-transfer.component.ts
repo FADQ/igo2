@@ -88,7 +88,7 @@ export class ClientParcelElementTransferComponent implements WidgetComponent, On
   /**
    * Event emitted on complete
    */
-  @Output() complete = new EventEmitter<void>();
+  @Output() complete = new EventEmitter<Client>();
 
   /**
    * Event emitted on cancel
@@ -194,7 +194,7 @@ export class ClientParcelElementTransferComponent implements WidgetComponent, On
 
   private onSubmitSuccess(parcelElements: ClientParcelElement[]) {
     this.parcelElementStore.deleteMany(parcelElements);
-    this.complete.emit();
+    this.complete.emit(this.toClient);
   }
 
   private onTransferAllParcelsChange(value: boolean) {
