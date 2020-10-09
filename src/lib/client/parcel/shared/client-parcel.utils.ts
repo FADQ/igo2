@@ -104,7 +104,7 @@ function getParcelFeatureText(olFeature: OlFeature, resolution: number): string 
 }
 
 function getParcelFeatureColor(olFeature: OlFeature) {
-  return ClientRelationColors['1'];
+  return ClientRelationColors['' + olFeature.get('relation')];
 }
 
 export function getParcelDraineeChoices(): FormFieldSelectChoice[] {
