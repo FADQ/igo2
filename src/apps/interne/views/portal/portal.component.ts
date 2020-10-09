@@ -198,8 +198,8 @@ export class PortalComponent implements OnInit, OnDestroy {
       // This patch removes the "square overlay. added after a query. IMO,
       // there should be an alternative to that square or no square at all.
       // Check the extractHtmlData of the QueryService for more info.
-      feature.geometry = undefined;
-      feature.extent = undefined;
+      // feature.geometry = undefined;
+      // feature.extent = undefined;
       return featureToSearchResult(feature, querySearchSource);
     });
     const research = {
@@ -359,7 +359,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     if (results.length === 0) { return; }
     this.toolState.toolbox.activateTool('searchResults');
     this.openSidenav();
-    this.searchStore.state.update(results[0], {selected: true}, true);
+    this.searchStore.state.update(results[0], {selected: true, focused: true}, true);
   }
 
   private onFocusSearchResult(result: SearchResult) {
