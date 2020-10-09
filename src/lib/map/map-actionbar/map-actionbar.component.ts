@@ -128,7 +128,7 @@ export class MapActionbarComponent implements OnInit, OnDestroy {
           const center = this.map.viewController.getCenter('EPSG:4326');
           const zoom =  this.map.viewController.getZoom();
           const url = getGoogleMapsUrl(center, zoom, 'satellite');
-          window.open(url, '_blank');
+          window.open(url, '', 'width=800, height=600');
         }
       }
     ];
