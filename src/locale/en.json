@@ -143,7 +143,7 @@
       "recoverParcelsWithoutOwner.info": "Select orphan parcels before recovering them",
       "recoverParcelsWithoutOwner.noParcelFound": "No orphan plots found",
       "recoverParcelsWithoutOwner.parcelFound": "{{count}} orphan parcel(s) found",
-      "recoverParcelsWithoutOwner.wrongZoomLevel": "The map scale should be between 1 and 30,000."
+      "recoverParcelsWithoutOwner.wrongZoomLevel": "The map scale should be between 1 and 15,000."
     },
     "parcelTx": {
       "reconciliate": "Reconcile the parcels in editing",

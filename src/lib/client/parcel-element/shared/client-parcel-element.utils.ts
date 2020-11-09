@@ -71,11 +71,11 @@ export function createParcelElementLayerStyle(
 
   const olNoOwnerStyle = new olstyle.Style({
     fill: new olstyle.Fill({
-      color: [30, 30, 30, 0]
+      color: [240, 240, 130, 1]
     }),
     stroke: new olstyle.Stroke({
       color: [30, 30, 30],
-      width: 2
+      width: 3
     }),
   });
 

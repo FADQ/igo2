@@ -38,7 +38,7 @@ import { getParcelElementValidationMessage } from '../shared/client-parcel-eleme
 export class ClientParcelElementWithoutOwnerComponent
     implements WidgetComponent, OnUpdateInputs, OnInit, OnDestroy {
 
-  static minZoomLevel = 9;
+  static minZoomLevel = 11;
 
   /**
    * Message
@@ -91,8 +91,10 @@ export class ClientParcelElementWithoutOwnerComponent
 
   ngOnInit() {
     this.resolution$$ = this.map.viewController.resolution$.subscribe(() => {
-      const scale = this.map.viewController.getScale();
-      this.scaleText$.next('~ 1 / ' + formatScale(scale));
+      // const scale = this.map.viewController.getScale();
+      // this.scaleText$.next('~ 1 / ' + formatScale(scale));
+      const zoom = this.map.viewController.getZoom();
+      this.scaleText$.next('Niveau de zoom actuel:' + zoom);
     });
     this.onRefresh();
   }
