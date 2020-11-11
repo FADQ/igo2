@@ -25,8 +25,8 @@
         "layer.placeholder": "Search for a layer",
         "client.title": "Client",
         "client.placeholder": "Search for a client",
-        "cadastre.title": "Original cadastre",
-        "cadastre.placeholder": "Search for a original cadastre",
+        "cadastre.title": "Cadastral compilation",
+        "cadastre.placeholder": "Search by cadastral compilation",
         "cadastre-reno.title": "Renovated cadastre",
         "cadastre-reno.placeholder": "Search for a renovated cadastre"
       }

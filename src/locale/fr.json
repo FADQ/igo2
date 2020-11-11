@@ -26,7 +26,7 @@
         "client.title": "Client",
         "client.placeholder": "Rechercher un client",
         "cadastre.title": "Compilation cadastrale",
-        "cadastre.placeholder": "Rechercher un cadastre originaire",
+        "cadastre.placeholder": "Rechercher par compilation cadastrale",
         "cadastre-reno.title": "Cadastre rénové",
         "cadastre-reno.placeholder": "Rechercher un cadastre rénové"
       }
@@ -132,7 +132,7 @@
       "transfer.error.invalid": "Le transfert vers ce client est présentement impossible",
       "commitDialog.title": "Informations non sauvegardées",
       "reloadDialog.title": "Informations non sauvegardées",
-      "reloadDialog.confirm": "Il y a des modifications non sauvegardées le client vers qui le transfert a été effectué. Désirez-vous tout-de-même recharger le client?",
+      "reloadDialog.confirm": "Il y a des modifications non sauvegardées dans le client vers qui le transfert a été effectué. Désirez-vous tout-de-même recharger le client?",
       "import": "Importer des données",
       "import.tooltip": "Importer des données (pour les fichiers qui supportent les polygones)",
       "save.error": "Les parcelles n'ont pas pu être sauvegardés",
