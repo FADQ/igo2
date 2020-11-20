@@ -109,7 +109,7 @@ export class ClientParcelTableService {
           title: 'Numéro de confirmation IVEG'
         },
         {
-          name: 'properties.statutAugmentationSupCultivable',
+          name: 'properties.descriptionStatutAugmentationSupCultivable',
           title: 'Statut IASC'
         },
         {

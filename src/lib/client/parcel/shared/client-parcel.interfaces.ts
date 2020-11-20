@@ -27,6 +27,7 @@ export interface ClientParcelProperties {
   production: string;
   sourceParcelleAgricole: string;
   statutAugmentationSupCultivable: string;
+  descriptionStatutAugmentationSupCultivable: string;
   superficie: number;
   superficieDeclaree: number;
   superficieHectare: number;
