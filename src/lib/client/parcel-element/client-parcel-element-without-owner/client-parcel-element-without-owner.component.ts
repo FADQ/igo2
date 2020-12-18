@@ -74,6 +74,11 @@ export class ClientParcelElementWithoutOwnerComponent
   @Input() map: IgoMap;
 
   /**
+   * Parcel annee
+   */
+  @Input() annee: number;
+
+  /**
    * Event emitted on complete
    */
   @Output() complete = new EventEmitter<void>();
@@ -91,6 +96,7 @@ export class ClientParcelElementWithoutOwnerComponent
 
   ngOnInit() {
     this.resolution$$ = this.map.viewController.resolution$.subscribe(() => {
+      // *************************** TODO *****************************
       // const scale = this.map.viewController.getScale();
       // this.scaleText$.next('~ 1 / ' + formatScale(scale));
       const zoom = this.map.viewController.getZoom();
@@ -162,7 +168,7 @@ export class ClientParcelElementWithoutOwnerComponent
 
   private refresh() {
     const extentGeometry = getMapExtentPolygon(this.map, 'EPSG:4326');
-    this.clientParcelElementService.getParcelElementsWithoutOwner(extentGeometry)
+    this.clientParcelElementService.getParcelElementsWithoutOwner(extentGeometry, this.annee)
       .subscribe((parcelElements: ClientParcelElement[]) => {
         this.clearParcelElements();
         // Filter new parcel elements. If we don't filter and a parcel element
@@ -183,7 +189,8 @@ export class ClientParcelElementWithoutOwnerComponent
 
   private onWrongZoomLevel() {
     const textKey = 'client.parcelElement.recoverParcelsWithoutOwner.wrongZoomLevel';
-    const text = this.languageService.translate.instant(textKey);
+    const minZoomLevel = ClientParcelElementWithoutOwnerComponent.minZoomLevel;
+    const text = this.languageService.translate.instant(textKey, {minZoomLevel});
     this.message$.next({
       type: MessageType.ERROR,
       text

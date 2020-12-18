@@ -77,10 +77,13 @@ export function createParcelElementLayerStyle(
       color: [30, 30, 30],
       width: 3
     }),
+    text: createOlTextStyle()
   });
 
   return (function(olFeature: OlFeature, resolution: number) {
     if (olFeature.get('noOwner') === true) {
+      let olText = olNoOwnerStyle.getText();
+      olText.setText(olFeature.get('annee').toString());
       return olNoOwnerStyle;
     }
 

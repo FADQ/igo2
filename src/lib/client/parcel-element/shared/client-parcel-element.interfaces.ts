@@ -25,6 +25,7 @@ export interface ClientParcelElementProperties {
   idParcelle: number;
   noParcelleAgricole: string;
   typeParcelle: string;
+  annee: string;
   anneeImage: number;
   infoLocateur: string;
   noDiagramme: number;

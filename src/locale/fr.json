@@ -144,7 +144,7 @@
       "recoverParcelsWithoutOwner.info": "Sélectionner des parcelles orphelines avant de les récupérer",
       "recoverParcelsWithoutOwner.noParcelFound": "Aucune parcelle orphelines trouvée",
       "recoverParcelsWithoutOwner.parcelFound": "{{count}} parcelle(s) orphelines trouvée(s)",
-      "recoverParcelsWithoutOwner.wrongZoomLevel": "L'échelle de la carte doit se trouver entre 1 et 15000."
+      "recoverParcelsWithoutOwner.wrongZoomLevel": "Le niveau de zoom doit être plus grand que {{minZoomLevel}}."
     },
     "parcelTx": {
       "reconciliate": "Réconcilier les parcelles en édition",

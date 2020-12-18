@@ -420,7 +420,8 @@ export class ClientParcelElementActionsService {
           ctrl.parcelElementWorkspace.activateWidget(widget, {
             transaction: ctrl.parcelElementTransaction,
             map: ctrl.map,
-            store: ctrl.parcelElementStore
+            store: ctrl.parcelElementStore,
+            annee: ctrl.parcelYear.annee
           });
         },
         availability: (ctrl: ClientController) => every(
