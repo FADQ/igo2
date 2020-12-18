@@ -107,7 +107,7 @@ export function createSchemaElementLayerStyle(
       updateSchemaPointText(type, style.getText());
     } else {
       const color = type ? type.color : getSchemaElementDefaultColor();
-      style.getFill().setColor(color.concat([0]));
+      style.getFill().setColor(color.concat([0.3]));
       style.getStroke().setColor(color);
     }
     style.getText().setText(getSchemaElementFeatureText(olFeature, resolution));
