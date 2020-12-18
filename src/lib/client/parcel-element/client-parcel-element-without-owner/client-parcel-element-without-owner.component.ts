@@ -96,9 +96,6 @@ export class ClientParcelElementWithoutOwnerComponent
 
   ngOnInit() {
     this.resolution$$ = this.map.viewController.resolution$.subscribe(() => {
-      // *************************** TODO *****************************
-      // const scale = this.map.viewController.getScale();
-      // this.scaleText$.next('~ 1 / ' + formatScale(scale));
       const zoom = this.map.viewController.getZoom();
       this.scaleText$.next('Niveau de zoom actuel:' + zoom);
     });
