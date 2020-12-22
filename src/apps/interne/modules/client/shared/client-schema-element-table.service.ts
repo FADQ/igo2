@@ -1,7 +1,9 @@
 import { Injectable} from '@angular/core';
 
+import OlGeoJSON from 'ol/format/GeoJSON';
+
 import { EntityTableTemplate, EntityTableColumnRenderer } from '@igo2/common';
-import { formatMeasure, squareMetersToAcres, squareMetersToHectares } from '@igo2/geo';
+import { formatMeasure, measureOlGeometryLength, squareMetersToAcres, squareMetersToHectares } from '@igo2/geo';
 
 import { formatDate } from 'src/lib/utils/date';
 import { ClientSchemaElement } from 'src/lib/client';
@@ -62,7 +64,7 @@ export class ClientSchemaElementTableService {
         },
         {
           name: 'properties.superficie',
-          title: 'Superficie(m²)',
+          title: 'Superficie (m²)',
           valueAccessor: (schemaElement: ClientSchemaElement) => {
             const area = schemaElement.properties.superficie;
             return area ? formatMeasure(area, {decimal: 1, locale: 'fr'}) : '';
@@ -82,6 +84,19 @@ export class ClientSchemaElementTableService {
           valueAccessor: (schemaElement: ClientSchemaElement) => {
             const area = schemaElement.properties.superficie;
             return area ? formatMeasure(squareMetersToAcres(area), {decimal: 1, locale: 'fr'}) : '';
+          }
+        },
+        {
+          name: 'longueur',
+          title: 'Longueur - Périmètre (m)',
+          valueAccessor: (schemaElement: ClientSchemaElement) => {
+            let length = 0;
+            const olGeometry = new OlGeoJSON().readGeometry(schemaElement.geometry, {
+              dataProjection: schemaElement.projection,
+              featureProjection: schemaElement.projection
+            });
+            length = measureOlGeometryLength(olGeometry,schemaElement.projection);
+            return length ? formatMeasure(length, {decimal: 1, locale: 'fr'}) : '';
           }
         },
         {
