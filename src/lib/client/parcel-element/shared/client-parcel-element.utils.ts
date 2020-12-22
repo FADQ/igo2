@@ -71,16 +71,19 @@ export function createParcelElementLayerStyle(
 
   const olNoOwnerStyle = new olstyle.Style({
     fill: new olstyle.Fill({
-      color: [30, 30, 30, 0]
+      color: [240, 240, 130, 1]
     }),
     stroke: new olstyle.Stroke({
       color: [30, 30, 30],
-      width: 2
+      width: 3
     }),
+    text: createOlTextStyle()
   });
 
   return (function(olFeature: OlFeature, resolution: number) {
     if (olFeature.get('noOwner') === true) {
+      let olText = olNoOwnerStyle.getText();
+      olText.setText(olFeature.get('annee').toString());
       return olNoOwnerStyle;
     }
 

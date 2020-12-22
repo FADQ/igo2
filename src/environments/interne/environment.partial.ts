@@ -123,7 +123,7 @@ export const igoEnvironment: IgoEnvironment = {
         save: '/igodonneesgeospatiales/edition_parcelle_agricole/enregistrerParcellesEdition/${clientNum}/${annee}',
         validateTransfer: '/igodonneesgeospatiales/edition_parcelle_agricole/validertransfertparcelle/${toClientNum}/${annee}',
         transfer: '/igodonneesgeospatiales/edition_parcelle_agricole/transfererparcellesedition/${fromClientNum}/${toClientNum}/${annee}',
-        parcelsWithoutOwner: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirParcellesSansDetenteur',
+        parcelsWithoutOwner: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirParcellesSansDetenteur/${annee}',
         domains: {
           statutAugm: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirStatutsAugmentationSuperficiesCultivees',
           source: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirSourcesParcelles'

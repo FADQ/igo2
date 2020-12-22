@@ -45,8 +45,8 @@ export class ClientParcelElementService {
       );
   }
 
-  getParcelElementsWithoutOwner(geometry: GeoJSONGeometry): Observable<ClientParcelElement[]> {
-    const url = this.apiService.buildUrl(this.apiConfig.parcelsWithoutOwner);
+  getParcelElementsWithoutOwner(geometry: GeoJSONGeometry, annee: number): Observable<ClientParcelElement[]> {
+    const url = this.apiService.buildUrl(this.apiConfig.parcelsWithoutOwner, {annee});
     return this.http
       .post(url, geometry)
       .pipe(
