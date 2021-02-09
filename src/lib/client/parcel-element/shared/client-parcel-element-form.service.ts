@@ -141,7 +141,7 @@ export class ClientParcelElementFormService {
         map((choices: FormFieldSelectChoice[]) => {
           return this.createField({
             name: 'properties.sourceParcelleAgricole',
-            title: 'Référence de la parcelle',
+            title: 'Mesure déclarée',
             type: 'select',
             options:  {
               cols: 1
