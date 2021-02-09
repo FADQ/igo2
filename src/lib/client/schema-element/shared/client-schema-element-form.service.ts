@@ -159,7 +159,7 @@ export class ClientSchemaElementFormService {
         drawGuideField: true,
         drawGuide: undefined,
         drawGuidePlaceholder: 'Guide d\'aide au traçage',
-        measure: true,
+        measure: false,
         controlOptions: {
           translate: false
         }
