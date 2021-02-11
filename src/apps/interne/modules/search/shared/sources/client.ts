@@ -33,6 +33,8 @@ export class ClientSearchSource extends SearchSource implements TextSearch {
 
   getId(): string { return ClientSearchSource.id; }
 
+  getType(): string { return CLIENT; }
+
   protected getDefaultOptions(): SearchSourceOptions {
     return {
       title: 'Client (FADQ)'
