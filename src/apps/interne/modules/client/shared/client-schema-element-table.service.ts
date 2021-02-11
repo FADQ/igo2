@@ -95,7 +95,7 @@ export class ClientSchemaElementTableService {
               dataProjection: schemaElement.projection,
               featureProjection: schemaElement.projection
             });
-            length = measureOlGeometryLength(olGeometry,schemaElement.projection);
+            length = measureOlGeometryLength(olGeometry, schemaElement.projection);
             return length ? formatMeasure(length, {decimal: 1, locale: 'fr'}) : '';
           }
         },

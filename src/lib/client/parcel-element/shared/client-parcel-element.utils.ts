@@ -2,7 +2,7 @@ import * as olstyle from 'ol/style';
 import OlFeature from 'ol/Feature';
 import OlGeoJSON from 'ol/format/GeoJSON';
 import turfUnion from '@turf/union';
-import { Feature, Polygon } from "@turf/helpers";
+import { Feature, Polygon } from '@turf/helpers';
 
 import { getEntityRevision } from '@igo2/common';
 import { LanguageService } from '@igo2/core';
@@ -85,13 +85,14 @@ export function createParcelElementLayerStyle(
   });
 
   return (function(olFeature: OlFeature, resolution: number) {
+    let olText;
     if (olFeature.get('noOwner') === true) {
-      let olText = olNoOwnerStyle.getText();
+      olText = olNoOwnerStyle.getText();
       olText.setText(olFeature.get('annee').toString());
       return olNoOwnerStyle;
     }
 
-    const olText = olStyle.getText();
+    olText = olStyle.getText();
     const olTextFill = olText.getFill();
     olText.setText(getParcelElementFeatureText(olFeature, resolution));
 
@@ -208,9 +209,9 @@ export function unionParcelElements(parcelElements: ClientParcelElement[]): [Cli
       id: uuid()
     };
   }
-  
-  let union = parcelElements[0]
-  for (var i = 1; i < parcelElements.length; i++) {
+
+  let union = parcelElements[0];
+  for (let i = 1; i < parcelElements.length; i++) {
     union = turfUnion(
       union  as Feature<Polygon>,
       parcelElements[i] as Feature<Polygon>
@@ -222,5 +223,5 @@ export function unionParcelElements(parcelElements: ClientParcelElement[]): [Cli
     properties
   });
 
-  return [union, base]
+  return [union, base];
 }

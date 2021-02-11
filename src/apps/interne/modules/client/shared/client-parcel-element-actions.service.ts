@@ -3,10 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import turfUnion from '@turf/union';
-import { Feature, Polygon } from "@turf/helpers";
-
-import { getEntityId, getEntityRevision } from '@igo2/common';
+import { getEntityId } from '@igo2/common';
 import { LanguageService } from '@igo2/core';
 import {
   Action,
@@ -14,7 +11,6 @@ import {
   EntityStoreFilterSelectionStrategy,
   Widget
 } from '@igo2/common';
-import { uuid } from '@igo2/utils';
 
 import { EditionUndoWidget } from 'src/lib/edition';
 
