@@ -30,6 +30,12 @@
         "cadastre-reno.title": "Renovated cadastre",
         "cadastre-reno.placeholder": "Search for a renovated cadastre"
       }
+    },
+
+    "integration": {
+      "searchResultsTool": {
+        "examples": ""
+      }
     }
   },
 

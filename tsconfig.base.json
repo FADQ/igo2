@@ -60,6 +60,7 @@
     "src/apps/shared/modules/feature/index.ts",
     "src/apps/shared/modules/help/help-tool/index.ts",
     "src/apps/shared/modules/help/shared/index.ts",
+    "src/apps/shared/modules/import-export/import-export-tool/index.ts",
     "src/apps/shared/modules/map/map-tool/index.ts",
     "src/apps/shared/modules/navigation/navigation-tool/index.ts",
     "src/apps/shared/modules/search/shared/index.ts",

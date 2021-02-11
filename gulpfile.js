@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 const gulp = require('gulp');
 const jeditor = require('gulp-json-editor');
+const babel = require('gulp-babel');
 
 gulp.task('geo:fixOL', done => {
   gulp

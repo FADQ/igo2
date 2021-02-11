@@ -3,12 +3,5 @@
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "types": []
-  },
-  "files": [
-    "apps/interne.ts",
-    "polyfills.ts"
-  ],
-  "include": [
-    "src/**/*.d.ts"
-  ]
+  }
 }

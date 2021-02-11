@@ -65,7 +65,11 @@
               "@turf/line-intersect",
               "@turf/union",
               "pbf",
-              "geojson-rbush"
+              "geojson-rbush",
+              "minimatch",
+              "path",
+              "pixelworks",
+              "brace-expansion"
             ]
           },
           "configurations": {
@@ -73,7 +77,7 @@
               "budgets": [
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "8kb"
                 }
               ],
               "fileReplacements": [
@@ -90,7 +94,7 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": true,
-              "buildOptimizer": true
+              "buildOptimizer": false
             }
           }
         },
@@ -211,7 +215,11 @@
               "@turf/invariant",
               "@turf/line-intersect",
               "pbf",
-              "geojson-rbush"
+              "geojson-rbush",
+              "minimatch",
+              "path",
+              "pixelworks",
+              "brace-expansion"
             ]
           },
           "configurations": {
@@ -236,7 +244,7 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": true,
-              "buildOptimizer": true
+              "buildOptimizer": false
             }
           }
         },
@@ -337,7 +345,11 @@
               "@turf/invariant",
               "@turf/line-intersect",
               "pbf",
-              "geojson-rbush"
+              "geojson-rbush",
+              "minimatch",
+              "path",
+              "pixelworks",
+              "brace-expansion"
             ]
           },
           "configurations": {
@@ -362,7 +374,7 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": true,
-              "buildOptimizer": true
+              "buildOptimizer": false
             }
           }
         },
