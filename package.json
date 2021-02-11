@@ -1,9 +1,9 @@
 {
-  "name": "igo",
+  "name": "igo-fadq",
   "version": "1.6.0",
   "description": "Infrastructure géomatique ouverte",
   "repository": {
-    "url": "https://github.com/infra-geo-ouverte/igo2"
+    "url": "https://github.com/FADQ/igo2"
   },
   "license": "LiLiQ-R",
   "scripts": {
@@ -18,7 +18,7 @@
     "e2e": "ng e2e --port 4300",
     "postinstall": "gulp geo:fixOL && ngcc --tsconfig \"./src/tsconfig.app.json\"",
     "build.prod": "ng build --prod",
-    "serve.prod": "node_modules/live-server/live-server.js ./dist/igo2/ --port=4200 --no-browser",
+    "serve.prod": "node_modules/live-server/live-server.js ./dist/interne/ --port=4200 --no-browser",
     "doc": "compodoc -p src/tsconfig.app.json -s --port 4220",
     "build.doc": "compodoc -p src/tsconfig.app.json",
     "serve.doc": "compodoc -s --port 4220",
@@ -35,11 +35,7 @@
     "changelog-current": "conventional-changelog -p angular -r 2",
     "preversion": "npm run test.all && rimraf ./dist && npm run build.prod",
     "version": "npm run changelog && git add -A CHANGELOG.md",
-    "postversion": "git push && git push --tags && rimraf igo2.zip && cd ./dist/igo2/ && zip -r ../igo2.zip ./* && npm run ghpages && npm run ghrelease",
-    "preghpages": "npm run build -- --configuration=github --output-path ./dist/ghpages --base-href /igo2/ && echo \"include: ['_default.json', '_contexts.json', '_base.json']\" > dist/ghpages/_config.yml",
-    "ghpages": "VERSION=$(node -p -e \"require('./package.json').version\") && npx ngh --dir=dist/ghpages --no-silent=false --message=$VERSION",
-    "postghpages": "rimraf ./dist/ghpages",
-    "ghrelease": "VERSION=$(node -p -e \"require('./package.json').version\") && publish-release --owner infra-geo-ouverte --repo igo2 --tag $VERSION --name $VERSION --reuse-release --notes \"$(npm run changelog-current -s)\" --assets dist/igo2.zip"
+    "postversion": "git push && git push --tags && rimraf igo2.zip && cd ./dist/igo2/ && zip -r ../igo2.zip ./* && npm run ghpages && npm run ghrelease"
   },
   "private": true,
   "dependencies": {
@@ -65,6 +61,7 @@
     "@turf/buffer": "^5.1.5",
     "@turf/helpers": "^6.3.0",
     "@turf/point-on-feature": "^5.1.5",
+    "@turf/simplify": "^6.3.0",
     "@turf/union": "^6.3.0",
     "angular-shepherd": "^0.7.0",
     "bowser": "^2.9.0",
@@ -84,6 +81,7 @@
     "ngx-color-picker": "^10.1.0",
     "ol": "^6.3.1",
     "ol-mapbox-style": "^6.1.2",
+    "path": "^0.12.7",
     "proj4": "^2.6.2",
     "rxjs": "^6.6.0",
     "scroll-into-view-if-needed": "^2.2.20",
