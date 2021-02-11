@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import turfUnion from '@turf/union';
+import { Feature, Polygon } from "@turf/helpers";
 
 import { getEntityId, getEntityRevision } from '@igo2/common';
 import { LanguageService } from '@igo2/core';
@@ -38,12 +39,14 @@ import {
   ClientParcelTxReconciliateWidget,
   generateParcelElementOperationTitle,
   getParcelElementErrors,
-  getParcelElementMergeBase
+  getParcelElementMergeBase,
+  unionParcelElements
 } from 'src/lib/client';
 import { moveToFeatureStore } from 'src/lib/feature';
 import { every } from 'src/lib/utils';
 
 import { ClientController } from './client-controller';
+import { assert } from 'console';
 
 @Injectable({
   providedIn: 'root'
@@ -232,24 +235,7 @@ export class ClientParcelElementActionsService {
           const transaction = ctrl.parcelElementTransaction;
           const parcelElements = ctrl.selectedParcelElements;
 
-          const baseParcelElement = getParcelElementMergeBase(parcelElements);
-          const properties = baseParcelElement.properties;
-          let meta;
-          if (baseParcelElement.properties.idParcelle) {
-            meta = Object.assign({}, baseParcelElement.meta, {
-              revision: getEntityRevision(baseParcelElement) + 1
-            });
-          } else {
-            meta = {
-              id: uuid()
-            };
-          }
-          const union = Object.assign(turfUnion(...parcelElements), {
-            meta,
-            projection: 'EPSG:4326',
-            properties
-          });
-
+          const [union, base] = unionParcelElements(parcelElements);
           if (union.geometry.type === 'MultiPolygon') {
             return;
           }
@@ -272,8 +258,8 @@ export class ClientParcelElementActionsService {
                 unionParcelElement,
                 this.languageService
               );
-              if (baseParcelElement.properties.idParcelle) {
-                transaction.update(baseParcelElement, unionParcelElement, store, {
+              if (base.properties.idParcelle) {
+                transaction.update(base, unionParcelElement, store, {
                   title
                 });
               } else {

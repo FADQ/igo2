@@ -1,7 +1,10 @@
 import * as olstyle from 'ol/style';
 import OlFeature from 'ol/Feature';
 import OlGeoJSON from 'ol/format/GeoJSON';
+import turfUnion from '@turf/union';
+import { Feature, Polygon } from "@turf/helpers";
 
+import { getEntityRevision } from '@igo2/common';
 import { LanguageService } from '@igo2/core';
 import { Context } from '@igo2/context';
 import {
@@ -9,6 +12,7 @@ import {
   VectorLayer,
   measureOlGeometryArea
 } from '@igo2/geo';
+import { uuid } from '@igo2/utils';
 
 import { createOlTextStyle } from '../../../edition/shared/edition.utils';
 import { TransactionData } from '../../../utils/transaction';
@@ -189,4 +193,34 @@ export function getParcelElementMergeBase(
   }
 
   return base;
+}
+
+export function unionParcelElements(parcelElements: ClientParcelElement[]): [ClientParcelElement, ClientParcelElement] {
+  const base = getParcelElementMergeBase(parcelElements);
+  const properties = base.properties;
+  let meta;
+  if (base.properties.idParcelle) {
+    meta = Object.assign({}, base.meta, {
+      revision: getEntityRevision(base) + 1
+    });
+  } else {
+    meta = {
+      id: uuid()
+    };
+  }
+  
+  let union = parcelElements[0]
+  for (var i = 1; i < parcelElements.length; i++) {
+    union = turfUnion(
+      union  as Feature<Polygon>,
+      parcelElements[i] as Feature<Polygon>
+    );
+  }
+  Object.assign(union, {
+    meta,
+    projection: 'EPSG:4326',
+    properties
+  });
+
+  return [union, base]
 }
