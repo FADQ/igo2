@@ -9,6 +9,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { IgoLanguageModule } from '@igo2/core';
 import {
   IgoActionModule,
+  IgoContextMenuModule,
   IgoWorkspaceModule,
   IgoEntityModule,
   IgoPanelModule,
@@ -46,6 +47,7 @@ import { PortalComponent } from './portal.component';
     IgoEntityModule,
     IgoPanelModule,
     IgoToolModule,
+    IgoContextMenuModule,
     IgoBackdropModule,
     IgoFeatureModule,
     IgoImportExportModule,

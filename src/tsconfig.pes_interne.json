@@ -5,7 +5,7 @@
     "types": []
   },
   "files": [
-    "apps/interne.ts",
+    "apps/pes_interne.ts",
     "polyfills.ts"
   ],
   "include": [

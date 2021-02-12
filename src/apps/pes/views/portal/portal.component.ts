@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { BehaviorSubject, Subscription, of } from 'rxjs';
 
 import { MapBrowserPointerEvent as OlMapBrowserPointerEvent } from 'ol/MapBrowserEvent';
@@ -50,6 +50,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   public expansionPanelExpanded = false;
   public sidenavOpened = false;
   public showToastPanelToggle = false;
+  public contextualMenuLocation$ = new BehaviorSubject<{x: number, y: number}>(null);
 
   private focusedSearchResult$$: Subscription;
 
@@ -95,6 +96,9 @@ export class PortalComponent implements OnInit, OnDestroy {
   get searchTerm(): string { return this.searchState.searchTerm$.value; }
 
   get searchType(): string { return this.searchState.searchType$.value; }
+
+  @ViewChild('mapBrowser', { read: ElementRef, static: true })
+  mapBrowserEl: ElementRef;
 
   @ViewChild(SearchBarComponent) search: SearchBarComponent;
 
@@ -195,6 +199,10 @@ export class PortalComponent implements OnInit, OnDestroy {
     if (mapResults.length > 0) {
       this.onSearchMap(mapResults as SearchResult<Feature>[]);
     }
+  }
+
+  onContextualMenuOpen(event: { x: number; y: number }) {
+    this.contextualMenuLocation$.next(event);
   }
 
   clearSearchResult() {

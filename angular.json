@@ -23,7 +23,7 @@
             "index": "src/index.html",
             "main": "src/apps/interne.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.app.json",
+            "tsConfig": "src/tsconfig.interne.json",
             "assets": [
               "src/favicon.ico",
               "src/assets",
@@ -130,7 +130,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
+            "tsConfig": ["src/tsconfig.interne.json", "src/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**"]
           }
         }
@@ -176,7 +176,7 @@
             "index": "src/index.html",
             "main": "src/apps/pes.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.app.json",
+            "tsConfig": "src/tsconfig.pes.json",
             "assets": [
               "src/favicon.ico",
               "src/assets",
@@ -280,7 +280,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
+            "tsConfig": ["src/tsconfig.pes.json", "src/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**"]
           }
         }
@@ -306,7 +306,7 @@
             "index": "src/index.html",
             "main": "src/apps/pes_interne.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.app.json",
+            "tsConfig": "src/tsconfig.pes_interne.json",
             "assets": [
               "src/favicon.ico",
               "src/assets",
@@ -410,7 +410,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
+            "tsConfig": ["src/tsconfig.pes_interne.json", "src/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**"]
           }
         }

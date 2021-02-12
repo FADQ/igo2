@@ -8,7 +8,13 @@
   "files": [],
   "references": [
     {
-      "path": "./src/tsconfig.app.json"
+      "path": "./src/tsconfig.interne.json"
+    },
+    {
+      "path": "./src/tsconfig.pes.json"
+    },
+    {
+      "path": "./src/tsconfig.pes_interne.json"
     },
     {
       "path": "./src/tsconfig.spec.json"

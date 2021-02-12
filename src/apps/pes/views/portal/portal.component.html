@@ -33,6 +33,7 @@
   </fadq-sidenav>
 
   <igo-map-browser
+    #mapBrowser
     igoQuery
     [queryFeatures]="true"
     [queryFeaturesHitTolerance]="5"
@@ -42,6 +43,8 @@
     [removeLayersOnContextChange]="false"
     igoDropGeoFile
     [map]="map"
+    [igoContextMenu]="contextualMenu"
+    (menuPosition)="onContextualMenuOpen($event)"
     (query)="onMapQuery($event)">
     <igo-baselayers-switcher [map]="map"></igo-baselayers-switcher>
   </igo-map-browser>
@@ -85,3 +88,12 @@
   </igo-entity-table>
 
 </fadq-expansion-panel>
+
+<ng-template #contextualMenu>
+  <fadq-contextual-menu
+    [map]="map"
+    [mapBrowser]="mapBrowserEl"
+    [location]="contextualMenuLocation$ | async"
+    >
+  </fadq-contextual-menu>
+</ng-template>
