@@ -8,7 +8,7 @@
   "license": "LiLiQ-R",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --host 0.0.0.0 --port 4200 --proxy-config proxy.conf.json",
+    "start": "ng serve interne --host 0.0.0.0 --port 4200 --proxy-config proxy.conf.json",
     "pes.start": "ng serve pes --host 0.0.0.0 --proxy-config proxy.conf.json",
     "pes.build.prod": "ng build pes --prod",
     "pes_interne.start": "ng serve pes_interne --host 0.0.0.0 --proxy-config proxy.conf.json",
@@ -17,7 +17,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e --port 4300",
     "postinstall": "gulp geo:fixOL && ngcc --tsconfig \"./src/tsconfig.interne.json\"",
-    "build.prod": "ng build --prod",
+    "build.prod": "ng build interne --prod",
     "serve.prod": "node_modules/live-server/live-server.js ./dist/interne/ --port=4200 --no-browser",
     "doc": "compodoc -p src/tsconfig.interne.json -s --port 4220",
     "build.doc": "compodoc -p src/tsconfig.interne.json",
@@ -34,8 +34,7 @@
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "changelog-current": "conventional-changelog -p angular -r 2",
     "preversion": "npm run test.all && rimraf ./dist && npm run build.prod",
-    "version": "npm run changelog && git add -A CHANGELOG.md",
-    "postversion": "git push && git push --tags && rimraf igo2.zip && cd ./dist/igo2/ && zip -r ../igo2.zip ./* && npm run ghpages && npm run ghrelease"
+    "version": "npm run changelog && git add -A CHANGELOG.md"
   },
   "private": true,
   "dependencies": {

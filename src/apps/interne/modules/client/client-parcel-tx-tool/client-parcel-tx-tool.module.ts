@@ -7,7 +7,7 @@ import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 
 import { IgoLanguageModule } from '@igo2/core';
-import { IgoListModule } from '@igo2/common';
+import { IgoListModule, ToolService } from '@igo2/common';
 
 import { FadqLibClientModule } from 'src/lib/client/client.module';
 
@@ -33,7 +33,13 @@ import { ClientParcelTxToolItemComponent } from './client-parcel-tx-tool-item.co
     ClientParcelTxToolItemComponent
   ],
   exports: [ClientParcelTxToolComponent],
-  entryComponents: [ClientParcelTxToolComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class FadqClientParcelTxToolModule {}
+
+ToolService.register({
+  name: 'clientTx',
+  title: 'tools.clientParcelTx',
+  icon: 'account-multiple-plus',
+  component: ClientParcelTxToolComponent
+})

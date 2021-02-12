@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
 
-import { EntityStore, ToolComponent } from '@igo2/common';
+import { EntityStore } from '@igo2/common';
 
 import {
   Client,
@@ -24,11 +24,7 @@ import { ClientState } from '../client.state';
 /**
  * Tool to display a list of clients with an associated tx
  */
-@ToolComponent({
-  name: 'clientTx',
-  title: 'tools.clientParcelTx',
-  icon: 'account-multiple-plus'
-})
+
 @Component({
   selector: 'fadq-client-parcel-tx-tool',
   templateUrl: './client-parcel-tx-tool.component.html',

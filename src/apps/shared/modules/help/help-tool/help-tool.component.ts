@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
-import { ToolComponent } from '@igo2/common';
 import { ConfigService } from '@igo2/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -9,11 +8,7 @@ import { HelpGuide } from '../shared/help.interfaces';
 /**
  * Help tool
  */
-@ToolComponent({
-  name: 'help',
-  title: 'tools.help',
-  icon: 'information'
-})
+
 @Component({
   selector: 'fadq-help-tool',
   templateUrl: './help-tool.component.html',

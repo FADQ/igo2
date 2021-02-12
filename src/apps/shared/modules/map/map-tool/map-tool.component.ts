@@ -10,11 +10,6 @@ import { LayerInfoDialogComponent } from './layer-info-dialog.component';
 /**
  * Tool to browse a map's layers or to choose a different map
  */
-@ToolComponent({
-  name: 'fadqMap',
-  title: 'tools.map',
-  icon: 'map'
-})
 @Component({
   selector: 'fadq-map-tool',
   templateUrl: './map-tool.component.html',

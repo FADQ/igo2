@@ -7,7 +7,7 @@ import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 
 import { IgoLanguageModule } from '@igo2/core';
-import { IgoListModule, IgoCollapsibleModule } from '@igo2/common';
+import { IgoListModule, IgoCollapsibleModule, ToolService } from '@igo2/common';
 
 import { FadqLibClientModule } from 'src/lib/client/client.module';
 import { FadqLibMessageInlineModule } from 'src/lib/message/message-inline/message-inline.module';
@@ -36,7 +36,13 @@ import { ClientToolItemComponent } from './client-tool-item.component';
     ClientToolItemComponent
   ],
   exports: [ClientToolComponent],
-  entryComponents: [ClientToolComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class FadqClientToolModule {}
+
+ToolService.register({
+  name: 'client',
+  title: 'tools.client',
+  icon: 'account',
+  component: ClientToolComponent
+});

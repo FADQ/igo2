@@ -14,7 +14,6 @@ import {
   IgoEntityModule,
   IgoPanelModule,
   IgoBackdropModule,
-  IgoToolModule
 } from '@igo2/common';
 import {
   IgoFeatureModule,
@@ -46,7 +45,6 @@ import { PortalComponent } from './portal.component';
     IgoWorkspaceModule,
     IgoEntityModule,
     IgoPanelModule,
-    IgoToolModule,
     IgoContextMenuModule,
     IgoBackdropModule,
     IgoFeatureModule,

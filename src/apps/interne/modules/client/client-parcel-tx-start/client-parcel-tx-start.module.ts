@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -26,8 +26,6 @@ import { ClientParcelTxStartComponent } from './client-parcel-tx-start.component
   declarations: [
     ClientParcelTxStartComponent
   ],
-  entryComponents: [
-    ClientParcelTxStartComponent
-  ]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class FadqClientParcelTxStartModule {}

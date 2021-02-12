@@ -6,6 +6,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { IgoLanguageModule } from '@igo2/core';
+import { ToolService } from '@igo2/common';
 import { IgoLayerModule } from '@igo2/geo';
 import { IgoAppCatalogModule } from '@igo2/integration';
 
@@ -31,10 +32,15 @@ import { LayerInfoDialogComponent } from './layer-info-dialog.component';
     LayerInfoDialogComponent
   ],
   exports: [MapToolComponent],
-  entryComponents: [
-    MapToolComponent,
-    LayerInfoDialogComponent
-  ],
+  entryComponents: [MapToolComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class FadqMapToolModule {}
+
+
+ToolService.register({
+  name: 'fadqMap',
+  title: 'tools.map',
+  icon: 'map',
+  component: MapToolComponent
+});

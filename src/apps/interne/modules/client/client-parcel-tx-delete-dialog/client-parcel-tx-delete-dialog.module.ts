@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -22,6 +22,6 @@ import { ClientParcelTxDeleteDialogComponent } from './client-parcel-tx-delete-d
   ],
   declarations: [ClientParcelTxDeleteDialogComponent],
   exports: [ClientParcelTxDeleteDialogComponent],
-  entryComponents: [ClientParcelTxDeleteDialogComponent]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class FadqClientParcelTxDeleteDialogModule {}

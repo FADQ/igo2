@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnInit, Input } from '@angular/core';
 
-import { ToolComponent, EntityStore } from '@igo2/common';
+import { EntityStore } from '@igo2/common';
 import {
   VectorLayer,
   featureToOl,
@@ -29,11 +29,7 @@ import { LotUnique, LotFeature, CadastreLotService } from 'src/lib/cadastre/lot'
 
 import { CadastreState } from '../cadastre.state';
 
-@ToolComponent({
-  name: 'cadastre',
-  title: 'tools.cadastre',
-  icon: 'view-quilt'
-})
+
 @Component({
   selector: 'fadq-cadastre-search-tool',
   templateUrl: './cadastre-search-tool.component.html',

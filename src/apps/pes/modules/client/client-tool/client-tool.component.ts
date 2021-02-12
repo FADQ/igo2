@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { ToolComponent, EntityStore } from '@igo2/common';
+import { EntityStore } from '@igo2/common';
 import { FEATURE } from '@igo2/geo';
 import { SearchState } from '@igo2/integration';
 
@@ -16,11 +16,7 @@ import { ClientState } from '../client.state';
 /**
  * Tool to display a client's info
  */
-@ToolComponent({
-  name: 'client',
-  title: 'tools.client',
-  icon: 'account'
-})
+
 @Component({
   selector: 'fadq-client-tool',
   templateUrl: './client-tool.component.html',
