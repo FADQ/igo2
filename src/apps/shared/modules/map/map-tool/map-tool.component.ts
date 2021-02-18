@@ -1,9 +1,9 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { ToolComponent } from '@igo2/common';
 import { ConfigService } from '@igo2/core';
-import { Layer, ImageLayer,  WMSDataSource } from '@igo2/geo';
+import { Layer, ImageLayer,  WMSDataSource, IgoMap } from '@igo2/geo';
+import { MapState } from '@igo2/integration';
 
 import { LayerInfoDialogComponent } from './layer-info-dialog.component';
 
@@ -20,8 +20,13 @@ export class MapToolComponent {
 
   constructor(
     private configService: ConfigService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private mapState: MapState
   ) {}
+
+  get map(): IgoMap {
+    return this.mapState.map;
+  }
 
   showInfoButton(layer: Layer): boolean {
     return layer.dataSource instanceof WMSDataSource;

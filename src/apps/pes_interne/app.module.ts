@@ -10,6 +10,7 @@ import { IgoIntegrationModule } from '@igo2/integration';
 import { environment } from 'src/environments/pes_interne/environment';
 
 import { FadqCoreModule } from 'src/apps/shared/modules/core/core.module';
+import { FadqContextModule } from 'src/apps/shared/modules/context/context.module';
 import { FadqHelpModule } from 'src/apps/shared/modules/help/help.module';
 import { FadqCadastreModule } from 'src/apps/shared/modules/cadastre/cadastre.module';
 import { FadqNavigationModule } from 'src/apps/shared/modules/navigation/navigation.module';
@@ -33,6 +34,7 @@ import { URLClientLoader } from './modules/client/shared/client.loader';
     IgoQueryModule.forRoot(),
     IgoIntegrationModule,
     FadqCoreModule,
+    FadqContextModule,
     FadqHelpModule,
     FadqCadastreModule,
     FadqNavigationModule,
