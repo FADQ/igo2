@@ -104,7 +104,7 @@ export class ClientInfoService {
     if (data === undefined) { return undefined; }
 
     const no = data['noAdresse'];
-    const suite = data['suiteAdresse'];
+    const suite = data['adresse'];
     const mun = data['municipaliteAdresse'];
     const code = data['codePostalAdresse'];
     const province = data['provincePaysAdresse'];
