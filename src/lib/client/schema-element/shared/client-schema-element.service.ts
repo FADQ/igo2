@@ -244,7 +244,7 @@ export class ClientSchemaElementService {
     const createChoice = (item: ClientSchemaElementTypesResponseItem) => {
       return {
         value: item.idTypeElement,
-        title: item.libelleFrancaisAbr,
+        title: item.libelleFrancais,
         color: hexToRGB(item.couleurElement),
         icon: item.iconeElement
       };

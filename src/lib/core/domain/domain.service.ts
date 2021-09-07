@@ -38,7 +38,7 @@ export class DomainService {
     const items = response.data || [];
     return items.map(item => Object.create({
       value: item.code,
-      title: item.descriptionAbregeeFrancais
+      title: item.descriptionFrancais
     }));
   }
 
