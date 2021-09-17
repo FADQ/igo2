@@ -38,7 +38,7 @@ export class ClientSchemaElementWorkspaceService {
     // TODO: i18n
     return new ClientSchemaElementWorkspace({
       id: `fadq.${client.info.numero}-4-schema-element-workspace`,
-      title: `${client.info.numero} - Éléments du schémas`,
+      title: `${client.info.numero} - Éléments du schéma`,
       entityStore: this.createSchemaElementStore(client, map),
       actionStore: this.createSchemaElementActionStore(),
       meta: {
