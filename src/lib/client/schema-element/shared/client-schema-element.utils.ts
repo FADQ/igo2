@@ -65,7 +65,7 @@ export function createSchemaElementLayer(client: Client): VectorLayer {
   // TODO: i18n
   const schemaElementDataSource = new FeatureDataSource();
   return new VectorLayer({
-    title: `${client.info.numero} - Éléments du schémas`,
+    title: `${client.info.numero} - Éléments du schéma`,
     zIndex: 102,
     source: schemaElementDataSource,
     removable: false,
