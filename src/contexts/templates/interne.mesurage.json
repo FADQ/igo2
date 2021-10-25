@@ -353,12 +353,11 @@
     "client",
     "clientTx",
     "searchResults",
-    "fadqMap",
     "catalog",
+    "fadqMap",
     "navigation",
-    "fadqImportExport",
+    "importExport",
     "measurer",
-    "print",
     "addressEditor",
     "cadastre",
     "contextManager",
@@ -366,7 +365,10 @@
   ],
   "tools": [
     {
-      "name": "client"
+      "name": "client",
+      "options": {
+        "showInfo": false
+      }
     },
     {
       "name": "clientTx"
@@ -378,13 +380,10 @@
       "name": "fadqMap"
     },
     {
-      "name": "catalog"
+      "name": "contextManager"
     },
     {
       "name": "catalogBrowser"
-    },
-    {
-      "name": "contextManager"
     },
     {
       "name": "navigation",
@@ -392,14 +391,14 @@
         "pois": [],
         "categories": [
           {
-            "title": "navigation.categories.mun",
+            "title": "navigation.categories.tcs",
             "collection": {
-              "uri": "/igonavigation/zoom_selection/obtenirMunicipalites",
-              "idProperty": "codeGeographique",
-              "titleProperty": "nomMunicipalite"
+              "uri": "/igonavigation/zoom_selection/obtenirTerritoiresCentresServices",
+              "idProperty": "idTerritoireCentreServices",
+              "titleProperty": "nomCentreServices"
             },
             "feature": {
-              "uri": "/igonavigation/zoom_selection/obtenirMunicipalite/${id}"
+              "uri": "/igonavigation/zoom_selection/obtenirTerritoireCentreServices/${id}"
             }
           },
           {
@@ -414,6 +413,17 @@
             }
           },
           {
+            "title": "navigation.categories.mun",
+            "collection": {
+              "uri": "/igonavigation/zoom_selection/obtenirMunicipalites",
+              "idProperty": "codeGeographique",
+              "titleProperty": "nomMunicipalite"
+            },
+            "feature": {
+              "uri": "/igonavigation/zoom_selection/obtenirMunicipalite/${id}"
+            }
+          },
+          {
             "title": "navigation.categories.ra",
             "collection": {
               "uri": "/igonavigation/zoom_selection/obtenirRegionsAdministratives",
@@ -425,29 +435,19 @@
             }
           },
           {
-            "title": "navigation.categories.tcs",
+            "title": "navigation.categories.rzc",
             "collection": {
-              "uri": "/igonavigation/zoom_selection/obtenirTerritoiresCentresServices",
-              "idProperty": "idTerritoireCentreServices",
-              "titleProperty": "nomCentreServices"
+              "uri": "/igonavigation/zoom_selection/obtenirRegionsZonageCollectif",
+              "resultsProperty": "lstRegionZonageCollectif",
+              "idProperty": "idRegionZonageCollectif",
+              "title": "${noRegionZonageCollectif}-${nomRegionZonageCollectif}"
             },
             "feature": {
-              "uri": "/igonavigation/zoom_selection/obtenirTerritoireCentreServices/${id}"
+              "uri": "/igonavigation/zoom_selection/obtenirRegionZonageCollectif/${id}"
             }
           },
           {
             "title": "navigation.categories.smf",
-            "collection": {
-              "uri": "/igonavigation/zoom_selection/obtenirStationsMeteoAnneeAssurance/2018",
-              "idProperty": "idStationMeteo",
-              "title": "${noStationFADQ}-${nomStation}"
-            },
-            "feature": {
-              "uri": "/igonavigation/zoom_selection/obtenirStationMeteo/${id}"
-            }
-          },
-          {
-            "title": "navigation.categories.smd",
             "collection": {
               "uri": "/igonavigation/zoom_selection/obtenirStationsMeteoDisponibles",
               "idProperty": "idStationMeteo",
@@ -455,18 +455,6 @@
             },
             "feature": {
               "uri": "/igonavigation/zoom_selection/obtenirStationMeteo/${id}"
-            }
-          },
-          {
-            "title": "navigation.categories.zc2",
-            "collection": {
-              "uri": "/igonavigation/zoom_selection/obtenirZonagesCollectifsAnneeActive/2",
-              "resultsProperty": "lstZonageCollectif",
-              "idProperty": "idZonageCollectif",
-              "title": "${regionZonage}-${noZone}"
-            },
-            "feature": {
-              "uri": "/igonavigation/zoom_selection/obtenirZonageCollectifAnneeActive/2/${id}"
             }
           },
           {
@@ -482,22 +470,43 @@
             }
           },
           {
-            "title": "navigation.categories.rzc",
+            "title": "navigation.categories.zc2",
             "collection": {
-              "uri": "/igonavigation/zoom_selection/obtenirRegionsZonageCollectif",
-              "resultsProperty": "lstRegionZonageCollectif",
-              "idProperty": "idRegionZonageCollectif",
-              "title": "${noRegionZonageCollectif}-${nomRegionZonageCollectif}"
+              "uri": "/igonavigation/zoom_selection/obtenirZonagesCollectifsAnneeActive/2",
+              "resultsProperty": "lstZonageCollectif",
+              "idProperty": "idZonageCollectif",
+              "title": "${regionZonage}-${noZone}"
             },
             "feature": {
-              "uri": "/igonavigation/zoom_selection/obtenirRegionZonageCollectif/${id}"
+              "uri": "/igonavigation/zoom_selection/obtenirZonageCollectifAnneeActive/2/${id}"
             }
           }
         ]
       }
     },
     {
-      "name": "fadqImportExport"
+      "name": "importExport",
+      "options": {
+        "selectFirstProj": true,
+        "projectionsLimitations": {
+          "projFromConfig": false,
+          "nad83": true,
+          "wgs84": false,
+          "webMercator": false,
+          "utm": false,
+          "mtm": false,
+          "utmZone": {
+            "minZone": 17,
+            "maxZone": 21
+          },
+          "mtmZone": {
+            "minZone": 3,
+            "maxZone": 10
+          }
+        },
+        "importExportType": "layer",
+        "importExportShowBothType": false
+      }
     },
     {
       "name": "measurer"
@@ -508,36 +517,10 @@
     {
       "name": "addressEditor",
       "options": {
-        "layerOptions": [{
-          "id": "buildings",
-          "title": "Numéro d'immeubles",
-          "visible": true,
-          "sourceOptions": {
-            "type": "wms",
-            "optionsFromCapabilities": true,
-            "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_adresses_quebec",
-            "projection": "EPSG:32198",
-            "params": {
-              "version": "1.3.0",
-              "layers": "AQ_MSP_ADRESSE_GEO"
-            }
-          }
-        },
-        {
-          "id": "buildingsCorrected",
-          "title": "Numéro d'immeubles corrigés",
-          "visible": true,
-          "sourceOptions": {
-            "type": "wms",
-            "optionsFromCapabilities": true,
-            "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_adresses_fadq",
-            "projection": "EPSG:32198",
-            "params": {
-              "version": "1.3.0",
-              "layers": "LOCTP_MODI_ADR_AQ"
-            }
-          }
-        }]
+		"layerAliasBuildings": "buildings",
+		"layerAliasBuildingsCorrected": "buildingsCorrected",
+		"layerAliasCadastre": "cadastre_reno",
+		"layerAliasMun": "mun"
       }
     },
     {
@@ -549,5 +532,9 @@
     {
       "name": "help"
     }
-  ]
+  ],
+  "searchLayers": {
+    "Feature": ["buildings","buildingsCorrected"],
+    "Cadastre-reno": ["cadastre_reno"]
+  }
 }
