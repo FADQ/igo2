@@ -46,7 +46,8 @@
             "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/style/partial"
+                "src/style/partial",
+                "node_modules"
               ]
             },
             "allowedCommonJsDependencies": [
@@ -69,7 +70,26 @@
               "minimatch",
               "path",
               "pixelworks",
-              "brace-expansion"
+              "brace-expansion",
+              "rbush",
+              "@babel/runtime-corejs3",
+              "core-js-pure",
+              "raf",
+              "txml",
+              "lru-cache",
+              "lerc",
+              "pako/lib/inflate",
+              "through2",
+              "yallist",
+              "debug",
+              "striptags",
+              "core-js/modules/es.promise.js",
+              "core-js/modules/es.regexp.to-string.js",
+              "core-js/modules/es.array.reverse.js",
+              "core-js/modules/es.array.index-of.js",
+              "core-js/modules/es.array.reduce.js",
+              "core-js/modules/web.dom-collections.iterator.js",
+              "core-js/modules/es.array.iterator.js"
             ]
           },
           "configurations": {
@@ -107,7 +127,7 @@
             "production": {
               "browserTarget": "interne:build:production"
             }
-          }
+          },
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -199,7 +219,8 @@
             "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/style/partial"
+                "src/style/partial",
+                "node_modules"
               ]
             },
             "allowedCommonJsDependencies": [
@@ -329,7 +350,8 @@
             "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/style/partial"
+                "src/style/partial",
+                "node_modules"
               ]
             },
             "allowedCommonJsDependencies": [

@@ -288,6 +288,7 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, 
    */
   private createSliceControl() {
     this.sliceControl = new SliceControl({
+      // @ts-ignore
       layerStyle: createOlEditionStyle()
     });
   }
