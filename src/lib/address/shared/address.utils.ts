@@ -7,7 +7,7 @@ export function createAddressStyle(strokeColor: string): olstyle.Style {
     color: strokeColor
   });
 
-  const fill = new olstyle.Stroke({
+  const fill = new olstyle.Fill({
     color: [0, 161, 222, 0.15]
   });
 
