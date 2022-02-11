@@ -213,7 +213,8 @@ export class ClientSchemaElementCreateComponent
       return _elementType.value === elementTypeValue;
     });
 
-    const geometryType$ = geometryField.inputs.geometryType as BehaviorSubject<string>;
+    // TODO: See why we need to cast as unknown
+    const geometryType$ = geometryField.inputs.geometryType as unknown as BehaviorSubject<string>;
     geometryType$.next(elementType.geometryType);
 
     // Blur the active element to allow the use of the spacebar shortcut

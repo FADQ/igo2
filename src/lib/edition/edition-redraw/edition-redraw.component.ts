@@ -14,8 +14,9 @@ import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
 
 import OlFormatGeoJSON from 'ol/format/GeoJSON';
 import OlPolygon from 'ol/geom/Polygon';
+import OlSimpleGeometry from 'ol/geom/SimpleGeometry';
 import OlOverlay from 'ol/Overlay';
-import { OlFeature } from 'ol/Feature';
+import OlFeature from 'ol/Feature';
 import { Style as OlStyle } from 'ol/style';
 
 import {
@@ -97,7 +98,7 @@ export class EditionRedrawComponent implements
   /**
    * Selected Ol feature
    */
-  private selectedOlFeature: OlFeature;
+  private selectedOlFeature: OlFeature<OlSimpleGeometry>;
 
   /**
    * Selected Ol feature styl. Keep a ref to it to restore it on complete
@@ -405,9 +406,11 @@ export class EditionRedrawComponent implements
 
     let coordinate;
     if (olGeometry instanceof OlPolygon) {
-      coordinate = olGeometry.flatCoordinates.slice(-4, -2);
+      coordinate = olGeometry.getFlatCoordinates().slice(-4, -2);
+    } else if (olGeometry instanceof OlSimpleGeometry){
+      coordinate = olGeometry.getFlatCoordinates().slice(-2);
     } else {
-      coordinate = olGeometry.flatCoordinates.slice(-2);
+      throw new Error('Cannot add continue button for that geometry type.')
     }
 
     const olOverlay = new OlOverlay({
@@ -464,7 +467,7 @@ export class EditionRedrawComponent implements
   /**
    * Return the Ol feature of the selected feature
    */
-  private getSelectedOlFeature(feature: Feature): OlFeature | undefined {
+  private getSelectedOlFeature(feature: Feature): OlFeature<OlSimpleGeometry> | undefined {
     const featureId = this.store.getKey(feature);
     return this.store.layer.dataSource.ol.getFeatureById(featureId);
   }

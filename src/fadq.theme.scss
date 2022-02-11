@@ -1,3 +1,4 @@
+/*@use '~@igo2/core/style/index.theming.scss';
 $primary: mat-palette($mat-blue, 800);
 $accent: mat-palette($mat-blue, 200);
 $warn: mat-palette($mat-red);
@@ -12,6 +13,27 @@ $theme: mat-light-theme(
 $is-dark: map-get($theme, is-dark);
 $foreground: map-get($theme, foreground);
 $background: map-get($theme, background);
+*/
+
+.blue-theme {
+  $primary: mat.define-palette(mat.$blue-palette, 700, 400, 900);
+  $accent: mat.define-palette(mat.$blue-palette, 200);
+  $warn: mat.define-palette(mat.$red-palette);
+
+  $temp-theme: mat.define-light-theme((
+      color: (
+          primary: $primary,
+          accent: $accent,
+          warn: $warn
+      )
+  ));
+
+  $foreground: theme-foreground(mat.define-palette(mat.$grey-palette, 900));
+  $theme: map-merge($temp-theme, (foreground: $foreground));
+
+  @include igo-all-theming($theme);
+  @include mat.all-component-colors($theme);
+}
 
 table.igo-striped tbody tr:nth-child(odd) {
   background-color: mat-color($background, if($is-dark, app-bar, status-bar));

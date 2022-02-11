@@ -1,4 +1,6 @@
 import * as olstyle from 'ol/style';
+import OlPolygon from 'ol/geom/Polygon';
+import OlSimpleGeometry from 'ol/geom/SimpleGeometry';
 import OlFeature from 'ol/Feature';
 import OlGeoJSON from 'ol/format/GeoJSON';
 
@@ -27,7 +29,7 @@ export function computeSchemaElementArea(element: ClientSchemaElement): number {
     dataProjection: element.projection,
     featureProjection: measureProjection
   });
-  return measureOlGeometryArea(olGeometry, measureProjection);
+  return measureOlGeometryArea(olGeometry as OlPolygon, measureProjection);
 }
 
 export function getSchemaElementValidationMessage(
@@ -73,7 +75,7 @@ export function createSchemaElementLayer(client: Client): VectorLayer {
 
 export function createSchemaElementLayerStyle(
   types: ClientSchemaElementTypes
-): (olFeature: OlFeature, resolution: number) => olstyle.Style {
+): (olFeature: OlFeature<OlSimpleGeometry>, resolution: number) => olstyle.Style {
   const styles = {
     'Point': new olstyle.Style({
       text: createOlTextStyle()
@@ -94,7 +96,7 @@ export function createSchemaElementLayerStyle(
     }),
   };
 
-  return (function(olFeature: OlFeature, resolution: number) {
+  return (function(olFeature: OlFeature<OlSimpleGeometry>, resolution: number) {
     const geometryType = olFeature.getGeometry().getType();
     const elementType = olFeature.get('typeElement');
     const type = (types[geometryType] || []).find((_type: ClientSchemaElementType) => {
@@ -116,7 +118,7 @@ export function createSchemaElementLayerStyle(
   });
 }
 
-function getSchemaElementFeatureText(olFeature: OlFeature, resolution: number): string {
+function getSchemaElementFeatureText(olFeature: OlFeature<OlSimpleGeometry>, resolution: number): string {
   const maxResolution = 14;
   if (resolution > maxResolution) {
     return '';

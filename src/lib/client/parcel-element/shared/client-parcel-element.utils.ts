@@ -1,5 +1,6 @@
 import * as olstyle from 'ol/style';
 import OlFeature from 'ol/Feature';
+import OlPolygon from 'ol/geom/Polygon';
 import OlGeoJSON from 'ol/format/GeoJSON';
 import turfUnion from '@turf/union';
 import { Feature, Polygon } from '@turf/helpers';
@@ -44,7 +45,7 @@ export function computeParcelElementArea(parcelElement: ClientParcelElement): nu
     dataProjection: parcelElement.projection,
     featureProjection: measureProjection
   });
-  return measureOlGeometryArea(olGeometry, measureProjection);
+  return measureOlGeometryArea(olGeometry as OlPolygon, measureProjection);
 }
 
 export function createParcelElementLayer(client: Client): VectorLayer {
@@ -61,7 +62,7 @@ export function createParcelElementLayer(client: Client): VectorLayer {
 
 export function createParcelElementLayerStyle(
   color: [number, number, number]
-): (olFeature: OlFeature, resolution: number) => olstyle.Style {
+): (olFeature: OlFeature<OlPolygon>, resolution: number) => olstyle.Style {
   const olStyle = new olstyle.Style({
     fill: new olstyle.Fill({
       color: color.concat([0])
@@ -84,7 +85,7 @@ export function createParcelElementLayerStyle(
     text: createOlTextStyle()
   });
 
-  return (function(olFeature: OlFeature, resolution: number) {
+  return (function(olFeature: OlFeature<OlPolygon>, resolution: number) {
     let olText;
     if (olFeature.get('noOwner') === true) {
       olText = olNoOwnerStyle.getText();
@@ -108,7 +109,7 @@ export function createParcelElementLayerStyle(
   });
 }
 
-function getParcelElementFeatureText(olFeature: OlFeature, resolution: number): string {
+function getParcelElementFeatureText(olFeature: OlFeature<OlPolygon>, resolution: number): string {
   const maxResolution = 14;
   if (resolution > maxResolution) {
     return '';

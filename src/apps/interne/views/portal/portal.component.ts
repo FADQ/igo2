@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { BehaviorSubject, Subscription, of, combineLatest } from 'rxjs';
 
-import { MapBrowserPointerEvent as OlMapBrowserPointerEvent } from 'ol/MapBrowserEvent';
+import OlMapBrowserEvent from 'ol/MapBrowserEvent';
 
 import { Media, MediaService, MediaOrientation } from '@igo2/core';
 import {
@@ -194,7 +194,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.toggleSidenav();
   }
 
-  onMapQuery(event: { features: Feature[]; event: OlMapBrowserPointerEvent }) {
+  onMapQuery(event: { features: Feature[]; event: OlMapBrowserEvent<any> }) {
     const querySearchSource = this.getQuerySearchSource();
     if (querySearchSource === undefined) { return; }
 

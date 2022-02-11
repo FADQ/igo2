@@ -52,8 +52,8 @@ export function createMarkerLayer(colorMarker: string): VectorLayer {
     source,
     showInLayerList: false,
     style: createOverlayMarkerStyle({
-      color: colorMarker,
-      outlineColor: colorMarker
+      markerColor: colorMarker,
+      markerOutlineColor: colorMarker
     })
   });
 }

@@ -1,6 +1,7 @@
 import { Injectable} from '@angular/core';
 
 import OlGeoJSON from 'ol/format/GeoJSON';
+import OlLineString from 'ol/geom/LineString'
 
 import { EntityTableTemplate, EntityTableColumnRenderer } from '@igo2/common';
 import { formatMeasure, measureOlGeometryLength, squareMetersToAcres, squareMetersToHectares } from '@igo2/geo';
@@ -95,7 +96,7 @@ export class ClientSchemaElementTableService {
               dataProjection: schemaElement.projection,
               featureProjection: schemaElement.projection
             });
-            length = measureOlGeometryLength(olGeometry, schemaElement.projection);
+            length = measureOlGeometryLength(olGeometry as OlLineString, schemaElement.projection);
             return length ? formatMeasure(length, {decimal: 1, locale: 'fr'}) : '';
           }
         },

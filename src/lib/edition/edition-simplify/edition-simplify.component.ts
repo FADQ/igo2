@@ -67,11 +67,6 @@ export class EditionSimplifyComponent implements OnUpdateInputs, WidgetComponent
   private result$$: Subscription;
 
   /**
-   * Simplify layer
-   */
-  private simplifyLayer: VectorLayer;
-
-  /**
    * Map to simplify feature on
    */
   @Input() map: IgoMap;
@@ -221,7 +216,6 @@ export class EditionSimplifyComponent implements OnUpdateInputs, WidgetComponent
       this.result$$ = undefined;
     }
 
-    this.map.ol.removeLayer(this.simplifyLayer);
     this.simplifyStore.clear();
   }
 

@@ -13,6 +13,7 @@ import { Subscription, BehaviorSubject, Observable, of, zip } from 'rxjs';
 
 import OlFeature from 'ol/Feature';
 import OlGeometry from 'ol/geom/Geometry';
+import OlPolygon from 'ol/geom/Polygon';
 import OlGeoJSON from 'ol/format/GeoJSON';
 
 import {
@@ -244,14 +245,14 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, 
     let maxArea = 0;
     let baseFeature: Feature;
 
-    // Find the bigest area feature
+    // Find the bighest area feature
     features.forEach((feature: Feature) => {
       let tempArea = 0;
       const olGeometry = new OlGeoJSON().readGeometry(feature.geometry, {
         dataProjection: feature.projection,
         featureProjection: measureProjection
       });
-      tempArea = measureOlGeometryArea(olGeometry, measureProjection);
+      tempArea = measureOlGeometryArea(olGeometry as OlPolygon, measureProjection);
       if (tempArea > maxArea) {
         maxArea = tempArea;
         baseFeature = feature;
@@ -373,7 +374,7 @@ export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, 
 
     const olGeoJSON = new OlGeoJSON();
     const baseFeature = this.feature;
-    return olFeatures.map((olFeature: OlFeature): Feature => {
+    return olFeatures.map((olFeature: OlFeature<OlPolygon>): Feature => {
       const olGeometry = olFeature.getGeometry();
       const meta = Object.assign({}, baseFeature.meta, {
         id: uuid()

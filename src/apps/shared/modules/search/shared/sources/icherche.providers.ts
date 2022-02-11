@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injector } from '@angular/core';
 
-import { ConfigService, LanguageService } from '@igo2/core';
+import { ConfigService, LanguageService, StorageService } from '@igo2/core';
 import {
   SearchSource,
   IChercheSearchSource,
@@ -44,6 +44,7 @@ export function provideFadqIChercheSearchResultFormatter() {
 export function ichercheSearchSourceFactory(
   http: HttpClient,
   languageService: LanguageService,
+  storageService: StorageService,
   config: ConfigService,
   formatter: IChercheSearchResultFormatter,
   injector: Injector
@@ -51,6 +52,7 @@ export function ichercheSearchSourceFactory(
   return new IChercheSearchSource(
     http,
     languageService,
+    storageService,
     config.getConfig(`searchSources.${IChercheSearchSource.id}`),
     formatter,
     injector
@@ -65,7 +67,14 @@ export function provideIChercheSearchSource() {
     provide: SearchSource,
     useFactory: ichercheSearchSourceFactory,
     multi: true,
-    deps: [HttpClient, LanguageService, ConfigService, IChercheSearchResultFormatter, Injector]
+    deps: [
+      HttpClient,
+      LanguageService,
+      StorageService,
+      ConfigService,
+      IChercheSearchResultFormatter,
+      Injector
+    ]
   };
 }
 
@@ -76,12 +85,14 @@ export function provideIChercheSearchSource() {
 export function ichercheReverseSearchSourceFactory(
   http: HttpClient,
   languageService: LanguageService,
+  storageService: StorageService,
   config: ConfigService,
   injector: Injector
 ) {
   return new IChercheReverseSearchSource(
     http,
     languageService,
+    storageService,
     config.getConfig(`searchSources.${IChercheReverseSearchSource.id}`),
     injector
   );
@@ -95,6 +106,12 @@ export function provideIChercheReverseSearchSource() {
     provide: SearchSource,
     useFactory: ichercheReverseSearchSourceFactory,
     multi: true,
-    deps: [HttpClient, LanguageService, ConfigService, Injector]
+    deps: [
+      HttpClient,
+      LanguageService,
+      StorageService,
+      ConfigService,
+      Injector
+    ]
   };
 }
