@@ -5,18 +5,26 @@
     "view": {
       "projection": "EPSG:32198",
       "center": [-68, 48],
+      "extent": [
+        -886251.0296,
+        115000,
+        897177.3418,
+        2106143.8139
+      ],
+      "minZoom": 3,
       "zoom": 3
     }
   },
   "layers": [
     {
+      "id": "imagRece",
       "title": "Images les plus récentes",
       "baseLayer": true,
       "visible": true,
       "sourceOptions": {
         "type": "wmts",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/mern_imagerie_continue",
+        "url": "https://servicesmatriciels.mern.qc/erdas-iws/ogc/wmts/Imagerie_Continue",
         "layer": "Imagerie_GQ",
         "matrixSet": "Lambert:epsg:32198",
         "requestEncoding": "KVP",
@@ -26,48 +34,31 @@
       }
     },
     {
-      "title": "Carte de base du Canada - Transport",
-      "baseLayer": true,
+      "id": "credImagRece",
+      "title": "Crédit des images les plus récentes",
       "visible": false,
       "sourceOptions": {
         "type": "wms",
+        "ratio": 1,
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/canada_transport",
-        "style": "default",
-        "matrixSet": "LAMBERT",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/info_reper",
         "projection": "EPSG:32198",
         "params": {
           "version": "1.3.0",
-          "layers": "cbct",
-          "srs": "EPSG:32198"
+          "layers": "CopyrightMERN"
         }
       }
     },
     {
-      "title": "Gouvernement du Québec",
+      "id": "imagHist2003",
+      "title": "Images historiques 2003",
       "baseLayer": true,
       "visible": false,
       "sourceOptions": {
         "type": "wmts",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_geoservpro_wmts",
-        "layer": "carte_gouv_qc",
-        "matrixSet": "LAMBERT",
-        "requestEncoding": "KVP",
-        "params": {
-          "version": "1.0.0"
-        }
-      }
-    },
-    {
-      "title": "Images historiques 2012",
-      "baseLayer": true,
-      "visible": false,
-      "sourceOptions": {
-        "type": "wmts",
-        "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/mern_imagerie_aeroportee_continue_annee",
-        "layer": "Mosaiques-orthophotos_2012",
+        "url": "https://servicesmatriciels.mern.gouv.qc.ca/erdas-iws/ogc/wmts/imagerie_aeroportee_continue_annee",
+        "layer": "Mosaiques-orthophotos_2003",
         "matrixSet": "Lambert:epsg:32198",
         "requestEncoding": "KVP",
         "params": {
@@ -76,14 +67,15 @@
       }
     },
     {
-      "title": "Images historiques 2013",
+      "id": "imagHist2004",
+      "title": "Images historiques 2004",
       "baseLayer": true,
       "visible": false,
       "sourceOptions": {
         "type": "wmts",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/mern_imagerie_aeroportee_continue_annee",
-        "layer": "Mosaiques-orthophotos_2013",
+        "url": "https://servicesmatriciels.mern.qc/erdas-iws/ogc/wmts/imagerie_aeroportee_continue_annee",
+        "layer": "Mosaiques-orthophotos_2004",
         "matrixSet": "Lambert:epsg:32198",
         "requestEncoding": "KVP",
         "params": {
@@ -92,14 +84,15 @@
       }
     },
     {
-      "title": "Images historiques 2014",
+      "id": "imagHist2005",
+      "title": "Images historiques 2005",
       "baseLayer": true,
       "visible": false,
       "sourceOptions": {
         "type": "wmts",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/mern_imagerie_aeroportee_continue_annee",
-        "layer": "Mosaiques-orthophotos_2014",
+        "url": "https://servicesmatriciels.mern.qc/erdas-iws/ogc/wmts/imagerie_aeroportee_continue_annee",
+        "layer": "Mosaiques-orthophotos_2005",
         "matrixSet": "Lambert:epsg:32198",
         "requestEncoding": "KVP",
         "params": {
@@ -108,29 +101,14 @@
       }
     },
     {
-      "title": "Images historiques 2015",
-      "baseLayer": true,
-      "visible": false,
-      "sourceOptions": {
-        "type": "wmts",
-        "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/mern_imagerie_aeroportee_continue_annee",
-        "layer": "Mosaiques-orthophotos_2015",
-        "matrixSet": "Lambert:epsg:32198",
-        "requestEncoding": "KVP",
-        "params": {
-          "version": "1.0.0"
-        }
-      }
-    },
-    {
+      "id": "imagHist2016",
       "title": "Images historiques 2016",
       "baseLayer": true,
       "visible": false,
       "sourceOptions": {
         "type": "wmts",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/mern_imagerie_aeroportee_continue_annee",
+        "url": "https://servicesmatriciels.mern.qc/erdas-iws/ogc/wmts/imagerie_aeroportee_continue_annee",
         "layer": "Mosaiques-orthophotos_2016",
         "matrixSet": "Lambert:epsg:32198",
         "requestEncoding": "KVP",
@@ -140,13 +118,14 @@
       }
     },
     {
+      "id": "imagHist2017",
       "title": "Images historiques 2017",
       "baseLayer": true,
       "visible": false,
       "sourceOptions": {
         "type": "wmts",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/mern_imagerie_aeroportee_continue_annee",
+        "url": "https://servicesmatriciels.mern.qc/erdas-iws/ogc/wmts/imagerie_aeroportee_continue_annee",
         "layer": "Mosaiques-orthophotos_2017",
         "matrixSet": "Lambert:epsg:32198",
         "requestEncoding": "KVP",
@@ -156,13 +135,14 @@
       }
     },
     {
+      "id": "imagHist2018",
       "title": "Images historiques 2018",
       "baseLayer": true,
       "visible": false,
       "sourceOptions": {
         "type": "wmts",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/mern_imagerie_aeroportee_continue_annee",
+        "url": "https://servicesmatriciels.mern.qc/erdas-iws/ogc/wmts/imagerie_aeroportee_continue_annee",
         "layer": "Mosaiques-orthophotos_2018",
         "matrixSet": "Lambert:epsg:32198",
         "requestEncoding": "KVP",
@@ -172,11 +152,65 @@
       }
     },
     {
+      "id": "imagHist2019",
+      "title": "Images historiques 2019",
+      "baseLayer": true,
+      "visible": false,
+      "sourceOptions": {
+        "type": "wmts",
+        "optionsFromCapabilities": true,
+        "url": "https://servicesmatriciels.mern.qc/erdas-iws/ogc/wmts/imagerie_aeroportee_continue_annee",
+        "layer": "Mosaiques-orthophotos_2019",
+        "matrixSet": "Lambert:epsg:32198",
+        "requestEncoding": "KVP",
+        "params": {
+          "version": "1.0.0"
+        }
+      }
+    },
+    {
+      "id": "ecoFore30cm2018",
+      "title": "Inv. Écoforestier 30cm 2018",
+      "baseLayer": true,
+      "visible": false,
+      "extent": [-832840.373093, 556664.42895, -599492.844687, 660515.867105],
+      "sourceOptions": {
+        "type": "wmts",
+        "optionsFromCapabilities": true,
+        "url": "https://servicesmatriciels.mern.qc/erdas-iws/ogc/wmts/Imagerie_Aeroportee_Historique",
+        "layer": "Mosaiques-orthophotos_2018_2018_Inv_Ecofor_30cm_RVB",
+        "matrixSet": "Lambert:epsg:32198",
+        "requestEncoding": "KVP",
+        "params": {
+          "version": "1.0.0"
+        }
+      }
+    },
+    {
+      "id": "ecoFore20cm2018",
+      "title": "Inv. Écoforestier 20cm 2018",
+      "baseLayer": true,
+      "visible": false,
+      "extent": [-624082.588495, 119536.438216, -127904.502632, 445803.263533],
+      "sourceOptions": {
+        "type": "wmts",
+        "optionsFromCapabilities": true,
+        "url": "https://servicesmatriciels.mern.qc/erdas-iws/ogc/wmts/Imagerie_Aeroportee_Historique",
+        "layer": "Mosaiques-orthophotos_2018_2018_Inv_Ecofor_20cm_RVB",
+        "matrixSet": "Lambert:epsg:32198",
+        "requestEncoding": "KVP",
+        "params": {
+          "version": "1.0.0"
+        }
+      }
+    },
+    {
+      "id": "projPartDgigMern",
       "visible": false,
       "sourceOptions": {
         "type": "wms",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_index_lies",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/info_reper",
         "projection": "EPSG:32198",
         "params": {
           "version": "1.3.0",
@@ -185,11 +219,12 @@
       }
     },
     {
+      "id": "projDeceForeMern",
       "visible": false,
       "sourceOptions": {
         "type": "wms",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_index_lies",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/info_reper",
         "projection": "EPSG:32198",
         "params": {
           "version": "1.3.0",
@@ -198,11 +233,12 @@
       }
     },
     {
+      "id": "imagContMern",
       "visible": false,
       "sourceOptions": {
         "type": "wms",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_index_lies",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/info_reper",
         "projection": "EPSG:32198",
         "params": {
           "version": "1.3.0",
@@ -211,13 +247,14 @@
       }
     },
     {
-      "id": "buildings",
+      "id": "numeImmeAQ",
+      "alias": "buildings",
       "visible": false,
       "zIndex": 250,
       "sourceOptions": {
         "type": "wms",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_adresses_quebec",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/info_reper",
         "projection": "EPSG:32198",
         "params": {
           "version": "1.3.0",
@@ -226,51 +263,41 @@
       }
     },
     {
+      "id": "reseRoutAq",
       "visible": false,
       "sourceOptions": {
         "type": "wms",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_adresses_quebec",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/info_reper",
         "projection": "EPSG:32198",
         "params": {
           "version": "1.3.0",
-          "layers": "ADRESSES_QC_REGR_IGO2"
+          "layers": "RESE_ROUT"
         }
       }
     },
     {
+      "id": "numeImmeFadqCorr",
+      "alias": "buildingsCorrected",
       "visible": false,
       "sourceOptions": {
         "type": "wms",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_adresses_fadq",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/info_reper",
         "projection": "EPSG:32198",
         "params": {
           "version": "1.3.0",
-          "layers": "LOCTP_MODI_ADR_AQ_BDTAG"
+          "layers": "ADR_MODI"
         }
       }
     },
     {
-      "id": "buildingsCorrected",
+	    "id": "muniIasc",
       "visible": false,
       "sourceOptions": {
         "type": "wms",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_adresses_fadq",
-        "projection": "EPSG:32198",
-        "params": {
-          "version": "1.3.0",
-          "layers": "LOCTP_MODI_ADR_AQ"
-        }
-      }
-    },
-    {
-      "visible": false,
-      "sourceOptions": {
-        "type": "wms",
-        "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_ecocondition",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/info_reper",
         "projection": "EPSG:32198",
         "params": {
           "version": "1.3.0",
@@ -279,11 +306,13 @@
       }
     },
     {
-      "visible": false,
+      "id": "muni",
+      "alias": "mun",
+	    "visible": false,
       "sourceOptions": {
         "type": "wms",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_limite_admin",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/info_reper",
         "projection": "EPSG:32198",
         "params": {
           "version": "1.3.0",
@@ -292,12 +321,13 @@
       }
     },
     {
+      "id": "cadaOri",
       "alias": "cadastre",
       "visible": false,
       "sourceOptions": {
         "type": "wms",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_info_fonciere",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/info_them",
         "projection": "EPSG:32198",
         "params": {
           "version": "1.3.0",
@@ -306,11 +336,13 @@
       }
     },
     {
-      "visible": false,
+      "id": "cadaReno",
+      "alias": "cadastre_reno",
+	    "visible": false,
       "sourceOptions": {
         "type": "wms",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_info_fonciere",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/info_them",
         "projection": "EPSG:32198",
         "params": {
           "version": "1.3.0",
@@ -319,30 +351,60 @@
       }
     },
     {
+      "id": "bdtqHydroLign",
       "visible": false,
       "sourceOptions": {
         "type": "wms",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_parcelles_agri",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/info_reper",
         "projection": "EPSG:32198",
         "params": {
           "version": "1.3.0",
-          "layers": "LOCTS_PARC_AGRI_AN_PREC"
+          "layers": "HYDRO_LINE"
+        }
+      }
+    },
+    {
+      "id": "bdtqHydroSurf",
+      "visible": false,
+      "sourceOptions": {
+        "type": "wms",
+        "optionsFromCapabilities": true,
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/info_reper",
+        "projection": "EPSG:32198",
+        "params": {
+          "version": "1.3.0",
+          "layers": "HYDRO_SURF"
+        }
+      }
+    },
+    {
+      "id": "prcAgriAnPrec",
+      "visible": false,
+      "sourceOptions": {
+        "type": "wms",
+        "optionsFromCapabilities": true,
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq",
+        "projection": "EPSG:32198",
+        "params": {
+          "version": "1.3.0",
+          "layers": "PARC_AGRI_AN_01"
         },
         "queryFormat": "html",
         "queryHtmlTarget": "innerhtml"
       }
     },
     {
+      "id": "prcAgriAnCour",
       "visible": false,
       "sourceOptions": {
         "type": "wms",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_parcelles_agri",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq",
         "projection": "EPSG:32198",
         "params": {
           "version": "1.3.0",
-          "layers": "LOCTS_PARC_AGRI_AN_COUR"
+          "layers": "PARC_AGRI_AN_00"
         },
         "queryFormat": "html",
         "queryHtmlTarget": "innerhtml"
@@ -510,9 +572,6 @@
     },
     {
       "name": "measurer"
-    },
-    {
-      "name": "print"
     },
     {
       "name": "addressEditor",
