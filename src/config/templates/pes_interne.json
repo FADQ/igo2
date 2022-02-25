@@ -120,6 +120,9 @@
           "years": "/igolocalisation/recherche_client/obtenirAnneesTraitementParcelleAgricole"
         }
       }
+    },
+    "language": {
+      "prefix": ["./locale/"]
     }
   }
   

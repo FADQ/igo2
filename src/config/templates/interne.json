@@ -130,5 +130,8 @@
         "link": "http://igodev.fadq.qc/app/interne/personnes/coordonnees/presenter/${clientNum}"
       }
     }
+  },
+  "language": {
+    "prefix": ["./locale/"]
   }
 }
