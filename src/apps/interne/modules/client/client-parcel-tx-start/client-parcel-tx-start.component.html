@@ -3,7 +3,7 @@
   [message]="message$ | async">
 
   <ng-container buttons>
-    <ng-container *ngIf="!(error$ | async); else error">
+    <ng-container *ngIf="(error$ | async) === false; else error">
       <button
         mat-button
         type="button"

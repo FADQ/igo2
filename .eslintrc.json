@@ -44,22 +44,8 @@
         "no-multiple-empty-lines": "error",
         "eol-last": ["error", "always"],
         "@angular-eslint/no-output-native": "off",
-        "@angular-eslint/component-selector": [
-          "error",
-          {
-            "prefix": "app",
-            "style": "kebab-case",
-            "type": "element"
-          }
-        ],
-        "@angular-eslint/directive-selector": [
-          "error",
-          {
-            "prefix": "app",
-            "style": "camelCase",
-            "type": "attribute"
-          }
-        ]
+        "@angular-eslint/component-selector": "off",
+        "@angular-eslint/directive-selector": "off"
       }
     },
     {

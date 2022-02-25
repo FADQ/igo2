@@ -7,7 +7,7 @@
         igoCollapse
         svgIcon="chevron-up"
         [target]="content"
-        [collapsed]="!(showContent$ | async)"
+        [collapsed]="(showContent$ | async) === false"
         (toggle)="toggleContent($event)">
       </mat-icon>
     </div>
@@ -22,7 +22,7 @@
           [color]="controller.parcelYear.current ? 'default' : 'warn'">
         </mat-icon>
         <mat-icon
-          *ngIf="!(controller.parcelElementTransaction.empty$ | async)"
+          *ngIf="(controller.parcelElementTransaction.empty$ | async) === false"
           class="fadq-client-header-badge"
           svgIcon="floppy">
         </mat-icon>

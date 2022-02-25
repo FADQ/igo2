@@ -15,6 +15,7 @@
     "pes_interne.build.prod": "ng build pes_interne --prod",
     "build": "ng build",
     "lint": "ng lint",
+    "lint.fix": "ng lint --fix",
     "e2e": "ng e2e --port 4300",
     "postinstall": "ngcc --tsconfig \"./src/tsconfig.interne.json\"",
     "build.prod": "ng build interne --prod",
