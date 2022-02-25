@@ -20,7 +20,7 @@
       mat-raised-button
       color="primary"
       type="button"
-      [disabled]="!(recoverEnabled$ | async)"
+      [disabled]="(recoverEnabled$ | async) === false"
       (click)="onRecover()">
       {{ 'recover' | translate }}
     </button>  
