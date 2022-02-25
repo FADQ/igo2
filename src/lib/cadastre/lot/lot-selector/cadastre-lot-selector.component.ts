@@ -97,7 +97,7 @@ export class LotSelectorComponent implements OnInit, OnDestroy {
    * @param lot A unique lot
    */
   getNomLot(lot: LotUnique): string {
-    return  lot.idLot;
+    return lot.idLot;
   }
 
   /**

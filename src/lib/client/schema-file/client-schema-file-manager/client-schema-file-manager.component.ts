@@ -28,7 +28,7 @@ import { ClientSchemaFileService } from '../shared/client-schema-file.service';
 })
 export class ClientSchemaFileManagerComponent implements OnInit, OnDestroy, WidgetComponent {
 
-  static maxSize = 1024 * 1024 * 10;  // 10mo
+  static maxSize = 1024 * 1024 * 10; // 10mo
 
   /**
    * Message

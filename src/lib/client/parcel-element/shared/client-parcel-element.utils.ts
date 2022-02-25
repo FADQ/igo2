@@ -214,7 +214,7 @@ export function unionParcelElements(parcelElements: ClientParcelElement[]): [Cli
   let union = parcelElements[0];
   for (let i = 1; i < parcelElements.length; i++) {
     union = turfUnion(
-      union  as Feature<Polygon>,
+      union as Feature<Polygon>,
       parcelElements[i] as Feature<Polygon>
     );
   }

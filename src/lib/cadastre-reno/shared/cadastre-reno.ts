@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { Geometry as GeoJSONGeometry } from 'geojson'
+import { Geometry as GeoJSONGeometry } from 'geojson';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -78,7 +78,7 @@ export class CadastreRenoSearchSource extends SearchSource implements TextSearch
     const textResults = response.split('<br />');
     return textResults
       .map((textResult: string) => this.dataToResult(textResult))
-      .filter((result:  SearchResult<CadastreRenoFeature>) => result !== undefined);
+      .filter((result: SearchResult<CadastreRenoFeature>) => result !== undefined);
   }
 
   private dataToResult(cadastre: string): SearchResult<CadastreRenoFeature> {
@@ -86,7 +86,7 @@ export class CadastreRenoSearchSource extends SearchSource implements TextSearch
     if (propertiesCadastre.length < 7) {
       return undefined;
     }
-    const geometry = this.convertWKTtoGeojson(propertiesCadastre[7])
+    const geometry = this.convertWKTtoGeojson(propertiesCadastre[7]);
     return {
       source: this,
       data: {

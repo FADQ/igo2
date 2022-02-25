@@ -57,7 +57,7 @@ export class ClientParcelElementSaveComponent implements OnUpdateInputs, WidgetC
    */
   @Output() cancel = new EventEmitter<void>();
 
-  get commitHandler(): (transaction: EntityTransaction) => Observable<Message | undefined>  {
+  get commitHandler(): (transaction: EntityTransaction) => Observable<Message | undefined> {
     return (transaction: EntityTransaction): Observable<Message | undefined> => this.commitTransaction(transaction);
   }
 

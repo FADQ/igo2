@@ -448,6 +448,6 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
       dataProjection: 'EPSG:4326',
       featureProjection: this.map.projection
     });
-    this.selectedAddressFeature.geometry = geometry as FeatureGeometry
+    this.selectedAddressFeature.geometry = geometry as FeatureGeometry;
   }
 }

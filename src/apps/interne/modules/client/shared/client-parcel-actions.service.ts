@@ -9,7 +9,7 @@ import {
   EntityTableColumn,
   Widget
 } from '@igo2/common';
-import { entitiesToRowData,  exportToCSV } from '@igo2/geo';
+import { entitiesToRowData, exportToCSV } from '@igo2/geo';
 import { ContextState } from '@igo2/integration';
 
 import {

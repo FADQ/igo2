@@ -21,7 +21,7 @@ export class ClientService {
     return client$
       .pipe(
         map((results: [ClientInfo]) => {
-         return  this.resultsToClient(results);
+         return this.resultsToClient(results);
         })
       );
   }

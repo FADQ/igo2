@@ -1,7 +1,7 @@
 import { Injectable} from '@angular/core';
 
 import OlGeoJSON from 'ol/format/GeoJSON';
-import OlLineString from 'ol/geom/LineString'
+import OlLineString from 'ol/geom/LineString';
 
 import { EntityTableTemplate, EntityTableColumnRenderer } from '@igo2/common';
 import { formatMeasure, measureOlGeometryLength, squareMetersToAcres, squareMetersToHectares } from '@igo2/geo';

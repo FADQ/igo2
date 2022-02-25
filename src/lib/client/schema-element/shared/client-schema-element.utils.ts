@@ -126,7 +126,7 @@ function getSchemaElementFeatureText(olFeature: OlFeature<OlSimpleGeometry>, res
   return olFeature.get('etiquette');
 }
 
-function createSchemaPointShape(type: ClientSchemaElementType): olstyle.Circle | olstyle.RegularShape  {
+function createSchemaPointShape(type: ClientSchemaElementType): olstyle.Circle | olstyle.RegularShape {
   const typeCode = type ? type.value : undefined;
   const color = type ? type.color : getSchemaElementDefaultColor();
   const factories = {
@@ -138,7 +138,7 @@ function createSchemaPointShape(type: ClientSchemaElementType): olstyle.Circle |
   return factory(color);
 }
 
-function updateSchemaPointText(type: ClientSchemaElementType, olText: olstyle.Text)  {
+function updateSchemaPointText(type: ClientSchemaElementType, olText: olstyle.Text) {
   const typeCode = type ? type.value : undefined;
   if (['CAG', 'CRI', 'SIL'].indexOf(typeCode) < 0) {
     olText.setTextAlign('left');
@@ -147,7 +147,7 @@ function updateSchemaPointText(type: ClientSchemaElementType, olText: olstyle.Te
   }
 }
 
-function createDefaultPointShape(color: [number, number, number]): olstyle.Circle  {
+function createDefaultPointShape(color: [number, number, number]): olstyle.Circle {
   return new olstyle.Circle({
     fill: new olstyle.Fill({
       color: color.concat([1])

@@ -20,7 +20,7 @@ import {
   OnUpdateInputs,
   getEntityRevision
 } from '@igo2/common';
-import { FeatureStore, IgoMap, formatScale } from '@igo2/geo';
+import { FeatureStore, IgoMap } from '@igo2/geo';
 
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
 import { getMapExtentPolygon } from '../../../map/shared/map.utils';

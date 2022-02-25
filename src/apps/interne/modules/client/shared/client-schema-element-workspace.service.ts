@@ -34,7 +34,7 @@ export class ClientSchemaElementWorkspaceService {
     private clientSchemaElementTableService: ClientSchemaElementTableService
   ) {}
 
-  createSchemaElementWorkspace(client: Client,  map: IgoMap): ClientSchemaElementWorkspace {
+  createSchemaElementWorkspace(client: Client, map: IgoMap): ClientSchemaElementWorkspace {
     // TODO: i18n
     return new ClientSchemaElementWorkspace({
       id: `fadq.${client.info.numero}-4-schema-element-workspace`,

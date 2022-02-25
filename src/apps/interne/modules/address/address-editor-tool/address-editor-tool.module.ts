@@ -1,6 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-import { ToolService } from '@igo2/common'
+import { ToolService } from '@igo2/common';
 
 import { FadqLibAddressModule } from 'src/lib/address/address.module';
 import { AddressEditorToolComponent } from './address-editor-tool.component';

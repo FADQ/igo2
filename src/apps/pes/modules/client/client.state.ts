@@ -3,7 +3,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { skip } from 'rxjs/operators';
 
-import { EntityRecord, EntityStore,  Widget } from '@igo2/common';
+import { EntityRecord, EntityStore, Widget } from '@igo2/common';
 
 import {
   Client,

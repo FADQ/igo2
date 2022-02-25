@@ -15,7 +15,7 @@ export function getOperationTitle(feature: Feature, languageService: LanguageSer
 }
 
 export function createOlEditionStyle(): olstyle.Style[] {
-  const color = [0, 218, 250];  // Teal;
+  const color = [0, 218, 250]; // Teal;
   return [
     new olstyle.Style({
       fill: new olstyle.Fill({

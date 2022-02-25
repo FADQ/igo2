@@ -234,7 +234,7 @@ export class EditionRedrawComponent implements
     }
   }
 
-  private featureToResult(data: Feature):  Observable<EditionResult> {
+  private featureToResult(data: Feature): Observable<EditionResult> {
     if (typeof this.processData === 'function') {
       const resultOrObservable = this.processData(data);
       if (resultOrObservable instanceof Observable) {
@@ -410,7 +410,7 @@ export class EditionRedrawComponent implements
     } else if (olGeometry instanceof OlSimpleGeometry){
       coordinate = olGeometry.getFlatCoordinates().slice(-2);
     } else {
-      throw new Error('Cannot add continue button for that geometry type.')
+      throw new Error('Cannot add continue button for that geometry type.');
     }
 
     const olOverlay = new OlOverlay({

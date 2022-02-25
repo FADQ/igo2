@@ -38,8 +38,8 @@ function appInitializerFactory(
       const promises = [
         languageService.translate.getTranslation(languageService.getLanguage())
       ];
-      Promise.all(promises).then(() => resolve())
-    })
+      Promise.all(promises).then(() => resolve());
+    });
   });
 }
 

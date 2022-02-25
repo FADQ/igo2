@@ -1,4 +1,4 @@
-export interface ClientSchemaFileApiConfig  {
+export interface ClientSchemaFileApiConfig {
   list: string;
   download: string;
   create: string;

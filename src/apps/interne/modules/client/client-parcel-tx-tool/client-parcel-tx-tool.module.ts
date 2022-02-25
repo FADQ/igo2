@@ -42,4 +42,4 @@ ToolService.register({
   title: 'tools.clientParcelTx',
   icon: 'account-multiple-plus',
   component: ClientParcelTxToolComponent
-})
+});

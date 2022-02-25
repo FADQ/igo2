@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Geometry as GeoJSONGeometry } from 'geojson'
+import { Geometry as GeoJSONGeometry } from 'geojson';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -67,7 +67,6 @@ export class AddressService {
       properties
     };
   }
-
 
 
   /**

@@ -104,7 +104,7 @@ export class MunSelectorComponent implements OnInit, OnDestroy {
    */
   getNomMun(mun: Mun): string {
     if (mun === null || mun === undefined) { return; }
-    return  mun.nomMunicipalite;
+    return mun.nomMunicipalite;
   }
 
   /**

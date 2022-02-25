@@ -11,7 +11,6 @@ import {
 import { FormControl } from '@angular/forms';
 
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { map, startWith} from 'rxjs/operators';
 
 import {
   EntityStore,
@@ -104,7 +103,7 @@ export class CadastreSelectorComponent implements OnInit, OnDestroy {
    * @param mun
    */
   getNomCadastre(cadastre: Cadastre): string {
-    return  cadastre.nomCadastre + ' (' + cadastre.codeCadastre + ')';
+    return cadastre.nomCadastre + ' (' + cadastre.codeCadastre + ')';
   }
 
   /**

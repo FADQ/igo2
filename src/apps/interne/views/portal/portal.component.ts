@@ -475,7 +475,7 @@ export class PortalComponent implements OnInit, OnDestroy {
    * @param result The SearchResult
    */
   private clearOtherSearchLayers(result: SearchResult) {
-    const  searchType = (result.source.constructor as typeof SearchSource).type;
+    const searchType = (result.source.constructor as typeof SearchSource).type;
 
     this.searchAddedLayers.forEach((layers: Layer[], key: string) => {
       if (key !== searchType) {

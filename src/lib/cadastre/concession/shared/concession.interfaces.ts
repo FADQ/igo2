@@ -43,7 +43,7 @@ export interface ConcessionUnique {
   listeIdConcession: string[];
 }
 
-export type ConcessionList =  ConcessionResponseItem[];
+export type ConcessionList = ConcessionResponseItem[];
 
 export type ConcessionUniqueList = ConcessionUnique[];
 

@@ -27,11 +27,11 @@ export function getParcelRelation(listItem: ClientParcelListResponseItem, noClie
   const estExp = listItem.properties.indEstExploitant || undefined;
 
   // Relation is a number used to order the parcels on the map and to define their color
-  let relation = 1;  // Orange
+  let relation = 1; // Orange
   if (estDet === 'N' && estExp === 'O') {
-    relation = 3;  // Teal
+    relation = 3; // Teal
   } else if (estDet === 'O' && estExp === 'N') {
-    relation = 2;  // Green
+    relation = 2; // Green
   }
 
   return relation;

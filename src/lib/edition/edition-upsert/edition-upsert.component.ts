@@ -47,7 +47,7 @@ import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition
   styleUrls: ['./edition-upsert.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInputs, WidgetComponent {
+export class EditionUpsertComponent implements OnInit, OnDestroy, OnUpdateInputs, WidgetComponent {
 
   /**
    * Message
@@ -198,7 +198,7 @@ export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInput
     this.unobserveGeometry();
   }
 
-  private featureToResult(data: Feature):  Observable<EditionResult> {
+  private featureToResult(data: Feature): Observable<EditionResult> {
     if (typeof this.processData === 'function') {
       const resultOrObservable = this.processData(data);
       if (resultOrObservable instanceof Observable) {
@@ -356,7 +356,7 @@ export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInput
     } else if (olGeometry instanceof OlSimpleGeometry){
       coordinate = olGeometry.getFlatCoordinates().slice(-2);
     } else {
-      throw new Error('Cannot add continue button for that geometry type.')
+      throw new Error('Cannot add continue button for that geometry type.');
     }
 
     const olOverlay = new OlOverlay({

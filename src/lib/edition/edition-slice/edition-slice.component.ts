@@ -48,7 +48,7 @@ import {
   styleUrls: ['./edition-slice.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditionSliceComponent implements  OnUpdateInputs, WidgetComponent, OnInit, OnDestroy {
+export class EditionSliceComponent implements OnUpdateInputs, WidgetComponent, OnInit, OnDestroy {
 
   /**
    * Message

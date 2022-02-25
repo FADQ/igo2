@@ -97,7 +97,7 @@ export class ClientSchemaElementService {
     return this.getSchemaElementTypes(schemaType)
       .pipe(
         map((types: ClientSchemaElementTypes): string => {
-          const allTypes =  Object.values(types)
+          const allTypes = Object.values(types)
             .reduce((acc: ClientSchemaElementType[], _types: ClientSchemaElementTypes) => {
               return acc.concat(...Object.values(_types));
             }, []);
@@ -262,7 +262,7 @@ export class ClientSchemaElementService {
    * @param schemaType Schema type
    * @param elementTypes Element types
    */
-  private cacheSchemaElementTypes(schemaType: string, schemaElementTypes:  ClientSchemaElementTypes) {
+  private cacheSchemaElementTypes(schemaType: string, schemaElementTypes: ClientSchemaElementTypes) {
     this.schemaElementTypes[schemaType] = schemaElementTypes;
   }
 

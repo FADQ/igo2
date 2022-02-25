@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Geometry as GeoJSONGeometry } from 'geojson'
+import { Geometry as GeoJSONGeometry } from 'geojson';
 import { Observable, of } from 'rxjs';
 import { concatMap, map, catchError } from 'rxjs/operators';
 

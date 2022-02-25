@@ -6,7 +6,7 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 
-import {  EntityStore } from '@igo2/common';
+import { EntityStore } from '@igo2/common';
 
 import { ClientSchema } from '../shared/client-schema.interfaces';
 import { getClientSchemaTitle } from '../shared/client-schema.utils';

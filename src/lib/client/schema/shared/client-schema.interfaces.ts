@@ -1,6 +1,6 @@
 import { DomainChoicesResponseItem } from 'src/lib/core/domain';
 
-export interface ClientSchemaApiConfig  {
+export interface ClientSchemaApiConfig {
   list: string;
   create: string;
   update: string;

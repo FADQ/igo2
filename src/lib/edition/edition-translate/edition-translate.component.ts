@@ -8,7 +8,7 @@ import {
   OnDestroy
 } from '@angular/core';
 
-import { Geometry as GeoJSONGeometry } from 'geojson'
+import { Geometry as GeoJSONGeometry } from 'geojson';
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
 
 import OlGeometry from 'ol/geom/Geometry';
@@ -39,7 +39,7 @@ import {
   styleUrls: ['./edition-translate.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditionTranslateComponent implements  WidgetComponent, OnInit, OnDestroy {
+export class EditionTranslateComponent implements WidgetComponent, OnInit, OnDestroy {
 
   /**
    * Message
