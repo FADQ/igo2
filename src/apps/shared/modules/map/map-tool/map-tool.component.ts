@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { ConfigService } from '@igo2/core';
-import { Layer, ImageLayer,  WMSDataSource, IgoMap } from '@igo2/geo';
+import { Layer, ImageLayer, WMSDataSource, IgoMap } from '@igo2/geo';
 import { MapState } from '@igo2/integration';
 
 import { LayerInfoDialogComponent } from './layer-info-dialog.component';

@@ -5,7 +5,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { provideConfigOptions } from '@igo2/core';
 import { IgoGeometryModule, IgoQueryModule } from '@igo2/geo';
-import { IgoIntegrationModule } from '@igo2/integration';
 
 import { environment } from 'src/environments/pes/environment';
 
@@ -31,7 +30,6 @@ import { ClientLoader } from './modules/client/shared/client.loader';
     RouterModule.forRoot([]),
     IgoGeometryModule,
     IgoQueryModule.forRoot(),
-    IgoIntegrationModule,
     FadqCoreModule,
     FadqContextModule,
     FadqHelpModule,
