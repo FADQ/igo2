@@ -14,6 +14,7 @@ import {
   ConfigOptions,
   ConfigService,
   LanguageService,
+  MessageService,
 } from '@igo2/core';
 
 import {
@@ -62,6 +63,7 @@ function appInitializerFactory(
   configLoader: Promise<unknown>,
   toolLoader: Promise<void>,
   languageService: LanguageService,
+  messageService: MessageService,
 ) {
   return () => new Promise<any>((resolve: any) => {
     configLoader.then(() => {
@@ -88,7 +90,7 @@ const providers: Provider[] = [
   {
     provide: APP_INITIALIZER,
     useFactory: appInitializerFactory,
-    deps: [CONFIG_LOADER, TOOL_LOADER, LanguageService],
+    deps: [CONFIG_LOADER, TOOL_LOADER, LanguageService, MessageService],
     multi: true
   },
   {
@@ -196,9 +198,9 @@ const providers: Provider[] = [
 
 @NgModule({
   imports: [
-    IgoCoreModule,
+    IgoCoreModule.forRoot(),
     FadqLibApiModule,
-    FadqLibDomainModule
+    FadqLibDomainModule,
   ],
   declarations: [],
   exports: [
