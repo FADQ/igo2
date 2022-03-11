@@ -105,7 +105,6 @@ function getParcelFeatureText(olFeature: OlFeature<OlPolygon>, resolution: numbe
 }
 
 function getParcelFeatureColor(olFeature: OlFeature<OlPolygon>) {
-  console.log(olFeature.get('relation'));
   return ClientRelationColors['' + olFeature.get('relation')];
 }
 
