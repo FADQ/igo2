@@ -1,12 +1,20 @@
 import {
   APP_INITIALIZER,
+  Component,
   InjectionToken,
   NgModule,
   ModuleWithProviders,
   Provider
 } from '@angular/core';
 
-import { Tool, ToolService } from '@igo2/common';
+import {
+  FormFieldService,
+  FormFieldSelectComponent,
+  FormFieldTextComponent,
+  FormFieldTextareaComponent,
+  Tool,
+  ToolService
+} from '@igo2/common';
 import {
   CONFIG_OPTIONS,
   IgoCoreModule,
@@ -15,6 +23,7 @@ import {
   ConfigService,
   LanguageService,
 } from '@igo2/core';
+import { GeometryFormFieldComponent } from '@igo2/geo'
 
 import {
   CatalogBrowserToolComponent,
@@ -33,8 +42,10 @@ import { FadqLibApiModule } from './api/api.module';
 import { FadqLibDomainModule } from './domain/domain.module';
 
 export let CONFIG_LOADER = new InjectionToken<Promise<ConfigService>>('Config Loader');
-export let TOOL_LOADER = new InjectionToken<Promise<Tool>>('Tool Config');
+export let FORM_FIELD_CONFIG = new InjectionToken<Promise<[string, Component]>>('Form Field Config');
+export let FORM_FIELD_LOADER = new InjectionToken<Promise<void>>('Form Field Loader');
 export let TOOL_CONFIG = new InjectionToken<Promise<Tool>>('Tool Loader');
+export let TOOL_LOADER = new InjectionToken<Promise<void>>('Tool Config');
 
 function configLoader(
   configService: ConfigService,
@@ -44,6 +55,15 @@ function configLoader(
   if (promiseOrTrue instanceof Promise) {
     return promiseOrTrue;
   }
+  return Promise.resolve();
+}
+
+function formFieldLoader(
+  formFields:  [[string, Component]],
+): Promise<void> {
+  formFields.forEach((formField) => {
+    FormFieldService.register(formField[0], formField[1]);
+  });
   return Promise.resolve();
 }
 
@@ -60,6 +80,7 @@ function toolLoader(
 
 function appInitializerFactory(
   configLoader: Promise<unknown>,
+  formFieldLoader: Promise<void>,
   toolLoader: Promise<void>,
   languageService: LanguageService,
 ) {
@@ -76,20 +97,45 @@ function appInitializerFactory(
 const providers: Provider[] = [
   RouteService,
   {
+    provide: APP_INITIALIZER,
+    useFactory: appInitializerFactory,
+    deps: [CONFIG_LOADER, FORM_FIELD_LOADER, TOOL_LOADER, LanguageService],
+    multi: true
+  },
+  {
     provide: CONFIG_LOADER,
     useFactory: configLoader,
     deps: [ConfigService, CONFIG_OPTIONS],
   },
   {
+    provide: FORM_FIELD_LOADER,
+    useFactory: formFieldLoader,
+    deps: [FORM_FIELD_CONFIG],
+  },
+  {
+    provide: FORM_FIELD_CONFIG,
+    useValue: ['select', FormFieldSelectComponent],
+    multi: true
+  },
+  {
+    provide: FORM_FIELD_CONFIG,
+    useValue: ['text', FormFieldTextComponent],
+    multi: true
+  },
+  {
+    provide: FORM_FIELD_CONFIG,
+    useValue: ['textarea', FormFieldTextareaComponent],
+    multi: true
+  },
+  {
+    provide: FORM_FIELD_CONFIG,
+    useValue: ['geometry', GeometryFormFieldComponent],
+    multi: true
+  },
+  {
     provide: TOOL_LOADER,
     useFactory: toolLoader,
     deps: [TOOL_CONFIG],
-  },
-  {
-    provide: APP_INITIALIZER,
-    useFactory: appInitializerFactory,
-    deps: [CONFIG_LOADER, TOOL_LOADER, LanguageService],
-    multi: true
   },
   {
     provide: TOOL_CONFIG,
