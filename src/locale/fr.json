@@ -330,12 +330,16 @@
 
   "icherche": {
     "adresse": "Adresse",
+    "code": "Code",
     "code_postal": "Code Postal",
+    "GoogleMaps": "Google Maps",
+    "GoogleStreetView": "Google Street View",
     "municipalite": "Municipalité",
     "nom": "Nom",
     "numero_civique": "Numéro civique",
     "numero_civique_suffixe": "Numéro civique (suffix)",
     "producteur": "Fournisseur",
+    "Route": "Route",
     "rue": "Rue",
     "type": "Type"
   },

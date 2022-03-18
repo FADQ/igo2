@@ -330,6 +330,8 @@
   "icherche": {
     "adresse": "Address",
     "code_postal": "Zip Code",
+    "GoogleMaps": "Google Maps",
+    "GoogleStreetView": "Google Street View",
     "municipalite": "Municipality",
     "nom": "Name",
     "numero_civique": "Address",
