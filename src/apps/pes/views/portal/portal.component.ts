@@ -250,8 +250,6 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   private onSearchMap(results: SearchResult<Feature>[]) {
     if (results.length === 0) { return; }
-    this.toolState.toolbox.activateTool('searchResults');
-    this.openSidenav();
     this.searchStore.state.update(results[0], {selected: true, focused: true}, true);
   }
 
@@ -261,11 +259,14 @@ export class PortalComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.toolState.toolbox.activateTool('searchResults');
     if (result.meta.dataType === FEATURE) {
+      this.searchResult = result;
       if (this.mediaService.media$.value === Media.Mobile) {
         this.closeSidenav();
+      } else {
+        this.openSidenav();
       }
-      this.searchResult = result;
     } else {
       this.searchResult = undefined;
     }
