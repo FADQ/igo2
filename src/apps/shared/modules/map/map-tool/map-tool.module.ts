@@ -9,6 +9,8 @@ import { IgoLanguageModule } from '@igo2/core';
 import { IgoLayerModule } from '@igo2/geo';
 import { IgoAppCatalogModule } from '@igo2/integration';
 
+import { FadqContextModule } from 'src/apps/shared/modules/context/context.module'
+
 import { TOOL_CONFIG } from 'src/lib/core/core.module';
 
 import { MapToolComponent } from './map-tool.component';
@@ -26,7 +28,8 @@ import { LayerInfoDialogComponent } from './layer-info-dialog.component';
     MatTooltipModule,
     IgoLanguageModule,
     IgoLayerModule,
-    IgoAppCatalogModule
+    IgoAppCatalogModule,
+    FadqContextModule
   ],
   declarations: [
     MapToolComponent,

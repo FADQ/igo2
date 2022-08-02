@@ -23,7 +23,6 @@ export class HelpToolComponent implements OnInit {
 
   ngOnInit() {
     const guides = this.configService.getConfig('help.guides') || [];
-    console.log(guides);
     this.guides$.next(guides);
   }
 }

@@ -8,6 +8,7 @@ import { LanguageOptions } from '@igo2/core';
 import { CatalogServiceOptions, Projection, SearchSourceOptions } from '@igo2/geo';
 
 import { ApiConfig } from 'src/lib/core/api/api.interfaces';
+import { ContextApiConfig } from 'src/lib/context/shared/context.interfaces';
 import { ClientApiConfig } from 'src/apps/pes/modules/client/shared/client.interfaces';
 import { HelpGuide } from 'src/apps/shared/modules/help/shared/help.interfaces';
 
@@ -26,6 +27,10 @@ export interface IgoEnvironment {
   };
   layer: {
     infoLink: string;
+  };
+  customContext: {
+    api: ContextApiConfig;
+    saveEnabled: boolean;
   };
   importExport: {
     url: string;
@@ -98,6 +103,12 @@ export const igoEnvironment: IgoEnvironment = {
         years: ''
       }
     }
+  },
+  customContext : {
+    api: {
+      save: ''
+    },
+    saveEnabled: false
   },
   importExport: {
     url: ''

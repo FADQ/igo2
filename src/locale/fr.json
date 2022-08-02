@@ -16,6 +16,8 @@
   "refresh": "Rafraîchir",
   "recover": "Récupérer",
   "coordinates": "Coordonnées",
+  "saveContext": "Sauvegarder le contexte",
+  "saveContext.tooltip": "Sauvegarder le contexte de carte en cours",
 
   "igo": {
     "geo": {

@@ -23,7 +23,7 @@ import {
   ConfigService,
   LanguageService,
 } from '@igo2/core';
-import { GeometryFormFieldComponent } from '@igo2/geo'
+import { GeometryFormFieldComponent } from '@igo2/geo';
 
 import {
   CatalogBrowserToolComponent,
