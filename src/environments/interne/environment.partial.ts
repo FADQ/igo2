@@ -195,7 +195,7 @@ export const igoEnvironment: IgoEnvironment = {
   },
   customContext : {
     api: {
-      save: 'TODO'
+      save: '/igovisualisation/contexte_catalogue/saveContext/general'
     },
     saveEnabled: true
   },

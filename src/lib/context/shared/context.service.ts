@@ -50,16 +50,18 @@ export class CustomContextService {
       if (dataSourceOptions.type) {
         context.layers.push({
           id: layerOptions.id ? String(layerOptions.id) : undefined,
-          layerOptions: {
-            title: layerOptions.title,
-            zIndex: i + 1,
-            visible: layer.visible
-          },
+          title: layerOptions.title,
+          baseLayer: layer.baseLayer,
+          zIndex: i + 1,
+          visible: layer.visible,
+          opacity: layer.opacity,
           sourceOptions: {
             type: dataSourceOptions.type,
             params:  dataSourceOptions.params,
             url:  dataSourceOptions.url,
-            queryable: layer.queryable
+            queryable: layer.queryable,
+            optionsFromCapabilities: dataSourceOptions.optionsFromCapabilities,
+            layer: dataSourceOptions.layer
           }
         });
       }
