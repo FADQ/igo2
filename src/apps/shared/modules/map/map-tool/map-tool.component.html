@@ -3,13 +3,13 @@
   <mat-tab [label]="'map.layers' | translate">
     <button
       *ngIf="saveContextEnabled"
+      mat-icon-button
       class="fadq-save-context-btn"
-      mat-flat-button
       tooltip-position="below"
       matTooltipShowDelay="500"
       [matTooltip]="'saveContext.tooltip' | translate"
       (click)="onSaveContextButtonClick()">
-      {{ 'saveContext' | translate }}
+      <mat-icon svgIcon="layers-edit"></mat-icon>
     </button>
 
     <igo-layer-list

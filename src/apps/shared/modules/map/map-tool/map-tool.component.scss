@@ -12,7 +12,9 @@ igo-layer-list ::ng-deep .igo-layer-actions-container > .igo-col {
 }
 
 .fadq-save-context-btn {
-  width: 100%;
-  background-color: #ededed;
+  display: flex;
+  justify-content: left;
+  align-items: center;
   border-radius: 0;
+  height: 5%;
 }
