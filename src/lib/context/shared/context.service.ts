@@ -47,7 +47,16 @@ export class CustomContextService {
       const layerOptions = layer.options;
       const dataSource = layer.dataSource;
       const dataSourceOptions = dataSource.options;
-      if (dataSourceOptions.type) {
+      
+      // Only support html query
+      let queryFormat;
+      let queryHtmlTarget;
+      if (dataSourceOptions.queryFormat == 'html') {
+        queryFormat = dataSourceOptions.queryFormat;
+        queryHtmlTarget = 'innerhtml';
+      }
+      
+        if (dataSourceOptions.type) {
         context.layers.push({
           id: layerOptions.id ? String(layerOptions.id) : undefined,
           title: layerOptions.title,
@@ -61,7 +70,9 @@ export class CustomContextService {
             url:  dataSourceOptions.url,
             queryable: layer.queryable,
             optionsFromCapabilities: dataSourceOptions.optionsFromCapabilities,
-            layer: dataSourceOptions.layer
+            layer: dataSourceOptions.layer,
+            queryFormat: queryFormat,
+            queryHtmlTarget: queryHtmlTarget
           }
         });
       }
