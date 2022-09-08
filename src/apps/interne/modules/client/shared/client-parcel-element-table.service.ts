@@ -45,7 +45,7 @@ export class ClientParcelElementTableService {
         },
         {
           name: 'properties.superficie',
-          title: 'Superficie mesurée (m²)',
+          title: 'Superficie (m²)',
           valueAccessor: (parcelElement: ClientParcelElement) => {
             const area = parcelElement.properties.superficie;
             return area ? formatMeasure(area, {decimal: 0, locale: 'fr'}) : '';
@@ -53,10 +53,26 @@ export class ClientParcelElementTableService {
         },
         {
           name: 'properties.superficieHectare',
-          title: 'Superficie mesurée (ha)',
+          title: 'Superficie (ha)',
           valueAccessor: (parcelElement: ClientParcelElement) => {
             const area = parcelElement.properties.superficie;
             return area ? formatMeasure(squareMetersToHectares(area), {decimal: 1, locale: 'fr'}) : '';
+          }
+        },
+        {
+          name: 'properties.superficieAcre',
+          title: 'Superficie (ac)',
+          valueAccessor: (parcelElement: ClientParcelElement) => {
+            const area = parcelElement.properties.superficie;
+            return area ? formatMeasure(squareMetersToHectares(area)*2.471, {decimal: 1, locale: 'fr'}) : '';
+          }
+        },
+        {
+          name: 'properties.superficieArpent',
+          title: 'Superficie (ar)',
+          valueAccessor: (parcelElement: ClientParcelElement) => {
+            const area = parcelElement.properties.superficie;
+            return area ? formatMeasure(squareMetersToHectares(area)*2.924, {decimal: 1, locale: 'fr'}) : '';
           }
         },
         {
