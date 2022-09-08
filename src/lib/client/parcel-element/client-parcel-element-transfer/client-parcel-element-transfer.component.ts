@@ -53,8 +53,6 @@ export class ClientParcelElementTransferComponent implements WidgetComponent, On
   get toClient(): Client { return this.toClient$.value; }
   readonly toClient$: BehaviorSubject<Client> = new BehaviorSubject(undefined);
 
-  private transferAllParcels$$: Subscription;
-
   get keepParcelNumbers(): boolean { return this.keepParcelNumbersField.value; }
   get keepParcelNumbersField(): FormControl {
     return (this.formGroup.controls as any).keepParcelNumbers as FormControl;
@@ -111,9 +109,6 @@ export class ClientParcelElementTransferComponent implements WidgetComponent, On
       keepParcelNumbers: false,
       transferAllParcels: false
     });
-
-    this.transferAllParcels$$ = this.transferAllParcelsField.valueChanges
-      .subscribe((value: boolean) => this.onTransferAllParcelsChange(value));
   }
 
   /**
@@ -123,7 +118,6 @@ export class ClientParcelElementTransferComponent implements WidgetComponent, On
    */
   ngOnDestroy() {
     this.submitHandler.destroy();
-    this.transferAllParcels$$.unsubscribe();
   }
 
   onTransfer() {
@@ -195,15 +189,6 @@ export class ClientParcelElementTransferComponent implements WidgetComponent, On
   private onSubmitSuccess(parcelElements: ClientParcelElement[]) {
     this.parcelElementStore.deleteMany(parcelElements);
     this.complete.emit(this.toClient);
-  }
-
-  private onTransferAllParcelsChange(value: boolean) {
-    if (value === true) {
-      this.keepParcelNumbersField.setValue(true);
-      this.keepParcelNumbersField.disable();
-    } else {
-      this.keepParcelNumbersField.enable();
-    }
   }
 
   private getParcelElementsToTransfer(): ClientParcelElement[] {

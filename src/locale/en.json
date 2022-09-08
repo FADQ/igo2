@@ -15,7 +15,9 @@
   "informations": "Informations",
   "refresh": "Refresh",
   "recover": "Recover",
-  "coordinates": "Coordinnates",
+  "coordinates": "Coordinates",
+  "saveContext": "Save context",
+  "saveContext.tooltip": "Save the current context",
 
   "igo": {
     "geo": {
