@@ -316,7 +316,7 @@
         "projection": "EPSG:32198",
         "params": {
           "version": "1.3.0",
-          "layers": "SDA_MUNIC_S"
+          "layers": "MUN"
         }
       }
     },
