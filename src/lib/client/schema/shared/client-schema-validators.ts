@@ -21,20 +21,3 @@ export function validateOnlyOneLSE(control: FormGroup, store: EntityStore<Client
 
   return null;
 }
-
-export function validateAnnee(control: FormGroup): null {
-  const schemaAnneeControl = control.controls['annee'];
-  const schemaAnnee = schemaAnneeControl.value;
-
-  const schemaTypeControl = control.controls['type'];
-  const schemaType = schemaTypeControl.value;
-
-  schemaAnneeControl.updateValueAndValidity({onlySelf: true});
-
-  const requireAnnee = [ClientSchemaType.ADO, ClientSchemaType.PLP];
-  if (!schemaAnnee && requireAnnee.indexOf(schemaType) >= 0) {
-    schemaAnneeControl.setErrors({required: ''});
-  }
-
-  return null;
-}

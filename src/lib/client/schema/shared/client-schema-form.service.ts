@@ -19,8 +19,7 @@ import { ApiService } from '../../../core/api/api.service';
 import { DomainService } from '../../../core/domain/domain.service';
 
 import {
-  validateOnlyOneLSE,
-  validateAnnee
+  validateOnlyOneLSE
 } from './client-schema-validators';
 import {
   ClientSchema,
@@ -53,7 +52,6 @@ export class ClientSchemaFormService {
             name: 'info',
             options: {
               validator: Validators.compose([
-                (control: FormGroup) => validateAnnee(control),
                 (control: FormGroup) => validateOnlyOneLSE(control, store)
               ])
             }
@@ -76,8 +74,7 @@ export class ClientSchemaFormService {
           this.formService.group({
             name: 'info',
             options: {
-              validator: Validators.compose([
-                (control: FormGroup) => validateAnnee(control),
+              validator: Validators.compose([,
                 (control: FormGroup) => validateOnlyOneLSE(control, store)
               ])
             }
@@ -166,11 +163,7 @@ export class ClientSchemaFormService {
       title: 'Année',
       options:  {
         cols: 2,
-        validator: Validators.pattern(/^([1-9][\d]{3})$/),
-        errors: {
-          required: 'client.schema.error.anneeRequired',
-          pattern: 'errors.invalidAnnee'
-        }
+        validator: Validators.compose([Validators.required,Validators.pattern(/^([1-9][\d]{3})$/)])
       }
     }, partial));
   }
