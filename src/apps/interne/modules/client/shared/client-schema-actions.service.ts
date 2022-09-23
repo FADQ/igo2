@@ -179,6 +179,6 @@ function schemaIsOfTypeLSE(ctrl: ClientController): Observable<boolean> {
 
 function schemaCanBeDuplicated(ctrl: ClientController): Observable<boolean> {
   return ctrl.schema$.pipe(
-    map((schema: ClientSchema) => schema !== undefined && schema.type !== ClientSchemaType.LSE)
+    map((schema: ClientSchema) => schema !== undefined && schema.type !== ClientSchemaType.LSE && schema.type !== ClientSchemaType.RPA)
   );
 }

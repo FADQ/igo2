@@ -67,7 +67,11 @@ export interface ClientSchemaUpdateResponse {
 
 export interface ClientSchemaTransferResponse {
   data: null;
-  messages: string[];
+  messages: ClientSchemaMessageTransferResponse[];
+}
+
+export interface ClientSchemaMessageTransferResponse {
+  libelle: string;
 }
 
 export interface ClientSchemaDuplicateResponse {

@@ -19,12 +19,13 @@ import { ApiService } from '../../../core/api/api.service';
 import { DomainService } from '../../../core/domain/domain.service';
 
 import {
-  validateOnlyOneLSE
+  validateOnlyOneType
 } from './client-schema-validators';
 import {
   ClientSchema,
   ClientSchemaApiConfig
 } from './client-schema.interfaces';
+import { ClientSchemaType } from './client-schema.enums';
 
 @Injectable()
 export class ClientSchemaFormService {
@@ -52,7 +53,8 @@ export class ClientSchemaFormService {
             name: 'info',
             options: {
               validator: Validators.compose([
-                (control: FormGroup) => validateOnlyOneLSE(control, store)
+                (control: FormGroup) => validateOnlyOneType(control, store, ClientSchemaType.LSE),
+                (control: FormGroup) => validateOnlyOneType(control, store, ClientSchemaType.RPA)
               ])
             }
           }, fields)
@@ -75,7 +77,8 @@ export class ClientSchemaFormService {
             name: 'info',
             options: {
               validator: Validators.compose([,
-                (control: FormGroup) => validateOnlyOneLSE(control, store)
+                (control: FormGroup) => validateOnlyOneType(control, store, ClientSchemaType.LSE),
+                (control: FormGroup) => validateOnlyOneType(control, store, ClientSchemaType.RPA)
               ])
             }
           }, fields)
@@ -135,7 +138,8 @@ export class ClientSchemaFormService {
                 Validators.required
               ]),
               errors: {
-                onlyOneLSE: 'client.schema.error.onlyOneLSE'
+                onlyOneLSE: 'client.schema.error.onlyOneLSE',
+                onlyOneRPA: 'client.schema.error.onlyOneRPA'
               }
             },
             inputs: {

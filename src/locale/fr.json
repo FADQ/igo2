@@ -181,7 +181,7 @@
       "none": "Aucun", 
       "error.anneeRequired": "Vous devez saisir une année pour un plan de production ou un avis de dommage",
       "error.onlyOneLSE": "Impossible d’avoir plus d’un schéma de type « Structure d’entreposage »",
-      "error.onlyOneEPA": "Impossible d’avoir plus d’un schéma de type « Édition de parcelles agricoles »",
+      "error.onlyOneRPA": "Impossible d’avoir plus d’un schéma de type « Aménagement biodiv. pratique 5 RPA »",
       "placeholder": "Schéma",
       "create": "Créer",
       "create.tooltip": "Créer un schéma",
