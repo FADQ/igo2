@@ -16,7 +16,8 @@ import {
   ClientSchemaUpdateData,
   ClientSchemaUpdateResponse,
   ClientSchemaTransferResponse,
-  ClientSchemaDuplicateResponse
+  ClientSchemaDuplicateResponse,
+  ClientSchemaMessageTransferResponse
 } from './client-schema.interfaces';
 
 @Injectable()
@@ -85,7 +86,7 @@ export class ClientSchemaService {
       );
   }
 
-  transferSchema(schema: ClientSchema, numClient: string): Observable<string[]> {
+  transferSchema(schema: ClientSchema, numClient: string): Observable<ClientSchemaMessageTransferResponse[]> {
     const url = this.apiService.buildUrl(this.apiConfig.update);
     const data = Object.assign({}, schema, {numeroClient: numClient});
     return this.http
