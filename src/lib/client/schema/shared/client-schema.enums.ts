@@ -7,5 +7,6 @@ export const ClientSchemaType = {
   INV: 'INV',
   LOC: 'LOC',
   LSE: 'LSE',
-  PLP: 'PLP'
+  PLP: 'PLP',
+  RPA: 'RPA'
 };
