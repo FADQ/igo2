@@ -63,16 +63,16 @@ export class ClientParcelElementTableService {
           name: 'properties.superficieAcre',
           title: 'Superficie (ac)',
           valueAccessor: (parcelElement: ClientParcelElement) => {
-            const area = parcelElement.properties.superficie;
-            return area ? formatMeasure(squareMetersToHectares(area)*2.471, {decimal: 1, locale: 'fr'}) : '';
+            const area = Number(squareMetersToHectares(parcelElement.properties.superficie).toFixed(1));
+            return area ? formatMeasure(area*2.471, {decimal: 1, locale: 'fr'}) : '';
           }
         },
         {
           name: 'properties.superficieArpent',
           title: 'Superficie (ar)',
           valueAccessor: (parcelElement: ClientParcelElement) => {
-            const area = parcelElement.properties.superficie;
-            return area ? formatMeasure(squareMetersToHectares(area)*2.924, {decimal: 1, locale: 'fr'}) : '';
+            const area = Number(squareMetersToHectares(parcelElement.properties.superficie).toFixed(1));
+            return area ? formatMeasure(area*2.924, {decimal: 1, locale: 'fr'}) : '';
           }
         },
         {
