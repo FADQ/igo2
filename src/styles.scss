@@ -1,7 +1,8 @@
-@import '~@igo2/core/style/all.theming';
+// @import '~@igo2/core/style/all.theming';
+@use '@angular/material' as mat;
 @import './fadq.theme';
 
-@include igo-all-theming($theme);
+// @include igo-all-theming($theme);
 
 
 /*** Reset ***/
@@ -67,7 +68,7 @@ tr.text-centered th div.mat-sort-header-container {
 }
 
 igo-actionbar igo-actionbar-item mat-list-item.active-accent .mat-list-item-content {
-  color: mat-color($accent);
+  color: mat.get-color-from-palette($accent);
 }
 
 .mat-menu-panel:not(.fadq-expansion-panel-actionbar-overlay) go-actionbar,
@@ -93,7 +94,7 @@ fadq-expansion-panel-header igo-actionbar {
 }
 
 .fadq-edition-continue-button-overlay button {
-  background-color: mat-color($primary);
+  background-color: mat.get-color-from-palette($primary);
   color: white;
 }
 

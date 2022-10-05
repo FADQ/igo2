@@ -14,7 +14,7 @@ import {
   ClientParcelListResponse,
   ClientParcelListResponseItem
 } from './client-parcel.interfaces';
-import { getParcelRelation, sortParcelsByRelation } from './client-parcel.utils';
+import { sortParcelsByRelation } from './client-parcel.utils';
 
 @Injectable()
 export class ClientParcelService {

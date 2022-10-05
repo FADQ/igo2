@@ -22,7 +22,6 @@ import {
   EntityTableColumnRenderer,
   EntityTableButton,
   WidgetComponent,
-  getEntityTitle,
   getEntityRevision,
 } from '@igo2/common';
 import { FeatureStore } from '@igo2/geo';

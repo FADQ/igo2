@@ -2,18 +2,10 @@ import { Injectable } from '@angular/core';
 
 import {
   FeatureStore,
-  VectorLayer,
-  FeatureDataSource,
-  FeatureStoreLoadingStrategy,
-  FeatureStoreSelectionStrategy,
-  tryBindStoreLayer,
-  tryAddLoadingStrategy,
-  FeatureMotion,
-  tryAddSelectionStrategy,
 } from '@igo2/geo';
 import { MapState } from '@igo2/integration';
 
-import { AddressFeature, createAddressStyle } from 'src/lib/address';
+import { AddressFeature } from 'src/lib/address';
 
 
 /**

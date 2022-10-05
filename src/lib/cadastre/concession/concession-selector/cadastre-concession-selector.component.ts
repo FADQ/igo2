@@ -97,7 +97,7 @@ export class ConcessionSelectorComponent implements OnInit, OnDestroy {
    * @param mun
    */
   getNomConcession(concession: ConcessionUnique): string {
-    return  concession.idConcession;
+    return concession.idConcession;
   }
 
   /**

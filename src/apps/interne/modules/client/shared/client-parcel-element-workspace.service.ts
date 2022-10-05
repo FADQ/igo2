@@ -23,7 +23,7 @@ import {
   createParcelElementLayer
 } from 'src/lib/client';
 
-import { ClientParcelElementTableService  } from './client-parcel-element-table.service';
+import { ClientParcelElementTableService } from './client-parcel-element-table.service';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +34,7 @@ export class ClientParcelElementWorkspaceService {
     private clientParcelElementTableService: ClientParcelElementTableService
   ) {}
 
-  createParcelElementWorkspace(client: Client,  map: IgoMap): ClientParcelElementWorkspace {
+  createParcelElementWorkspace(client: Client, map: IgoMap): ClientParcelElementWorkspace {
     // TODO: i18n
 
     // Type is set to parcel. This allows us to switch from a client to another and

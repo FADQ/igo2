@@ -8,6 +8,7 @@ import {
   OnDestroy
 } from '@angular/core';
 
+import { Geometry as GeoJSONGeometry } from 'geojson';
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
 
 import OlGeometry from 'ol/geom/Geometry';
@@ -22,7 +23,6 @@ import { LanguageService, Message, MessageType } from '@igo2/core';
 import {
   Feature,
   FeatureStore,
-  GeoJSONGeometry,
   IgoMap,
   ModifyControl
 } from '@igo2/geo';
@@ -39,7 +39,7 @@ import {
   styleUrls: ['./edition-translate.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditionTranslateComponent implements  WidgetComponent, OnInit, OnDestroy {
+export class EditionTranslateComponent implements WidgetComponent, OnInit, OnDestroy {
 
   /**
    * Message
@@ -225,7 +225,7 @@ export class EditionTranslateComponent implements  WidgetComponent, OnInit, OnDe
    */
   private activateModifyControl() {
     this.modifyEnd$$ = this.modifyControl.end$
-      .subscribe((olGeometries: OlGeometry[]) => this.onTranslateEnd(olGeometries));
+      .subscribe((olGeometry: OlGeometry) => this.onTranslateEnd(olGeometry));
 
     const olGeometry = new OlGeoJSON().readGeometry(this.feature.geometry, {
       dataProjection: this.feature.projection,

@@ -10,3 +10,11 @@ igo-layer-list ::ng-deep .mat-list-base .mat-list-item .mat-list-item-content {
 igo-layer-list ::ng-deep .igo-layer-actions-container > .igo-col {
   padding: 0 0 0 16px;
 }
+
+.fadq-save-context-btn {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  border-radius: 0;
+  height: 5%;
+}

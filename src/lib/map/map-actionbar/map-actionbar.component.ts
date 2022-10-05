@@ -126,7 +126,7 @@ export class MapActionbarComponent implements OnInit, OnDestroy {
         tooltip: 'map.actionbar.googleview.tooltip',
         handler: () => {
           const center = this.map.viewController.getCenter('EPSG:4326');
-          const zoom =  this.map.viewController.getZoom();
+          const zoom = this.map.viewController.getZoom();
           const url = getGoogleMapsUrl(center, zoom, 'satellite');
           window.open(url, '', 'width=800, height=600');
         }

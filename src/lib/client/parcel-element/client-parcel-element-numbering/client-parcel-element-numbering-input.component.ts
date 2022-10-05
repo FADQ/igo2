@@ -128,7 +128,7 @@ export class ClientParcelElementNumberingInputComponent
       this.stateChanges.next();
     });
 
-    if (this.ngControl != null) {
+    if (this.ngControl !== null) {
       this.ngControl.valueAccessor = this;
     }
   }

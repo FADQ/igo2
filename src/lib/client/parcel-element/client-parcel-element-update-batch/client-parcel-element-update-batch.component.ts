@@ -75,11 +75,11 @@ export class ClientParcelElementUpdateBatchComponent
    */
   @Output() cancel = new EventEmitter<void>();
 
-  get getOperationTitle(): (data: ClientParcelElement, languageService: LanguageService) => string  {
+  get getOperationTitle(): (data: ClientParcelElement, languageService: LanguageService) => string {
     return generateParcelElementOperationTitle;
   }
 
-  get processData(): (data: ClientParcelElement) => Observable<EditionResult>  {
+  get processData(): (data: ClientParcelElement) => Observable<EditionResult> {
     return (data: ClientParcelElement): Observable<EditionResult> => this.processParcelElement(data);
   }
 

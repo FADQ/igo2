@@ -38,7 +38,7 @@ export class ClientParcelWorkspaceService {
    * @param map Igo map
    * @returns Parcel workspace
    */
-  createParcelWorkspace(client: Client,  map: IgoMap): ClientParcelWorkspace {
+  createParcelWorkspace(client: Client, map: IgoMap): ClientParcelWorkspace {
     // TODO: i18n
     return new ClientParcelWorkspace({
       id: `fadq.${client.info.numero}-1-parcel-workspace`,

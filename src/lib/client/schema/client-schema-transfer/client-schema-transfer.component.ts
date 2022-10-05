@@ -15,7 +15,7 @@ import { EntityStore, Form, WidgetComponent, OnUpdateInputs } from '@igo2/common
 
 import { Client } from '../../shared/client.interfaces';
 
-import { ClientSchema } from '../shared/client-schema.interfaces';
+import { ClientSchema, ClientSchemaMessageTransferResponse } from '../shared/client-schema.interfaces';
 import { ClientSchemaService } from '../shared/client-schema.service';
 import { ClientSchemaFormService } from '../shared/client-schema-form.service';
 
@@ -88,7 +88,7 @@ export class ClientSchemaTransferComponent implements OnInit, OnUpdateInputs, Wi
    */
   onSubmit(data: {[key: string]: any}) {
     this.clientSchemaService.transferSchema(this.schema, data.numeroClient)
-      .subscribe((messages: string[]) => {
+      .subscribe((messages: ClientSchemaMessageTransferResponse[]) => {
         if (messages.length === 0) {
           this.onSubmitSuccess();
         } else {
@@ -117,8 +117,8 @@ export class ClientSchemaTransferComponent implements OnInit, OnUpdateInputs, Wi
   /**
    * On submit error, display an error message
    */
-  private onSubmitError(messages: string[]) {
-    this.setError(messages[0]);
+  private onSubmitError(messages: ClientSchemaMessageTransferResponse[]) {
+    this.setError(messages[0].libelle);
   }
 
   private setError(text: string | undefined) {

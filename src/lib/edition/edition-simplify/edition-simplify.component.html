@@ -22,7 +22,7 @@
     <button
       mat-raised-button
       color="primary"
-      [disabled]="!(submitEnabled$ | async)"
+      [disabled]="(submitEnabled$ | async) === false"
       (click)="onSubmit()">
       {{ 'apply' | translate }}
     </button> 

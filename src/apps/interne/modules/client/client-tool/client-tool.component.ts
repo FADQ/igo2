@@ -3,7 +3,7 @@ import {
   Input,
   ChangeDetectionStrategy
 } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Message } from '@igo2/core';

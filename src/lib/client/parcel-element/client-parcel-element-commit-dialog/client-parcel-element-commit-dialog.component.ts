@@ -41,7 +41,7 @@ export class ClientParcelElementCommitDialogComponent implements OnDestroy {
   }
 
   onYesClick() {
-    const submit$ =  this.clientParcelElementService
+    const submit$ = this.clientParcelElementService
       .commitTransaction(
         this.transaction.client,
         this.transaction.annee,

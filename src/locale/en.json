@@ -15,7 +15,9 @@
   "informations": "Informations",
   "refresh": "Refresh",
   "recover": "Recover",
-  "coordinates": "Coordinnates",
+  "coordinates": "Coordinates",
+  "saveContext": "Save context",
+  "saveContext.tooltip": "Save the current context",
 
   "igo": {
     "geo": {
@@ -178,7 +180,7 @@
       "none": "None",
       "error.anneeRequired": "You must enter a year for a production plan or a damage notice",
       "error.onlyOneLSE": "Cannot have more than one « Storage structure » type diagram",
-      "error.onlyOneEPA": "Cannot have more than one « Editing agricultural parcels » type diagram",
+      "error.onlyOneRPA": "Cannot have more than one « Practical biodiversity development 5 RPA » type diagram",
       "placeholder": "Schema",
       "create": "Create",
       "create.tooltip": "Create a schema",
@@ -330,6 +332,8 @@
   "icherche": {
     "adresse": "Address",
     "code_postal": "Zip Code",
+    "GoogleMaps": "Google Maps",
+    "GoogleStreetView": "Google Street View",
     "municipalite": "Municipality",
     "nom": "Name",
     "numero_civique": "Address",

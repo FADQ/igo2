@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { BehaviorSubject, Subscription, of } from 'rxjs';
 
-import { MapBrowserPointerEvent as OlMapBrowserPointerEvent } from 'ol/MapBrowserEvent';
+import OlMapBrowserEvent from 'ol/MapBrowserEvent';
 
 import { Media, MediaService, MediaOrientation } from '@igo2/core';
 import { DetailedContext } from '@igo2/context';
@@ -144,7 +144,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.toggleSidenav();
   }
 
-  onMapQuery(event: { features: Feature[]; event: OlMapBrowserPointerEvent }) {
+  onMapQuery(event: { features: Feature[]; event: OlMapBrowserEvent<any> }) {
     const querySearchSource = this.getQuerySearchSource();
     if (querySearchSource === undefined) { return; }
 
@@ -250,8 +250,6 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   private onSearchMap(results: SearchResult<Feature>[]) {
     if (results.length === 0) { return; }
-    this.toolState.toolbox.activateTool('searchResults');
-    this.openSidenav();
     this.searchStore.state.update(results[0], {selected: true, focused: true}, true);
   }
 
@@ -261,11 +259,14 @@ export class PortalComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.toolState.toolbox.activateTool('searchResults');
     if (result.meta.dataType === FEATURE) {
+      this.searchResult = result;
       if (this.mediaService.media$.value === Media.Mobile) {
         this.closeSidenav();
+      } else {
+        this.openSidenav();
       }
-      this.searchResult = result;
     } else {
       this.searchResult = undefined;
     }
@@ -358,7 +359,7 @@ export class PortalComponent implements OnInit, OnDestroy {
    * @param result The SearchResult
    */
   private clearOtherSearchLayers(result: SearchResult) {
-    const  searchType = (result.source.constructor as typeof SearchSource).type;
+    const searchType = (result.source.constructor as typeof SearchSource).type;
 
     this.searchAddedLayers.forEach((layers: Layer[], key: string) => {
       if (key !== searchType) {

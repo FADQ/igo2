@@ -1,7 +1,6 @@
 {
   "uri": "interne.default",
   "title": "Général",
-  "mesurage": true,
   "map": {
     "view": {
       "projection": "EPSG:32198",
@@ -18,56 +17,41 @@
   },
   "layers": [
     {
-      "title": "2002",
-      "baseLayer": true,
-      "visible": false,
-      "sourceOptions": {
-        "type": "wms",
-        "optionsFromCapabilities": true,
-        "url": "https://servicesmatriciels.mern.qc/erdas-iws/ogc/wms/Imagerie_Aeroportee_Historique",
-        "projection": "EPSG:32198",
-        "params": {
-          "version": "1.3.0",
-          "layers": "Mosaiques-orthophotos_2002_2002_Plan_Nord_VillagesNordiques_25cm_PAN,Mosaiques-orthophotos_2002_2002_Orthos_40K_100cm_PAN"
-        }
-      }
-    },
-    {
+      "id": "imagRece",
       "title": "Images les plus récentes",
       "baseLayer": true,
       "visible": true,
       "sourceOptions": {
         "type": "wmts",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/mern_imagerie_continue",
+        "url": "https://servicesmatriciels.mern.qc/erdas-iws/ogc/wmts/Imagerie_Continue",
         "layer": "Imagerie_GQ",
         "matrixSet": "Lambert:epsg:32198",
         "requestEncoding": "KVP",
         "params": {
-          "version": "1.3.0"
+          "version": "1.0.0"
         }
       }
     },
     {
-      "title": "Carte de base du Canada - Transport",
-      "baseLayer": true,
-      "visible": false,
+      "id": "credImagRece",
+      "title": "Crédit des images les plus récentes",
+      "visible": true,
       "sourceOptions": {
         "type": "wms",
+        "ratio": 1,
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/canada_transport",
-        "style": "default",
-        "matrixSet": "LAMBERT",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/info_reper",
         "projection": "EPSG:32198",
         "params": {
           "version": "1.3.0",
-          "layers": "cbct",
-          "srs": "EPSG:32198"
+          "layers": "CopyrightMERN"
         }
       }
     },
     {
-      "title": "Gouvernement du Québec",
+      "id": "cartGouvQueb",
+      "title": "Carte du Gouvernement du Québec",
       "baseLayer": true,
       "visible": false,
       "sourceOptions": {
@@ -83,82 +67,13 @@
       }
     },
     {
+      "id": "cadaReno",
+      "alias": "cadastre_reno",
       "visible": false,
       "sourceOptions": {
         "type": "wms",
         "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_info_syst_coll",
-        "projection": "EPSG:32198",
-        "params": {
-          "version": "1.3.0",
-          "layers": "LOCVDS_ZONA_COLL_MGR"
-        }
-      }
-    },
-    {
-      "visible": false,
-      "sourceOptions": {
-        "type": "wms",
-        "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_info_syst_coll",
-        "projection": "EPSG:32198",
-        "params": {
-          "version": "1.3.0",
-          "layers": "LOCVDS_ZONA_COLL"
-        }
-      }
-    },
-    {
-      "visible": false,
-      "sourceOptions": {
-        "type": "wms",
-        "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_info_syst_coll",
-        "projection": "EPSG:32198",
-        "params": {
-          "version": "1.3.0",
-          "layers": "SMDVSP_STAT_METE_ASSU_AN_PREC"
-        },
-        "queryFormat": "html",
-        "queryHtmlTarget": "innerhtml"
-      }
-    },
-    {
-      "visible": false,
-      "sourceOptions": {
-        "type": "wms",
-        "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_info_syst_coll",
-        "projection": "EPSG:32198",
-        "params": {
-          "version": "1.3.0",
-          "layers": "SMDVSP_STAT_METE_ASSU_AN_COUR"
-        },
-        "queryFormat": "html",
-        "queryHtmlTarget": "innerhtml"
-      }
-    },
-    
-    {
-      "alias": "cadastre",
-      "visible": false,
-      "sourceOptions": {
-        "type": "wms",
-        "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_info_fonciere",
-        "projection": "EPSG:32198",
-        "params": {
-          "version": "1.3.0",
-          "layers": "COMPIL_CADAS_IGO2"
-        }
-      }
-    },
-    {
-      "visible": false,
-      "sourceOptions": {
-        "type": "wms",
-        "optionsFromCapabilities": true,
-        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/fadq_info_fonciere",
+        "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/info_them",
         "projection": "EPSG:32198",
         "params": {
           "version": "1.3.0",
@@ -169,26 +84,19 @@
   ],
   "toolbar": [
     "client",
-    "clientTx",
     "searchResults",
+    "catalog",
     "fadqMap",
     "navigation",
-    "fadqImportExport",
+    "importExport",
     "measurer",
-    "print",
     "cadastre",
     "contextManager",
     "help"
   ],
   "tools": [
     {
-      "name": "client",
-      "options": {
-        "showInfo": false
-      }
-    },
-    {
-      "name": "clientTx"
+      "name": "client"
     },
     {
       "name": "searchResults"
@@ -197,10 +105,10 @@
       "name": "fadqMap"
     },
     {
-      "name": "catalogBrowser"
+      "name": "contextManager"
     },
     {
-      "name": "contextManager"
+      "name": "catalogBrowser"
     },
     {
       "name": "navigation",
@@ -264,20 +172,9 @@
             }
           },
           {
-            "title": "navigation.categories.smd",
-            "collection": {
-              "uri": "/igonavigation/zoom_selection/obtenirStationsMeteoDisponibles",
-              "idProperty": "idStationMeteo",
-              "title": "${noStationFADQ}-${nomStation}"
-            },
-            "feature": {
-              "uri": "/igonavigation/zoom_selection/obtenirStationMeteo/${id}"
-            }
-          },
-          {
             "title": "navigation.categories.smf",
             "collection": {
-              "uri": "/igonavigation/zoom_selection/obtenirStationsMeteoAnneeAssurance/2018",
+              "uri": "/igonavigation/zoom_selection/obtenirStationsMeteoDisponibles",
               "idProperty": "idStationMeteo",
               "title": "${noStationFADQ}-${nomStation}"
             },
@@ -313,22 +210,88 @@
       }
     },
     {
-      "name": "fadqImportExport"
+      "name": "importExport",
+      "options": {
+        "selectFirstProj": true,
+        "projectionsLimitations": {
+          "projFromConfig": false,
+          "nad83": true,
+          "wgs84": false,
+          "webMercator": false,
+          "utm": false,
+          "mtm": false,
+          "utmZone": {
+            "minZone": 17,
+            "maxZone": 21
+          },
+          "mtmZone": {
+            "minZone": 3,
+            "maxZone": 10
+          }
+        },
+        "importExportType": "layer",
+        "importExportShowBothType": false
+      }
     },
     {
       "name": "measurer"
     },
     {
-      "name": "print"
-    },
-    {
       "name": "cadastre",
       "options": {
-        "layerAlias": "cadastre"
+        "layerOptions": {
+            "alias": "cadastre",
+            "visible": false,
+            "sourceOptions": {
+            "type": "wms",
+            "optionsFromCapabilities": true,
+            "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/info_them",
+            "projection": "EPSG:32198",
+            "params": {
+              "version": "1.3.0",
+              "layers": "COMPIL_CADAS_IGO2"
+            }
+          }
+        }
       }
     },
     {
       "name": "help"
     }
-  ]
+  ],
+  "searchLayers": {
+    "Feature": [
+      {
+        "alias": "buildings",
+        "visible": true,
+        "sourceOptions": {
+          "type": "wms",
+          "optionsFromCapabilities": true,
+          "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/info_reper",
+          "projection": "EPSG:32198",
+          "params": {
+            "version": "1.1.1",
+            "layers": "AQ_MSP_ADRESSE_GEO",
+            "srs": "EPSG:32198"
+          }
+        }
+      },
+      {
+        "alias": "buildingsCorrected",
+        "visible": true,
+        "sourceOptions": {
+          "type": "wms",
+          "optionsFromCapabilities": true,
+          "url": "{api_root}/app/interne/servicescartographiques/w_m_s/service/info_reper",
+          "projection": "EPSG:32198",
+          "params": {
+            "version": "1.1.1",
+            "layers": "ADR_MODI",
+            "srs": "EPSG:32198"
+          }
+        }
+      }
+    ],
+    "Cadastre-reno": ["cadastre_reno"]
+  }
 }

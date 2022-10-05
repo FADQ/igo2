@@ -67,11 +67,11 @@ export class ClientSchemaElementSliceComponent implements OnUpdateInputs, Widget
    */
   @Output() cancel = new EventEmitter<void>();
 
-  get getOperationTitle(): (data: ClientSchemaElement, languageService: LanguageService) => string  {
+  get getOperationTitle(): (data: ClientSchemaElement, languageService: LanguageService) => string {
     return generateSchemaElementOperationTitle;
   }
 
-  get processData(): (data: ClientSchemaElement) => Observable<EditionResult>  {
+  get processData(): (data: ClientSchemaElement) => Observable<EditionResult> {
     return (data: ClientSchemaElement): Observable<EditionResult> => this.processSchemaElement(data);
   }
 

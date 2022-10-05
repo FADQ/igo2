@@ -6,9 +6,12 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { IgoLanguageModule } from '@igo2/core';
-import { ToolService } from '@igo2/common';
 import { IgoLayerModule } from '@igo2/geo';
 import { IgoAppCatalogModule } from '@igo2/integration';
+
+import { FadqContextModule } from 'src/apps/shared/modules/context/context.module'
+
+import { TOOL_CONFIG } from 'src/lib/core/core.module';
 
 import { MapToolComponent } from './map-tool.component';
 import { LayerInfoDialogComponent } from './layer-info-dialog.component';
@@ -25,7 +28,8 @@ import { LayerInfoDialogComponent } from './layer-info-dialog.component';
     MatTooltipModule,
     IgoLanguageModule,
     IgoLayerModule,
-    IgoAppCatalogModule
+    IgoAppCatalogModule,
+    FadqContextModule
   ],
   declarations: [
     MapToolComponent,
@@ -33,14 +37,18 @@ import { LayerInfoDialogComponent } from './layer-info-dialog.component';
   ],
   exports: [MapToolComponent],
   entryComponents: [MapToolComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [
+    {
+      provide: TOOL_CONFIG,
+      useValue: {
+        name: 'fadqMap',
+        title: 'tools.map',
+        icon: 'map',
+        component: MapToolComponent
+      },
+      multi: true
+    },
+  ]
 })
 export class FadqMapToolModule {}
-
-
-ToolService.register({
-  name: 'fadqMap',
-  title: 'tools.map',
-  icon: 'map',
-  component: MapToolComponent
-});

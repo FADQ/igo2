@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 
-import { ConfigService, LanguageService } from '@igo2/core';
+import { ConfigService } from '@igo2/core';
 
 import { ApiService } from 'src/lib/core/api';
 import { ClientSchemaElementPointService } from './client-schema-element-point.service';

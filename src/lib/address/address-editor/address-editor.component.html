@@ -33,7 +33,7 @@
             [matTooltip]="'addressEditor.save.tooltip' | translate"
             type="button"
             #save
-            [disabled]="!(inEdition$ | async)"
+            [disabled]="(inEdition$ | async) === false"
             (click)="handleFormSave()">
         {{'addressEditor.save' | translate}}
         </button>
@@ -42,7 +42,7 @@
             matTooltipShowDelay="500"
             [matTooltip]="'addressEditor.cancel.tooltip' | translate"
             type="button"
-            [disabled]="!(inEdition$ | async)"
+            [disabled]="(inEdition$ | async) === false"
             (click)="handleFormCancel()">
         {{'addressEditor.cancel' | translate}}
         </button>

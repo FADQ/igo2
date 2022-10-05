@@ -35,14 +35,12 @@ import {
   ClientParcelTxReconciliateWidget,
   generateParcelElementOperationTitle,
   getParcelElementErrors,
-  getParcelElementMergeBase,
   unionParcelElements
 } from 'src/lib/client';
 import { moveToFeatureStore } from 'src/lib/feature';
 import { every } from 'src/lib/utils';
 
 import { ClientController } from './client-controller';
-import { assert } from 'console';
 
 @Injectable({
   providedIn: 'root'

@@ -5,7 +5,7 @@ import {
   EntityTableColumnRenderer,
   FormFieldSelectChoice
 } from '@igo2/common';
-
+import { formatMeasure } from '@igo2/geo';
 import { formatDate } from 'src/lib/utils/date';
 import {
   ClientInfoService,
@@ -82,7 +82,27 @@ export class ClientParcelTableService {
         },
         {
           name: 'properties.superficieHectare',
-          title: 'Superficie mesurée (ha)'
+          title: 'Superficie mesurée (ha)',
+          valueAccessor: (parcelElement: ClientParcel) => {
+            const area = parcelElement.properties.superficieHectare;
+            return area ? formatMeasure(area, {decimal: 1, locale: 'fr'}) : '';
+          }
+        },
+        {
+          name: 'properties.superficieAcre',
+          title: 'Superficie mesurée (ac)',
+          valueAccessor: (parcelElement: ClientParcel) => {
+            const area = parcelElement.properties.superficieHectare;
+            return area ? formatMeasure(area*2.471, {decimal: 1, locale: 'fr'}) : '';
+          }
+        },
+        {
+          name: 'properties.superficieArpent',
+          title: 'Superficie mesurée (ar)',
+          valueAccessor: (parcelElement: ClientParcel) => {
+            const area = parcelElement.properties.superficieHectare;
+            return area ? formatMeasure(area*2.924, {decimal: 1, locale: 'fr'}) : '';
+          }
         },
         {
           name: 'properties.pourcentageSupMao',

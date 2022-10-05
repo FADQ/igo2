@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
-import { concatMap } from 'rxjs/operators';
 
 import {
   ClientService

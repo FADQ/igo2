@@ -56,11 +56,11 @@ export class ClientParcelElementImportComponent implements OnUpdateInputs, Widge
    */
   @Output() cancel = new EventEmitter<void>();
 
-  get getOperationTitle(): (data: ClientParcelElement, languageService: LanguageService) => string  {
+  get getOperationTitle(): (data: ClientParcelElement, languageService: LanguageService) => string {
     return generateParcelElementOperationTitle;
   }
 
-  get processData(): (data: ClientParcelElement) => Observable<EditionResult>  {
+  get processData(): (data: ClientParcelElement) => Observable<EditionResult> {
     return (data: ClientParcelElement): Observable<EditionResult> => this.processParcelElement(data);
   }
 
@@ -104,7 +104,7 @@ export class ClientParcelElementImportComponent implements OnUpdateInputs, Widge
             return undefined;
           }
 
-          const error =  getParcelElementValidationMessage(parcelElement, this.languageService);
+          const error = getParcelElementValidationMessage(parcelElement, this.languageService);
           return error === undefined ? {feature: parcelElement} : undefined;
         })
       );

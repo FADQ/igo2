@@ -1,6 +1,6 @@
 import { DomainChoicesResponseItem } from 'src/lib/core/domain';
 
-export interface ClientSchemaApiConfig  {
+export interface ClientSchemaApiConfig {
   list: string;
   create: string;
   update: string;
@@ -67,7 +67,11 @@ export interface ClientSchemaUpdateResponse {
 
 export interface ClientSchemaTransferResponse {
   data: null;
-  messages: string[];
+  messages: ClientSchemaMessageTransferResponse[];
+}
+
+export interface ClientSchemaMessageTransferResponse {
+  libelle: string;
 }
 
 export interface ClientSchemaDuplicateResponse {

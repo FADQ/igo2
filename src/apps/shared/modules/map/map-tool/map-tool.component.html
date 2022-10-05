@@ -1,6 +1,17 @@
 <mat-tab-group>
 
   <mat-tab [label]="'map.layers' | translate">
+    <button
+      *ngIf="saveContextEnabled"
+      mat-icon-button
+      class="fadq-save-context-btn"
+      tooltip-position="below"
+      matTooltipShowDelay="500"
+      [matTooltip]="'saveContext.tooltip' | translate"
+      (click)="onSaveContextButtonClick()">
+      <mat-icon svgIcon="layers-edit"></mat-icon>
+    </button>
+
     <igo-layer-list
       igoLayerListBinding
       [excludeBaseLayers]="false"

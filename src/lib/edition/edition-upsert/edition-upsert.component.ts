@@ -14,9 +14,11 @@ import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
 
 import OlFormatGeoJSON from 'ol/format/GeoJSON';
 import OlPolygon from 'ol/geom/Polygon';
+import OlSimpleGeometry from 'ol/geom/SimpleGeometry';
 import OlOverlay from 'ol/Overlay';
-import { OlFeature } from 'ol/Feature';
+import OlFeature from 'ol/Feature';
 import { Style as OlStyle } from 'ol/style';
+import { StyleLike as OlStyleLike } from 'ol/style/Style';
 
 import {
   EntityTransaction,
@@ -45,7 +47,7 @@ import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition
   styleUrls: ['./edition-upsert.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInputs, WidgetComponent {
+export class EditionUpsertComponent implements OnInit, OnDestroy, OnUpdateInputs, WidgetComponent {
 
   /**
    * Message
@@ -66,12 +68,12 @@ export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInput
   /**
    * Selected Ol feature
    */
-  private selectedOlFeature: OlFeature;
+  private selectedOlFeature: OlFeature<OlSimpleGeometry>;
 
   /**
    * Selected Ol feature styl. Keep a ref to it to restore it on complete
    */
-  private selectedOlFeatureStyle: OlStyle;
+  private selectedOlFeatureStyle: OlStyleLike;
 
   /**
    * OL overlay
@@ -196,7 +198,7 @@ export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInput
     this.unobserveGeometry();
   }
 
-  private featureToResult(data: Feature):  Observable<EditionResult> {
+  private featureToResult(data: Feature): Observable<EditionResult> {
     if (typeof this.processData === 'function') {
       const resultOrObservable = this.processData(data);
       if (resultOrObservable instanceof Observable) {
@@ -266,7 +268,7 @@ export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInput
     }
   }
 
-  private getSelectedOlFeature(): OlFeature | undefined {
+  private getSelectedOlFeature(): OlFeature<OlSimpleGeometry> | undefined {
     if (this.feature === undefined) {
       return;
     }
@@ -280,7 +282,7 @@ export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInput
     const overlayStore = selectionStrategy.overlayStore;
     const featureId = this.store.getKey(this.feature);
 
-    return overlayStore.source.ol.getFeatureById(featureId);
+    return overlayStore.source.ol.getFeatureById(featureId) as OlFeature<OlSimpleGeometry>;
   }
 
   /**
@@ -350,9 +352,11 @@ export class EditionUpsertComponent implements  OnInit, OnDestroy, OnUpdateInput
 
     let coordinate;
     if (olGeometry instanceof OlPolygon) {
-      coordinate = olGeometry.flatCoordinates.slice(-4, -2);
+      coordinate = olGeometry.getFlatCoordinates().slice(-4, -2);
+    } else if (olGeometry instanceof OlSimpleGeometry){
+      coordinate = olGeometry.getFlatCoordinates().slice(-2);
     } else {
-      coordinate = olGeometry.flatCoordinates.slice(-2);
+      throw new Error('Cannot add continue button for that geometry type.');
     }
 
     const olOverlay = new OlOverlay({

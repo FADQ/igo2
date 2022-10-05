@@ -37,7 +37,7 @@ export interface LotUnique {
   listeIdLot: string[];
 }
 
-export type LotList =  LotResponseItem[];
+export type LotList = LotResponseItem[];
 
 export type LotUniqueList = LotUnique[];
 

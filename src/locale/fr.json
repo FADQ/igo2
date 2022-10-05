@@ -16,6 +16,8 @@
   "refresh": "Rafraîchir",
   "recover": "Récupérer",
   "coordinates": "Coordonnées",
+  "saveContext": "Sauvegarder le contexte",
+  "saveContext.tooltip": "Sauvegarder le contexte de carte en cours",
 
   "igo": {
     "geo": {
@@ -179,7 +181,7 @@
       "none": "Aucun", 
       "error.anneeRequired": "Vous devez saisir une année pour un plan de production ou un avis de dommage",
       "error.onlyOneLSE": "Impossible d’avoir plus d’un schéma de type « Structure d’entreposage »",
-      "error.onlyOneEPA": "Impossible d’avoir plus d’un schéma de type « Édition de parcelles agricoles »",
+      "error.onlyOneRPA": "Impossible d’avoir plus d’un schéma de type « Aménagement biodiv. pratique 5 RPA »",
       "placeholder": "Schéma",
       "create": "Créer",
       "create.tooltip": "Créer un schéma",
@@ -330,12 +332,16 @@
 
   "icherche": {
     "adresse": "Adresse",
+    "code": "Code",
     "code_postal": "Code Postal",
+    "GoogleMaps": "Google Maps",
+    "GoogleStreetView": "Google Street View",
     "municipalite": "Municipalité",
     "nom": "Nom",
     "numero_civique": "Numéro civique",
     "numero_civique_suffixe": "Numéro civique (suffix)",
     "producteur": "Fournisseur",
+    "Route": "Route",
     "rue": "Rue",
     "type": "Type"
   },

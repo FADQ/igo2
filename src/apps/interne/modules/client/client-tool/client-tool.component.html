@@ -15,7 +15,7 @@
     <ng-template ngFor let-controller [ngForOf]="(controllers.view.all$() | async).slice().reverse()">
       <fadq-client-tool-item
         [controller]="controller"
-        [showLegend]="!(showLegend$ | async)"
+        [showLegend]="(showLegend$ | async) === false"
         [showInfo]="showInfo"
         [selected]="(activeController$ | async) === controller"
         (clear)="onDestroyController($event)"

@@ -107,11 +107,11 @@ export class ClientSchemaElementCreateComponent
    */
   @Output() cancel = new EventEmitter<void>();
 
-  get getOperationTitle(): (data: ClientSchemaElement, languageService: LanguageService) => string  {
+  get getOperationTitle(): (data: ClientSchemaElement, languageService: LanguageService) => string {
     return generateSchemaElementOperationTitle;
   }
 
-  get processData(): (data: ClientSchemaElement) => Observable<EditionResult>  {
+  get processData(): (data: ClientSchemaElement) => Observable<EditionResult> {
     return (data: ClientSchemaElement): Observable<EditionResult> => this.processSchemaElement(data);
   }
 
@@ -213,7 +213,8 @@ export class ClientSchemaElementCreateComponent
       return _elementType.value === elementTypeValue;
     });
 
-    const geometryType$ = geometryField.inputs.geometryType as BehaviorSubject<string>;
+    // TODO: See why we need to cast as unknown
+    const geometryType$ = geometryField.inputs.geometryType as unknown as BehaviorSubject<string>;
     geometryType$.next(elementType.geometryType);
 
     // Blur the active element to allow the use of the spacebar shortcut

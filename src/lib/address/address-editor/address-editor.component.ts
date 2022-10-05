@@ -7,7 +7,6 @@ import {
   ViewChild,
   ElementRef
 } from '@angular/core';
-
 import { MatDialog } from '@angular/material/dialog';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -19,6 +18,7 @@ import { EntityRecord } from '@igo2/common';
 import {
   FeatureStore,
   IgoMap,
+  FeatureGeometry,
   FeatureStoreSelectionStrategy,
   FeatureDataSource,
   FeatureStoreLoadingStrategy,
@@ -444,9 +444,10 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
   private setOlGeometry(olGeometry: OlGeometry | undefined) {
     if (olGeometry === undefined || this.selectedAddressFeature === undefined) { return; }
     const olGeoJSON = new OlGeoJSON();
-    this.selectedAddressFeature.geometry = olGeoJSON.writeGeometryObject(olGeometry, {
+    const geometry = olGeoJSON.writeGeometryObject(olGeometry, {
       dataProjection: 'EPSG:4326',
       featureProjection: this.map.projection
     });
+    this.selectedAddressFeature.geometry = geometry as FeatureGeometry;
   }
 }

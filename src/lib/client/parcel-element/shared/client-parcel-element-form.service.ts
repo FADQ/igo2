@@ -79,7 +79,7 @@ export class ClientParcelElementFormService {
 
     return infoFields$
       .pipe(
-        map((fields:  FormField[]) => {
+        map((fields: FormField[]) => {
           return this.formService.form([], [
             this.formService.group({name: 'info', title: infoTitle}, fields)
           ]);
@@ -116,7 +116,7 @@ export class ClientParcelElementFormService {
             inputs: {
               choices
             }
-          }, partial)  as FormField<FormFieldSelectInputs>;
+          }, partial) as FormField<FormFieldSelectInputs>;
         })
       );
   }
@@ -149,7 +149,7 @@ export class ClientParcelElementFormService {
             inputs: {
               choices
             }
-          }, partial)  as FormField<FormFieldSelectInputs>;
+          }, partial) as FormField<FormFieldSelectInputs>;
         })
       );
   }

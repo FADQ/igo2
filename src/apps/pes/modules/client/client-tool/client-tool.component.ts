@@ -1,6 +1,5 @@
 import {
   Component,
-  Input,
   ChangeDetectionStrategy
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';

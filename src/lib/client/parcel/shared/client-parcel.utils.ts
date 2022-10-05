@@ -1,5 +1,6 @@
 import * as olstyle from 'ol/style';
 import OlFeature from 'ol/Feature';
+import OlPolygon from 'ol/geom/Polygon';
 
 import { FormFieldSelectChoice } from '@igo2/common';
 
@@ -26,11 +27,11 @@ export function getParcelRelation(listItem: ClientParcelListResponseItem, noClie
   const estExp = listItem.properties.indEstExploitant || undefined;
 
   // Relation is a number used to order the parcels on the map and to define their color
-  let relation = 1;  // Orange
+  let relation = 1; // Orange
   if (estDet === 'N' && estExp === 'O') {
-    relation = 3;  // Teal
+    relation = 3; // Teal
   } else if (estDet === 'O' && estExp === 'N') {
-    relation = 2;  // Green
+    relation = 2; // Green
   }
 
   return relation;
@@ -58,7 +59,7 @@ export function createParcelLayer(client: Client): VectorLayer {
 
 export function createPerClientParcelLayerStyle(
   color: [number, number, number]
-): (olFeature: OlFeature, resolution: number) => olstyle.Style {
+): (olFeature: OlFeature<OlPolygon>, resolution: number) => olstyle.Style {
 
   const style = new olstyle.Style({
     stroke: new olstyle.Stroke({
@@ -71,13 +72,13 @@ export function createPerClientParcelLayerStyle(
     text: createOlTextStyle()
   });
 
-  return (function(olFeature: OlFeature, resolution: number) {
+  return (function(olFeature: OlFeature<OlPolygon>, resolution: number) {
     style.getText().setText(getParcelFeatureText(olFeature, resolution));
     return style;
   });
 }
 
-export function createParcelLayerStyle(): (olFeature: OlFeature, resolution: number) => olstyle.Style {
+export function createParcelLayerStyle(): (olFeature: OlFeature<OlPolygon>, resolution: number) => olstyle.Style {
   const style = new olstyle.Style({
     stroke: new olstyle.Stroke({
       width: 2
@@ -86,7 +87,7 @@ export function createParcelLayerStyle(): (olFeature: OlFeature, resolution: num
     text: createOlTextStyle()
   });
 
-  return (function(olFeature: OlFeature, resolution: number) {
+  return (function(olFeature: OlFeature<OlPolygon>, resolution: number) {
     const color = getParcelFeatureColor(olFeature);
     style.getFill().setColor(color.concat([0]));
     style.getStroke().setColor(color);
@@ -95,7 +96,7 @@ export function createParcelLayerStyle(): (olFeature: OlFeature, resolution: num
   });
 }
 
-function getParcelFeatureText(olFeature: OlFeature, resolution: number): string {
+function getParcelFeatureText(olFeature: OlFeature<OlPolygon>, resolution: number): string {
   const maxResolution = 14;
   if (resolution > maxResolution) {
     return '';
@@ -103,8 +104,7 @@ function getParcelFeatureText(olFeature: OlFeature, resolution: number): string 
   return olFeature.get('noParcelleAgricole');
 }
 
-function getParcelFeatureColor(olFeature: OlFeature) {
-  console.log(olFeature.get('relation'));
+function getParcelFeatureColor(olFeature: OlFeature<OlPolygon>) {
   return ClientRelationColors['' + olFeature.get('relation')];
 }
 

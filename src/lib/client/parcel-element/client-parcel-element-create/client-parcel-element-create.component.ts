@@ -85,11 +85,11 @@ export class ClientParcelElementCreateComponent
    */
   @Output() cancel = new EventEmitter<void>();
 
-  get getOperationTitle(): (data: ClientParcelElement, languageService: LanguageService) => string  {
+  get getOperationTitle(): (data: ClientParcelElement, languageService: LanguageService) => string {
     return generateParcelElementOperationTitle;
   }
 
-  get processData(): (data: ClientParcelElement) => Observable<EditionResult>  {
+  get processData(): (data: ClientParcelElement) => Observable<EditionResult> {
     return (data: ClientParcelElement): Observable<EditionResult> => this.processParcelElement(data);
   }
 
@@ -141,7 +141,7 @@ export class ClientParcelElementCreateComponent
   }
 
   private setForm(form: Form) {
-    const fields =  getAllFormFields(form);
+    const fields = getAllFormFields(form);
 
     const anneeImageField = fields.find((field: FormField) => field.name === 'properties.anneeImage');
     if (anneeImageField !== undefined) {

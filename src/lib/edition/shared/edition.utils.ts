@@ -1,5 +1,6 @@
 import * as olstyle from 'ol/style';
 import OlFeature from 'ol/Feature';
+import OlSimpleGeometry from 'ol/geom/SimpleGeometry';
 import OlMultiPoint from 'ol/geom/MultiPoint';
 
 import turfSimplify from '@turf/simplify';
@@ -14,7 +15,7 @@ export function getOperationTitle(feature: Feature, languageService: LanguageSer
 }
 
 export function createOlEditionStyle(): olstyle.Style[] {
-  const color = [0, 218, 250];  // Teal;
+  const color = [0, 218, 250]; // Teal;
   return [
     new olstyle.Style({
       fill: new olstyle.Fill({
@@ -44,7 +45,7 @@ export function createOlEditionStyle(): olstyle.Style[] {
           color: color.concat([0.30])
         })
       }),
-      geometry: function(olFeature: OlFeature) {
+      geometry: function(olFeature: OlFeature<OlSimpleGeometry>) {
         const olGeometry = olFeature.getGeometry();
         const coordinates = olGeometry.getCoordinates().reduce((r, c) => {
           return r.concat(c);
