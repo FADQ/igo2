@@ -9,7 +9,8 @@ import { EntityStore } from '@igo2/common';
 
 import {
   Client,
-  ClientParcelTxService
+  ClientParcelTxService,
+  ClientInReconciliationResponseData
 } from 'src/lib/client';
 import { SubmitStep, SubmitHandler } from 'src/lib/utils';
 
@@ -69,8 +70,8 @@ export class ClientParcelTxDeleteDialogComponent implements OnDestroy {
   }
 
   onYesClick() {
-    const submit$ = this.clientParcelTxService.getClientsInReconcilitation(this.client).pipe(
-      concatMap((clients: Client[]) => {
+    const submit$ = this.clientParcelTxService.getClientsInReconcilitation(this.client, this.annee).pipe(
+      concatMap((clients: ClientInReconciliationResponseData[]) => {
         if (clients.length > 0) {
           return throwError(null);
         }

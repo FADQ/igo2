@@ -136,7 +136,7 @@ export const igoEnvironment: IgoEnvironment = {
       },
       parcelTx: {
         reconciliate: '/igodonneesgeospatiales/edition_parcelle_agricole/reconcilierParcellesEdition/${clientNum}/${annee}',
-        reconciliateClients: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirliensclientsedition/${clientNum}',
+        reconciliateClients: '/igodonneesgeospatiales/edition_parcelle_agricole/obtenirliensclientsedition/${clientNum}/${annee}',
         start: '/igodonneesgeospatiales/edition_parcelle_agricole/activeredition/${clientNum}/${annee}',
         create: '/igodonneesgeospatiales/edition_parcelle_agricole/creerSchemaEdition/${clientNum}/${annee}',
         delete: '/igodonneesgeospatiales/edition_parcelle_agricole/supprimerschema/${clientNum}/${annee}',

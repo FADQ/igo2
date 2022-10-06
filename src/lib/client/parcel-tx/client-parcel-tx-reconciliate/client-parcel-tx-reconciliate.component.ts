@@ -16,12 +16,14 @@ import {
   EntityStore,
   EntityTableTemplate,
   WidgetComponent,
-  OnUpdateInputs
+  OnUpdateInputs,
+  EntityTableColumnRenderer
 } from '@igo2/common';
 
 import { SubmitStep, SubmitHandler } from '../../../utils';
 import { Client } from '../../shared/client.interfaces';
 import { ClientParcelTxService } from '../shared/client-parcel-tx.service';
+import { ClientInReconciliationResponseData, ClientInReconciliationResponse } from '../shared/client-parcel-tx.interfaces';
 
 @Component({
   selector: 'fadq-client-parcel-tx-reconciliate',
@@ -31,6 +33,11 @@ import { ClientParcelTxService } from '../shared/client-parcel-tx.service';
 })
 export class ClientParcelTxReconciliateComponent
     implements WidgetComponent, OnUpdateInputs, OnInit, OnDestroy {
+
+   /**
+   * Determines whether edition$ in
+   */
+    isBlocked$: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
   /**
    * Message
@@ -54,25 +61,44 @@ export class ClientParcelTxReconciliateComponent
    * Clients in reconciliation store
    * @internal
    */
-  readonly clientStore: EntityStore<Client> = new EntityStore([], {
-    getKey: (client: Client) => client.info.numero
+  readonly clientStore: EntityStore<ClientInReconciliationResponseData> = new EntityStore([], {
+    getKey: (client: ClientInReconciliationResponseData) => client.numeroClient
   });
 
   /**
    * Transaction operations table template
    * @internal
    */
-  readonly tableTemplate: EntityTableTemplate = {
+  tableTemplate: EntityTableTemplate = {
     selection: false,
     sort: false,
+    fixedHeader: true,
+      headerClassFunc: (() => {
+        return {'text-centered': true};
+      }),
+      rowClassFunc: ((client: ClientInReconciliationResponseData) => {
+        return {'text-centered': true};
+      }),
     columns: [
       {
-        name: 'info.numero',
+        name: 'numeroClient',
         title: 'No. de client'
       },
       {
-        name: 'info.nom',
+        name: 'nomClient',
         title: 'Nom'
+      },
+      {
+        name: 'sensAsso',
+        title: 'Association'
+      },
+      {
+        name: 'indiBloque',
+        title: 'Bloquant',
+        renderer: EntityTableColumnRenderer.HTML,
+        valueAccessor: (client: ClientInReconciliationResponseData) => {
+          return client.indiBloque === 'O' ? 'Oui' : 'Non';
+        }
       }
     ]
   };
@@ -108,8 +134,17 @@ export class ClientParcelTxReconciliateComponent
    * @internal
    */
   ngOnInit() {
-    this.clientParcelTxService.getClientsInReconcilitation(this.client)
-      .subscribe((clients: Client[]) => this.clientStore.load(clients));
+    this.clientParcelTxService.getClientsInReconcilitation(this.client, this.annee)
+      .subscribe((clients: ClientInReconciliationResponseData[]) => {
+        this.clientStore.load(clients);
+        let recIsBlocked: boolean = false;
+        clients.forEach(element => {
+          if (element.indiBloque === 'O') {
+            recIsBlocked = true;
+          }
+        });
+        this.isBlocked$.next(recIsBlocked);
+      });
   }
 
   /**
