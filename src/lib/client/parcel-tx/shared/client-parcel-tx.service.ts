@@ -65,26 +65,25 @@ export class ClientParcelTxService {
     return this.http.get(url);
   }
 
-  getClientsInReconcilitation(client: Client): Observable<Client[]> {
+  getClientsInReconcilitation(client: Client, annee: number): Observable<ClientInReconciliationResponseData[]> {
     const url = this.apiService.buildUrl(this.apiConfig.reconciliateClients, {
-      clientNum: client.info.numero
+      clientNum: client.info.numero,
+      annee
     });
 
     return this.http.get(url).pipe(
       map((response: ClientInReconciliationResponse) => {
-        return response.data.map((item: ClientInReconciliationResponseData) => {
-          return {
-            info: {
-              nom: item.nomClient,
-              numero: item.numeroClient,
-              adresseCor: undefined,
-              adresseExp: undefined,
-              adressePro: []
-            }
-          };
-        });
+        return response.data.map(item => this.listItemToClient(item));
       })
     );
+  }
+
+  /**
+   * Convert a service response item in a MunNom interface
+   * @param listItem An item of response municipality service
+   */
+   private listItemToClient(listItem: ClientInReconciliationResponseData): ClientInReconciliationResponseData {
+    return Object.assign({}, listItem);
   }
 
   reconciliate(client: Client, annee: number): Observable<unknown> {

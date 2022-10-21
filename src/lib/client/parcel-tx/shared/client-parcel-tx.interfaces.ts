@@ -20,10 +20,12 @@ export interface ClientParcelTxActivateResponse {
 export interface ClientInReconciliationResponseData {
   numeroClient: string;
   nomClient: string;
+  sensAsso: string;
+  indiBloque: string;
 }
 
 export interface ClientInReconciliationResponse {
-  data: ClientInfoGetResponseData[];
+  data: ClientInReconciliationResponseData[];
 }
 
 export interface ClientsInParcelTxGetResponse {

@@ -24,7 +24,7 @@
       <button
         mat-raised-button
         color="primary"
-        [disabled]="(submitHandler.step$ | async) === submitStep.Pending"
+        [disabled]="(isBlocked$ | async) || ((submitHandler.step$ | async) === submitStep.Pending && (!isBlocked$ | async))"
         (click)="onSubmit()">
         {{ 'yes' | translate }}
       </button>
@@ -36,7 +36,7 @@
         type="button"
         (click)="onClose()">
         {{ 'close' | translate }}
-      </button>  
+      </button>
     </ng-template>
   </ng-container>
 
