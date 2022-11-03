@@ -151,7 +151,7 @@ export class ClientSchemaActionsService {
         },
         availability: (ctrl: ClientController) => every(
           noActiveWidget(ctrl),
-          schemaIsOfTypeLSE(ctrl)
+          schemaCanBeTransfered(ctrl)
         )
       }
     ];
@@ -171,9 +171,9 @@ function schemaIsDefined(ctrl: ClientController): Observable<boolean> {
   );
 }
 
-function schemaIsOfTypeLSE(ctrl: ClientController): Observable<boolean> {
+function schemaCanBeTransfered(ctrl: ClientController): Observable<boolean> {
   return ctrl.schema$.pipe(
-    map((schema: ClientSchema) => schema !== undefined && schema.type === ClientSchemaType.LSE)
+    map((schema: ClientSchema) => schema !== undefined && (schema.type === ClientSchemaType.LSE || schema.type === ClientSchemaType.RPA))
   );
 }
 
