@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 
 import { BehaviorSubject, Observable, of, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -13,13 +13,15 @@ import {
   FormService,
   FormFieldSelectChoice
 } from '@igo2/common';
-import { IgoMap } from '@igo2/geo';
+import { FeatureStore, IgoMap } from '@igo2/geo';
 import { ObjectUtils } from '@igo2/utils';
 
 import { createOlEditionStyle } from '../../../edition/shared/edition.utils';
 
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
+import { validateOnlyOneLabel } from './client-schema-element-validators';
 import {
+  ClientSchemaElement,
   ClientSchemaElementType,
   ClientSchemaElementTypes
 } from './client-schema-element.interfaces';
@@ -36,7 +38,7 @@ export class ClientSchemaElementFormService {
     private schemaElementService: ClientSchemaElementService
   ) {}
 
-  buildCreateForm(schema: ClientSchema, igoMap: IgoMap): Observable<Form> {
+  buildCreateForm(schema: ClientSchema, igoMap: IgoMap, store: FeatureStore<ClientSchemaElement>): Observable<Form> {
     // TODO: i18n
     const infoFields$ = zip(
       this.createIdField({options: {disabled: true}}),
@@ -59,18 +61,22 @@ export class ClientSchemaElementFormService {
       .pipe(
         map((fields: [FormField[], FormField[]]) => {
           return this.formService.form([], [
-            this.formService.group({name: 'info', title: infoTitle}, fields[0]),
+            this.formService.group({name: 'info', title: infoTitle, options: {
+              validator: Validators.compose([,
+                (control: FormGroup) => validateOnlyOneLabel(control, store, schema)
+              ])
+            }}, fields[0]),
             this.formService.group({name: 'geometry', title: geometryTitle}, fields[1])
           ]);
         })
       );
   }
 
-  buildUpdateForm(schema: ClientSchema, igoMap: IgoMap): Observable<Form> {
-    return this.buildCreateForm(schema, igoMap);
+  buildUpdateForm(schema: ClientSchema, igoMap: IgoMap, store: FeatureStore<ClientSchemaElement>): Observable<Form> {
+    return this.buildCreateForm(schema, igoMap, store);
   }
 
-  buildUpdateBatchForm(schema: ClientSchema): Observable<Form> {
+  buildUpdateBatchForm(schema: ClientSchema, store: FeatureStore<ClientSchemaElement>): Observable<Form> {
     const infoFields$ = zip(
       this.createDescriptionField({options: {disabled: true, disableSwitch: true}}),
       this.createEtiquetteField({options: {disabled: true, disableSwitch: true}}),
@@ -83,7 +89,12 @@ export class ClientSchemaElementFormService {
       .pipe(
         map((fields: FormField[]) => {
           return this.formService.form([], [
-            this.formService.group({name: 'info', title: infoTitle}, fields)
+            this.formService.group({name: 'info', title: infoTitle,
+            options: {
+              validator: Validators.compose([,
+                (control: FormGroup) => validateOnlyOneLabel(control, store, schema)
+              ])
+            }}, fields)
           ]);
         })
       );
@@ -119,9 +130,12 @@ export class ClientSchemaElementFormService {
       title: 'Étiquette',
       options:  {
         cols: 1,
-        validator: Validators.maxLength(25),
+        validator: Validators.compose([
+          Validators.maxLength(25)
+        ]),
         errors: {
-          maxlength: 'client.schemaElement.error.etiquetteMaxLength'
+          maxlength: 'client.schemaElement.error.etiquetteMaxLength',
+          uniqueLabel: 'client.schemaElement.error.uniqueLabel'
         }
       }
     }, partial));

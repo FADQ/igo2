@@ -10,3 +10,8 @@ export const ClientSchemaType = {
   PLP: 'PLP',
   RPA: 'RPA'
 };
+
+export const UniqueClientSchemaType = {
+  LSE: 'LSE',
+  RPA: 'RPA'
+};

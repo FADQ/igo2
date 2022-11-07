@@ -124,7 +124,7 @@ export class ClientSchemaElementCreateComponent
 
   ngOnInit() {
     this.clientSchemaElementFormService
-      .buildCreateForm(this.schema, this.map)
+      .buildCreateForm(this.schema, this.map, this.store)
       .subscribe((form: Form) => this.setForm(form));
   }
 

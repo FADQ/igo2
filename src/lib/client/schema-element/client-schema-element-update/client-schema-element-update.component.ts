@@ -102,7 +102,7 @@ export class ClientSchemaElementUpdateComponent
 
   ngOnInit() {
     this.clientSchemaElementFormService
-      .buildUpdateForm(this.schema, this.map)
+      .buildUpdateForm(this.schema, this.map, this.store)
       .subscribe((form: Form) => this.setForm(form));
   }
 

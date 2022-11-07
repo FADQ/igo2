@@ -213,6 +213,7 @@
     "schemaElement": {
       "commitDialog.title": "Informations non sauvegardées",
       "error.etiquetteMaxLength": "Vous devez saisir une étiquette de moins de 25 caractères.",
+      "error.uniqueLabel": "L'étiquette doit être unique.",
       "error.descriptionMaxLength": "Vous devez saisir une description de moins de 250 caractères.",
       "error.area": "La superficie doit être plus grande que 50m² et plus petite que 999 999 999 m².",
       "import": "Importer des données",

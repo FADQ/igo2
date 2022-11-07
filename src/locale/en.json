@@ -212,6 +212,7 @@
     "schemaElement": {
       "commitDialog.title": "Unsaved information",
       "error.etiquetteMaxLength": "You must enter a label of less than 25 characters.",
+      "error.uniqueLabel": "A label must be unique",
       "error.descriptionMaxLength": "You must enter a description of less than 250 characters.",
       "error.area": "The area must be larger than 50m² and smaller than 999,999,999m².",
       "import": "Import data",
