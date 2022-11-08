@@ -53,8 +53,7 @@ export class ClientSchemaFormService {
             name: 'info',
             options: {
               validator: Validators.compose([
-                (control: FormGroup) => validateOnlyOneType(control, store, ClientSchemaType.LSE),
-                (control: FormGroup) => validateOnlyOneType(control, store, ClientSchemaType.RPA)
+                (control: FormGroup) => validateOnlyOneType(control, store)
               ])
             }
           }, fields)
@@ -77,8 +76,7 @@ export class ClientSchemaFormService {
             name: 'info',
             options: {
               validator: Validators.compose([,
-                (control: FormGroup) => validateOnlyOneType(control, store, ClientSchemaType.LSE),
-                (control: FormGroup) => validateOnlyOneType(control, store, ClientSchemaType.RPA)
+                (control: FormGroup) => validateOnlyOneType(control, store)
               ])
             }
           }, fields)

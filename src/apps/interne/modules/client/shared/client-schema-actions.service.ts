@@ -8,6 +8,7 @@ import { Action, Widget } from '@igo2/common';
 import {
   ClientSchema,
   ClientSchemaType,
+  UniqueClientSchemaType,
   ClientSchemaCreateWidget,
   ClientSchemaUpdateWidget,
   ClientSchemaDeleteWidget,
@@ -173,12 +174,12 @@ function schemaIsDefined(ctrl: ClientController): Observable<boolean> {
 
 function schemaCanBeTransfered(ctrl: ClientController): Observable<boolean> {
   return ctrl.schema$.pipe(
-    map((schema: ClientSchema) => schema !== undefined && (schema.type === ClientSchemaType.LSE || schema.type === ClientSchemaType.RPA))
+    map((schema: ClientSchema) => schema !== undefined && schema.type in UniqueClientSchemaType)
   );
 }
 
 function schemaCanBeDuplicated(ctrl: ClientController): Observable<boolean> {
   return ctrl.schema$.pipe(
-    map((schema: ClientSchema) => schema !== undefined && schema.type !== ClientSchemaType.LSE && schema.type !== ClientSchemaType.RPA)
+    map((schema: ClientSchema) => schema !== undefined && schema.type in UniqueClientSchemaType)
   );
 }
