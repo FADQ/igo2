@@ -44,6 +44,7 @@ export interface ClientSchemaElementType extends FormFieldSelectChoice {
   color: [number, number, number];
   icon?: string;
   geometryType?: string;
+  order?: number;
 }
 
 export interface ClientSchemaElementTypes {

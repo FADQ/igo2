@@ -26,6 +26,7 @@ import {
   ClientSchemaElementTypes
 } from './client-schema-element.interfaces';
 import { ClientSchemaElementService } from './client-schema-element.service';
+import { UniqueClientSchemaType } from '../../schema/shared/client-schema.enums';
 
 @Injectable({
   providedIn: 'root'
@@ -77,7 +78,12 @@ export class ClientSchemaElementFormService {
   }
 
   buildUpdateBatchForm(schema: ClientSchema, store: FeatureStore<ClientSchemaElement>): Observable<Form> {
+    if (schema.type in UniqueClientSchemaType) {
+      return this.buildUpdateBatchFormUniqueClientSchema(schema);
+    }
+
     const infoFields$ = zip(
+      this.createTypeElementField(schema.type, {options: {disabled: true, disableSwitch: true}}),
       this.createDescriptionField({options: {disabled: true, disableSwitch: true}}),
       this.createEtiquetteField({options: {disabled: true, disableSwitch: true}}),
       this.createAnneeImageField({options: {disabled: true, disableSwitch: true}})
@@ -89,12 +95,26 @@ export class ClientSchemaElementFormService {
       .pipe(
         map((fields: FormField[]) => {
           return this.formService.form([], [
-            this.formService.group({name: 'info', title: infoTitle,
-            options: {
-              validator: Validators.compose([,
-                (control: FormGroup) => validateOnlyOneLabel(control, store, schema)
-              ])
-            }}, fields)
+            this.formService.group({name: 'info', title: infoTitle}, fields)
+          ]);
+        })
+      );
+  }
+
+  private buildUpdateBatchFormUniqueClientSchema(schema: ClientSchema): Observable<Form> {
+    const infoFields$ = zip(
+      this.createTypeElementField(schema.type, {options: {disabled: true, disableSwitch: true}}),
+      this.createDescriptionField({options: {disabled: true, disableSwitch: true}}),
+      this.createAnneeImageField({options: {disabled: true, disableSwitch: true}})
+    );
+
+    const infoTitle = this.languageService.translate.instant('informations');
+
+    return infoFields$
+      .pipe(
+        map((fields: FormField[]) => {
+          return this.formService.form([], [
+            this.formService.group({name: 'info', title: infoTitle}, fields)
           ]);
         })
       );
@@ -130,9 +150,7 @@ export class ClientSchemaElementFormService {
       title: 'Étiquette',
       options:  {
         cols: 1,
-        validator: Validators.compose([
-          Validators.maxLength(25)
-        ]),
+        validator: Validators.maxLength(25),
         errors: {
           maxlength: 'client.schemaElement.error.etiquetteMaxLength',
           uniqueLabel: 'client.schemaElement.error.uniqueLabel'
@@ -223,8 +241,8 @@ export class ClientSchemaElementFormService {
           }, [])
           .sort((v1: ClientSchemaElementType, v2: ClientSchemaElementType) => {
             return ObjectUtils.naturalCompare(
-              v1.title,
-              v2.title,
+              v1.order,
+              v2.order,
               'asc'
             );
           });

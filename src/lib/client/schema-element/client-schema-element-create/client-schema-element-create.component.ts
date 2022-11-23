@@ -43,7 +43,8 @@ import { ClientSchemaElementFormService } from '../shared/client-schema-element-
 
 import {
   generateSchemaElementOperationTitle,
-  getSchemaElementValidationMessage
+  getSchemaElementValidationMessage,
+  updateElementTypeChoices
 } from '../shared/client-schema-element.utils';
 
 @Component({
@@ -176,7 +177,7 @@ export class ClientSchemaElementCreateComponent
 
     const geometryField = this.getGeometryField();
     this.geometry$$ = geometryField.control.valueChanges
-      .subscribe((geometry: GeoJSONGeometry) => this.updateElementTypeChoices(geometry.type));
+      .subscribe((geometry: GeoJSONGeometry) => updateElementTypeChoices(geometry.type, this.clientSchemaElementService,this.schema, this.getElementTypeField()));
 
     const elementTypeField = this.getElementTypeField();
     this.elementType$$ = elementTypeField.control.valueChanges
@@ -228,15 +229,4 @@ export class ClientSchemaElementCreateComponent
       }
     });
   }
-
-  private updateElementTypeChoices(geometryTypeValue: string) {
-    this.clientSchemaElementService
-      .getSchemaElementTypes(this.schema.type)
-      .subscribe((schemaElementTypes: ClientSchemaElementTypes) => {
-        const elementTypeField = this.getElementTypeField();
-        const choices$ = elementTypeField.inputs.choices as BehaviorSubject<FormFieldSelectChoice[]>;
-        choices$.next(schemaElementTypes[geometryTypeValue]);
-      });
-  }
-
 }

@@ -14,8 +14,11 @@ import { map } from 'rxjs/operators';
 import {
   EntityTransaction,
   Form,
+  FormField,
+  FormFieldSelectInputs,
   WidgetComponent,
-  OnUpdateInputs
+  OnUpdateInputs,
+  getAllFormFields
 } from '@igo2/common';
 import { LanguageService } from '@igo2/core';
 import { FeatureStore, IgoMap } from '@igo2/geo';
@@ -28,7 +31,8 @@ import { ClientSchemaElementFormService } from '../shared/client-schema-element-
 
 import {
   generateSchemaElementOperationTitle,
-  getSchemaElementValidationMessage
+  getSchemaElementValidationMessage,
+  updateElementTypeChoices
 } from '../shared/client-schema-element.utils';
 
 @Component({
@@ -131,6 +135,15 @@ export class ClientSchemaElementUpdateBatchComponent
 
   private setForm(form: Form) {
     this.form$.next(form);
+    const geometryType = this.schemaElements[0].geometry.type;
+    updateElementTypeChoices(geometryType,this.clientSchemaElementService, this.schema, this.getElementTypeField());
+  }
+
+  private getElementTypeField(): FormField<FormFieldSelectInputs> {
+    const fields = getAllFormFields(this.form$.value);
+    return fields.find((field: FormField) => {
+      return field.name === 'properties.typeElement';
+    }) as FormField<FormFieldSelectInputs>;
   }
 
 }

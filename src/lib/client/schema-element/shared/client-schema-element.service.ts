@@ -246,7 +246,8 @@ export class ClientSchemaElementService {
         value: item.idTypeElement,
         title: item.libelleFrancais,
         color: hexToRGB(item.couleurElement),
-        icon: item.iconeElement
+        icon: item.iconeElement,
+        order: item.ordreAffichage
       };
     };
 
