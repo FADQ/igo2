@@ -133,10 +133,10 @@ export class ClientSchemaElementFormService {
   private createDescriptionField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
     return of(this.createField({
       name: 'properties.description',
-      title: 'Description',
+      title: 'Description ou commentaire',
       options:  {
         cols: 2,
-        validator: Validators.maxLength(250),
+        validator: Validators.maxLength(1500),
         errors: {
           maxlength: 'client.schemaElement.error.descriptionMaxLength'
         }
