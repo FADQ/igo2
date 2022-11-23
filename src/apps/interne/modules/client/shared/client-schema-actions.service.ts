@@ -152,7 +152,7 @@ export class ClientSchemaActionsService {
         },
         availability: (ctrl: ClientController) => every(
           noActiveWidget(ctrl),
-          transactionIsEmpty(ctrl)
+          schemaCanBeTransfered(ctrl)
         )
       }
     ];
@@ -180,10 +180,6 @@ function schemaCanBeTransfered(ctrl: ClientController): Observable<boolean> {
 
 function schemaCanBeDuplicated(ctrl: ClientController): Observable<boolean> {
   return ctrl.schema$.pipe(
-    map((schema: ClientSchema) => schema !== undefined && (schema.type in UniqueClientSchemaType) === false)
+    map((schema: ClientSchema) => schema !== undefined && schema.type in UniqueClientSchemaType)
   );
-}
-
-function transactionIsEmpty(ctrl: ClientController): Observable<boolean> {
-  return ctrl.schemaElementTransaction.empty$;
 }
