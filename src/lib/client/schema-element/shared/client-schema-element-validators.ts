@@ -10,15 +10,15 @@ import {
   } from './client-schema-element.interfaces';
 /**
  * Validates only one label
- * @param control 
- * @param store 
- * @param schema 
- * @returns only one label 
+ * @param control The control to validate information
+ * @param store Store cantaining all schema elements of the schema to be validated
+ * @param schema Schema to be validated
+ * @returns Error if the label of the control is not unique
  */
 export function validateOnlyOneLabel(control: FormGroup, store: EntityStore<ClientSchemaElement>, schema: ClientSchema): ValidationErrors | null {
   const labelControl = control.controls['properties.etiquette'];
   const schemaElementId = control.controls['properties.idElementGeometrique'].value;
-  const label = control.controls['properties.etiquette'].value;
+  const label = labelControl.value;
 
   if (schema.type in UniqueClientSchemaType) {
     const otherElementSchema = store.all().find((schemaElement: ClientSchemaElement) => {
