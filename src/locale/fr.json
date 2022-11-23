@@ -199,7 +199,9 @@
       "transfer.tooltip": "Transférer le schéma",
       "transfer.error.duplicatedNumber": "Certains numéros des éléments du schéma sélectionné sont déjà utilisés dans celui du client vers lequel est tenté le transfert. Si nécessaire, aller modifier ces numéros par la suite.",
       "createMap": "Créer carte(s)",
-      "createMap.tooltip": "Créer carte(s) de structure d'entreposage"
+      "createMap.tooltip": "Créer carte(s) de structure d'entreposage",
+      "description.LSE": "Localisation de silos, carrés à grain et cribs",
+      "description.RPA": "Localisation d'aménagements admissibles/inadmissibles"
     },
     "schemaFile": {
       "error.size": "Vous devez sélectionner un document numérisé qui contient des données et avoir au plus une taille de 10 mo.",
@@ -214,6 +216,7 @@
       "commitDialog.title": "Informations non sauvegardées",
       "error.etiquetteMaxLength": "Vous devez saisir une étiquette de moins de 25 caractères.",
       "error.uniqueLabel": "L'étiquette doit être unique.",
+      "error.labelRequired": "L'étiquette est obligatoire pour ce type de schéma.",
       "error.descriptionMaxLength": "Vous devez saisir une description de moins de 250 caractères.",
       "error.area": "La superficie doit être plus grande que 50m² et plus petite que 999 999 999 m².",
       "import": "Importer des données",

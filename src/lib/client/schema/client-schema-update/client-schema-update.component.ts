@@ -8,12 +8,12 @@ import {
   OnInit
 } from '@angular/core';
 
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { EntityStore, Form, WidgetComponent, OnUpdateInputs } from '@igo2/common';
 
+import { formToJSON } from '../../../utils/conversion';
 import { Client } from '../../shared/client.interfaces';
-
 import { ClientSchema, ClientSchemaUpdateData } from '../shared/client-schema.interfaces';
 import { ClientSchemaService } from '../shared/client-schema.service';
 import { ClientSchemaFormService } from '../shared/client-schema-form.service';
@@ -29,7 +29,7 @@ export class ClientSchemaUpdateComponent implements OnInit, OnUpdateInputs, Widg
   /**
    * Create form
    */
-  form$ = new Subject<Form>();
+  form$ = new BehaviorSubject<Form>(undefined);
 
   /**
    * Client
@@ -63,7 +63,7 @@ export class ClientSchemaUpdateComponent implements OnInit, OnUpdateInputs, Widg
   ) {}
 
   ngOnInit() {
-    this.clientSchemaFormService.buildUpdateForm(this.store)
+    this.clientSchemaFormService.buildUpdateForm(this.store, this.schema)
       .subscribe((form: Form) => this.form$.next(form));
   }
 
@@ -75,7 +75,7 @@ export class ClientSchemaUpdateComponent implements OnInit, OnUpdateInputs, Widg
   }
 
   onSubmit(data: {[key: string]: any}) {
-    const schemaData = Object.assign({}, data as Partial<ClientSchemaUpdateData>, {
+    const schemaData = Object.assign({}, formToJSON(this.form$.value) as Partial<ClientSchemaUpdateData>, {
       id: this.schema.id,
     }) as ClientSchemaUpdateData;
 
@@ -91,5 +91,4 @@ export class ClientSchemaUpdateComponent implements OnInit, OnUpdateInputs, Widg
     this.store.update(schema);
     this.complete.emit();
   }
-
 }

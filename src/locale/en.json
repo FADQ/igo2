@@ -198,7 +198,9 @@
       "transfer.tooltip": "Transfer the diagram",
       "transfer.error.duplicatedNumber": "Certain numbers of the elements of the selected scheme are already used in that of the customer to which the transfer is attempted. If necessary, modify these numbers later.",
       "createMap": "Create map(s)",
-      "createMap.tooltip": "Create storage structure map(s)"
+      "createMap.tooltip": "Create storage structure map(s)",
+      "description.LSE": "'Location of silos, grain beds and cribs",
+      "description.RPA": "Location of admissible/inadmissible developments"
     },
     "schemaFile": {
       "error.size": "You must select a scanned document that contains data and is at most 10MB in size.",
@@ -213,6 +215,7 @@
       "commitDialog.title": "Unsaved information",
       "error.etiquetteMaxLength": "You must enter a label of less than 25 characters.",
       "error.uniqueLabel": "A label must be unique",
+      "error.labelRequired": "The label is mandatory for this type of schema.",
       "error.descriptionMaxLength": "You must enter a description of less than 250 characters.",
       "error.area": "The area must be larger than 50m² and smaller than 999,999,999m².",
       "import": "Import data",

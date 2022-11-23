@@ -8,10 +8,11 @@ import {
   OnInit
 } from '@angular/core';
 
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { EntityStore, Form, WidgetComponent, OnUpdateInputs } from '@igo2/common';
-
+import { LanguageService } from '@igo2/core';
+import { formToJSON } from '../../../utils/conversion';
 import { Client } from '../../shared/client.interfaces';
 import { ClientSchema, ClientSchemaCreateData } from '../shared/client-schema.interfaces';
 import { ClientSchemaService } from '../shared/client-schema.service';
@@ -28,7 +29,7 @@ export class ClientSchemaCreateComponent implements OnInit, OnUpdateInputs, Widg
   /**
    * Create form
    */
-  form$ = new Subject<Form>();
+  form$ = new BehaviorSubject<Form>(undefined);
 
   /**
    * Client
@@ -53,6 +54,7 @@ export class ClientSchemaCreateComponent implements OnInit, OnUpdateInputs, Widg
   constructor(
     private clientSchemaService: ClientSchemaService,
     private clientSchemaFormService: ClientSchemaFormService,
+    private languageService: LanguageService,
     private cdRef: ChangeDetectorRef
   ) {}
 
@@ -71,7 +73,7 @@ export class ClientSchemaCreateComponent implements OnInit, OnUpdateInputs, Widg
   onSubmit(data: {[key: string]: any}) {
     const schemaData = Object.assign({
       numeroClient: this.client.info.numero
-    }, data) as ClientSchemaCreateData;
+    }, formToJSON(this.form$.value)) as ClientSchemaCreateData;
 
     this.clientSchemaService.createSchema(schemaData)
       .subscribe((schema: ClientSchema) => this.onSubmitSuccess(schema));
@@ -86,5 +88,4 @@ export class ClientSchemaCreateComponent implements OnInit, OnUpdateInputs, Widg
     this.store.state.update(schema, {selected: true}, true);
     this.complete.emit();
   }
-
 }
