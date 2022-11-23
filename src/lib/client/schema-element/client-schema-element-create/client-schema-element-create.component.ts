@@ -19,8 +19,7 @@ import {
   FormFieldSelectInputs,
   getAllFormFields,
   WidgetComponent,
-  OnUpdateInputs,
-  FormFieldSelectChoice
+  OnUpdateInputs
 } from '@igo2/common';
 import { LanguageService } from '@igo2/core';
 import {
@@ -35,7 +34,6 @@ import { getAnneeImageFromMap } from '../../shared/client.utils';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import {
   ClientSchemaElement,
-  ClientSchemaElementTypes,
   ClientSchemaElementType
 } from '../shared/client-schema-element.interfaces';
 import { ClientSchemaElementService } from '../shared/client-schema-element.service';
