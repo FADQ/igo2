@@ -25,6 +25,8 @@ import {
   provideEditionUndoWidget
 } from './shared/edition.widgets';
 
+import { provideEditionService } from './shared/edition.providers';
+
 @NgModule({
   imports: [
     CommonModule
@@ -57,7 +59,8 @@ export class FadqLibEditionModule {
         provideEditionSimplifyWidget(),
         provideEditionSliceWidget(),
         provideEditionTranslateWidget(),
-        provideEditionUndoWidget()
+        provideEditionUndoWidget(),
+        provideEditionService(),
       ]
     };
   }

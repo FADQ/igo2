@@ -29,6 +29,8 @@ import {
   GeometryFormFieldInputs
 } from '@igo2/geo';
 
+import { getMapExtentPolygon } from '../../../map';
+
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
 import { getAnneeImageFromMap } from '../../shared/client.utils';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
@@ -170,7 +172,16 @@ export class ClientSchemaElementCreateComponent
 
     const anneeImageField = this.getAnneeImageField();
     if (anneeImageField !== undefined) {
-      anneeImageField.control.setValue(getAnneeImageFromMap(this.map));
+      let recentYear = getAnneeImageFromMap(this.map);
+      if (recentYear === undefined) {
+        const extentGeometry = getMapExtentPolygon(this.map, 'EPSG:4326');
+        this.clientSchemaElementService.getMostRecentImageYear(extentGeometry)
+          .subscribe((reponse: any) => {
+            anneeImageField.control.setValue(reponse.data);
+        });
+      } else {
+        anneeImageField.control.setValue(recentYear);
+      }
     }
 
     const geometryField = this.getGeometryField();

@@ -61,7 +61,7 @@ export class ClientSchemaElementTableService {
         },
         {
           name: 'properties.description',
-          title: 'Description'
+          title: 'Description ou commentaire'
         },
         {
           name: 'properties.superficie',
@@ -115,7 +115,12 @@ export class ClientSchemaElementTableService {
         },
         {
           name: 'properties.usagerMaj',
-          title: 'Usager mise à jour'
+          title: 'Usager mise à jour',
+          valueAccessor: (schemaElement: ClientSchemaElement) => {
+            const value = schemaElement.properties.idenUsagerMaj;
+            if (value) { return value; }
+            return schemaElement.properties.usagerMaj;
+          }
         }
       ]
     };

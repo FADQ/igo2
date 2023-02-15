@@ -56,6 +56,9 @@ export interface IgoEnvironment {
   importExport: {
     url: string;
   };
+  edition: {
+    validGeometry: string;
+  };
 }
 
 /* tslint:disable */
@@ -166,6 +169,7 @@ export const igoEnvironment: IgoEnvironment = {
         points: '/igolocalisation/recherche_client/obtenirElementGeometriquePoint/${schemaId}',
         lines: '/igolocalisation/recherche_client/obtenirElementGeometriqueLigne/${schemaId}',
         surfaces: '/igolocalisation/recherche_client/obtenirElementGeometriqueSurface/${schemaId}',
+        getMostRecentImageYear: '/igoschema/edition_schema/obtenirAnneeImageRecente',
         domains: {
           type: '/igoschema/edition_schema/obtenirTypesElementGeometriqueTypeSchema/${schemaType}'
         }
@@ -201,5 +205,8 @@ export const igoEnvironment: IgoEnvironment = {
   },
   importExport: {
     url: ''
+  },
+  edition: {
+    validGeometry: '/igodonneesgeospatiales/geometrie/validerGeometrie'
   }
 };
