@@ -144,9 +144,6 @@ export class ClientParcelElementCreateComponent
     const fields = getAllFormFields(form);
 
     const anneeImageField = fields.find((field: FormField) => field.name === 'properties.anneeImage');
-    if (anneeImageField !== undefined) {
-      anneeImageField.control.setValue(getAnneeImageFromMap(this.map));
-    }
 
     this.form$.next(form);
 
@@ -158,7 +155,5 @@ export class ClientParcelElementCreateComponent
         }
         this.groupIndex$.next(1);
       });
-
   }
-
 }
