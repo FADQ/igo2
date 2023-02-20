@@ -15,6 +15,7 @@ import {
 } from '@igo2/common';
 import { FeatureStore, IgoMap } from '@igo2/geo';
 import { ObjectUtils } from '@igo2/utils';
+import { getMapExtentPolygon } from '../../../map';
 
 import { createOlEditionStyle } from '../../../edition/shared/edition.utils';
 
@@ -46,7 +47,7 @@ export class ClientSchemaElementFormService {
       this.createTypeElementField(schema.type),
       this.createDescriptionField(),
       this.createEtiquetteField(),
-      this.createAnneeImageField()
+      this.createAnneeImageField(igoMap)
     );
 
     const geometryFields$ = zip(
@@ -77,16 +78,16 @@ export class ClientSchemaElementFormService {
     return this.buildCreateForm(schema, igoMap, store);
   }
 
-  buildUpdateBatchForm(schema: ClientSchema, store: FeatureStore<ClientSchemaElement>): Observable<Form> {
+  buildUpdateBatchForm(igoMap: IgoMap, schema: ClientSchema, store: FeatureStore<ClientSchemaElement>): Observable<Form> {
     if (schema.type in UniqueClientSchemaType) {
-      return this.buildUpdateBatchFormUniqueClientSchema(schema);
+      return this.buildUpdateBatchFormUniqueClientSchema(igoMap, schema);
     }
 
     const infoFields$ = zip(
       this.createTypeElementField(schema.type, {options: {disabled: true, disableSwitch: true}}),
       this.createDescriptionField({options: {disabled: true, disableSwitch: true}}),
       this.createEtiquetteField({options: {disabled: true, disableSwitch: true}}),
-      this.createAnneeImageField({options: {disabled: true, disableSwitch: true}})
+      this.createAnneeImageField(igoMap,{options: {disabled: true, disableSwitch: true}})
     );
 
     const infoTitle = this.languageService.translate.instant('informations');
@@ -101,11 +102,11 @@ export class ClientSchemaElementFormService {
       );
   }
 
-  private buildUpdateBatchFormUniqueClientSchema(schema: ClientSchema): Observable<Form> {
+  private buildUpdateBatchFormUniqueClientSchema(igoMap: IgoMap, schema: ClientSchema): Observable<Form> {
     const infoFields$ = zip(
       this.createTypeElementField(schema.type, {options: {disabled: true, disableSwitch: true}}),
       this.createDescriptionField({options: {disabled: true, disableSwitch: true}}),
-      this.createAnneeImageField({options: {disabled: true, disableSwitch: true}})
+      this.createAnneeImageField(igoMap, {options: {disabled: true, disableSwitch: true}})
     );
 
     const infoTitle = this.languageService.translate.instant('informations');
@@ -159,21 +160,53 @@ export class ClientSchemaElementFormService {
     }, partial));
   }
 
-  private createAnneeImageField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
-    return of(this.createField({
-      name: 'properties.anneeImage',
-      title: 'Année d\'image',
-      options:  {
-        cols: 1,
-        validator: Validators.compose([
-          Validators.pattern(/^([1-9][\d]{3})$/)
-        ]),
-        errors: {
-          pattern: 'errors.invalidAnnee'
-        }
-      }
-    }, partial));
+  private createAnneeImageField(igoMap: IgoMap, partial?: Partial<FormFieldConfig>): Observable<FormField> {
+    const extentGeometry = getMapExtentPolygon(igoMap, 'EPSG:4326');
+    return this.schemaElementService.getMostRecentImageYear(extentGeometry)
+      .pipe(
+        map((reponse: any) => {
+          const lastYear:number = reponse.data;
+          return this.createField({
+            name: 'properties.anneeImage',
+            title: 'Année d\'image',
+            options:  {
+              cols: 1,
+              validator: Validators.compose([,
+                Validators.pattern(/^([1-9][\d]{3})$/),
+                Validators.min(2000),
+                Validators.max(lastYear)
+              ]),
+              errors: {
+                pattern: 'errors.invalidAnnee',
+                min: 'errors.imageYearWrongRange',
+                max: 'errors.imageYearWrongRange'
+              }
+            }
+          }, partial);
+        })
+      );
   }
+
+  /*private createAnneeImageField(igoMap: IgoMap, partial?: Partial<FormFieldConfig>): Observable<FormField<FormFieldSelectInputs>> {
+    const extentGeometry = getMapExtentPolygon(igoMap, 'EPSG:4326');
+    return this.schemaElementService.getMostRecentImageYear(extentGeometry)
+      .pipe(
+        map((reponse: any) => {
+          const lastYear:number = reponse.data;
+          return this.createField({
+            name: 'properties.anneeImage',
+            title: 'Année d\'image',
+            type: 'select',
+            options:  {
+              cols: 1
+            },
+            inputs: {
+              choices: new BehaviorSubject(this.getImageYearChoices(2000,lastYear))
+            }
+          }, partial) as FormField<FormFieldSelectInputs>;
+        })
+      );
+  }*/
 
   private createGeometryField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
     return of(this.createField({
@@ -250,5 +283,15 @@ export class ClientSchemaElementFormService {
     );
   }
 
-
+  /*private getImageYearChoices(firstYear: number, lastYear: number): FormFieldSelectChoice[] {
+    const years = []
+    if (lastYear === null || lastYear === undefined) { lastYear = new Date().getFullYear(); }
+    // Add null value
+    years.push({value:null, title: ''});
+    for (var i = lastYear; i >= firstYear; i--) {
+      //console.log('Année: ' + i.toString())
+      years.push({value:i, title: i})
+    }
+    return years;
+  }*/
 }

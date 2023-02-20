@@ -102,7 +102,7 @@ export class ClientSchemaElementUpdateBatchComponent
 
   ngOnInit() {
     this.clientSchemaElementFormService
-      .buildUpdateBatchForm(this.schema, this.store)
+      .buildUpdateBatchForm(this.map, this.schema, this.store)
       .subscribe((form: Form) => this.setForm(form));
   }
 

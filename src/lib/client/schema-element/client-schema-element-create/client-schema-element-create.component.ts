@@ -171,16 +171,17 @@ export class ClientSchemaElementCreateComponent
     this.form$.next(form);
 
     const anneeImageField = this.getAnneeImageField();
+    anneeImageField.control.value
     if (anneeImageField !== undefined) {
-      let recentYear = getAnneeImageFromMap(this.map);
-      if (recentYear === undefined) {
+      let imageYear = getAnneeImageFromMap(this.map);
+      if (imageYear === undefined) {
         const extentGeometry = getMapExtentPolygon(this.map, 'EPSG:4326');
         this.clientSchemaElementService.getMostRecentImageYear(extentGeometry)
           .subscribe((reponse: any) => {
             anneeImageField.control.setValue(reponse.data);
         });
       } else {
-        anneeImageField.control.setValue(recentYear);
+        anneeImageField.control.setValue(imageYear);
       }
     }
 

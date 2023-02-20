@@ -71,7 +71,8 @@
   },
 
   "errors": {
-    "invalidAnnee": "Format d'année invalide"
+    "invalidAnnee": "Format d'année invalide",
+    "imageYearWrongRange": "L'année d'image n'est pas disponible"
   },
 
   "tools": {
