@@ -157,7 +157,10 @@ export class ClientSchemaFormService {
       title: 'Description',
       options:  {
         cols: 2,
-        validator: Validators.required
+        validator: Validators.compose([Validators.required, Validators.maxLength(250)]),
+        errors: {
+          maxlength: 'client.schema.error.descriptionMaxLength'
+        }
       }
     }, partial));
   }
@@ -168,7 +171,10 @@ export class ClientSchemaFormService {
       title: 'Année',
       options:  {
         cols: 2,
-        validator: Validators.compose([Validators.required,Validators.pattern(/^([1-9][\d]{3})$/)])
+        validator: Validators.compose([Validators.required,Validators.pattern(/(19|20)\d{2}/)]),
+        errors: {
+          pattern: 'errors.invalidAnnee'
+        }
       }
     }, partial));
   }

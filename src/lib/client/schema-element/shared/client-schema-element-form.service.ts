@@ -172,7 +172,7 @@ export class ClientSchemaElementFormService {
             options:  {
               cols: 1,
               validator: Validators.compose([,
-                Validators.pattern(/^([1-9][\d]{3})$/),
+                Validators.pattern(/(19|20)\d{2}/),
                 Validators.min(2000),
                 Validators.max(lastYear)
               ]),

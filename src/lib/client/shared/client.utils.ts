@@ -31,7 +31,7 @@ export function createClientDefaultSelectionStyle(): olstyle.Style {
 }
 
 export function getAnneeImageFromMap(map: IgoMap): number | undefined {
-  const anneeRegex = new RegExp(/([1-2][\d]{3})/);
+  const anneeRegex = new RegExp(/(19|20)\d{2}/);
   let anneImage: string;
 
   const imageLayerNames = map.layers.reduce((acc: string[], layer: Layer) => {
@@ -50,14 +50,9 @@ export function getAnneeImageFromMap(map: IgoMap): number | undefined {
       layerName = dataSource.options.params.LAYERS;
     }
 
-    // Check if layerName starts or ends with a year pattern
-    const matchStart = layerName.substring(0,4).match(anneeRegex);
-    const matchEnd = layerName.substring(layerName.length - 4).match(anneeRegex);
-
-    if(matchEnd !== null) {
-      acc.push(matchEnd[0]);
-    } else if (matchStart !== null) {
-      acc.push(matchStart[0]);
+    const match = layerName.match(anneeRegex);
+    if(match !== null) {
+      acc.push(match[0]);
     }
 
     return acc;
