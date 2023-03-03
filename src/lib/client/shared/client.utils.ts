@@ -50,9 +50,11 @@ export function getAnneeImageFromMap(map: IgoMap): number | undefined {
       layerName = dataSource.options.params.LAYERS;
     }
 
-    const match = layerName.match(anneeRegex);
-    if(match !== null) {
-      acc.push(match[0]);
+    if (layerName !== undefined && layerName.startsWith('Mosaiques-orthophotos')) {
+      const match = layerName.match(anneeRegex);
+      if(match !== null) {
+        acc.push(match[0]);
+      }
     }
 
     return acc;
