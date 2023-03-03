@@ -93,9 +93,7 @@ export class ClientSchemaElementImportComponent implements OnUpdateInputs, Widge
 
   private processSchemaElement(data: ClientSchemaElement): Observable<EditionResult> {
     Object.assign(data.properties, {
-      idElementGeometrique: undefined,
-      description: undefined,
-      etiquette: undefined
+      idElementGeometrique: undefined
     });
     return this.clientSchemaElementService.createSchemaElement(this.schema, data)
       .pipe(
