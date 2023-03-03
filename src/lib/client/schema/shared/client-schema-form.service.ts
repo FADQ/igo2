@@ -19,10 +19,7 @@ import {
 import { ApiService } from '../../../core/api/api.service';
 import { DomainService } from '../../../core/domain/domain.service';
 
-import {
-  validateOnlyOneType,
-  setDescription
-} from './client-schema-validators';
+import { validateOnlyOneType } from './client-schema-validators';
 import {
   ClientSchema,
   ClientSchemaApiConfig
@@ -55,8 +52,7 @@ export class ClientSchemaFormService {
             name: 'info',
             options: {
               validator: Validators.compose([
-                (control: FormGroup) => validateOnlyOneType(control, store),
-                (control: FormGroup) => setDescription(control, this.languageService)
+                (control: FormGroup) => validateOnlyOneType(control, store)
               ])
             }
           }, fields)

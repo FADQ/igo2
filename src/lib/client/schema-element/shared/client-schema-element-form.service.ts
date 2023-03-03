@@ -84,7 +84,6 @@ export class ClientSchemaElementFormService {
     }
 
     const infoFields$ = zip(
-      this.createTypeElementField(schema.type, {options: {disabled: true, disableSwitch: true}}),
       this.createDescriptionField({options: {disabled: true, disableSwitch: true}}),
       this.createEtiquetteField({options: {disabled: true, disableSwitch: true}}),
       this.createAnneeImageField(igoMap,{options: {disabled: true, disableSwitch: true}})
@@ -104,7 +103,6 @@ export class ClientSchemaElementFormService {
 
   private buildUpdateBatchFormUniqueClientSchema(igoMap: IgoMap, schema: ClientSchema): Observable<Form> {
     const infoFields$ = zip(
-      this.createTypeElementField(schema.type, {options: {disabled: true, disableSwitch: true}}),
       this.createDescriptionField({options: {disabled: true, disableSwitch: true}}),
       this.createAnneeImageField(igoMap, {options: {disabled: true, disableSwitch: true}})
     );
@@ -186,27 +184,6 @@ export class ClientSchemaElementFormService {
         })
       );
   }
-
-  /*private createAnneeImageField(igoMap: IgoMap, partial?: Partial<FormFieldConfig>): Observable<FormField<FormFieldSelectInputs>> {
-    const extentGeometry = getMapExtentPolygon(igoMap, 'EPSG:4326');
-    return this.schemaElementService.getMostRecentImageYear(extentGeometry)
-      .pipe(
-        map((reponse: any) => {
-          const lastYear:number = reponse.data;
-          return this.createField({
-            name: 'properties.anneeImage',
-            title: 'Année d\'image',
-            type: 'select',
-            options:  {
-              cols: 1
-            },
-            inputs: {
-              choices: new BehaviorSubject(this.getImageYearChoices(2000,lastYear))
-            }
-          }, partial) as FormField<FormFieldSelectInputs>;
-        })
-      );
-  }*/
 
   private createGeometryField(partial?: Partial<FormFieldConfig>): Observable<FormField> {
     return of(this.createField({

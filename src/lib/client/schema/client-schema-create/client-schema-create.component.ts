@@ -17,6 +17,8 @@ import { Client } from '../../shared/client.interfaces';
 import { ClientSchema, ClientSchemaCreateData } from '../shared/client-schema.interfaces';
 import { ClientSchemaService } from '../shared/client-schema.service';
 import { ClientSchemaFormService } from '../shared/client-schema-form.service';
+import { UniqueClientSchemaType } from '../shared/client-schema.enums';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'fadq-client-schema-create',
@@ -60,7 +62,10 @@ export class ClientSchemaCreateComponent implements OnInit, OnUpdateInputs, Widg
 
   ngOnInit() {
     this.clientSchemaFormService.buildCreateForm(this.store)
-      .subscribe((form: Form) => this.form$.next(form));
+      .subscribe((form: Form) => {
+        this.setDescription(form);
+        this.form$.next(form);
+      });
   }
 
   /**
@@ -87,5 +92,25 @@ export class ClientSchemaCreateComponent implements OnInit, OnUpdateInputs, Widg
     this.store.insert(schema);
     this.store.state.update(schema, {selected: true}, true);
     this.complete.emit();
+  }
+
+  private setDescription(form: Form) {
+    const formInfo = form.control.get('info') as FormControl;
+    formInfo.get('type').valueChanges.subscribe(() => {
+      const schemaTypeControl = formInfo.get('type') as FormControl;
+      const schemaType = schemaTypeControl.value;
+      const descriptionControl = formInfo.get('description') as FormControl;
+      if (schemaType in UniqueClientSchemaType && descriptionControl !== undefined) {
+        formInfo.patchValue({description: this.languageService.translate.instant('client.schema.description.' + schemaType)}, {onlySelf: true, emitEvent: true});
+        descriptionControl.disable({onlySelf: true, emitEvent: true});
+      }else {
+        if (descriptionControl.value === this.languageService.translate.instant('client.schema.description.LSE') ||
+            descriptionControl.value === this.languageService.translate.instant('client.schema.description.RPA')) {
+          descriptionControl.reset(null);
+          descriptionControl.setValue('', {onlySelf: true, emitEvent: true});
+          }
+          descriptionControl.enable({onlySelf: true, emitEvent: true});
+      }
+    });
   }
 }
