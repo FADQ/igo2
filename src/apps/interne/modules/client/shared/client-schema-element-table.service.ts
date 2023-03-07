@@ -83,16 +83,16 @@ export class ClientSchemaElementTableService {
           name: 'superficieAcres',
           title: 'Superficie (acres)',
           valueAccessor: (schemaElement: ClientSchemaElement) => {
-            const area = Number(squareMetersToHectares(schemaElement.properties.superficie).toFixed(1));
-            return area ? formatMeasure(area*2.924, {decimal: 1, locale: 'fr'}) : '';
+            const area = schemaElement.properties.superficie;
+            return area ? formatMeasure(squareMetersToAcres(area), {decimal: 1, locale: 'fr'}) : '';
           }
         },
         {
           name: 'superficieArpents',
           title: 'Superficie (arpents)',
           valueAccessor: (schemaElement: ClientSchemaElement) => {
-            const area = schemaElement.properties.superficie;
-            return area ? formatMeasure(squareMetersToAcres(area), {decimal: 1, locale: 'fr'}) : '';
+            const area = Number(squareMetersToHectares(schemaElement.properties.superficie).toFixed(1));
+            return area ? formatMeasure(area*2.924, {decimal: 1, locale: 'fr'}) : '';
           }
         },
         {
