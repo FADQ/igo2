@@ -13,6 +13,7 @@ export interface ClientSchemaElementApiConfig {
   points: string;
   lines: string;
   surfaces: string;
+  getMostRecentImageYear: string;
   domains: {
     type: string;
   };
@@ -27,6 +28,7 @@ export interface ClientSchemaElementProperties {
   anneeImage: number;
   timbreMaj: string;
   usagerMaj: string;
+  idenUsagerMaj: string;
   superficie?: number;
 }
 
@@ -44,6 +46,7 @@ export interface ClientSchemaElementType extends FormFieldSelectChoice {
   color: [number, number, number];
   icon?: string;
   geometryType?: string;
+  order?: number;
 }
 
 export interface ClientSchemaElementTypes {

@@ -31,6 +31,9 @@ export function createClientDefaultSelectionStyle(): olstyle.Style {
 }
 
 export function getAnneeImageFromMap(map: IgoMap): number | undefined {
+  const anneeRegex = new RegExp(/(19|20)\d{2}/);
+  let anneImage: string;
+
   const imageLayerNames = map.layers.reduce((acc: string[], layer: Layer) => {
     const dataSource = layer.dataSource;
     if ((
@@ -40,34 +43,24 @@ export function getAnneeImageFromMap(map: IgoMap): number | undefined {
       return acc;
     }
 
-    let layerName;
+    let layerName: string;
     if (dataSource instanceof WMTSDataSource) {
       layerName = dataSource.options.layer;
     } else if (dataSource instanceof WMSDataSource) {
       layerName = dataSource.options.params.LAYERS;
     }
 
-    if (
-      layerName.startsWith('Mosaiques-orthophotos_') ||
-      layerName.startsWith('orthos') ||
-      layerName.length === 4
-    ) {
-      acc.push(layerName);
+    if (layerName !== undefined && layerName.startsWith('Mosaiques-orthophotos')) {
+      const match = layerName.match(anneeRegex);
+      if(match !== null) {
+        acc.push(match[0]);
+      }
     }
 
     return acc;
   }, []);
 
-  const anneeRegex = new RegExp(/([1-9][\d]{3})/);
-  const anneeImages = imageLayerNames.reduce((acc: number[], layerName: string) => {
-    const matches = layerName.match(anneeRegex);
-    if (matches) {
-      acc.push(parseInt(matches[0], 10));
-    }
-    return acc;
-  }, []);
-
-  return anneeImages.length === 1 ? anneeImages[0] : undefined;
+  return imageLayerNames.length === 1 ? parseInt(imageLayerNames[0],10) : undefined;
 }
 
 export function validateClientNum(clientNum?: string) {

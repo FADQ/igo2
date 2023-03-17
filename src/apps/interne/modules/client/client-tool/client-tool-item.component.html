@@ -22,7 +22,7 @@
           [color]="controller.parcelYear.current ? 'default' : 'warn'">
         </mat-icon>
         <mat-icon
-          *ngIf="(controller.parcelElementTransaction.empty$ | async) === false"
+          *ngIf="(controller.parcelElementTransaction.empty$ | async) === false || (controller.schemaElementTransaction.empty$ | async) === false"
           class="fadq-client-header-badge"
           svgIcon="floppy">
         </mat-icon>

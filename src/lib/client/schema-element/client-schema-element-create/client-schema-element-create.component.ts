@@ -19,8 +19,7 @@ import {
   FormFieldSelectInputs,
   getAllFormFields,
   WidgetComponent,
-  OnUpdateInputs,
-  FormFieldSelectChoice
+  OnUpdateInputs
 } from '@igo2/common';
 import { LanguageService } from '@igo2/core';
 import {
@@ -30,12 +29,13 @@ import {
   GeometryFormFieldInputs
 } from '@igo2/geo';
 
+import { getMapExtentPolygon } from '../../../map';
+
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
 import { getAnneeImageFromMap } from '../../shared/client.utils';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import {
   ClientSchemaElement,
-  ClientSchemaElementTypes,
   ClientSchemaElementType
 } from '../shared/client-schema-element.interfaces';
 import { ClientSchemaElementService } from '../shared/client-schema-element.service';
@@ -43,7 +43,8 @@ import { ClientSchemaElementFormService } from '../shared/client-schema-element-
 
 import {
   generateSchemaElementOperationTitle,
-  getSchemaElementValidationMessage
+  getSchemaElementValidationMessage,
+  updateElementTypeChoices
 } from '../shared/client-schema-element.utils';
 
 @Component({
@@ -124,7 +125,7 @@ export class ClientSchemaElementCreateComponent
 
   ngOnInit() {
     this.clientSchemaElementFormService
-      .buildCreateForm(this.schema, this.map)
+      .buildCreateForm(this.schema, this.map, this.store)
       .subscribe((form: Form) => this.setForm(form));
   }
 
@@ -170,13 +171,23 @@ export class ClientSchemaElementCreateComponent
     this.form$.next(form);
 
     const anneeImageField = this.getAnneeImageField();
+    anneeImageField.control.value
     if (anneeImageField !== undefined) {
-      anneeImageField.control.setValue(getAnneeImageFromMap(this.map));
+      let imageYear = getAnneeImageFromMap(this.map);
+      if (imageYear === undefined) {
+        const extentGeometry = getMapExtentPolygon(this.map, 'EPSG:4326');
+        this.clientSchemaElementService.getMostRecentImageYear(extentGeometry)
+          .subscribe((reponse: any) => {
+            anneeImageField.control.setValue(reponse.data);
+        });
+      } else {
+        anneeImageField.control.setValue(imageYear);
+      }
     }
 
     const geometryField = this.getGeometryField();
     this.geometry$$ = geometryField.control.valueChanges
-      .subscribe((geometry: GeoJSONGeometry) => this.updateElementTypeChoices(geometry.type));
+      .subscribe((geometry: GeoJSONGeometry) => updateElementTypeChoices(geometry.type, this.clientSchemaElementService,this.schema, this.getElementTypeField()));
 
     const elementTypeField = this.getElementTypeField();
     this.elementType$$ = elementTypeField.control.valueChanges
@@ -228,15 +239,4 @@ export class ClientSchemaElementCreateComponent
       }
     });
   }
-
-  private updateElementTypeChoices(geometryTypeValue: string) {
-    this.clientSchemaElementService
-      .getSchemaElementTypes(this.schema.type)
-      .subscribe((schemaElementTypes: ClientSchemaElementTypes) => {
-        const elementTypeField = this.getElementTypeField();
-        const choices$ = elementTypeField.inputs.choices as BehaviorSubject<FormFieldSelectChoice[]>;
-        choices$.next(schemaElementTypes[geometryTypeValue]);
-      });
-  }
-
 }

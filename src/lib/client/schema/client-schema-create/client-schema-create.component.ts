@@ -8,14 +8,17 @@ import {
   OnInit
 } from '@angular/core';
 
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { EntityStore, Form, WidgetComponent, OnUpdateInputs } from '@igo2/common';
-
+import { LanguageService } from '@igo2/core';
+import { formToJSON } from '../../../utils/conversion';
 import { Client } from '../../shared/client.interfaces';
 import { ClientSchema, ClientSchemaCreateData } from '../shared/client-schema.interfaces';
 import { ClientSchemaService } from '../shared/client-schema.service';
 import { ClientSchemaFormService } from '../shared/client-schema-form.service';
+import { UniqueClientSchemaType } from '../shared/client-schema.enums';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'fadq-client-schema-create',
@@ -28,7 +31,7 @@ export class ClientSchemaCreateComponent implements OnInit, OnUpdateInputs, Widg
   /**
    * Create form
    */
-  form$ = new Subject<Form>();
+  form$ = new BehaviorSubject<Form>(undefined);
 
   /**
    * Client
@@ -53,12 +56,16 @@ export class ClientSchemaCreateComponent implements OnInit, OnUpdateInputs, Widg
   constructor(
     private clientSchemaService: ClientSchemaService,
     private clientSchemaFormService: ClientSchemaFormService,
+    private languageService: LanguageService,
     private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.clientSchemaFormService.buildCreateForm(this.store)
-      .subscribe((form: Form) => this.form$.next(form));
+      .subscribe((form: Form) => {
+        this.setDescription(form);
+        this.form$.next(form);
+      });
   }
 
   /**
@@ -71,7 +78,7 @@ export class ClientSchemaCreateComponent implements OnInit, OnUpdateInputs, Widg
   onSubmit(data: {[key: string]: any}) {
     const schemaData = Object.assign({
       numeroClient: this.client.info.numero
-    }, data) as ClientSchemaCreateData;
+    }, formToJSON(this.form$.value)) as ClientSchemaCreateData;
 
     this.clientSchemaService.createSchema(schemaData)
       .subscribe((schema: ClientSchema) => this.onSubmitSuccess(schema));
@@ -87,4 +94,23 @@ export class ClientSchemaCreateComponent implements OnInit, OnUpdateInputs, Widg
     this.complete.emit();
   }
 
+  private setDescription(form: Form) {
+    const formInfo = form.control.get('info') as FormControl;
+    formInfo.get('type').valueChanges.subscribe(() => {
+      const schemaTypeControl = formInfo.get('type') as FormControl;
+      const schemaType = schemaTypeControl.value;
+      const descriptionControl = formInfo.get('description') as FormControl;
+      if (schemaType in UniqueClientSchemaType && descriptionControl !== undefined) {
+        formInfo.patchValue({description: this.languageService.translate.instant('client.schema.description.' + schemaType)}, {onlySelf: true, emitEvent: true});
+        descriptionControl.disable({onlySelf: true, emitEvent: true});
+      }else {
+        if (descriptionControl.value === this.languageService.translate.instant('client.schema.description.LSE') ||
+            descriptionControl.value === this.languageService.translate.instant('client.schema.description.RPA')) {
+          descriptionControl.reset(null);
+          descriptionControl.setValue('', {onlySelf: true, emitEvent: true});
+          }
+          descriptionControl.enable({onlySelf: true, emitEvent: true});
+      }
+    });
+  }
 }

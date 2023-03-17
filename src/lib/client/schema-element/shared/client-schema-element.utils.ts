@@ -1,3 +1,5 @@
+import { BehaviorSubject} from 'rxjs';
+
 import * as olstyle from 'ol/style';
 import OlPolygon from 'ol/geom/Polygon';
 import OlSimpleGeometry from 'ol/geom/SimpleGeometry';
@@ -10,10 +12,13 @@ import {
   FeatureDataSource,
   VectorLayer
 } from '@igo2/geo';
+import { FormField, FormFieldSelectChoice, FormFieldSelectInputs } from '@igo2/common';
 
 import { createOlTextStyle } from '../../../edition/shared/edition.utils';
 import { TransactionData } from '../../../utils/transaction';
 import { Client } from '../../shared/client.interfaces';
+import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
+import { ClientSchemaElementService } from '../shared/client-schema-element.service';
 import {
   ClientSchemaElement,
   ClientSchemaElementType,
@@ -206,4 +211,13 @@ export function transactionDataToSaveSchemaElementData(
     lstElementsModifies: data.updates,
     lstIdElementsSupprimes: data.deletes
   };
+}
+
+export function updateElementTypeChoices(geometryType: string,clientSchemaElementService: ClientSchemaElementService, schema: ClientSchema, elementTypeField: FormField<FormFieldSelectInputs>) {
+  clientSchemaElementService
+    .getSchemaElementTypes(schema.type)
+    .subscribe((schemaElementTypes: ClientSchemaElementTypes) => {
+      const choices$ = elementTypeField.inputs.choices as BehaviorSubject<FormFieldSelectChoice[]>;
+      choices$.next(schemaElementTypes[geometryType]);
+    });
 }

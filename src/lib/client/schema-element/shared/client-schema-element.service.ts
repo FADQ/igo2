@@ -26,6 +26,8 @@ import { ClientSchemaElementPointService } from './client-schema-element-point.s
 import { ClientSchemaElementLineService } from './client-schema-element-line.service';
 import { ClientSchemaElementSurfaceService } from './client-schema-element-surface.service';
 import { computeSchemaElementArea } from './client-schema-element.utils';
+import { Projection } from 'ol/proj';
+import { Geometry } from 'geojson';
 
 @Injectable()
 export class ClientSchemaElementService {
@@ -189,6 +191,17 @@ export class ClientSchemaElementService {
     return zip(...commits$);
   }
 
+  getMostRecentImageYear(
+    geometry: Geometry
+  ): Observable<number> {
+
+    const url = this.apiService.buildUrl(this.apiConfig.getMostRecentImageYear, {});
+    return this.http.post(url, {"geometrie": geometry})
+    .pipe(map((year: number) => {
+      return year;
+    }));
+  }
+
   /**
    * Commit (save) some operations of a transaction
    * @param schema Schema
@@ -246,7 +259,8 @@ export class ClientSchemaElementService {
         value: item.idTypeElement,
         title: item.libelleFrancais,
         color: hexToRGB(item.couleurElement),
-        icon: item.iconeElement
+        icon: item.iconeElement,
+        order: item.ordreAffichage
       };
     };
 

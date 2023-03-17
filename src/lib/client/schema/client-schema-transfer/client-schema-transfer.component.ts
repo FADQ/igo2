@@ -10,7 +10,7 @@ import {
 
 import { BehaviorSubject, Subject } from 'rxjs';
 
-import { Message, MessageType } from '@igo2/core';
+import { Message, MessageType, LanguageService } from '@igo2/core';
 import { EntityStore, Form, WidgetComponent, OnUpdateInputs } from '@igo2/common';
 
 import { Client } from '../../shared/client.interfaces';
@@ -31,13 +31,17 @@ export class ClientSchemaTransferComponent implements OnInit, OnUpdateInputs, Wi
    * Transfer form
    * @internal
    */
-  form$: Subject<Form> = new Subject<Form>();
+  form$: BehaviorSubject<Form> = new BehaviorSubject<Form>(undefined);
 
   /**
    * Message
    * @internal
    */
   message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
+
+  isDisabled: boolean = false;
+
+  labelCancelButton: string = this.languageService.translate.instant('cancel');
 
   /**
    * Client
@@ -67,7 +71,8 @@ export class ClientSchemaTransferComponent implements OnInit, OnUpdateInputs, Wi
   constructor(
     private clientSchemaService: ClientSchemaService,
     private clientSchemaFormService: ClientSchemaFormService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private languageService: LanguageService
   ) {}
 
   ngOnInit() {
@@ -118,6 +123,8 @@ export class ClientSchemaTransferComponent implements OnInit, OnUpdateInputs, Wi
    * On submit error, display an error message
    */
   private onSubmitError(messages: ClientSchemaMessageTransferResponse[]) {
+    this.isDisabled = true;
+    this.labelCancelButton = this.languageService.translate.instant('close');
     this.setError(messages[0].libelle);
   }
 

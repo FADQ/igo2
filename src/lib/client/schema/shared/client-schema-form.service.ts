@@ -10,6 +10,7 @@ import {
   Form,
   FormField,
   FormFieldConfig,
+  FormFieldInputs,
   FormFieldSelectChoice,
   FormFieldSelectInputs,
   FormService
@@ -18,14 +19,12 @@ import {
 import { ApiService } from '../../../core/api/api.service';
 import { DomainService } from '../../../core/domain/domain.service';
 
-import {
-  validateOnlyOneType
-} from './client-schema-validators';
+import { validateOnlyOneType } from './client-schema-validators';
 import {
   ClientSchema,
   ClientSchemaApiConfig
 } from './client-schema.interfaces';
-import { ClientSchemaType } from './client-schema.enums';
+import { UniqueClientSchemaType } from './client-schema.enums';
 
 @Injectable()
 export class ClientSchemaFormService {
@@ -53,8 +52,7 @@ export class ClientSchemaFormService {
             name: 'info',
             options: {
               validator: Validators.compose([
-                (control: FormGroup) => validateOnlyOneType(control, store, ClientSchemaType.LSE),
-                (control: FormGroup) => validateOnlyOneType(control, store, ClientSchemaType.RPA)
+                (control: FormGroup) => validateOnlyOneType(control, store)
               ])
             }
           }, fields)
@@ -63,24 +61,23 @@ export class ClientSchemaFormService {
     );
   }
 
-  buildUpdateForm(store: EntityStore<ClientSchema>): Observable<Form> {
+  buildUpdateForm(store: EntityStore<ClientSchema>, schema: ClientSchema): Observable<Form> {
+    let descriptionConfig: Partial<FormFieldConfig<FormFieldInputs>>;
+    if (schema.type in UniqueClientSchemaType) {
+      descriptionConfig = {options: {disabled: true}};
+    }
+    else { descriptionConfig = {};}
     const fields$ = zip(
       this.createIdField({options: {disabled: true}}),
       this.createTypeField({options: {disabled: true}}),
-      this.createDescriptionField(),
+      this.createDescriptionField(descriptionConfig),
       this.createAnneeField()
     );
     return fields$.pipe(
       map((fields: FormField[]) => {
         return this.formService.form([], [
           this.formService.group({
-            name: 'info',
-            options: {
-              validator: Validators.compose([,
-                (control: FormGroup) => validateOnlyOneType(control, store, ClientSchemaType.LSE),
-                (control: FormGroup) => validateOnlyOneType(control, store, ClientSchemaType.RPA)
-              ])
-            }
+            name: 'info'
           }, fields)
         ]);
       })
@@ -156,7 +153,10 @@ export class ClientSchemaFormService {
       title: 'Description',
       options:  {
         cols: 2,
-        validator: Validators.required
+        validator: Validators.compose([Validators.required, Validators.maxLength(250)]),
+        errors: {
+          maxlength: 'client.schema.error.descriptionMaxLength'
+        }
       }
     }, partial));
   }
@@ -167,7 +167,10 @@ export class ClientSchemaFormService {
       title: 'Année',
       options:  {
         cols: 2,
-        validator: Validators.compose([Validators.required,Validators.pattern(/^([1-9][\d]{3})$/)])
+        validator: Validators.compose([Validators.required,Validators.pattern(/(19|20)\d{2}/)]),
+        errors: {
+          pattern: 'errors.invalidAnnee'
+        }
       }
     }, partial));
   }

@@ -52,7 +52,12 @@ export class ClientSchemaTableService {
         },
         {
           name: 'usagerMaj',
-          title: 'Usager mise à jour'
+          title: 'Usager mise à jour',
+          valueAccessor: (schema: ClientSchema) => {
+            const value = schema.idenUsagerMaj;
+            if (value) { return value; }
+            return schema.usagerMaj;
+          }
         },
         {
           name: 'nbDocuments',

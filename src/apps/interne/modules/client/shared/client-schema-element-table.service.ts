@@ -61,7 +61,7 @@ export class ClientSchemaElementTableService {
         },
         {
           name: 'properties.description',
-          title: 'Description'
+          title: 'Description ou commentaire'
         },
         {
           name: 'properties.superficie',
@@ -85,6 +85,14 @@ export class ClientSchemaElementTableService {
           valueAccessor: (schemaElement: ClientSchemaElement) => {
             const area = schemaElement.properties.superficie;
             return area ? formatMeasure(squareMetersToAcres(area), {decimal: 1, locale: 'fr'}) : '';
+          }
+        },
+        {
+          name: 'superficieArpents',
+          title: 'Superficie (arpents)',
+          valueAccessor: (schemaElement: ClientSchemaElement) => {
+            const area = Number(squareMetersToHectares(schemaElement.properties.superficie).toFixed(1));
+            return area ? formatMeasure(area*2.924, {decimal: 1, locale: 'fr'}) : '';
           }
         },
         {
@@ -115,7 +123,12 @@ export class ClientSchemaElementTableService {
         },
         {
           name: 'properties.usagerMaj',
-          title: 'Usager mise à jour'
+          title: 'Usager mise à jour',
+          valueAccessor: (schemaElement: ClientSchemaElement) => {
+            const value = schemaElement.properties.idenUsagerMaj;
+            if (value) { return value; }
+            return schemaElement.properties.usagerMaj;
+          }
         }
       ]
     };

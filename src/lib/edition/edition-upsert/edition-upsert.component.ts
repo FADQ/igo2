@@ -41,6 +41,8 @@ import {
 import { EditionResult } from '../shared/edition.interfaces';
 import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition.utils';
 
+import { EditionService } from '../shared/edition.service';
+
 @Component({
   selector: 'fadq-edition-upsert',
   templateUrl: './edition-upsert.component.html',
@@ -137,7 +139,8 @@ export class EditionUpsertComponent implements OnInit, OnDestroy, OnUpdateInputs
 
   constructor(
     private languageService: LanguageService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private editionService: EditionService
   ) {}
 
   ngOnInit() {
@@ -174,7 +177,11 @@ export class EditionUpsertComponent implements OnInit, OnDestroy, OnUpdateInputs
    */
   onSubmit(data: Feature) {
     this.result$$ = this.featureToResult(data).subscribe((result: EditionResult) => {
-      this.submitResult(result);
+      this.editionService.validateGeometry(data)
+        .subscribe((message: string) => {
+          result.error = message;
+          this.submitResult(result);
+      });
     });
   }
 
@@ -236,6 +243,7 @@ export class EditionUpsertComponent implements OnInit, OnDestroy, OnUpdateInputs
     }
     this.showSelectedFeature();
     this.complete.emit(feature);
+    //this.form.control.reset();
   }
 
   /**

@@ -24,7 +24,7 @@
       <button
         mat-raised-button
         color="primary"
-        [disabled]="(isBlocked$ | async) || ((submitHandler.step$ | async) === submitStep.Pending && (!isBlocked$ | async))"
+        [disabled]="(isBlocked$ | async) || (submitHandler.step$ | async) === submitStep.Pending"
         (click)="onSubmit()">
         {{ 'yes' | translate }}
       </button>

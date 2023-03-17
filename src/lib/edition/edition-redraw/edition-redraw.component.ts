@@ -40,6 +40,7 @@ import {
 
 import { EditionResult } from '../shared/edition.interfaces';
 import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition.utils';
+import { EditionService } from '../shared/edition.service';
 
 @Component({
   selector: 'fadq-edition-redraw',
@@ -164,7 +165,8 @@ export class EditionRedrawComponent implements
 
   constructor(
     private languageService: LanguageService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private editionService: EditionService
   ) {}
 
   ngOnInit() {
@@ -201,7 +203,11 @@ export class EditionRedrawComponent implements
    */
   onSubmit(data: Feature) {
     this.result$$ = this.featureToResult(data).subscribe((result: EditionResult) => {
-      this.submitResult(result);
+      this.editionService.validateGeometry(data)
+        .subscribe((message: string) => {
+          result.error = message;
+          this.submitResult(result);
+      });
     });
   }
 

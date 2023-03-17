@@ -21,6 +21,7 @@ export interface ClientSchema {
   annee: string;
   nbDocuments: number;
   usagerMaj: string;
+  idenUsagerMaj: string;
   timbreMaj: {
     date: string;
   };
@@ -38,6 +39,7 @@ export interface ClientSchemaListResponseItem {
   annee: string;
   nbDocuments: number;
   usagerMaj: string;
+  idenUsagerMaj: string;
   timbreMaj: {
     date: string;
   };

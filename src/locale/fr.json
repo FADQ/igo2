@@ -71,7 +71,8 @@
   },
 
   "errors": {
-    "invalidAnnee": "Format d'année invalide"
+    "invalidAnnee": "Format d'année invalide",
+    "imageYearWrongRange": "L'année d'image n'est pas disponible"
   },
 
   "tools": {
@@ -179,9 +180,10 @@
     },
     "schema": {
       "none": "Aucun", 
-      "error.anneeRequired": "Vous devez saisir une année pour un plan de production ou un avis de dommage",
-      "error.onlyOneLSE": "Impossible d’avoir plus d’un schéma de type « Structure d’entreposage »",
-      "error.onlyOneRPA": "Impossible d’avoir plus d’un schéma de type « Aménagement biodiv. pratique 5 RPA »",
+      "error.anneeRequired": "Vous devez saisir une année pour un plan de production ou un avis de dommage.",
+      "error.onlyOneLSE": "Impossible d’avoir plus d’un schéma de type « Structure d’entreposage ».",
+      "error.onlyOneRPA": "Impossible d’avoir plus d’un schéma de type « Aménagement biodiv. pratique 5 RPA ».",
+      "error.descriptionMaxLength": "Vous devez saisir une description de moins de 250 caractères.",
       "placeholder": "Schéma",
       "create": "Créer",
       "create.tooltip": "Créer un schéma",
@@ -199,7 +201,9 @@
       "transfer.tooltip": "Transférer le schéma",
       "transfer.error.duplicatedNumber": "Certains numéros des éléments du schéma sélectionné sont déjà utilisés dans celui du client vers lequel est tenté le transfert. Si nécessaire, aller modifier ces numéros par la suite.",
       "createMap": "Créer carte(s)",
-      "createMap.tooltip": "Créer carte(s) de structure d'entreposage"
+      "createMap.tooltip": "Créer carte(s) de structure d'entreposage",
+      "description.LSE": "Localisation de silos, carrés à grain et cribs",
+      "description.RPA": "Localisation d'aménagements admissibles/inadmissibles"
     },
     "schemaFile": {
       "error.size": "Vous devez sélectionner un document numérisé qui contient des données et avoir au plus une taille de 10 mo.",
@@ -213,7 +217,9 @@
     "schemaElement": {
       "commitDialog.title": "Informations non sauvegardées",
       "error.etiquetteMaxLength": "Vous devez saisir une étiquette de moins de 25 caractères.",
-      "error.descriptionMaxLength": "Vous devez saisir une description de moins de 250 caractères.",
+      "error.uniqueLabel": "L'étiquette doit être unique.",
+      "error.labelRequired": "L'étiquette est obligatoire pour ce type de schéma.",
+      "error.descriptionMaxLength": "Vous devez saisir une description de moins de 1500 caractères.",
       "error.area": "La superficie doit être plus grande que 50m² et plus petite que 999 999 999 m².",
       "import": "Importer des données",
       "import.tooltip": "Importer des données",

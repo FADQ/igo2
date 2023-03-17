@@ -8,6 +8,7 @@ import { Action, Widget } from '@igo2/common';
 import {
   ClientSchema,
   ClientSchemaType,
+  UniqueClientSchemaType,
   ClientSchemaCreateWidget,
   ClientSchemaUpdateWidget,
   ClientSchemaDeleteWidget,
@@ -151,7 +152,7 @@ export class ClientSchemaActionsService {
         },
         availability: (ctrl: ClientController) => every(
           noActiveWidget(ctrl),
-          schemaIsOfTypeLSE(ctrl)
+          transactionIsEmpty(ctrl)
         )
       }
     ];
@@ -171,14 +172,18 @@ function schemaIsDefined(ctrl: ClientController): Observable<boolean> {
   );
 }
 
-function schemaIsOfTypeLSE(ctrl: ClientController): Observable<boolean> {
+function schemaCanBeTransfered(ctrl: ClientController): Observable<boolean> {
   return ctrl.schema$.pipe(
-    map((schema: ClientSchema) => schema !== undefined && schema.type === ClientSchemaType.LSE)
+    map((schema: ClientSchema) => schema !== undefined && schema.type in UniqueClientSchemaType)
   );
 }
 
 function schemaCanBeDuplicated(ctrl: ClientController): Observable<boolean> {
   return ctrl.schema$.pipe(
-    map((schema: ClientSchema) => schema !== undefined && schema.type !== ClientSchemaType.LSE && schema.type !== ClientSchemaType.RPA)
+    map((schema: ClientSchema) => schema !== undefined && (schema.type in UniqueClientSchemaType) === false)
   );
+}
+
+function transactionIsEmpty(ctrl: ClientController): Observable<boolean> {
+  return ctrl.schemaElementTransaction.empty$;
 }

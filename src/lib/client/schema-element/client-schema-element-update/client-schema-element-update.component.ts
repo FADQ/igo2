@@ -32,7 +32,8 @@ import { ClientSchemaElementFormService } from '../shared/client-schema-element-
 
 import {
   generateSchemaElementOperationTitle,
-  getSchemaElementValidationMessage
+  getSchemaElementValidationMessage,
+  updateElementTypeChoices
 } from '../shared/client-schema-element.utils';
 
 @Component({
@@ -102,7 +103,7 @@ export class ClientSchemaElementUpdateComponent
 
   ngOnInit() {
     this.clientSchemaElementFormService
-      .buildUpdateForm(this.schema, this.map)
+      .buildUpdateForm(this.schema, this.map, this.store)
       .subscribe((form: Form) => this.setForm(form));
   }
 
@@ -136,7 +137,7 @@ export class ClientSchemaElementUpdateComponent
   private setForm(form: Form) {
     this.form$.next(form);
     const geometryType = this.schemaElement.geometry.type;
-    this.updateElementTypeChoices(geometryType);
+    updateElementTypeChoices(geometryType,this.clientSchemaElementService, this.schema, this.getElementTypeField());
   }
 
   private getElementTypeField(): FormField<FormFieldSelectInputs> {
@@ -145,15 +146,4 @@ export class ClientSchemaElementUpdateComponent
       return field.name === 'properties.typeElement';
     }) as FormField<FormFieldSelectInputs>;
   }
-
-  private updateElementTypeChoices(geometryType: string) {
-    this.clientSchemaElementService
-      .getSchemaElementTypes(this.schema.type)
-      .subscribe((schemaElementTypes: ClientSchemaElementTypes) => {
-        const elementTypeField = this.getElementTypeField();
-        const choices$ = elementTypeField.inputs.choices as BehaviorSubject<FormFieldSelectChoice[]>;
-        choices$.next(schemaElementTypes[geometryType]);
-      });
-  }
-
 }
