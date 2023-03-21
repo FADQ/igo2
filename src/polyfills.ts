@@ -24,15 +24,6 @@ import 'core-js/es/string';
 import 'core-js/es/array/includes';
 import 'core-js/es/array/flat-map';
 
-/** IE10 and IE11 requires the following for NgClass support on SVG elements */
-import 'classlist.js'; // Run `npm install --save classlist.js`.
-
-/** IE10 and IE11 requires the following for string normalization */
-import 'unorm/lib/unorm.js';
-
-/** IE10 and IE11 requires the following to support `@angular/animation`. */
-import 'web-animations-js'; // Run `npm install --save web-animations-js`.
-
 /** Evergreen browsers require these. **/
 import 'core-js/es/reflect';
 
