@@ -16,6 +16,7 @@
       },
       "architect": {
         "build": {
+          "defaultConfiguration": "development",
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
@@ -30,6 +31,11 @@
               "src/config",
               "src/contexts",
               "src/locale",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@igo2/common/assets/",
+                "output": "./assets/igo2/common/"
+              },
               {
                 "glob": "**/*",
                 "input": "./node_modules/@igo2/core/assets/",
@@ -77,19 +83,15 @@
               "raf",
               "txml",
               "lru-cache",
-              "lerc",
-              "pako/lib/inflate",
-              "through2",
-              "yallist",
-              "debug",
               "striptags",
-              "core-js/modules/es.promise.js",
-              "core-js/modules/es.regexp.to-string.js",
-              "core-js/modules/es.array.reverse.js",
-              "core-js/modules/es.array.index-of.js",
-              "core-js/modules/es.array.reduce.js",
-              "core-js/modules/web.dom-collections.iterator.js",
-              "core-js/modules/es.array.iterator.js"
+              "nosleep.js",
+              "ts-md5",
+              "moment",
+              "html2canvas",
+              "jszip",
+              "bowser",
+              "rgbcolor",
+              "rbush"
             ]
           },
           "configurations": {
@@ -114,10 +116,19 @@
               "extractLicenses": true,
               "vendorChunk": true,
               "buildOptimizer": false
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
           }
         },
         "serve": {
+          "defaultConfiguration": "development",
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "interne:build"
@@ -125,6 +136,9 @@
           "configurations": {
             "production": {
               "browserTarget": "interne:build:production"
+            },
+            "development": {
+              "browserTarget": "interne:build:development"
             }
           }
         },
@@ -186,6 +200,7 @@
       },
       "architect": {
         "build": {
+          "defaultConfiguration": "development",
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
@@ -200,6 +215,11 @@
               "src/config",
               "src/contexts",
               "src/locale",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@igo2/common/assets/",
+                "output": "./assets/igo2/common/"
+              },
               {
                 "glob": "**/*",
                 "input": "./node_modules/@igo2/core/assets/",
@@ -262,10 +282,19 @@
               "extractLicenses": true,
               "vendorChunk": true,
               "buildOptimizer": false
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
           }
         },
         "serve": {
+          "defaultConfiguration": "development",
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "pes:build"
@@ -273,6 +302,9 @@
           "configurations": {
             "production": {
               "browserTarget": "pes:build:production"
+            },
+            "development": {
+              "browserTarget": "pes:build:development"
             }
           }
         },
@@ -318,6 +350,7 @@
       },
       "architect": {
         "build": {
+          "defaultConfiguration": "development",
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
@@ -332,6 +365,11 @@
               "src/config",
               "src/contexts",
               "src/locale",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@igo2/common/assets/",
+                "output": "./assets/igo2/common/"
+              },
               {
                 "glob": "**/*",
                 "input": "./node_modules/@igo2/core/assets/",
@@ -394,10 +432,19 @@
               "extractLicenses": true,
               "vendorChunk": true,
               "buildOptimizer": false
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
           }
         },
         "serve": {
+          "defaultConfiguration": "development",
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "pes_interne:build"
@@ -405,6 +452,9 @@
           "configurations": {
             "production": {
               "browserTarget": "pes_interne:build:production"
+            },
+            "development": {
+              "browserTarget": "pes_interne:build:development"
             }
           }
         },
@@ -440,6 +490,7 @@
   },
   "defaultProject": "interne",
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+    "defaultCollection": "@angular-eslint/schematics",
+    "analytics": false
   }
 }
