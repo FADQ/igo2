@@ -230,25 +230,28 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   onSearch(event: {research: Research, results: SearchResult[]}) {
     const results = event.results;
+    const searchSource = event.research.source
     const querySearchSource = this.getQuerySearchSource();
-    if (results.length === 0 && querySearchSource !== undefined && event.research.source === querySearchSource) {
+    if (results.length === 0 && querySearchSource !== undefined && searchSource === querySearchSource) {
       if (this.searchResult !== undefined && this.searchResult.source === querySearchSource) {
         this.searchStore.state.update(this.searchResult, {focused: false, selected: false});
       }
       return;
     }
 
-    this.searchStore.state.updateAll({focused: false, selected: false});
+    if (!(searchSource instanceof ClientSearchSource)) {
+      this.searchStore.state.updateAll({focused: false, selected: false});
+    }
 
     const newResults = this.searchStore.all()
-      .filter((result: SearchResult) => result.source !== event.research.source)
+      .filter((result: SearchResult) => result.source !== searchSource)
       .concat(results.filter((result: SearchResult) => result.meta.dataType !== CLIENT));
     this.searchStore.load(newResults);
 
     const clientResult = results.find((result: SearchResult) => result.meta.dataType === CLIENT);
     if (clientResult !== undefined) {
       this.onSearchClient(clientResult as SearchResult<Client>);
-    } else if (event.research.source instanceof ClientSearchSource) {
+    } else if (searchSource instanceof ClientSearchSource) {
       this.onClientNotFound();
     }
 
