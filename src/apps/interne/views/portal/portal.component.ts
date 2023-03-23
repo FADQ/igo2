@@ -12,6 +12,7 @@ import {
   EntityStore,
   Widget
 } from '@igo2/common';
+import { DetailedContext } from '@igo2/context';
 import {
   FEATURE,
   Feature,
@@ -25,7 +26,7 @@ import {
   SearchBarComponent,
   Layer,
   LayerOptions,
-  LayerService
+  LayerService,
 } from '@igo2/geo';
 import {
   ContextState,
@@ -41,7 +42,7 @@ import { ClientSearchSource } from 'src/apps/interne/modules/search/shared/sourc
 import { CLIENT, Client, validateClientNum } from 'src/lib/client';
 
 import { CADASTRE } from 'src/lib/cadastre/shared/cadastre.enums';
-import { DetailedContext } from '@igo2/context';
+import { getOlViewResolutions } from 'src/lib/map';
 
 @Component({
   selector: 'app-portal',
@@ -152,6 +153,7 @@ export class PortalComponent implements OnInit, OnDestroy {
 
     this.context$$ = this.contextState.context$.subscribe((context: DetailedContext) => {
       if (context !== undefined) {
+        this.updateViewResolutions();
         this.updateSearchLayers(undefined);
       }
     });
@@ -494,6 +496,28 @@ export class PortalComponent implements OnInit, OnDestroy {
           layer.visible = false;
         });
       }
+    });
+  }
+
+  /**
+   * Update the view resolutions to constrain the zoom levels between 0 and
+   * the max zoom value found in the context.
+   * @param result The SearchResult
+   */
+  private updateViewResolutions(): void {
+    const map = this.map;
+    const viewController = map.viewController;
+    const olMap = viewController.getOlMap();
+    const olView = olMap.getView();
+
+    const context = this.contextState.context$.value;
+    const mapContext = context.map;
+    const viewContext = mapContext ? (mapContext.view || {}) : {};
+    const maxZoom = viewContext.maxZoom || olView.getMaxZoom();
+
+    const resolutions = getOlViewResolutions(olView);
+    map.updateView({
+      resolutions: resolutions.slice(0, maxZoom)
     });
   }
 }

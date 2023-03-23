@@ -35,6 +35,7 @@ import {
 import { SEARCH_TYPES } from 'src/apps/pes/modules/search/shared/search.enums';
 import { ClientState } from 'src/apps/pes/modules/client/client.state';
 import { ClientController } from 'src/apps/pes/modules/client/shared/client-controller';
+import { getOlViewResolutions } from 'src/lib/map';
 
 @Component({
   selector: 'app-portal',
@@ -126,6 +127,7 @@ export class PortalComponent implements OnInit, OnDestroy {
 
     this.context$$ = this.contextState.context$.subscribe((context: DetailedContext) => {
       if (context !== undefined) {
+        this.updateViewResolutions();
         this.updateSearchLayers(undefined);
       }
     });
@@ -375,6 +377,28 @@ export class PortalComponent implements OnInit, OnDestroy {
           layer.visible = false;
         });
       }
+    });
+  }
+
+  /**
+   * Update the view resolutions to constrain the zoom levels between 0 and
+   * the max zoom value found in the context.
+   * @param result The SearchResult
+   */
+  private updateViewResolutions(): void {
+    const map = this.map;
+    const viewController = map.viewController;
+    const olMap = viewController.getOlMap();
+    const olView = olMap.getView();
+
+    const context = this.contextState.context$.value;
+    const mapContext = context.map;
+    const viewContext = mapContext ? (mapContext.view || {}) : {};
+    const maxZoom = viewContext.maxZoom || olView.getMaxZoom();
+
+    const resolutions = getOlViewResolutions(olView);
+    map.updateView({
+      resolutions: resolutions.slice(0, maxZoom)
     });
   }
 }
