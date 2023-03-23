@@ -10,6 +10,7 @@ import {
   WorkspaceStore,
   EntityRecord,
   EntityStore,
+  Tool,
   Widget
 } from '@igo2/common';
 import { DetailedContext } from '@igo2/context';
@@ -69,6 +70,7 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   private searchDisabled$$: Subscription;
 
+  private activeTool$$: Subscription;
   private activeWidget$$: Subscription;
 
   get map(): IgoMap {
@@ -168,6 +170,12 @@ export class PortalComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.activeTool$$ = this.toolState.toolbox.activeTool$.subscribe((tool: Tool) => {
+      if (tool && tool.name === 'directions') {
+        this.searchState.setSearchType(FEATURE);
+      }
+    });
+
     this.searchDisabled$$ = combineLatest([
       this.clientState.activeWidget$,
       this.searchState.searchType$
@@ -184,6 +192,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.context$$.unsubscribe();
     this.focusedSearchResult$$.unsubscribe();
+    this.activeTool$$.unsubscribe();
     this.activeWidget$$.unsubscribe();
     this.searchDisabled$$.unsubscribe();
   }
@@ -232,7 +241,7 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   onSearch(event: {research: Research, results: SearchResult[]}) {
     const results = event.results;
-    const searchSource = event.research.source
+    const searchSource = event.research.source;
     const querySearchSource = this.getQuerySearchSource();
     if (results.length === 0 && querySearchSource !== undefined && searchSource === querySearchSource) {
       if (this.searchResult !== undefined && this.searchResult.source === querySearchSource) {
