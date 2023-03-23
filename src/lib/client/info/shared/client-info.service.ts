@@ -103,13 +103,12 @@ export class ClientInfoService {
   private extractAddressFromGetResponseData(data: ClientInfoAddressData) {
     if (data === undefined) { return undefined; }
 
-    const no = data['noAdresse'];
-    const suite = data['adresse'];
+    const address = data['adresse'];
     const mun = data['municipaliteAdresse'];
     const code = data['codePostalAdresse'];
     const province = data['provincePaysAdresse'];
 
-    return [no, suite, mun, code, `(${province})`]
+    return [address, mun, code, `(${province})`]
       .filter((item: string) => item !== undefined)
       .join(' ');
   }
