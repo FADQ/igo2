@@ -28,6 +28,7 @@ export class ClientParcelElementTableService {
       selectionCheckbox: true,
       selectMany: true,
       sort: true,
+      tableHeight: '100%',
       headerClassFunc: (() => {
         return {'text-centered': true};
       }),
