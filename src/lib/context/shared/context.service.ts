@@ -59,6 +59,7 @@ export class CustomContextService {
         if (dataSourceOptions.type) {
         context.layers.push({
           id: layerOptions.id ? String(layerOptions.id) : undefined,
+          removable: layerOptions.removable,
           title: layerOptions.title,
           baseLayer: layer.baseLayer,
           zIndex: i + 1,

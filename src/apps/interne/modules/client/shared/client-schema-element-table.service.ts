@@ -30,6 +30,7 @@ export class ClientSchemaElementTableService {
       selectMany: true,
       sort: true,
       fixedHeader: true,
+      tableHeight: '100%',
       headerClassFunc: (() => {
         return {'text-centered': true};
       }),

@@ -1,6 +1,6 @@
 {
   "uri": "interne.default",
-  "title": "Général",
+  "title": "Interne",
   "map": {
     "view": {
       "projection": "EPSG:32198",

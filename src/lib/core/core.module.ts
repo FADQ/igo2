@@ -27,6 +27,7 @@ import {
 import { GeometryFormFieldComponent } from '@igo2/geo';
 
 import {
+  AdvancedMapToolComponent,
   CatalogBrowserToolComponent,
   CatalogLibraryToolComponent,
   ContextManagerToolComponent,
@@ -237,6 +238,16 @@ const providers: Provider[] = [
       title: 'igo.integration.tools.searchResults',
       icon: 'magnify',
       component: SearchResultsToolComponent
+    },
+    multi: true
+  },
+  {
+    provide: TOOL_CONFIG,
+    useValue: {
+      name: 'advancedMap',
+      title: 'igo.integration.tools.advancedMap',
+      icon: 'toolbox',
+      component: AdvancedMapToolComponent
     },
     multi: true
   },

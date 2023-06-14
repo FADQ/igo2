@@ -113,6 +113,8 @@ fadq-expansion-panel-header igo-actionbar {
   z-index: 101;  // Because table sticky headers have a z-index of 100
   content: attr(tooltip);
   padding: 5px;
+  transform-origin: right;
+  transform: translate(-100%, 0);
   background: rgba(30, 30, 30, 0.5);
   color: white;
   font-weight: normal;

@@ -1,4 +1,6 @@
 import { fromExtent } from 'ol/geom/Polygon';
+import { getWidth as extentGetWidth } from 'ol/extent.js';
+import OLView from 'ol/View';
 import OlGeoJSON from 'ol/format/GeoJSON';
 
 import { IgoMap } from '@igo2/geo';
@@ -22,4 +24,17 @@ export function getGoogleMapsUrl(center: [number, number], zoom?: number, basema
  */
 export function getMapExtentPolygon(map: IgoMap, projection: string) {
   return new OlGeoJSON().writeGeometryObject(fromExtent(map.viewController.getExtent(projection)));
+}
+
+
+export function getOlViewResolutions(olView: OLView): number[] {
+  const projection = olView.getProjection();
+  const projectionExtent = projection.getExtent();
+  const size = extentGetWidth(projectionExtent) / 256;
+  const numberOfZoomLevels = olView.getMaxZoom();
+  const resolutions = new Array(numberOfZoomLevels);
+  for (let z = 0; z < resolutions.length; ++z) {
+    resolutions[z] = size / Math.pow(2, z);
+  }
+  return resolutions;
 }

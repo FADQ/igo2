@@ -38,8 +38,9 @@ igo-message-center ::ng-deep .simple-notification-wrapper {
 /*** Spinner ***/
 igo-spinner {
   position: absolute;
-  top: $igo-margin;
-  right: $igo-margin;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -100%);
   z-index: 5;
 }
 

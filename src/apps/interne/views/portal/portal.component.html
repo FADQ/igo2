@@ -47,6 +47,8 @@
     (menuPosition)="onContextualMenuOpen($event)"
     (query)="onMapQuery($event)">
     <igo-baselayers-switcher [map]="map"></igo-baselayers-switcher>
+    <igo-swipe-control [map]="map"></igo-swipe-control>
+    <igo-map-center [map]="map"></igo-map-center>
   </igo-map-browser>
 </mat-sidenav-container>
 
