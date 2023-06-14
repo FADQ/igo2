@@ -1,17 +1,16 @@
 /*jshint esversion: 6 */
 const gulp = require('gulp');
-const jeditor = require('gulp-json-editor');
-const babel = require('gulp-babel');
+const bump = require('gulp-bump');
+const package = require('./package.json')
 
-gulp.task('geo:fixOL', done => {
+gulp.task('copyLocaleFromLib', done => {
   gulp
-    .src(['./node_modules/ol/package.json'])
-    .pipe(
-      jeditor({
-        sideEffects: true
-      })
-    )
-    .pipe(gulp.dest('./node_modules/ol/'));
-
+    .src('./node_modules/@igo2/core/locale/@(fr|en).json', { "allowEmpty": true })
+    .pipe(gulp.dest('./src/locale/libs_locale'));
   done();
+});
+
+
+gulp.task('watch:locale', function () {
+  gulp.watch('./node_modules/@igo2/core/locale/*.json', gulp.series('copyLocaleFromLib'));
 });

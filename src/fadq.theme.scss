@@ -1,33 +1,7 @@
-/*@use '~@igo2/core/style/index.theming.scss';
-$primary: mat-palette($mat-blue, 800);
-$accent: mat-palette($mat-blue, 200);
-$warn: mat-palette($mat-red);
-$success: mat-palette($mat-green);
-
-$theme: mat-light-theme(
-  $primary,
-  $accent,
-  $warn
-);
-
-$is-dark: map-get($theme, is-dark);
-$foreground: map-get($theme, foreground);
-$background: map-get($theme, background);
-*/
 @use '@angular/material' as mat;
 @use 'sass:map';
-@import '~@igo2/core/style/index.theming.scss';
-/*
-@import '~@igo2/core/style/all.theming';
+@import '@igo2/core/style/index.theming.scss';
 
-@import '~ngx-toastr/toastr.css';
-@import '~@igo2/core/style/typography';
-@import '~@igo2/core/style/core.theming.scss';
-@import '~@igo2/core/style/theming.scss';
-@import '~@igo2/core/style/all.theming';
-@import '~@igo2/common/style/common.theming.scss';
-@import '~@igo2/geo/style/geo.theming.scss';
-*/
 
 $primary: mat.define-palette(mat.$blue-palette,800);
 $accent: mat.define-palette(mat.$blue-palette, 200);

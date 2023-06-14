@@ -475,7 +475,7 @@ export class EditionRedrawComponent implements
    */
   private getSelectedOlFeature(feature: Feature): OlFeature<OlSimpleGeometry> | undefined {
     const featureId = this.store.getKey(feature);
-    return this.store.layer.dataSource.ol.getFeatureById(featureId);
+    return this.store.layer.dataSource.ol.getFeatureById(featureId) as OlFeature<OlSimpleGeometry>;
   }
 
   /**

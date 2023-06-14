@@ -46,3 +46,6 @@ Thumbs.db
 # dev
 src/contexts/locals
 src/config/locals
+
+# Angular
+.angular
