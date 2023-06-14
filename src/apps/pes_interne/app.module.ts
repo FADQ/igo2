@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { provideConfigOptions } from '@igo2/core';
-import { IgoGeometryModule, IgoQueryModule } from '@igo2/geo';
+import { IgoGeometryModule, IgoQueryModule, IgoDirectionsModule, provideOsrmDirectionsSource } from '@igo2/geo';
 
 import { environment } from 'src/environments/pes_interne/environment';
 
@@ -31,6 +31,7 @@ import { URLClientLoader } from './modules/client/shared/client.loader';
     RouterModule.forRoot([]),
     IgoGeometryModule,
     IgoQueryModule.forRoot(),
+    IgoDirectionsModule,
     FadqCoreModule,
     FadqContextModule,
     FadqHelpModule,
@@ -50,7 +51,8 @@ import { URLClientLoader } from './modules/client/shared/client.loader';
       provide: ClientLoader,
       useClass: URLClientLoader
       // deps: [ClientService]
-    }
+    },
+    provideOsrmDirectionsSource()
   ],
   bootstrap: [AppComponent]
 })
