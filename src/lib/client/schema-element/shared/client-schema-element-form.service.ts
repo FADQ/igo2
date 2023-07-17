@@ -104,6 +104,7 @@ export class ClientSchemaElementFormService {
 
   private buildUpdateBatchFormUniqueClientSchema(igoMap: IgoMap, schema: ClientSchema): Observable<Form> {
     const infoFields$ = zip(
+      this.createTypeElementField(schema.type,{options: {disabled: true, disableSwitch: true}}),
       this.createDescriptionField({options: {disabled: true, disableSwitch: true}}),
       this.createAnneeImageField(igoMap, {options: {disabled: true, disableSwitch: true}})
     );
