@@ -8,7 +8,8 @@ import { DetailedContext } from '@igo2/context';
 import {
   ActionbarMode,
   EntityRecord,
-  EntityStore
+  EntityStore,
+  Tool
 } from '@igo2/common';
 import {
   FEATURE,
@@ -54,6 +55,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   public contextualMenuLocation$ = new BehaviorSubject<{x: number, y: number}>(null);
 
   private focusedSearchResult$$: Subscription;
+  private activeTool$$: Subscription;
 
   private searchAddedLayers: Map<string, Layer[]> = new Map();
   private searchVisibledLayers: Map<string, Layer[]> = new Map();
@@ -131,11 +133,18 @@ export class PortalComponent implements OnInit, OnDestroy {
         this.updateSearchLayers(undefined);
       }
     });
+
+    this.activeTool$$ = this.toolState.toolbox.activeTool$.subscribe((tool: Tool) => {
+      if (tool && tool.name === 'directions') {
+        this.searchState.setSearchType(FEATURE);
+      }
+    });
   }
 
   ngOnDestroy() {
     this.context$$.unsubscribe();
     this.focusedSearchResult$$.unsubscribe();
+    this.activeTool$$.unsubscribe();
   }
 
   onBackdropClick() {
@@ -182,8 +191,9 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   onSearch(event: {research: Research, results: SearchResult[]}) {
     const results = event.results;
+    const searchSource = event.research.source;
     const querySearchSource = this.getQuerySearchSource();
-    if (results.length === 0 && querySearchSource !== undefined && event.research.source === querySearchSource) {
+    if (results.length === 0 && querySearchSource !== undefined && searchSource === querySearchSource) {
       if (this.searchResult !== undefined && this.searchResult.source === querySearchSource) {
         this.searchStore.state.update(this.searchResult, {focused: false, selected: false});
       }

@@ -147,7 +147,8 @@ export class ClientSchemaElementActionsService {
         },
         availability: (ctrl: ClientController) => every(
           noActiveWidget(ctrl),
-          transactionIsNotInCommitPhase(ctrl)
+          transactionIsNotInCommitPhase(ctrl),
+          schemaElementHasSameGeometryType(ctrl)
         )
       },
       {
@@ -353,6 +354,28 @@ function oneSchemaElementIsActive(ctrl: ClientController): Observable<boolean> {
 function oneOrMoreSchemaElementAreSelected(ctrl: ClientController): Observable<boolean> {
   return ctrl.selectedSchemaElements$.pipe(
     map((schemaElements: ClientSchemaElement[]) => schemaElements.length > 0)
+  );
+}
+
+/**
+ * Schemas element has same geometry type
+ * @param ctrl Client controller
+ * @returns return true if geometry type is unique. False otherwise. 
+ */
+function schemaElementHasSameGeometryType(ctrl: ClientController): Observable<boolean> {
+  return ctrl.selectedSchemaElements$.pipe(
+    map(() => {
+      let typeIsUnique = true;
+      let geometryType;
+
+      ctrl.selectedSchemaElements.forEach((elem: ClientSchemaElement) => {
+        if (geometryType === undefined)
+          { geometryType = elem.geometry.type; }
+        if (geometryType !== elem.geometry.type)
+          { typeIsUnique = false; }
+      });
+      return typeIsUnique;
+    })
   );
 }
 

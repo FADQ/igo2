@@ -20,6 +20,8 @@ import OlFeature from 'ol/Feature';
 import { Style as OlStyle } from 'ol/style';
 import { StyleLike as OlStyleLike } from 'ol/style/Style';
 
+import turfTruncate from '@turf/truncate';
+
 import {
   EntityTransaction,
   Form,
@@ -176,8 +178,17 @@ export class EditionUpsertComponent implements OnInit, OnDestroy, OnUpdateInputs
    * @internal
    */
   onSubmit(data: Feature) {
-    this.result$$ = this.featureToResult(data).subscribe((result: EditionResult) => {
-      this.editionService.validateGeometry(data)
+
+    let truncFeature = data;
+    if (this.feature === undefined || this.feature.geometry !== data.geometry) {
+      // truncate data precision an keep 2d coordinates only
+      const options = {precision: 6, coordinates: 2};
+      truncFeature.geometry = turfTruncate(data.geometry,options);
+    }
+
+    // validate geometry
+    this.result$$ = this.featureToResult(truncFeature).subscribe((result: EditionResult) => {
+      this.editionService.validateGeometry(truncFeature)
         .subscribe((message: string) => {
           result.error = message;
           this.submitResult(result);

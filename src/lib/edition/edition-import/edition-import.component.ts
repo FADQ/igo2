@@ -15,6 +15,8 @@ import {
   zip
 } from 'rxjs';
 
+import turfTruncate from '@turf/truncate';
+
 import { EntityTransaction, WidgetComponent } from '@igo2/common';
 import { LanguageService, Message, MessageType } from '@igo2/core';
 import {
@@ -183,6 +185,13 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
       this.onEmptyFile();
       return;
     }
+
+    // truncate data precision an keep 2d coordinates only
+    features.forEach((feature: Feature) => {
+      // truncate data precision an keep 2d coordinates only
+      const options = {precision: 6, coordinates: 2};
+      feature.geometry = turfTruncate(feature.geometry,options);
+    });
 
     const results$ = [];
     if (typeof this.processData === 'function') {
