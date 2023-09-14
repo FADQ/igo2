@@ -5,14 +5,23 @@ import OlPolygon from 'ol/geom/Polygon';
 import OlSimpleGeometry from 'ol/geom/SimpleGeometry';
 import OlFeature from 'ol/Feature';
 import OlGeoJSON from 'ol/format/GeoJSON';
+import * as olFormat from 'ol/format';
 
 import { LanguageService } from '@igo2/core';
 import {
+  IgoMap,
   measureOlGeometryArea,
   FeatureDataSource,
   VectorLayer
 } from '@igo2/geo';
-import { FormField, FormFieldSelectChoice, FormFieldSelectInputs } from '@igo2/common';
+
+import {
+  Form,
+  FormField,
+  FormFieldSelectInputs,
+  FormFieldSelectChoice,
+  getAllFormFields
+} from '@igo2/common';
 
 import { createOlTextStyle } from '../../../edition/shared/edition.utils';
 import { TransactionData } from '../../../utils/transaction';
@@ -25,6 +34,7 @@ import {
   ClientSchemaElementTypes,
   ClientSchemaElementSaveData
 } from './client-schema-element.interfaces';
+import { getAnneeImageFromMap } from '../../shared/client.utils';
 
 export function computeSchemaElementArea(element: ClientSchemaElement): number {
   if (element.geometry.type !== 'Polygon') { return; }
@@ -221,3 +231,47 @@ export function updateElementTypeChoices(geometryType: string,clientSchemaElemen
       choices$.next(schemaElementTypes[geometryType]);
     });
 }
+
+
+/**
+ * Gets the field to contain the year of the image
+ * @param form$ Form to display the schema element informations
+ * @returns The field to contain the year of the image used to do the schema element
+ */
+export function  getAnneeImageField(form$: BehaviorSubject<Form>): FormField {
+  const fields = getAllFormFields(form$.value);
+  return fields.find((field: FormField) => {
+    return field.name === 'properties.anneeImage';
+  });
+}
+
+
+/**
+ * Find the image year upon wich a schema element is done
+ * @param schemaElement The schema element to process
+ * @param anneeImageField The field to contain the year of the image used to do the schema element
+ * @param clientSchemaElementService Access to all the services related to a client element schema
+ */
+export function processAnneeImageField (
+  schemaElement: ClientSchemaElement,
+  anneeImageField: FormField,
+  clientSchemaElementService: ClientSchemaElementService,
+  map: IgoMap) {
+  let imageYear = getAnneeImageFromMap(map);
+  if (imageYear !== undefined) {
+    schemaElement.properties.anneeImage = imageYear
+    anneeImageField.control.setValue(imageYear);
+  }
+  else {
+    const olFormatGeoJson = new olFormat.GeoJSON();
+    const olGeometry = new OlGeoJSON().readGeometry(schemaElement.geometry);
+    const olGeometryGeoJson = olFormatGeoJson.writeGeometryObject(olGeometry);
+
+    clientSchemaElementService.getMostRecentImageYear(olGeometryGeoJson)
+    .subscribe((reponse: any) => {
+      schemaElement.properties.anneeImage = reponse.data;
+      anneeImageField.control.setValue(reponse.data);
+    });
+  }
+}
+

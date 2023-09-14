@@ -47,7 +47,7 @@ export class ClientSchemaElementFormService {
       this.createTypeElementField(schema.type),
       this.createDescriptionField(),
       this.createEtiquetteField(),
-      this.createAnneeImageField(igoMap)
+      this.createAnneeImageField(igoMap,{options: {disabled: true}})
     );
 
     const geometryFields$ = zip(

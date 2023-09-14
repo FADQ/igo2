@@ -27,7 +27,7 @@ import { ClientSchemaElementLineService } from './client-schema-element-line.ser
 import { ClientSchemaElementSurfaceService } from './client-schema-element-surface.service';
 import { computeSchemaElementArea } from './client-schema-element.utils';
 import { Projection } from 'ol/proj';
-import { Geometry } from 'geojson';
+import { Geometry as GeoJSONGeometry } from 'geojson';
 
 @Injectable()
 export class ClientSchemaElementService {
@@ -192,7 +192,7 @@ export class ClientSchemaElementService {
   }
 
   getMostRecentImageYear(
-    geometry: Geometry
+    geometry: GeoJSONGeometry
   ): Observable<number> {
 
     const url = this.apiService.buildUrl(this.apiConfig.getMostRecentImageYear, {});

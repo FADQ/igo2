@@ -11,6 +11,9 @@ import {
 import { BehaviorSubject, Observable} from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import OlGeoJSON from 'ol/format/GeoJSON';
+import * as olFormat from 'ol/format';
+
 import {
   EntityTransaction,
   Form,
@@ -24,6 +27,7 @@ import {
 import { LanguageService } from '@igo2/core';
 import { FeatureStore, IgoMap } from '@igo2/geo';
 
+import { getAnneeImageFromMap } from '../../shared/client.utils';
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import { ClientSchemaElement, ClientSchemaElementTypes } from '../shared/client-schema-element.interfaces';
@@ -33,7 +37,9 @@ import { ClientSchemaElementFormService } from '../shared/client-schema-element-
 import {
   generateSchemaElementOperationTitle,
   getSchemaElementValidationMessage,
-  updateElementTypeChoices
+  updateElementTypeChoices,
+  getAnneeImageField,
+  processAnneeImageField
 } from '../shared/client-schema-element.utils';
 
 @Component({
@@ -122,10 +128,16 @@ export class ClientSchemaElementUpdateComponent
     this.cancel.emit();
   }
 
+  /**
+   * Process a schema element
+   * @param data The client schema element to process
+   * @returns The schema element processed
+   */
   private processSchemaElement(data: ClientSchemaElement): Observable<EditionResult> {
     return this.clientSchemaElementService.createSchemaElement(this.schema, data)
       .pipe(
         map((schemaElement: ClientSchemaElement): EditionResult => {
+          processAnneeImageField(schemaElement,getAnneeImageField(this.form$), this.clientSchemaElementService,this.map);
           return {
             feature: schemaElement,
             error: getSchemaElementValidationMessage(schemaElement, this.languageService)

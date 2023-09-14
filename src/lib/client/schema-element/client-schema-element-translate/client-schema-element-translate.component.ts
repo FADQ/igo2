@@ -10,11 +10,15 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import OlGeoJSON from 'ol/format/GeoJSON';
+import * as olFormat from 'ol/format';
+
 import { LanguageService } from '@igo2/core';
 
 import { EntityTransaction, WidgetComponent, OnUpdateInputs } from '@igo2/common';
 import { FeatureStore, IgoMap } from '@igo2/geo';
 
+import { getAnneeImageFromMap } from '../../shared/client.utils';
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import { ClientSchemaElement } from '../shared/client-schema-element.interfaces';
@@ -96,10 +100,29 @@ export class ClientSchemaElementTranslateComponent implements OnUpdateInputs, Wi
     this.cancel.emit();
   }
 
+  /**
+   * Process a schema element
+   * @param data The client schema element to process
+   * @returns The schema element processed
+   */
   private processSchemaElement(data: ClientSchemaElement): Observable<EditionResult> {
     return this.clientSchemaElementService.createSchemaElement(this.schema, data)
       .pipe(
         map((schemaElement: ClientSchemaElement): EditionResult => {
+          let imageYear = getAnneeImageFromMap(this.map);
+          if (imageYear !== undefined) {
+            schemaElement.properties.anneeImage = imageYear;
+          }
+          else {
+            const olFormatGeoJson = new olFormat.GeoJSON();
+            const olGeometry = new OlGeoJSON().readGeometry(schemaElement.geometry);
+            const olGeometryGeoJson = olFormatGeoJson.writeGeometryObject(olGeometry);
+
+            this.clientSchemaElementService.getMostRecentImageYear(olGeometryGeoJson)
+            .subscribe((reponse: any) => {
+              schemaElement.properties.anneeImage = reponse.data;
+            });
+          }
           return {
             feature: schemaElement,
             error: getSchemaElementValidationMessage(schemaElement, this.languageService)
