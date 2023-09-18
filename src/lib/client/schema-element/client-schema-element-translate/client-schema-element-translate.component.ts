@@ -25,7 +25,8 @@ import { ClientSchemaElement } from '../shared/client-schema-element.interfaces'
 import { ClientSchemaElementService } from '../shared/client-schema-element.service';
 import {
   generateSchemaElementOperationTitle,
-  getSchemaElementValidationMessage
+  getSchemaElementValidationMessage,
+  processAnneeImageField
 } from '../shared/client-schema-element.utils';
 
 @Component({
@@ -109,20 +110,7 @@ export class ClientSchemaElementTranslateComponent implements OnUpdateInputs, Wi
     return this.clientSchemaElementService.createSchemaElement(this.schema, data)
       .pipe(
         map((schemaElement: ClientSchemaElement): EditionResult => {
-          let imageYear = getAnneeImageFromMap(this.map);
-          if (imageYear !== undefined) {
-            schemaElement.properties.anneeImage = imageYear;
-          }
-          else {
-            const olFormatGeoJson = new olFormat.GeoJSON();
-            const olGeometry = new OlGeoJSON().readGeometry(schemaElement.geometry);
-            const olGeometryGeoJson = olFormatGeoJson.writeGeometryObject(olGeometry);
-
-            this.clientSchemaElementService.getMostRecentImageYear(olGeometryGeoJson)
-            .subscribe((reponse: any) => {
-              schemaElement.properties.anneeImage = reponse.data;
-            });
-          }
+          processAnneeImageField(schemaElement, this.clientSchemaElementService,this.map);
           return {
             feature: schemaElement,
             error: getSchemaElementValidationMessage(schemaElement, this.languageService)

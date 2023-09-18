@@ -254,13 +254,15 @@ export function  getAnneeImageField(form$: BehaviorSubject<Form>): FormField {
  */
 export function processAnneeImageField (
   schemaElement: ClientSchemaElement,
-  anneeImageField: FormField,
   clientSchemaElementService: ClientSchemaElementService,
-  map: IgoMap) {
+  map: IgoMap,
+  anneeImageField?: FormField) {
   let imageYear = getAnneeImageFromMap(map);
   if (imageYear !== undefined) {
     schemaElement.properties.anneeImage = imageYear
-    anneeImageField.control.setValue(imageYear);
+    if (anneeImageField !== undefined) {
+      anneeImageField.control.setValue(imageYear);
+    }
   }
   else {
     const olFormatGeoJson = new olFormat.GeoJSON();
@@ -270,8 +272,9 @@ export function processAnneeImageField (
     clientSchemaElementService.getMostRecentImageYear(olGeometryGeoJson)
     .subscribe((reponse: any) => {
       schemaElement.properties.anneeImage = reponse.data;
-      anneeImageField.control.setValue(reponse.data);
+      if (anneeImageField !== undefined) {
+        anneeImageField.control.setValue(reponse.data);
+      }
     });
   }
 }
-

@@ -137,7 +137,7 @@ export class ClientSchemaElementUpdateComponent
     return this.clientSchemaElementService.createSchemaElement(this.schema, data)
       .pipe(
         map((schemaElement: ClientSchemaElement): EditionResult => {
-          processAnneeImageField(schemaElement,getAnneeImageField(this.form$), this.clientSchemaElementService,this.map);
+          processAnneeImageField(schemaElement, this.clientSchemaElementService,this.map,getAnneeImageField(this.form$));
           return {
             feature: schemaElement,
             error: getSchemaElementValidationMessage(schemaElement, this.languageService)
