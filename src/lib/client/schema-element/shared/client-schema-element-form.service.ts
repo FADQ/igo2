@@ -87,7 +87,6 @@ export class ClientSchemaElementFormService {
       this.createTypeElementField(schema.type,{options: {disabled: true, disableSwitch: true}}),
       this.createDescriptionField({options: {disabled: true, disableSwitch: true}}),
       this.createEtiquetteField({options: {disabled: true, disableSwitch: true}}),
-      this.createAnneeImageField(igoMap,{options: {disabled: true, disableSwitch: true}})
     );
 
     const infoTitle = this.languageService.translate.instant('informations');
@@ -106,7 +105,6 @@ export class ClientSchemaElementFormService {
     const infoFields$ = zip(
       this.createTypeElementField(schema.type,{options: {disabled: true, disableSwitch: true}}),
       this.createDescriptionField({options: {disabled: true, disableSwitch: true}}),
-      this.createAnneeImageField(igoMap, {options: {disabled: true, disableSwitch: true}})
     );
 
     const infoTitle = this.languageService.translate.instant('informations');
