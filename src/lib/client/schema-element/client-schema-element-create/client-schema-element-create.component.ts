@@ -29,8 +29,6 @@ import {
   GeometryFormFieldInputs
 } from '@igo2/geo';
 
-import { getMapExtentPolygon } from '../../../map';
-
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
 import { getAnneeImageFromMap } from '../../shared/client.utils';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
@@ -44,7 +42,9 @@ import { ClientSchemaElementFormService } from '../shared/client-schema-element-
 import {
   generateSchemaElementOperationTitle,
   getSchemaElementValidationMessage,
-  updateElementTypeChoices
+  updateElementTypeChoices,
+  getAnneeImageField,
+  processAnneeImageField
 } from '../shared/client-schema-element.utils';
 
 @Component({
@@ -155,10 +155,16 @@ export class ClientSchemaElementCreateComponent
     this.cancel.emit();
   }
 
+  /**
+   * Process a schema element
+   * @param data The client schema element to process
+   * @returns The schema element processed
+   */
   private processSchemaElement(data: ClientSchemaElement): Observable<EditionResult> {
     return this.clientSchemaElementService.createSchemaElement(this.schema, data)
       .pipe(
         map((schemaElement: ClientSchemaElement): EditionResult => {
+          processAnneeImageField(schemaElement, this.clientSchemaElementService,this.map,getAnneeImageField(this.form$));
           return {
             feature: schemaElement,
             error: getSchemaElementValidationMessage(schemaElement, this.languageService)
@@ -174,13 +180,7 @@ export class ClientSchemaElementCreateComponent
     anneeImageField.control.value
     if (anneeImageField !== undefined) {
       let imageYear = getAnneeImageFromMap(this.map);
-      if (imageYear === undefined) {
-        const extentGeometry = getMapExtentPolygon(this.map, 'EPSG:4326');
-        this.clientSchemaElementService.getMostRecentImageYear(extentGeometry)
-          .subscribe((reponse: any) => {
-            anneeImageField.control.setValue(reponse.data);
-        });
-      } else {
+      if (imageYear !== undefined) {
         anneeImageField.control.setValue(imageYear);
       }
     }
