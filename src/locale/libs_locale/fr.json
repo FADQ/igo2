@@ -13,7 +13,7 @@
 			"error": {
 				"Password expired": "Votre mot de passe est expiré",
 				"Maximun logins exceeded": "Nombre maximal de connexions dépassé",
-				"Login lockout": "Nombre maximal d'essai dépassé. Votre compte est verrouillé.",
+				"Login lockout": "Nombre maximal d'essais dépassés. Votre compte est verrouillé.",
 				"Wrong password": "Mot de passe incorrect",
 				"Invalid username": "Utilisateur invalide"
 			},
@@ -223,7 +223,7 @@
 				"refreshBtn": "Actualiser le partage",
 				"copy": "Copier le lien",
 				"shareWithApi": "Partage par contexte",
-				"shareWithUrl": "Partage par url",
+				"shareWithUrl": "Partage par URL",
 				"dialog": {
 					"copyMsg": "Lien copié",
 					"copyTitle": "Lien"
@@ -271,7 +271,7 @@
 			},
 			"errors": {
 				"uncaught": {
-					"message": "Désolé! Le service que vous voulez utiliser n’est malheureusement pas disponible pour le moment. Essayez plus tard!",
+					"message": "Désolé! Le service que vous voulez utiliser n'est malheureusement pas disponible pour le moment. Essayez plus tard!",
 					"title": "Erreur serveur"
 				}
 			},
@@ -402,6 +402,9 @@
 					"UTF8": "UTF-8"
 				},
 				"combinedLayers": "couchesCombinees"
+			},
+			"import": {
+				"promptStoreToIdb": "Est-ce que vous voulez sauvegarder cette couche d'information afin d'être utilisée ultérieurement dans une autre session?"
 			},
 			"importExportForm": {
 				"exportButton": "Exporter",
@@ -541,7 +544,7 @@
 					"selectStyle": "Sélectionner le style de la légende",
 					"showAll": "Montrer toutes les couches (non visible et hors échelle)",
 					"noLayersVisibleWithShowAllButton": "Aucune couche actuellement visible. Activez le bouton ci haut pour voir toutes les légendes.",
-					"noLayersVisibleWithShowAllButtonButZoom": "Aucune couche actuellement visible. Si vous zoomez dans la carte, certaines couches apparaîtront OU activez le bouton ci haut pour voir toutes les légendes.",
+					"noLayersVisibleWithShowAllButtonButZoom": "Aucune couche actuellement visible. Si vous zoomez dans la carte, certaines couches apparaîtront OU activez le bouton ci-haut pour voir toutes les légendes.",
 					"noLayersVisible": "Aucune couche actuellement visible.",
 					"noLayersVisibleButZoom": "Aucune couche actuellement visible. Par contre, si vous zoomez dans la carte, certaines couches apparaîtront."
 				},
@@ -553,6 +556,19 @@
 				"cancelBtn": "Cancel",
 				"saveFeatureInLayer": "Ajouter la sélection dans une couche",
 				"chooseOrSet": "Choisir une couche ou définir un nouveau nom"
+			},
+			"style": {
+				"styleModal": "Modifier le style",
+				"styleModalTooltipLayer": "Éditer le style de la présente couche.",
+				"styleModalTooltipSelected": "Éditer le style des entités sélectionnées",
+				"colorPicker": "Cliquer pour ouvrir le sélecteur de couleurs",
+				"cancel": "Annuler",
+				"fill": "Remplissage",
+				"stroke": "Contour",
+				"fontSize": "Taille de police",
+				"fontStyle": "Style de police",
+				"offsetX": "Décalage horizontal",
+				"offsetY": "Décalage vertical"
 			},
 			"download": {
 				"action": "Télécharger les données associées",
@@ -571,8 +587,8 @@
 				"zoomOut": "Dézoomer ({{zoom}})",
 				"resetRotation": "Azimut: {{azimuth}}°N. Rotation: {{rotation}}°. Réinitialiser la carte vers le nord",
 				"tipRotation": "Maintenez les touches Alt et Majuscule (shift) tout en cliquant sur la carte pour faire pivoter la carte",
-				"preventSreenLock": "Prévient l'écran d'entrer en mode verrouillé.",
-				"letScreenLock": "Permet l'écran d'entrer en mode verrouillé."
+				"preventScreenLock": "Préviens l'écran d'entrer en mode verrouillé.",
+				"letScreenLock": "Permets l'écran d'entrer en mode verrouillé."
 			},
 			"metadata": {
 				"show": "Montrer les métadonnées"
@@ -745,6 +761,13 @@
 						"canada": "Canada"
 					}
 				},
+				"workspace": {
+					"name": "Données importées (vecteurs)",
+					"restrictExtent": {
+						"map": "À l'étendue de la carte",
+						"whole": "L'entièreté du jeu de données"
+					}
+				},
 				"icherche": {
 					"name": "iCherche",
 					"type": {
@@ -790,7 +813,7 @@
 				},
 				"pointerSearchSummary": {
 					"title": "Position du curseur",
-					"tooltip": "Afficher les coordonnées du curseur ainsi que d'autres informations sur sa position en fonction des types de résultats activées. Utiliser F2 pour activer / désactiver."
+					"tooltip": "Afficher les coordonnées du curseur ainsi que d'autres informations sur sa position en fonction des types de résultats activés. Utiliser F2 pour activer / désactiver."
 				},
 				"searchResultsGeometry": {
 					"title": "Montrer tous les résultats",
@@ -805,12 +828,13 @@
 					"selectAll": "Tout sélectionner",
 					"unselectAll": "Tout désélectionner",
 					"settings": {
+						"datasets": "Jeu de données",
 						"results type": "Type de résultat",
 						"ecmax": "Écart maximal",
 						"radius": "Rayon de recherche",
 						"results limit": "Nombre de résultats",
 						"multiple object": "Objet multiple",
-						"restrictExtent": "Restreint l'étendue",
+						"restrictExtent": "Restreins l'étendue",
 						"selectAll": "Tout sélectionner",
 						"unselectAll": "Tout désélectionner",
 						"true": "Oui",
@@ -842,7 +866,7 @@
 			},
 			"spatialFilter": {
 				"spatialFilter": "Filtre spatial",
-				"predefined": "Zone Prédéfinie",
+				"predefined": "Zone prédéfinie",
 				"draw": "Dessin",
 				"polygon": "Polygone",
 				"point": "Cercle",
@@ -908,7 +932,7 @@
 				"sites": "Sites patrimoniaux",
 				"service-garde": "Services de garde",
 				"public": "Écoles publiques",
-				"prive": "Écoles privés",
+				"prive": "Écoles privées",
 				"gouvernemental": "Écoles gouvernementales",
 				"colleges": "Collèges",
 				"universites": "Universités",
@@ -984,12 +1008,10 @@
 				"abort": "Annuler le dessin en cours",
 				"cancel": "Annuler",
 				"Circle": "Cercle",
-				"colorPicker": "Cliquer pour ouvrir le sélecteur de couleurs",
 				"dialogInstruction": "Veuillez entrer l'étiquette de votre dessin",
 				"dialogTitle": "Étiquette",
 				"delete": "Retirer les dessins de la carte",
 				"drawing": "Dessins",
-				"fill": "Remplissage",
 				"finish": "Terminer le dessin en cours",
 				"freehandMode": "Dessiner à main levée",
 				"icon": "Icônes",
@@ -1003,14 +1025,9 @@
 				"Polygon": "Polygone",
 				"radius": "Rayon",
 				"shortcuts": "Raccourcis clavier",
-				"stroke": "Contour",
 				"styleSelect": "Sélectionner le style",
 				"toggleMapTooltips": "Afficher les étiquettes",
 				"undo": "Retirer le dernier sommet",
-				"fontSize": "Taille de police",
-				"fontStyle": "Style de police",
-				"offsetX": "Décalage horizontal",
-				"offsetY": "Décalage vertical",
 				"layer": {
 					"title": "Titre",
 					"createNewLayer": "Créer une nouvelle couche de dessin",
@@ -1066,7 +1083,7 @@
 			},
 			"indexedDb": {
 				"data-download-start": "Téléchargement des données. Veuillez ne pas quitter.",
-				"data-download-completed": "Téléchargement des données terminée."
+				"data-download-completed": "Téléchargement des données terminées."
 			}
 		},
 		"integration": {
@@ -1093,7 +1110,7 @@
 			"searchResultsTool": {
 				"noResults": "Aucun résultat",
 				"doSearch": "Veuillez effectuer une recherche dans la barre de recherche ci-dessus.",
-				"examples": "<b>Permet de rechercher des adresses, des lieux, des coordonnées ou des couches</b>.<br><br>Les recherches d'<u>adresses</u> peuvent être effectuées selon une combinaison: <ul><li>du no. immeuble</li><li>du nom de la rue</li><li>de la ville</li><li>du code postal</li></ul> Exemples pour les <u>lieux</u>: <ul><li>Lac Poulin</li><li>Mcdo Lévis</li><li>Saint-Isidore</li></ul> Vous pouvez aussi utiliser des mots clés pour préciser votre recherche. Exemples: <ul><li>#mun québec (pour rechercher une municipalité)</li><li>#sante Lévis (pour rechercher un établissement de santé)</li><li>#cpe joyeux (pour rechercher un centre de la petite enfance)</li><li>#intersection liégois + église (pour rechercher une intersection, le #+ peut aussi être utilisé)</li></ul>*Les mots clés apparaissent au survol d'un type dans l'onglet des paramètres de recherche -> iCherche -> Type de résultat.<br><br>Exemple pour les <u>coordonnées</u> :<ul><li>Degré décimal (-68.165547, 48.644546)</li><li>Degré minute seconde (-68 9 56, 48 38 40)</li><li>Degré minute décimal (-68 9.56, 48 38.40)</li><li>Projeté (UTM-19 561466.861, 5388278.862)</li><li>BELL (Lat: 48 38 40N Long: 68 9 56W UNC:100 CONF:90)</li><li>Metre Metre (111594.63, 445854.74;32198)</li></ul>Pour plus d'informations sur la recherche par coordonnées : <a href='https://igo2.readthedocs.io/fr/next/properties.html#coordonnees' target='_blank'>Consulter la documentation d'IGO2</a>",
+				"examples": "<b>Permet de rechercher des adresses, des lieux, des coordonnées ou des couches</b>.<br><br>Les recherches d'<u>adresses</u> peuvent être effectués selon une combinaison: <ul><li>du no. immeuble</li><li>du nom de la rue</li><li>de la ville</li><li>du code postal</li></ul> Exemples pour les <u>lieux</u>: <ul><li>Lac Poulin</li><li>Mcdo Lévis</li><li>Saint-Isidore</li></ul> Vous pouvez aussi utiliser des mots clés pour préciser votre recherche. Exemples: <ul><li>#mun québec (pour rechercher une municipalité)</li><li>#sante Lévis (pour rechercher un établissement de santé)</li><li>#cpe joyeux (pour rechercher un centre de la petite enfance)</li><li>#intersection liégois + église (pour rechercher une intersection, le #+ peut aussi être utilisé)</li></ul>*Les mots clés apparaissent au survol d'un type dans l'onglet des paramètres de recherche -> iCherche -> Type de résultat.<br><br>Exemple pour les <u>coordonnées</u> :<ul><li>Degré décimal (-68.165547, 48.644546)</li><li>Degré minute seconde (-68 9 56, 48 38 40)</li><li>Degré minute décimal (-68 9.56, 48 38.40)</li><li>Projeté (UTM-19 561466.861, 5388278.862)</li><li>BELL (Lat: 48 38 40N Long: 68 9 56W UNC:100 CONF:90)</li><li>Metre Metre (111594.63, 445854.74;32198)</li></ul>Pour plus d'informations sur la recherche par coordonnées : <a href='https://igo2.readthedocs.io/fr/next/properties.html#coordonnees' target='_blank'>Consulter la documentation d'IGO2</a>",
 				"zoomOnFeatureTooltip": "Zoomer sur l'entité sélectionnée.",
 				"zoomOnFeatureTooltipOutOfView": "L'entité est hors de la vue. Zoomer sur l'entité sélectionnée."
 			},
@@ -1140,7 +1157,7 @@
 			"directions": {
 				"warning": {
 					"title": "Avertissement",
-					"message": "L'itinéraire proposé dans cet outil ne tient pas compte des conditions routières actuelles, de la congestion routière, des entraves présente sur le réseau et des horaires de traversiers (ouverture quotidienne et saisonnière)."
+					"message": "L'itinéraire proposé dans cet outil ne tient pas compte des conditions routières actuelles, de la congestion routière, des entraves présentes sur le réseau et des horaires de traversiers (ouverture quotidienne et saisonnière)."
 				}
 			},
 			"map-proximity-tool": {
@@ -1181,7 +1198,7 @@
 					"coordinates": "Coordonnées du centre de la carte",
 					"copyMsg": "Coordonnées copiées",
 					"copyTitle": "Coordonnées du centre",
-					"center": "Centre",
+					"center": "Afficher le centre de la carte",
 					"coordSystem": "Système de coordonnées",
 					"zoom": "Niveau de zoom courant: ",
 					"scale": "Échelle cartographique: ",

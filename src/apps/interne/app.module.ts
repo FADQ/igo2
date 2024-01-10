@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTooltipDefaultOptions, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
 
 import { provideConfigOptions } from '@igo2/core';
 import { IgoGeometryModule, IgoQueryModule, IgoDirectionsModule, provideOsrmDirectionsSource } from '@igo2/geo';
@@ -21,6 +22,13 @@ import { FadqInterneEditionModule } from './modules/edition/edition.module';
 import { FadqInterneSearchModule } from './modules/search/search.module';
 import { FadqInternePortalModule } from './views/portal/portal.module';
 import { AppComponent } from './app.component';
+
+export const defaultTooltipOptions: MatTooltipDefaultOptions = {
+  showDelay: 3000,
+  hideDelay: 0,
+  touchendHideDelay: 0,
+  disableTooltipInteractivity: true
+};
 
 @NgModule({
   declarations: [AppComponent],
@@ -48,7 +56,8 @@ import { AppComponent } from './app.component';
       default: environment.igo,
       path: environment.configPath
     }),
-    provideOsrmDirectionsSource()
+    provideOsrmDirectionsSource(),
+    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: defaultTooltipOptions }
   ],
   bootstrap: [AppComponent]
 })
