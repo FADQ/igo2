@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTooltipDefaultOptions, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
 
 import { provideConfigOptions } from '@igo2/core';
 import { IgoGeometryModule, IgoQueryModule, IgoDirectionsModule, provideOsrmDirectionsSource } from '@igo2/geo';
@@ -22,6 +23,13 @@ import { AppComponent } from './app.component';
 
 import { ClientLoader } from 'src/apps/pes/modules/client/shared/client.loader';
 import { URLClientLoader } from './modules/client/shared/client.loader';
+
+export const defaultTooltipOptions: MatTooltipDefaultOptions = {
+  showDelay: 3000,
+  hideDelay: 0,
+  touchendHideDelay: 0,
+  disableTooltipInteractivity: true
+};
 
 @NgModule({
   declarations: [AppComponent],
