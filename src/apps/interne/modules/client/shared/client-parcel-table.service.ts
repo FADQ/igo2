@@ -144,7 +144,7 @@ export class ClientParcelTableService {
           }
         },
         {
-          name: 'properties.sourceParcelleAgricole',
+          name: 'properties.descSourceParcelleAgricole',
           title: 'Mesure déclarée'
         },
         {

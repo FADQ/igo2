@@ -31,6 +31,7 @@ export interface ClientParcelElementProperties {
   noDiagramme: number;
   indParcelleDrainee: string;
   sourceParcelleAgricole: string;
+  descSourceParcelleAgricole: string;
   statutAugmentationSupCultivable: string;
   superficie: number;
   superficieHectare: number;
