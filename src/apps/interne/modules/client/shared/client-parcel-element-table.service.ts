@@ -99,7 +99,7 @@ export class ClientParcelElementTableService {
           title: 'Année de l’image du mesurage'
         },
         {
-          name: 'properties.sourceParcelleAgricole',
+          name: 'properties.descSourceParcelleAgricole',
           title: 'Mesure déclarée'
         },
         {

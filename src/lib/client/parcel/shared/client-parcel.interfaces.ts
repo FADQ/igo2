@@ -26,6 +26,7 @@ export interface ClientParcelProperties {
   pourcentageSupMao: number;
   production: string;
   sourceParcelleAgricole: string;
+  descSourceParcelleAgricole: string;
   statutAugmentationSupCultivable: string;
   descriptionStatutAugmentationSupCultivable: string;
   superficie: number;
