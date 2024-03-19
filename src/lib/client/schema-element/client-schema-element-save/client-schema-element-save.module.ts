@@ -24,8 +24,5 @@ import { ClientSchemaElementSaveComponent } from './client-schema-element-save.c
   declarations: [
     ClientSchemaElementSaveComponent
   ],
-  entryComponents: [
-    ClientSchemaElementSaveComponent
-  ]
 })
 export class FadqLibClientSchemaElementSaveModule {}

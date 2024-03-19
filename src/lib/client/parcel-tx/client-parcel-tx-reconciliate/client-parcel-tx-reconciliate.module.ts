@@ -30,8 +30,5 @@ import { ClientParcelTxReconciliateComponent } from './client-parcel-tx-reconcil
   declarations: [
     ClientParcelTxReconciliateComponent
   ],
-  entryComponents: [
-    ClientParcelTxReconciliateComponent
-  ]
 })
 export class FadqLibClientParcelTxReconciliateModule {}

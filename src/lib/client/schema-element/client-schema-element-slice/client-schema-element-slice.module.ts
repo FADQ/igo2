@@ -24,8 +24,5 @@ import { ClientSchemaElementSliceComponent } from './client-schema-element-slice
   declarations: [
     ClientSchemaElementSliceComponent
   ],
-  entryComponents: [
-    ClientSchemaElementSliceComponent
-  ]
 })
 export class FadqLibClientSchemaElementSliceModule {}

@@ -33,8 +33,5 @@ import { ClientParcelElementTransferComponent } from './client-parcel-element-tr
   declarations: [
     ClientParcelElementTransferComponent
   ],
-  entryComponents: [
-    ClientParcelElementTransferComponent
-  ]
 })
 export class FadqLibClientParcelElementTransferModule {}

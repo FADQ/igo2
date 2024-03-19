@@ -247,7 +247,7 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
     }
 
     const olFeatures = features.map((feature: Feature) => featureToOl(feature, this.map.projection));
-    moveToOlFeatures(this.map, olFeatures);
+    moveToOlFeatures(this.map.viewController, olFeatures);
 
     this.complete.emit(features);
   }

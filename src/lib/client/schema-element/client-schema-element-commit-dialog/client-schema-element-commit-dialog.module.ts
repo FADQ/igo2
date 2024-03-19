@@ -19,6 +19,5 @@ import { ClientSchemaElementCommitDialogComponent } from './client-schema-elemen
   ],
   declarations: [ClientSchemaElementCommitDialogComponent],
   exports: [ClientSchemaElementCommitDialogComponent],
-  entryComponents: [ClientSchemaElementCommitDialogComponent]
 })
 export class FadqLibClientSchemaElementCommitDialogModule {}

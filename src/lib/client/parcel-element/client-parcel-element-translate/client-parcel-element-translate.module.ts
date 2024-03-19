@@ -24,8 +24,5 @@ import { ClientParcelElementTranslateComponent } from './client-parcel-element-t
   declarations: [
     ClientParcelElementTranslateComponent
   ],
-  entryComponents: [
-    ClientParcelElementTranslateComponent
-  ]
 })
 export class FadqLibClientParcelElementTranslateModule {}

@@ -19,6 +19,5 @@ import { ClientParcelElementCommitDialogComponent } from './client-parcel-elemen
   ],
   declarations: [ClientParcelElementCommitDialogComponent],
   exports: [ClientParcelElementCommitDialogComponent],
-  entryComponents: [ClientParcelElementCommitDialogComponent]
 })
 export class FadqLibClientParcelElementCommitDialogModule {}

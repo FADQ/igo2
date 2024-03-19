@@ -1,3 +1,4 @@
+@import 'media';
 @import '../portal.variables';
 
 :host {
@@ -11,7 +12,7 @@
   transition: height 280ms cubic-bezier(.4,0,.2,1);
   padding: $igo-padding;
 
-  @include mobile {
+  @include media-breakpoint-down('mobile') {
     max-height: 40%;
   }
 }
@@ -19,7 +20,7 @@
 :host.fadq-toast-panel-opened {
   height: $fadq-toast-panel-max-height;
 
-  @include mobile {
+  @include media-breakpoint-down('mobile') {
     height: 40%;
   }
 }

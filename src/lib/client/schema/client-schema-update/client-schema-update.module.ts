@@ -23,8 +23,5 @@ import { ClientSchemaUpdateComponent } from './client-schema-update.component';
   declarations: [
     ClientSchemaUpdateComponent
   ],
-  entryComponents: [
-    ClientSchemaUpdateComponent
-  ]
 })
 export class FadqLibClientSchemaUpdateModule {}

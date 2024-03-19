@@ -19,6 +19,5 @@ import { ClientParcelElementReloadDialogComponent } from './client-parcel-elemen
   ],
   declarations: [ClientParcelElementReloadDialogComponent],
   exports: [ClientParcelElementReloadDialogComponent],
-  entryComponents: [ClientParcelElementReloadDialogComponent]
 })
 export class FadqLibClientParcelElementReloadDialogModule {}

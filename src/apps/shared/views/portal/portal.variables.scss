@@ -1,10 +1,10 @@
-@import 'media';
 @import 'variables';
+
 
 $fadq-mobile-min-space-right: 40px;
 $fadq-footer-height: 49px;
 
-$fadq-expansion-panel-collapsed-height: 48px;
+$fadq-expansion-panel-collapsed-height: 56px;
 $fadq-expansion-panel-collapsed-width: 52px;
 $fadq-expansion-panel-height: 281px;
 $fadq-expansion-panel-header-height: $fadq-expansion-panel-collapsed-height;
@@ -15,6 +15,6 @@ $fadq-sidenav-width: 400px;
 $fadq-sidenav-margin-top: 50px;
 $fadq-sidenav-width-mobile: calc(100% - #{$fadq-mobile-min-space-right} - #{$igo-margin});
 
-$fadq-toast-panel-collapsed-height: 48px;
+$fadq-toast-panel-collapsed-height: 56px;
 $fadq-toast-panel-max-height: 329px;
 $fadq-toast-panel-width: 30%;

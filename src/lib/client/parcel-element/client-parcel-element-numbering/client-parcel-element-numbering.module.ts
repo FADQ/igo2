@@ -36,8 +36,5 @@ import { ClientParcelElementNumberingComponent } from './client-parcel-element-n
     ClientParcelElementNumberingInputComponent,
     ClientParcelElementNumberingComponent
   ],
-  entryComponents: [
-    ClientParcelElementNumberingComponent
-  ]
 })
 export class FadqLibClientParcelElementNumberingModule {}

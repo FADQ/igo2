@@ -444,7 +444,7 @@ export class CadastreSearchToolComponent implements OnInit {
     }
 
     if (features !== undefined) {
-      moveToOlFeatures(this.mapState.map, features);
+      moveToOlFeatures(this.mapState.map.viewController, features);
     }
   }
 

@@ -28,8 +28,5 @@ import { EditionUpsertComponent } from './edition-upsert.component';
   declarations: [
     EditionUpsertComponent
   ],
-  entryComponents: [
-    EditionUpsertComponent
-  ]
 })
 export class FadqLibEditionUpsertModule {}

@@ -36,7 +36,6 @@ import { LayerInfoDialogComponent } from './layer-info-dialog.component';
     LayerInfoDialogComponent
   ],
   exports: [MapToolComponent],
-  entryComponents: [MapToolComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
     {

@@ -24,8 +24,5 @@ import { ClientParcelElementImportComponent } from './client-parcel-element-impo
   declarations: [
     ClientParcelElementImportComponent
   ],
-  entryComponents: [
-    ClientParcelElementImportComponent
-  ]
 })
 export class FadqLibClientParcelElementImportModule {}

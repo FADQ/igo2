@@ -29,8 +29,5 @@ import { EditionSimplifyComponent } from './edition-simplify.component';
   declarations: [
     EditionSimplifyComponent
   ],
-  entryComponents: [
-    EditionSimplifyComponent
-  ]
 })
 export class FadqLibEditionSimplifyModule {}

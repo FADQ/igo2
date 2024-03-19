@@ -30,8 +30,5 @@ import { EditionRedrawComponent } from './edition-redraw.component';
   declarations: [
     EditionRedrawComponent
   ],
-  entryComponents: [
-    EditionRedrawComponent
-  ]
 })
 export class FadqLibEditionRedrawModule {}

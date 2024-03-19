@@ -24,8 +24,5 @@ import { ClientSchemaElementTranslateComponent } from './client-schema-element-t
   declarations: [
     ClientSchemaElementTranslateComponent
   ],
-  entryComponents: [
-    ClientSchemaElementTranslateComponent
-  ]
 })
 export class FadqLibClientSchemaElementTranslateModule {}

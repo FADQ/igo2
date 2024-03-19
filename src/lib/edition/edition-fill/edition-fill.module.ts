@@ -27,8 +27,5 @@ import { EditionFillComponent } from './edition-fill.component';
   declarations: [
     EditionFillComponent
   ],
-  entryComponents: [
-    EditionFillComponent
-  ]
 })
 export class FadqLibEditionFillModule {}

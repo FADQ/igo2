@@ -19,6 +19,5 @@ import { AddressEditorZoomDialogComponent } from './address-editor-zoom-dialog.c
   ],
   declarations: [AddressEditorZoomDialogComponent],
   exports: [AddressEditorZoomDialogComponent],
-  entryComponents: [AddressEditorZoomDialogComponent]
 })
 export class FadqAddressEditorZoomDialogModule {}

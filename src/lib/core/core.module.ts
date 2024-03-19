@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import {
   APP_INITIALIZER,
   Component,
@@ -39,6 +40,7 @@ import {
   MeasurerToolComponent,
   SearchResultsToolComponent
 } from '@igo2/integration';
+import { loadTheme } from '@igo2/utils';
 
 import { FadqLibApiModule } from './api/api.module';
 import { FadqLibDomainModule } from './domain/domain.module';
@@ -85,9 +87,11 @@ function appInitializerFactory(
   formFieldLoader: Promise<void>,
   toolLoader: Promise<void>,
   languageService: LanguageService,
+  document: Document
 ) {
   return () => new Promise<any>((resolve: any) => {
     configLoader.then(() => {
+      loadTheme(document, 'blue-theme')
       const language = languageService.getLanguage();
       const promises = [
         lastValueFrom(languageService.translate.getTranslation(language))
@@ -102,7 +106,7 @@ const providers: Provider[] = [
   {
     provide: APP_INITIALIZER,
     useFactory: appInitializerFactory,
-    deps: [CONFIG_LOADER, FORM_FIELD_LOADER, TOOL_LOADER, LanguageService],
+    deps: [CONFIG_LOADER, FORM_FIELD_LOADER, TOOL_LOADER, LanguageService, DOCUMENT],
     multi: true
   },
   {

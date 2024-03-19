@@ -24,8 +24,5 @@ import { ClientSchemaElementUpdateBatchComponent } from './client-schema-element
   declarations: [
     ClientSchemaElementUpdateBatchComponent
   ],
-  entryComponents: [
-    ClientSchemaElementUpdateBatchComponent
-  ]
 })
 export class FadqLibClientSchemaElementUpdateBatchModule {}

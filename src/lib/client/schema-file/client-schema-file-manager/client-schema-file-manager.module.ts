@@ -30,8 +30,5 @@ import { ClientSchemaFileManagerComponent } from './client-schema-file-manager.c
   declarations: [
     ClientSchemaFileManagerComponent
   ],
-  entryComponents: [
-    ClientSchemaFileManagerComponent
-  ]
 })
 export class FadqLibClientSchemaFileManagerModule {}

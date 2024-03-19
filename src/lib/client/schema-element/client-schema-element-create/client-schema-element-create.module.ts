@@ -24,8 +24,5 @@ import { ClientSchemaElementCreateComponent } from './client-schema-element-crea
   declarations: [
     ClientSchemaElementCreateComponent
   ],
-  entryComponents: [
-    ClientSchemaElementCreateComponent
-  ]
 })
 export class FadqLibClientSchemaElementCreateModule {}

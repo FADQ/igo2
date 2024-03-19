@@ -1,3 +1,4 @@
+@import 'media';
 @import './portal.variables';
 
 /*** Main ***/
@@ -72,7 +73,7 @@ igo-search-bar {
   height: $igo-icon-size;
   margin: 0 $igo-margin;
 
-  @include mobile {
+  @include media-breakpoint-down('mobile') {
     width: $search-bar-width-mobile
   }
 }
@@ -111,7 +112,7 @@ fadq-expansion-panel.fadq-expansion-panel-expanded {
 }
 
 fadq-expansion-panel:not(.fadq-expansion-panel-expanded) {
-  @include mobile {
+  @include media-breakpoint-down('mobile') {
     igo-workspace-selector,
     fadq-actionbar {
       display: none;
@@ -140,7 +141,7 @@ fadq-expansion-panel {
     }
   }
 
-  @include mobile {
+  @include media-breakpoint-down('mobile') {
     igo-workspace-selector {
       width: calc(#{$fadq-sidenav-width-mobile} - 5px);
     }

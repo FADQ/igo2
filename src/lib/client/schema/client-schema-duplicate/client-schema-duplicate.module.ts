@@ -26,8 +26,5 @@ import { ClientSchemaDuplicateComponent } from './client-schema-duplicate.compon
   declarations: [
     ClientSchemaDuplicateComponent
   ],
-  entryComponents: [
-    ClientSchemaDuplicateComponent
-  ]
 })
 export class FadqLibClientSchemaDuplicateModule {}

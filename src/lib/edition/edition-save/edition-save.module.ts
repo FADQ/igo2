@@ -31,8 +31,5 @@ import { EditionSaveComponent } from './edition-save.component';
   declarations: [
     EditionSaveComponent
   ],
-  entryComponents: [
-    EditionSaveComponent
-  ]
 })
 export class FadqLibEditionSaveModule {}

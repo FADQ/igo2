@@ -24,8 +24,5 @@ import { ClientParcelElementSliceComponent } from './client-parcel-element-slice
   declarations: [
     ClientParcelElementSliceComponent
   ],
-  entryComponents: [
-    ClientParcelElementSliceComponent
-  ]
 })
 export class FadqLibClientParcelElementSliceModule {}
