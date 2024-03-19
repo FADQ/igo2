@@ -75,15 +75,40 @@ igo-entity-table .mat-mdc-checkbox .mdc-form-field {
 }
 
 // Fix display of fields with cols = 1
-.igo-feature-form .igo-form-field-colspan-1 {
-  display: inline-block
+.igo-form-field-colspan-1 {
+  display: inline-block;
 }
 
 // Fix field height
 .mat-form-field-appearance-fill {
-  height: 48px;
+  .mat-mdc-form-field-flex {
+    height: 48px;
+  }
+
+  .mat-mdc-form-field-infix {
+    padding-top: 22px;
+    padding-bottom: 0;
+  }
 }
 
+// Fix overflow of map tool
 fadq-map-tool .mat-mdc-tab-body-content {
   overflow-y: hidden;
+  igo-layer-list {
+    // This is a fix to remove the double scroll bar.
+    // A better fix would involve more CSS and potentially some reorganization of the elements.
+    // Here, 40px is the height of the top toolbar;
+    height: calc(100% - 40px);
+  }
+}
+
+// Fix overflow of selected search result panel
+igo-search-results-tool .igo-flexible-fill .igo-panel-content {
+  overflow: hidden !important;
+}
+
+// Fix an issue with the actions not displayed on the same lien as the text
+fadq-client-parcel-tx-tool-item .mat-mdc-list-item-unscoped-content {
+  display: flex !important;
+  flex-direction: row;
 }
