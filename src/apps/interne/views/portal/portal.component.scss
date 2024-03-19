@@ -35,6 +35,8 @@ igo-map-browser {
   height: 100%;
 
   igo-baselayers-switcher {
+    position: absolute;
+    bottom: 12px;
     left: initial !important;
     right: 5px;
 

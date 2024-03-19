@@ -34,3 +34,56 @@
   display: flex;
   align-items: center;
 }
+
+// Override sarch bar height
+igo-search-bar mat-form-field .mat-mdc-text-field-wrapper {
+  height: 46px;
+}
+
+
+// Override spacing in action bar
+igo-actionbar {
+  .mat-mdc-list {
+    padding: 0 !important;
+  }
+}
+
+igo-actionbar-item {
+  .mdc-list-item {
+    padding-right: 0;
+  }
+
+  .mdc-list-item--with-leading-avatar .mdc-list-item__start {
+    margin-right: 0;
+  }
+}
+
+// Override spacing in table cells and headers
+igo-entity-table .mdc-data-table__cell,
+igo-entity-table .mdc-data-table__header-cell {
+  padding: 0;
+  line-height: 1;
+}
+
+igo-entity-table .mat-mdc-checkbox .mdc-form-field {
+  height: 30px;
+}
+
+// Override expansion panel trigger margin
+.fadq-expansion-panel-trigger-container button {
+  margin: 0 !important;
+}
+
+// Fix display of fields with cols = 1
+.igo-feature-form .igo-form-field-colspan-1 {
+  display: inline-block
+}
+
+// Fix field height
+.mat-form-field-appearance-fill {
+  height: 48px;
+}
+
+fadq-map-tool .mat-mdc-tab-body-content {
+  overflow-y: hidden;
+}
