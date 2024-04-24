@@ -3,13 +3,15 @@
   [message]="message$ | async">
 
   <mat-slider
-    thumbLabel
-    tickInterval="8"
+    showTickMarks
     thumbLabel="false"
     step="5"
     [min]="0"
     [max]="200"
+    name="tolerance"
+    ngDefaultControl
     [(ngModel)]="tolerance">
+    <input matSliderThumb>
   </mat-slider>
 
   <ng-container buttons>

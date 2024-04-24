@@ -52,7 +52,8 @@ export const igoEnvironment: IgoEnvironment = {
       params: {
         type: 'adresses,codes-postaux,municipalites,mrc,regadmin,lieux',
         limit: '5',
-        geometrie: 'true'
+        // TODO: What should we do with this?
+        // geometrie: 'true'
       },
       settings: []
     },
@@ -67,8 +68,9 @@ export const igoEnvironment: IgoEnvironment = {
       params: {
         type: 'adresses,municipalites,mrc,regadmin',
         limit: '5',
-        geometry: '1',
-        buffer: '10'
+        // TODO: What should we do with this?
+        // geometry: '1',
+        // buffer: '10'
       }
     },
     datasource: {
