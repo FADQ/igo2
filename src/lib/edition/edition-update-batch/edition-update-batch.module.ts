@@ -28,8 +28,5 @@ import { EditionUpdateBatchComponent } from './edition-update-batch.component';
   declarations: [
     EditionUpdateBatchComponent
   ],
-  entryComponents: [
-    EditionUpdateBatchComponent
-  ]
 })
 export class FadqLibEditionUpdateBatchModule {}

@@ -1,0 +1,114 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use '@igo2/geo' as igo2-geo;
+
+@mixin theme($theme) {
+  @include color($theme);
+  @include density($theme);
+}
+
+@mixin color($theme) {
+}
+
+@mixin density($theme) {
+  $density: mat.get-density-config($theme);
+
+  $theme: map.merge(
+    $theme,
+    (
+      density: $density - 2
+    )
+  );
+
+  @include igo2-geo.search-bar-density($theme);
+}
+
+// Override groups in the search bar
+.igo-search-selector-radio-group {
+  display: flex;
+  flex-direction: column;
+  padding-right: 8px;
+}
+
+.igo-search-selector {
+  display: flex;
+  align-items: center;
+}
+
+// Override sarch bar height
+igo-search-bar mat-form-field .mat-mdc-text-field-wrapper {
+  height: 46px;
+}
+
+
+// Override spacing in action bar
+igo-actionbar {
+  .mat-mdc-list {
+    padding: 0 !important;
+  }
+}
+
+igo-actionbar-item {
+  .mdc-list-item {
+    padding-right: 0;
+  }
+
+  .mdc-list-item--with-leading-avatar .mdc-list-item__start {
+    margin-right: 0;
+  }
+}
+
+// Override spacing in table cells and headers
+igo-entity-table .mdc-data-table__cell,
+igo-entity-table .mdc-data-table__header-cell {
+  padding: 0;
+  line-height: 1;
+}
+
+igo-entity-table .mat-mdc-checkbox .mdc-form-field {
+  height: 30px;
+}
+
+// Override expansion panel trigger margin
+.fadq-expansion-panel-trigger-container button {
+  margin: 0 !important;
+}
+
+// Fix display of fields with cols = 1
+.igo-form-field-colspan-1 {
+  display: inline-block;
+}
+
+// Fix field height
+.mat-form-field-appearance-fill {
+  .mat-mdc-form-field-flex {
+    height: 48px;
+  }
+
+  .mat-mdc-form-field-infix {
+    padding-top: 22px;
+    padding-bottom: 0;
+  }
+}
+
+// Fix overflow of map tool
+fadq-map-tool .mat-mdc-tab-body-content {
+  overflow-y: hidden;
+  igo-layer-list {
+    // This is a fix to remove the double scroll bar.
+    // A better fix would involve more CSS and potentially some reorganization of the elements.
+    // Here, 40px is the height of the top toolbar;
+    height: calc(100% - 40px);
+  }
+}
+
+// Fix overflow of selected search result panel
+igo-search-results-tool .igo-flexible-fill .igo-panel-content {
+  overflow: hidden !important;
+}
+
+// Fix an issue with the actions not displayed on the same lien as the text
+fadq-client-parcel-tx-tool-item .mat-mdc-list-item-unscoped-content {
+  display: flex !important;
+  flex-direction: row;
+}

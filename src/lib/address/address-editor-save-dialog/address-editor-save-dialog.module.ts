@@ -19,6 +19,5 @@ import { AddressEditorSaveDialogComponent } from './address-editor-save-dialog.c
   ],
   declarations: [AddressEditorSaveDialogComponent],
   exports: [AddressEditorSaveDialogComponent],
-  entryComponents: [AddressEditorSaveDialogComponent]
 })
 export class FadqAddressEditorSaveDialogModule {}

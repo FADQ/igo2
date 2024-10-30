@@ -24,8 +24,5 @@ import { ClientParcelElementSaveComponent } from './client-parcel-element-save.c
   declarations: [
     ClientParcelElementSaveComponent
   ],
-  entryComponents: [
-    ClientParcelElementSaveComponent
-  ]
 })
 export class FadqLibClientParcelElementSaveModule {}

@@ -1,3 +1,4 @@
+@import 'media';
 @import './portal.variables';
 
 /*** Main ***/
@@ -34,6 +35,8 @@ igo-map-browser {
   height: 100%;
 
   igo-baselayers-switcher {
+    position: absolute;
+    bottom: 5px;
     left: initial !important;
     right: 5px;
 
@@ -72,7 +75,7 @@ igo-search-bar {
   height: $igo-icon-size;
   margin: 0 $igo-margin;
 
-  @include mobile {
+  @include media-breakpoint-down('mobile') {
     width: $search-bar-width-mobile
   }
 }
@@ -111,7 +114,7 @@ fadq-expansion-panel.fadq-expansion-panel-expanded {
 }
 
 fadq-expansion-panel:not(.fadq-expansion-panel-expanded) {
-  @include mobile {
+  @include media-breakpoint-down('mobile') {
     igo-workspace-selector,
     fadq-actionbar {
       display: none;
@@ -134,13 +137,13 @@ fadq-expansion-panel {
     margin: 15px;
   }
 
-  @include tablet {
+  @include media-breakpoint-down('table') {
     igo-workspace-selector {
       width: calc(#{$fadq-sidenav-width} - (2 * #{$igo-icon-size}) - 20px);
     }
   }
 
-  @include mobile {
+  @include media-breakpoint-down('mobile') {
     igo-workspace-selector {
       width: calc(#{$fadq-sidenav-width-mobile} - 5px);
     }
@@ -148,5 +151,66 @@ fadq-expansion-panel {
     .fadq-workspace-count {
       display: none
     }
+  }
+}
+
+
+
+/*** Info panel ***/
+fadq-toast-panel {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  margin-left: -300px;
+  width: 600px;
+  z-index: 6;
+
+  @include media-breakpoint-down('tablet') {
+    width: calc(100% - 2 * #{$fadq-footer-height});
+    left: $fadq-footer-height;
+    margin-left: 0;
+  }
+
+  @include media-breakpoint-down('mobile') {
+    width: calc(100% - 2 * #{$fadq-footer-height});
+    left: $fadq-footer-height;
+    margin-left: 0;
+  }
+}
+
+fadq-toast-panel.fadq-toast-panel-opened {
+  @include media-breakpoint-down('mobile') {
+    width: 100%;
+    left: 0;
+  }
+}
+
+/*** Info panel close/open buttons ***/
+fadq-toast-panel .fadq-toast-panel-close-button-container {
+  position: absolute;
+  top: -10px;
+  right: -15px;
+  z-index: 6;
+
+  button {
+    height: 24px;
+    line-height: 24px;
+  }
+}
+
+.fadq-toast-panel-open-button-container {
+  position: absolute;
+  bottom: $fadq-footer-height;
+  left: 50%;
+  width: 128px;
+  margin-left: -64px;
+  z-index: 6;
+
+  button {
+    width: 100%;
+    height: 24px;
+    line-height: 24px;
+    color: white;
+    border-radius: 4px 4px 0 0;
   }
 }

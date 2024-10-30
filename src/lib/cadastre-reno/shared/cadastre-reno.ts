@@ -50,15 +50,14 @@ export class CadastreRenoSearchSource extends SearchSource implements TextSearch
    * @returns Parameters for http structure
    */
   private computeRequestParams(term: string): HttpParams {
-    return new HttpParams({
-      fromObject: Object.assign(
-        {
-          numero: term.replace(/;/g, ','),
-          epsg: '4326'
-        },
-        this.params
-      )
-    });
+    const params = Object.assign(
+      {
+        numero: term.replace(/;/g, ','),
+        epsg: '4326'
+      },
+      this.params as { [params: string]: string }
+    )
+    return new HttpParams({ fromObject: params });
   }
 
   /**

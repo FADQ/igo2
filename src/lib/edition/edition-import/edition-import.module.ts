@@ -31,8 +31,5 @@ import { EditionImportComponent } from './edition-import.component';
   declarations: [
     EditionImportComponent
   ],
-  entryComponents: [
-    EditionImportComponent
-  ]
 })
 export class FadqLibEditionImportModule {}

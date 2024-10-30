@@ -23,8 +23,5 @@ import { ClientSchemaCreateComponent } from './client-schema-create.component';
   declarations: [
     ClientSchemaCreateComponent
   ],
-  entryComponents: [
-    ClientSchemaCreateComponent
-  ]
 })
 export class FadqLibClientSchemaCreateModule {}

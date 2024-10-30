@@ -24,8 +24,5 @@ import { EditionTranslateComponent } from './edition-translate.component';
   declarations: [
     EditionTranslateComponent
   ],
-  entryComponents: [
-    EditionTranslateComponent
-  ]
 })
 export class FadqLibEditionTranslateModule {}

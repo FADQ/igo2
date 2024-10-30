@@ -24,8 +24,5 @@ import { ClientParcelElementFillComponent } from './client-parcel-element-fill.c
   declarations: [
     ClientParcelElementFillComponent
   ],
-  entryComponents: [
-    ClientParcelElementFillComponent
-  ]
 })
 export class FadqLibClientParcelElementFillModule {}

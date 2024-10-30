@@ -24,8 +24,5 @@ import { ClientSchemaElementFillComponent } from './client-schema-element-fill.c
   declarations: [
     ClientSchemaElementFillComponent
   ],
-  entryComponents: [
-    ClientSchemaElementFillComponent
-  ]
 })
 export class FadqLibClientSchemaElementFillModule {}

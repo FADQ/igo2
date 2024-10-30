@@ -24,8 +24,5 @@ import { ClientSchemaElementImportComponent } from './client-schema-element-impo
   declarations: [
     ClientSchemaElementImportComponent
   ],
-  entryComponents: [
-    ClientSchemaElementImportComponent
-  ]
 })
 export class FadqLibClientSchemaElementImportModule {}

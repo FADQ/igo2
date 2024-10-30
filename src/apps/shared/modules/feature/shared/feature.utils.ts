@@ -22,7 +22,7 @@ export function moveToFeatureStore(map: IgoMap, store: FeatureStore) {
   }
 
   moveToOlFeatures(
-    map,
+    map.viewController,
     olFeatures,
     FeatureMotion.Zoom,
     [0, 0, 0.8, 0.6]

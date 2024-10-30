@@ -31,8 +31,5 @@ import { EditionUndoComponent } from './edition-undo.component';
   declarations: [
     EditionUndoComponent
   ],
-  entryComponents: [
-    EditionUndoComponent
-  ]
 })
 export class FadqLibEditionUndoModule {}

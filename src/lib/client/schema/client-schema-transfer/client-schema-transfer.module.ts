@@ -26,8 +26,5 @@ import { ClientSchemaTransferComponent } from './client-schema-transfer.componen
   declarations: [
     ClientSchemaTransferComponent
   ],
-  entryComponents: [
-    ClientSchemaTransferComponent
-  ]
 })
 export class FadqLibClientSchemaTransferModule {}

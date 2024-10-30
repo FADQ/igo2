@@ -1,3 +1,4 @@
+@import 'media';
 @import '../portal.variables';
 
 :host {
@@ -19,7 +20,7 @@ mat-sidenav {
   height: $fadq-sidenav-height;
   width: $fadq-sidenav-width;
 
-  @include mobile {
+  @include media-breakpoint-down('mobile') {
     width: $fadq-sidenav-width-mobile;
     height: 100%;
   }

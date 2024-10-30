@@ -24,8 +24,5 @@ import { ClientParcelElementUpdateBatchComponent } from './client-parcel-element
   declarations: [
     ClientParcelElementUpdateBatchComponent
   ],
-  entryComponents: [
-    ClientParcelElementUpdateBatchComponent
-  ]
 })
 export class FadqLibClientParcelElementUpdateBatchModule {}

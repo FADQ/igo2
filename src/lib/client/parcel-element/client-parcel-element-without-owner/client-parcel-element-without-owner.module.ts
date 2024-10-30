@@ -30,8 +30,5 @@ import { ClientParcelElementWithoutOwnerComponent } from './client-parcel-elemen
   declarations: [
     ClientParcelElementWithoutOwnerComponent
   ],
-  entryComponents: [
-    ClientParcelElementWithoutOwnerComponent
-  ]
 })
 export class FadqLibClientParcelElementWithoutOwnerModule {}

@@ -1,5 +1,9 @@
 @use '@angular/material' as mat;
-@import './fadq.theme';
+@use '@igo2/core/all-style';
+@use '@igo2/core/layout';
+
+// @use 'style/reset.scss';
+@import 'style/fadq.theme.scss';
 
 // @include igo-all-theming($theme);
 

@@ -1,0 +1,43 @@
+// fadq.theme.scss
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use './igo2-lib.override' as igo2-lib;
+@use '@igo2/core/theming/prebuilt-themes/blue-theme';
+
+/*
+* Define a default theme for styling some part of the app
+* Don't forget that we also have static theme apply
+*/
+$primary: mat.define-palette(mat.$blue-palette, 700, 400, 900);
+$accent: mat.define-palette(mat.$blue-palette, 200);
+$warn: mat.define-palette(mat.$red-palette);
+
+$theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+      warn: $warn
+    ),
+    density: 0
+  )
+);
+
+$background: map.get($theme, background);
+$foreground: map.get($theme, foreground);
+
+@include igo2-lib.theme($theme);
+
+table.igo-striped tbody tr:nth-child(odd) {
+  background-color: mat.get-color-from-palette($background, status-bar);
+  color: mat.get-color-from-palette($foreground, text);
+}
+
+.fadq-error-text,
+.fadq-alert-text {
+  color: mat.get-color-from-palette($warn);
+}
+
+.fadq-success-text {
+  color: mat.get-color-from-palette(mat.$green-palette);
+}

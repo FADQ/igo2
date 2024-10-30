@@ -26,8 +26,5 @@ import { ClientSchemaDeleteComponent } from './client-schema-delete.component';
   declarations: [
     ClientSchemaDeleteComponent
   ],
-  entryComponents: [
-    ClientSchemaDeleteComponent
-  ]
 })
 export class FadqLibClientSchemaDeleteModule {}

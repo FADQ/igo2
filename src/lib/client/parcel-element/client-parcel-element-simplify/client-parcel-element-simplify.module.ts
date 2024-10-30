@@ -24,8 +24,5 @@ import { ClientParcelElementSimplifyComponent } from './client-parcel-element-si
   declarations: [
     ClientParcelElementSimplifyComponent
   ],
-  entryComponents: [
-    ClientParcelElementSimplifyComponent
-  ]
 })
 export class FadqLibClientParcelElementSimplifyModule {}

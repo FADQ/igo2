@@ -24,8 +24,5 @@ import { ClientParcelElementRedrawComponent } from './client-parcel-element-redr
   declarations: [
     ClientParcelElementRedrawComponent
   ],
-  entryComponents: [
-    ClientParcelElementRedrawComponent
-  ]
 })
 export class FadqLibClientParcelElementRedrawModule {}

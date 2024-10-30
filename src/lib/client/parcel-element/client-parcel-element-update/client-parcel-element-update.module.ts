@@ -24,8 +24,5 @@ import { ClientParcelElementUpdateComponent } from './client-parcel-element-upda
   declarations: [
     ClientParcelElementUpdateComponent
   ],
-  entryComponents: [
-    ClientParcelElementUpdateComponent
-  ]
 })
 export class FadqLibClientParcelElementUpdateModule {}

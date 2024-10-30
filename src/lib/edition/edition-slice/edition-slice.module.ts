@@ -24,8 +24,5 @@ import { EditionSliceComponent } from './edition-slice.component';
   declarations: [
     EditionSliceComponent
   ],
-  entryComponents: [
-    EditionSliceComponent
-  ]
 })
 export class FadqLibEditionSliceModule {}

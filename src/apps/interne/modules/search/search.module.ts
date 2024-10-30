@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { provideSearchSourceService } from '@igo2/geo';
 
 import { provideCadastreRenoSearchSource } from 'src/lib/cadastre-reno';
 
@@ -23,6 +24,7 @@ import { provideClientSearchSource } from './shared/sources/client.providers';
   ],
   declarations: [],
   providers: [
+    provideSearchSourceService(),
     provideClientSearchSource(),
     provideFadqIChercheSearchResultFormatter(),
     provideIChercheSearchSource(),
