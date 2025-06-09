@@ -5,8 +5,8 @@ import OlGeoJSON from 'ol/format/GeoJSON';
 import turfUnion from '@turf/union';
 import { Feature, Polygon } from '@turf/helpers';
 
-import { getEntityRevision } from '@igo2/common';
-import { LanguageService } from '@igo2/core';
+import { getEntityRevision } from '@igo2/common/entity';
+import { LanguageService } from '@igo2/core/language';
 import { Context } from '@igo2/context';
 import {
   FeatureDataSource,

@@ -1,4 +1,4 @@
-import { EntityKey, EntityOperation, EntityOperationType } from '@igo2/common';
+import { EntityKey, EntityOperation, EntityOperationType } from '@igo2/common/entity';
 import { Feature } from '@igo2/geo';
 
 /**

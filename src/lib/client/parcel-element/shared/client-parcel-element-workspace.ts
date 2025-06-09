@@ -1,10 +1,6 @@
 
-import {
-  EntityTableTemplate,
-  EntityTransaction,
-  Workspace,
-  WorkspaceOptions
-} from '@igo2/common';
+import { EntityTableTemplate, EntityTransaction } from '@igo2/common/entity';
+import { Workspace, WorkspaceOptions } from '@igo2/common/workspace';
 import {
   IgoMap,
   FeatureStore,

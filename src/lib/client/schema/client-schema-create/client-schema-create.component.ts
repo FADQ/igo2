@@ -10,8 +10,12 @@ import {
 
 import { BehaviorSubject } from 'rxjs';
 
-import { EntityStore, Form, WidgetComponent, OnUpdateInputs } from '@igo2/common';
-import { LanguageService } from '@igo2/core';
+import { EntityStore } from '@igo2/common/entity';
+import { Form } from '@igo2/common/form';
+import { WidgetComponent } from '@igo2/common/widget';
+import { OnUpdateInputs } from '@igo2/common/dynamic-component';
+
+import { LanguageService } from '@igo2/core/language';
 import { formToJSON } from '../../../utils/conversion';
 import { Client } from '../../shared/client.interfaces';
 import { ClientSchema, ClientSchemaCreateData } from '../shared/client-schema.interfaces';

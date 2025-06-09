@@ -3,12 +3,9 @@ import { Inject, Injectable} from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import {
-  Action,
-  EntityStoreFilterSelectionStrategy,
-  EntityTableColumn,
-  Widget
-} from '@igo2/common';
+import { Action } from '@igo2/common/action';
+import { EntityStoreFilterSelectionStrategy, EntityTableColumn } from '@igo2/common/entity';
+import { Widget } from '@igo2/common/widget';
 import { entitiesToRowData, exportToCSV } from '@igo2/geo';
 import { ContextState } from '@igo2/integration';
 

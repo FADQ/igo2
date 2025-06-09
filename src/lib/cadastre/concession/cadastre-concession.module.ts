@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule} from '@angular/material/select';
 
-import { IgoLanguageModule } from '@igo2/core';
+import { IgoLanguageModule } from '@igo2/core/language';
 
 import { provideConcessionService } from './shared/concession.providers';
 import { FadqConcessionSelectorModule } from './concession-selector/cadastre-concession-selector.module';

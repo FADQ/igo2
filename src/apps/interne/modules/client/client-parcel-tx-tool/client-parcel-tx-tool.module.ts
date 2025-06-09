@@ -6,8 +6,8 @@ import { MatListModule } from '@angular/material/list';
 
 import { CommonModule } from '@angular/common';
 
-import { IgoLanguageModule } from '@igo2/core';
-import { IgoListModule } from '@igo2/common';
+import { IgoLanguageModule } from '@igo2/core/language';
+import { IgoListModule } from '@igo2/common/list';
 
 import { FadqLibClientModule } from 'src/lib/client/client.module';
 import { TOOL_CONFIG } from 'src/lib/core/core.module';

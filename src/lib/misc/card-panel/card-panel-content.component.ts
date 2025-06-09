@@ -4,7 +4,7 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 
-import { Message } from '@igo2/core';
+import { Message } from '@igo2/core/message';
 
 import { BehaviorSubject } from 'rxjs';
 

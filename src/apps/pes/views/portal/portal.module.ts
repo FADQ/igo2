@@ -6,15 +6,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
-import { IgoLanguageModule } from '@igo2/core';
-import {
-  IgoActionModule,
-  IgoContextMenuModule,
-  IgoWorkspaceModule,
-  IgoEntityModule,
-  IgoPanelModule,
-  IgoBackdropModule,
-} from '@igo2/common';
+import { IgoLanguageModule } from '@igo2/core/language';
+import { IgoActionModule } from '@igo2/common/action';
+import { IgoContextMenuModule } from '@igo2/common/context-menu';
+import { IgoWorkspaceModule } from '@igo2/common/workspace';
+import { IgoEntityModule } from '@igo2/common/entity';
+import { IgoPanelModule } from '@igo2/common/panel';
+import { IgoBackdropModule } from '@igo2/common/backdrop';
 import {
   IgoFeatureModule,
   IgoImportExportModule,

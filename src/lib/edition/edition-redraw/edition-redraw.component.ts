@@ -19,16 +19,13 @@ import OlOverlay from 'ol/Overlay';
 import OlFeature from 'ol/Feature';
 import { Style as OlStyle } from 'ol/style';
 
-import {
-  EntityRecord,
-  EntityTransaction,
-  Form,
-  FormField,
-  getAllFormFields,
-  WidgetComponent,
-  OnUpdateInputs
-} from '@igo2/common';
-import { LanguageService, Message, MessageType } from '@igo2/core';
+import { EntityRecord, EntityTransaction } from '@igo2/common/entity';
+import { Form, FormField, getAllFormFields } from '@igo2/common/form';
+import { WidgetComponent } from '@igo2/common/widget';
+import { OnUpdateInputs } from '@igo2/common/dynamic-component';
+
+import { LanguageService } from '@igo2/core/language';
+import { Message, MessageType } from '@igo2/core/message';
 import {
   Feature,
   FeatureFormComponent,

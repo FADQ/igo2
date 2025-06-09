@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import {
-  ActionStore,
-  EntityStoreFilterSelectionStrategy,
-  EntityTransaction
-} from '@igo2/common';
+import { ActionStore } from '@igo2/common/action';
+import { EntityStoreFilterSelectionStrategy, EntityTransaction } from '@igo2/common/entity';
 import {
   FeatureMotion,
   FeatureStore,

@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { ConfigService } from '@igo2/core';
+import { ConfigService } from '@igo2/core/config';
 import { Layer, ImageLayer, WMSDataSource, IgoMap } from '@igo2/geo';
 import { ContextState, MapState } from '@igo2/integration';
 

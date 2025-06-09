@@ -3,16 +3,12 @@ import { BehaviorSubject, Subscription, of, combineLatest } from 'rxjs';
 
 import OlMapBrowserEvent from 'ol/MapBrowserEvent';
 
-import { Media, MediaService, MediaOrientation } from '@igo2/core';
-import {
-  ActionbarMode,
-  Workspace,
-  WorkspaceStore,
-  EntityRecord,
-  EntityStore,
-  Tool,
-  Widget
-} from '@igo2/common';
+import { Media, MediaService, MediaOrientation } from '@igo2/core/media';
+import { ActionbarMode } from '@igo2/common/action';
+import { EntityRecord, EntityStore } from '@igo2/common/entity';
+import { Tool } from '@igo2/common/tool';
+import { Widget } from '@igo2/common/widget';
+import { Workspace, WorkspaceStore } from '@igo2/common/workspace';
 import { DetailedContext } from '@igo2/context';
 import {
   FEATURE,

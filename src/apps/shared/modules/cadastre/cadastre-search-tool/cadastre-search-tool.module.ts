@@ -3,7 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { IgoLanguageModule } from '@igo2/core';
+import { IgoLanguageModule } from '@igo2/core/language';
 
 import { FadqLibCadastreModule } from 'src/lib/cadastre/cadastre.module';
 import { TOOL_CONFIG } from 'src/lib/core/core.module';

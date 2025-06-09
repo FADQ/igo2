@@ -12,14 +12,12 @@ import {
 import { BehaviorSubject, Observable, Subscription, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { LanguageService, Message, MessageType } from '@igo2/core';
-import {
-  EntityRecord,
-  EntityTransaction,
-  WidgetComponent,
-  OnUpdateInputs,
-  getEntityRevision
-} from '@igo2/common';
+import { LanguageService } from '@igo2/core/language';
+import { Message, MessageType } from '@igo2/core/message';
+import { EntityRecord, EntityTransaction, getEntityRevision } from '@igo2/common/entity';
+import { WidgetComponent } from '@igo2/common/widget';
+import { OnUpdateInputs } from '@igo2/common/dynamic-component';
+
 import { FeatureStore, IgoMap } from '@igo2/geo';
 
 import { EditionResult } from '../../../edition/shared/edition.interfaces';

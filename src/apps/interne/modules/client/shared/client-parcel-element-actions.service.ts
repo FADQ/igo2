@@ -3,14 +3,11 @@ import { Inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { getEntityId } from '@igo2/common';
-import { LanguageService } from '@igo2/core';
-import {
-  Action,
-  EntityStore,
-  EntityStoreFilterSelectionStrategy,
-  Widget
-} from '@igo2/common';
+import { getEntityId } from '@igo2/common/entity';
+import { LanguageService } from '@igo2/core/language';
+import { Action } from '@igo2/common/action';
+import { EntityStore, EntityStoreFilterSelectionStrategy } from '@igo2/common/entity'
+import { Widget} from '@igo2/common/widget';
 
 import { EditionUndoWidget } from 'src/lib/edition';
 

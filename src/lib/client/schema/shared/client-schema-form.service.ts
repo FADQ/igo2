@@ -4,9 +4,9 @@ import { FormGroup, Validators } from '@angular/forms';
 import { Observable, of, zip } from 'rxjs';
 import { map} from 'rxjs/operators';
 
-import { LanguageService } from '@igo2/core';
+import { LanguageService } from '@igo2/core/language';
+import { EntityStore } from '@igo2/common/entity';
 import {
-  EntityStore,
   Form,
   FormField,
   FormFieldConfig,
@@ -14,7 +14,7 @@ import {
   FormFieldSelectChoice,
   FormFieldSelectInputs,
   FormService
-} from '@igo2/common';
+} from '@igo2/common/form';
 
 import { ApiService } from '../../../core/api/api.service';
 import { DomainService } from '../../../core/domain/domain.service';

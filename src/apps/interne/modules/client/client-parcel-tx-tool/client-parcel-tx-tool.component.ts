@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
 
-import { EntityStore } from '@igo2/common';
+import { EntityStore } from '@igo2/common/entity';
 
 import {
   Client,

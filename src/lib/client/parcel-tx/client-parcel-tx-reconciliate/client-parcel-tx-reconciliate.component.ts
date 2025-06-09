@@ -11,14 +11,12 @@ import {
 
 import { BehaviorSubject } from 'rxjs';
 
-import { LanguageService, Message, MessageType } from '@igo2/core';
-import {
-  EntityStore,
-  EntityTableTemplate,
-  WidgetComponent,
-  OnUpdateInputs,
-  EntityTableColumnRenderer
-} from '@igo2/common';
+import { LanguageService } from '@igo2/core/language';
+import { Message, MessageType } from '@igo2/core/message';
+
+import { EntityStore, EntityTableTemplate, EntityTableColumnRenderer } from '@igo2/common/entity';
+import { WidgetComponent } from '@igo2/common/widget';
+import { OnUpdateInputs } from '@igo2/common/dynamic-component';
 
 import { SubmitStep, SubmitHandler } from '../../../utils';
 import { Client } from '../../shared/client.interfaces';

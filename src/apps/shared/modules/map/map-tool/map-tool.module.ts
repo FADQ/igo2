@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { IgoLanguageModule } from '@igo2/core';
+import { IgoLanguageModule } from '@igo2/core/language';
 import { IgoLayerModule } from '@igo2/geo';
 import { IgoAppCatalogModule } from '@igo2/integration';
 

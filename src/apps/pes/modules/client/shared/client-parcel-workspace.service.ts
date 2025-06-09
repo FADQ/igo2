@@ -1,6 +1,6 @@
 import { Injectable} from '@angular/core';
 
-import { ActionStore } from '@igo2/common';
+import { ActionStore } from '@igo2/common/action';
 import {
   FeatureMotion,
   FeatureStore,

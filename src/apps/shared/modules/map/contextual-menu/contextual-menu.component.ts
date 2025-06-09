@@ -2,8 +2,8 @@ import { Component, OnInit, ChangeDetectionStrategy, Input, ElementRef } from '@
 
 import * as olProj from 'ol/proj';
 
-import { ActionStore } from '@igo2/common';
-import { LanguageService } from '@igo2/core';
+import { ActionStore } from '@igo2/common/action';
+import { LanguageService } from '@igo2/core/language';
 import { FEATURE, IgoMap } from '@igo2/geo';
 import { SearchState } from '@igo2/integration';
 

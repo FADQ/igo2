@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTooltipDefaultOptions, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
 
-import { provideConfigOptions } from '@igo2/core';
+import { provideConfig } from '@igo2/core/config';
 import { IgoGeometryModule, IgoQueryModule, IgoDirectionsModule, provideOsrmDirectionsSource } from '@igo2/geo';
 
 import { environment } from 'src/environments/pes_interne/environment';
@@ -52,7 +52,7 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
     FadqPesPortalModule
   ],
   providers: [
-    provideConfigOptions({
+    provideConfig({
       default: environment.igo,
       path: environment.configPath
     }),

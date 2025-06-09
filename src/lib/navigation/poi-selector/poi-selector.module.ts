@@ -6,8 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
-import { IgoStopPropagationModule } from '@igo2/common';
-import { IgoLanguageModule } from '@igo2/core';
+import { IgoStopPropagationModule } from '@igo2/common/stop-propagation';
+import { IgoLanguageModule } from '@igo2/core/language';
 
 import { PoiSelectorComponent } from './poi-selector.component';
 

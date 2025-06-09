@@ -3,7 +3,8 @@ import { Inject, Injectable} from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Action, Widget } from '@igo2/common';
+import { Action } from '@igo2/common/action';
+import { Widget } from '@igo2/common/widget';
 
 import {
   ClientSchema,

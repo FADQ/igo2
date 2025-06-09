@@ -6,8 +6,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 
-import { IgoLanguageModule } from '@igo2/core';
-import { IgoEntityTableModule, IgoFormModule } from '@igo2/common';
+import { IgoLanguageModule } from '@igo2/core/language';
+import { IgoEntityTableModule } from '@igo2/common/entity';
+import { IgoFormModule } from '@igo2/common/form';
 
 import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
 

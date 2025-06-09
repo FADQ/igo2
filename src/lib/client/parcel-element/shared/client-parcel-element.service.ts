@@ -5,7 +5,7 @@ import { Geometry as GeoJSONGeometry } from 'geojson';
 import { Observable, of } from 'rxjs';
 import { concatMap, map, catchError } from 'rxjs/operators';
 
-import { EntityOperation, EntityTransaction } from '@igo2/common';
+import { EntityOperation, EntityTransaction } from '@igo2/common/entity';
 
 import { ApiService } from 'src/lib/core/api';
 import { TransactionSerializer, TransactionData } from 'src/lib/utils/transaction';

@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of, zip } from 'rxjs';
 import { concatMap, map, tap, catchError } from 'rxjs/operators';
 
-import { EntityOperation, EntityTransaction } from '@igo2/common';
+import { EntityOperation, EntityTransaction } from '@igo2/common/entity';
 
 import { ApiService } from 'src/lib/core/api';
 import { hexToRGB } from 'src/lib/utils/color';

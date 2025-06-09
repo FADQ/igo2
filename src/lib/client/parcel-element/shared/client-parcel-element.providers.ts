@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 
-import { ConfigService, LanguageService } from '@igo2/core';
-import { FormService } from '@igo2/common';
+import { ConfigService } from '@igo2/core/config';
+import { LanguageService } from '@igo2/core/language';
+import { FormService } from '@igo2/common/form';
 
 import { ApiService } from 'src/lib/core/api';
 import { DomainService } from 'src/lib/core/domain';

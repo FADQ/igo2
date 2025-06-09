@@ -7,7 +7,9 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 
-import { EntityStore, WidgetComponent, OnUpdateInputs } from '@igo2/common';
+import { EntityStore } from '@igo2/common/entity';
+import { WidgetComponent } from '@igo2/common/widget';
+import { OnUpdateInputs } from '@igo2/common/dynamic-component';
 
 import { Client } from '../../shared/client.interfaces';
 import { ClientSchema } from '../shared/client-schema.interfaces';

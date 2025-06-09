@@ -11,8 +11,10 @@ import {
 
 import { BehaviorSubject } from 'rxjs';
 
-import { LanguageService, Message, MessageType } from '@igo2/core';
-import { WidgetComponent, OnUpdateInputs } from '@igo2/common';
+import { LanguageService } from '@igo2/core/language';
+import { Message, MessageType } from '@igo2/core/message';
+import { WidgetComponent } from '@igo2/common/widget';
+import { OnUpdateInputs } from '@igo2/common/dynamic-component';
 
 import {
   ClientParcelTxService,

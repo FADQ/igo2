@@ -14,7 +14,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import OlGeoJSON from 'ol/format/GeoJSON';
 import OlGeometry from 'ol/geom/Geometry';
 
-import { EntityRecord } from '@igo2/common';
+import { EntityRecord } from '@igo2/common/entity';
 import {
   FeatureStore,
   IgoMap,

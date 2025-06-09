@@ -1,4 +1,4 @@
-import { EntityTransaction } from '@igo2/common';
+import { EntityTransaction } from '@igo2/common/entity';
 import { Feature } from '@igo2/geo';
 
 import { Client } from '../../shared/client.interfaces';

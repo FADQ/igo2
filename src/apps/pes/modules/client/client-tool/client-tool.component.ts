@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { EntityStore } from '@igo2/common';
+import { EntityStore } from '@igo2/common/entity';
 import { FEATURE } from '@igo2/geo';
 import { SearchState } from '@igo2/integration';
 

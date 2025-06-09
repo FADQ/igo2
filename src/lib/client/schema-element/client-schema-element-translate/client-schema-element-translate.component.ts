@@ -13,9 +13,11 @@ import { map } from 'rxjs/operators';
 import OlGeoJSON from 'ol/format/GeoJSON';
 import * as olFormat from 'ol/format';
 
-import { LanguageService } from '@igo2/core';
+import { LanguageService } from '@igo2/core/language';
 
-import { EntityTransaction, WidgetComponent, OnUpdateInputs } from '@igo2/common';
+import { EntityTransaction } from '@igo2/common/entity';
+import { WidgetComponent } from '@igo2/common/widget';
+import { OnUpdateInputs } from '@igo2/common/dynamic-component';
 import { FeatureStore, IgoMap } from '@igo2/geo';
 
 import { getAnneeImageFromMap } from '../../shared/client.utils';

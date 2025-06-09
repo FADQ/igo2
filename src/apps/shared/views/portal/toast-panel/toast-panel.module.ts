@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import { IgoPanelModule, IgoStopPropagationModule } from '@igo2/common';
-import { IgoLanguageModule } from '@igo2/core';
+import { IgoPanelModule } from '@igo2/common/panel';
+import { IgoStopPropagationModule } from '@igo2/common/stop-propagation';
+import { IgoLanguageModule } from '@igo2/core/language';
 
 import { ToastPanelComponent } from './toast-panel.component';
 

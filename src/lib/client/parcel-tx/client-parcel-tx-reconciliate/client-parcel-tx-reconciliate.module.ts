@@ -4,8 +4,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 
-import { IgoLanguageModule } from '@igo2/core';
-import { IgoEntityTableModule } from '@igo2/common';
+import { IgoLanguageModule } from '@igo2/core/language';
+import { IgoEntityTableModule } from '@igo2/common/entity';
 
 import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
 

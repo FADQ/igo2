@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule} from '@angular/material/select';
 
-import { IgoLanguageModule } from '@igo2/core';
+import { IgoLanguageModule } from '@igo2/core/language';
 
 import { provideMunService } from './shared/mun.providers';
 import { FadqMunSelectorModule } from './mun-selector/cadastre-mun-selector.module';

@@ -12,7 +12,8 @@ import {
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { skip } from 'rxjs/operators';
 
-import { LanguageService, Message, MessageType } from '@igo2/core';
+import { LanguageService } from '@igo2/core/language';
+import { Message, MessageType } from '@igo2/core/message';
 import {
   EntityRecord,
   EntityOperation,
@@ -21,9 +22,9 @@ import {
   EntityTableTemplate,
   EntityTableColumnRenderer,
   EntityTableButton,
-  WidgetComponent,
   getEntityRevision,
-} from '@igo2/common';
+} from '@igo2/common/entity';
+import { WidgetComponent } from '@igo2/common/widget';
 import { FeatureStore } from '@igo2/geo';
 import { ObjectUtils } from '@igo2/utils';
 

@@ -16,7 +16,7 @@ import {
   EntityStore,
   EntityStoreWatcher,
   EntityRecord
-} from '@igo2/common';
+} from '@igo2/common/entity';
 
 import { Cadastre, CadastreResponseItem } from 'src/lib/cadastre/cadastre/shared/cadastre.interfaces';
 

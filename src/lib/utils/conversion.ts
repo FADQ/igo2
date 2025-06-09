@@ -1,4 +1,4 @@
-import { Form, FormField, FormFieldInputs, getAllFormFields } from '@igo2/common';
+import { Form, FormField, FormFieldInputs, getAllFormFields } from '@igo2/common/form';
 
 export function formToJSON (elements: Form) {
     return [].reduce.call(

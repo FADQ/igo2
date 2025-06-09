@@ -5,8 +5,8 @@ import OlMultiPoint from 'ol/geom/MultiPoint';
 
 import turfSimplify from '@turf/simplify';
 
-import { getEntityRevision, getEntityTitle } from '@igo2/common';
-import { LanguageService } from '@igo2/core';
+import { getEntityRevision, getEntityTitle } from '@igo2/common/entity';
+import { LanguageService } from '@igo2/core/language';
 import { Feature } from '@igo2/geo';
 import { ObjectUtils, uuid } from '@igo2/utils';
 

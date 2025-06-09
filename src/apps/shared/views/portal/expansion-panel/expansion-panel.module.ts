@@ -7,8 +7,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 
-import { IgoLanguageModule } from '@igo2/core';
-import { IgoBackdropModule } from '@igo2/common';
+import { IgoLanguageModule } from '@igo2/core/language';
+import { IgoBackdropModule } from '@igo2/common/backdrop';
 
 import { ExpansionPanelComponent } from './expansion-panel.component';
 import { ExpansionPanelHeaderComponent } from './expansion-panel-header.component';

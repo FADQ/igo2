@@ -10,14 +10,15 @@ import {
 
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
+import { WidgetComponent } from '@igo2/common/widget';
 import {
   EntityRecord,
   EntityTransaction,
   EntityTableTemplate,
-  WidgetComponent,
   getEntityRevision
-} from '@igo2/common';
-import { LanguageService, Message, MessageType } from '@igo2/core';
+} from '@igo2/common/entity';
+import { LanguageService } from '@igo2/core/language';
+import { Message, MessageType } from '@igo2/core/message';
 import {
   IgoMap,
   VectorLayer,

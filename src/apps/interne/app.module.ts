@@ -5,17 +5,17 @@ import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTooltipDefaultOptions, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
 
-import { provideConfigOptions } from '@igo2/core';
+import { provideConfig } from '@igo2/core/config';
 import { IgoGeometryModule, IgoQueryModule, IgoDirectionsModule, provideOsrmDirectionsSource } from '@igo2/geo';
 
-import { environment } from 'src/environments/interne/environment';
+import { environment } from '../../environments/interne/environment';
 
-import { FadqCoreModule } from 'src/apps/shared/modules/core/core.module';
-import { FadqContextModule } from 'src/apps/shared/modules/context/context.module';
-import { FadqHelpModule } from 'src/apps/shared/modules/help/help.module';
-import { FadqCadastreModule } from 'src/apps/shared/modules/cadastre/cadastre.module';
-import { FadqNavigationModule } from 'src/apps/shared/modules/navigation/navigation.module';
-import { FadqAppOutletModule } from 'src/apps/shared/app-outlet/app-outlet.module';
+import { FadqCoreModule } from '../../apps/shared/modules/core/core.module';
+import { FadqContextModule } from '../../apps/shared/modules/context/context.module';
+import { FadqHelpModule } from '../../apps/shared/modules/help/help.module';
+import { FadqCadastreModule } from '../../apps/shared/modules/cadastre/cadastre.module';
+import { FadqNavigationModule } from '../../apps/shared/modules/navigation/navigation.module';
+import { FadqAppOutletModule } from '../../apps/shared/app-outlet/app-outlet.module';
 
 import { FadqInterneAddressModule } from './modules/address/address.module';
 import { FadqInterneClientModule } from './modules/client/client.module';
@@ -53,7 +53,7 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
     FadqInternePortalModule
   ],
   providers: [
-    provideConfigOptions({
+    provideConfig({
       default: environment.igo,
       path: environment.configPath
     }),

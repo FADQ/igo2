@@ -3,13 +3,10 @@ import { Inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { LanguageService } from '@igo2/core';
-import {
-  Action,
-  EntityStoreFilterSelectionStrategy,
-  EntityTableColumn,
-  Widget
-} from '@igo2/common';
+import { LanguageService } from '@igo2/core/language';
+import { Action } from '@igo2/common/action';
+import { EntityStoreFilterSelectionStrategy, EntityTableColumn } from '@igo2/common/entity';
+import { Widget } from '@igo2/common/widget';
 import { entitiesToRowData, exportToCSV } from '@igo2/geo';
 import { downloadFromUri } from '@igo2/utils';
 
@@ -360,7 +357,7 @@ function oneOrMoreSchemaElementAreSelected(ctrl: ClientController): Observable<b
 /**
  * Schemas element has same geometry type
  * @param ctrl Client controller
- * @returns return true if geometry type is unique. False otherwise. 
+ * @returns return true if geometry type is unique. False otherwise.
  */
 function schemaElementHasSameGeometryType(ctrl: ClientController): Observable<boolean> {
   return ctrl.selectedSchemaElements$.pipe(

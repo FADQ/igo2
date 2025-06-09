@@ -3,14 +3,11 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subscription, combineLatest } from 'rxjs';
 import { skip } from 'rxjs/operators';
 
-import { LanguageService, Message, MessageType } from '@igo2/core';
-import {
-  EntityRecord,
-  EntityStore,
-  Widget,
-  Workspace,
-  WorkspaceStore
-} from '@igo2/common';
+import { Message, MessageType } from '@igo2/core/message';
+import { LanguageService } from '@igo2/core/language';
+import { EntityRecord, EntityStore } from '@igo2/common/entity';
+import { Widget } from '@igo2/common/widget';
+import { Workspace, WorkspaceStore } from '@igo2/common/workspace';
 
 import {
   Client,

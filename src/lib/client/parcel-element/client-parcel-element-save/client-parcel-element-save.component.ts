@@ -10,9 +10,12 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { LanguageService, Message, MessageType } from '@igo2/core';
+import { LanguageService } from '@igo2/core/language';
+import { Message, MessageType } from '@igo2/core/message';
 
-import { EntityTransaction, WidgetComponent, OnUpdateInputs } from '@igo2/common';
+import { EntityTransaction } from '@igo2/common/entity';
+import { WidgetComponent } from '@igo2/common/widget';
+import { OnUpdateInputs } from '@igo2/common/dynamic-component';
 import { FeatureStore } from '@igo2/geo';
 
 import { Client } from '../../shared/client.interfaces';

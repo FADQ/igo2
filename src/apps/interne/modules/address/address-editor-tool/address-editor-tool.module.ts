@@ -3,7 +3,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FadqLibAddressModule } from 'src/lib/address/address.module';
 import { AddressEditorToolComponent } from './address-editor-tool.component';
 
-import { TOOL_CONFIG } from 'src/lib/core/core.module';
+import { TOOL_CONFIG } from '/src/lib/core/core.module';
 
 /**
  * @ignore

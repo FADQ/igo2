@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
-import { EntityStore } from '@igo2/common';
+import { EntityStore } from '@igo2/common/entity';
 import { VectorLayer, ImageLayer} from '@igo2/geo';
 import { MapState } from '@igo2/integration';
 

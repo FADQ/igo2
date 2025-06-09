@@ -3,14 +3,11 @@ import { BehaviorSubject, Subscription, of } from 'rxjs';
 
 import OlMapBrowserEvent from 'ol/MapBrowserEvent';
 
-import { Media, MediaService, MediaOrientation } from '@igo2/core';
+import { Media, MediaService, MediaOrientation } from '@igo2/core/media';
 import { DetailedContext } from '@igo2/context';
-import {
-  ActionbarMode,
-  EntityRecord,
-  EntityStore,
-  Tool
-} from '@igo2/common';
+import { ActionbarMode } from '@igo2/common/action';
+import { EntityRecord, EntityStore } from '@igo2/common/entity';
+import { Tool } from '@igo2/common/tool';
 import {
   FEATURE,
   Feature,

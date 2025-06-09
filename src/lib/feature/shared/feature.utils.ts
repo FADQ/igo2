@@ -1,4 +1,4 @@
-import { EntityRecord } from '@igo2/common';
+import { EntityRecord } from '@igo2/common/entity';
 import {
   Feature,
   FeatureMotion,

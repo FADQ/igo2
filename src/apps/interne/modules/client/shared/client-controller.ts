@@ -1,8 +1,10 @@
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { concatMap, map, skip, tap } from 'rxjs/operators';
 
-import { LanguageService, Message, MessageType } from '@igo2/core';
-import { EntityRecord, EntityStore, EntityTransaction, WorkspaceStore } from '@igo2/common';
+import { LanguageService } from '@igo2/core/language';
+import { Message, MessageType } from '@igo2/core/message';
+import { EntityRecord, EntityStore, EntityTransaction } from '@igo2/common/entity';
+import { WorkspaceStore } from '@igo2/common/workspace'
 import {
   FeatureMotion,
   FeatureStore,

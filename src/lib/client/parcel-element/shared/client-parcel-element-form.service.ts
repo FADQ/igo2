@@ -4,7 +4,7 @@ import { Validators } from '@angular/forms';
 import { Observable, of, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { LanguageService } from '@igo2/core';
+import { LanguageService } from '@igo2/core/language';
 import {
   Form,
   FormField,
@@ -12,7 +12,7 @@ import {
   FormFieldSelectChoice,
   FormFieldSelectInputs,
   FormService
-} from '@igo2/common';
+} from '@igo2/common/form';
 import { IgoMap } from '@igo2/geo';
 
 import { ApiService } from '../../../core/api/api.service';

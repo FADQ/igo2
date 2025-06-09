@@ -4,7 +4,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 import { ContextServiceOptions } from '@igo2/context';
-import { LanguageOptions } from '@igo2/core';
+import { LanguageOptions } from '@igo2/core/language';
 import { CatalogServiceOptions, Projection, SearchSourceOptions } from '@igo2/geo';
 
 import { ApiConfig } from 'src/lib/core/api/api.interfaces';

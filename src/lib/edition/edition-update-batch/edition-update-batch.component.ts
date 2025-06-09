@@ -17,16 +17,13 @@ import {
   zip
 } from 'rxjs';
 
-import {
-  EntityTransaction,
-  Form,
-  FormField,
-  WidgetComponent,
-  OnUpdateInputs,
-  getAllFormFields,
-  getEntityRevision
-} from '@igo2/common';
-import { LanguageService, Message, MessageType } from '@igo2/core';
+import { EntityTransaction, getEntityRevision } from '@igo2/common/entity';
+import { Form, FormField, getAllFormFields } from '@igo2/common/form';
+import { WidgetComponent } from '@igo2/common/widget';
+import { OnUpdateInputs } from '@igo2/common/dynamic-component';
+
+import { LanguageService } from '@igo2/core/language';
+import { Message, MessageType } from '@igo2/core/message';
 import { FEATURE, Feature, FeatureStore } from '@igo2/geo';
 
 import { EditionResult } from '../shared/edition.interfaces';

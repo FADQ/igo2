@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
-import { ConfigService } from '@igo2/core';
+import { ConfigService } from '@igo2/core/config';
 import { BehaviorSubject } from 'rxjs';
 
 import { HelpGuide } from '../shared/help.interfaces';

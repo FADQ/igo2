@@ -12,16 +12,12 @@ import {
 import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 
-import {
-  EntityTransaction,
-  Form,
-  FormField,
-  FormFieldSelectInputs,
-  getAllFormFields,
-  WidgetComponent,
-  OnUpdateInputs
-} from '@igo2/common';
-import { LanguageService } from '@igo2/core';
+import { EntityTransaction } from '@igo2/common/entity';
+import { Form, FormField, FormFieldSelectInputs, getAllFormFields } from '@igo2/common/form';
+import { WidgetComponent } from '@igo2/common/widget';
+import { OnUpdateInputs } from '@igo2/common/dynamic-component';
+
+import { LanguageService } from '@igo2/core/language';
 import {
   FeatureStore,
   IgoMap,

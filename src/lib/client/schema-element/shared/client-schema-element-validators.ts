@@ -1,6 +1,6 @@
 import { FormGroup, ValidationErrors } from '@angular/forms';
 
-import { EntityStore } from '@igo2/common';
+import { EntityStore } from '@igo2/common/entity';
 import { UniqueClientSchemaType } from '../../schema/shared/client-schema.enums';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import {

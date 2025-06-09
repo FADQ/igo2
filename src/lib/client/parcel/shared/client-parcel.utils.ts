@@ -2,7 +2,7 @@ import * as olstyle from 'ol/style';
 import OlFeature from 'ol/Feature';
 import OlPolygon from 'ol/geom/Polygon';
 
-import { FormFieldSelectChoice } from '@igo2/common';
+import { FormFieldSelectChoice } from '@igo2/common/form';
 
 import { FeatureDataSource, VectorLayer } from '@igo2/geo';
 import { ObjectUtils } from '@igo2/utils';

@@ -5,7 +5,7 @@ import {
   HostBinding
 } from '@angular/core';
 
-import { Message, MessageType } from '@igo2/core';
+import { Message, MessageType } from '@igo2/core/message';
 
 /**
  * Inline message

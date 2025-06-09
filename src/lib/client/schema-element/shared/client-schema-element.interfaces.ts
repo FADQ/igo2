@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs';
 
-import { FormFieldSelectChoice, EntityTransaction } from '@igo2/common';
+import { EntityTransaction } from '@igo2/common/entity';
+import { FormFieldSelectChoice,  } from '@igo2/common/form';
 import { Feature } from '@igo2/geo';
 
 import { TransactionData } from 'src/lib/utils/transaction';

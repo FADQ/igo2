@@ -4,7 +4,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 import { ContextServiceOptions } from '@igo2/context';
-import { LanguageOptions } from '@igo2/core';
+import { LanguageOptions } from '@igo2/core/language';
 import { CatalogServiceOptions, Projection, SearchSourceOptions } from '@igo2/geo';
 
 import { ApiConfig } from 'src/lib/core/api/api.interfaces';
@@ -153,7 +153,7 @@ export const igoEnvironment: IgoEnvironment = {
         update: '/igoschema/edition_schema/modifierSchema',
         delete: '/igoschema/edition_schema/supprimerSchema/${id}',
         duplicate: '/igoschema/edition_schema/copierSchema/${id}',
-        downloadMapLSE: '/igoschema/edition_schema/creerCartesStructureEntreposage/${clientNum}', 
+        downloadMapLSE: '/igoschema/edition_schema/creerCartesStructureEntreposage/${clientNum}',
         domains: {
           type: '/igoschema/edition_schema/obtenirTypesSchemas'
         }

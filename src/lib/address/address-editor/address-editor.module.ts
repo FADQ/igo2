@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { IgoLanguageModule } from '@igo2/core';
+import { IgoLanguageModule } from '@igo2/core/language';
 
 import { AddressEditorComponent } from './address-editor.component';
 import { FadqAddressEditorSaveDialogModule } from '../address-editor-save-dialog/address-editor-save-dialog.module';

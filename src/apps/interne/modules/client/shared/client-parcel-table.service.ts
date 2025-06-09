@@ -1,10 +1,7 @@
 import { Injectable} from '@angular/core';
 
-import {
-  EntityTableTemplate,
-  EntityTableColumnRenderer,
-  FormFieldSelectChoice
-} from '@igo2/common';
+import { EntityTableTemplate, EntityTableColumnRenderer } from '@igo2/common/entity';
+import { FormFieldSelectChoice } from '@igo2/common/form';
 import { formatMeasure } from '@igo2/geo';
 import { formatDate } from 'src/lib/utils/date';
 import {

@@ -12,8 +12,11 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Subscription, BehaviorSubject, throwError } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
-import { Message, MessageType, LanguageService } from '@igo2/core';
-import { EntityRecord, EntityStore, WidgetComponent } from '@igo2/common';
+import { Message, MessageType } from '@igo2/core/message';
+import { LanguageService } from '@igo2/core/language';
+
+import { EntityRecord, EntityStore } from '@igo2/common/entity';
+import { WidgetComponent } from '@igo2/common/widget';
 import { FeatureStore } from '@igo2/geo';
 
 import { SubmitStep, SubmitHandler } from '../../../utils';

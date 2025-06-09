@@ -1,4 +1,4 @@
-import { EntityStoreStrategy } from '@igo2/common';
+import { EntityStoreStrategy } from '@igo2/common/entity';
 import { FeatureStore } from '@igo2/geo';
 
 import { ClientParcel } from '../client-parcel.interfaces';

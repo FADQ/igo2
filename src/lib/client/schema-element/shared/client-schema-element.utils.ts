@@ -7,7 +7,7 @@ import OlFeature from 'ol/Feature';
 import OlGeoJSON from 'ol/format/GeoJSON';
 import * as olFormat from 'ol/format';
 
-import { LanguageService } from '@igo2/core';
+import { LanguageService } from '@igo2/core/language';
 import {
   IgoMap,
   measureOlGeometryArea,
@@ -21,7 +21,7 @@ import {
   FormFieldSelectInputs,
   FormFieldSelectChoice,
   getAllFormFields
-} from '@igo2/common';
+} from '@igo2/common/form';
 
 import { createOlTextStyle } from '../../../edition/shared/edition.utils';
 import { TransactionData } from '../../../utils/transaction';

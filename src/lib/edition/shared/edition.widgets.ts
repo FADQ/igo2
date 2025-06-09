@@ -2,7 +2,7 @@
 
 import { InjectionToken } from '@angular/core';
 
-import { Widget, WidgetService } from '@igo2/common';
+import { Widget, WidgetService } from '@igo2/common/widget';
 
 import { EditionUpsertComponent } from '../edition-upsert/edition-upsert.component';
 import { EditionUpdateBatchComponent } from '../edition-update-batch/edition-update-batch.component';

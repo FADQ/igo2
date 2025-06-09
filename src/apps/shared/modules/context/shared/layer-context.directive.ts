@@ -3,7 +3,7 @@ import { Directive, OnInit, OnDestroy, Optional, Input } from '@angular/core';
 import { Subscription, zip } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { RouteService } from '@igo2/core';
+import { RouteService } from '@igo2/core/route';
 import {
   MapBrowserComponent,
   Layer,

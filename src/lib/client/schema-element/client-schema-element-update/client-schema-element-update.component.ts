@@ -14,17 +14,12 @@ import { map } from 'rxjs/operators';
 import OlGeoJSON from 'ol/format/GeoJSON';
 import * as olFormat from 'ol/format';
 
-import {
-  EntityTransaction,
-  Form,
-  FormField,
-  FormFieldSelectInputs,
-  getAllFormFields,
-  WidgetComponent,
-  OnUpdateInputs,
-  FormFieldSelectChoice
-} from '@igo2/common';
-import { LanguageService } from '@igo2/core';
+import { EntityTransaction } from '@igo2/common/entity';
+import { WidgetComponent } from '@igo2/common/widget';
+import { OnUpdateInputs } from '@igo2/common/dynamic-component';
+import { Form, FormField, FormFieldSelectInputs, getAllFormFields, FormFieldSelectChoice } from '@igo2/common/form';
+
+import { LanguageService } from '@igo2/core/language';
 import { FeatureStore, IgoMap } from '@igo2/geo';
 
 import { getAnneeImageFromMap } from '../../shared/client.utils';

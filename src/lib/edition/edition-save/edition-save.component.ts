@@ -9,7 +9,7 @@ import {
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { Message } from '@igo2/core';
+import { Message } from '@igo2/core/message';
 import {
   EntityOperation,
   EntityOperationType,
@@ -18,8 +18,9 @@ import {
   EntityTableColumnRenderer,
   getEntityId,
   getEntityTitle,
-  WidgetComponent
-} from '@igo2/common';
+} from '@igo2/common/entity';
+import { WidgetComponent } from '@igo2/common/widget';
+
 import { FeatureStore } from '@igo2/geo';
 
 import { SubmitStep, SubmitHandler } from '../../utils';

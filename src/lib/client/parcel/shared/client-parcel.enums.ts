@@ -1,4 +1,4 @@
-import { FormFieldSelectChoice } from '@igo2/common';
+import { FormFieldSelectChoice } from '@igo2/common/form';
 
 export const ClientParcelColors: [number, number, number][] = [
   [142, 36, 170], // Purple

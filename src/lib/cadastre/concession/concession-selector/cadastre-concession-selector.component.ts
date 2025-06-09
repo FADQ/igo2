@@ -16,7 +16,7 @@ import {
   EntityStore,
   EntityStoreWatcher,
   EntityRecord
-} from '@igo2/common';
+} from '@igo2/common/entity';
 
 import { Concession, ConcessionResponseItem, ConcessionUnique } from 'src/lib/cadastre/concession/shared/concession.interfaces';
 

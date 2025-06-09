@@ -1,8 +1,9 @@
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { skip, tap } from 'rxjs/operators';
 
-import { LanguageService, Message, MessageType } from '@igo2/core';
-import { EntityRecord, EntityStore } from '@igo2/common';
+import { LanguageService } from '@igo2/core/language';
+import { Message, MessageType } from '@igo2/core/message';
+import { EntityRecord, EntityStore } from '@igo2/common/entity';
 import { FeatureStore, IgoMap } from '@igo2/geo';
 
 import {

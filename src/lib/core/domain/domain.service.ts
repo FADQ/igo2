@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
-import { FormFieldSelectChoice } from '@igo2/common';
+import { FormFieldSelectChoice } from '@igo2/common/form';
 
 import { DomainChoicesResponse } from './domain.interfaces';
 

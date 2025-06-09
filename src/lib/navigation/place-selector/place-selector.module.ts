@@ -9,8 +9,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 
-import { IgoStopPropagationModule } from '@igo2/common';
-import { IgoLanguageModule } from '@igo2/core';
+import { IgoStopPropagationModule } from '@igo2/common/stop-propagation';
+import { IgoLanguageModule } from '@igo2/core/language';
 
 import { PlaceSelectorComponent } from './place-selector.component';
 

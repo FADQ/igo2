@@ -5,8 +5,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { IgoLanguageModule } from '@igo2/core';
-import { IgoPanelModule, IgoFlexibleModule, IgoToolModule } from '@igo2/common';
+import { IgoLanguageModule } from '@igo2/core/language';
+import { IgoPanelModule } from '@igo2/common/panel';
+import { IgoFlexibleModule } from '@igo2/common/flexible';
+import { IgoToolModule } from '@igo2/common/tool';
 
 import { SidenavComponent } from './sidenav.component';
 

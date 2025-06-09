@@ -16,7 +16,7 @@ import {
   EntityStore,
   EntityStoreWatcher,
   EntityRecord
-} from '@igo2/common';
+} from '@igo2/common/entity';
 
 import { Lot, LotResponseItem, LotUnique } from 'src/lib/cadastre/lot/shared/lot.interfaces';
 

@@ -4,7 +4,7 @@ import { FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, of, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { LanguageService } from '@igo2/core';
+import { LanguageService } from '@igo2/core/language';
 import {
   Form,
   FormField,
@@ -12,7 +12,7 @@ import {
   FormFieldSelectInputs,
   FormService,
   FormFieldSelectChoice
-} from '@igo2/common';
+} from '@igo2/common/form';
 import { FeatureStore, IgoMap } from '@igo2/geo';
 import { ObjectUtils } from '@igo2/utils';
 import { getMapExtentPolygon } from '../../../map';

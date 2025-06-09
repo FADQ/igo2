@@ -1,5 +1,4 @@
 import {
-  Component,
   Input,
   Output,
   OnInit,
@@ -10,7 +9,7 @@ import {
 
 import { BehaviorSubject, Subscription } from 'rxjs';
 
-import { Tool, Toolbox } from '@igo2/common';
+import { Tool, Toolbox } from '@igo2/common/tool';
 import { ToolState } from '@igo2/integration';
 
 @Component({

@@ -6,7 +6,8 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 
-import { EntityTransaction, WidgetComponent } from '@igo2/common';
+import { EntityTransaction } from '@igo2/common/entity';
+import { WidgetComponent } from '@igo2/common/widget';
 
 @Component({
   selector: 'fadq-edition-undo',

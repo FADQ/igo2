@@ -4,8 +4,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BehaviorSubject, throwError } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
-import { Message, MessageType, LanguageService } from '@igo2/core';
-import { EntityStore } from '@igo2/common';
+import { Message, MessageType } from '@igo2/core/message';
+import { LanguageService } from '@igo2/core/language';
+import { EntityStore } from '@igo2/common/entity';
 
 import {
   Client,

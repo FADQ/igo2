@@ -16,13 +16,13 @@ import OlGeometry from 'ol/geom/Geometry';
 import OlPolygon from 'ol/geom/Polygon';
 import OlGeoJSON from 'ol/format/GeoJSON';
 
-import {
-  EntityTransaction,
-  WidgetComponent,
-  OnUpdateInputs,
-  getEntityRevision
-} from '@igo2/common';
-import { LanguageService, Message, MessageType } from '@igo2/core';
+import { EntityTransaction, getEntityRevision } from '@igo2/common/entity';
+import { WidgetComponent } from '@igo2/common/widget';
+import { OnUpdateInputs } from '@igo2/common/dynamic-component';
+
+import { LanguageService } from '@igo2/core/language';
+import { Message, MessageType } from '@igo2/core/message';
+
 import {
   Feature,
   FeatureStore,

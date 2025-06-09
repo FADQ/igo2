@@ -6,8 +6,8 @@ import {
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Message } from '@igo2/core';
-import { EntityStore } from '@igo2/common';
+import { Message } from '@igo2/core/message';
+import { EntityStore } from '@igo2/common/entity';
 import { FEATURE } from '@igo2/geo';
 import { SearchState } from '@igo2/integration';
 

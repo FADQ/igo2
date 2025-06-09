@@ -1,6 +1,6 @@
 import { Injectable} from '@angular/core';
 
-import { LanguageService } from '@igo2/core';
+import { LanguageService } from '@igo2/core/language';
 import { MapState } from '@igo2/integration';
 
 import { hexToRGB } from 'src/lib/utils/color';

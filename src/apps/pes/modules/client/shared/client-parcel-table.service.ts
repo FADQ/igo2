@@ -1,6 +1,6 @@
 import { Injectable} from '@angular/core';
 
-import { EntityTableTemplate } from '@igo2/common';
+import { EntityTableTemplate } from '@igo2/common/entity';
 import { formatMeasure } from '@igo2/geo';
 import { formatDate } from 'src/lib/utils/date';
 import { ClientParcel } from 'src/lib/client';

@@ -1,4 +1,4 @@
-import { ConfigService } from '@igo2/core';
+import { ConfigService } from '@igo2/core/config';
 import { ApiService } from './api.service';
 
 /**

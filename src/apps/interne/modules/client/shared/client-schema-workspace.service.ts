@@ -1,6 +1,7 @@
 import { Injectable} from '@angular/core';
 
-import { ActionStore, EntityStore } from '@igo2/common';
+import { ActionStore } from '@igo2/common/action';
+import { EntityStore } from '@igo2/common/entity';
 
 import {
   Client,

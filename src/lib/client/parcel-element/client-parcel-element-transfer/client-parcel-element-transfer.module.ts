@@ -5,8 +5,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
-import { IgoLanguageModule } from '@igo2/core';
-import { IgoFormModule, IgoEntitySelectorModule } from '@igo2/common';
+import { IgoLanguageModule } from '@igo2/core/language';
+import { IgoFormModule } from '@igo2/common/form';
+import { IgoEntitySelectorModule } from '@igo2/common/entity';
 
 import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
 

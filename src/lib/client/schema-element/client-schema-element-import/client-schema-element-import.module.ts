@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { IgoLanguageModule } from '@igo2/core';
-import { IgoFormModule } from '@igo2/common';
+import { IgoLanguageModule } from '@igo2/core/language';
+import { IgoFormModule } from '@igo2/common/form';
 
 import { FadqLibEditionModule } from '../../../edition/edition.module';
 

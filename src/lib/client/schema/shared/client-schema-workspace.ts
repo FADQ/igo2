@@ -1,9 +1,5 @@
-import {
-  EntityStore,
-  EntityTableTemplate,
-  Workspace,
-  WorkspaceOptions
-} from '@igo2/common';
+import { EntityStore, EntityTableTemplate } from '@igo2/common/entity';
+import { Workspace, WorkspaceOptions } from '@igo2/common/workspace';
 
 import { Client } from '../../shared/client.interfaces';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';

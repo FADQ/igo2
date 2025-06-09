@@ -3,7 +3,7 @@ import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy } from '@a
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Action, ActionbarMode, ActionStore } from '@igo2/common';
+import { Action, ActionbarMode, ActionStore } from '@igo2/common/action';
 import { IgoMap } from '@igo2/geo';
 
 import { MapAction } from '../shared/map.enum';

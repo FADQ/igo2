@@ -12,15 +12,11 @@ import {
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import {
-  EntityTransaction,
-  Form,
-  FormField,
-  getAllFormFields,
-  WidgetComponent,
-  OnUpdateInputs
-} from '@igo2/common';
-import { LanguageService } from '@igo2/core';
+import { EntityTransaction } from '@igo2/common/entity';
+import { Form, FormField, getAllFormFields } from '@igo2/common/form';
+import {WidgetComponent } from '@igo2/common/widget';
+import { OnUpdateInputs } from '@igo2/common/dynamic-component';
+import { LanguageService } from '@igo2/core/language';
 import { FeatureStore, IgoMap, GeoJSONGeometry } from '@igo2/geo';
 
 import { EditionResult } from '../../../edition/shared/edition.interfaces';

@@ -17,8 +17,12 @@ import {
 
 import turfTruncate from '@turf/truncate';
 
-import { EntityTransaction, WidgetComponent } from '@igo2/common';
-import { LanguageService, Message, MessageType } from '@igo2/core';
+import { EntityTransaction } from '@igo2/common/entity';
+import { WidgetComponent } from '@igo2/common/widget';
+
+import { LanguageService } from '@igo2/core/language';
+import { Message, MessageType } from '@igo2/core/message';
+
 import {
   IgoMap,
   Feature,

@@ -1,6 +1,6 @@
 import { Injectable, } from '@angular/core';
 
-import { LanguageService } from '@igo2/core';
+import { LanguageService } from '@igo2/core/language';
 import { Feature, SearchResult } from '@igo2/geo';
 
 @Injectable()

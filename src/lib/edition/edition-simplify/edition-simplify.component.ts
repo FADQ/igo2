@@ -12,12 +12,12 @@ import {
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
 import { debounceTime, skip } from 'rxjs/operators';
 
-import {
-  EntityTransaction,
-  WidgetComponent,
-  OnUpdateInputs
-} from '@igo2/common';
-import { LanguageService, Message, MessageType } from '@igo2/core';
+import { EntityTransaction } from '@igo2/common/entity';
+import { WidgetComponent } from '@igo2/common/widget';
+import { OnUpdateInputs } from '@igo2/common/dynamic-component';
+import { LanguageService } from '@igo2/core/language';
+import { Message, MessageType } from '@igo2/core/message';
+
 import {
   IgoMap,
   VectorLayer,
