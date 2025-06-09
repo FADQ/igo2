@@ -5,7 +5,7 @@ import { ConfigService } from '@igo2/core/config';
 import { Layer, ImageLayer, WMSDataSource, IgoMap } from '@igo2/geo';
 import { ContextState, MapState } from '@igo2/integration';
 
-import { CustomContextService } from 'src/lib/context'
+import { CustomContextService } from '../../../../../../src/lib/context';
 
 import { LayerInfoDialogComponent } from './layer-info-dialog.component';
 

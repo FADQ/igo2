@@ -7,7 +7,7 @@ import {
   Client,
   ClientSchema,
   ClientSchemaWorkspace
-} from 'src/lib/client';
+} from '../../../../../../src/lib/client';
 
 import { ClientSchemaTableService } from './client-schema-table.service';
 

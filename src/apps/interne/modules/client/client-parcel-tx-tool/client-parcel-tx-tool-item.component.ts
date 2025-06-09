@@ -7,7 +7,7 @@ import {
   HostBinding
 } from '@angular/core';
 
-import { Client } from 'src/lib/client';
+import { Client } from '../../../../../../src/lib/client';
 
 @Component({
   selector: 'fadq-client-parcel-tx-tool-item',

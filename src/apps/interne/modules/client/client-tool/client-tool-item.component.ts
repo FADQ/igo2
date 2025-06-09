@@ -12,7 +12,7 @@ import { BehaviorSubject } from 'rxjs';
 import {
   Client,
   ClientInfoService,
-} from 'src/lib/client';
+} from '../../../../../../src/lib/client';
 
 import { ClientController } from '../shared/client-controller';
 

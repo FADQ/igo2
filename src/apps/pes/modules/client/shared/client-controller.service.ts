@@ -6,7 +6,7 @@ import { MapState } from '@igo2/integration';
 import {
   Client,
   ClientParcelService
-} from 'src/lib/client';
+} from '../../../../../../src/lib/client';
 
 import {
   ClientController,

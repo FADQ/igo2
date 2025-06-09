@@ -3,7 +3,7 @@ import { Injectable} from '@angular/core';
 import { LanguageService } from '@igo2/core/language';
 import { MapState } from '@igo2/integration';
 
-import { hexToRGB } from 'src/lib/utils/color';
+import { hexToRGB } from '../../../../../../src/lib/utils/color';
 
 import {
   Client,
@@ -14,7 +14,7 @@ import {
   ClientSchemaService,
   ClientSchemaElementService,
   ClientSchemaElementDialogService
-} from 'src/lib/client';
+} from '../../../../../../src/lib/client';
 
 import {
   ClientController,

@@ -18,7 +18,7 @@ import {
   EntityRecord
 } from '@igo2/common/entity';
 
-import { Lot, LotResponseItem, LotUnique } from 'src/lib/cadastre/lot/shared/lot.interfaces';
+import { Lot, LotResponseItem, LotUnique } from '../../../../../src/lib/cadastre/lot/shared/lot.interfaces';
 
 @Component({
   selector: 'fadq-cadastre-lot-selector',

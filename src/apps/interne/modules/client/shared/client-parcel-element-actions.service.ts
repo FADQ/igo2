@@ -9,7 +9,7 @@ import { Action } from '@igo2/common/action';
 import { EntityStore, EntityStoreFilterSelectionStrategy } from '@igo2/common/entity'
 import { Widget} from '@igo2/common/widget';
 
-import { EditionUndoWidget } from 'src/lib/edition';
+import { EditionUndoWidget } from '../../../../../../src/lib/edition';
 
 import {
   Client,
@@ -33,9 +33,9 @@ import {
   generateParcelElementOperationTitle,
   getParcelElementErrors,
   unionParcelElements
-} from 'src/lib/client';
-import { moveToFeatureStore } from 'src/lib/feature';
-import { every } from 'src/lib/utils';
+} from '../../../../../../src/lib/client';
+import { moveToFeatureStore } from '../../../../../../src/lib/feature';
+import { every } from '../../../../../../src/lib/utils';
 
 import { ClientController } from './client-controller';
 

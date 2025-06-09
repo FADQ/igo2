@@ -13,19 +13,19 @@ import {
 } from '@igo2/geo';
 import { MapState } from '@igo2/integration';
 
-import { Mun, CadastreMunService } from 'src/lib/cadastre/mun';
+import { Mun, CadastreMunService } from '../../../../../../src/lib/cadastre/mun';
 import {
   Cadastre,
   CadastreFeature,
   CadastreList,
   CadastreCadastreService
-} from 'src/lib/cadastre/cadastre';
+} from '../../../../../../src/lib/cadastre/cadastre';
 import {
   ConcessionFeature,
   ConcessionUnique,
   CadastreConcessionService
-} from 'src/lib/cadastre/concession';
-import { LotUnique, LotFeature, CadastreLotService } from 'src/lib/cadastre/lot';
+} from '../../../../../../src/lib/cadastre/concession';
+import { LotUnique, LotFeature, CadastreLotService } from '../../../../../../src/lib/cadastre/lot';
 
 import { CadastreState } from '../cadastre.state';
 

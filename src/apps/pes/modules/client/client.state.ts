@@ -10,7 +10,7 @@ import {
   Client,
   ClientParcelYear,
   ClientParcelYearService
-} from 'src/lib/client';
+} from '../../../../../src/lib/client';
 
 import { ClientController } from './shared/client-controller';
 import { ClientControllerService } from './shared/client-controller.service';

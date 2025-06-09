@@ -7,7 +7,7 @@ import OlPoint from 'ol/geom/Point';
 import { DetailedContext } from '@igo2/context';
 import { IgoMap } from '@igo2/geo';
 
-import { ApiService } from 'src/lib/core/api';
+import { ApiService } from '../../../../src/lib/core/api';
 
 import { ContextApiConfig } from './context.interfaces';
 
@@ -47,7 +47,7 @@ export class CustomContextService {
       const layerOptions = layer.options;
       const dataSource = layer.dataSource;
       const dataSourceOptions = dataSource.options;
-      
+
       // Only support html query
       let queryFormat;
       let queryHtmlTarget;
@@ -55,7 +55,7 @@ export class CustomContextService {
         queryFormat = dataSourceOptions.queryFormat;
         queryHtmlTarget = 'innerhtml';
       }
-      
+
         if (dataSourceOptions.type) {
         context.layers.push({
           id: layerOptions.id ? String(layerOptions.id) : undefined,

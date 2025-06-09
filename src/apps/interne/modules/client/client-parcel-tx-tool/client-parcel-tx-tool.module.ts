@@ -9,8 +9,8 @@ import { CommonModule } from '@angular/common';
 import { IgoLanguageModule } from '@igo2/core/language';
 import { IgoListModule } from '@igo2/common/list';
 
-import { FadqLibClientModule } from 'src/lib/client/client.module';
-import { TOOL_CONFIG } from 'src/lib/core/core.module';
+import { FadqLibClientModule } from '../../../../../../src/lib/client/client.module';
+import { TOOL_CONFIG } from '../../../../../../src/lib/core/core.module';
 
 import { ClientParcelTxToolComponent } from './client-parcel-tx-tool.component';
 import { ClientParcelTxToolItemComponent } from './client-parcel-tx-tool-item.component';

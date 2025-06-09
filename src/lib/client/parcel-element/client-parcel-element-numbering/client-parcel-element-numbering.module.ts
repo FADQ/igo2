@@ -10,7 +10,7 @@ import { IgoLanguageModule } from '@igo2/core/language';
 import { IgoEntityTableModule } from '@igo2/common/entity';
 import { IgoFormModule } from '@igo2/common/form';
 
-import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
+import { FadqLibCardPanelModule } from '../../../../../src/lib/misc/card-panel/card-panel.module';
 
 import { ClientParcelElementNumberingInputComponent } from './client-parcel-element-numbering-input.component';
 import { ClientParcelElementNumberingComponent } from './client-parcel-element-numbering.component';

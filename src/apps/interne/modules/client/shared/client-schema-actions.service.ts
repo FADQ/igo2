@@ -16,8 +16,8 @@ import {
   ClientSchemaDuplicateWidget,
   ClientSchemaTransferWidget,
   ClientSchemaFileManagerWidget
-} from 'src/lib/client';
-import { every } from 'src/lib/utils';
+} from '../../../../../../src/lib/client';
+import { every } from '../../../../../../src/lib/utils';
 
 import { ClientController } from './client-controller';
 

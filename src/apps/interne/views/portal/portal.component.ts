@@ -32,14 +32,14 @@ import {
   SearchState
 } from '@igo2/integration';
 
-import { SEARCH_TYPES } from 'src/apps/interne/modules/search/shared/search.enums';
-import { ClientState } from 'src/apps/interne/modules/client/client.state';
-import { ClientSearchSource } from 'src/apps/interne/modules/search/shared/sources/client';
+import { SEARCH_TYPES } from '../../../../../src/apps/interne/modules/search/shared/search.enums';
+import { ClientState } from '../../../../../src/apps/interne/modules/client/client.state';
+import { ClientSearchSource } from '../../../../../src/apps/interne/modules/search/shared/sources/client';
 
-import { CLIENT, Client, validateClientNum } from 'src/lib/client';
+import { CLIENT, Client, validateClientNum } from '../../../../../src/lib/client';
 
-import { CADASTRE } from 'src/lib/cadastre/shared/cadastre.enums';
-import { getOlViewResolutions } from 'src/lib/map';
+import { CADASTRE } from '../../../../../src/lib/cadastre/shared/cadastre.enums';
+import { getOlViewResolutions } from '../../../../../src/lib/map';
 
 @Component({
   selector: 'app-portal',

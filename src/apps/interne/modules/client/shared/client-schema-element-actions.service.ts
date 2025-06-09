@@ -10,8 +10,8 @@ import { Widget } from '@igo2/common/widget';
 import { entitiesToRowData, exportToCSV } from '@igo2/geo';
 import { downloadFromUri } from '@igo2/utils';
 
-import { EditionUndoWidget } from 'src/lib/edition';
-import { every } from 'src/lib/utils';
+import { EditionUndoWidget } from '../../../../../../src/lib/edition';
+import { every } from '../../../../../../src/lib/utils';
 
 import {
   ClientSchema,
@@ -27,8 +27,8 @@ import {
   ClientSchemaElementTranslateWidget,
   ClientSchemaElementImportWidget,
   generateSchemaElementOperationTitle
-} from 'src/lib/client';
-import { moveToFeatureStore } from 'src/lib/feature';
+} from '../../../../../../src/lib/client';
+import { moveToFeatureStore } from '../../../../../../src/lib/feature';
 
 import { ClientController } from './client-controller';
 

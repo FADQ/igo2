@@ -4,7 +4,7 @@ import { Action } from '@igo2/common/action';
 import { EntityTableColumn } from '@igo2/common/entity';
 import { entitiesToRowData, exportToCSV } from '@igo2/geo';
 
-import { moveToFeatureStore } from 'src/lib/feature';
+import { moveToFeatureStore } from '../../../../../../src/lib/feature';
 import { ClientController } from './client-controller';
 
 /**

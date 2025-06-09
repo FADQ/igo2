@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { ConfigService } from '@igo2/core/config';
 
-import { ApiService } from 'src/lib/core/api';
+import { ApiService } from '../../../../../src/lib/core/api';
 
 import { ClientParcelService } from './client-parcel.service';
 import { ClientParcelYearService } from './client-parcel-year.service';

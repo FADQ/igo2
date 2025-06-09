@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { FadqLibNavigationModule } from 'src/lib/navigation/navigation.module';
+import { FadqLibNavigationModule } from '../../../../../src/lib/navigation/navigation.module';
 import { FadqNavigationToolModule } from './navigation-tool/navigation-tool.module';
 
 @NgModule({

@@ -5,7 +5,7 @@ import {
 } from '@igo2/geo';
 import { MapState } from '@igo2/integration';
 
-import { AddressFeature } from 'src/lib/address';
+import { AddressFeature } from '../../../../../src/lib/address';
 
 
 /**

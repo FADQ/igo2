@@ -2,8 +2,8 @@ import { Injectable} from '@angular/core';
 
 import { EntityTableTemplate } from '@igo2/common/entity';
 
-import { formatDate } from 'src/lib/utils/date';
-import { ClientSchema } from 'src/lib/client';
+import { formatDate } from '../../../../../../src/lib/utils/date';
+import { ClientSchema } from '../../../../../../src/lib/client';
 
 @Injectable({
   providedIn: 'root'

@@ -7,7 +7,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { IgoLanguageModule } from '@igo2/core/language';
 import { IgoEntityTableModule } from '@igo2/common/entity';
 
-import { FadqLibMessageInlineModule } from 'src/lib/message/message-inline/message-inline.module';
+import { FadqLibMessageInlineModule } from '../../../../../src/lib/message/message-inline/message-inline.module';
 
 import { ClientSchemaFileManagerComponent } from './client-schema-file-manager.component';
 

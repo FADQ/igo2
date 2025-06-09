@@ -18,7 +18,7 @@ import {
   EntityRecord
 } from '@igo2/common/entity';
 
-import { Cadastre, CadastreResponseItem } from 'src/lib/cadastre/cadastre/shared/cadastre.interfaces';
+import { Cadastre, CadastreResponseItem } from '../../../../../src/lib/cadastre/cadastre/shared/cadastre.interfaces';
 
 @Component({
   selector: 'fadq-cadastre-cadastre-selector',

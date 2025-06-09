@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { FadqLibEditionModule } from 'src/lib/edition/edition.module';
+import { FadqLibEditionModule } from '../../../../../../src/lib/edition/edition.module';
 
 @NgModule({
   imports: [

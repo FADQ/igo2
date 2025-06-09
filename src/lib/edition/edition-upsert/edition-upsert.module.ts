@@ -6,7 +6,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { IgoLanguageModule } from '@igo2/core/language';
 import { IgoFeatureFormModule } from '@igo2/geo';
 
-import { FadqLibMessageInlineModule } from 'src/lib/message/message-inline/message-inline.module';
+import { FadqLibMessageInlineModule } from '../../../../src/lib/message/message-inline/message-inline.module';
 
 import { EditionUpsertComponent } from './edition-upsert.component';
 

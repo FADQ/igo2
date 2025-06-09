@@ -2,7 +2,7 @@ import { ConfigService } from '@igo2/core/config';
 
 import { SearchSource } from '@igo2/geo';
 
-import { ClientService } from 'src/lib/client';
+import { ClientService } from '../../../../../../../src/lib/client';
 import { ClientSearchSource } from './client';
 
 /**

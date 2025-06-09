@@ -17,7 +17,7 @@ import { WidgetComponent } from '@igo2/common/widget';
 import { LanguageService } from '@igo2/core/language';
 import { Message, MessageType } from '@igo2/core/message';
 
-import { formatDate } from 'src/lib/utils/date';
+import { formatDate } from '../../../../../src/lib/utils/date';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import { ClientSchemaFile } from '../shared/client-schema-file.interfaces';
 import { ClientSchemaFileService } from '../shared/client-schema-file.service';

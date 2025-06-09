@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { IgoLanguageModule } from '@igo2/core/language';
 
-import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
+import { FadqLibCardPanelModule } from '../../../../src/lib/misc/card-panel/card-panel.module';
 
 import { EditionSliceComponent } from './edition-slice.component';
 

@@ -30,10 +30,10 @@ import {
   SearchState
 } from '@igo2/integration';
 
-import { SEARCH_TYPES } from 'src/apps/pes/modules/search/shared/search.enums';
-import { ClientState } from 'src/apps/pes/modules/client/client.state';
-import { ClientController } from 'src/apps/pes/modules/client/shared/client-controller';
-import { getOlViewResolutions } from 'src/lib/map';
+import { SEARCH_TYPES } from '../../../../../src/apps/pes/modules/search/shared/search.enums';
+import { ClientState } from '../../../../../src/apps/pes/modules/client/client.state';
+import { ClientController } from '../../../../../src/apps/pes/modules/client/shared/client-controller';
+import { getOlViewResolutions } from '../../../../../src/lib/map';
 
 @Component({
   selector: 'app-portal',

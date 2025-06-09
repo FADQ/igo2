@@ -18,7 +18,10 @@ import {
   EntityRecord
 } from '@igo2/common/entity';
 
-import { Concession, ConcessionResponseItem, ConcessionUnique } from 'src/lib/cadastre/concession/shared/concession.interfaces';
+import {
+  Concession,
+  ConcessionResponseItem,
+  ConcessionUnique } from '../../../../../src/lib/cadastre/concession/shared/concession.interfaces';
 
 @Component({
   selector: 'fadq-cadastre-concession-selector',

@@ -6,9 +6,9 @@ import { concatMap, map, tap, catchError } from 'rxjs/operators';
 
 import { EntityOperation, EntityTransaction } from '@igo2/common/entity';
 
-import { ApiService } from 'src/lib/core/api';
-import { hexToRGB } from 'src/lib/utils/color';
-import { TransactionSerializer, TransactionData } from 'src/lib/utils/transaction';
+import { ApiService } from '../../../../../src/lib/core/api';
+import { hexToRGB } from '../../../../../src/lib/utils/color';
+import { TransactionSerializer, TransactionData } from '../../../../../src/lib/utils/transaction';
 
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import {

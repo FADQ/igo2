@@ -11,7 +11,7 @@ import { EntityStore } from '@igo2/common/entity';
 import { FEATURE } from '@igo2/geo';
 import { SearchState } from '@igo2/integration';
 
-import { ClientParcelYear } from 'src/lib/client';
+import { ClientParcelYear } from '../../../../../../src/lib/client';
 
 import { ClientController } from '../shared/client-controller';
 import { ClientState } from '../client.state';

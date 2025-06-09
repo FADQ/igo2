@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { provideSearchSourceService } from '@igo2/geo';
 
-import { provideCadastreRenoSearchSource } from 'src/lib/cadastre-reno';
+import { provideCadastreRenoSearchSource } from '../../../../..//src/lib/cadastre-reno';
 
-import { FadqSearchModule } from 'src/apps/shared/modules/search/search.module';
+import { FadqSearchModule } from '../../../../../src/apps/shared/modules/search/search.module';
 import {
   provideCoordinatesReverseSearchSource,
   provideCoordinatesSearchResultFormatter,
@@ -11,7 +11,7 @@ import {
   provideIChercheSearchSource,
   provideIChercheReverseSearchSource,
   provideQuerySearchSource
-} from 'src/apps/shared/modules/search/shared/sources';
+} from '../../../../../src/apps/shared/modules/search/shared/sources';
 
 import { provideClientSearchSource } from './shared/sources/client.providers';
 

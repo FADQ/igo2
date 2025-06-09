@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { IgoLanguageModule } from '@igo2/core/language';
 import { IgoFormModule } from '@igo2/common/form';
 
-import { FadqLibMessageInlineModule } from 'src/lib/message/message-inline/message-inline.module';
+import { FadqLibMessageInlineModule } from '../../../../../src/lib/message/message-inline/message-inline.module';
 
 import { ClientSchemaTransferComponent } from './client-schema-transfer.component';
 

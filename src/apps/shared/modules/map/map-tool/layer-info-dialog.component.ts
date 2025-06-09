@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { Layer, ImageLayer } from '@igo2/geo';
 
-import { substituteProperties } from 'src/lib/utils';
+import { substituteProperties } from '../../../../../../src/lib/utils';
 
 @Component({
   selector: 'fadq-layer-info-dialog',

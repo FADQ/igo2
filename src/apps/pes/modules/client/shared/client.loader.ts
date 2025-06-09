@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import {
   ClientService
-} from 'src/lib/client';
+} from '../../../../../../src/lib/client';
 
 /**
  * Client loader that loads a client from the URL.

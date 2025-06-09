@@ -19,8 +19,8 @@ import { OnUpdateInputs } from '@igo2/common/dynamic-component';
 import {
   ClientParcelTxService,
   ClientParcelTxState
-} from 'src/lib/client';
-import { SubmitStep, SubmitHandler } from 'src/lib/utils';
+} from '../../../../../../src/lib/client';
+import { SubmitStep, SubmitHandler } from '../../../../../../src/lib/utils';
 
 import { ClientController } from '../shared/client-controller';
 

@@ -4,8 +4,8 @@ import { ConfigService } from '@igo2/core/config';
 import { LanguageService } from '@igo2/core/language';
 import { FormService } from '@igo2/common/form';
 
-import { ApiService } from 'src/lib/core/api';
-import { DomainService } from 'src/lib/core/domain';
+import { ApiService } from '../../../../../src/lib/core/api';
+import { DomainService } from '../../../../../src/lib/core/domain';
 
 import { ClientParcelElementService } from './client-parcel-element.service';
 import { ClientParcelElementFormService } from './client-parcel-element-form.service';

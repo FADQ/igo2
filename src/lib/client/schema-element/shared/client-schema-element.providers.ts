@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { ConfigService } from '@igo2/core/config';
 
-import { ApiService } from 'src/lib/core/api';
+import { ApiService } from '../../../../../src/lib/core/api';
 import { ClientSchemaElementPointService } from './client-schema-element-point.service';
 import { ClientSchemaElementLineService } from './client-schema-element-line.service';
 import { ClientSchemaElementSurfaceService } from './client-schema-element-surface.service';

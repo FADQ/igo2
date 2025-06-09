@@ -6,11 +6,11 @@ import { EntityStore } from '@igo2/common/entity';
 import { VectorLayer, ImageLayer} from '@igo2/geo';
 import { MapState } from '@igo2/integration';
 
-import { createPolygonLayer, createMarkerLayer } from 'src/lib/cadastre';
-import { Mun } from 'src/lib/cadastre/mun';
-import { Cadastre, CadastreFeature } from 'src/lib/cadastre/cadastre';
-import { ConcessionUnique, ConcessionFeature } from 'src/lib/cadastre/concession';
-import { LotUnique, LotFeature } from 'src/lib/cadastre/lot';
+import { createPolygonLayer, createMarkerLayer } from '../../../../../src/lib/cadastre';
+import { Mun } from '../../../../../src/lib/cadastre/mun';
+import { Cadastre, CadastreFeature } from '../../../../../src/lib/cadastre/cadastre';
+import { ConcessionUnique, ConcessionFeature } from '../../../../../src/lib/cadastre/concession';
+import { LotUnique, LotFeature } from '../../../../../src/lib/cadastre/lot';
 
 /**
  * Service that holds the state of the edition module

@@ -5,8 +5,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { IgoLanguageModule } from '@igo2/core/language';
 
-import { FadqLibCadastreModule } from 'src/lib/cadastre/cadastre.module';
-import { TOOL_CONFIG } from 'src/lib/core/core.module';
+import { FadqLibCadastreModule } from '../../../../../../src/lib/cadastre/cadastre.module';
+import { TOOL_CONFIG } from '../../../../../../src/lib/core/core.module';
 import { CadastreSearchToolComponent } from './cadastre-search-tool.component';
 
 @NgModule({

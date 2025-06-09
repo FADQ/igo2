@@ -14,8 +14,8 @@ import {
   ClientParcelTxState,
   FeatureStoreFilterNotOwnedStrategy,
   parcelElementsEnabledInContext
-} from 'src/lib/client';
-import { moveToFeatureStore } from 'src/lib/feature';
+} from '../../../../../../src/lib/client';
+import { moveToFeatureStore } from '../../../../../../src/lib/feature';
 
 import { ClientParcelTxStartWidget } from './client-parcel-tx.widgets';
 import { ClientController } from './client-controller';

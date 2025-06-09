@@ -4,14 +4,14 @@ import { EntityTableTemplate, EntityTableColumnRenderer } from '@igo2/common/ent
 import { FormFieldSelectChoice } from '@igo2/common/form';
 import { formatMeasure, squareMetersToHectares } from '@igo2/geo';
 
-import { formatDate } from 'src/lib/utils/date';
+import { formatDate } from '../../../../../../src/lib/utils/date';
 import {
   ClientParcelElement,
   ClientParcelElementMessage,
   getParcelElementErrors,
   getParcelElementWarnings,
   getParcelDraineeChoices
-} from 'src/lib/client';
+} from '../../../../../../src/lib/client';
 
 @Injectable({
   providedIn: 'root'

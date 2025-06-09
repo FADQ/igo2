@@ -6,7 +6,7 @@ import {
   ClientSchemaApiConfig,
   ClientSchemaFileApiConfig,
   ClientSchemaElementApiConfig
-} from 'src/lib/client';
+} from '../../../../../../src/lib/client';
 
 export interface ClientApiConfig {
   info: ClientInfoApiConfig;

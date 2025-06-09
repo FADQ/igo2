@@ -18,7 +18,7 @@ import {
   ClientSchemaElementWorkspace,
   createClientDefaultSelectionStyle,
   createSchemaElementLayer
-} from 'src/lib/client';
+} from '../../../../../../src/lib/client';
 
 import { ClientSchemaElementTableService } from './client-schema-element-table.service';
 

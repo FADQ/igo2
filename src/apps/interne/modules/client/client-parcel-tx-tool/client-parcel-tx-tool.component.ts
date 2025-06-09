@@ -16,7 +16,7 @@ import {
   ClientService,
   ClientParcelYear,
   ClientParcelTxService
-} from 'src/lib/client';
+} from '../../../../../../src/lib/client';
 
 import { ClientParcelTxDeleteDialogComponent } from '../client-parcel-tx-delete-dialog/client-parcel-tx-delete-dialog.component';
 import { ClientState } from '../client.state';
