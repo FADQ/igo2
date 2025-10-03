@@ -19,6 +19,7 @@ import {
 } from '@igo2/common/entity';
 
 import { Cadastre, CadastreResponseItem } from '../../../../../src/lib/cadastre/cadastre/shared/cadastre.interfaces';
+import { AnyType } from 'ol/expr/expression';
 
 @Component({
   selector: 'fadq-cadastre-cadastre-selector',
@@ -32,7 +33,7 @@ export class CadastreSelectorComponent implements OnInit, OnDestroy {
    * The current municipality
    * @internal
    */
-  selected$ = new BehaviorSubject<Cadastre>(undefined);
+  selected$ = new BehaviorSubject<Cadastre | undefined>(undefined);
 
   /**
    * Subscription to the selected entity
