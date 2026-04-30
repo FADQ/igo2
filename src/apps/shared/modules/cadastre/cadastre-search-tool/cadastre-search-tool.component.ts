@@ -13,19 +13,19 @@ import {
 } from '@igo2/geo';
 import { MapState } from '@igo2/integration';
 
-import { Mun, CadastreMunService } from '../../../../../../src/lib/cadastre/mun';
+import { Mun, CadastreMunService } from 'src/lib/cadastre/mun';
 import {
   Cadastre,
   CadastreFeature,
   CadastreList,
   CadastreCadastreService
-} from '../../../../../../src/lib/cadastre/cadastre';
+} from 'src/lib/cadastre/cadastre';
 import {
   ConcessionFeature,
   ConcessionUnique,
   CadastreConcessionService
-} from '../../../../../../src/lib/cadastre/concession';
-import { LotUnique, LotFeature, CadastreLotService } from '../../../../../../src/lib/cadastre/lot';
+} from 'src/lib/cadastre/concession';
+import { LotUnique, LotFeature, CadastreLotService } from 'src/lib/cadastre/lot';
 
 import { CadastreState } from '../cadastre.state';
 
@@ -413,7 +413,7 @@ export class CadastreSearchToolComponent implements OnInit {
       this.layerService.createAsyncLayer(this.layerOptions).subscribe((imageLayer: ImageLayer) => {
         imageLayer.visible = visibility;
         this.cadastreState.layerCadastreImage = imageLayer;
-        this.mapState.map.addLayer(imageLayer);
+        this.mapState.map.layerController.add(imageLayer);
       } );
     }
   }
@@ -434,7 +434,7 @@ export class CadastreSearchToolComponent implements OnInit {
 
    let features;
     if (cadastre !== undefined) {
-      features =  this.featureListToOl([cadastre]);
+      features = this.featureListToOl([cadastre]);
     } else if (concessions !== undefined && lots !== undefined) {
       features = this.featureListToOl(concessions).concat(this.featureListToOl(lots));
     } else if (concessions !== undefined) {

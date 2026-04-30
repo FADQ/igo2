@@ -32,14 +32,14 @@ import {
   SearchState
 } from '@igo2/integration';
 
-import { SEARCH_TYPES } from '../../../../../src/apps/interne/modules/search/shared/search.enums';
-import { ClientState } from '../../../../../src/apps/interne/modules/client/client.state';
-import { ClientSearchSource } from '../../../../../src/apps/interne/modules/search/shared/sources/client';
+import { SEARCH_TYPES } from 'src/apps/interne/modules/search/shared/search.enums';
+import { ClientState } from 'src/apps/interne/modules/client/client.state';
+import { ClientSearchSource } from 'src/apps/interne/modules/search/shared/sources/client';
 
-import { CLIENT, Client, validateClientNum } from '../../../../../src/lib/client';
+import { CLIENT, Client, validateClientNum } from 'src/lib/client';
 
-import { CADASTRE } from '../../../../../src/lib/cadastre/shared/cadastre.enums';
-import { getOlViewResolutions } from '../../../../../src/lib/map';
+import { CADASTRE } from 'src/lib/cadastre/shared/cadastre.enums';
+import { getOlViewResolutions } from 'src/lib/map';
 
 @Component({
   selector: 'app-portal',
@@ -450,7 +450,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     } else {
       this.searchAddedLayers.set(searchType, [layer]);
     }
-    this.map.addLayer(layer);
+    this.map.layerController.add(layer);
   }
 
   private makeSearchLayerVisible(layerAlias: string, searchType: string) {
@@ -458,7 +458,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     if (layer === undefined) { return; }
 
     if (this.searchVisibledLayers.has(searchType)) {
-      this.searchVisibledLayers.get(searchType).push(layer);
+      this.searchVisibledLayers.get(searchType)?.push(layer);
     } else {
       this.searchVisibledLayers.set(searchType, [layer]);
     }
@@ -470,7 +470,9 @@ export class PortalComponent implements OnInit, OnDestroy {
    */
   private clearAllSearchLayers() {
     this.searchAddedLayers.forEach((layers: Layer[]) => {
-      this.map.removeLayers(layers);
+      layers.forEach((layer: Layer) => {
+        this.map.layerController.remove(layer);
+      });
     });
 
     this.searchVisibledLayers.forEach((layers: Layer[]) => {

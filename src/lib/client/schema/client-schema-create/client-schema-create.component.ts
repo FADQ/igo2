@@ -22,7 +22,7 @@ import { ClientSchema, ClientSchemaCreateData } from '../shared/client-schema.in
 import { ClientSchemaService } from '../shared/client-schema.service';
 import { ClientSchemaFormService } from '../shared/client-schema-form.service';
 import { UniqueClientSchemaType } from '../shared/client-schema.enums';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'fadq-client-schema-create',

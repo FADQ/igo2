@@ -1,6 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
-import { FadqLibClientModule } from '/src/lib/client/client.module';
+import { FadqLibClientModule } from 'src/lib/client/client.module';
+// import { FadqLibClientModule } from '@lib/client/client.module';
 
 import { FadqClientParcelTxDeleteDialogModule } from './client-parcel-tx-delete-dialog/client-parcel-tx-delete-dialog.module';
 import { FadqClientParcelTxStartModule } from './client-parcel-tx-start/client-parcel-tx-start.module';

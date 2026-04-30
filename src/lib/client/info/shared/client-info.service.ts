@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { ApiService } from '../../../../../src/lib/core/api';
-import { substituteProperties } from '../../../../../src/lib/utils';
+import { ApiService } from 'src/lib/core/api';
+import { substituteProperties } from 'src/lib/utils';
 import {
   ClientInfo,
   ClientInfoAddresses,

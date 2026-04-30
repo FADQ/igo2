@@ -21,7 +21,7 @@ import { OnUpdateInputs } from '@igo2/common/dynamic-component';
 import { SubmitStep, SubmitHandler } from '../../../utils';
 import { Client } from '../../shared/client.interfaces';
 import { ClientParcelTxService } from '../shared/client-parcel-tx.service';
-import { ClientInReconciliationResponseData, ClientInReconciliationResponse } from '../shared/client-parcel-tx.interfaces';
+import { ClientInReconciliationResponseData } from '../shared/client-parcel-tx.interfaces';
 
 @Component({
   selector: 'fadq-client-parcel-tx-reconciliate',

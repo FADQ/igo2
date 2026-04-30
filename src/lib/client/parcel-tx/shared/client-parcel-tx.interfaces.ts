@@ -1,4 +1,3 @@
-import { ClientInfoGetResponseData } from '../../info/shared/client-info.interfaces';
 import { ClientParcelTxState } from './client-parcel-tx.enums';
 
 export interface ClientParcelTxApiConfig {

@@ -7,7 +7,7 @@ import OlPoint from 'ol/geom/Point';
 import { DetailedContext } from '@igo2/context';
 import { IgoMap } from '@igo2/geo';
 
-import { ApiService } from '../../../../src/lib/core/api';
+import { ApiService } from 'src/lib/core/api';
 
 import { ContextApiConfig } from './context.interfaces';
 
@@ -41,7 +41,7 @@ export class CustomContextService {
       tools: []
     };
 
-    const layers = igoMap.layers$.getValue().sort((a, b) => a.zIndex - b.zIndex);
+    const layers = igoMap.layerController.all.sort((a, b) => a.zIndex - b.zIndex);
     for (let i = 0; i < layers.length; i++) {
       const layer = layers[i] as any;
       const layerOptions = layer.options;

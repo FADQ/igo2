@@ -18,7 +18,7 @@ import {
   ClientParcelElementWorkspace,
   createClientDefaultSelectionStyle,
   createParcelElementLayer
-} from '../../../../../../src/lib/client';
+} from 'src/lib/client';
 
 import { ClientParcelElementTableService } from './client-parcel-element-table.service';
 

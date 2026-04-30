@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { ApiService } from '../../../../../src/lib/core/api';
-import { TransactionData } from '../../../../../src/lib/utils/transaction';
+import { ApiService } from 'src/lib/core/api';
+import { TransactionData } from 'src/lib/utils/transaction';
 
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import {

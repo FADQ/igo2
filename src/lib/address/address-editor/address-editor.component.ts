@@ -359,7 +359,7 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
         this.layerService.createAsyncLayer(Object.assign({}, layerOptions, {
           visible: true,
           showInLayerList: false
-        })).subscribe((layerCreated: Layer) => this.map.addLayer(layerCreated));
+        })).subscribe((layerCreated: Layer) => this.map.layerController.add(layerCreated));
       }
     }
   }

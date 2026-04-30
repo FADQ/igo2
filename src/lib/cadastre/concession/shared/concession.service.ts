@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { ApiService } from '../../../../../src/lib/core/api';
+import { ApiService } from 'src/lib/core/api';
 import {
   ConcessionResponseItem,
   ConcessionApiConfig,
@@ -14,7 +14,7 @@ import {
   ConcessionUnique,
   ConcessionFeatureResponseItem,
   ConcessionFeatureListResponse
-} from '../../../../../src/lib/cadastre/concession/shared/concession.interfaces';
+} from 'src/lib/cadastre/concession/shared/concession.interfaces';
 
 @Injectable()
 export class CadastreConcessionService {

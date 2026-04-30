@@ -1,7 +1,7 @@
 {
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "../out-tsc/app",
+    "outDir": "../out-tsc/pes",
     "types": []
   },
   "files": [
@@ -9,6 +9,8 @@
     "polyfills.ts"
   ],
   "include": [
-    "src/**/*.d.ts"
+    "apps/pes/**/*.ts",
+    "lib/**/*.ts",
+    "environments/**/*.ts"
   ]
 }

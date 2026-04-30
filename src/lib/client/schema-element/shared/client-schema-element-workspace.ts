@@ -64,13 +64,13 @@ export class ClientSchemaElementWorkspace extends Workspace<ClientSchemaElement>
 
   private addSchemaElementLayer() {
     if (this.schemaElementStore.layer.map === undefined) {
-      this.map.addLayer(this.schemaElementStore.layer);
+      this.map.layerController.add(this.schemaElementStore.layer);
     }
   }
 
   private removeSchemaElementLayer() {
     if (this.schemaElementStore.layer.map !== undefined) {
-      this.map.removeLayer(this.schemaElementStore.layer);
+      this.map.layerController.remove(this.schemaElementStore.layer);
     }
   }
 }

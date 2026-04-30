@@ -10,8 +10,6 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import OlGeoJSON from 'ol/format/GeoJSON';
-import * as olFormat from 'ol/format';
 
 import { LanguageService } from '@igo2/core/language';
 
@@ -19,7 +17,7 @@ import { EntityTransaction } from '@igo2/common/entity';
 import { WidgetComponent } from '@igo2/common/widget';
 import { OnUpdateInputs } from '@igo2/common/dynamic-component';
 
-import { FeatureStore, IgoMap, formatMeasure } from '@igo2/geo';
+import { FeatureStore, IgoMap } from '@igo2/geo';
 
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';

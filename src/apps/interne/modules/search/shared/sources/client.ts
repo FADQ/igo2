@@ -10,7 +10,7 @@ import {
   TextSearch
 } from '@igo2/geo';
 
-import { CLIENT, Client, ClientService, validateClientNum } from '../../../../../../../src/lib/client';
+import { CLIENT, Client, ClientService, validateClientNum } from 'src/lib/client';
 import { ClientData } from './client.interfaces';
 
 /**

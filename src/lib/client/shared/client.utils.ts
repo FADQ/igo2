@@ -1,6 +1,6 @@
 import * as olstyle from 'ol/style';
 
-import { IgoMap, Layer, WMSDataSource, WMTSDataSource } from '@igo2/geo';
+import { AnyLayer, IgoMap, WMSDataSource, WMTSDataSource } from '@igo2/geo';
 
 export function padClientNum(clientNum: string | number) {
   return ('' + clientNum).padStart(7, '0');
@@ -34,7 +34,7 @@ export function getAnneeImageFromMap(map: IgoMap): number | undefined {
   const anneeRegex = new RegExp(/(19|20)\d{2}/);
   let anneImage: string;
 
-  const imageLayerNames = map.layers.reduce((acc: string[], layer: Layer) => {
+  const imageLayerNames = map.layerController.all.reduce((acc: string[], layer: AnyLayer, currentIndex: number, array: AnyLayer[]) => {
     const dataSource = layer.dataSource;
     if ((
       !(dataSource instanceof WMTSDataSource) &&
@@ -44,6 +44,8 @@ export function getAnneeImageFromMap(map: IgoMap): number | undefined {
     }
 
     let layerName: string;
+    layerName = 'Unknown';
+
     if (dataSource instanceof WMTSDataSource) {
       layerName = dataSource.options.layer;
     } else if (dataSource instanceof WMSDataSource) {

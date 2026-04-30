@@ -11,21 +11,18 @@ import {
 import { BehaviorSubject, Observable} from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import OlGeoJSON from 'ol/format/GeoJSON';
-import * as olFormat from 'ol/format';
 
 import { EntityTransaction } from '@igo2/common/entity';
 import { WidgetComponent } from '@igo2/common/widget';
 import { OnUpdateInputs } from '@igo2/common/dynamic-component';
-import { Form, FormField, FormFieldSelectInputs, getAllFormFields, FormFieldSelectChoice } from '@igo2/common/form';
+import { Form, FormField, FormFieldSelectInputs, getAllFormFields } from '@igo2/common/form';
 
 import { LanguageService } from '@igo2/core/language';
 import { FeatureStore, IgoMap } from '@igo2/geo';
 
-import { getAnneeImageFromMap } from '../../shared/client.utils';
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
-import { ClientSchemaElement, ClientSchemaElementTypes } from '../shared/client-schema-element.interfaces';
+import { ClientSchemaElement } from '../shared/client-schema-element.interfaces';
 import { ClientSchemaElementService } from '../shared/client-schema-element.service';
 import { ClientSchemaElementFormService } from '../shared/client-schema-element-form.service';
 

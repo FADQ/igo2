@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { IgoLanguageModule } from '@igo2/core/language';
 import { IgoFormModule } from '@igo2/common/form';
 
-import { FadqLibCardPanelModule } from '../../../../../src/lib/misc/card-panel/card-panel.module';
+import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
 
 import { ClientSchemaDuplicateComponent } from './client-schema-duplicate.component';
 

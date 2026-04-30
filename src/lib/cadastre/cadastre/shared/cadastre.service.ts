@@ -4,14 +4,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { ApiService } from '../../../../../src/lib/core/api';
+import { ApiService } from 'src/lib/core/api';
 import {
   CadastreResponseItem,
   CadastreApiConfig,
   CadastreListResponse,
   CadastreFeature,
   CadastreFeatureResponse
-} from '../../../../../src/lib/cadastre/cadastre/shared/cadastre.interfaces';
+} from 'src/lib/cadastre/cadastre/shared/cadastre.interfaces';
 
 @Injectable()
 export class CadastreCadastreService {

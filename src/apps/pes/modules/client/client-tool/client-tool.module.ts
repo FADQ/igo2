@@ -10,9 +10,9 @@ import { IgoLanguageModule } from '@igo2/core/language';
 import { IgoListModule } from '@igo2/common/list';
 import { IgoCollapsibleModule } from '@igo2/common/collapsible';
 
-import { FadqLibClientModule } from '../../../../../../src/lib/client/client.module';
-import { TOOL_CONFIG } from '../../../../../../src/lib/core/core.module';
-import { FadqLibMessageInlineModule } from '../../../../../../src/lib/message/message-inline/message-inline.module';
+import { FadqLibClientModule } from 'src/lib/client/client.module';
+import { TOOL_CONFIG } from 'src/lib/core/core.module';
+import { FadqLibMessageInlineModule } from 'src/lib/message/message-inline/message-inline.module';
 
 import { ClientToolComponent } from './client-tool.component';
 import { ClientToolItemComponent } from './client-tool-item.component';

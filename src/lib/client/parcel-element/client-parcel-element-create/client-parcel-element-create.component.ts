@@ -20,7 +20,6 @@ import { LanguageService } from '@igo2/core/language';
 import { FeatureStore, IgoMap, GeoJSONGeometry } from '@igo2/geo';
 
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
-import { getAnneeImageFromMap } from '../../shared/client.utils';
 import { ClientParcelElement } from '../shared/client-parcel-element.interfaces';
 import { ClientParcelElementService } from '../shared/client-parcel-element.service';
 import { ClientParcelElementFormService } from '../shared/client-parcel-element-form.service';

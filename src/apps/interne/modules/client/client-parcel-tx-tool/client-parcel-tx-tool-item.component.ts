@@ -7,7 +7,7 @@ import {
   HostBinding
 } from '@angular/core';
 
-import { Client } from '../../../../../../src/lib/client';
+import * as client from 'src/lib/client';
 
 @Component({
   selector: 'fadq-client-parcel-tx-tool-item',
@@ -20,7 +20,7 @@ export class ClientParcelTxToolItemComponent {
   /**
    * Client
    */
-  @Input() client: Client;
+  @Input() client: client.Client;
 
   /**
    * Whether a row is added
@@ -38,13 +38,13 @@ export class ClientParcelTxToolItemComponent {
    */
   @Output() addedChange = new EventEmitter<{
     added: boolean;
-    client: Client;
+    client: client.Client;
   }>();
 
   /**
    * Event emitted when the add/remove button is clicked
    */
-  @Output() delete = new EventEmitter<Client>();
+  @Output() delete = new EventEmitter<client.Client>();
 
   /**
    * @ignore

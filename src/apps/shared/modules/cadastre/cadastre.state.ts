@@ -6,11 +6,11 @@ import { EntityStore } from '@igo2/common/entity';
 import { VectorLayer, ImageLayer} from '@igo2/geo';
 import { MapState } from '@igo2/integration';
 
-import { createPolygonLayer, createMarkerLayer } from '../../../../../src/lib/cadastre';
-import { Mun } from '../../../../../src/lib/cadastre/mun';
-import { Cadastre, CadastreFeature } from '../../../../../src/lib/cadastre/cadastre';
-import { ConcessionUnique, ConcessionFeature } from '../../../../../src/lib/cadastre/concession';
-import { LotUnique, LotFeature } from '../../../../../src/lib/cadastre/lot';
+import { createPolygonLayer, createMarkerLayer } from 'src/lib/cadastre';
+import { Mun } from 'src/lib/cadastre/mun';
+import { Cadastre, CadastreFeature } from 'src/lib/cadastre/cadastre';
+import { ConcessionUnique, ConcessionFeature } from 'src/lib/cadastre/concession';
+import { LotUnique, LotFeature } from 'src/lib/cadastre/lot';
 
 /**
  * Service that holds the state of the edition module
@@ -157,7 +157,7 @@ export class CadastreState {
   initCadastreLayer() {
     if (this._layerCadastre === undefined || this._layerCadastre === null) {
       this._layerCadastre = createPolygonLayer('rgba(255, 255, 255, 0.2)', '#6efc02', 4);
-      this.mapState.map.addLayer(this._layerCadastre, false );
+      this.mapState.map.layerController.add(this._layerCadastre );
     }
   }
 
@@ -168,10 +168,10 @@ export class CadastreState {
   initConcessionLayer() {
     if (this._layerConcession === undefined || this._layerConcession === null) {
       this._layerConcession = createMarkerLayer('yellow');
-      this.mapState.map.addLayer(this._layerConcession, false );
+      this.mapState.map.layerController.add(this._layerConcession );
     }
   }
-
+w;
   /**
    * Show the selected cadastre on the map
    * @param CadastreFeature cadastre
@@ -179,7 +179,7 @@ export class CadastreState {
   initLotLayer() {
     if (this._layerLot === undefined || this._layerLot === null) {
       this._layerLot = createMarkerLayer('blue');
-      this.mapState.map.addLayer(this._layerLot, false );
+      this.mapState.map.layerController.add(this._layerLot );
     }
   }
 }

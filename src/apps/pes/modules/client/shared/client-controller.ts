@@ -14,7 +14,7 @@ import {
   ClientParcelWorkspace,
   ClientParcelService,
   getDiagramsFromParcels
-} from '../../../../../../src/lib/client';
+} from 'src/lib/client';
 
 export interface ClientControllerOptions {
   map: IgoMap;

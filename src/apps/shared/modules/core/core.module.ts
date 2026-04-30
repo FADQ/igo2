@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { FadqLibCoreModule } from '../../../../../src/lib/core/core.module';
+import { FadqLibCoreModule } from 'src/lib/core/core.module';
 
 @NgModule({
   imports: [

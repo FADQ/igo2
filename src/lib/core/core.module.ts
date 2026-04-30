@@ -7,7 +7,7 @@ import {
   ModuleWithProviders,
   Provider
 } from '@angular/core';
-import { lastValueFrom } from 'rxjs'
+import { lastValueFrom } from 'rxjs';
 
 import {
   FormFieldService,
@@ -88,7 +88,7 @@ function appInitializerFactory(
 ) {
   return () => new Promise<any>((resolve: any) => {
     configLoader.then(() => {
-      loadTheme(document, 'blue-theme')
+      loadTheme(document, 'blue-theme');
       const language = languageService.getLanguage();
       const promises = [
         lastValueFrom(languageService.translate.getTranslation(language))

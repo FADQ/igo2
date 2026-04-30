@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { ApiService } from '../../../../../src/lib/core/api';
+import { ApiService } from 'src/lib/core/api';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import {
   ClientSchemaFile,

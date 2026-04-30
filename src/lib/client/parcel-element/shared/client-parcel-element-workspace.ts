@@ -70,13 +70,13 @@ export class ClientParcelElementWorkspace extends Workspace<ClientParcelElement>
 
   private addParcelElementLayer() {
     if (this.parcelElementStore.layer.map === undefined) {
-      this.map.addLayer(this.parcelElementStore.layer);
+      this.map.layerController.add(this.parcelElementStore.layer);
     }
   }
 
   private removeParcelElementLayer() {
     if (this.parcelElementStore.layer.map !== undefined) {
-      this.map.removeLayer(this.parcelElementStore.layer);
+      this.map.layerController.remove(this.parcelElementStore.layer);
     }
   }
 

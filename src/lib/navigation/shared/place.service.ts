@@ -5,8 +5,8 @@ import { map } from 'rxjs/operators';
 
 import { Feature } from '@igo2/geo';
 
-import { ApiService } from '../../../../src/lib/core';
-import { substituteProperties } from '../../../../src/lib/utils';
+import { ApiService } from 'src/lib/core';
+import { substituteProperties } from 'src/lib/utils';
 import {
   Place,
   PlaceCategory,

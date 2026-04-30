@@ -1,0 +1,988 @@
+Structure du dossier pour le volume Windows
+Le numéro de série du volume est 7813-18AB
+C:.
+|   browserslist
+|   favicon.ico
+|   index.html
+|   karma.conf.js
+|   polyfills.ts
+|   structure.txt
+|   styles.scss
+|   test.ts
+|   tsconfig.interne.json
+|   tsconfig.pes.json
+|   tsconfig.pes_interne.json
+|   tsconfig.spec.json
+|   
++---apps
+|   |   interne.ts
+|   |   pes.ts
+|   |   pes_interne.ts
+|   |   
+|   +---interne
+|   |   |   app.component.html
+|   |   |   app.component.scss
+|   |   |   app.component.ts
+|   |   |   app.module.ts
+|   |   |   
+|   |   +---modules
+|   |   |   +---address
+|   |   |   |   |   address.module.ts
+|   |   |   |   |   address.state.ts
+|   |   |   |   |   index.ts
+|   |   |   |   |   
+|   |   |   |   \---address-editor-tool
+|   |   |   |           address-editor-tool.component.html
+|   |   |   |           address-editor-tool.component.scss
+|   |   |   |           address-editor-tool.component.ts
+|   |   |   |           address-editor-tool.module.ts
+|   |   |   |           index.ts
+|   |   |   |           
+|   |   |   +---client
+|   |   |   |   |   client.module.ts
+|   |   |   |   |   client.state.ts
+|   |   |   |   |   
+|   |   |   |   +---client-parcel-tx-delete-dialog
+|   |   |   |   |       client-parcel-tx-delete-dialog.component.html
+|   |   |   |   |       client-parcel-tx-delete-dialog.component.scss
+|   |   |   |   |       client-parcel-tx-delete-dialog.component.ts
+|   |   |   |   |       client-parcel-tx-delete-dialog.module.ts
+|   |   |   |   |       
+|   |   |   |   +---client-parcel-tx-start
+|   |   |   |   |       client-parcel-tx-start.component.html
+|   |   |   |   |       client-parcel-tx-start.component.scss
+|   |   |   |   |       client-parcel-tx-start.component.ts
+|   |   |   |   |       client-parcel-tx-start.module.ts
+|   |   |   |   |       
+|   |   |   |   +---client-parcel-tx-tool
+|   |   |   |   |       client-parcel-tx-tool-item.component.html
+|   |   |   |   |       client-parcel-tx-tool-item.component.scss
+|   |   |   |   |       client-parcel-tx-tool-item.component.ts
+|   |   |   |   |       client-parcel-tx-tool.component.html
+|   |   |   |   |       client-parcel-tx-tool.component.scss
+|   |   |   |   |       client-parcel-tx-tool.component.ts
+|   |   |   |   |       client-parcel-tx-tool.module.ts
+|   |   |   |   |       index.ts
+|   |   |   |   |       
+|   |   |   |   +---client-tool
+|   |   |   |   |       client-tool-item.component.html
+|   |   |   |   |       client-tool-item.component.scss
+|   |   |   |   |       client-tool-item.component.ts
+|   |   |   |   |       client-tool.component.html
+|   |   |   |   |       client-tool.component.scss
+|   |   |   |   |       client-tool.component.ts
+|   |   |   |   |       client-tool.module.ts
+|   |   |   |   |       index.ts
+|   |   |   |   |       
+|   |   |   |   \---shared
+|   |   |   |           client-controller.service.ts
+|   |   |   |           client-controller.ts
+|   |   |   |           client-parcel-actions.service.ts
+|   |   |   |           client-parcel-element-actions.service.ts
+|   |   |   |           client-parcel-element-table.service.ts
+|   |   |   |           client-parcel-element-workspace.service.ts
+|   |   |   |           client-parcel-table.service.ts
+|   |   |   |           client-parcel-tx.widgets.ts
+|   |   |   |           client-parcel-workspace.service.ts
+|   |   |   |           client-schema-actions.service.ts
+|   |   |   |           client-schema-element-actions.service.ts
+|   |   |   |           client-schema-element-table.service.ts
+|   |   |   |           client-schema-element-workspace.service.ts
+|   |   |   |           client-schema-table.service.ts
+|   |   |   |           client-schema-workspace.service.ts
+|   |   |   |           client.interfaces.ts
+|   |   |   |           index.ts
+|   |   |   |           
+|   |   |   +---edition
+|   |   |   |       edition.module.ts
+|   |   |   |       
+|   |   |   \---search
+|   |   |       |   search.module.ts
+|   |   |       |   
+|   |   |       \---shared
+|   |   |           |   index.ts
+|   |   |           |   search.enums.ts
+|   |   |           |   
+|   |   |           \---sources
+|   |   |                   client.interfaces.ts
+|   |   |                   client.providers.ts
+|   |   |                   client.ts
+|   |   |                   index.ts
+|   |   |                   
+|   |   \---views
+|   |       \---portal
+|   |               portal.component.html
+|   |               portal.component.scss
+|   |               portal.component.ts
+|   |               portal.module.ts
+|   |               portal.variables.scss
+|   |               
+|   +---pes
+|   |   |   app.component.html
+|   |   |   app.component.scss
+|   |   |   app.component.ts
+|   |   |   app.module.ts
+|   |   |   
+|   |   +---modules
+|   |   |   +---client
+|   |   |   |   |   client.module.ts
+|   |   |   |   |   client.state.ts
+|   |   |   |   |   
+|   |   |   |   +---client-tool
+|   |   |   |   |       client-tool-item.component.html
+|   |   |   |   |       client-tool-item.component.scss
+|   |   |   |   |       client-tool-item.component.ts
+|   |   |   |   |       client-tool.component.html
+|   |   |   |   |       client-tool.component.scss
+|   |   |   |   |       client-tool.component.ts
+|   |   |   |   |       client-tool.module.ts
+|   |   |   |   |       index.ts
+|   |   |   |   |       
+|   |   |   |   \---shared
+|   |   |   |           client-controller.service.ts
+|   |   |   |           client-controller.ts
+|   |   |   |           client-parcel-actions.service.ts
+|   |   |   |           client-parcel-table.service.ts
+|   |   |   |           client-parcel-workspace.service.ts
+|   |   |   |           client.interfaces.ts
+|   |   |   |           client.loader.ts
+|   |   |   |           index.ts
+|   |   |   |           
+|   |   |   \---search
+|   |   |       |   search.module.ts
+|   |   |       |   
+|   |   |       \---shared
+|   |   |               index.ts
+|   |   |               search.enums.ts
+|   |   |               
+|   |   \---views
+|   |       \---portal
+|   |               portal.component.html
+|   |               portal.component.scss
+|   |               portal.component.ts
+|   |               portal.module.ts
+|   |               portal.variables.scss
+|   |               
+|   +---pes_interne
+|   |   |   app.component.html
+|   |   |   app.component.scss
+|   |   |   app.component.ts
+|   |   |   app.module.ts
+|   |   |   
+|   |   \---modules
+|   |       \---client
+|   |           |   client.module.ts
+|   |           |   
+|   |           \---shared
+|   |                   client.loader.ts
+|   |                   
+|   \---shared
+|       +---app-outlet
+|       |       app-outlet.component.html
+|       |       app-outlet.component.scss
+|       |       app-outlet.component.ts
+|       |       app-outlet.module.ts
+|       |       
+|       +---modules
+|       |   +---cadastre
+|       |   |   |   cadastre.module.ts
+|       |   |   |   cadastre.state.ts
+|       |   |   |   
+|       |   |   \---cadastre-search-tool
+|       |   |           cadastre-search-tool.component.html
+|       |   |           cadastre-search-tool.component.scss
+|       |   |           cadastre-search-tool.component.ts
+|       |   |           cadastre-search-tool.module.ts
+|       |   |           
+|       |   +---context
+|       |   |   |   context.module.ts
+|       |   |   |   
+|       |   |   \---shared
+|       |   |           index.ts.ts
+|       |   |           layer-context.directive.ts
+|       |   |           
+|       |   +---core
+|       |   |       code.module.ts
+|       |   |       core.module.ts
+|       |   |       
+|       |   +---feature
+|       |   |   |   feature.module.ts
+|       |   |   |   index.ts
+|       |   |   |   
+|       |   |   \---shared
+|       |   |           feature.utils.ts
+|       |   |           index.ts
+|       |   |           
+|       |   +---help
+|       |   |   |   help.module.ts
+|       |   |   |   
+|       |   |   +---help-tool
+|       |   |   |       help-tool.component.html
+|       |   |   |       help-tool.component.scss
+|       |   |   |       help-tool.component.ts
+|       |   |   |       help-tool.module.ts
+|       |   |   |       index.ts
+|       |   |   |       
+|       |   |   \---shared
+|       |   |           help.interfaces.ts
+|       |   |           index.ts
+|       |   |           
+|       |   +---import-export
+|       |   |   |   import-export.module.ts
+|       |   |   |   
+|       |   |   \---import-export-tool
+|       |   |           import-export-tool.component.html
+|       |   |           import-export-tool.component.scss
+|       |   |           import-export-tool.component.ts
+|       |   |           import-export-tool.module.ts
+|       |   |           index.ts
+|       |   |           
+|       |   +---map
+|       |   |   |   map.module.ts
+|       |   |   |   
+|       |   |   +---contextual-menu
+|       |   |   |       contextual-menu.component.html
+|       |   |   |       contextual-menu.component.scss
+|       |   |   |       contextual-menu.component.ts
+|       |   |   |       contextual-menu.module.ts
+|       |   |   |       index.ts
+|       |   |   |       
+|       |   |   \---map-tool
+|       |   |           index.ts
+|       |   |           layer-info-dialog.component.html
+|       |   |           layer-info-dialog.component.scss
+|       |   |           layer-info-dialog.component.ts
+|       |   |           map-tool.component.html
+|       |   |           map-tool.component.scss
+|       |   |           map-tool.component.ts
+|       |   |           map-tool.module.ts
+|       |   |           
+|       |   +---navigation
+|       |   |   |   navigation.module.ts
+|       |   |   |   
+|       |   |   \---navigation-tool
+|       |   |           index.ts
+|       |   |           navigation-tool.component.html
+|       |   |           navigation-tool.component.scss
+|       |   |           navigation-tool.component.ts
+|       |   |           navigation-tool.module.ts
+|       |   |           
+|       |   \---search
+|       |       |   search.module.ts
+|       |       |   
+|       |       \---shared
+|       |           |   index.ts
+|       |           |   
+|       |           \---sources
+|       |                   coordinates.providers.ts
+|       |                   icherche.providers.ts
+|       |                   icherche.ts
+|       |                   index.ts
+|       |                   query.providers.ts
+|       |                   
+|       \---views
+|           \---portal
+|               |   portal.module.ts
+|               |   portal.variables.scss
+|               |   
+|               +---expansion-panel
+|               |       expansion-panel-header.component.html
+|               |       expansion-panel-header.component.scss
+|               |       expansion-panel-header.component.ts
+|               |       expansion-panel.animations.ts
+|               |       expansion-panel.component.html
+|               |       expansion-panel.component.scss
+|               |       expansion-panel.component.ts
+|               |       expansion-panel.module.ts
+|               |       
+|               +---sidenav
+|               |       sidenav.component.html
+|               |       sidenav.component.scss
+|               |       sidenav.component.ts
+|               |       sidenav.module.ts
+|               |       
+|               \---toast-panel
+|                       toast-panel.animations.ts
+|                       toast-panel.component.html
+|                       toast-panel.component.scss
+|                       toast-panel.component.ts
+|                       toast-panel.module.ts
+|                       
++---assets
+|   |   .gitkeep
+|   |   
+|   \---images
+|           igo-loading.gif
+|           loading.gif
+|           logo_igo_text_md.png
+|           
++---config
+|   \---templates
+|           interne.json
+|           pes.json
+|           pes_interne.json
+|           
++---contexts
+|   \---templates
+|           interne.default.json
+|           interne.json
+|           interne.mesurage.json
+|           pes.default.json
+|           pes.json
+|           
++---environments
+|   +---interne
+|   |       environment.partial.ts
+|   |       environment.prod.ts
+|   |       environment.ts
+|   |       
+|   +---pes
+|   |       environment.partial.ts
+|   |       environment.prod.ts
+|   |       environment.ts
+|   |       
+|   \---pes_interne
+|           environment.partial.ts
+|           environment.prod.ts
+|           environment.ts
+|           
++---fonts
+|       MaterialIcons-Regular.eot
+|       MaterialIcons-Regular.ttf
+|       MaterialIcons-Regular.woff
+|       MaterialIcons-Regular.woff2
+|       
++---lib
+|   +---address
+|   |   |   address.module.ts
+|   |   |   index.ts
+|   |   |   
+|   |   +---address-editor
+|   |   |       address-editor.component.html
+|   |   |       address-editor.component.scss
+|   |   |       address-editor.component.ts
+|   |   |       address-editor.module.ts
+|   |   |       
+|   |   +---address-editor-save-dialog
+|   |   |       address-editor-save-dialog.component.html
+|   |   |       address-editor-save-dialog.component.scss
+|   |   |       address-editor-save-dialog.component.ts
+|   |   |       address-editor-save-dialog.module.ts
+|   |   |       
+|   |   +---address-editor-zoom-dialog
+|   |   |       address-editor-zoom-dialog.component.html
+|   |   |       address-editor-zoom-dialog.component.scss
+|   |   |       address-editor-zoom-dialog.component.ts
+|   |   |       address-editor-zoom-dialog.module.ts
+|   |   |       
+|   |   \---shared
+|   |           address.interface.ts
+|   |           address.providers.ts
+|   |           address.service.ts
+|   |           address.utils.ts
+|   |           index.ts
+|   |           
+|   +---cadastre
+|   |   |   cadastre.module.ts
+|   |   |   index.ts
+|   |   |   
+|   |   +---cadastre
+|   |   |   |   cadastre-cadastre.module.ts
+|   |   |   |   index.ts
+|   |   |   |   
+|   |   |   +---cadastre-selector
+|   |   |   |       cadastre-cadastre-selector.component.html
+|   |   |   |       cadastre-cadastre-selector.component.scss
+|   |   |   |       cadastre-cadastre-selector.component.ts
+|   |   |   |       cadastre-cadastre-selector.module.ts
+|   |   |   |       
+|   |   |   \---shared
+|   |   |           cadastre.interfaces.ts
+|   |   |           cadastre.providers.ts
+|   |   |           cadastre.service.ts
+|   |   |           index.ts
+|   |   |           
+|   |   +---concession
+|   |   |   |   cadastre-concession.module.ts
+|   |   |   |   index.ts
+|   |   |   |   
+|   |   |   +---concession-selector
+|   |   |   |       cadastre-concession-selector.component.html
+|   |   |   |       cadastre-concession-selector.component.scss
+|   |   |   |       cadastre-concession-selector.component.ts
+|   |   |   |       cadastre-concession-selector.module.ts
+|   |   |   |       
+|   |   |   \---shared
+|   |   |           concession.interfaces.ts
+|   |   |           concession.providers.ts
+|   |   |           concession.service.ts
+|   |   |           index.ts
+|   |   |           
+|   |   +---lot
+|   |   |   |   cadastre-lot.module.ts
+|   |   |   |   index.ts
+|   |   |   |   
+|   |   |   +---lot-selector
+|   |   |   |       cadastre-lot-selector.component.html
+|   |   |   |       cadastre-lot-selector.component.scss
+|   |   |   |       cadastre-lot-selector.component.ts
+|   |   |   |       cadastre-lot-selector.module.ts
+|   |   |   |       
+|   |   |   \---shared
+|   |   |           index.ts
+|   |   |           lot.interfaces.ts
+|   |   |           lot.providers.ts
+|   |   |           lot.service.ts
+|   |   |           
+|   |   +---mun
+|   |   |   |   cadastre-mun.module.ts
+|   |   |   |   index.ts
+|   |   |   |   
+|   |   |   +---mun-selector
+|   |   |   |       cadastre-mun-selector.component.html
+|   |   |   |       cadastre-mun-selector.component.scss
+|   |   |   |       cadastre-mun-selector.component.ts
+|   |   |   |       cadastre-mun-selector.module.ts
+|   |   |   |       
+|   |   |   \---shared
+|   |   |           index.ts
+|   |   |           mun.interfaces.ts
+|   |   |           mun.providers.ts
+|   |   |           mun.service.ts
+|   |   |           
+|   |   \---shared
+|   |           cadastre.enums.ts
+|   |           cadastre.utils.ts
+|   |           index.ts
+|   |           
+|   +---cadastre-reno
+|   |   |   cadastre-reno.module.ts
+|   |   |   index.ts
+|   |   |   
+|   |   \---shared
+|   |           cadastre-reno.enums.ts
+|   |           cadastre-reno.interfaces.ts
+|   |           cadastre-reno.providers.ts
+|   |           cadastre-reno.ts
+|   |           index.ts
+|   |           
+|   +---client
+|   |   |   client.module.ts
+|   |   |   index.ts
+|   |   |   
+|   |   +---info
+|   |   |   |   client-info.module.ts
+|   |   |   |   index.ts
+|   |   |   |   
+|   |   |   +---client-info-addresses
+|   |   |   |       client-info-addresses.component.html
+|   |   |   |       client-info-addresses.component.scss
+|   |   |   |       client-info-addresses.component.ts
+|   |   |   |       client-info-addresses.module.ts
+|   |   |   |       
+|   |   |   \---shared
+|   |   |           client-info.interfaces.ts
+|   |   |           client-info.providers.ts
+|   |   |           client-info.service.ts
+|   |   |           index.ts
+|   |   |           
+|   |   +---parcel
+|   |   |   |   client-parcel.module.ts
+|   |   |   |   index.ts
+|   |   |   |   
+|   |   |   +---client-parcel-diagram-selector
+|   |   |   |       client-parcel-diagram-selector.component.html
+|   |   |   |       client-parcel-diagram-selector.component.ts
+|   |   |   |       client-parcel-diagram-selector.module.ts
+|   |   |   |       
+|   |   |   +---client-parcel-legend
+|   |   |   |       client-parcel-legend-item.component.html
+|   |   |   |       client-parcel-legend-item.component.scss
+|   |   |   |       client-parcel-legend-item.component.ts
+|   |   |   |       client-parcel-legend.component.html
+|   |   |   |       client-parcel-legend.component.ts
+|   |   |   |       client-parcel-legend.module.ts
+|   |   |   |       
+|   |   |   +---client-parcel-year-selector
+|   |   |   |       client-parcel-year-selector.component.html
+|   |   |   |       client-parcel-year-selector.component.ts
+|   |   |   |       client-parcel-year-selector.module.ts
+|   |   |   |       
+|   |   |   \---shared
+|   |   |       |   client-parcel-workspace.ts
+|   |   |       |   client-parcel-year.service.ts
+|   |   |       |   client-parcel.enums.ts
+|   |   |       |   client-parcel.interfaces.ts
+|   |   |       |   client-parcel.providers.ts
+|   |   |       |   client-parcel.service.ts
+|   |   |       |   client-parcel.utils.ts
+|   |   |       |   index.ts
+|   |   |       |   
+|   |   |       \---strategies
+|   |   |               filter-not-owned.ts
+|   |   |               index.ts
+|   |   |               
+|   |   +---parcel-element
+|   |   |   |   client-parcel-element.module.ts
+|   |   |   |   index.ts
+|   |   |   |   
+|   |   |   +---client-parcel-element-commit-dialog
+|   |   |   |       client-parcel-element-commit-dialog.component.html
+|   |   |   |       client-parcel-element-commit-dialog.component.scss
+|   |   |   |       client-parcel-element-commit-dialog.component.ts
+|   |   |   |       client-parcel-element-commit-dialog.module.ts
+|   |   |   |       
+|   |   |   +---client-parcel-element-create
+|   |   |   |       client-parcel-element-create.component.html
+|   |   |   |       client-parcel-element-create.component.scss
+|   |   |   |       client-parcel-element-create.component.ts
+|   |   |   |       client-parcel-element-create.module.ts
+|   |   |   |       
+|   |   |   +---client-parcel-element-fill
+|   |   |   |       client-parcel-element-fill.component.html
+|   |   |   |       client-parcel-element-fill.component.scss
+|   |   |   |       client-parcel-element-fill.component.ts
+|   |   |   |       client-parcel-element-fill.module.ts
+|   |   |   |       
+|   |   |   +---client-parcel-element-import
+|   |   |   |       client-parcel-element-import.component.html
+|   |   |   |       client-parcel-element-import.component.scss
+|   |   |   |       client-parcel-element-import.component.ts
+|   |   |   |       client-parcel-element-import.module.ts
+|   |   |   |       
+|   |   |   +---client-parcel-element-numbering
+|   |   |   |       client-parcel-element-numbering-input.component.html
+|   |   |   |       client-parcel-element-numbering-input.component.scss
+|   |   |   |       client-parcel-element-numbering-input.component.ts
+|   |   |   |       client-parcel-element-numbering.component.html
+|   |   |   |       client-parcel-element-numbering.component.scss
+|   |   |   |       client-parcel-element-numbering.component.ts
+|   |   |   |       client-parcel-element-numbering.module.ts
+|   |   |   |       
+|   |   |   +---client-parcel-element-redraw
+|   |   |   |       client-parcel-element-redraw.component.html
+|   |   |   |       client-parcel-element-redraw.component.scss
+|   |   |   |       client-parcel-element-redraw.component.ts
+|   |   |   |       client-parcel-element-redraw.module.ts
+|   |   |   |       
+|   |   |   +---client-parcel-element-reload-dialog
+|   |   |   |       client-parcel-element-reload-dialog.component.html
+|   |   |   |       client-parcel-element-reload-dialog.component.scss
+|   |   |   |       client-parcel-element-reload-dialog.component.ts
+|   |   |   |       client-parcel-element-reload-dialog.module.ts
+|   |   |   |       
+|   |   |   +---client-parcel-element-save
+|   |   |   |       client-parcel-element-save.component.html
+|   |   |   |       client-parcel-element-save.component.scss
+|   |   |   |       client-parcel-element-save.component.ts
+|   |   |   |       client-parcel-element-save.module.ts
+|   |   |   |       
+|   |   |   +---client-parcel-element-simplify
+|   |   |   |       client-parcel-element-simplify.component.html
+|   |   |   |       client-parcel-element-simplify.component.scss
+|   |   |   |       client-parcel-element-simplify.component.ts
+|   |   |   |       client-parcel-element-simplify.module.ts
+|   |   |   |       
+|   |   |   +---client-parcel-element-slice
+|   |   |   |       client-parcel-element-slice.component.html
+|   |   |   |       client-parcel-element-slice.component.scss
+|   |   |   |       client-parcel-element-slice.component.ts
+|   |   |   |       client-parcel-element-slice.module.ts
+|   |   |   |       
+|   |   |   +---client-parcel-element-transfer
+|   |   |   |       client-parcel-element-transfer.component.html
+|   |   |   |       client-parcel-element-transfer.component.scss
+|   |   |   |       client-parcel-element-transfer.component.ts
+|   |   |   |       client-parcel-element-transfer.module.ts
+|   |   |   |       
+|   |   |   +---client-parcel-element-translate
+|   |   |   |       client-parcel-element-translate.component.html
+|   |   |   |       client-parcel-element-translate.component.scss
+|   |   |   |       client-parcel-element-translate.component.ts
+|   |   |   |       client-parcel-element-translate.module.ts
+|   |   |   |       
+|   |   |   +---client-parcel-element-update
+|   |   |   |       client-parcel-element-update.component.html
+|   |   |   |       client-parcel-element-update.component.scss
+|   |   |   |       client-parcel-element-update.component.ts
+|   |   |   |       client-parcel-element-update.module.ts
+|   |   |   |       
+|   |   |   +---client-parcel-element-update-batch
+|   |   |   |       client-parcel-element-update-batch.component.html
+|   |   |   |       client-parcel-element-update-batch.component.scss
+|   |   |   |       client-parcel-element-update-batch.component.ts
+|   |   |   |       client-parcel-element-update-batch.module.ts
+|   |   |   |       
+|   |   |   +---client-parcel-element-without-owner
+|   |   |   |       client-parcel-element-without-owner.component.html
+|   |   |   |       client-parcel-element-without-owner.component.scss
+|   |   |   |       client-parcel-element-without-owner.component.ts
+|   |   |   |       client-parcel-element-without-owner.module.ts
+|   |   |   |       
+|   |   |   \---shared
+|   |   |           client-parcel-element-dialog.service.ts
+|   |   |           client-parcel-element-form.service.ts
+|   |   |           client-parcel-element-workspace.ts
+|   |   |           client-parcel-element.interfaces.ts
+|   |   |           client-parcel-element.providers.ts
+|   |   |           client-parcel-element.service.ts
+|   |   |           client-parcel-element.utils.ts
+|   |   |           client-parcel-element.widgets.ts
+|   |   |           index.ts
+|   |   |           
+|   |   +---parcel-tx
+|   |   |   |   client-parcel-tx.module.ts
+|   |   |   |   index.ts
+|   |   |   |   
+|   |   |   +---client-parcel-tx-reconciliate
+|   |   |   |       client-parcel-tx-reconciliate.component.html
+|   |   |   |       client-parcel-tx-reconciliate.component.scss
+|   |   |   |       client-parcel-tx-reconciliate.component.ts
+|   |   |   |       client-parcel-tx-reconciliate.module.ts
+|   |   |   |       
+|   |   |   \---shared
+|   |   |           client-parcel-tx.enums.ts
+|   |   |           client-parcel-tx.interfaces.ts
+|   |   |           client-parcel-tx.providers.ts
+|   |   |           client-parcel-tx.service.ts
+|   |   |           client-parcel-tx.widgets.ts
+|   |   |           index.ts
+|   |   |           
+|   |   +---schema
+|   |   |   |   client-schema.module.ts
+|   |   |   |   index.ts
+|   |   |   |   
+|   |   |   +---client-schema-create
+|   |   |   |       client-schema-create.component.html
+|   |   |   |       client-schema-create.component.scss
+|   |   |   |       client-schema-create.component.ts
+|   |   |   |       client-schema-create.module.ts
+|   |   |   |       
+|   |   |   +---client-schema-delete
+|   |   |   |       client-schema-delete.component.html
+|   |   |   |       client-schema-delete.component.scss
+|   |   |   |       client-schema-delete.component.ts
+|   |   |   |       client-schema-delete.module.ts
+|   |   |   |       
+|   |   |   +---client-schema-duplicate
+|   |   |   |       client-schema-duplicate.component.html
+|   |   |   |       client-schema-duplicate.component.scss
+|   |   |   |       client-schema-duplicate.component.ts
+|   |   |   |       client-schema-duplicate.module.ts
+|   |   |   |       
+|   |   |   +---client-schema-selector
+|   |   |   |       client-schema-selector.component.html
+|   |   |   |       client-schema-selector.component.ts
+|   |   |   |       client-schema-selector.module.ts
+|   |   |   |       
+|   |   |   +---client-schema-transfer
+|   |   |   |       client-schema-transfer.component.html
+|   |   |   |       client-schema-transfer.component.scss
+|   |   |   |       client-schema-transfer.component.ts
+|   |   |   |       client-schema-transfer.module.ts
+|   |   |   |       
+|   |   |   +---client-schema-update
+|   |   |   |       client-schema-update.component.html
+|   |   |   |       client-schema-update.component.scss
+|   |   |   |       client-schema-update.component.ts
+|   |   |   |       client-schema-update.module.ts
+|   |   |   |       
+|   |   |   \---shared
+|   |   |           client-schema-form.service.ts
+|   |   |           client-schema-validators.ts
+|   |   |           client-schema-workspace.ts
+|   |   |           client-schema.enums.ts
+|   |   |           client-schema.interfaces.ts
+|   |   |           client-schema.providers.ts
+|   |   |           client-schema.service.ts
+|   |   |           client-schema.utils.ts
+|   |   |           client-schema.widgets.ts
+|   |   |           index.ts
+|   |   |           
+|   |   +---schema-element
+|   |   |   |   client-schema-element.module.ts
+|   |   |   |   index.ts
+|   |   |   |   
+|   |   |   +---client-schema-element-commit-dialog
+|   |   |   |       client-schema-element-commit-dialog.component.html
+|   |   |   |       client-schema-element-commit-dialog.component.scss
+|   |   |   |       client-schema-element-commit-dialog.component.ts
+|   |   |   |       client-schema-element-commit-dialog.module.ts
+|   |   |   |       
+|   |   |   +---client-schema-element-create
+|   |   |   |       client-schema-element-create.component.html
+|   |   |   |       client-schema-element-create.component.scss
+|   |   |   |       client-schema-element-create.component.ts
+|   |   |   |       client-schema-element-create.module.ts
+|   |   |   |       
+|   |   |   +---client-schema-element-fill
+|   |   |   |       client-schema-element-fill.component.html
+|   |   |   |       client-schema-element-fill.component.scss
+|   |   |   |       client-schema-element-fill.component.ts
+|   |   |   |       client-schema-element-fill.module.ts
+|   |   |   |       
+|   |   |   +---client-schema-element-import
+|   |   |   |       client-schema-element-import.component.html
+|   |   |   |       client-schema-element-import.component.scss
+|   |   |   |       client-schema-element-import.component.ts
+|   |   |   |       client-schema-element-import.module.ts
+|   |   |   |       
+|   |   |   +---client-schema-element-save
+|   |   |   |       client-schema-element-save.component.html
+|   |   |   |       client-schema-element-save.component.scss
+|   |   |   |       client-schema-element-save.component.ts
+|   |   |   |       client-schema-element-save.module.ts
+|   |   |   |       
+|   |   |   +---client-schema-element-slice
+|   |   |   |       client-schema-element-slice.component.html
+|   |   |   |       client-schema-element-slice.component.scss
+|   |   |   |       client-schema-element-slice.component.ts
+|   |   |   |       client-schema-element-slice.module.ts
+|   |   |   |       
+|   |   |   +---client-schema-element-translate
+|   |   |   |       client-schema-element-translate.component.html
+|   |   |   |       client-schema-element-translate.component.scss
+|   |   |   |       client-schema-element-translate.component.ts
+|   |   |   |       client-schema-element-translate.module.ts
+|   |   |   |       
+|   |   |   +---client-schema-element-update
+|   |   |   |       client-schema-element-update.component.html
+|   |   |   |       client-schema-element-update.component.scss
+|   |   |   |       client-schema-element-update.component.ts
+|   |   |   |       client-schema-element-update.module.ts
+|   |   |   |       
+|   |   |   +---client-schema-element-update-batch
+|   |   |   |       client-schema-element-update-batch.component.html
+|   |   |   |       client-schema-element-update-batch.component.scss
+|   |   |   |       client-schema-element-update-batch.component.ts
+|   |   |   |       client-schema-element-update-batch.module.ts
+|   |   |   |       
+|   |   |   \---shared
+|   |   |           client-schema-element-dialog.service.ts
+|   |   |           client-schema-element-form.service.ts
+|   |   |           client-schema-element-line.service.ts
+|   |   |           client-schema-element-point.service.ts
+|   |   |           client-schema-element-surface.service.ts
+|   |   |           client-schema-element-validators.ts
+|   |   |           client-schema-element-workspace.ts
+|   |   |           client-schema-element.interfaces.ts
+|   |   |           client-schema-element.providers.ts
+|   |   |           client-schema-element.service.ts
+|   |   |           client-schema-element.utils.ts
+|   |   |           client-schema-element.widgets.ts
+|   |   |           index.ts
+|   |   |           
+|   |   +---schema-file
+|   |   |   |   client-schema-file.module.ts
+|   |   |   |   index.ts
+|   |   |   |   
+|   |   |   +---client-schema-file-manager
+|   |   |   |       client-schema-file-manager.component.html
+|   |   |   |       client-schema-file-manager.component.scss
+|   |   |   |       client-schema-file-manager.component.ts
+|   |   |   |       client-schema-file-manager.module.ts
+|   |   |   |       
+|   |   |   \---shared
+|   |   |           client-schema-file.interfaces.ts
+|   |   |           client-schema-file.providers.ts
+|   |   |           client-schema-file.service.ts
+|   |   |           index.ts
+|   |   |           
+|   |   \---shared
+|   |           client.enums.ts
+|   |           client.interfaces.ts
+|   |           client.providers.ts
+|   |           client.service.ts
+|   |           client.utils.ts
+|   |           index.ts
+|   |           
+|   +---context
+|   |   |   context.module.ts
+|   |   |   index.ts
+|   |   |   
+|   |   \---shared
+|   |           context.interfaces.ts
+|   |           context.providers.ts
+|   |           context.service.ts
+|   |           index.ts
+|   |           
+|   +---core
+|   |   |   core.module.ts
+|   |   |   index.ts
+|   |   |   
+|   |   +---api
+|   |   |       api.interceptor.ts
+|   |   |       api.interfaces.ts
+|   |   |       api.module.ts
+|   |   |       api.providers.ts
+|   |   |       api.service.ts
+|   |   |       index.ts
+|   |   |       
+|   |   \---domain
+|   |           domain.interfaces.ts
+|   |           domain.module.ts
+|   |           domain.service.ts
+|   |           index.ts
+|   |           
+|   +---edition
+|   |   |   edition.module.ts
+|   |   |   index.ts
+|   |   |   
+|   |   +---edition-fill
+|   |   |       edition-fill.component.html
+|   |   |       edition-fill.component.scss
+|   |   |       edition-fill.component.ts
+|   |   |       edition-fill.module.ts
+|   |   |       
+|   |   +---edition-import
+|   |   |       edition-import.component.html
+|   |   |       edition-import.component.scss
+|   |   |       edition-import.component.ts
+|   |   |       edition-import.module.ts
+|   |   |       
+|   |   +---edition-redraw
+|   |   |       edition-redraw.component.html
+|   |   |       edition-redraw.component.scss
+|   |   |       edition-redraw.component.ts
+|   |   |       edition-redraw.module.ts
+|   |   |       
+|   |   +---edition-save
+|   |   |       edition-save.component.html
+|   |   |       edition-save.component.scss
+|   |   |       edition-save.component.ts
+|   |   |       edition-save.module.ts
+|   |   |       
+|   |   +---edition-simplify
+|   |   |       edition-simplify.component.html
+|   |   |       edition-simplify.component.scss
+|   |   |       edition-simplify.component.ts
+|   |   |       edition-simplify.module.ts
+|   |   |       
+|   |   +---edition-slice
+|   |   |       edition-slice.component.html
+|   |   |       edition-slice.component.scss
+|   |   |       edition-slice.component.ts
+|   |   |       edition-slice.module.ts
+|   |   |       
+|   |   +---edition-translate
+|   |   |       edition-translate.component.html
+|   |   |       edition-translate.component.scss
+|   |   |       edition-translate.component.ts
+|   |   |       edition-translate.module.ts
+|   |   |       
+|   |   +---edition-undo
+|   |   |       edition-undo.component.html
+|   |   |       edition-undo.component.scss
+|   |   |       edition-undo.component.ts
+|   |   |       edition-undo.module.ts
+|   |   |       
+|   |   +---edition-update-batch
+|   |   |       edition-update-batch.component.html
+|   |   |       edition-update-batch.component.scss
+|   |   |       edition-update-batch.component.ts
+|   |   |       edition-update-batch.module.ts
+|   |   |       
+|   |   +---edition-upsert
+|   |   |       edition-upsert.component.html
+|   |   |       edition-upsert.component.scss
+|   |   |       edition-upsert.component.ts
+|   |   |       edition-upsert.module.ts
+|   |   |       
+|   |   \---shared
+|   |           edition.interfaces.ts
+|   |           edition.providers.ts
+|   |           edition.service.ts
+|   |           edition.utils.ts
+|   |           edition.widgets.ts
+|   |           index.ts
+|   |           
+|   +---feature
+|   |   |   feature.module.ts
+|   |   |   index.ts
+|   |   |   
+|   |   \---shared
+|   |           feature.utils.ts
+|   |           index.ts
+|   |           
+|   +---map
+|   |   |   index.ts
+|   |   |   map.module.ts
+|   |   |   
+|   |   +---map-actionbar
+|   |   |       index.ts
+|   |   |       map-actionbar.component.html
+|   |   |       map-actionbar.component.scss
+|   |   |       map-actionbar.component.ts
+|   |   |       map-actionbar.module.ts
+|   |   |       
+|   |   \---shared
+|   |           index.ts
+|   |           map.enum.ts
+|   |           map.utils.ts
+|   |           
+|   +---message
+|   |   |   message.module.ts
+|   |   |   
+|   |   \---message-inline
+|   |           message-inline.component.html
+|   |           message-inline.component.scss
+|   |           message-inline.component.ts
+|   |           message-inline.module.ts
+|   |           
+|   +---misc
+|   |   \---card-panel
+|   |           card-panel-content.component.html
+|   |           card-panel-content.component.scss
+|   |           card-panel-content.component.ts
+|   |           card-panel.component.html
+|   |           card-panel.component.scss
+|   |           card-panel.component.ts
+|   |           card-panel.module.ts
+|   |           
+|   +---navigation
+|   |   |   index.ts
+|   |   |   navigation.module.ts
+|   |   |   
+|   |   +---place-selector
+|   |   |       place-selector.component.html
+|   |   |       place-selector.component.scss
+|   |   |       place-selector.component.ts
+|   |   |       place-selector.module.ts
+|   |   |       
+|   |   +---poi-selector
+|   |   |       poi-selector.component.html
+|   |   |       poi-selector.component.scss
+|   |   |       poi-selector.component.ts
+|   |   |       poi-selector.module.ts
+|   |   |       
+|   |   \---shared
+|   |           index.ts
+|   |           place.interfaces.ts
+|   |           place.service.ts
+|   |           
+|   \---utils
+|           color.ts
+|           conversion.ts
+|           date.ts
+|           index.ts
+|           observable.ts
+|           str.ts
+|           submit.ts
+|           transaction.ts
+|           
++---locale
+|   |   en.json
+|   |   fr.json
+|   |   
+|   \---libs_locale
+|           en.json
+|           fr.json
+|           
+\---style
+    |   fadq.theme.scss
+    |   igo2-lib.override.scss
+    |   
+    \---partial
+            media.scss
+            variables.scss
+            

@@ -21,7 +21,7 @@ import {
 import {
   Concession,
   ConcessionResponseItem,
-  ConcessionUnique } from '../../../../../src/lib/cadastre/concession/shared/concession.interfaces';
+  ConcessionUnique } from 'src/lib/cadastre/concession/shared/concession.interfaces';
 
 @Component({
   selector: 'fadq-cadastre-concession-selector',

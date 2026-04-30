@@ -5,7 +5,7 @@ import { Geometry as GeoJSONGeometry } from 'geojson';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { ApiService } from '../../../../src/lib/core/api';
+import { ApiService } from 'src/lib/core/api';
 
 import {
   AddressApiConfig,

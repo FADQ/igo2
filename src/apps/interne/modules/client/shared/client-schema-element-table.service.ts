@@ -6,8 +6,8 @@ import OlLineString from 'ol/geom/LineString';
 import { EntityTableTemplate, EntityTableColumnRenderer } from '@igo2/common/entity';
 import { formatMeasure, measureOlGeometryLength, squareMetersToAcres, squareMetersToHectares } from '@igo2/geo';
 
-import { formatDate } from '../../../../../../src/lib/utils/date';
-import { ClientSchemaElement } from '../../../../../../src/lib/client';
+import { formatDate } from 'src/lib/utils/date';
+import { ClientSchemaElement } from 'src/lib/client';
 
 @Injectable({
   providedIn: 'root'

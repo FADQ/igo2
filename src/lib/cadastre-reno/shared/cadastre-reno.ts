@@ -56,7 +56,7 @@ export class CadastreRenoSearchSource extends SearchSource implements TextSearch
         epsg: '4326'
       },
       this.params as { [params: string]: string }
-    )
+    );
     return new HttpParams({ fromObject: params });
   }
 
@@ -87,7 +87,7 @@ export class CadastreRenoSearchSource extends SearchSource implements TextSearch
         // There's a search to do
         blnSearch = true;
       }
-    } 
+    }
     // There's only one cadastre number
     else {
       // Keep just numbers
@@ -111,8 +111,8 @@ export class CadastreRenoSearchSource extends SearchSource implements TextSearch
 
   /**
    * Extracts results from the response of service
-   * @param response 
-   * @returns results 
+   * @param response
+   * @returns results
    */
   private extractResults(response: string): SearchResult<CadastreRenoFeature>[] {
     const textResults = response.split('<br />');
@@ -123,7 +123,7 @@ export class CadastreRenoSearchSource extends SearchSource implements TextSearch
 
   /**
    * Convert text result of response to data structure SearchResult
-   * @param cadastre 
+   * @param cadastre
    * @returns SearchResult of CadastreRenoFeature
    */
   private dataToResult(cadastre: string): SearchResult<CadastreRenoFeature> {

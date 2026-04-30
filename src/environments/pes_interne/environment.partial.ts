@@ -7,9 +7,9 @@ import { ContextServiceOptions } from '@igo2/context';
 import { LanguageOptions } from '@igo2/core/language';
 import { CatalogServiceOptions, Projection, SearchSourceOptions } from '@igo2/geo';
 
-import { ApiConfig } from '../../../src/lib/core/api/api.interfaces';
-import { ContextApiConfig } from '../../../src/lib/context/shared/context.interfaces';
-import { ClientApiConfig } from '../../../src/apps/pes/modules/client/shared/client.interfaces';
+import { ApiConfig } from 'src/lib/core/api/api.interfaces';
+import { ContextApiConfig } from 'src/lib/context/shared/context.interfaces';
+import { ClientApiConfig } from 'src/apps/pes/modules/client/shared/client.interfaces';
 
 export interface IgoEnvironment {
   projections?: Projection[];

@@ -1,4 +1,4 @@
-import { DomainChoicesResponseItem } from '../../../../../src/lib/core/domain';
+import { DomainChoicesResponseItem } from 'src/lib/core/domain';
 
 export interface ClientSchemaApiConfig {
   list: string;

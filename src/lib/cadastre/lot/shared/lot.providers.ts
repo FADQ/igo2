@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from '@igo2/core/config';
-import { ApiService } from '../../../../../src/lib/core/api';
+import { ApiService } from 'src/lib/core/api';
 import { CadastreLotService } from './lot.service';
 
 export function lotServiceFactory(

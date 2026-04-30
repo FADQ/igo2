@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { ApiService } from '../../../../../src/lib/core/api';
+import { ApiService } from 'src/lib/core/api';
 import {
   LotResponseItem,
   LotApiConfig,

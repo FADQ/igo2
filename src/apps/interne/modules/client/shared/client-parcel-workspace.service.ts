@@ -21,7 +21,7 @@ import {
   createClientDefaultSelectionStyle,
   FeatureStoreFilterNotOwnedStrategy,
   parcelElementsEnabledInContext
-} from '../../../../../../src/lib/client';
+} from 'src/lib/client';
 
 import { ClientParcelTableService } from './client-parcel-table.service';
 

@@ -4,9 +4,7 @@ import { EntityStore } from '@igo2/common/entity';
 import { UniqueClientSchemaType } from '../../schema/shared/client-schema.enums';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import {
-    ClientSchemaElement,
-    ClientSchemaElementType,
-    ClientSchemaElementTypes
+    ClientSchemaElement
   } from './client-schema-element.interfaces';
 /**
  * Validates only one label

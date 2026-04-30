@@ -173,7 +173,7 @@ export class ClientSchemaElementCreateComponent
     this.form$.next(form);
 
     const anneeImageField = this.getAnneeImageField();
-    anneeImageField.control.value
+    anneeImageField.control.value;
     if (anneeImageField !== undefined) {
       let imageYear = getAnneeImageFromMap(this.map);
       if (imageYear !== undefined) {

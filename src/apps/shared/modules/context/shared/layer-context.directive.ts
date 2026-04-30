@@ -9,10 +9,11 @@ import {
   Layer,
   LayerService,
   LayerOptions,
-  IgoMap
+  IgoMap,
+  AnyLayer
 } from '@igo2/geo';
 
-import { ContextService, DetailedContext  } from '@igo2/context';
+import { ContextService, DetailedContext } from '@igo2/context';
 
 @Directive({
   selector: '[fadqLayerContext]'
@@ -65,9 +66,9 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
       return;
     }
     if (this.removeLayersOnContextChange === true) {
-      this.map.removeAllLayers();
+      this.map.layerController.reset();
     } else {
-      this.map.removeLayers(this.contextLayers);
+      this.contextLayers.forEach((layer: AnyLayer) => this.map.layerController.remove(layer));
     }
     this.contextLayers = [];
 
@@ -76,17 +77,20 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
     }));
 
     layersAndIndex$
-      .subscribe((layers: Layer[]) => {
+      .subscribe((layers: (Layer | undefined)[]) => {
         layers = layers
-          .filter((layer: Layer) => layer !== undefined)
+          .filter((layer: Layer | undefined) => layer !== undefined)
           .map((layer) => {
             layer.visible = this.computeLayerVisibilityFromUrl(layer);
             layer.zIndex = layer.zIndex;
 
             return layer;
           });
-        this.contextLayers.push(...layers);
-        this.map.addLayers(layers);
+        const validLayers = layers.filter(layer => layer !== undefined);
+        this.contextLayers.push(...validLayers);
+        validLayers.forEach(
+          (layer: Layer) => this.map.layerController.add(layer)
+        );
       });
   }
 
@@ -134,7 +138,7 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
       // After, managing named layer by id (context.json OR id from datasource)
       visiblelayers = visibleOnLayersParams.split(',');
       invisiblelayers = visibleOffLayersParams.split(',');
-      if (visiblelayers.indexOf(currentLayerid) > -1  || visiblelayers.indexOf(currentLayerid.toString()) > -1) {
+      if (visiblelayers.indexOf(currentLayerid) > -1 || visiblelayers.indexOf(currentLayerid.toString()) > -1) {
         visible = true;
       }
       if (invisiblelayers.indexOf(currentLayerid) > -1 || invisiblelayers.indexOf(currentLayerid.toString()) > -1) {

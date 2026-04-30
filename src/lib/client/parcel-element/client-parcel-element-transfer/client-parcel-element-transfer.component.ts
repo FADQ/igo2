@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { Subscription, BehaviorSubject, throwError } from 'rxjs';
+import { BehaviorSubject, throwError } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { Message, MessageType } from '@igo2/core/message';

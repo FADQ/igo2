@@ -8,7 +8,7 @@ import {
   OnInit
 } from '@angular/core';
 
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { LanguageService } from '@igo2/core/language';
 import { Message, MessageType } from '@igo2/core/message';

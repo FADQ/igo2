@@ -238,7 +238,7 @@ export function updateElementTypeChoices(geometryType: string,clientSchemaElemen
  * @param form$ Form to display the schema element informations
  * @returns The field to contain the year of the image used to do the schema element
  */
-export function  getAnneeImageField(form$: BehaviorSubject<Form>): FormField {
+export function getAnneeImageField(form$: BehaviorSubject<Form>): FormField {
   const fields = getAllFormFields(form$.value);
   return fields.find((field: FormField) => {
     return field.name === 'properties.anneeImage';
@@ -259,7 +259,7 @@ export function processAnneeImageField (
   anneeImageField?: FormField) {
   let imageYear = getAnneeImageFromMap(map);
   if (imageYear !== undefined) {
-    schemaElement.properties.anneeImage = imageYear
+    schemaElement.properties.anneeImage = imageYear;
     if (anneeImageField !== undefined) {
       anneeImageField.control.setValue(imageYear);
     }

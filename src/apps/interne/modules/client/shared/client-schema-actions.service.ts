@@ -8,7 +8,6 @@ import { Widget } from '@igo2/common/widget';
 
 import {
   ClientSchema,
-  ClientSchemaType,
   UniqueClientSchemaType,
   ClientSchemaCreateWidget,
   ClientSchemaUpdateWidget,
@@ -16,8 +15,8 @@ import {
   ClientSchemaDuplicateWidget,
   ClientSchemaTransferWidget,
   ClientSchemaFileManagerWidget
-} from '../../../../../../src/lib/client';
-import { every } from '../../../../../../src/lib/utils';
+} from 'src/lib/client';
+import { every } from 'src/lib/utils';
 
 import { ClientController } from './client-controller';
 

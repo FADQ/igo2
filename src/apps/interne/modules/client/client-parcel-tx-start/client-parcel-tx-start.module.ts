@@ -4,8 +4,8 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { IgoLanguageModule } from '@igo2/core/language';
 
-import { FadqLibCardPanelModule } from '../../../../../../src/lib/misc/card-panel/card-panel.module';
-import { FadqLibMessageInlineModule } from '../../../../../../src/lib/message/message-inline/message-inline.module';
+import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
+import { FadqLibMessageInlineModule } from 'src/lib/message/message-inline/message-inline.module';
 import { ClientParcelTxStartComponent } from './client-parcel-tx-start.component';
 
 /**

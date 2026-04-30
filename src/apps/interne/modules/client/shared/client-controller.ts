@@ -4,7 +4,7 @@ import { concatMap, map, skip, tap } from 'rxjs/operators';
 import { LanguageService } from '@igo2/core/language';
 import { Message, MessageType } from '@igo2/core/message';
 import { EntityRecord, EntityStore, EntityTransaction } from '@igo2/common/entity';
-import { WorkspaceStore } from '@igo2/common/workspace'
+import { WorkspaceStore } from '@igo2/common/workspace';
 import {
   FeatureMotion,
   FeatureStore,
@@ -37,7 +37,7 @@ import {
   createParcelLayerStyle,
   getDiagramsFromParcels,
   getDiagramsFromParcelElements
-} from '../../../../../../src/lib/client';
+} from 'src/lib/client';
 
 export interface ClientControllerOptions {
   map: IgoMap;

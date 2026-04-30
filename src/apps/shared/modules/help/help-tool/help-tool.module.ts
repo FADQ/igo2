@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { IgoLanguageModule } from '@igo2/core/language';
 
-import { TOOL_CONFIG } from '../../../../../../src/lib/core/core.module';
+import { TOOL_CONFIG } from 'src/lib/core/core.module';
 
 import { HelpToolComponent } from './help-tool.component';
 

@@ -11,12 +11,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { EntityStore } from '@igo2/common/entity';
 
-import {
-  Client,
-  ClientService,
-  ClientParcelYear,
-  ClientParcelTxService
-} from '../../../../../../src/lib/client';
+import * as client from 'src/lib/client';
 
 import { ClientParcelTxDeleteDialogComponent } from '../client-parcel-tx-delete-dialog/client-parcel-tx-delete-dialog.component';
 import { ClientState } from '../client.state';
@@ -36,8 +31,8 @@ export class ClientParcelTxToolComponent implements OnInit, OnDestroy {
   /**
    * Client store
    */
-  readonly clients: EntityStore<Client> = new EntityStore([], {
-    getKey: (client: Client) => client.info.numero
+  readonly clients: EntityStore<client.Client> = new EntityStore([], {
+    getKey: (client: client.Client) => client.info.numero
   });
 
   /**
@@ -56,7 +51,7 @@ export class ClientParcelTxToolComponent implements OnInit, OnDestroy {
    * Store holding all the availables "parcel years"
    * @internal
    */
-  get parcelYears(): EntityStore<ClientParcelYear> {
+  get parcelYears(): EntityStore<client.ClientParcelYear> {
     return this.clientState.parcelYears;
   }
 
@@ -69,8 +64,8 @@ export class ClientParcelTxToolComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private clientService: ClientService,
-    private clientParcelTxService: ClientParcelTxService,
+    private clientService: client.ClientService,
+    private clientParcelTxService: client.ClientParcelTxService,
     private clientState: ClientState,
     private dialog: MatDialog,
     private cdRef: ChangeDetectorRef
@@ -83,17 +78,17 @@ export class ClientParcelTxToolComponent implements OnInit, OnDestroy {
    */
   ngOnInit() {
     this.clients.view.sort({
-      valueAccessor: (client: Client) => client.tx.date,
+      valueAccessor: (client: client.Client) => client.tx.date,
       direction: 'desc'
     });
 
     this.parcelYear$$ = this.clientState.parcelYear$
-      .subscribe((parcelYear: ClientParcelYear) => this.clients.view.filter(
-        (client: Client) => client.tx.annee === parcelYear.annee
+      .subscribe((parcelYear: client.ClientParcelYear) => this.clients.view.filter(
+        (client: client.Client) => client.tx.annee === parcelYear.annee
       ));
 
     this.clientParcelTxService.getClientsInTx()
-      .subscribe((clients: Client[]) => this.clients.load(clients));
+      .subscribe((clients: client.Client[]) => this.clients.load(clients));
 
     this.activeClients$$ = this.clientState.controllers.count$
       .subscribe((count: number) => {
@@ -115,10 +110,10 @@ export class ClientParcelTxToolComponent implements OnInit, OnDestroy {
    * @param event Added event
    * @internal
    */
-  onClientAddedChange(event: {added: boolean, client: Client}) {
+  onClientAddedChange(event: {added: boolean, client: client.Client}) {
     const clientNum = event.client.info.numero;
     if (event.added === true) {
-      this.clientService.getClientByNum(clientNum).subscribe((client: Client) => {
+      this.clientService.getClientByNum(clientNum).subscribe((client: client.Client) => {
         this.clientState.setClientNotFound(false);
         this.clientState.addClient(client);
       });
@@ -134,7 +129,7 @@ export class ClientParcelTxToolComponent implements OnInit, OnDestroy {
    * @return client Client
    * @internal
    */
-  onDeleteTx(client: Client) {
+  onDeleteTx(client: client.Client) {
     const controller = this.clientState.controllers.get(client.info.numero);
     const data = {
       store: this.clients,
@@ -150,7 +145,7 @@ export class ClientParcelTxToolComponent implements OnInit, OnDestroy {
    * @return Whther a client is added
    * @internal
    */
-  clientIsAdded(client: Client): boolean {
+  clientIsAdded(client: client.Client): boolean {
     const controller = this.clientState.controllers.get(client.info.numero);
     return controller !== undefined;
   }

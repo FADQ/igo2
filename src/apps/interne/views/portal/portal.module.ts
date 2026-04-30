@@ -8,7 +8,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 
 import { IgoLanguageModule } from '@igo2/core/language';
 import { IgoActionModule } from '@igo2/common/action';
-import { IgoBackdropModule } from '@igo2/common/backdrop'
+import { IgoBackdropModule } from '@igo2/common/backdrop';
 import { IgoContextMenuModule } from '@igo2/common/context-menu';
 import { IgoEntityModule } from '@igo2/common/entity';
 import { IgoPanelModule } from '@igo2/common/panel';

@@ -7,8 +7,8 @@ import { concatMap, map, catchError } from 'rxjs/operators';
 
 import { EntityOperation, EntityTransaction } from '@igo2/common/entity';
 
-import { ApiService } from '../../../../../src/lib/core/api';
-import { TransactionSerializer, TransactionData } from '../../../../../src/lib/utils/transaction';
+import { ApiService } from 'src/lib/core/api';
+import { TransactionSerializer, TransactionData } from 'src/lib/utils/transaction';
 
 import { transactionDataToSaveParcelElementData } from './client-parcel-element.utils';
 import { Client } from '../../shared/client.interfaces';

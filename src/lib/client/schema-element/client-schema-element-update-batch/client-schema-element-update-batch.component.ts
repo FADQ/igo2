@@ -12,7 +12,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { EntityTransaction } from '@igo2/common/entity';
-import { Form, FormField, FormFieldSelectInputs, getAllFormFields, FormFieldSelectChoice } from '@igo2/common/form';
+import { Form, FormField, FormFieldSelectInputs, getAllFormFields } from '@igo2/common/form';
 import { WidgetComponent } from '@igo2/common/widget';
 import { OnUpdateInputs } from '@igo2/common/dynamic-component';
 

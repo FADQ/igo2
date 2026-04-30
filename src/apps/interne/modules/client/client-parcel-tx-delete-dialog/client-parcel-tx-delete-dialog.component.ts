@@ -12,8 +12,8 @@ import {
   Client,
   ClientParcelTxService,
   ClientInReconciliationResponseData
-} from '../../../../../../src/lib/client';
-import { SubmitStep, SubmitHandler } from '../../../../../../src/lib/utils';
+} from 'src/lib/client';
+import { SubmitStep, SubmitHandler } from 'src/lib/utils';
 
 import { ClientController } from '../shared/client-controller';
 
