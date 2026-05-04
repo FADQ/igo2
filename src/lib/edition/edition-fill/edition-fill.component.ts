@@ -15,7 +15,9 @@ import {
   EntityRecord,
   EntityTransaction,
   EntityTableTemplate,
-  getEntityRevision
+  getEntityRevision,
+  EntityStore,
+  EntityState
 } from '@igo2/common/entity';
 import { LanguageService } from '@igo2/core/language';
 import { Message, MessageType } from '@igo2/core/message';
@@ -220,9 +222,14 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
   private addToTransaction(feature: Feature) {
     const getOperationTitle = this.getOperationTitle ? this.getOperationTitle : getDefaultOperationTitle;
     const operationTitle = getOperationTitle(feature, this.languageService);
-    this.transaction.update(this.feature, feature, this.store, {
-      title: operationTitle
-    });
+    this.transaction.update(
+      this.feature,
+      feature,
+      this.store as EntityStore<object, EntityState>,
+      {
+        title: operationTitle
+      }
+    );
   }
 
   /**
@@ -231,8 +238,8 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
    * @returns Exclusion store
    */
   private createExclusionStore(): FeatureStore {
-    const getKey = (exclusion: Feature) => exclusion.properties.id;
-    const exclusionStore = new FeatureStore([], {
+    const getKey = (exclusion: object): number => (exclusion as Feature).properties.id as number;
+    const exclusionStore = new FeatureStore<Feature>([], {
       map: this.map,
       getKey
     });
@@ -247,7 +254,7 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
       getFeatureId: getKey,
       motion: FeatureMotion.None
     });
-    exclusionStore.addStrategy(loadingStrategy, true);
+    exclusionStore.addStrategy(loadingStrategy as any, true);
 
     const selectionStrategy = new FeatureStoreSelectionStrategy({
       map: this.map,
@@ -255,7 +262,7 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
       motion: FeatureMotion.None,
       getFeatureId: getKey
     });
-    exclusionStore.addStrategy(selectionStrategy, true);
+    exclusionStore.addStrategy(selectionStrategy as any);
 
     const exclusionCoordinates = this.feature.geometry.coordinates.slice(1);
     const exclusions = exclusionCoordinates.map((coordinates: number[], index: number) => {
