@@ -28,7 +28,7 @@ export class ClientParcelTxService {
 
   getClientsInTx(): Observable<Client[]> {
     const url = this.apiService.buildUrl(this.apiConfig.clients);
-    return this.http.get(url)
+    return this.http.get<ClientsInParcelTxGetResponse>(url)
       .pipe(
         map((response: ClientsInParcelTxGetResponse) => {
           return this.extractClientsFromClientsInTxResponse(response);
@@ -41,7 +41,7 @@ export class ClientParcelTxService {
       clientNum: client.info.numero,
       annee
     });
-    return this.http.get(url)
+    return this.http.get<ClientParcelTxActivateResponse>(url)
       .pipe(
         map((response: ClientParcelTxActivateResponse) => {
           return response.data.resultat;
@@ -71,7 +71,7 @@ export class ClientParcelTxService {
       annee
     });
 
-    return this.http.get(url).pipe(
+    return this.http.get<ClientInReconciliationResponse>(url).pipe(
       map((response: ClientInReconciliationResponse) => {
         return response.data.map(item => this.listItemToClient(item));
       })
@@ -96,7 +96,7 @@ export class ClientParcelTxService {
   }
 
   private extractClientsFromClientsInTxResponse(response: ClientsInParcelTxGetResponse): Client[] {
-    return response.data.map((item: ClientInParcelTx) => ({
+    return response.data.map((item: ClientInParcelTx): Client => ({
       info: {
         numero: item.noClient,
         nom: item.nomClient,
