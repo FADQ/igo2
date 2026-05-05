@@ -56,6 +56,8 @@ export interface ClientSchemaElementTypes {
   Polygon: ClientSchemaElementType[];
 }
 
+export type ClientSchemaElementGeometryType = keyof ClientSchemaElementTypes;
+
 export interface ClientSchemaElementTypesResponse {
   data: {
     lstTypeElementPoint: ClientSchemaElementTypesResponseItem[];

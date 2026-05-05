@@ -76,6 +76,7 @@
               "@turf/invariant",
               "@turf/line-intersect",
               "@turf/union",
+              "@turf/truncate",
               "pbf",
               "geojson-rbush",
               "minimatch",

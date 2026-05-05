@@ -1,5 +1,5 @@
 import * as olstyle from 'ol/style';
-import OlFeature from 'ol/Feature';
+import OlFeature, { FeatureLike } from 'ol/Feature';
 import OlPolygon from 'ol/geom/Polygon';
 
 import { FormFieldSelectChoice } from '@igo2/common/form';
@@ -59,7 +59,7 @@ export function createParcelLayer(client: Client): VectorLayer {
 
 export function createPerClientParcelLayerStyle(
   color: [number, number, number]
-): (olFeature: OlFeature<OlPolygon>, resolution: number) => olstyle.Style {
+): (olFeature: FeatureLike, resolution: number) => olstyle.Style {
 
   const style = new olstyle.Style({
     stroke: new olstyle.Stroke({
@@ -72,13 +72,23 @@ export function createPerClientParcelLayerStyle(
     text: createOlTextStyle()
   });
 
-  return (function(olFeature: OlFeature<OlPolygon>, resolution: number) {
-    style.getText().setText(getParcelFeatureText(olFeature, resolution));
+  return function (feature: FeatureLike, resolution: number) {
+    const olFeature = feature as OlFeature<OlPolygon>;
+
+    style.getText().setText(
+      getParcelFeatureText(olFeature, resolution)
+    );
+
     return style;
-  });
+  };
+
+  // return (function(olFeature: OlFeature<OlPolygon>, resolution: number) {
+  //   style.getText().setText(getParcelFeatureText(olFeature, resolution));
+  //   return style;
+  // });
 }
 
-export function createParcelLayerStyle(): (olFeature: OlFeature<OlPolygon>, resolution: number) => olstyle.Style {
+export function createParcelLayerStyle(): (olFeature: FeatureLike, resolution: number) => olstyle.Style {
   const style = new olstyle.Style({
     stroke: new olstyle.Stroke({
       width: 2
@@ -87,16 +97,16 @@ export function createParcelLayerStyle(): (olFeature: OlFeature<OlPolygon>, reso
     text: createOlTextStyle()
   });
 
-  return (function(olFeature: OlFeature<OlPolygon>, resolution: number) {
-    const color = getParcelFeatureColor(olFeature);
+  return (function(feature: FeatureLike, resolution: number) {
+    const color = getParcelFeatureColor(feature);
     style.getFill().setColor(color.concat([0]));
     style.getStroke().setColor(color);
-    style.getText().setText(getParcelFeatureText(olFeature, resolution));
+    style.getText().setText(getParcelFeatureText(feature, resolution));
     return style;
   });
 }
 
-function getParcelFeatureText(olFeature: OlFeature<OlPolygon>, resolution: number): string {
+function getParcelFeatureText(olFeature: FeatureLike, resolution: number): string {
   const maxResolution = 14;
   if (resolution > maxResolution) {
     return '';
@@ -104,7 +114,7 @@ function getParcelFeatureText(olFeature: OlFeature<OlPolygon>, resolution: numbe
   return olFeature.get('noParcelleAgricole');
 }
 
-function getParcelFeatureColor(olFeature: OlFeature<OlPolygon>) {
+function getParcelFeatureColor(olFeature: FeatureLike) {
   return ClientRelationColors['' + olFeature.get('relation')];
 }
 

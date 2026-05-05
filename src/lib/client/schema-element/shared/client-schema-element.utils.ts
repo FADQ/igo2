@@ -3,7 +3,7 @@ import { BehaviorSubject} from 'rxjs';
 import * as olstyle from 'ol/style';
 import OlPolygon from 'ol/geom/Polygon';
 import OlSimpleGeometry from 'ol/geom/SimpleGeometry';
-import OlFeature from 'ol/Feature';
+import OlFeature, { FeatureLike } from 'ol/Feature';
 import OlGeoJSON from 'ol/format/GeoJSON';
 import * as olFormat from 'ol/format';
 
@@ -32,9 +32,11 @@ import {
   ClientSchemaElement,
   ClientSchemaElementType,
   ClientSchemaElementTypes,
-  ClientSchemaElementSaveData
+  ClientSchemaElementSaveData,
+  ClientSchemaElementGeometryType
 } from './client-schema-element.interfaces';
 import { getAnneeImageFromMap } from '../../shared/client.utils';
+import { StyleFunction } from 'ol/style/Style';
 
 export function computeSchemaElementArea(element: ClientSchemaElement): number {
   if (element.geometry.type !== 'Polygon') { return; }
@@ -88,9 +90,19 @@ export function createSchemaElementLayer(client: Client): VectorLayer {
   });
 }
 
+function getOlTypes(olFeature: OlFeature<OlSimpleGeometry>): 'Point' | 'LineString' | 'Polygon' {
+  const rawType = olFeature.getGeometry().getType();
+
+  if (rawType.includes('Point')) return 'Point';
+  if (rawType.includes('LineString')) return 'LineString';
+  if (rawType.includes('Polygon')) return 'Polygon';
+
+  throw new Error(`Unsupported geometry type: ${rawType}`);
+}
+
 export function createSchemaElementLayerStyle(
   types: ClientSchemaElementTypes
-): (olFeature: OlFeature<OlSimpleGeometry>, resolution: number) => olstyle.Style {
+): StyleFunction {
   const styles = {
     'Point': new olstyle.Style({
       text: createOlTextStyle()
@@ -111,14 +123,18 @@ export function createSchemaElementLayerStyle(
     }),
   };
 
-  return (function(olFeature: OlFeature<OlSimpleGeometry>, resolution: number) {
-    const geometryType = olFeature.getGeometry().getType();
+  return function (feature: FeatureLike, resolution: number): olstyle.Style {
+    const olFeature = feature as OlFeature<OlSimpleGeometry>;
+
+    const geometryType = getOlTypes(olFeature);
     const elementType = olFeature.get('typeElement');
-    const type = (types[geometryType] || []).find((_type: ClientSchemaElementType) => {
-      return _type.value === elementType;
-    });
+
+    const type = (types[geometryType] || []).find(
+      (_type: ClientSchemaElementType) => _type.value === elementType
+    );
 
     const style = styles[geometryType];
+
     if (geometryType === 'Point') {
       style.setImage(createSchemaPointShape(type));
       updateSchemaPointText(type, style.getText());
@@ -127,10 +143,11 @@ export function createSchemaElementLayerStyle(
       style.getFill().setColor(color.concat([0.3]));
       style.getStroke().setColor(color);
     }
+
     style.getText().setText(getSchemaElementFeatureText(olFeature, resolution));
 
     return style;
-  });
+  };
 }
 
 function getSchemaElementFeatureText(olFeature: OlFeature<OlSimpleGeometry>, resolution: number): string {
@@ -142,14 +159,18 @@ function getSchemaElementFeatureText(olFeature: OlFeature<OlSimpleGeometry>, res
 }
 
 function createSchemaPointShape(type: ClientSchemaElementType): olstyle.Circle | olstyle.RegularShape {
+  type SchemaPointTypeCode = 'CAG' | 'CRI' | 'SIL';
   const typeCode = type ? type.value : undefined;
   const color = type ? type.color : getSchemaElementDefaultColor();
-  const factories = {
-    'CAG': createCAGShape,
-    'CRI': createCRIShape,
-    'SIL': createSILShape
+  const factories: Record<SchemaPointTypeCode, (color: [number, number, number]) => olstyle.RegularShape> = {
+    CAG: createCAGShape,
+    CRI: createCRIShape,
+    SIL: createSILShape
   };
-  const factory = factories[typeCode] || createDefaultPointShape;
+  const factory = typeCode && typeCode in factories
+    ? factories[typeCode as SchemaPointTypeCode]
+    : createDefaultPointShape;
+
   return factory(color);
 }
 
@@ -209,7 +230,7 @@ function createSILShape(color: [number, number, number]): olstyle.RegularShape {
   });
 }
 
-function getSchemaElementDefaultColor() {
+function getSchemaElementDefaultColor(): [number, number, number] {
   return [128, 21, 21];
 }
 
@@ -223,7 +244,9 @@ export function transactionDataToSaveSchemaElementData(
   };
 }
 
-export function updateElementTypeChoices(geometryType: string,clientSchemaElementService: ClientSchemaElementService, schema: ClientSchema, elementTypeField: FormField<FormFieldSelectInputs>) {
+export function updateElementTypeChoices(geometryType: ClientSchemaElementGeometryType,
+  clientSchemaElementService: ClientSchemaElementService,
+   schema: ClientSchema, elementTypeField: FormField<FormFieldSelectInputs>) {
   clientSchemaElementService
     .getSchemaElementTypes(schema.type)
     .subscribe((schemaElementTypes: ClientSchemaElementTypes) => {

@@ -1,5 +1,5 @@
 import * as olstyle from 'ol/style';
-import OlFeature from 'ol/Feature';
+import OlFeature, { FeatureLike } from 'ol/Feature';
 import OlPolygon from 'ol/geom/Polygon';
 import OlGeoJSON from 'ol/format/GeoJSON';
 import turfUnion from '@turf/union';
@@ -24,6 +24,7 @@ import {
   ClientParcelElementMessage,
   ClientParcelElementSaveData
 } from './client-parcel-element.interfaces';
+import { StyleFunction } from 'ol/style/Style';
 
 export function parcelElementsEnabledInContext(context: Context) {
   return context.uri === 'mesurage' || (context as any).mesurage === true;
@@ -62,7 +63,7 @@ export function createParcelElementLayer(client: Client): VectorLayer {
 
 export function createParcelElementLayerStyle(
   color: [number, number, number]
-): (olFeature: OlFeature<OlPolygon>, resolution: number) => olstyle.Style {
+): StyleFunction {
   const olStyle = new olstyle.Style({
     fill: new olstyle.Fill({
       color: color.concat([0])
@@ -85,8 +86,11 @@ export function createParcelElementLayerStyle(
     text: createOlTextStyle()
   });
 
-  return (function(olFeature: OlFeature<OlPolygon>, resolution: number) {
+  return function (feature: FeatureLike, resolution: number): olstyle.Style {
+    const olFeature = feature as OlFeature<OlPolygon>;
+
     let olText;
+
     if (olFeature.get('noOwner') === true) {
       olText = olNoOwnerStyle.getText();
       olText.setText(olFeature.get('annee').toString());
@@ -98,15 +102,14 @@ export function createParcelElementLayerStyle(
     olText.setText(getParcelElementFeatureText(olFeature, resolution));
 
     const messages = olFeature.get('messages') || [];
-    const hasError = messages.some((message: ClientParcelElementMessage) => message.severite === 'S');
-    if (hasError) {
-      olTextFill.setColor('#f44336');
-    } else {
-      olTextFill.setColor('#000');
-    }
+    const hasError = messages.some(
+      (message: ClientParcelElementMessage) => message.severite === 'S'
+    );
+
+    olTextFill.setColor(hasError ? '#f44336' : '#000');
 
     return olStyle;
-  });
+  };
 }
 
 function getParcelElementFeatureText(olFeature: OlFeature<OlPolygon>, resolution: number): string {
@@ -140,10 +143,11 @@ function getUniqueParcelElementMessages(
   parcelElement: ClientParcelElement
 ): ClientParcelElementMessage[] {
   const messages = parcelElement.properties.messages;
-  const messagesObject = messages.reduce((acc: object, message: ClientParcelElementMessage) => {
-    acc[message.id] = message;
-    return acc;
-  }, {} as {[key: string]: ClientParcelElementMessage});
+
+  const messagesObject = Object.fromEntries(
+    messages.map(m => [m.id, m])
+  );
+
   return Object.values(messagesObject);
 }
 

@@ -3,7 +3,7 @@ import { concatMap, map, skip, tap } from 'rxjs/operators';
 
 import { LanguageService } from '@igo2/core/language';
 import { Message, MessageType } from '@igo2/core/message';
-import { EntityRecord, EntityStore, EntityTransaction } from '@igo2/common/entity';
+import { EntityRecord, EntityStore, EntityStoreStrategy, EntityTransaction } from '@igo2/common/entity';
 import { WorkspaceStore } from '@igo2/common/workspace';
 import {
   FeatureMotion,
@@ -11,6 +11,8 @@ import {
   FeatureStoreLoadingStrategy,
   IgoMap
 } from '@igo2/geo';
+
+import { asWorkspaceObject } from '@lib/utils/workspaces';
 
 import {
   Client,
@@ -301,7 +303,7 @@ export class ClientController {
     this.initParcelElements();
     this.loadParcelElements();
     this.teardownParcels();
-    this.workspaces.activateWorkspace(this.parcelElementWorkspace);
+    this.workspaces.activateWorkspace(asWorkspaceObject(this.parcelElementWorkspace));
   }
 
   /**
@@ -321,7 +323,7 @@ export class ClientController {
     this.teardownParcelElements();
     this.initParcels();
     this.loadParcels();
-    this.workspaces.activateWorkspace(this.parcelWorkspace);
+    this.workspaces.activateWorkspace(asWorkspaceObject(this.parcelWorkspace));
   }
 
 
@@ -446,7 +448,7 @@ export class ClientController {
       .subscribe(() => {
         this.parcelsReloaded$$.unsubscribe();
         const loadingStrategy = this.parcelStore
-          .getStrategyOfType(FeatureStoreLoadingStrategy) as FeatureStoreLoadingStrategy;
+          .getStrategyOfType(FeatureStoreLoadingStrategy as unknown as typeof EntityStoreStrategy) as FeatureStoreLoadingStrategy;
         loadingStrategy.setMotion(FeatureMotion.None);
       });
 
@@ -457,7 +459,7 @@ export class ClientController {
       });
 
     this.parcelWorkspace.init();
-    this.workspaces.update(this.parcelWorkspace);
+    this.workspaces.update(asWorkspaceObject(this.parcelWorkspace));
   }
 
   /**
@@ -472,7 +474,7 @@ export class ClientController {
     if (this.workspaces.activeWorkspace$.value === this.parcelWorkspace) {
       this.workspaces.deactivateWorkspace();
     }
-    this.workspaces.delete(this.parcelWorkspace);
+    this.workspaces.delete(asWorkspaceObject(this.parcelWorkspace));
   }
 
   /**
@@ -524,7 +526,7 @@ export class ClientController {
       });
 
       this.parcelElementWorkspace.init();
-      this.workspaces.update(this.parcelElementWorkspace);
+      this.workspaces.update(asWorkspaceObject(this.parcelElementWorkspace));
   }
 
   /**
@@ -542,7 +544,7 @@ export class ClientController {
     if (this.workspaces.activeWorkspace$.value === this.parcelElementWorkspace) {
       this.workspaces.deactivateWorkspace();
     }
-    this.workspaces.delete(this.parcelElementWorkspace);
+    this.workspaces.delete(asWorkspaceObject(this.parcelElementWorkspace));
   }
 
   /**
@@ -594,7 +596,7 @@ export class ClientController {
       });
 
     this.schemaWorkspace.init();
-    this.workspaces.update(this.schemaWorkspace);
+    this.workspaces.update(asWorkspaceObject(this.schemaWorkspace));
   }
 
   /**
@@ -606,7 +608,7 @@ export class ClientController {
     if (this.workspaces.activeWorkspace$.value === this.schemaWorkspace) {
       this.workspaces.deactivateWorkspace();
     }
-    this.workspaces.delete(this.schemaWorkspace);
+    this.workspaces.delete(asWorkspaceObject(this.schemaWorkspace));
     this.clearSchema();
   }
 
@@ -676,7 +678,7 @@ export class ClientController {
       });
 
     this.schemaElementWorkspace.init();
-    this.workspaces.update(this.schemaElementWorkspace);
+    this.workspaces.update(asWorkspaceObject(this.schemaElementWorkspace));
   }
 
   /**
@@ -692,7 +694,7 @@ export class ClientController {
     if (this.workspaces.activeWorkspace$.value === this.schemaElementWorkspace) {
       this.workspaces.deactivateWorkspace();
     }
-    this.workspaces.delete(this.schemaElementWorkspace);
+    this.workspaces.delete(asWorkspaceObject(this.schemaElementWorkspace));
   }
 
   /**
@@ -705,7 +707,7 @@ export class ClientController {
       .pipe(
         concatMap((types: ClientSchemaElementTypes) => {
           return this.schemaElementService.getSchemaElements(schema).pipe(
-            map((elements: ClientSchemaElement[]) => [types, elements])
+            map((elements: ClientSchemaElement[]) => [types, elements] as [ClientSchemaElementTypes, ClientSchemaElement[]])
           );
         })
       )
