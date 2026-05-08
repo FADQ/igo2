@@ -34,7 +34,7 @@ export class CadastreLotService {
     const url = this.apiService.buildUrl(this.apiConfig.list);
 
     return this.http
-      .post(url, {lstIdCadastreOriginaire: [idCadastreOriginaire]})
+      .post<LotListResponse>(url, {lstIdCadastreOriginaire: [idCadastreOriginaire]})
       .pipe(
         map((response: LotListResponse) => {
           return this.convertResponseToListLotUnique(response);
@@ -69,7 +69,7 @@ export class CadastreLotService {
 
 
     return this.http
-      .post(url, { lstIdLotSecondaire: listLot })
+      .post<LotFeatureListResponse>(url, { lstIdLotSecondaire: listLot })
       .pipe(
         map((response: LotFeatureListResponse) => {
           return this.extractLotsFromListResponse(response);

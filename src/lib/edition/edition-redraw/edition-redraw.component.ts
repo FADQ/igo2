@@ -121,7 +121,7 @@ export class EditionRedrawComponent implements
   /**
    * Feature store
    */
-  @Input() store: FeatureStore;
+  @Input() store: FeatureStore<any>;
 
   /**
    * Transaction
@@ -171,7 +171,7 @@ export class EditionRedrawComponent implements
       this.applyDisabled$.next(!this.form.control.valid);
     });
 
-    const selectionStrategy = this.store.getStrategyOfType(FeatureStoreSelectionStrategy);
+    const selectionStrategy = this.store.getStrategyOfType(FeatureStoreSelectionStrategy as any);
     this.selectionStrategy = selectionStrategy as FeatureStoreSelectionStrategy;
     this.selectionStrategyIsActive = this.selectionStrategy.active;
     this.activateSelection();

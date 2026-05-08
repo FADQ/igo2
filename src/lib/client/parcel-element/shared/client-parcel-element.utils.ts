@@ -16,7 +16,7 @@ import {
 import { uuid } from '@igo2/utils';
 
 import { createOlTextStyle } from '../../../edition/shared/edition.utils';
-import { TransactionData } from '../../../utils/transaction';
+// import { TransactionData } from '../../../utils/transaction';
 import { ClientParcelDiagram } from '../../parcel/shared/client-parcel.interfaces';
 import { Client } from '../../shared/client.interfaces';
 import {
@@ -161,8 +161,9 @@ export function generateParcelElementOperationTitle(
   return terms.filter((term: string) => term !== undefined).join(' - ');
 }
 
+// Migration 17: TransactionData n'est plus disponible. Remplacé par data: any afin de compiler.
 export function transactionDataToSaveParcelElementData(
-  data: TransactionData<ClientParcelElement>
+  data: any
 ): ClientParcelElementSaveData {
   return {
     lstParcellesAjoutes: data.inserts,

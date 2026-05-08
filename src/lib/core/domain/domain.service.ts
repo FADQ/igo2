@@ -23,7 +23,7 @@ export class DomainService {
     }
 
     return this.http
-      .get(url)
+      .get<DomainChoicesResponse>(url)
       .pipe(
         map((response: DomainChoicesResponse) => {
           return this.extractChoicesFromResponse(response);

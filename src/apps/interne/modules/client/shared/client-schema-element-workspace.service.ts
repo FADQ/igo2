@@ -21,6 +21,9 @@ import {
 } from 'src/lib/client';
 
 import { ClientSchemaElementTableService } from './client-schema-element-table.service';
+import { asEntityStore } from '@lib/shared/entity/entity-store.adapter';
+import { entityKey } from '@lib/shared/entity/entity-key.utils';
+import { asStrategy } from '@lib/compatibility/strategy.adapter';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +39,7 @@ export class ClientSchemaElementWorkspaceService {
     return new ClientSchemaElementWorkspace({
       id: `fadq.${client.info.numero}-4-schema-element-workspace`,
       title: `${client.info.numero} - Éléments du schéma`,
-      entityStore: this.createSchemaElementStore(client, map),
+      entityStore: asEntityStore(this.createSchemaElementStore(client, map)),
       actionStore: this.createSchemaElementActionStore(),
       meta: {
         client,
@@ -50,17 +53,15 @@ export class ClientSchemaElementWorkspaceService {
 
   private createSchemaElementStore(client: Client, map: IgoMap): FeatureStore<ClientSchemaElement> {
     const store = new FeatureStore<ClientSchemaElement>([], {
-      getKey: (entity: ClientSchemaElement) => {
-        return entity.properties.idElementGeometrique || entity.meta.id;
-      },
+      getKey: entityKey<ClientSchemaElement>(e => e.properties.idElementGeometrique || e.meta.id),
       map
     });
 
     const layer = createSchemaElementLayer(client);
     store.bindLayer(layer);
 
-    store.addStrategy(this.createLoadingStrategy(), true);
-    store.addStrategy(this.createSelectionStrategy(client, map), false);
+    store.addStrategy(asStrategy(this.createLoadingStrategy()), true);
+    store.addStrategy(asStrategy(this.createSelectionStrategy(client, map)), false);
     store.addStrategy(this.createFilterSelectionStrategy(), false);
 
     return store;

@@ -15,6 +15,7 @@ import * as client from 'src/lib/client';
 
 import { ClientParcelTxDeleteDialogComponent } from '../client-parcel-tx-delete-dialog/client-parcel-tx-delete-dialog.component';
 import { ClientState } from '../client.state';
+import { entityKey } from '@lib/shared/entity/entity-key.utils';
 
 /**
  * Tool to display a list of clients with an associated tx
@@ -32,7 +33,7 @@ export class ClientParcelTxToolComponent implements OnInit, OnDestroy {
    * Client store
    */
   readonly clients: EntityStore<client.Client> = new EntityStore([], {
-    getKey: (client: client.Client) => client.info.numero
+    getKey: entityKey<client.Client>(e => e.info.numero)
   });
 
   /**

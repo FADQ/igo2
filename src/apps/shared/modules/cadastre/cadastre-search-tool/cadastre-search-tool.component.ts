@@ -41,8 +41,6 @@ export class CadastreSearchToolComponent implements OnInit {
   @Input() layerAlias: string;
   @Input() layerOptions: ImageLayerOptions;
 
-  private imageLayer = undefined;
-
   /**
    *Enabled  the search button
    */
@@ -403,18 +401,28 @@ export class CadastreSearchToolComponent implements OnInit {
     this.layerLot.dataSource.ol.addFeatures(this.featureListToOl(lotList));
   }
 
-  private showCadastreImageLayer(visibility: boolean ) {
+  private showCadastreImageLayer(visibility: boolean) {
     if (this.layerAlias && this.layerOptions === undefined) {
 
-      const layerCadastreImage: Layer = this.mapState.map.getLayerByAlias(this.layerAlias);
-      if (layerCadastreImage !== undefined) { layerCadastreImage.visible = visibility; }
+      const layerCadastreImage: Layer =
+        (this.mapState as any).map.getLayerByAlias(this.layerAlias);
+
+      if (layerCadastreImage !== undefined) {
+        layerCadastreImage.visible = visibility;
+      }
 
     } else if (this.layerOptions !== undefined) {
-      this.layerService.createAsyncLayer(this.layerOptions).subscribe((imageLayer: ImageLayer) => {
-        imageLayer.visible = visibility;
-        this.cadastreState.layerCadastreImage = imageLayer;
-        this.mapState.map.layerController.add(imageLayer);
-      } );
+
+      this.layerService.createAsyncLayer(this.layerOptions)
+        .subscribe((layer: Layer) => {
+
+          const imageLayer = layer as ImageLayer;
+
+          imageLayer.visible = visibility;
+          this.cadastreState.layerCadastreImage = imageLayer;
+          (this.mapState.map as any).layerController.add(imageLayer);
+
+        });
     }
   }
 

@@ -9,13 +9,13 @@ import {
   OnDestroy
 } from '@angular/core';
 
+import { FormControl } from '@angular/forms';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { skip } from 'rxjs/operators';
 
 import { LanguageService } from '@igo2/core/language';
 import { Message, MessageType } from '@igo2/core/message';
 import {
-  EntityRecord,
   EntityOperation,
   EntityOperationType,
   EntityTransaction,
@@ -23,14 +23,17 @@ import {
   EntityTableColumnRenderer,
   EntityTableButton,
   getEntityRevision,
+  EntityStore,
+  EntityRecord
 } from '@igo2/common/entity';
-import { WidgetComponent } from '@igo2/common/widget';
+
 import { FeatureStore } from '@igo2/geo';
 import { ObjectUtils } from '@igo2/utils';
 
 import { ClientParcelElement } from '../shared/client-parcel-element.interfaces';
 import { ClientParcelElementService } from '../shared/client-parcel-element.service';
 import { MultipartNoParcel } from './client-parcel-element-numbering-input.component';
+import { asEntityStore } from '@lib/compatibility/igo2-compat';
 
 @Component({
   selector: 'fadq-client-parcel-element-numbering',
@@ -38,78 +41,64 @@ import { MultipartNoParcel } from './client-parcel-element-numbering-input.compo
   styleUrls: ['./client-parcel-element-numbering.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientParcelElementNumberingComponent implements WidgetComponent, OnInit, OnDestroy {
+export class ClientParcelElementNumberingComponent implements OnInit, OnDestroy {
 
-  set value(value: MultipartNoParcel) { this.setValue(value); }
-  get value(): MultipartNoParcel { return this._value; }
-  private _value: MultipartNoParcel = {number: '', prefix: '', suffix: ''};
+  // 🎯 SINGLE SOURCE OF TRUTH
+  readonly valueControl = new FormControl<MultipartNoParcel>({
+    number: '',
+    prefix: '',
+    suffix: ''
+  }, { nonNullable: true });
 
-  /**
-   * Message
-   * @internal
-   */
-  message$: BehaviorSubject<Message> = new BehaviorSubject(undefined);
+  readonly message$ = new BehaviorSubject<Message | undefined>(undefined);
 
-  tableTemplate: EntityTableTemplate = {
+  private parcelElement$$?: Subscription;
+  private value$$?: Subscription;
+  private lastUpdate?: ClientParcelElement;
+
+  @Input() store!: FeatureStore<ClientParcelElement>;
+  @Input() transaction!: EntityTransaction;
+
+  @Output() complete = new EventEmitter<void>();
+  @Output() cancel = new EventEmitter<void>();
+
+  readonly subTransaction = new EntityTransaction();
+
+  // 🧾 TABLE TEMPLATE (requis par le HTML)
+  readonly tableTemplate: EntityTableTemplate = {
     selection: false,
     sort: false,
     columns: [
       {
         name: 'previous',
         title: 'Précédent',
-        valueAccessor: (operation: EntityOperation<ClientParcelElement>) => {
-          return operation.meta.previous;
+        valueAccessor: (entity: any) => {
+          const op = entity as EntityOperation<ClientParcelElement>;
+          return op.meta.previous;
         }
       },
       {
         name: 'current',
         title: 'Nouveau',
-        valueAccessor: (operation: EntityOperation<ClientParcelElement>) => {
-          return operation.meta.current;
+        valueAccessor: (entity: any) => {
+          const op = entity as EntityOperation<ClientParcelElement>;
+          return op.meta.current;
         }
       },
       {
         name: 'action',
         title: '',
         renderer: EntityTableColumnRenderer.ButtonGroup,
-        valueAccessor: (operation: EntityOperation<ClientParcelElement>): EntityTableButton[] => {
+        valueAccessor: (entity: any): EntityTableButton[] => {
+          const op = entity as EntityOperation<ClientParcelElement>;
           return [{
             icon: 'delete',
-            click: (_operation: EntityOperation<ClientParcelElement>) => {
-              this.deleteOperation(_operation);
-            }
+            click: () => this.deleteOperation(op)
           }];
         }
       }
     ]
   };
-
-  private parcelElement$$: Subscription;
-
-  private lastUpdate: ClientParcelElement;
-
-  /**
-   * Parcel element store
-   */
-  @Input() store: FeatureStore<ClientParcelElement>;
-
-  /**
-   * Parcel element transaction
-   */
-  @Input() transaction: EntityTransaction;
-
-  /**
-   * Event emitted on complete
-   */
-  @Output() complete = new EventEmitter<void>();
-
-  /**
-   * Event emitted on cancel
-   */
-  @Output() cancel = new EventEmitter<void>();
-
-  get subTransaction(): EntityTransaction { return this._subTransaction; }
-  private _subTransaction: EntityTransaction = new EntityTransaction();
 
   constructor(
     private clientParcelElementService: ClientParcelElementService,
@@ -118,35 +107,174 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
   ) {}
 
   ngOnInit() {
-    this.store.state.updateAll({selected: false});
+    this.store.state.updateAll({ selected: false });
 
     this.initValue();
 
+    // 🧠 validation réactive
+    this.value$$ = this.valueControl.valueChanges.subscribe(value => {
+      const [message, type] = this.validate(value);
+
+      if (!message) {
+        this.message$.next(undefined);
+      } else {
+        this.message$.next({
+          type,
+          text: message
+        });
+      }
+    });
+
     this.subTransaction.operations.view.sort({
       direction: 'desc',
-      valueAccessor: (operation: EntityOperation) => operation.meta.index
+      valueAccessor: (op: EntityOperation) => op.meta.index
     });
 
     this.parcelElement$$ = this.store.stateView
-      .firstBy$((record: EntityRecord<ClientParcelElement>) => record.state.selected === true)
+      .firstBy$((r: EntityRecord<ClientParcelElement>) => r.state.selected === true)
       .pipe(skip(1))
-      .subscribe((record: EntityRecord<ClientParcelElement>) => {
-        const parcelElement = record ? record.entity : undefined;
-        if (parcelElement !== undefined) {
-          this.onSelectParcelElement(parcelElement);
+      .subscribe(r => {
+        const entity = r?.entity;
+        if (entity) {
+          this.onSelectParcelElement(entity);
         }
       });
   }
 
   ngOnDestroy() {
-    this.parcelElement$$.unsubscribe();
+    this.parcelElement$$?.unsubscribe();
+    this.value$$?.unsubscribe();
   }
 
-  /**
-   * Implemented as part of OnUpdateInputs
-   */
-  onUpdateInputs() {
-    this.cdRef.detectChanges();
+  // 🎯 Helpers
+
+  private computeParcelElementNumber(value: MultipartNoParcel): string {
+    return [
+      value.prefix || '',
+      value.number || '',
+      value.suffix || ''
+    ].join('').toUpperCase();
+  }
+
+  private initValue() {
+    const allNumbers = this.store.all()
+      .map(e => parseInt(e.properties.noParcelleAgricole, 10))
+      .filter(n => !isNaN(n));
+
+    const max = allNumbers.length ? Math.max(...allNumbers) : 0;
+
+    this.valueControl.setValue({
+      prefix: '',
+      number: String(max + 1),
+      suffix: ''
+    }, { emitEvent: false });
+  }
+
+  private onSelectParcelElement(parcelElement: ClientParcelElement) {
+    if (this.lastUpdate?.meta.id === parcelElement.meta.id) return;
+
+    const value = this.valueControl.value;
+    const number = this.computeParcelElementNumber(value);
+
+    this.updateParcelElement(parcelElement, number);
+  }
+
+  private updateParcelElement(parcelElement: ClientParcelElement, number: string) {
+    const data = ObjectUtils.mergeDeep(parcelElement, {
+      properties: {
+        noParcelleAgricole: number
+      },
+      meta: {
+        revision: getEntityRevision(parcelElement) + 1
+      }
+    });
+
+    this.clientParcelElementService
+      .createParcelElement(data)
+      .subscribe(newEntity => {
+        this.addToSubTransaction(newEntity);
+        this.incrementValue();
+      });
+  }
+
+  private incrementValue() {
+    const v = this.valueControl.value;
+    const n = parseInt(v.number, 10);
+
+    if (!isNaN(n)) {
+      this.valueControl.setValue({
+        ...v,
+        number: String(n + 1)
+      }, { emitEvent: false });
+    }
+  }
+
+  private validate(value: MultipartNoParcel): [string | undefined, MessageType | undefined] {
+    const number = this.computeParcelElementNumber(value);
+
+    if (number.length > 4) {
+      return [
+        this.languageService.translate.instant(
+          'client.parcelElement.numbering.numberTooLong.error'
+        ),
+        MessageType.ERROR
+      ];
+    }
+
+    const all = this.store.all().map(e => e.properties.noParcelleAgricole);
+
+    if (all.includes(number)) {
+      return [
+        this.languageService.translate.instant(
+          'client.parcelElement.numbering.numberInUse.error'
+        ),
+        MessageType.ALERT
+      ];
+    }
+
+    return [undefined, undefined];
+  }
+
+  private addToSubTransaction(parcelElement: ClientParcelElement) {
+    const current = parcelElement.properties.noParcelleAgricole;
+    const source = this.store.get(parcelElement.meta.id);
+
+    const op = this.subTransaction.getOperationByEntity(parcelElement);
+    const previous = op?.meta.previous ?? source.properties.noParcelleAgricole;
+
+    this.subTransaction.update(
+      source,
+      parcelElement,
+      asEntityStore(this.store),
+      {
+        previous,
+        current,
+        index: this.computeOperationIndex()
+      }
+    );
+  }
+
+  private computeOperationIndex(): number {
+    const indexes = this.subTransaction.operations.all()
+      .map(o => o.meta.index);
+
+    return indexes.length ? Math.max(...indexes) + 1 : 0;
+  }
+
+  private deleteOperation(operation: EntityOperation<ClientParcelElement>) {
+    const op = operation as unknown as EntityOperation<any>;
+
+    const lastUpdateId =
+      this.lastUpdate === undefined ? undefined : this.lastUpdate.meta.id;
+
+    const parcelId = op.current.meta.id;
+
+    if (parcelId === lastUpdateId) {
+      this.store.state.update(this.lastUpdate, { selected: false });
+      this.lastUpdate = undefined;
+    }
+
+    this.subTransaction.rollbackOperations([op]);
   }
 
   onComplete() {
@@ -159,168 +287,27 @@ export class ClientParcelElementNumberingComponent implements WidgetComponent, O
     this.cancel.emit();
   }
 
-  private onSelectParcelElement(parcelElement: ClientParcelElement) {
-    if (this.lastUpdate !== undefined && parcelElement.meta.id === this.lastUpdate.meta.id) {
-      return;
-    }
-
-    const message = this.message$.value;
-    if (message !== undefined && message.type === MessageType.ERROR) {
-      return;
-    }
-
-    this.lastUpdate = parcelElement;
-    this.updateParcelElement(parcelElement);
-  }
-
-  private updateParcelElement(parcelElement: ClientParcelElement) {
-    const data = ObjectUtils.mergeDeep(parcelElement, {
-      properties: {
-        noParcelleAgricole: this.computeParcelElementNumber()
-      },
-      meta: {
-        revision: getEntityRevision(parcelElement) + 1
-      }
-    });
-
-    return this.clientParcelElementService
-      .createParcelElement(data)
-      .subscribe((newParcelElement: ClientParcelElement) => {
-        this.addToSubTransaction(newParcelElement);
-        this.incrementValue();
-      });
-  }
-
-  private computeParcelElementNumber(): string {
-    const value = this.value;
-    return [
-      value.prefix || '',
-      value.number || '',
-      value.suffix || ''
-    ].join('').toUpperCase();
-  }
-
-  private initValue() {
-    const allNumbers = this.store.all()
-      .map((parcelElement: ClientParcelElement) => {
-        return parseInt(parcelElement.properties.noParcelleAgricole, 10);
-      })
-      .filter((number: number) => !isNaN(number));
-    const maxNumber = allNumbers.length > 0 ? Math.max(...allNumbers) : 0;
-    this.setValueNumber(maxNumber + 1);
-  }
-
-  private incrementValue() {
-    const value = this.value;
-    const currentNumber = parseInt(value.number, 10);
-    if (!isNaN(currentNumber)) {
-      this.setValueNumber(currentNumber + 1);
-    }
-  }
-
-  private setValueNumber(number: number) {
-    const value = Object.assign({}, this.value, {number: '' + number});
-    this.setValue(value);
-  }
-
-  private setValue(value: MultipartNoParcel) {
-    this._value = value;
-    const [message, type] = this.validateValue();
-    if (message === undefined) {
-      this.message$.next(undefined);
-    } else {
-      this.message$.next({
-        type: type,
-        text: message
-      });
-    }
-  }
-
-  private validateValue(): [string | undefined, MessageType | undefined] {
-    const number = this.computeParcelElementNumber();
-
-    if (number.length > 4) {
-      return [
-        this.languageService.translate.instant('client.parcelElement.numbering.numberTooLong.error'),
-        MessageType.ERROR
-      ];
-    }
-
-    const allNumbers = this.store.all().map((parcelElement: ClientParcelElement) => {
-      return parcelElement.properties.noParcelleAgricole;
-    });
-
-    if (allNumbers.includes(number)) {
-      return [
-        this.languageService.translate.instant('client.parcelElement.numbering.numberInUse.error'),
-        MessageType.ALERT
-      ];
-    }
-
-    return [undefined, undefined];
-  }
-
-  private addToSubTransaction(parcelElement: ClientParcelElement) {
-    const current = parcelElement.properties.noParcelleAgricole;
-    const sourceParcelId = parcelElement.meta.id;
-    const sourceParcelElement = this.store.get(sourceParcelId);
-    const operation = this.subTransaction.getOperationByEntity(parcelElement);
-
-    let previous = sourceParcelElement.properties.noParcelleAgricole;
-    if (operation !== undefined) {
-      previous = operation.meta.previous;
-    }
-
-    this.subTransaction.update(sourceParcelElement, parcelElement, this.store, {
-      previous,
-      current,
-      index: this.computeOperationIndex()
-    });
-  }
-
-  private computeOperationIndex(): number {
-    const allIndexes = this.subTransaction.operations.all()
-      .map((operation: EntityOperation) => operation.meta.index);
-    const maxIndex = allIndexes.length > 0 ? Math.max(...allIndexes) : 0;
-    return maxIndex + 1;
-  }
-
-  private mergeSubTransaction() {
-    // The subtransaction only contains operation of the UPDATE type because we want
-    // to be able to rollback the numbering. If we number a parcel element that has not been saved
-    // yet (INSERT), we need to make sure that it stays an INSERT in the parent transaction.
-    // Merging the transaction using this.transaction.mergeTransaction(this.subTransaction)
-    // would result in that INSERT becoming an UPDATE with undesired side-effects
-    // (for example deleting that parcel before saving it wouldn't work).
-    // Because of that, we are forced to merge both transaction manually.
-
-    const operations = this.subTransaction.operations.all();
-    operations.forEach((operation: EntityOperation) => {
-      const current = operation.current as ClientParcelElement;
-      const previous = operation.previous as ClientParcelElement;
-      const parentOperation = this.transaction.getOperationByEntity(current);
-      if (parentOperation && parentOperation.type === EntityOperationType.Insert) {
-        this.transaction.insert(current, this.store, operation.meta);
-      } else {
-        this.transaction.update(previous, current, this.store, operation.meta);
-      }
-    });
-    this.subTransaction.clear();
-  }
-
   private rollbackSubTransaction() {
     this.subTransaction.rollback();
   }
 
-  private deleteOperation(operation: EntityOperation<ClientParcelElement>) {
-    const lastUpdateId = this.lastUpdate === undefined ? undefined : this.lastUpdate.meta.id;
-    const parcelId = operation.current.meta.id;
+  private mergeSubTransaction() {
+    const ops = this.subTransaction.operations.all();
 
-    if (parcelId === lastUpdateId) {
-      this.store.state.update(this.lastUpdate, {selected: false});
-      this.lastUpdate = undefined;
-    }
-    this.subTransaction.rollbackOperations([operation]);
+    ops.forEach(op => {
+      const current = op.current as ClientParcelElement;
+      const previous = op.previous as ClientParcelElement;
+
+      const parentOp = this.transaction.getOperationByEntity(current);
+      const store = this.store as unknown as EntityStore<object>;
+
+      if (parentOp?.type === EntityOperationType.Insert) {
+        this.transaction.insert(current, store, op.meta);
+      } else {
+        this.transaction.update(previous, current, store, op.meta);
+      }
+    });
+
+    this.subTransaction.clear();
   }
-
 }

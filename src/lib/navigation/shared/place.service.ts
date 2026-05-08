@@ -10,12 +10,16 @@ import { substituteProperties } from 'src/lib/utils';
 import {
   Place,
   PlaceCategory,
-  PlaceMapper,
+  PlaceMapper
 } from './place.interfaces';
+
+// 🔒 base JSON typée
+type JsonRecord = Record<string, unknown>;
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class PlaceService {
 
   static defaultPlaceMapper: PlaceMapper = {
@@ -28,126 +32,168 @@ export class PlaceService {
     private apiService: ApiService
   ) {}
 
-  /**
-   * Get the places of a category (without geometry)
-   * @param category Category
-   * @returns Observable of the places
-   */
+  // -------------------------
+  // PUBLIC API
+  // -------------------------
+
   getPlacesByCategory(category: PlaceCategory): Observable<Place[]> {
     const api = category.collection;
     const url = this.apiService.buildUrl(api.uri);
-    return this.http
-      .get(url)
-      .pipe(map(res => this.extractPlacesFromResponse(res, category)));
+
+    return this.http.get(url).pipe(
+      map(res => this.extractPlacesFromResponse(res, category))
+    );
   }
 
-  /**
-   * Get a place's feature (geometry)
-   * @param category Category
-   * @param place Place
-   * @returns Observable of the place's feature
-   */
-  getPlaceFeatureByCategory(category: PlaceCategory, place: Place): Observable<Feature> {
+  getPlaceFeatureByCategory(
+    category: PlaceCategory,
+    place: Place
+  ): Observable<Feature | undefined> {
     const api = category.feature;
-    const url = this.apiService.buildUrl(api.uri, {id: place.id});
-    return this.http
-      .get(url)
-      .pipe(map(res => this.extractPlaceFeatureFromResponse(res, place)));
+    const url = this.apiService.buildUrl(api.uri, { id: place.id });
+
+    return this.http.get(url).pipe(
+      map(res => this.extractPlaceFeatureFromResponse(res, place))
+    );
   }
 
-  /**
-   * Extract places from list response
-   * @param response List response
-   * @param category Category
-   * @returns Places list
-   */
-  private extractPlacesFromResponse(response: object, category: PlaceCategory): Place[] {
-    let data = response;
-    if (response.hasOwnProperty('data')) {
+  // -------------------------
+  // EXTRACTION PLACES
+  // -------------------------
+
+  private extractPlacesFromResponse(
+    response: unknown,
+    category: PlaceCategory
+  ): Place[] {
+
+    let data: unknown = response;
+
+    if (this.isRecord(response) && this.hasKey(response, 'data')) {
       data = response['data'];
     }
 
     const api = category.collection;
-    let results: object[] = [];
-    if (data instanceof Array) {
-      results = data as object[];
-    } else if (api.resultsProperty !== undefined && data.hasOwnProperty(api.resultsProperty)) {
-      results = data[api.resultsProperty];
+    let results: unknown[] = [];
+
+    if (Array.isArray(data)) {
+      results = data;
+    } else if (
+      this.isRecord(data) &&
+      api.resultsProperty !== undefined &&
+      this.hasKey(data, api.resultsProperty)
+    ) {
+      const value = data[api.resultsProperty];
+
+      if (Array.isArray(value)) {
+        results = value;
+      }
     }
 
-    const mapper = {
+    const mapper: PlaceMapper = {
       idProperty: api.idProperty || PlaceService.defaultPlaceMapper.idProperty,
       titleProperty: api.titleProperty || PlaceService.defaultPlaceMapper.titleProperty,
       title: api.title
     };
 
-    return results.map(result => {
-      return this.formatPlaceResult(result, mapper);
-    });
+    return results
+      .filter(this.isRecord)
+      .map(result => this.formatPlaceResult(result, mapper));
   }
 
-  /**
-   * Format a place result
-   * @param result Result
-   * @param mapper Attribute mapper
-   * @returns Place
-   */
-  private formatPlaceResult(result: object, mapper: PlaceMapper): Place {
-    const id = String(result[mapper.idProperty]);
+  private formatPlaceResult(
+    result: Record<string, unknown>,
+    mapper: PlaceMapper
+  ): Place {
+
+    const idRaw = result[mapper.idProperty];
+
+    const id =
+      typeof idRaw === 'string' || typeof idRaw === 'number'
+        ? String(idRaw)
+        : '';
+
     const title = this.computeTitle(result, mapper) || id;
-    return {
-      id: id,
-      title: title
-    };
+
+    return { id, title };
   }
 
-  /**
-   * Extract place feature from response
-   * @param response Feature response
-   * @param place Place
-   * @returns Place feature
-   */
-  private extractPlaceFeatureFromResponse(response: object, place: Place): Feature | undefined {
-    if (Object.getOwnPropertyNames(response).length > 0) {
-      return this.formatPlaceFeatureResult(response, place);
+  // -------------------------
+  // FEATURE EXTRACTION
+  // -------------------------
+
+  private extractPlaceFeatureFromResponse(
+    response: unknown,
+    place: Place
+  ): Feature | undefined {
+
+    if (!this.isRecord(response)) {
+      return undefined;
     }
-    return;
+
+    if (Object.keys(response).length === 0) {
+      return undefined;
+    }
+
+    return this.formatPlaceFeatureResult(response, place);
   }
 
-  /**
-   * Format a place feature result
-   * @param result Result
-   * @param place Place
-   * @returns Feature
-   */
-  private formatPlaceFeatureResult(result: object, place: Place): Feature {
-    return Object.assign({
+  private formatPlaceFeatureResult(
+    result: Record<string, unknown>,
+    place: Place
+  ): Feature {
+
+    const feature: Partial<Feature> = {
       projection: 'EPSG:4326',
       meta: {
+        id: place.id,
         mapTitle: place.title
       }
-    }, result) as Feature;
+    };
+
+    return Object.assign({}, feature, result) as Feature;
   }
 
-  /**
-   * Compute a place's title
-   * @param result Result
-   * @param mapper Attribute mapper
-   * @returns Place title
-   */
-  private computeTitle(result: object, mapper: PlaceMapper): string | undefined {
-    let title;
+  // -------------------------
+  // TITLE
+  // -------------------------
+
+  private computeTitle(
+    result: JsonRecord,
+    mapper: PlaceMapper
+  ): string | undefined {
+
+    let title: unknown;
+
     if (mapper.titleProperty !== undefined) {
       title = result[mapper.titleProperty];
     }
 
+    if (typeof title === 'string' || typeof title === 'number') {
+      return String(title);
+    }
+
     if (title === undefined && mapper.title !== undefined) {
-      title = substituteProperties(
+      return substituteProperties(
         mapper.title,
-        result as {[key: string]: string | number}
+        result as Record<string, string | number>
       );
     }
 
-    return title;
+    return undefined;
+  }
+
+  // -------------------------
+  // TYPE GUARDS
+  // -------------------------
+
+  private isRecord(value: unknown): value is Record<string, unknown> {
+    return typeof value === 'object' && value !== null && !Array.isArray(value);
+  }
+
+  private hasKey<T extends string>(
+    obj: Record<string, unknown>,
+    key: T
+  ): obj is Record<T, unknown> {
+    return Object.prototype.hasOwnProperty.call(obj, key);
   }
 }

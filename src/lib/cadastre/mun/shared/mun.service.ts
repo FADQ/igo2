@@ -28,7 +28,7 @@ export class CadastreMunService {
     const url = this.apiService.buildUrl(this.apiConfig.list);
 
     return this.http
-      .get(url)
+      .get<MunListResponse>(url)
       .pipe(
         map((response: MunListResponse) => {
           return this.extractMunFromListResponse(response);

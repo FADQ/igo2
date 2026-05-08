@@ -49,7 +49,8 @@ export class ClientSchemaFileManagerComponent implements OnInit, OnDestroy, Widg
       {
         name: 'timbreMaj.date',
         title: 'Date de mise à jour',
-        valueAccessor: (file: ClientSchemaFile) => {
+        valueAccessor: (entity: Object) => {
+          const file = entity as ClientSchemaFile;
           const value = file.timbreMaj.date;
           if (!value) { return ''; }
           return formatDate(value);

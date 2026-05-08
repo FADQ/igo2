@@ -38,13 +38,13 @@ export class ClientParcelWorkspace extends Workspace<ClientParcel> {
   }
 
   init() {
-    this.parcelStore.activateStrategyOfType(FeatureStoreLoadingStrategy);
+    this.parcelStore.activateStrategyOfType(FeatureStoreLoadingStrategy as any);
     this.addParcelLayer();
   }
 
   teardown() {
     this.deactivate();
-    this.parcelStore.deactivateStrategyOfType(FeatureStoreLoadingStrategy);
+    this.parcelStore.deactivateStrategyOfType(FeatureStoreLoadingStrategy as any);
     this.removeParcelLayer();
     this.deactivate();
     this.parcelStore.layer.ol.getSource().clear();
@@ -57,24 +57,24 @@ export class ClientParcelWorkspace extends Workspace<ClientParcel> {
 
   activate() {
     super.activate();
-    this.parcelStore.activateStrategyOfType(FeatureStoreSelectionStrategy);
+    this.parcelStore.activateStrategyOfType(FeatureStoreSelectionStrategy as any);
   }
 
   deactivate() {
     super.deactivate();
-    this.parcelStore.deactivateStrategyOfType(FeatureStoreSelectionStrategy);
+    this.parcelStore.deactivateStrategyOfType(FeatureStoreSelectionStrategy as any);
     this.parcelStore.state.clear();
   }
 
   private addParcelLayer() {
     if (this.parcelStore.layer.map === undefined) {
-      this.map.layerController.add(this.parcelStore.layer);
+      (this.map as any).layerController.add(this.parcelStore.layer);
     }
   }
 
   private removeParcelLayer() {
     if (this.parcelStore.layer.map !== undefined) {
-      this.map.layerController.remove(this.parcelStore.layer);
+      (this.map as any).layerController.remove(this.parcelStore.layer);
     }
   }
 

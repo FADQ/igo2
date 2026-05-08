@@ -32,7 +32,7 @@ export class ClientSchemaService {
   getSchemas(client: Client): Observable<ClientSchema[]> {
     const url = this.apiService.buildUrl(this.apiConfig.list, {clientNum: client.info.numero});
     return this.http
-      .get(url)
+      .get<ClientSchemaListResponse>(url)
       .pipe(
         map((response: ClientSchemaListResponse) => {
           return this.extractSchemasFromListResponse(response);
@@ -44,7 +44,7 @@ export class ClientSchemaService {
     const url = this.apiService.buildUrl(this.apiConfig.create);
 
     return this.http
-      .post(url, data)
+      .post<ClientSchemaCreateResponse>(url, data)
       .pipe(
         map((response: ClientSchemaCreateResponse) => {
           return this.extractSchemaFromCreateResponse(response);
@@ -56,7 +56,7 @@ export class ClientSchemaService {
     const url = this.apiService.buildUrl(this.apiConfig.update);
 
     return this.http
-      .post(url, data)
+      .post<ClientSchemaUpdateResponse>(url, data)
       .pipe(
         map((response: ClientSchemaUpdateResponse) => {
           return this.extractSchemaFromUpdateResponse(response);
@@ -78,7 +78,7 @@ export class ClientSchemaService {
     });
 
     return this.http
-      .post(url, {})
+      .post<ClientSchemaDuplicateResponse>(url, {})
       .pipe(
         map((response: ClientSchemaDuplicateResponse) => {
           return this.extractSchemaFromDuplicateResponse(response);
@@ -90,7 +90,7 @@ export class ClientSchemaService {
     const url = this.apiService.buildUrl(this.apiConfig.update);
     const data = Object.assign({}, schema, {numeroClient: numClient});
     return this.http
-      .post(url, data)
+      .post<ClientSchemaTransferResponse>(url, data)
       .pipe(
         map((response: ClientSchemaTransferResponse) => {
           return response.messages;

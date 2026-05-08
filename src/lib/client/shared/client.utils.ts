@@ -30,40 +30,58 @@ export function createClientDefaultSelectionStyle(): olstyle.Style {
   return style;
 }
 
-export function getAnneeImageFromMap(map: IgoMap): number | undefined {
-  const anneeRegex = new RegExp(/(19|20)\d{2}/);
-  let anneImage: string;
+export function getAnneeImageFromMap(
+    map: IgoMap
+  ): number | undefined {
 
-  const imageLayerNames = map.layerController.all.reduce((acc: string[], layer: AnyLayer, currentIndex: number, array: AnyLayer[]) => {
-    const dataSource = layer.dataSource;
-    if ((
-      !(dataSource instanceof WMTSDataSource) &&
-      !(dataSource instanceof WMSDataSource)
-    ) || !layer.visible) {
-      return acc;
-    }
+    const anneeRegex = /(19|20)\d{2}/;
 
-    let layerName: string;
-    layerName = 'Unknown';
+    const layers: AnyLayer[] =
+      (map as any).layerController.all;
 
-    if (dataSource instanceof WMTSDataSource) {
-      layerName = dataSource.options.layer;
-    } else if (dataSource instanceof WMSDataSource) {
-      layerName = dataSource.options.params.LAYERS;
-    }
+    const imageLayerNames = layers.reduce(
+      (acc: string[], layer: AnyLayer) => {
 
-    if (layerName !== undefined && layerName.startsWith('Mosaiques-orthophotos')) {
-      const match = layerName.match(anneeRegex);
-      if(match !== null) {
-        acc.push(match[0]);
-      }
-    }
+        const dataSource = layer.dataSource;
 
-    return acc;
-  }, []);
+        const isImageLayer =
+          dataSource instanceof WMTSDataSource ||
+          dataSource instanceof WMSDataSource;
 
-  return imageLayerNames.length === 1 ? parseInt(imageLayerNames[0],10) : undefined;
-}
+        if (!isImageLayer || !layer.visible) {
+          return acc;
+        }
+
+        let layerName: string | undefined;
+
+        if (dataSource instanceof WMTSDataSource) {
+          layerName = dataSource.options.layer;
+        } else if (dataSource instanceof WMSDataSource) {
+          layerName = dataSource.options.params.LAYERS;
+        }
+
+        if (
+          layerName !== undefined &&
+          layerName.startsWith('Mosaiques-orthophotos')
+        ) {
+
+          const match = layerName.match(anneeRegex);
+
+          if (match !== null) {
+            acc.push(match[0]);
+          }
+        }
+
+        return acc;
+
+      },
+      []
+    );
+
+    return imageLayerNames.length === 1
+      ? parseInt(imageLayerNames[0], 10)
+      : undefined;
+  }
 
 export function validateClientNum(clientNum?: string) {
   const clientNumMinLength = 3;

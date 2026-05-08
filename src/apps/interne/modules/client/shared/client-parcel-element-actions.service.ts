@@ -38,6 +38,8 @@ import { moveToFeatureStore } from 'src/lib/feature';
 import { every } from 'src/lib/utils';
 
 import { ClientController } from './client-controller';
+import { entityKey } from '@lib/shared/entity/entity-key.utils';
+import { toFeatureStore } from '@lib/compatibility/feature-store.adapter';
 
 @Injectable({
   providedIn: 'root'
@@ -103,7 +105,7 @@ export class ClientParcelElementActionsService {
         handler: function(ctrl: ClientController) {
           moveToFeatureStore(
             ctrl.parcelElementWorkspace.map,
-            ctrl.parcelElementWorkspace.parcelElementStore
+            toFeatureStore(ctrl.parcelElementWorkspace.parcelElementStore)
           );
         }
       },
@@ -237,7 +239,7 @@ export class ClientParcelElementActionsService {
             .subscribe((unionParcelElement: ClientParcelElement) => {
               parcelElements.forEach((parcelElement: ClientParcelElement) => {
                 if (getEntityId(parcelElement) !== unionId) {
-                  transaction.delete(parcelElement, store, {
+                  transaction.delete(parcelElement, toFeatureStore(store), {
                     title: generateParcelElementOperationTitle(
                       parcelElement,
                       this.languageService
@@ -250,11 +252,11 @@ export class ClientParcelElementActionsService {
                 this.languageService
               );
               if (base.properties.idParcelle) {
-                transaction.update(base, unionParcelElement, store, {
+                transaction.update(base, unionParcelElement, toFeatureStore(store), {
                   title
                 });
               } else {
-                transaction.insert(unionParcelElement, store, {
+                transaction.insert(unionParcelElement, toFeatureStore(store), {
                   title
                 });
               }
@@ -375,7 +377,7 @@ export class ClientParcelElementActionsService {
           const transaction = ctrl.parcelElementTransaction;
           const parcelElements = ctrl.selectedParcelElements;
           parcelElements.forEach((parcelElement: ClientParcelElement) => {
-            transaction.delete(parcelElement, store, {
+            transaction.delete(parcelElement, toFeatureStore(store), {
               title: generateParcelElementOperationTitle(parcelElement, this.languageService)
             });
           });
@@ -417,7 +419,7 @@ export class ClientParcelElementActionsService {
             .filter((_ctrl: ClientController) => _ctrl !== ctrl)
             .map((_ctrl: ClientController) => _ctrl.client);
           const clientStore = new EntityStore(clients, {
-            getKey: (client: Client) => client.info.numero
+            getKey: entityKey<Client>(e => e.info.numero)
           });
 
           ctrl.parcelElementWorkspace.activateWidget(widget, {

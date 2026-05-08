@@ -17,6 +17,8 @@ import {
 
 import { ClientController } from './shared/client-controller';
 import { ClientControllerService } from './shared/client-controller.service';
+import { entityKey } from '@lib/shared/entity/entity-key.utils';
+import { asWorkspace } from '@lib/compatibility/igo2-compat';
 
 /**
  * Service that holds the state of the client module
@@ -115,7 +117,7 @@ export class ClientState implements OnDestroy {
     // Activate the newly added client's parcel workspace
     // if no controller is active (selected)
     if (this.activeController === undefined) {
-      this.workspaces.activateWorkspace(controller.parcelWorkspace);
+      this.workspaces.activateWorkspace(asWorkspace(controller.parcelWorkspace));
     }
   }
 
@@ -147,35 +149,41 @@ export class ClientState implements OnDestroy {
     }
   }
 
-  /**
-   * Destroy a client's controller
-   * Make sure ongoing transactions are resolved first
-   * @param controller Controller
-   */
-  destroyController(controller: ClientController) {
-    if (!controller.schemaElementTransaction.empty) {
-      return controller.schemaElementDialogService.promptCommit({
-        schema: controller.schema,
-        transaction: controller.schemaElementTransaction,
-        proceed: () => this.destroyController(controller)
-      });
-    }
-
-    if (!controller.parcelElementTransaction.empty) {
-      return controller.parcelElementDialogService.promptCommit({
-        client: controller.client,
-        annee: controller.parcelYear.annee,
-        transaction: controller.parcelElementTransaction,
-        proceed: () => this.destroyController(controller)
-      });
-    }
-
-    if (controller === this.activeController) {
-      this.setActiveController(undefined);
-    }
+  private destroyControllerInternal(controller: ClientController): void {
     controller.destroy();
     this.controllers.delete(controller);
   }
+
+  /**
+ * Destroy a client's controller
+ * Make sure ongoing transactions are resolved first
+ */
+destroyController(controller: ClientController): void {
+  if (!controller.schemaElementTransaction.empty) {
+    controller.schemaElementDialogService.promptCommit({
+      schema: controller.schema,
+      transaction: controller.schemaElementTransaction,
+      proceed: () => this.destroyController(controller)
+    });
+    return;
+  }
+
+  if (!controller.parcelElementTransaction.empty) {
+    controller.parcelElementDialogService.promptCommit({
+      client: controller.client,
+      annee: controller.parcelYear.annee,
+      transaction: controller.parcelElementTransaction,
+      proceed: () => this.destroyController(controller)
+    });
+    return;
+  }
+
+  if (controller === this.activeController) {
+    this.setActiveController(undefined);
+  }
+
+  this.destroyControllerInternal(controller);
+}
 
   /**
    * Make a controller active. That means, showing only its workspaces
@@ -214,11 +222,13 @@ export class ClientState implements OnDestroy {
         controller.schemaWorkspace,
         controller.schemaElementWorkspace
       ];
-      const workspace = workspaces.find((_workspace: Workspace) => {
-        return _workspace.meta.type === currentWorkspace.meta.type &&
-          this.workspaces.get(_workspace.id) !== undefined;
-      });
-      this.workspaces.activateWorkspace(workspace || controller.parcelWorkspace);
+      const targetWorkspace =
+        workspaces.find(w =>
+          w.meta.type === currentWorkspace.meta.type &&
+          this.workspaces.get(w.id) !== undefined
+        ) ?? controller.parcelWorkspace;
+
+      this.workspaces.activateWorkspace(asWorkspace(targetWorkspace));
     }
 
     this.workspaces.view.filter((workspace: Workspace) => {
@@ -233,7 +243,7 @@ export class ClientState implements OnDestroy {
    */
   private initControllers() {
     this._controllers = new EntityStore<ClientController>([], {
-      getKey: (controller: ClientController) => controller.client.info.numero
+      getKey: entityKey<ClientController>(e => e.client.info.numero)
     });
 
     this.controllers$$ = this.controllers.count$

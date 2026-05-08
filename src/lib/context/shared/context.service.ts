@@ -37,11 +37,11 @@ export class CustomContextService {
           maxZoomOnExtent: igoMap.viewController.maxZoomOnExtent
         }
       },
-      layers: [],
-      tools: []
+      layers: [] as any[],
+      tools: [] as any[]
     };
 
-    const layers = igoMap.layerController.all.sort((a, b) => a.zIndex - b.zIndex);
+    const layers = (igoMap as any).layerController.all.sort((a: any, b: any) => a.zIndex - b.zIndex);
     for (let i = 0; i < layers.length; i++) {
       const layer = layers[i] as any;
       const layerOptions = layer.options;
@@ -51,7 +51,7 @@ export class CustomContextService {
       // Only support html query
       let queryFormat;
       let queryHtmlTarget;
-      if (dataSourceOptions.queryFormat == 'html') {
+      if (dataSourceOptions.queryFormat === 'html') {
         queryFormat = dataSourceOptions.queryFormat;
         queryHtmlTarget = 'innerhtml';
       }

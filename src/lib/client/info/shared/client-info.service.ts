@@ -1,11 +1,12 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, zip } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ApiService } from 'src/lib/core/api';
 import { substituteProperties } from 'src/lib/utils';
+
 import {
   ClientInfo,
   ClientInfoAddresses,
@@ -24,51 +25,46 @@ export class ClientInfoService {
     @Inject('clientInfoApiConfig') private apiConfig: ClientInfoApiConfig
   ) {}
 
-  getClientInfoByNum(clientNum: string): Observable<ClientInfo> {
-    const url = this.apiService.buildUrl(this.apiConfig.get, {clientNum});
+  getClientInfoByNum(clientNum: string): Observable<ClientInfo | undefined> {
+    const url = this.apiService.buildUrl(this.apiConfig.get, { clientNum });
+
     const clientBaseInfo$ = this.http
-      .get(url)
+      .get<ClientInfoGetResponse>(url)
       .pipe(
-        map((response: ClientInfoGetResponse) => {
-          return this.extractClientInfoFromGetResponse(response);
-        })
+        map(response => this.extractClientInfoFromGetResponse(response))
       );
 
-    const client$ = zip(
-      clientBaseInfo$,
-      this.getClientAddressesByNum(clientNum)
-    );
+    const clientAddresses$ = this.getClientAddressesByNum(clientNum);
 
-    return client$.pipe(
-      map((results: [ClientInfo, ClientInfoAddresses]) => {
-        if (results[0] === undefined) {
+    return forkJoin({
+      base: clientBaseInfo$,
+      addresses: clientAddresses$
+    }).pipe(
+      map(({ base, addresses }) => {
+        if (!base) {
           return undefined;
         }
-        return Object.assign(...results);
+
+        return {
+          ...base,
+          ...addresses
+        };
       })
     );
   }
 
   private getClientAddressesByNum(clientNum: string): Observable<ClientInfoAddresses> {
-    const url = this.apiService.buildUrl(this.apiConfig.addresses, {clientNum});
+    const url = this.apiService.buildUrl(this.apiConfig.addresses, { clientNum });
 
     return this.http
-      .get(url)
+      .get<ClientInfoAddressesResponse>(url)
       .pipe(
-        map((response: ClientInfoAddressesResponse) => {
-          return this.extractClientAddressesFromResponse(response);
-        })
+        map(response => this.extractClientAddressesFromResponse(response))
       );
   }
 
-  /**
-   * Compute the link to the client's info
-   * @internal
-   * @param client Client
-   * @returns External link to the client's info
-   */
   getClientInfoLink(clientNum: string): string {
-    return substituteProperties(this.apiConfig.link, {clientNum: clientNum});
+    return substituteProperties(this.apiConfig.link, { clientNum });
   }
 
   private extractClientInfoFromGetResponse(response: ClientInfoGetResponse): ClientInfo | undefined {
@@ -76,6 +72,7 @@ export class ClientInfoService {
     if (data === null) {
       return undefined;
     }
+
     return {
       numero: data.numeroClient,
       nom: data.nomClient,
@@ -87,30 +84,30 @@ export class ClientInfoService {
 
   private extractClientAddressesFromResponse(response: ClientInfoAddressesResponse): ClientInfoAddresses {
     const data = response.data;
+
     return {
       adresseCor: this.extractAddressFromGetResponseData(
-        data.find((address: ClientInfoAddressData) => address.typeAdresse === 'COR')
+        data.find(a => a.typeAdresse === 'COR')
       ),
       adresseExp: this.extractAddressFromGetResponseData(
-        data.find((address: ClientInfoAddressData) => address.typeAdresse === 'EXP')
+        data.find(a => a.typeAdresse === 'EXP')
       ),
       adressePro: data
-        .filter((address: ClientInfoAddressData) => address.typeAdresse === 'SPR')
-        .map((address: ClientInfoAddressData) => this.extractAddressFromGetResponseData(address))
+        .filter(a => a.typeAdresse === 'SPR')
+        .map(a => this.extractAddressFromGetResponseData(a))
     };
   }
 
   private extractAddressFromGetResponseData(data: ClientInfoAddressData) {
-    if (data === undefined) { return undefined; }
+    if (!data) return undefined;
 
-    const address = data['adresse'];
-    const mun = data['municipaliteAdresse'];
-    const code = data['codePostalAdresse'];
-    const province = data['provincePaysAdresse'];
+    const address = data.adresse;
+    const mun = data.municipaliteAdresse;
+    const code = data.codePostalAdresse;
+    const province = data.provincePaysAdresse;
 
     return [address, mun, code, `(${province})`]
-      .filter((item: string) => item !== undefined)
+      .filter(Boolean)
       .join(' ');
   }
-
 }

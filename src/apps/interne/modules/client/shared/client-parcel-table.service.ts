@@ -10,6 +10,7 @@ import {
   padClientNum,
   getParcelDraineeChoices
 } from 'src/lib/client';
+import { typedRowClass } from '@lib/compatibility/typedAccessor';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +31,7 @@ export class ClientParcelTableService {
       headerClassFunc: (() => {
         return {'text-centered': true};
       }),
-      rowClassFunc: ((parcel: ClientParcel) => {
+      rowClassFunc: typedRowClass<ClientParcel>(() => {
         return {'text-centered': true};
       }),
       columns: [
@@ -46,7 +47,8 @@ export class ClientParcelTableService {
           name: 'properties.noClientDetenteur',
           title: 'Autre détenteur',
           renderer: EntityTableColumnRenderer.UnsanitizedHTML,
-          valueAccessor: (parcel: ClientParcel) => {
+          valueAccessor: (entity: Object) => {
+            const parcel = entity as ClientParcel;
             const value = parcel.properties.autreDetenteur;
             if (!value) { return ''; }
             return this.computeClientNumAnchor(value);
@@ -56,7 +58,8 @@ export class ClientParcelTableService {
           name: 'properties.noClientExploitant',
           title: 'Autre exploitant',
           renderer: EntityTableColumnRenderer.UnsanitizedHTML,
-          valueAccessor: (parcel: ClientParcel) => {
+          valueAccessor: (entity: Object) => {
+            const parcel = entity as ClientParcel;
             const value = parcel.properties.autreExploitant;
             if (!value) { return ''; }
             return this.computeClientNumAnchor(value);
@@ -81,7 +84,8 @@ export class ClientParcelTableService {
         {
           name: 'properties.superficieHectare',
           title: 'Superficie mesurée (ha)',
-          valueAccessor: (parcelElement: ClientParcel) => {
+          valueAccessor: (entity: Object) => {
+            const parcelElement = entity as ClientParcel;
             const area = parcelElement.properties.superficieHectare;
             return area ? formatMeasure(area, {decimal: 1, locale: 'fr'}) : '';
           }
@@ -89,7 +93,8 @@ export class ClientParcelTableService {
         {
           name: 'properties.superficieAcre',
           title: 'Superficie mesurée (ac)',
-          valueAccessor: (parcelElement: ClientParcel) => {
+          valueAccessor: (entity: Object) => {
+            const parcelElement = entity as ClientParcel;
             const area = parcelElement.properties.superficieHectare;
             return area ? formatMeasure(area*2.471, {decimal: 1, locale: 'fr'}) : '';
           }
@@ -97,7 +102,8 @@ export class ClientParcelTableService {
         {
           name: 'properties.superficieArpent',
           title: 'Superficie mesurée (ar)',
-          valueAccessor: (parcelElement: ClientParcel) => {
+          valueAccessor: (entity: Object) => {
+            const parcelElement = entity as ClientParcel;
             const area = parcelElement.properties.superficieHectare;
             return area ? formatMeasure(area*2.924, {decimal: 1, locale: 'fr'}) : '';
           }
@@ -133,7 +139,8 @@ export class ClientParcelTableService {
         {
           name: 'properties.indParcelleDrainee',
           title: 'Parcelle drainée',
-          valueAccessor: (parcel: ClientParcel) => {
+          valueAccessor: (entity: Object) => {
+            const parcel = entity as ClientParcel;
             const value = parcel.properties.indParcelleDrainee;
             const choices = getParcelDraineeChoices();
             const choice = choices.find((_choice: FormFieldSelectChoice) => _choice.value === value);
@@ -147,7 +154,8 @@ export class ClientParcelTableService {
         {
           name: 'properties.timbreMajGeometrie',
           title: 'Date de mise à jour de la géométrie',
-          valueAccessor: (parcel: ClientParcel) => {
+          valueAccessor: (entity: Object) => {
+            const parcel = entity as ClientParcel;
             const value = parcel.properties.timbreMajGeometrie;
             if (!value) { return ''; }
             return formatDate(value);

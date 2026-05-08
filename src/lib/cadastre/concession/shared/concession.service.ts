@@ -34,7 +34,7 @@ export class CadastreConcessionService {
     const url = this.apiService.buildUrl(this.apiConfig.list);
 
     return this.http
-      .post(url, {lstIdCadastreOriginaire: [idCadastreOriginaire]})
+      .post<ConcessionListResponse>(url, {lstIdCadastreOriginaire: [idCadastreOriginaire]})
       .pipe(
         map((response: ConcessionListResponse) => {
           return this.convertResponseToListConcessionUnique(response);
@@ -71,7 +71,7 @@ export class CadastreConcessionService {
 
 
     return this.http
-      .post(url, { lstIdDesignationSecondaire: listConcession })
+      .post<ConcessionFeatureListResponse>(url, { lstIdDesignationSecondaire: listConcession })
       .pipe(
         map((response: ConcessionFeatureListResponse) => {
           return this.extractConcessionsFromListResponse(response);

@@ -22,6 +22,8 @@ import { SubmitStep, SubmitHandler } from '../../../utils';
 import { Client } from '../../shared/client.interfaces';
 import { ClientParcelTxService } from '../shared/client-parcel-tx.service';
 import { ClientInReconciliationResponseData } from '../shared/client-parcel-tx.interfaces';
+import { entityKey } from '@lib/shared/entity/entity-key.utils';
+import { typedRowClass } from '@lib/compatibility/typedAccessor';
 
 @Component({
   selector: 'fadq-client-parcel-tx-reconciliate',
@@ -60,7 +62,7 @@ export class ClientParcelTxReconciliateComponent
    * @internal
    */
   readonly clientStore: EntityStore<ClientInReconciliationResponseData> = new EntityStore([], {
-    getKey: (client: ClientInReconciliationResponseData) => client.numeroClient
+    getKey: entityKey<ClientInReconciliationResponseData>(e => e.numeroClient)
   });
 
   /**
@@ -74,7 +76,7 @@ export class ClientParcelTxReconciliateComponent
       headerClassFunc: (() => {
         return {'text-centered': true};
       }),
-      rowClassFunc: ((client: ClientInReconciliationResponseData) => {
+      rowClassFunc: typedRowClass<ClientInReconciliationResponseData>(() => {
         return {'text-centered': true};
       }),
     columns: [
@@ -94,7 +96,8 @@ export class ClientParcelTxReconciliateComponent
         name: 'indiBloque',
         title: 'Bloquant',
         renderer: EntityTableColumnRenderer.HTML,
-        valueAccessor: (client: ClientInReconciliationResponseData) => {
+        valueAccessor: (entity: Object) => {
+          const client = entity as ClientInReconciliationResponseData;
           return client.indiBloque === 'O' ? 'Oui' : 'Non';
         }
       }

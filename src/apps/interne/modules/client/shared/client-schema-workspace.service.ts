@@ -2,6 +2,7 @@ import { Injectable} from '@angular/core';
 
 import { ActionStore } from '@igo2/common/action';
 import { EntityStore } from '@igo2/common/entity';
+import { asEntityStore } from '@lib/shared/entity/entity-store.adapter';
 
 import {
   Client,
@@ -22,7 +23,7 @@ export class ClientSchemaWorkspaceService {
     return new ClientSchemaWorkspace({
       id: `fadq.${client.info.numero}-3-schema-workspace`,
       title: `${client.info.numero} - Schémas`,
-      entityStore: this.createSchemaStore(client),
+      entityStore: asEntityStore(this.createSchemaStore(client)),
       actionStore: this.createSchemaActionStore(),
       meta: {
         client,

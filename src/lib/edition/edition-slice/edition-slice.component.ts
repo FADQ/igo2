@@ -11,7 +11,6 @@ import {
 
 import { Subscription, BehaviorSubject, Observable, of, zip } from 'rxjs';
 
-import OlFeature from 'ol/Feature';
 import OlGeometry from 'ol/geom/Geometry';
 import OlPolygon from 'ol/geom/Polygon';
 import OlGeoJSON from 'ol/format/GeoJSON';
@@ -41,6 +40,7 @@ import {
   createOlEditionStyle,
   getOperationTitle as getDefaultOperationTitle
 } from '../shared/edition.utils';
+import { asEntityStore } from '@lib/compatibility/igo2-compat';
 
 @Component({
   selector: 'fadq-edition-slice',
@@ -172,22 +172,32 @@ export class EditionSliceComponent implements OnUpdateInputs, WidgetComponent, O
    */
   onSubmit() {
     const features = this.computeFeatures();
-    const results$ = [];
+
+    const results$: Observable<EditionResult>[] = [];
+
     if (typeof this.processData === 'function') {
+
       features.forEach((feature: Feature) => {
+
         const resultOrObservable = this.processData(feature);
+
         if (resultOrObservable instanceof Observable) {
           results$.push(resultOrObservable);
         } else {
           results$.push(of(resultOrObservable));
         }
+
       });
+
       this.result$$ = zip(...results$).subscribe((results: EditionResult[]) => {
-        this.submitResults(results.filter((result: EditionResult) => result !== undefined));
+        this.submitResults(
+          results.filter((result): result is EditionResult => result !== undefined)
+        );
       });
+
     } else {
-      const results = features.map((feature: Feature) => ({feature}));
-      this.submitResults(results);
+      const results = features.map((feature: Feature) => ({ feature }));
+      this.submitResults(results as EditionResult[]);
     }
   }
 
@@ -271,12 +281,12 @@ export class EditionSliceComponent implements OnUpdateInputs, WidgetComponent, O
     });
     featureUpdate.geometry = baseFeature.geometry;
 
-    this.transaction.update(this.feature, featureUpdate, this.store, {
+    this.transaction.update(this.feature, featureUpdate, asEntityStore(this.store), {
       title: getOperationTitle(this.feature, this.languageService)
     });
     features.forEach((feature: Feature) => {
       if (feature !== baseFeature) {
-        this.transaction.insert(feature, this.store, {
+        this.transaction.insert(feature, asEntityStore(this.store), {
         title: getOperationTitle(feature, this.languageService)
       });
     }
@@ -369,17 +379,22 @@ export class EditionSliceComponent implements OnUpdateInputs, WidgetComponent, O
    */
   private computeFeatures(): Feature[] {
     const olFeatures = this.sliceControl.getSource().getFeatures();
+
     if (olFeatures.length <= 1) {
       return [];
     }
 
     const olGeoJSON = new OlGeoJSON();
     const baseFeature = this.feature;
-    return olFeatures.map((olFeature: OlFeature<OlPolygon>): Feature => {
-      const olGeometry = olFeature.getGeometry();
+
+    return olFeatures.map((olFeature) => {
+
+      const olGeometry = olFeature.getGeometry() as OlPolygon;
+
       const meta = Object.assign({}, baseFeature.meta, {
         id: uuid()
       });
+
       const properties = Object.assign({}, baseFeature.properties);
 
       return Object.assign({}, baseFeature, {

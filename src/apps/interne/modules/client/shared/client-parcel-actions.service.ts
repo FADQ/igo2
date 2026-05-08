@@ -19,6 +19,8 @@ import { moveToFeatureStore } from 'src/lib/feature';
 
 import { ClientParcelTxStartWidget } from './client-parcel-tx.widgets';
 import { ClientController } from './client-controller';
+import { toFeatureStore } from '@lib/compatibility/feature-store.adapter';
+import { asStrategy } from '@lib/compatibility/strategy.adapter';
 
 @Injectable({
   providedIn: 'root'
@@ -82,7 +84,7 @@ export class ClientParcelActionsService {
         handler: function(ctrl: ClientController) {
           moveToFeatureStore(
             ctrl.parcelWorkspace.map,
-            ctrl.parcelWorkspace.parcelStore
+            toFeatureStore(ctrl.parcelWorkspace.parcelStore)
           );
         }
       },
@@ -119,7 +121,7 @@ export class ClientParcelActionsService {
         args: [controller],
         handler: function(ctrl: ClientController) {
           const filterStrategy = ctrl.parcelStore
-            .getStrategyOfType(FeatureStoreFilterNotOwnedStrategy);
+            .getStrategyOfType(asStrategy(FeatureStoreFilterNotOwnedStrategy));
           if (filterStrategy.active) {
             filterStrategy.deactivate();
           } else {
@@ -128,7 +130,7 @@ export class ClientParcelActionsService {
         },
         ngClass: function(ctrl: ClientController) {
           const filterStrategy = ctrl.parcelStore
-            .getStrategyOfType(FeatureStoreFilterNotOwnedStrategy);
+            .getStrategyOfType(asStrategy(FeatureStoreFilterNotOwnedStrategy));
           return filterStrategy.active$.pipe(
             map((active: boolean) => ({
               'fadq-actionbar-item-divider': true,

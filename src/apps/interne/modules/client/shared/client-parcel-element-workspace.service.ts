@@ -20,7 +20,11 @@ import {
   createParcelElementLayer
 } from 'src/lib/client';
 
+import { asEntityStore } from '@lib/shared/entity/entity-store.adapter';
+
 import { ClientParcelElementTableService } from './client-parcel-element-table.service';
+import { entityKey } from '@lib/shared/entity/entity-key.utils';
+import { asStrategy } from '@lib/compatibility/strategy.adapter';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +44,7 @@ export class ClientParcelElementWorkspaceService {
     return new ClientParcelElementWorkspace({
       id: `fadq.${client.info.numero}-2-parcel-element-workspace`,
       title: `${client.info.numero} - Parcelles en édition`,
-      entityStore: this.createParcelElementStore(client, map),
+      entityStore: asEntityStore(this.createParcelElementStore(client, map)),
       actionStore: this.createParcelElementActionStore(),
       meta: {
         client,
@@ -54,17 +58,15 @@ export class ClientParcelElementWorkspaceService {
 
   private createParcelElementStore(client: Client, map: IgoMap): FeatureStore<ClientParcelElement> {
     const store = new FeatureStore<ClientParcelElement>([], {
-      getKey: (entity: ClientParcelElement) => {
-        return entity.properties.idParcelle || entity.meta.id;
-      },
+      getKey: entityKey<ClientParcelElement>(e => e.properties.idParcelle || e.meta.id),
       map
     });
 
     const layer = createParcelElementLayer(client);
     store.bindLayer(layer);
 
-    store.addStrategy(this.createLoadingStrategy(), true);
-    store.addStrategy(this.createSelectionStrategy(client, map), false);
+    store.addStrategy(asStrategy(this.createLoadingStrategy()), true);
+    store.addStrategy(asStrategy(this.createSelectionStrategy(client, map)), false);
     store.addStrategy(this.createFilterSelectionStrategy(), false);
 
     return store;

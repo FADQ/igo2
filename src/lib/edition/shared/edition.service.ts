@@ -24,7 +24,7 @@ export class EditionService {
   ): Observable<string> {
 
     const url = this.apiService.buildUrl(this.apiConfig.validGeometry, {});
-    return this.http.post(url, {"geometrie": feature.geometry})
+    return this.http.post<ErreurValidation>(url, {"geometrie": feature.geometry})
     .pipe(map((data: ErreurValidation) => {
       if (data.messages.length > 0 ) {
         return data.messages[0].libelle;

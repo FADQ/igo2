@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -13,12 +14,14 @@ import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.modul
 
 import { ClientParcelElementTransferComponent } from './client-parcel-element-transfer.component';
 
+
 /**
  * @ignore
  */
 @NgModule({
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,

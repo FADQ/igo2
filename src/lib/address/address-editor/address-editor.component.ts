@@ -14,7 +14,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import OlGeoJSON from 'ol/format/GeoJSON';
 import OlGeometry from 'ol/geom/Geometry';
 
-import { EntityRecord } from '@igo2/common/entity';
+import { EntityRecord, EntityStoreStrategy } from '@igo2/common/entity';
 import {
   FeatureStore,
   IgoMap,
@@ -32,6 +32,7 @@ import {
   tryAddSelectionStrategy,
   VectorLayer,
   WMSDataSource,
+  Feature,
 } from '@igo2/geo';
 
 import { getMapExtentPolygon } from '../../map/shared/map.utils';
@@ -201,8 +202,9 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    */
   private initStore() {
     this.trybindStoreLayer();
-    tryAddLoadingStrategy(this.store, new FeatureStoreLoadingStrategy({motion: FeatureMotion.None}));
-    tryAddSelectionStrategy(this.store, new FeatureStoreSelectionStrategy({
+    const featureStore = this.store as unknown as FeatureStore<Feature<Record<string, any>>>;
+    tryAddLoadingStrategy(featureStore, new FeatureStoreLoadingStrategy({motion: FeatureMotion.None}));
+    tryAddSelectionStrategy(featureStore, new FeatureStoreSelectionStrategy({
       map: this.map,
       motion: FeatureMotion.None
     }));
@@ -212,13 +214,14 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    * Try to bind a layer to the store
    */
   private trybindStoreLayer() {
+    const featureStore = this.store as unknown as FeatureStore<Feature<Record<string, any>>>;
     const layer = new VectorLayer({
       zIndex: 200,
       source: new FeatureDataSource(),
       style: createAddressStyle('#f7ef0e'),
       showInLayerList: false
     });
-    tryBindStoreLayer(this.store, layer);
+    tryBindStoreLayer(featureStore, layer);
   }
 
   /**
@@ -265,7 +268,7 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
           ).subscribe(() => {
             this.closeEdition(false);
             // Refresh the buildingCorrected layer
-            const layer: Layer = this.map.getLayerByAlias('buildingsCorrected');
+            const layer: Layer = (this.map as any).getLayerByAlias('buildingsCorrected');
             if (layer.dataSource instanceof WMSDataSource ) {
               (layer.dataSource as WMSDataSource).refresh();
             }
@@ -289,7 +292,9 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
     this.store.layer.dataSource.ol.clear();
     this.store.clear();
     this.subscribeToAddressSelection();
-    this.store.activateStrategyOfType(FeatureStoreSelectionStrategy);
+    this.store.activateStrategyOfType(
+      FeatureStoreSelectionStrategy as unknown as typeof EntityStoreStrategy
+    );
     this.inEdition$.next(false);
     if (hideLayers) { this.hideLayers(); }
   }
@@ -309,7 +314,9 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
     if (!this.addressIsSelected) { return; }
 
     // Deactivate the selection strategy when an address is selected
-    this.store.deactivateStrategyOfType(FeatureStoreSelectionStrategy);
+    this.store.deactivateStrategyOfType(
+      FeatureStoreSelectionStrategy as unknown as typeof EntityStoreStrategy
+    );
     if (this.selectedAddress$$ !== undefined) {
       this.selectedAddress$$.unsubscribe();
     }
@@ -350,7 +357,7 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    * @param layerExist Indicates if the layer already exists on the map
    */
   private showLayer(layerAlias: string, layerExist: boolean) {
-    const layer: Layer = this.map.getLayerByAlias(layerAlias);
+    const layer: Layer = (this.map as any).getLayerByAlias(layerAlias);
     if (layerExist || layer !== undefined) {
       if (layer !== undefined) { layer.visible = true; }
     } else if (this.layerOptions !== undefined) {
@@ -359,7 +366,7 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
         this.layerService.createAsyncLayer(Object.assign({}, layerOptions, {
           visible: true,
           showInLayerList: false
-        })).subscribe((layerCreated: Layer) => this.map.layerController.add(layerCreated));
+        })).subscribe((layerCreated: Layer) => (this.map as any).layerController.add(layerCreated));
       }
     }
   }
@@ -381,9 +388,9 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
   private hideLayer(layerAlias: string) {
     let layer: Layer;
     if (layerAlias !== undefined) {
-      layer = this.map.getLayerByAlias(layerAlias);
+      layer = (this.map as any).getLayerByAlias(layerAlias);
     } else {
-      layer = this.map.getLayerByAlias(this.getLayerOptions(layerAlias).alias);
+      layer = (this.map as any).getLayerByAlias(this.getLayerOptions(layerAlias).alias);
     }
     if (layer !== undefined) { layer.visible = false; }
   }

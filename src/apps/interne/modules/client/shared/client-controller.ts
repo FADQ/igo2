@@ -309,35 +309,43 @@ export class ClientController {
   /**
    * Deactivate parcel elements
    */
-  deactivateParcelElements() {
+  deactivateParcelElements(): void {
+
     if (!this.parcelElementTransaction.empty) {
-      return this.parcelElementDialogService.promptCommit({
+      this.parcelElementDialogService.promptCommit({
         client: this.client,
         annee: this.parcelYear.annee,
         transaction: this.parcelElementTransaction,
-        proceed: () => this.deactivateParcelElements()
+        proceed: () => this.handleParcelCommitThenRetry(() => this.deactivateParcelElements())
       });
+      return;
     }
 
     this.unobserveDiagrams();
     this.teardownParcelElements();
     this.initParcels();
     this.loadParcels();
-    this.workspaces.activateWorkspace(asWorkspaceObject(this.parcelWorkspace));
+
+    this.workspaces.activateWorkspace(
+      asWorkspaceObject(this.parcelWorkspace)
+    );
   }
 
 
   /**
    * Deactivate parcel elements
    */
-  reloadParcelElements() {
+  reloadParcelElements(): void {
     if (!this.parcelElementTransaction.empty) {
-      return this.parcelElementDialogService.promptReload({
+      this.parcelElementDialogService.promptReload({
         client: this.client,
         annee: this.parcelYear.annee,
         transaction: this.parcelElementTransaction,
-        proceed: () => this.reloadParcelElements()
+        proceed: () => {
+          this.handleParcelCommitThenRetry(() => this.reloadParcelElements());
+        }
       });
+      return;
     }
 
     this.parcelTxOngoing.next(true);
@@ -636,18 +644,18 @@ export class ClientController {
    * transaction is ongoing, make sure it's resolved first.
    * @param schema Schema
    */
-  private setSchema(schema: ClientSchema) {
+  private setSchema(schema: ClientSchema): void {
     if (!this.schemaElementTransaction.empty) {
-      return this.schemaElementDialogService.promptCommit({
+      this.schemaElementDialogService.promptCommit({
         schema: this.schema,
         transaction: this.schemaElementTransaction,
         proceed: () => this.setSchema(schema),
-        abort: () => this.schemaStore.state.update(this.schema, {selected: true}, true)
+        abort: () => this.schemaStore.state.update(this.schema, { selected: true }, true)
       });
+
+      return;
     }
-
     this.clearSchema();
-
     if (schema !== undefined) {
       this.initSchemaElements(schema);
       this.loadSchemaElements(schema);
@@ -725,6 +733,10 @@ export class ClientController {
    */
   private onSelectSchemaElements(schemaElements: ClientSchemaElement[]) {
     this.selectedSchemaElements$.next(schemaElements);
+  }
+
+  private handleParcelCommitThenRetry(callback: () => void): void {
+    callback();
   }
 
 }

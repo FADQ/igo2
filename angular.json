@@ -57,8 +57,7 @@
             "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/style/partial",
-                "node_modules"
+                "src/style/partial"
               ]
             },
             "allowedCommonJsDependencies": [
@@ -116,7 +115,7 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": true,
+              "sourceMap": false,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -124,11 +123,12 @@
               "buildOptimizer": false
             },
             "development": {
+              "aot": false,
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": true,
+              "sourceMap": false,
               "namedChunks": true
             }
           }
@@ -242,8 +242,7 @@
             "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/style/partial",
-                "node_modules"
+                "src/style/partial"
               ]
             },
             "allowedCommonJsDependencies": [
@@ -290,6 +289,7 @@
               "buildOptimizer": false
             },
             "development": {
+              "aot": false,
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
@@ -392,8 +392,7 @@
             "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/style/partial",
-                "node_modules"
+                "src/style/partial"
               ]
             },
             "allowedCommonJsDependencies": [
@@ -440,6 +439,7 @@
               "buildOptimizer": false
             },
             "development": {
+              "aot": false,
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,

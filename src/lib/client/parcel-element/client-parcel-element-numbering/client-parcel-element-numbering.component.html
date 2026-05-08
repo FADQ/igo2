@@ -4,7 +4,9 @@
 
       <ng-container body>
         <mat-form-field>
-          <fadq-client-parcel-element-numbering-input [(ngModel)]="value"></fadq-client-parcel-element-numbering-input>
+          <fadq-client-parcel-element-numbering-input
+            [formControl]="valueControl">
+          </fadq-client-parcel-element-numbering-input>
         </mat-form-field>
         <igo-entity-table
           class="table-compact"

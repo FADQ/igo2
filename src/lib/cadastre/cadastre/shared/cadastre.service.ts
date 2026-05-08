@@ -32,7 +32,7 @@ export class CadastreCadastreService {
     const url = this.apiService.buildUrl(this.apiConfig.list, {codeGeo: codeGeographique});
 
     return this.http
-      .get(url)
+      .get<CadastreListResponse>(url)
       .pipe(
         map((response: CadastreListResponse) => {
           return this.extractCadastreFromListResponse(response);
@@ -63,7 +63,7 @@ export class CadastreCadastreService {
     const url = this.apiService.buildUrl(this.apiConfig.surfaces, {idCadastre: idCadastreOriginaire});
 
     return this.http
-      .get(url)
+      .get<CadastreFeatureResponse>(url)
       .pipe(
         map((response: CadastreFeatureResponse) => {
           return this.extractCadastreFeatureFromResponse(response);

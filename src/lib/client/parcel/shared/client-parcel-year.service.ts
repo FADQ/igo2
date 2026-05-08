@@ -24,7 +24,7 @@ export class ClientParcelYearService {
   getParcelYears(): Observable<ClientParcelYear[]> {
     const url = this.apiService.buildUrl(this.apiConfig.years);
     return this.http
-      .get(url)
+      .get<ClientParcelYearListResponse>(url)
       .pipe(
         map((response: ClientParcelYearListResponse) => {
           return this.extractParcelYearsFromListResponse(response);

@@ -21,7 +21,7 @@ import { FeatureStore, IgoMap } from '@igo2/geo';
 
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
-import { ClientSchemaElement } from '../shared/client-schema-element.interfaces';
+import { ClientSchemaElement, ClientSchemaElementTypes } from '../shared/client-schema-element.interfaces';
 import { ClientSchemaElementService } from '../shared/client-schema-element.service';
 import { ClientSchemaElementFormService } from '../shared/client-schema-element-form.service';
 
@@ -131,8 +131,16 @@ export class ClientSchemaElementUpdateBatchComponent
 
   private setForm(form: Form) {
     this.form$.next(form);
-    const geometryType = this.schemaElements[0].geometry.type;
-    updateElementTypeChoices(geometryType,this.clientSchemaElementService, this.schema, this.getElementTypeField());
+
+    const geometryType =
+      this.schemaElements[0].geometry.type as keyof ClientSchemaElementTypes;
+
+    updateElementTypeChoices(
+      geometryType,
+      this.clientSchemaElementService,
+      this.schema,
+      this.getElementTypeField()
+    );
   }
 
   private getElementTypeField(): FormField<FormFieldSelectInputs> {

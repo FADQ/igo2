@@ -21,6 +21,9 @@ import {
 } from 'src/lib/client';
 
 import { ClientParcelTableService } from './client-parcel-table.service';
+import { asEntityStore } from '@lib/shared/entity/entity-store.adapter';
+import { entityKey } from '@lib/shared/entity/entity-key.utils';
+import { asStrategy } from '@lib/compatibility/strategy.adapter';
 
 /**
  * This is a parcel workspace factory
@@ -43,7 +46,7 @@ export class ClientParcelWorkspaceService {
     return new ClientParcelWorkspace({
       id: `fadq.${client.info.numero}-1-parcel-workspace`,
       title: `${client.info.numero} - Parcelles`,
-      entityStore: this.createParcelStore(client, map),
+      entityStore: asEntityStore(this.createParcelStore(client, map)),
       actionStore: this.createParcelActionStore(),
       meta: {
         client,
@@ -62,7 +65,7 @@ export class ClientParcelWorkspaceService {
    */
   private createParcelStore(client: Client, map: IgoMap): FeatureStore<ClientParcel> {
     const store = new FeatureStore<ClientParcel>([], {
-      getKey: (entity: ClientParcel) => entity.properties.id,
+      getKey: entityKey<ClientParcel>(e => e.properties.id),
       map
     });
     store.view.sort({
@@ -75,8 +78,8 @@ export class ClientParcelWorkspaceService {
     layer.ol.setStyle(olStyle);
     store.bindLayer(layer);
 
-    store.addStrategy(this.createLoadingStrategy(), true);
-    store.addStrategy(this.createSelectionStrategy(client, map), true);
+    store.addStrategy(asStrategy(this.createLoadingStrategy()), true);
+    store.addStrategy(asStrategy(this.createSelectionStrategy(client, map)), true);
 
     return store;
   }

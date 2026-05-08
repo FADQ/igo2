@@ -21,14 +21,14 @@ export interface ClientParcelElementWorkspaceOptions extends WorkspaceOptions {
   };
 }
 
-export class ClientParcelElementWorkspace extends Workspace<ClientParcelElement> {
+export class ClientParcelElementWorkspace extends Workspace<any> {
 
   get map(): IgoMap {
     return this.meta.map;
   }
 
   get parcelElementStore(): FeatureStore<ClientParcelElement> {
-    return this.entityStore as FeatureStore<ClientParcelElement>;
+    return this.entityStore as unknown as FeatureStore<ClientParcelElement>;
   }
 
   get transaction(): EntityTransaction {
@@ -39,18 +39,30 @@ export class ClientParcelElementWorkspace extends Workspace<ClientParcelElement>
     super(options);
   }
 
+  // init() {
+  //   this.parcelElementStore.activateStrategyOfType(FeatureStoreLoadingStrategy);
+  //   this.addParcelElementLayer();
+  // }
+
   init() {
-    this.parcelElementStore.activateStrategyOfType(FeatureStoreLoadingStrategy);
+    const store = this.parcelElementStore as any;
+
+    store.activateStrategyOfType(FeatureStoreLoadingStrategy);
     this.addParcelElementLayer();
   }
 
   teardown() {
     this.deactivate();
-    this.parcelElementStore.deactivateStrategyOfType(FeatureStoreLoadingStrategy);
+
+    const store = this.parcelElementStore as any;
+
+    store.deactivateStrategyOfType?.(FeatureStoreLoadingStrategy);
+    store.deactivateStrategyOfType?.(FeatureStoreSelectionStrategy);
+
     this.removeParcelElementLayer();
-    this.deactivate();
-    this.parcelElementStore.layer.ol.getSource().clear();
-    this.parcelElementStore.clear();
+
+    store.layer?.ol?.getSource?.()?.clear?.();
+    store.clear?.();
   }
 
   load(parcelElements: ClientParcelElement[]) {
@@ -59,24 +71,25 @@ export class ClientParcelElementWorkspace extends Workspace<ClientParcelElement>
 
   activate() {
     super.activate();
-    this.parcelElementStore.activateStrategyOfType(FeatureStoreSelectionStrategy);
+    (this.parcelElementStore as any)
+      .activateStrategyOfType?.(FeatureStoreSelectionStrategy);
   }
 
   deactivate() {
     super.deactivate();
-    this.parcelElementStore.deactivateStrategyOfType(FeatureStoreSelectionStrategy);
-    this.parcelElementStore.state.clear();
+    (this.parcelElementStore as any)
+      .deactivateStrategyOfType?.(FeatureStoreSelectionStrategy);
   }
 
   private addParcelElementLayer() {
     if (this.parcelElementStore.layer.map === undefined) {
-      this.map.layerController.add(this.parcelElementStore.layer);
+      (this.map as any).layerController.add(this.parcelElementStore.layer);
     }
   }
 
   private removeParcelElementLayer() {
     if (this.parcelElementStore.layer.map !== undefined) {
-      this.map.layerController.remove(this.parcelElementStore.layer);
+      (this.map as any).layerController.remove(this.parcelElementStore.layer);
     }
   }
 

@@ -31,7 +31,7 @@ export class AddressService {
   getAddressesByGeometry(geometry: GeoJSONGeometry): Observable<AddressFeature[]> {
     const url = this.apiService.buildUrl(this.apiConfig.list);
     return this.http
-      .post(url, geometry)
+      .post<AddressFeatureResponseItem[]>(url, geometry)
       .pipe(
         map((response: AddressFeatureResponseItem[]) => {
           return this.extractAddressesFromListResponse(response);

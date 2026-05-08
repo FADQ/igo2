@@ -34,9 +34,11 @@ export interface SubmitHandlerFuncs<T> {
 
 export class SubmitHandler<T = unknown> {
 
-  readonly step$: BehaviorSubject<SubmitStep> = new BehaviorSubject(SubmitStep.Idle);
+  readonly step$: BehaviorSubject<SubmitStep> =
+    new BehaviorSubject<SubmitStep>(SubmitStep.Idle);
 
-  readonly status$: BehaviorSubject<SubmitStatus> = new BehaviorSubject(SubmitStatus.Unknown);
+  readonly status$: BehaviorSubject<SubmitStatus> =
+    new BehaviorSubject<SubmitStatus>(SubmitStatus.Unknown);
 
   readonly state$: Observable<[SubmitStep, SubmitStatus]> = combineLatest([this.step$, this.status$]);
 

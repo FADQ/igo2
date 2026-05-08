@@ -28,6 +28,7 @@ import { FEATURE, Feature, FeatureStore } from '@igo2/geo';
 
 import { EditionResult } from '../shared/edition.interfaces';
 import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition.utils';
+import { asEntityStore } from '@lib/compatibility/igo2-compat';
 
 @Component({
   selector: 'fadq-edition-update-batch',
@@ -130,21 +131,28 @@ export class EditionUpdateBatchComponent
    */
   onSubmit(data: Partial<Feature>) {
     const features = this.updateFeatures(data);
-    const results$ = [];
+
+    const results$: Observable<EditionResult>[] = [];
+
     if (typeof this.processData === 'function') {
       features.forEach((feature: Feature) => {
         const resultOrObservable = this.processData(feature);
+
         if (resultOrObservable instanceof Observable) {
           results$.push(resultOrObservable);
         } else {
           results$.push(of(resultOrObservable));
         }
       });
+
       this.result$$ = zip(...results$).subscribe((results: EditionResult[]) => {
-        this.submitResults(results.filter((result: EditionResult) => result !== undefined));
+        this.submitResults(
+          results.filter((result): result is EditionResult => result !== undefined)
+        );
       });
+
     } else {
-      const results = features.map((feature: Feature) => ({feature}));
+      const results = features.map((feature: Feature) => ({ feature }));
       this.submitResults(results);
     }
   }
@@ -195,7 +203,7 @@ export class EditionUpdateBatchComponent
       const previous = this.features.find((_feature: Feature) => {
         return this.store.getKey(_feature) === this.store.getKey(feature);
       });
-      this.transaction.update(previous, feature, this.store, {
+      this.transaction.update(previous, feature, asEntityStore(this.store), {
         title: getOperationTitle(feature, this.languageService)
       });
     });
@@ -232,7 +240,7 @@ export class EditionUpdateBatchComponent
       .filter((key: string) => fieldNames.includes(`properties.${key}`));
     const uniqueKeys = new Set(keys);
 
-    const deleted = [];
+    const deleted: string[] = [];
     const properties = this.features.reduce((acc: {[key: string]: any}, feature: Feature) => {
       uniqueKeys.forEach((key: string) => {
         const value = feature.properties[key];

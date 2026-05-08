@@ -11,6 +11,7 @@ import { Mun } from 'src/lib/cadastre/mun';
 import { Cadastre, CadastreFeature } from 'src/lib/cadastre/cadastre';
 import { ConcessionUnique, ConcessionFeature } from 'src/lib/cadastre/concession';
 import { LotUnique, LotFeature } from 'src/lib/cadastre/lot';
+import { entityKey } from '@lib/shared/entity/entity-key.utils';
 
 /**
  * Service that holds the state of the edition module
@@ -119,7 +120,7 @@ export class CadastreState {
    */
   initMun() {
     this._munStore = new EntityStore<Mun>([], {
-      getKey: (entity: Mun) => entity.codeGeographique
+      getKey: entityKey<Mun>(e => e.codeGeographique)
     });
   }
 
@@ -128,7 +129,7 @@ export class CadastreState {
    */
   initCadastres() {
     this._cadastreStore = new EntityStore<Cadastre>([], {
-      getKey: (entity: Cadastre) => entity.idCadastreOriginaire
+      getKey: entityKey<Cadastre>(e => e.idCadastreOriginaire)
     });
   }
 
@@ -137,7 +138,7 @@ export class CadastreState {
    */
   initConcessions() {
     this._concessionStore = new EntityStore<ConcessionUnique>([], {
-      getKey: (entity: ConcessionUnique) => entity.idConcession
+      getKey: entityKey<ConcessionUnique>(e => e.idConcession)
     });
   }
 
@@ -146,7 +147,7 @@ export class CadastreState {
    */
   initLots() {
     this._lotStore = new EntityStore<LotUnique>([], {
-      getKey: (entity: LotUnique) => entity.idLot
+      getKey: entityKey<LotUnique>(e => e.idLot)
     });
   }
 
@@ -157,7 +158,7 @@ export class CadastreState {
   initCadastreLayer() {
     if (this._layerCadastre === undefined || this._layerCadastre === null) {
       this._layerCadastre = createPolygonLayer('rgba(255, 255, 255, 0.2)', '#6efc02', 4);
-      this.mapState.map.layerController.add(this._layerCadastre );
+      (this.mapState.map as any).layerController.add(this._layerCadastre );
     }
   }
 
@@ -168,10 +169,10 @@ export class CadastreState {
   initConcessionLayer() {
     if (this._layerConcession === undefined || this._layerConcession === null) {
       this._layerConcession = createMarkerLayer('yellow');
-      this.mapState.map.layerController.add(this._layerConcession );
+      (this.mapState.map as any).layerController.add(this._layerConcession );
     }
   }
-w;
+
   /**
    * Show the selected cadastre on the map
    * @param CadastreFeature cadastre
@@ -179,7 +180,7 @@ w;
   initLotLayer() {
     if (this._layerLot === undefined || this._layerLot === null) {
       this._layerLot = createMarkerLayer('blue');
-      this.mapState.map.layerController.add(this._layerLot );
+      (this.mapState.map as any).layerController.add(this._layerLot );
     }
   }
 }

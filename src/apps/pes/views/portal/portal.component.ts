@@ -333,11 +333,11 @@ export class PortalComponent implements OnInit, OnDestroy {
     } else {
       this.searchAddedLayers.set(searchType, [layer]);
     }
-    this.map.layerController.add(layer);
+    (this.map as any).layerController.add(layer);
   }
 
   private makeSearchLayerVisible(layerAlias: string, searchType: string) {
-    const layer = this.map.getLayerByAlias(layerAlias);
+    const layer = (this.map as any).getLayerByAlias(layerAlias);
     if (layer === undefined) { return; }
 
     if (this.searchVisibledLayers.has(searchType)) {
@@ -353,7 +353,7 @@ export class PortalComponent implements OnInit, OnDestroy {
    */
   private clearAllSearchLayers() {
     this.searchAddedLayers.forEach((layers: Layer[]) => {
-      this.map.layerController.removes(layers);
+      (this.map as any).layerController.removes(layers);
     });
 
     this.searchVisibledLayers.forEach((layers: Layer[]) => {

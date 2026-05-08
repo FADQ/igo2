@@ -28,7 +28,7 @@ export class ClientSchemaFileService {
     const url = this.apiService.buildUrl(this.apiConfig.list, {schemaId: schema.id});
 
     return this.http
-      .get(url)
+      .get<ClientSchemaFileListResponse>(url)
       .pipe(
         map((response: ClientSchemaFileListResponse) => {
           return this.extractSchemaFilesFromListResponse(response);
@@ -58,7 +58,7 @@ export class ClientSchemaFileService {
     });
 
     return this.http
-      .post(url, formData, {headers})
+      .post<ClientSchemaFileCreateResponse>(url, formData, {headers})
       .pipe(
         map((response: ClientSchemaFileCreateResponse) => {
           return this.extractSchemaFromCreateResponse(response);

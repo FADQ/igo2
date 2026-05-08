@@ -34,6 +34,8 @@ import {
   getOperationTitle as getDefaultOperationTitle,
   simplifyFeature
 } from '../shared/edition.utils';
+import { asEntityStore } from '@lib/compatibility/igo2-compat';
+import { asStrategy } from '@lib/compatibility/strategy.adapter';
 
 @Component({
   selector: 'fadq-edition-simplify',
@@ -256,7 +258,7 @@ export class EditionSimplifyComponent implements OnUpdateInputs, WidgetComponent
   private addToTransaction(feature: Feature) {
     const getOperationTitle = this.getOperationTitle ? this.getOperationTitle : getDefaultOperationTitle;
     const operationTitle = getOperationTitle(feature, this.languageService);
-    this.transaction.update(this.feature, feature, this.store, {
+    this.transaction.update(this.feature, feature, asEntityStore(this.store), {
       title: operationTitle
     });
   }
@@ -267,7 +269,9 @@ export class EditionSimplifyComponent implements OnUpdateInputs, WidgetComponent
    * @returns Simplify store
    */
   private createSimplifyStore(): FeatureStore {
-    const getKey = (simplify: Feature) => simplify.properties.id;
+    const getKey = (entity: object) =>
+      (entity as Feature).properties.id as string;
+
     const simplifyStore = new FeatureStore([], {
       map: this.map,
       getKey
@@ -278,13 +282,15 @@ export class EditionSimplifyComponent implements OnUpdateInputs, WidgetComponent
       source: new FeatureDataSource(),
       style: createOlEditionStyle()
     });
+
     simplifyStore.bindLayer(layer);
 
     const loadingStrategy = new FeatureStoreLoadingStrategy({
       getFeatureId: getKey,
       motion: FeatureMotion.None
     });
-    simplifyStore.addStrategy(loadingStrategy, true);
+
+    simplifyStore.addStrategy(asStrategy(loadingStrategy), true);
     simplifyStore.load([this.feature]);
 
     return simplifyStore;

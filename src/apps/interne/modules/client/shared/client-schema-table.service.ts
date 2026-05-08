@@ -4,6 +4,7 @@ import { EntityTableTemplate } from '@igo2/common/entity';
 
 import { formatDate } from 'src/lib/utils/date';
 import { ClientSchema } from 'src/lib/client';
+import { typedRowClass } from '@lib/compatibility/typedAccessor';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +23,8 @@ export class ClientSchemaTableService {
       headerClassFunc: (() => {
         return {'text-centered': true};
       }),
-      rowClassFunc: ((schema: ClientSchema) => {
-        return {'text-centered': true};
+      rowClassFunc: typedRowClass<ClientSchema>((schema) => {
+        return { 'text-centered': true };
       }),
       columns: [
         {
@@ -45,19 +46,21 @@ export class ClientSchemaTableService {
         {
           name: 'timbreMaj.date',
           title: 'Date de mise à jour',
-          valueAccessor: (schema: ClientSchema) => {
-            const value = schema.timbreMaj.date;
-            if (!value) { return ''; }
-            return formatDate(value);
+          valueAccessor: (entity: object) => {
+            const schema = entity as ClientSchema;
+
+            const value = schema.timbreMaj?.date;
+            return value ? formatDate(value) : '';
           }
         },
         {
           name: 'usagerMaj',
           title: 'Usager mise à jour',
-          valueAccessor: (schema: ClientSchema) => {
+          valueAccessor: (entity: object) => {
+            const schema = entity as ClientSchema;
+
             const value = schema.idenUsagerMaj;
-            if (value) { return value; }
-            return schema.usagerMaj;
+            return value ?? schema.usagerMaj;
           }
         },
         {

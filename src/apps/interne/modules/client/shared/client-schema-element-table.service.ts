@@ -8,16 +8,26 @@ import { formatMeasure, measureOlGeometryLength, squareMetersToAcres, squareMete
 
 import { formatDate } from 'src/lib/utils/date';
 import { ClientSchemaElement } from 'src/lib/client';
+import { typedRowClass } from '@lib/compatibility/typedAccessor';
+
+  type GeometryType =
+    | 'Point'
+    | 'MultiPoint'
+    | 'LineString'
+    | 'MultiLineString'
+    | 'Polygon'
+    | 'MultiPolygon'
+    | 'GeometryCollection';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClientSchemaElementTableService {
 
-  static schemaElementTypes = {
-    'Point': 'P',
-    'LineString': 'L',
-    'Polygon': 'S'
+  static schemaElementTypes: Partial<Record<GeometryType, string>> = {
+    Point: 'P',
+    LineString: 'L',
+    Polygon: 'S'
   };
 
   constructor() {}
@@ -34,7 +44,7 @@ export class ClientSchemaElementTableService {
       headerClassFunc: (() => {
         return {'text-centered': true};
       }),
-      rowClassFunc: ((schemaElement: ClientSchemaElement) => {
+      rowClassFunc: typedRowClass<ClientSchemaElement>(() => {
         return {'text-centered': true};
       }),
       columns: [
@@ -42,7 +52,8 @@ export class ClientSchemaElementTableService {
           name: 'geometry.type',
           title: 'Type',
           renderer: EntityTableColumnRenderer.HTML,
-          valueAccessor: (schemaElement: ClientSchemaElement) => {
+          valueAccessor: (entity: Object) => {
+            const schemaElement = entity as ClientSchemaElement;
             const geometryType = schemaElement.geometry.type;
             const value = ClientSchemaElementTableService.schemaElementTypes[geometryType];
             return `<b>${value}</b>`;
@@ -67,7 +78,8 @@ export class ClientSchemaElementTableService {
         {
           name: 'properties.superficie',
           title: 'Superficie (m²)',
-          valueAccessor: (schemaElement: ClientSchemaElement) => {
+          valueAccessor: (entity: Object) => {
+            const schemaElement = entity as ClientSchemaElement;
             const area = schemaElement.properties.superficie;
             return area ? formatMeasure(area, {decimal: 1, locale: 'fr'}) : '';
           }
@@ -75,7 +87,8 @@ export class ClientSchemaElementTableService {
         {
           name: 'superficieHectares',
           title: 'Superficie (ha)',
-          valueAccessor: (schemaElement: ClientSchemaElement) => {
+          valueAccessor: (entity: Object) => {
+            const schemaElement = entity as ClientSchemaElement;
             const area = schemaElement.properties.superficie;
             return area ? formatMeasure(squareMetersToHectares(area), {decimal: 1, locale: 'fr'}) : '';
           }
@@ -83,7 +96,8 @@ export class ClientSchemaElementTableService {
         {
           name: 'superficieAcres',
           title: 'Superficie (acres)',
-          valueAccessor: (schemaElement: ClientSchemaElement) => {
+          valueAccessor: (entity: Object) => {
+            const schemaElement = entity as ClientSchemaElement;
             const area = schemaElement.properties.superficie;
             return area ? formatMeasure(squareMetersToAcres(area), {decimal: 1, locale: 'fr'}) : '';
           }
@@ -91,7 +105,8 @@ export class ClientSchemaElementTableService {
         {
           name: 'superficieArpents',
           title: 'Superficie (arpents)',
-          valueAccessor: (schemaElement: ClientSchemaElement) => {
+          valueAccessor: (entity: Object) => {
+            const schemaElement = entity as ClientSchemaElement;
             const area = Number(squareMetersToHectares(schemaElement.properties.superficie).toFixed(1));
             return area ? formatMeasure(area*2.924, {decimal: 1, locale: 'fr'}) : '';
           }
@@ -99,7 +114,8 @@ export class ClientSchemaElementTableService {
         {
           name: 'longueur',
           title: 'Longueur - Périmètre (m)',
-          valueAccessor: (schemaElement: ClientSchemaElement) => {
+          valueAccessor: (entity: Object) => {
+            const schemaElement = entity as ClientSchemaElement;
             let length = 0;
             const olGeometry = new OlGeoJSON().readGeometry(schemaElement.geometry, {
               dataProjection: schemaElement.projection,
@@ -116,7 +132,8 @@ export class ClientSchemaElementTableService {
         {
           name: 'properties.timbreMaj',
           title: 'Date de mise à jour',
-          valueAccessor: (schemaElement: ClientSchemaElement) => {
+          valueAccessor: (entity: Object) => {
+            const schemaElement = entity as ClientSchemaElement;
             const value = schemaElement.properties.timbreMaj;
             if (!value) { return ''; }
             return formatDate(value);
@@ -125,7 +142,8 @@ export class ClientSchemaElementTableService {
         {
           name: 'properties.usagerMaj',
           title: 'Usager mise à jour',
-          valueAccessor: (schemaElement: ClientSchemaElement) => {
+          valueAccessor: (entity: Object) => {
+            const schemaElement = entity as ClientSchemaElement;
             const value = schemaElement.properties.idenUsagerMaj;
             if (value) { return value; }
             return schemaElement.properties.usagerMaj;

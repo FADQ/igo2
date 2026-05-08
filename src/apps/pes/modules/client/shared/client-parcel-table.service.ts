@@ -4,6 +4,7 @@ import { EntityTableTemplate } from '@igo2/common/entity';
 import { formatMeasure } from '@igo2/geo';
 import { formatDate } from 'src/lib/utils/date';
 import { ClientParcel } from 'src/lib/client';
+import { typedRowClass } from '@lib/compatibility/typedAccessor';
 
 /**
  * This is a factory for parcel workspace table template
@@ -30,7 +31,7 @@ export class ClientParcelTableService {
       headerClassFunc: (() => {
         return {'text-centered': true};
       }),
-      rowClassFunc: ((parcel: ClientParcel) => {
+      rowClassFunc: typedRowClass<ClientParcel>(() => {
         return {'text-centered': true};
       }),
       columns: [
@@ -57,7 +58,8 @@ export class ClientParcelTableService {
         {
           name: 'properties.superficieHectare',
           title: 'Superficie mesurée (ha)',
-          valueAccessor: (parcelElement: ClientParcel) => {
+          valueAccessor: (entity: Object) => {
+            const parcelElement = entity as ClientParcel;
             const area = parcelElement.properties.superficieHectare;
             return area ? formatMeasure(area, {decimal: 1, locale: 'fr'}) : '';
           }
@@ -65,7 +67,8 @@ export class ClientParcelTableService {
         {
           name: 'properties.superficieAcre',
           title: 'Superficie mesurée (ac)',
-          valueAccessor: (parcelElement: ClientParcel) => {
+          valueAccessor: (entity: Object) => {
+            const parcelElement = entity as ClientParcel;
             const area = parcelElement.properties.superficieHectare;
             return area ? formatMeasure(area*2.471, {decimal: 1, locale: 'fr'}) : '';
           }
@@ -73,7 +76,8 @@ export class ClientParcelTableService {
         {
           name: 'properties.superficieArpent',
           title: 'Superficie mesurée (ar)',
-          valueAccessor: (parcelElement: ClientParcel) => {
+          valueAccessor: (entity: Object) => {
+            const parcelElement = entity as ClientParcel;
             const area = parcelElement.properties.superficieHectare;
             return area ? formatMeasure(area*2.924, {decimal: 1, locale: 'fr'}) : '';
           }
@@ -109,7 +113,8 @@ export class ClientParcelTableService {
         {
           name: 'properties.timbreMajGeometrie',
           title: 'Date de mise à jour de la géométrie',
-          valueAccessor: (parcel: ClientParcel) => {
+          valueAccessor: (entity: Object) => {
+            const parcel = entity as ClientParcel;
             const value = parcel.properties.timbreMajGeometrie;
             if (!value) { return ''; }
             return formatDate(value);

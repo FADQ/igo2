@@ -32,7 +32,7 @@ export class ClientParcelService {
     });
 
     return this.http
-      .get(url)
+      .get<ClientParcelListResponse>(url)
       .pipe(
         map((response: ClientParcelListResponse) => {
           return this.extractParcelsFromListResponse(response, client);

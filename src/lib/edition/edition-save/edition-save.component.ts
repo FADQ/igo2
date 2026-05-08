@@ -69,14 +69,16 @@ export class EditionSaveComponent implements WidgetComponent, OnDestroy {
         name: 'type',
         title: 'Opération',
         renderer: EntityTableColumnRenderer.Icon,
-        valueAccessor: (operation: EntityOperation) => {
+        valueAccessor: (entity: Object) => {
+          const operation = entity as EntityOperation;
           return EditionSaveComponent.operationIcons[operation.type];
         }
       },
       {
         name: 'title',
         title: 'Élément',
-        valueAccessor: (operation: EntityOperation) => {
+        valueAccessor: (entity: Object) => {
+          const operation = entity as EntityOperation;
           return getEntityTitle(operation) || getEntityId(operation);
         }
       }

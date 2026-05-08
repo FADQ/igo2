@@ -18,7 +18,7 @@ import { EntityRecord, EntityTransaction, getEntityRevision } from '@igo2/common
 import { WidgetComponent } from '@igo2/common/widget';
 import { OnUpdateInputs } from '@igo2/common/dynamic-component';
 
-import { FeatureStore, IgoMap } from '@igo2/geo';
+import { Feature, FeatureStore, IgoMap } from '@igo2/geo';
 
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
 import { getMapExtentPolygon } from '../../../map/shared/map.utils';
@@ -26,6 +26,7 @@ import { getMapExtentPolygon } from '../../../map/shared/map.utils';
 import { ClientParcelElement } from '../shared/client-parcel-element.interfaces';
 import { ClientParcelElementService } from '../shared/client-parcel-element.service';
 import { getParcelElementValidationMessage } from '../shared/client-parcel-element.utils';
+import { asEntityStore } from '@lib/compatibility/igo2-compat';
 
 @Component({
   selector: 'fadq-client-parcel-element-without-owner',
@@ -152,7 +153,7 @@ export class ClientParcelElementWithoutOwnerComponent
         const firstResultWithError = results.find((result: EditionResult) => result.error !== undefined);
         const error = firstResultWithError ? firstResultWithError.error : undefined;
 
-        let parcelElements = [];
+        let parcelElements: ClientParcelElement[] | Feature<Record<string, any>>[] = [];
         if (error === undefined) {
           parcelElements = results.map((result: EditionResult) => result.feature);
         }
@@ -241,9 +242,14 @@ export class ClientParcelElementWithoutOwnerComponent
    */
   private addToTransaction(parcelElement: ClientParcelElement) {
     const operationTitle = parcelElement.properties.noParcelleAgricole;
-    this.transaction.insert(parcelElement, this.store, {
-      title: operationTitle
-    });
+
+    this.transaction.insert(
+      parcelElement,
+      asEntityStore(this.store),
+      {
+        title: operationTitle
+      }
+    );
   }
 
   private setError(text: string | undefined) {

@@ -31,6 +31,8 @@ import {
 import { moveToFeatureStore } from 'src/lib/feature';
 
 import { ClientController } from './client-controller';
+import { asEntityStore } from '@lib/compatibility/igo2-compat';
+import { toFeatureStore } from '@lib/compatibility/feature-store.adapter';
 
 @Injectable({
   providedIn: 'root'
@@ -76,7 +78,7 @@ export class ClientSchemaElementActionsService {
         handler: function(ctrl: ClientController) {
           moveToFeatureStore(
             ctrl.schemaElementWorkspace.map,
-            ctrl.schemaElementWorkspace.schemaElementStore
+            toFeatureStore(ctrl.schemaElementWorkspace.schemaElementStore)
           );
         }
       },
@@ -180,7 +182,7 @@ export class ClientSchemaElementActionsService {
           const transaction = ctrl.schemaElementTransaction;
           const schemaElements = ctrl.selectedSchemaElements;
           schemaElements.forEach((schemaElement: ClientSchemaElement) => {
-            transaction.delete(schemaElement, store, {
+            transaction.delete(schemaElement, asEntityStore(store), {
               title: generateSchemaElementOperationTitle(schemaElement, this.languageService)
             });
           });
@@ -362,16 +364,11 @@ function oneOrMoreSchemaElementAreSelected(ctrl: ClientController): Observable<b
 function schemaElementHasSameGeometryType(ctrl: ClientController): Observable<boolean> {
   return ctrl.selectedSchemaElements$.pipe(
     map(() => {
-      let typeIsUnique = true;
-      let geometryType;
+      const firstType = ctrl.selectedSchemaElements[0]?.geometry.type;
 
-      ctrl.selectedSchemaElements.forEach((elem: ClientSchemaElement) => {
-        if (geometryType === undefined)
-          { geometryType = elem.geometry.type; }
-        if (geometryType !== elem.geometry.type)
-          { typeIsUnique = false; }
-      });
-      return typeIsUnique;
+      return ctrl.selectedSchemaElements.every(
+        (elem: ClientSchemaElement) => elem.geometry.type === firstType
+      );
     })
   );
 }

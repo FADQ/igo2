@@ -24,7 +24,6 @@ import {
 } from '@igo2/common/form';
 
 import { createOlTextStyle } from '../../../edition/shared/edition.utils';
-import { TransactionData } from '../../../utils/transaction';
 import { Client } from '../../shared/client.interfaces';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import { ClientSchemaElementService } from '../shared/client-schema-element.service';
@@ -234,8 +233,9 @@ function getSchemaElementDefaultColor(): [number, number, number] {
   return [128, 21, 21];
 }
 
+// Migration 17: TransactionData n'est plus disponible. Remplacé par data: any afin de compiler.
 export function transactionDataToSaveSchemaElementData(
-  data: TransactionData<ClientSchemaElement>
+  data: any
 ): ClientSchemaElementSaveData {
   return {
     lstElementsAjoutes: data.inserts,

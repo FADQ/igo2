@@ -66,9 +66,9 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
       return;
     }
     if (this.removeLayersOnContextChange === true) {
-      this.map.layerController.reset();
+      (this.map as any).layerController.reset();
     } else {
-      this.contextLayers.forEach((layer: AnyLayer) => this.map.layerController.remove(layer));
+      this.contextLayers.forEach((layer: AnyLayer) => (this.map as any).layerController.remove(layer));
     }
     this.contextLayers = [];
 
@@ -89,7 +89,7 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
         const validLayers = layers.filter(layer => layer !== undefined);
         this.contextLayers.push(...validLayers);
         validLayers.forEach(
-          (layer: Layer) => this.map.layerController.add(layer)
+          (layer: Layer) => (this.map as any).layerController.add(layer)
         );
       });
   }

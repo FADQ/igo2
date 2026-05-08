@@ -4,6 +4,7 @@ import {
   FeatureStore,
 } from '@igo2/geo';
 import { MapState } from '@igo2/integration';
+import { entityKey } from '@lib/shared/entity/entity-key.utils';
 
 import { AddressFeature } from 'src/lib/address';
 
@@ -32,7 +33,7 @@ export class AddressState {
    */
   initAddressStore() {
     this._adressStore = new FeatureStore<AddressFeature>([], {
-      getKey: (entity: AddressFeature) => entity.properties.idAdresseLocalisee,
+      getKey: entityKey<AddressFeature>(e => e.properties.idAdresseLocalisee),
       map: this.mapState.map }
       );
   }

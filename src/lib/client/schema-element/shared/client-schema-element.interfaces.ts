@@ -4,7 +4,7 @@ import { EntityTransaction } from '@igo2/common/entity';
 import { FormFieldSelectChoice, } from '@igo2/common/form';
 import { Feature } from '@igo2/geo';
 
-import { TransactionData } from 'src/lib/utils/transaction';
+// import { TransactionData } from 'src/lib/utils/transaction';
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 
 export interface ClientSchemaElementApiConfig {
@@ -88,8 +88,9 @@ export interface GetElements {
   getSchemaElements(schema: ClientSchema): Observable<ClientSchemaElement[]>;
 }
 
+// Migration 17: TransactionData n'est plus disponible. Remplacé par data: any afin de compiler.
 export interface SaveElements {
-  saveElements(schema: ClientSchema, data: TransactionData<ClientSchemaElement>): Observable<any>;
+  saveElements(schema: ClientSchema, data: any): Observable<any>;
 }
 
 export interface ClientSchemaElementSaveData {

@@ -450,11 +450,11 @@ export class PortalComponent implements OnInit, OnDestroy {
     } else {
       this.searchAddedLayers.set(searchType, [layer]);
     }
-    this.map.layerController.add(layer);
+    this.map.addLayer(layer);
   }
 
   private makeSearchLayerVisible(layerAlias: string, searchType: string) {
-    const layer = this.map.getLayerByAlias(layerAlias);
+    const layer = (this.map as any).getLayerByAlias(layerAlias);
     if (layer === undefined) { return; }
 
     if (this.searchVisibledLayers.has(searchType)) {
@@ -471,7 +471,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   private clearAllSearchLayers() {
     this.searchAddedLayers.forEach((layers: Layer[]) => {
       layers.forEach((layer: Layer) => {
-        this.map.layerController.remove(layer);
+        this.map.removeLayer(layer);
       });
     });
 

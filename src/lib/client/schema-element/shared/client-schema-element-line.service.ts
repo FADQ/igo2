@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ApiService } from 'src/lib/core/api';
-import { TransactionData } from 'src/lib/utils/transaction';
+// import { TransactionData } from 'src/lib/utils/transaction';
 
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import {
@@ -34,7 +34,7 @@ export class ClientSchemaElementLineService implements GetElements, SaveElements
     });
 
     return this.http
-      .get(url)
+      .get<ClientSchemaElementListResponse>(url)
       .pipe(
         map((response: ClientSchemaElementListResponse) => {
           return this.extractElementsFromListResponse(response);
@@ -42,11 +42,23 @@ export class ClientSchemaElementLineService implements GetElements, SaveElements
       );
   }
 
-  saveElements(schema: ClientSchema, data: TransactionData<ClientSchemaElement>): Observable<any> {
-    const url = this.apiService.buildUrl(this.apiConfig.saveLines, {
-      schemaId: schema.id
-    });
-    return this.http.post(url, transactionDataToSaveSchemaElementData(data));
+  // Migration 17: TransactionData n'est plus disponible. Remplacé par data: any afin de compiler.
+  saveElements(
+    schema: ClientSchema,
+    data: any
+  ): Observable<any> {
+
+    const url = this.apiService.buildUrl(
+      this.apiConfig.saveLines,
+      {
+        schemaId: schema.id
+      }
+    );
+
+    return this.http.post(
+      url,
+      transactionDataToSaveSchemaElementData(data)
+    );
   }
 
   private extractElementsFromListResponse(response: ClientSchemaElementListResponse): ClientSchemaElement[] {

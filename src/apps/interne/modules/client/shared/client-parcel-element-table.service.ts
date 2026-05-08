@@ -12,6 +12,7 @@ import {
   getParcelElementWarnings,
   getParcelDraineeChoices
 } from 'src/lib/client';
+import { typedRowClass } from '@lib/compatibility/typedAccessor';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,7 @@ export class ClientParcelElementTableService {
       headerClassFunc: (() => {
         return {'text-centered': true};
       }),
-      rowClassFunc: ((parcelElement: ClientParcelElement) => {
+      rowClassFunc: typedRowClass<ClientParcelElement>(() => {
         return {'text-centered': true};
       }),
       columns: [
@@ -44,7 +45,8 @@ export class ClientParcelElementTableService {
         {
           name: 'properties.superficie',
           title: 'Superficie (m²)',
-          valueAccessor: (parcelElement: ClientParcelElement) => {
+          valueAccessor: (entity: Object) => {
+            const parcelElement = entity as ClientParcelElement;
             const area = parcelElement.properties.superficie;
             return area ? formatMeasure(area, {decimal: 0, locale: 'fr'}) : '';
           }
@@ -52,7 +54,8 @@ export class ClientParcelElementTableService {
         {
           name: 'properties.superficieHectare',
           title: 'Superficie (ha)',
-          valueAccessor: (parcelElement: ClientParcelElement) => {
+          valueAccessor: (entity: Object) => {
+            const parcelElement = entity as ClientParcelElement;
             const area = parcelElement.properties.superficie;
             return area ? formatMeasure(squareMetersToHectares(area), {decimal: 1, locale: 'fr'}) : '';
           }
@@ -60,7 +63,8 @@ export class ClientParcelElementTableService {
         {
           name: 'properties.superficieAcre',
           title: 'Superficie (ac)',
-          valueAccessor: (parcelElement: ClientParcelElement) => {
+          valueAccessor: (entity: Object) => {
+            const parcelElement = entity as ClientParcelElement;
             const area = Number(squareMetersToHectares(parcelElement.properties.superficie).toFixed(1));
             return area ? formatMeasure(area*2.471, {decimal: 1, locale: 'fr'}) : '';
           }
@@ -68,7 +72,8 @@ export class ClientParcelElementTableService {
         {
           name: 'properties.superficieArpent',
           title: 'Superficie (ar)',
-          valueAccessor: (parcelElement: ClientParcelElement) => {
+          valueAccessor: (entity: Object) => {
+            const parcelElement = entity as ClientParcelElement;
             const area = Number(squareMetersToHectares(parcelElement.properties.superficie).toFixed(1));
             return area ? formatMeasure(area*2.924, {decimal: 1, locale: 'fr'}) : '';
           }
@@ -80,7 +85,8 @@ export class ClientParcelElementTableService {
         {
           name: 'properties.indParcelleDrainee',
           title: 'Parcelle drainée',
-          valueAccessor: (parcelElement: ClientParcelElement) => {
+          valueAccessor: (entity: Object) => {
+            const parcelElement = entity as ClientParcelElement;
             const value = parcelElement.properties.indParcelleDrainee;
             const choices = getParcelDraineeChoices();
             const choice = choices.find((_choice: FormFieldSelectChoice) => _choice.value === value);
@@ -102,7 +108,8 @@ export class ClientParcelElementTableService {
         {
           name: 'properties.timbreMaj',
           title: 'Date de mise à jour',
-          valueAccessor: (parcelElement: ClientParcelElement) => {
+          valueAccessor: (entity: Object) => {
+            const parcelElement = entity as ClientParcelElement;
             const value = parcelElement.properties.timbreMaj;
             if (!value) { return ''; }
             return formatDate(value);
@@ -120,7 +127,8 @@ export class ClientParcelElementTableService {
           name: 'properties.messages',
           title: 'Validation',
           renderer: EntityTableColumnRenderer.UnsanitizedHTML,
-          valueAccessor: (parcelElement: ClientParcelElement) => {
+          valueAccessor: (entity: Object) => {
+            const parcelElement = entity as ClientParcelElement;
             const errors = getParcelElementErrors(parcelElement);
             const warnings = getParcelElementWarnings(parcelElement);
             const errorsHtml = errors.map((error: ClientParcelElementMessage) => {

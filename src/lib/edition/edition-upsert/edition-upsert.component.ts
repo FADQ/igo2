@@ -99,7 +99,7 @@ export class EditionUpsertComponent implements OnInit, OnDestroy, OnUpdateInputs
   /**
    * Feature store
    */
-  @Input() store: FeatureStore;
+  @Input() store: FeatureStore<any>;
 
   /**
    * Transaction
@@ -265,11 +265,11 @@ export class EditionUpsertComponent implements OnInit, OnDestroy, OnUpdateInputs
     const operationTitle = getOperationTitle(feature, this.languageService);
 
     if (this.feature === undefined) {
-      this.transaction.insert(feature, this.store, {
+      this.transaction.insert(feature, this.store as any, {
         title: operationTitle
       });
     } else {
-      this.transaction.update(this.feature, feature, this.store, {
+      this.transaction.update(this.feature, feature, this.store as any, {
         title: operationTitle
       });
     }
@@ -292,15 +292,21 @@ export class EditionUpsertComponent implements OnInit, OnDestroy, OnUpdateInputs
     }
 
     const selectionStrategy =
-      this.store.getStrategyOfType(FeatureStoreSelectionStrategy) as FeatureStoreSelectionStrategy;
-    if (selectionStrategy === undefined) {
+      this.store.getStrategyOfType(
+        FeatureStoreSelectionStrategy as any
+      );
+
+    if (!selectionStrategy) {
       return;
     }
 
-    const overlayStore = selectionStrategy.overlayStore;
+    const overlayStore = (selectionStrategy as any).overlayStore;
+
     const featureId = this.store.getKey(this.feature);
 
-    return overlayStore.source.ol.getFeatureById(featureId) as OlFeature<OlSimpleGeometry>;
+    return overlayStore.source.ol.getFeatureById(
+      featureId
+    ) as OlFeature<OlSimpleGeometry>;
   }
 
   /**

@@ -8,7 +8,7 @@ import { concatMap, map, catchError } from 'rxjs/operators';
 import { EntityOperation, EntityTransaction } from '@igo2/common/entity';
 
 import { ApiService } from 'src/lib/core/api';
-import { TransactionSerializer, TransactionData } from 'src/lib/utils/transaction';
+import { TransactionSerializer } from 'src/lib/utils/transaction';
 
 import { transactionDataToSaveParcelElementData } from './client-parcel-element.utils';
 import { Client } from '../../shared/client.interfaces';
@@ -37,7 +37,7 @@ export class ClientParcelElementService {
     });
 
     return this.http
-      .get(url)
+      .get<ClientParcelElementListResponse>(url)
       .pipe(
         map((response: ClientParcelElementListResponse) => {
           return this.extractParcelsFromListResponse(response);
@@ -48,7 +48,7 @@ export class ClientParcelElementService {
   getParcelElementsWithoutOwner(geometry: GeoJSONGeometry, annee: number): Observable<ClientParcelElement[]> {
     const url = this.apiService.buildUrl(this.apiConfig.parcelsWithoutOwner, {annee});
     return this.http
-      .post(url, geometry)
+      .post<ClientParcelElementWithoutOwnerResponse>(url, geometry)
       .pipe(
         map((response: ClientParcelElementWithoutOwnerResponse) => {
           return this.extractParcelsWithoutOwnerFromListResponse(response);
@@ -62,7 +62,7 @@ export class ClientParcelElementService {
       annee
     });
 
-    return this.http.get(url).pipe(
+    return this.http.get<ClientParcelElementValidateTransferResponse>(url).pipe(
       map((response: ClientParcelElementValidateTransferResponse) => response.data.transfertPossible)
     );
   }
@@ -146,8 +146,13 @@ export class ClientParcelElementService {
     annee: number,
     operations: EntityOperation[]
   ): Observable<ClientParcelElement[] | Error> {
-    const serializer = new TransactionSerializer<ClientParcelElement>();
-    const data = serializer.serializeOperations(operations);
+
+    const serializer = new TransactionSerializer();
+
+    const data = serializer.serializeOperations(
+      operations as any
+    );
+
     return this.saveElements(client, annee, data);
   }
 
@@ -161,7 +166,8 @@ export class ClientParcelElementService {
   private saveElements(
     client: Client,
     annee: number,
-    data: TransactionData<ClientParcelElement>
+    // Migration 17: TransactionData n'est plus disponible. Remplacé par data: any afin de compiler.
+    data: any
   ): Observable<ClientParcelElement[] | Error> {
     const url = this.apiService.buildUrl(this.apiConfig.save, {
       clientNum: client.info.numero,

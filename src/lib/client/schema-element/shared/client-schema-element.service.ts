@@ -8,7 +8,7 @@ import { EntityOperation, EntityTransaction } from '@igo2/common/entity';
 
 import { ApiService } from 'src/lib/core/api';
 import { hexToRGB } from 'src/lib/utils/color';
-import { TransactionSerializer, TransactionData } from 'src/lib/utils/transaction';
+import { TransactionSerializer } from 'src/lib/utils/transaction';
 
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 import {
@@ -83,7 +83,7 @@ export class ClientSchemaElementService {
       schemaType: schemaType
     });
     return this.http
-      .get(url)
+      .get<ClientSchemaElementTypesResponse>(url)
       .pipe(
         map((response: ClientSchemaElementTypesResponse) => {
           return this.extractSchemaElementTypesFromResponse(response);
@@ -114,11 +114,19 @@ export class ClientSchemaElementService {
    * @param schemaType Schema type (code)
    * @returns Observable of the geometry types
    */
-  getSchemaElementGeometryTypes(schemaType: string): Observable<string[]> {
+  getSchemaElementGeometryTypes(
+    schemaType: string
+  ): Observable<string[]> {
+
     return this.getSchemaElementTypes(schemaType).pipe(
+
       map((schemaElementTypes: ClientSchemaElementTypes) => {
-        return Object.keys(schemaElementTypes).filter((key: string) => schemaElementTypes[key].length > 0);
+
+        return (Object.keys(schemaElementTypes) as Array<keyof ClientSchemaElementTypes>)
+          .filter((key) => schemaElementTypes[key].length > 0);
+
       })
+
     );
   }
 
@@ -195,7 +203,7 @@ export class ClientSchemaElementService {
   ): Observable<number> {
 
     const url = this.apiService.buildUrl(this.apiConfig.getMostRecentImageYear, {});
-    return this.http.post(url, {"geometrie": geometry})
+    return this.http.post<number>(url, {"geometrie": geometry})
     .pipe(map((year: number) => {
       return year;
     }));
@@ -213,8 +221,13 @@ export class ClientSchemaElementService {
     operations: EntityOperation[],
     geometryType: string
   ): Observable<ClientSchemaElement[] | Error> {
-    const serializer = new TransactionSerializer<ClientSchemaElement>();
-    const data = serializer.serializeOperations(operations);
+
+    const serializer = new TransactionSerializer();
+
+    const data = serializer.serializeOperations(
+      operations as any
+    );
+
     return this.saveElements(schema, data, geometryType);
   }
 
@@ -227,7 +240,8 @@ export class ClientSchemaElementService {
    */
   private saveElements(
     schema: ClientSchema,
-    data: TransactionData<ClientSchemaElement>,
+    // Migration 17: TransactionData n'est plus disponible. Remplacé par data: any afin de compiler.
+    data: any,
     geometryType: string
   ): Observable<ClientSchemaElement[] | Error> {
     const service = this.services[geometryType];

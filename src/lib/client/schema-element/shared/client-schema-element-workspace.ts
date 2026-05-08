@@ -39,13 +39,13 @@ export class ClientSchemaElementWorkspace extends Workspace<ClientSchemaElement>
   }
 
   init() {
-    this.schemaElementStore.activateStrategyOfType(FeatureStoreLoadingStrategy);
+    this.schemaElementStore.activateStrategyOfType(FeatureStoreLoadingStrategy as any);
     this.addSchemaElementLayer();
   }
 
   teardown() {
     this.deactivate();
-    this.schemaElementStore.deactivateStrategyOfType(FeatureStoreLoadingStrategy);
+    this.schemaElementStore.deactivateStrategyOfType(FeatureStoreLoadingStrategy as any);
     this.removeSchemaElementLayer();
     this.schemaElementStore.layer.ol.getSource().clear();
     this.schemaElementStore.clear();
@@ -53,24 +53,24 @@ export class ClientSchemaElementWorkspace extends Workspace<ClientSchemaElement>
 
   activate() {
     super.activate();
-    this.schemaElementStore.activateStrategyOfType(FeatureStoreSelectionStrategy);
+    this.schemaElementStore.activateStrategyOfType(FeatureStoreSelectionStrategy as any);
   }
 
   deactivate() {
     super.deactivate();
-    this.schemaElementStore.deactivateStrategyOfType(FeatureStoreSelectionStrategy);
+    this.schemaElementStore.deactivateStrategyOfType(FeatureStoreSelectionStrategy as any);
     this.schemaElementStore.state.clear();
   }
 
   private addSchemaElementLayer() {
     if (this.schemaElementStore.layer.map === undefined) {
-      this.map.layerController.add(this.schemaElementStore.layer);
+      (this.map as any).layerController.add(this.schemaElementStore.layer);
     }
   }
 
   private removeSchemaElementLayer() {
     if (this.schemaElementStore.layer.map !== undefined) {
-      this.map.layerController.remove(this.schemaElementStore.layer);
+      (this.map as any).layerController.remove(this.schemaElementStore.layer);
     }
   }
 }
