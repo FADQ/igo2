@@ -105,7 +105,8 @@ export class ClientSchemaCreateComponent implements OnInit, OnUpdateInputs, Widg
       const schemaType = schemaTypeControl.value;
       const descriptionControl = formInfo.get('description') as FormControl;
       if (schemaType in UniqueClientSchemaType && descriptionControl !== undefined) {
-        formInfo.patchValue({description: this.languageService.translate.instant('client.schema.description.' + schemaType)}, {onlySelf: true, emitEvent: true});
+        formInfo.patchValue({description: this.languageService.translate.instant('client.schema.description.' + schemaType)},
+        {onlySelf: true, emitEvent: true});
         descriptionControl.disable({onlySelf: true, emitEvent: true});
       }else {
         if (descriptionControl.value === this.languageService.translate.instant('client.schema.description.LSE') ||

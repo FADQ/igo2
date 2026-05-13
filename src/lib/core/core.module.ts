@@ -17,7 +17,7 @@ import {
 } from '@igo2/common/form';
 
 import { Tool, ToolService } from '@igo2/common/tool';
-import { IgoCoreModule } from '@igo2/core/';
+import { IgoCoreModule } from '@igo2/core';
 import { ConfigOptions, ConfigService, CONFIG_OPTIONS } from '@igo2/core/config';
 import { RouteService } from '@igo2/core/route';
 import { LanguageService } from '@igo2/core/language';

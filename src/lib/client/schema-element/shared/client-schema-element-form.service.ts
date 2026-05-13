@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, Validators } from '@angular/forms';
 
 import { BehaviorSubject, Observable, of, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -63,11 +63,17 @@ export class ClientSchemaElementFormService {
       .pipe(
         map((fields: [FormField[], FormField[]]) => {
           return this.formService.form([], [
-            this.formService.group({name: 'info', title: infoTitle, options: {
-              validator: Validators.compose([,
-                (control: FormGroup) => validateOnlyOneLabel(control, store, schema)
-              ])
-            }}, fields[0]),
+            this.formService.group(
+            {
+              name: 'info',
+              title: infoTitle,
+              options: {
+                validator: (control: AbstractControl) =>
+                  validateOnlyOneLabel(control, store, schema)
+              }
+            },
+            fields[0]
+          ),
             this.formService.group({name: 'geometry', title: geometryTitle}, fields[1])
           ]);
         })

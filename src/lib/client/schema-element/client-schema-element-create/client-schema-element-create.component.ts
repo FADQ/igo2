@@ -183,7 +183,14 @@ export class ClientSchemaElementCreateComponent
 
     const geometryField = this.getGeometryField();
     this.geometry$$ = geometryField.control.valueChanges
-      .subscribe((geometry: GeoJSONGeometry) => updateElementTypeChoices(geometry.type, this.clientSchemaElementService,this.schema, this.getElementTypeField()));
+      .subscribe((geometry: GeoJSONGeometry) => {
+        updateElementTypeChoices(
+          geometry.type as any,
+          this.clientSchemaElementService,
+          this.schema,
+          this.getElementTypeField()
+        );
+      });
 
     const elementTypeField = this.getElementTypeField();
     this.elementType$$ = elementTypeField.control.valueChanges
@@ -215,7 +222,9 @@ export class ClientSchemaElementCreateComponent
     const elementTypeField = this.getElementTypeField();
     const geometryField = this.getGeometryField();
 
-    const elementTypes = (elementTypeField.inputs.choices as BehaviorSubject<ClientSchemaElementType[]>).value;
+    const elementTypes = (
+      elementTypeField.inputs.choices as unknown as BehaviorSubject<ClientSchemaElementType[]>
+    ).value;
     const elementType = elementTypes.find((_elementType: ClientSchemaElementType) => {
       return _elementType.value === elementTypeValue;
     });

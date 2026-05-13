@@ -18,10 +18,11 @@ export class FeatureStoreFilterNotOwnedStrategy extends EntityStoreStrategy {
    * Bind this strategy to a store and start filtering it
    * @param store Entity store
    */
-  bindStore(store: FeatureStore<ClientParcel>) {
+  bindStore(store: any) {
     super.bindStore(store);
+
     if (this.active === true) {
-      this.filterStore(store);
+      this.filterStore(store as FeatureStore<ClientParcel>);
     }
   }
 
@@ -29,10 +30,11 @@ export class FeatureStoreFilterNotOwnedStrategy extends EntityStoreStrategy {
    * Unbind this strategy from a store and stop filtering it
    * @param store Entity store
    */
-  unbindStore(store: FeatureStore<ClientParcel>) {
+  unbindStore(store: any) {
     super.unbindStore(store);
+
     if (this.active === true) {
-      this.unfilterStore(store);
+      this.unfilterStore(store as FeatureStore<ClientParcel>);
     }
   }
 
@@ -56,14 +58,18 @@ export class FeatureStoreFilterNotOwnedStrategy extends EntityStoreStrategy {
    * Filter all stores
    */
   private filterAll() {
-    this.stores.forEach((store: FeatureStore<ClientParcel>) => this.filterStore(store));
+    this.stores.forEach((store: any) =>
+      this.filterStore(store as FeatureStore<ClientParcel>)
+    );
   }
 
   /**
    * Unfilter all stores
    */
   private unfilterAll() {
-    this.stores.forEach((store: FeatureStore<ClientParcel>) => this.unfilterStore(store));
+    this.stores.forEach((store: any) =>
+      this.unfilterStore(store as FeatureStore<ClientParcel>)
+    );
   }
 
   /**

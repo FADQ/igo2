@@ -1,5 +1,5 @@
 import * as olstyle from 'ol/style';
-import OlFeature from 'ol/Feature';
+import OlFeature, { FeatureLike } from 'ol/Feature';
 import OlSimpleGeometry from 'ol/geom/SimpleGeometry';
 import OlMultiPoint from 'ol/geom/MultiPoint';
 
@@ -45,11 +45,15 @@ export function createOlEditionStyle(): olstyle.Style[] {
           color: color.concat([0.30])
         })
       }),
-      geometry: function(olFeature: OlFeature<OlSimpleGeometry>) {
+      geometry: function (feature: FeatureLike) {
+        const olFeature = feature as OlFeature<OlSimpleGeometry>;
         const olGeometry = olFeature.getGeometry();
-        const coordinates = olGeometry.getCoordinates().reduce((r, c) => {
+
+        if (!olGeometry) return null;
+        const coordinates = (olGeometry.getCoordinates() as any[]).reduce((r, c) => {
           return r.concat(c);
         }, []);
+
         return new OlMultiPoint(coordinates);
       }
     })

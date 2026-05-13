@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { IgoLanguageModule } from '@igo2/core/language';
 import { IgoEntityTableModule } from '@igo2/common/entity';
@@ -24,7 +25,8 @@ import { EditionImportComponent } from './edition-import.component';
     IgoLanguageModule,
     IgoFormModule,
     IgoEntityTableModule,
-    FadqLibCardPanelModule
+    FadqLibCardPanelModule,
+    ReactiveFormsModule
   ],
   exports: [
     EditionImportComponent

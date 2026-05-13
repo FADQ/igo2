@@ -90,7 +90,7 @@ export class ClientSchemaElementSaveComponent implements OnUpdateInputs, WidgetC
 
   private onCommitSuccess(results: Array<ClientSchemaElement[] | Error>): Message | undefined {
     let hasError = false;
-    const schemaElementsToLoad = [];
+    const schemaElementsToLoad: Array<ClientSchemaElement> = [];
 
     results.forEach((result: ClientSchemaElement[] | Error) => {
       if (result instanceof Error) {

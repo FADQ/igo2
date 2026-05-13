@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { Validators } from '@angular/forms';
 
 import { Observable, of, zip } from 'rxjs';
 import { map} from 'rxjs/operators';
@@ -19,7 +19,7 @@ import {
 import { ApiService } from '../../../core/api/api.service';
 import { DomainService } from '../../../core/domain/domain.service';
 
-import { validateOnlyOneType } from './client-schema-validators';
+import { onlyOneTypeValidator } from './client-schema-validators';
 import {
   ClientSchema,
   ClientSchemaApiConfig
@@ -52,7 +52,7 @@ export class ClientSchemaFormService {
             name: 'info',
             options: {
               validator: Validators.compose([
-                (control: FormGroup) => validateOnlyOneType(control, store)
+                onlyOneTypeValidator(store)
               ])
             }
           }, fields)

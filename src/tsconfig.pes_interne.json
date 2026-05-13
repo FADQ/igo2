@@ -11,6 +11,12 @@
   "include": [
     "apps/pes_interne/**/*.ts",
     "lib/**/*.ts",
-    "environments/**/*.ts"
+    "**/*.d.ts"
+  ],
+  "exclude": [
+    "apps/interne/**/*",
+    "apps/pes/**/*",
+    "environments/interne/**/*",
+    "environments/pes/**/*"
   ]
 }

@@ -42,7 +42,7 @@ export class DomainService {
     }));
   }
 
-  private cacheChoices(url, choices: FormFieldSelectChoice[]) {
+  private cacheChoices(url: string, choices: FormFieldSelectChoice[]) {
     this.cache[url] = choices;
   }
 }

@@ -2,7 +2,6 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": ".",
-    "ignoreDeprecations":"6.0",
     "moduleResolution": "node",
     "resolvePackageJsonExports": false,
     "strict": true,
@@ -15,15 +14,10 @@
     "paths": {
       "@lib/*": ["src/lib/*"],
       "@shared/*": ["src/apps/shared/*"],
-
       "@interne/*": ["src/apps/interne/*"],
       "@pes/*": ["src/apps/pes/*"],
       "@pes-interne/*": ["src/apps/pes_interne/*"],
       "@shared/dto": ["src/apps/shared/dto"]
     }
-  },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts"
-  ]
+  }
 }

@@ -1,4 +1,4 @@
-import { FormGroup, ValidationErrors } from '@angular/forms';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 import { EntityStore } from '@igo2/common/entity';
 import { UniqueClientSchemaType } from '../../schema/shared/client-schema.enums';
@@ -13,18 +13,32 @@ import {
  * @param schema Schema to be validated
  * @returns Error if the label of the control is not unique
  */
-export function validateOnlyOneLabel(control: FormGroup, store: EntityStore<ClientSchemaElement>, schema: ClientSchema): ValidationErrors | null {
-  const labelControl = control.controls['properties.etiquette'];
-  const schemaElementId = control.controls['properties.idElementGeometrique'].value;
+export function validateOnlyOneLabel(
+  control: AbstractControl,
+  store: EntityStore<ClientSchemaElement>,
+  schema: ClientSchema
+): ValidationErrors | null {
+
+  const labelControl = control.get('properties.etiquette');
+  const idControl = control.get('properties.idElementGeometrique');
+
+  if (!labelControl || !idControl) {
+    return null;
+  }
+
   const label = labelControl.value;
+  const schemaElementId = idControl.value;
 
   if (schema.type in UniqueClientSchemaType) {
-    const otherElementSchema = store.all().find((schemaElement: ClientSchemaElement) => {
-      return schemaElement.properties.etiquette === label && schemaElement.properties.idElementGeometrique !== schemaElementId;
+
+    const duplicate = store.all().find((schemaElement: ClientSchemaElement) => {
+      return schemaElement.properties.etiquette === label &&
+             schemaElement.properties.idElementGeometrique !== schemaElementId;
     });
 
-    if (otherElementSchema !== undefined) {
-      labelControl.setErrors({uniqueLabel: ''});}
+    if (duplicate) {
+      return { uniqueLabel: true };
+    }
   }
 
   return null;

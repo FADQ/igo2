@@ -32,6 +32,7 @@ import {
   createOlEditionTranslateStyle,
   getOperationTitle as getDefaultOperationTitle
 } from '../shared/edition.utils';
+import { asEntityStore } from '@lib/compatibility/igo2-compat';
 
 @Component({
   selector: 'fadq-edition-translate',
@@ -205,9 +206,14 @@ export class EditionTranslateComponent implements WidgetComponent, OnInit, OnDes
   private addToTransaction(feature: Feature) {
     const getOperationTitle = this.getOperationTitle ? this.getOperationTitle : getDefaultOperationTitle;
     const operationTitle = getOperationTitle(feature, this.languageService);
-    this.transaction.update(this.feature, feature, this.store, {
-      title: operationTitle
-    });
+    this.transaction.update(
+      this.feature,
+      feature,
+      asEntityStore(this.store),
+      {
+        title: operationTitle
+      }
+    );
   }
 
   /**

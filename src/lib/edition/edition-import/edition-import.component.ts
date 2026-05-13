@@ -7,6 +7,8 @@ import {
   OnInit
 } from '@angular/core';
 
+import { FormControl } from '@angular/forms';
+
 import {
   BehaviorSubject,
   Observable,
@@ -35,6 +37,8 @@ import {
 
 import { EditionResult } from '../shared/edition.interfaces';
 import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition.utils';
+import { asEntityStore } from '@lib/compatibility/igo2-compat';
+
 
 @Component({
   selector: 'fadq-edition-import',
@@ -44,7 +48,7 @@ import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition
 })
 export class EditionImportComponent implements WidgetComponent, OnInit {
 
-  projection: string = 'EPSG:4326';
+  projectionControl = new FormControl('EPSG:4326');
 
   /**
    * File object
@@ -155,7 +159,7 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
    * @internal
    */
   onImport() {
-    const projection = this.projection || 'EPSG:4326';
+    const projection = this.projectionControl.value ?? 'EPSG:4326';
     this.result$$ = this.importService.import(this.file$.value, projection)
       .subscribe(
       (features: Feature[]) => this.onImportSuccess(features),
@@ -197,22 +201,26 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
       feature.geometry = turfTruncate(feature.geometry,options);
     });
 
-    const results$ = [];
+    const results$: Observable<EditionResult>[] = [];
+
     if (typeof this.processData === 'function') {
       features.forEach((feature: Feature) => {
         const resultOrObservable = this.processData(feature);
+
         if (resultOrObservable instanceof Observable) {
           results$.push(resultOrObservable);
         } else {
           results$.push(of(resultOrObservable));
         }
       });
-      this.result$$ = zip(...results$).subscribe((results: EditionResult[]) => {
-        this.submitResults(results.filter((result: EditionResult) => result !== undefined));
+
+      this.result$$ = zip(results$).subscribe((results: EditionResult[]) => {
+        this.submitResults(
+          results.filter(
+            (result: EditionResult) => result !== undefined
+          )
+        );
       });
-    } else {
-      const results = features.map((feature: Feature) => ({feature}));
-      this.submitResults(results);
     }
   }
 
@@ -264,7 +272,7 @@ export class EditionImportComponent implements WidgetComponent, OnInit {
     const getOperationTitle = this.getOperationTitle ? this.getOperationTitle : getDefaultOperationTitle;
 
     features.forEach((feature: Feature) => {
-      this.transaction.insert(feature, this.store, {
+      this.transaction.insert(feature, asEntityStore(this.store), {
         title: getOperationTitle(feature, this.languageService)
       });
     });
