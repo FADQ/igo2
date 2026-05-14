@@ -65,6 +65,13 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
     if (context.layers === undefined) {
       return;
     }
+
+    // ✅ ATTENDRE QUE LA MAP SOIT PRÊTE
+    if (!this.isMapReady()) {
+      this.waitForMapReady(() => this.handleContextChange(context));
+      return;
+    }
+
     if (this.removeLayersOnContextChange === true) {
       (this.map as any).layerController.reset();
     } else {
@@ -88,9 +95,11 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
           });
         const validLayers = layers.filter(layer => layer !== undefined);
         this.contextLayers.push(...validLayers);
-        validLayers.forEach(
-          (layer: Layer) => (this.map as any).layerController.add(layer)
-        );
+        validLayers.forEach((layer: Layer) => {
+          if ((this.map as any)?.layerController?.add) {
+            (this.map as any).layerController.add(layer);
+          }
+        });
       });
   }
 
@@ -147,5 +156,18 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
     }
 
     return visible;
+  }
+
+  private isMapReady(): boolean {
+    return !!(this.map && (this.map as any).layerController);
+  }
+
+  private waitForMapReady(callback: () => void) {
+    const interval = setInterval(() => {
+      if (this.isMapReady()) {
+        clearInterval(interval);
+        callback();
+      }
+    }, 50);
   }
 }

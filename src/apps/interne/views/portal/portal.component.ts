@@ -9,7 +9,6 @@ import { EntityRecord, EntityStore } from '@igo2/common/entity';
 import { Tool } from '@igo2/common/tool';
 import { Widget } from '@igo2/common/widget';
 import { Workspace, WorkspaceStore } from '@igo2/common/workspace';
-import { DetailedContext } from '@igo2/context';
 import {
   FEATURE,
   Feature,
@@ -69,8 +68,10 @@ export class PortalComponent implements OnInit, OnDestroy {
   private activeTool$$: Subscription;
   private activeWidget$$: Subscription;
 
-  get map(): IgoMap {
-    return this.mapState.map;
+  private mapReady$ = new BehaviorSubject<IgoMap | null>(null);
+
+  get map(): IgoMap | null {
+    return this.mapState.map ?? null;
   }
 
   get backdropShown(): boolean {
@@ -142,19 +143,39 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.searchState.setSearchType(CLIENT);
 
     this.focusedSearchResult$$ = this.searchStore.stateView
-      .firstBy$((record: EntityRecord<SearchResult>) => record.state.focused === true)
-      .subscribe((record: EntityRecord<SearchResult>) => {
+    .firstBy$((record: EntityRecord<SearchResult>) => record.state.focused === true)
+    .subscribe((record) => {
+
+      const map = this.mapState.map;
+
+      // ✅ vérifie la map
+      if (!map) return;
+
+      // ✅ attend un tick complet Angular + IGO
+      setTimeout(() => {
+
+        // ✅ vérifie encore après le tick
+        if (!map || !(map as any).layerController) return;
+
         const result = record ? record.entity : undefined;
+
         this.onFocusSearchResult(result);
         this.updateSearchLayers(result);
-      });
 
-    this.context$$ = this.contextState.context$.subscribe((context: DetailedContext) => {
-      if (context !== undefined) {
-        this.updateViewResolutions();
-        this.updateSearchLayers(undefined);
-      }
+      }, 0);
     });
+
+    /*this.context$$ = this.contextState.context$.subscribe((context: DetailedContext) => {
+      if (!context) return;
+
+      const map = this.mapState.map;
+      if (!map || !(map as any).layerController) return;
+
+      this.mapReady$.next(map);
+
+      this.updateViewResolutions();
+      this.updateSearchLayers(undefined);
+    });*/
 
     this.activeWidget$$ = this.clientState.activeWidget$.subscribe((widget: Widget) => {
       if (widget !== undefined) {
@@ -183,6 +204,18 @@ export class PortalComponent implements OnInit, OnDestroy {
         this.searchState.enableSearch();
       }
     });
+
+    /*const waitMapReady = setInterval(() => {
+      const map = this.mapState.map;
+
+      if (map && (map as any).layerController) {
+        this.mapReady$.next(map);
+        clearInterval(waitMapReady);
+
+        this.updateViewResolutions();
+        this.updateSearchLayers(undefined);
+      }
+    }, 100);*/
   }
 
   ngOnDestroy() {
@@ -277,10 +310,15 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   clearSearchResult() {
-    this.map.overlay.clear();
+    const map = this.getMap();
+    if (map?.overlay) {
+      map.overlay.clear();
+    }
+
     this.searchResult = undefined;
-    this.searchStore.state.updateAll({focused: false, selected: false});
+    this.searchStore.state.updateAll({ focused: false, selected: false });
   }
+
 
   closeToastPanel() {
     this.toastPanelOpened = false;
@@ -398,8 +436,12 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   private onClearSearch() {
+    const map = this.getMap();
+    if (map?.overlay) {
+      map.overlay.clear();
+    }
+
     this.searchStore.clear();
-    this.map.overlay.clear();
     this.clientState.setClientNotFound(false);
   }
 
@@ -414,6 +456,11 @@ export class PortalComponent implements OnInit, OnDestroy {
    * @param result Result search to update layers
    */
   private updateSearchLayers(result: SearchResult) {
+    const map = this.mapState.map;
+
+    // ✅ PROTECTION CRITIQUE
+    if (!map || !(map as any).layerController) return;
+
     if (result === undefined) {
       this.clearAllSearchLayers();
       return;
@@ -436,7 +483,8 @@ export class PortalComponent implements OnInit, OnDestroy {
           .subscribe(layer => this.addSearchLayer(layer, searchType));
       }
     });
-    this.clearOtherSearchLayers(result);
+
+    this.clearOtherSearchLayers(result); // ✅ CONSERVÉ
   }
 
   /**
@@ -445,16 +493,24 @@ export class PortalComponent implements OnInit, OnDestroy {
    * @param searchType The search type
    */
   private addSearchLayer(layer: Layer, searchType: string) {
+    const map = this.getMap();
+    if (!map) return;
+
     if (this.searchAddedLayers.has(searchType)) {
       this.searchAddedLayers.get(searchType).push(layer);
     } else {
       this.searchAddedLayers.set(searchType, [layer]);
     }
-    this.map.addLayer(layer);
+
+    map.addLayer(layer);
   }
 
+
   private makeSearchLayerVisible(layerAlias: string, searchType: string) {
-    const layer = (this.map as any).getLayerByAlias(layerAlias);
+    const map = this.getMap();
+    if (!map) return;
+
+    const layer = (map as any).getLayerByAlias(layerAlias);
     if (layer === undefined) { return; }
 
     if (this.searchVisibledLayers.has(searchType)) {
@@ -462,6 +518,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     } else {
       this.searchVisibledLayers.set(searchType, [layer]);
     }
+
     layer.visible = true;
   }
 
@@ -469,9 +526,12 @@ export class PortalComponent implements OnInit, OnDestroy {
    * Clears all search layers
    */
   private clearAllSearchLayers() {
+    const map = this.getMap();
+    if (!map) return;
+
     this.searchAddedLayers.forEach((layers: Layer[]) => {
       layers.forEach((layer: Layer) => {
-        this.map.removeLayer(layer);
+        map.removeLayer(layer);
       });
     });
 
@@ -480,6 +540,9 @@ export class PortalComponent implements OnInit, OnDestroy {
         layer.visible = false;
       });
     });
+
+    this.searchAddedLayers.clear();
+    this.searchVisibledLayers.clear();
   }
 
   /**
@@ -512,19 +575,35 @@ export class PortalComponent implements OnInit, OnDestroy {
    * @param result The SearchResult
    */
   private updateViewResolutions(): void {
-    const map = this.map;
+    const map = this.getMap();
+    if (!map) return;
+
+    const context = this.contextState.context$.value;
+    if (!context) return;
+
     const viewController = map.viewController;
     const olMap = viewController.getOlMap();
     const olView = olMap.getView();
 
-    const context = this.contextState.context$.value;
     const mapContext = context.map;
     const viewContext = mapContext ? (mapContext.view || {}) : {};
     const maxZoom = viewContext.maxZoom || olView.getMaxZoom();
 
     const resolutions = getOlViewResolutions(olView);
+
     map.updateView({
       resolutions: resolutions.slice(0, maxZoom)
     });
   }
+
+  private getMap(): IgoMap | null {
+    const map = this.mapReady$.value;
+
+    if (!map || !(map as any).layerController) {
+      return null;
+    }
+
+    return map;
+  }
+
 }
