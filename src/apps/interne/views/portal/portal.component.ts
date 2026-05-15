@@ -69,6 +69,8 @@ export class PortalComponent implements OnInit, OnDestroy {
   private activeWidget$$: Subscription;
 
   private mapReady$ = new BehaviorSubject<IgoMap | null>(null);
+  private lastFocusedResult: SearchResult | undefined;
+
 
   get map(): IgoMap | null {
     return this.mapState.map ?? null;
@@ -140,43 +142,98 @@ export class PortalComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+
     this.searchState.setSearchType(CLIENT);
 
+    /**
+     * ✅ 1. ATTEND QUE LA MAP SOIT PRÊTE (CRITIQUE)
+     */
+    const waitMapReady = setInterval(() => {
+      const map = this.mapState.map;
+
+      // ✅ NOUVELLE CONDITION ROBUSTE
+      if (map && map.viewController && map.viewController.getOlMap()) {
+
+        // console.log('✅ MAP READY (OL OK)');
+
+        this.mapReady$.next(map);
+        clearInterval(waitMapReady);
+
+        this.updateViewResolutions();
+        this.updateSearchLayers(undefined);
+
+        // ✅ 🔥 REPLAY
+        if (this.lastFocusedResult) {
+          // console.log('🔁 REPLAY LAST RESULT', this.lastFocusedResult);
+
+          this.onFocusSearchResult(this.lastFocusedResult);
+          this.updateSearchLayers(this.lastFocusedResult);
+        }
+      }
+    }, 100);
+
+    /**
+     * ✅ 2. RÉACTION AUX RÉSULTATS (runtime)
+     */
     this.focusedSearchResult$$ = this.searchStore.stateView
     .firstBy$((record: EntityRecord<SearchResult>) => record.state.focused === true)
     .subscribe((record) => {
 
-      const map = this.mapState.map;
+      if (!record) {
+            // console.log('⚠️ NO FOCUSED RECORD');
+            return;
+          }
 
-      // ✅ vérifie la map
-      if (!map) return;
+          const result = record.entity;
 
-      // ✅ attend un tick complet Angular + IGO
-      setTimeout(() => {
+          this.lastFocusedResult = result;
 
-        // ✅ vérifie encore après le tick
-        if (!map || !(map as any).layerController) return;
+          const map = this.getMap();
+          if (!map) {
+            // console.log('⛔ MAP NOT READY (focus)');
+            return;
+          }
 
-        const result = record ? record.entity : undefined;
+          // console.log('🎯 FOCUS RESULT', result);
 
-        this.onFocusSearchResult(result);
-        this.updateSearchLayers(result);
-
-      }, 0);
+          this.onFocusSearchResult(result);
+          this.updateSearchLayers(result);
     });
 
-    /*this.context$$ = this.contextState.context$.subscribe((context: DetailedContext) => {
-      if (!context) return;
+    /**
+     * ✅ 3. CONTEXTE (optionnel mais utile)
+     */
+    this.context$$ = this.contextState.context$.subscribe((context) => {
 
-      const map = this.mapState.map;
-      if (!map || !(map as any).layerController) return;
+      // console.log('📦 CONTEXT CHANGED', context);
+      const map = this.getMap();
+      if (!map || !context) return;
 
-      this.mapReady$.next(map);
+      const contextLayers = context.layers || [];
+
+      contextLayers.forEach((layerOptions: any) => {
+        const existing = map.layers.find(l => l.id === layerOptions.id);
+          if (existing) {
+            // console.log('♻️ LAYER ALREADY EXISTS', layerOptions.id);
+            return;
+          }
+
+        this.layerService.createAsyncLayer(layerOptions)
+          .subscribe(layer => {
+            // ✅ évite duplication
+            const existing = map.layers.find(l => l.id === layerOptions.id);
+            if (existing) return;
+            // console.log('✅ ADD LAYER (IGO)', layerOptions.id);
+            map.addLayer(layer);
+          });
+      });
 
       this.updateViewResolutions();
-      this.updateSearchLayers(undefined);
-    });*/
+    });
 
+    /**
+     * ✅ 4. WIDGET UI
+     */
     this.activeWidget$$ = this.clientState.activeWidget$.subscribe((widget: Widget) => {
       if (widget !== undefined) {
         this.openToastPanel();
@@ -187,35 +244,31 @@ export class PortalComponent implements OnInit, OnDestroy {
       }
     });
 
+    /**
+     * ✅ 5. TOOL ACTIVE
+     */
     this.activeTool$$ = this.toolState.toolbox.activeTool$.subscribe((tool: Tool) => {
       if (tool && tool.name === 'directions') {
         this.searchState.setSearchType(FEATURE);
       }
     });
 
+    /**
+     * ✅ 6. SEARCH ENABLE / DISABLE
+     */
     this.searchDisabled$$ = combineLatest([
       this.clientState.activeWidget$,
       this.searchState.searchType$
-    ]).subscribe((bunch: [Widget, string]) => {
-      const disabled = bunch[0] !== undefined || bunch[1] === CADASTRE;
-      if (disabled === true) {
+    ]).subscribe(([widget, searchType]: [Widget, string]) => {
+
+      const disabled = widget !== undefined || searchType === CADASTRE;
+
+      if (disabled) {
         this.searchState.disableSearch();
       } else {
         this.searchState.enableSearch();
       }
     });
-
-    /*const waitMapReady = setInterval(() => {
-      const map = this.mapState.map;
-
-      if (map && (map as any).layerController) {
-        this.mapReady$.next(map);
-        clearInterval(waitMapReady);
-
-        this.updateViewResolutions();
-        this.updateSearchLayers(undefined);
-      }
-    }, 100);*/
   }
 
   ngOnDestroy() {
@@ -599,7 +652,12 @@ export class PortalComponent implements OnInit, OnDestroy {
   private getMap(): IgoMap | null {
     const map = this.mapReady$.value;
 
-    if (!map || !(map as any).layerController) {
+    if (!map) {
+      return null;
+    }
+
+    // ✅ même condition que ton setInterval
+    if (!map.viewController || !map.viewController.getOlMap()) {
       return null;
     }
 
