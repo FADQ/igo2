@@ -19,7 +19,7 @@ import { ImportExportToolComponent } from './import-export-tool.component';
       useValue: {
         name: 'fadqImportExport',
         title: 'igo.integration.tools.importExport',
-        icon: 'file-move',
+        icon: 'mobiledata_arrows',
         component: ImportExportToolComponent
       },
       multi: true

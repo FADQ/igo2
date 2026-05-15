@@ -65,8 +65,6 @@
     "@igo2/integration": "17.0.0",
     "@igo2/utils": "17.0.0",
     "@mat-datetimepicker/core": "~13.0.0",
-    "@mdi/angular-material": "^7.2.96",
-    "@mdi/font": "''7.4.47",
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
     "@ngxs/store": "^3.8.1",

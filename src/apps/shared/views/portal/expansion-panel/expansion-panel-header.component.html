@@ -5,15 +5,15 @@
         *ngIf="!expanded" 
         matTooltipShowDelay="500" 
         [matTooltip]="'expansion-panel.header-not-expanded.tooltip' | translate" 
-        color="primary" 
-        svgIcon="arrow-up-bold-box-outline">
+        color="primary">
+        arrow_circle_up
       </mat-icon>
       <mat-icon 
         *ngIf="expanded"
         matTooltipShowDelay="500" 
         [matTooltip]="'expansion-panel.header-expanded.tooltip' | translate"
-        color="primary" 
-        svgIcon="arrow-down-bold-box-outline">
+        color="primary" >
+        arrow_circle_down
       </mat-icon>
     </button>
   </div>

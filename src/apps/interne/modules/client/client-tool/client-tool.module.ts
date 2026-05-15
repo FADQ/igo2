@@ -45,7 +45,7 @@ import { ClientToolItemComponent } from './client-tool-item.component';
       useValue: {
         name: 'client',
         title: 'tools.client',
-        icon: 'account',
+        icon: 'person',
         component: ClientToolComponent
       },
       multi: true

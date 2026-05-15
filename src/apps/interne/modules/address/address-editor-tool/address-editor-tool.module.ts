@@ -19,7 +19,7 @@ import { TOOL_CONFIG } from 'src/lib/core/core.module';
       useValue: {
         name: 'addressEditor',
         title: 'tools.addressEditor',
-        icon: 'home-map-marker',
+        icon: 'home_pin',
         component: AddressEditorToolComponent
       },
       multi: true

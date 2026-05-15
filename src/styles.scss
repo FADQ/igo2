@@ -7,6 +7,13 @@
 
 // @include igo-all-theming($theme);
 
+@font-face {
+  font-family: "Material Design Icons";
+  src: url("/assets/fonts/materialdesignicons-webfont.woff2") format("woff2"),
+       url("/assets/fonts/materialdesignicons-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
 
 /*** Reset ***/
 

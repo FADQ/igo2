@@ -35,7 +35,7 @@ export class ClientParcelActionsService {
     return [
       {
         id: 'zoom-to-features',
-        icon: 'feature-search-outline',
+        icon: 'feature_search',
         title: 'map.moveToFeatures.title',
         tooltip: 'map.moveToFeatures.tooltip',
         args: [controller],
@@ -48,7 +48,7 @@ export class ClientParcelActionsService {
       },
       {
         id: 'export',
-        icon: 'file-download',
+        icon: 'file_export',
         title: 'client.parcel.exportToCSV',
         tooltip: 'client.parcel.exportToCSV.tooltip',
         args: [controller],

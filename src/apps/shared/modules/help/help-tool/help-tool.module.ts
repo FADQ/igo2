@@ -26,7 +26,7 @@ import { HelpToolComponent } from './help-tool.component';
       useValue: {
         name: 'help',
         title: 'tools.help',
-        icon: 'information',
+        icon: 'info',
         component: HelpToolComponent
       },
       multi: true

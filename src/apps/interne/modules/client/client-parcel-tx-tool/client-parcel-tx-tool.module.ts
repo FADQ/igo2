@@ -41,7 +41,7 @@ import { ClientParcelTxToolItemComponent } from './client-parcel-tx-tool-item.co
       useValue: {
         name: 'clientTx',
         title: 'tools.clientParcelTx',
-        icon: 'account-multiple-plus',
+        icon: 'group_add',
         component: ClientParcelTxToolComponent
       },
       multi: true

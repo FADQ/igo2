@@ -84,7 +84,7 @@ export class ClientParcelElementActionsService {
     return [
       {
         id: 'deactivate-parcel-elements',
-        icon: 'close-box-outline',
+        icon: 'disabled_by_default',
         title: 'client.parcelTx.stop',
         tooltip: 'client.parcelTx.stop.tooltip',
         args: [controller],
@@ -98,7 +98,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'zoom-to-features',
-        icon: 'feature-search-outline',
+        icon: 'feature_search',
         title: 'map.moveToFeatures.title',
         tooltip: 'map.moveToFeatures.tooltip',
         args: [controller],
@@ -137,7 +137,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'createUpdate',
-        icon: 'pencil',
+        icon: 'edit',
         title: 'edition.createUpdate',
         tooltip: 'edition.createUpdate.tooltip',
         args: [
@@ -177,7 +177,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'redraw',
-        icon: 'pencil-remove',
+        icon: 'redo',
         title: 'edition.redraw',
         tooltip: 'edition.redraw.tooltip',
         args: [
@@ -199,7 +199,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'translate',
-        icon: 'pan',
+        icon: 'drag_pan',
         title: 'edition.translate',
         tooltip: 'edition.translate.tooltip',
         args: [controller, this.clientParcelElementTranslateWidget],
@@ -219,7 +219,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'union',
-        icon: 'vector-union',
+        icon: 'stack_group',
         title: 'edition.union',
         tooltip: 'edition.union.tooltip',
         args: [controller],
@@ -270,7 +270,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'simplify',
-        icon: 'vector-polygon',
+        icon: 'polyline',
         title: 'edition.simplify',
         tooltip: 'edition.simplify.tooltip',
         args: [controller, this.clientParcelElementSimplifyWidget],
@@ -290,7 +290,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'fill',
-        icon: 'select-all',
+        icon: 'select_all',
         title: 'edition.fill',
         tooltip: 'edition.fill.tooltip',
         args: [controller, this.clientParcelElementFillWidget],
@@ -311,7 +311,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'slice',
-        icon: 'box-cutter',
+        icon: 'surgical',
         title: 'edition.slice',
         tooltip: 'edition.slice.tooltip',
         args: [controller, this.clientParcelElementSliceWidget],
@@ -332,7 +332,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'numbering',
-        icon: 'counter',
+        icon: 'pin',
         title: 'client.parcelElement.numbering',
         tooltip: 'client.parcelElement.numbering.tooltip',
         args: [controller, this.clientParcelElementNumberingWidget],
@@ -349,7 +349,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'import',
-        icon: 'import',
+        icon: 'content_paste_go',
         title: 'client.parcelElement.import',
         tooltip: 'client.parcelElement.import.tooltip',
         args: [controller, this.clientParcelElementImportWidget],
@@ -368,7 +368,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'delete',
-        icon: 'account-arrow-right',
+        icon: 'person_off',
         title: 'client.parcelElement.delete',
         tooltip: 'client.parcelElement.delete',
         args: [controller],
@@ -391,7 +391,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'recoverParcelsWithoutOwner',
-        icon: 'account-arrow-left',
+        icon: 'person_add',
         title: 'client.parcelElement.recoverParcelsWithoutOwner',
         tooltip: 'client.parcelElement.recoverParcelsWithoutOwner.tooltip',
         args: [controller, this.clientParcelElementWithoutOwnerWidget],
@@ -410,7 +410,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'transfer',
-        icon: 'account-switch',
+        icon: 'switch_account',
         title: 'client.parcelElement.transfer',
         tooltip: 'client.parcelElement.transfer.tooltip',
         args: [controller, this.clientParcelElementTransferWidget],
@@ -446,7 +446,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'save',
-        icon: 'floppy',
+        icon: 'save',
         title: 'edition.save',
         tooltip: 'edition.save.tooltip',
         args: [controller, this.clientParcelElementSaveWidget],
@@ -483,7 +483,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'reconciliate',
-        icon: 'table-merge-cells',
+        icon: 'database_upload',
         title: 'client.parcelTx.reconciliate',
         tooltip: 'client.parcelTx.reconciliate.tooltip',
         args: [controller, this.clientParcelTxReconciliateWidget],

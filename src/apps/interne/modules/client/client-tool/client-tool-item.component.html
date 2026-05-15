@@ -5,10 +5,10 @@
         class="igo-chevron"
         mat-list-avatar
         igoCollapse
-        svgIcon="chevron-up"
         [target]="content"
         [collapsed]="(showContent$ | async) === false"
         (toggle)="toggleContent($event)">
+        expand_less
       </mat-icon>
     </div>
 
@@ -18,20 +18,20 @@
         <mat-icon
           *ngIf="controller.parcelTxOngoing | async"
           class="fadq-client-header-badge"
-          svgIcon="square-edit-outline"
           [color]="controller.parcelYear.current ? 'default' : 'warn'">
+          edit_square
         </mat-icon>
         <mat-icon
           *ngIf="(controller.parcelElementTransaction.empty$ | async) === false || (controller.schemaElementTransaction.empty$ | async) === false"
-          class="fadq-client-header-badge"
-          svgIcon="floppy">
+          class="fadq-client-header-badge">
+          save
         </mat-icon>
       </div>
     </div>
 
     <div class="fadq-client-header-right">
       <button mat-icon-button (click)="onClear()">
-        <mat-icon svgIcon="close"></mat-icon>
+        <mat-icon>close</mat-icon>
       </button>
       <div *ngIf="showLegend" class="fadq-per-client-legend-thumbnail-container">
         <div class="fadq-per-client-legend-thumbnail-wrapper">

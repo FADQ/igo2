@@ -30,17 +30,17 @@
   <ng-container matSuffix *ngIf="placeControl.value">
     <mat-icon
       igoStopPropagation
-      svgIcon="close"
       matTooltipShowDelay="500"
       [matTooltip]="'navigation.placeSelector.poi.close.tooltip' | translate"
       (click)="onClearButtonClick()">
+      close
     </mat-icon>
     <mat-icon
       igoStopPropagation
-      svgIcon="magnify"
       matTooltipShowDelay="500"
       [matTooltip]="'navigation.placeSelector.poi.magnify.tooltip' | translate"
       (click)="onOverlayButtonClick()">
+      search
     </mat-icon>
   </ng-container>
 </mat-form-field>

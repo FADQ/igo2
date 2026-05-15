@@ -7,6 +7,7 @@ import { MatTooltipDefaultOptions, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/
 
 import { provideConfig } from '@igo2/core/config';
 import { IgoGeometryModule, IgoQueryModule, IgoDirectionsModule, provideOsrmDirectionsSource } from '@igo2/geo';
+import { SearchState } from '@igo2/integration';
 
 import { environment } from '../../environments/interne/environment';
 
@@ -37,15 +38,19 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
     BrowserModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([]),
+
+    // IGO modules (fournissent les états automatiquement)
     IgoGeometryModule,
     IgoQueryModule.forRoot(),
     IgoDirectionsModule,
+
     FadqCoreModule,
     FadqContextModule,
     FadqHelpModule,
     FadqCadastreModule,
     FadqNavigationModule,
     FadqAppOutletModule,
+
     FadqInterneAddressModule,
     FadqInterneClientModule.forRoot(),
     FadqInterneSearchModule,
@@ -60,7 +65,10 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
     provideOsrmDirectionsSource(),
     { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: defaultTooltipOptions },
     DatePipe,
+    SearchState
   ],
   bootstrap: [AppComponent]
 })
+
 export class FadqInterneAppModule {}
+

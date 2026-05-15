@@ -28,7 +28,7 @@ import { TOOL_CONFIG } from 'src/lib/core/core.module';
       useValue: {
         name: 'navigation',
         title: 'tools.navigation',
-        icon: 'map-marker-radius',
+        icon: 'location_on',
         component: NavigationToolComponent
       },
       multi: true

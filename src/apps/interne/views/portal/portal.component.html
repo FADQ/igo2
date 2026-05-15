@@ -14,7 +14,7 @@
     matTooltipShowDelay="500"
     [matTooltip]="(sidenavOpened ? 'menu.close' : 'menu.open') | translate"
     (click)="onToggleSidenavClick()">
-    <mat-icon svgIcon="menu"></mat-icon>
+    <mat-icon>menu</mat-icon>
   </button>
 
   <igo-search-bar
@@ -110,7 +110,7 @@
       mat-icon-button
       color="warn"
       (click)="closeToastPanel()">
-      <mat-icon svgIcon="menu-down"></mat-icon>  
+      <mat-icon>arrow_drop_down</mat-icon>  
     </button>
   </div>
 
@@ -122,7 +122,7 @@
     mat-flat-button
     color="warn"
     (click)="openToastPanel()">
-    <mat-icon svgIcon="menu-up"></mat-icon>
+    <mat-icon>arrow_drop_up</mat-icon>
   </button>
 </div>
 

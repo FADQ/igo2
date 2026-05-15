@@ -71,7 +71,7 @@ export class ClientSchemaElementActionsService {
     return [
       {
         id: 'zoom-to-features',
-        icon: 'feature-search-outline',
+        icon: 'feature_search',
         title: 'map.moveToFeatures.title',
         tooltip: 'map.moveToFeatures.tooltip',
         args: [controller],
@@ -84,7 +84,7 @@ export class ClientSchemaElementActionsService {
       },
       {
         id: 'filterSelection',
-        icon: 'selection',
+        icon: 'select',
         title: 'map.filterSelection.title',
         tooltip: 'map.filterSelection.tooltip',
         args: [controller],
@@ -110,7 +110,7 @@ export class ClientSchemaElementActionsService {
       },
       {
         id: 'createUpdate',
-        icon: 'pencil',
+        icon: 'edit',
         title: 'edition.createUpdate',
         tooltip: 'edition.createUpdate.tooltip',
         args: [
@@ -152,7 +152,7 @@ export class ClientSchemaElementActionsService {
       },
       {
         id: 'translate',
-        icon: 'pan',
+        icon: 'drag_pan',
         title: 'edition.translate',
         tooltip: 'edition.translate.tooltip',
         args: [controller, this.clientSchemaElementTranslateWidget],
@@ -195,7 +195,7 @@ export class ClientSchemaElementActionsService {
       },
       {
         id: 'fill',
-        icon: 'select-all',
+        icon: 'select_all',
         title: 'edition.fill',
         tooltip: 'edition.fill.tooltip',
         args: [controller, this.clientSchemaElementFillWidget],
@@ -217,7 +217,7 @@ export class ClientSchemaElementActionsService {
       },
       {
         id: 'slice',
-        icon: 'box-cutter',
+        icon: 'surgical',
         title: 'edition.slice',
         tooltip: 'edition.slice.tooltip',
         args: [controller, this.clientSchemaElementSliceWidget],
@@ -242,7 +242,7 @@ export class ClientSchemaElementActionsService {
       },
       {
         id: 'import',
-        icon: 'import',
+        icon: 'content_paste_go',
         title: 'client.schemaElement.import',
         tooltip: 'client.schemaElement.import.tooltip',
         args: [controller, this.clientSchemaElementImportWidget],
@@ -262,7 +262,7 @@ export class ClientSchemaElementActionsService {
       },
       {
         id: 'export',
-        icon: 'file-download',
+        icon: 'attach_file_add',
         title: 'edition.exportToCSV',
         tooltip: 'edition.exportToCSV.tooltip',
         args: [controller],
@@ -282,7 +282,7 @@ export class ClientSchemaElementActionsService {
       },
       {
         id: 'save',
-        icon: 'floppy',
+        icon: 'save',
         title: 'edition.save',
         tooltip: 'edition.save.tooltip',
         args: [controller, this.clientSchemaElementSaveWidget],
@@ -318,7 +318,7 @@ export class ClientSchemaElementActionsService {
       },
       {
         id: 'downloadMapLSE',
-        icon: 'image-area-close',
+        icon: 'image_arrow_up',
         title: 'client.schemaElement.downloadMapLSE',
         tooltip: 'client.schemaElement.downloadMapLSE.tooltip',
         args: [controller],

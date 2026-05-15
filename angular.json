@@ -50,10 +50,12 @@
                 "glob": "**/*",
                 "input": "./node_modules/@igo2/geo/assets/",
                 "output": "./assets/igo2/geo/"
-              },
-              { "glob": "mdi.svg", "input": "./node_modules/@mdi/angular-material", "output": "./assets" }
+              }
             ],
-            "styles": ["src/styles.scss"],
+            "styles": [
+              "node_modules/@mdi/font/css/materialdesignicons.min.css",
+              "src/styles.scss"
+            ],
             "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": [
@@ -113,7 +115,13 @@
                   "with": "src/environments/interne/environment.prod.ts"
                 }
               ],
-              "optimization": true,
+              "optimization": {
+                  "scripts": true,
+                  "styles": true,
+                  "fonts": {
+                    "inline": false
+                  }
+                },
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
@@ -235,10 +243,12 @@
                 "glob": "**/*",
                 "input": "./node_modules/@igo2/geo/assets/",
                 "output": "./assets/igo2/geo/"
-              },
-              { "glob": "mdi.svg", "input": "./node_modules/@mdi/angular-material", "output": "./assets" }
+              }
             ],
-            "styles": ["src/styles.scss"],
+            "styles": [
+              "node_modules/@mdi/font/css/materialdesignicons.min.css",
+              "src/styles.scss"
+            ],
             "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": [
@@ -279,7 +289,13 @@
                   "with": "src/environments/pes/environment.prod.ts"
                 }
               ],
-              "optimization": true,
+              "optimization": {
+                  "scripts": true,
+                  "styles": true,
+                  "fonts": {
+                    "inline": false
+                  }
+                },
               "outputHashing": "all",
               "sourceMap": true,
               "namedChunks": false,
@@ -385,10 +401,12 @@
                 "glob": "**/*",
                 "input": "./node_modules/@igo2/geo/assets/",
                 "output": "./assets/igo2/geo/"
-              },
-              { "glob": "mdi.svg", "input": "./node_modules/@mdi/angular-material", "output": "./assets" }
+              }
             ],
-            "styles": ["src/styles.scss"],
+            "styles": [
+              "node_modules/@mdi/font/css/materialdesignicons.min.css",
+              "src/styles.scss"
+            ],
             "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": [
@@ -429,7 +447,13 @@
                   "with": "src/environments/pes_interne/environment.prod.ts"
                 }
               ],
-              "optimization": true,
+              "optimization": {
+                  "scripts": true,
+                  "styles": true,
+                  "fonts": {
+                    "inline": false
+                  }
+                },
               "outputHashing": "all",
               "sourceMap": true,
               "namedChunks": false,

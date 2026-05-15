@@ -4,6 +4,8 @@ import { DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTooltipDefaultOptions } from '@angular/material/tooltip';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import { provideConfig } from '@igo2/core/config';
 import { IgoGeometryModule, IgoQueryModule, IgoDirectionsModule, provideOsrmDirectionsSource } from '@igo2/geo';
@@ -61,4 +63,13 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
   ],
   bootstrap: [AppComponent]
 })
-export class FadqPesAppModule {}
+export class FadqPesAppModule {
+  constructor(
+    matIconRegistry: MatIconRegistry,
+    domSanitizer: DomSanitizer
+  ) {
+    matIconRegistry.addSvgIconSet(
+      domSanitizer.bypassSecurityTrustResourceUrl('assets/mdi.svg')
+    );
+  }
+}

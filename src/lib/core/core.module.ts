@@ -146,7 +146,7 @@ const providers: Provider[] = [
     useValue: {
       name: 'catalogBrowser',
       title: 'igo.integration.tools.catalog',
-      icon: 'photo-browser',
+      icon: 'photo_library',
       parent: 'catalog',
       component: CatalogBrowserToolComponent
     },
@@ -157,7 +157,7 @@ const providers: Provider[] = [
     useValue: {
       name: 'catalog',
       title: 'igo.integration.tools.catalog',
-      icon: 'layers-plus',
+      icon: 'library_add',
       component: CatalogLibraryToolComponent
     },
     multi: true
@@ -167,7 +167,7 @@ const providers: Provider[] = [
     useValue: {
       name: 'contextManager',
       title: 'igo.integration.tools.contexts',
-      icon: 'star',
+      icon: 'settings_account_box',
       component: ContextManagerToolComponent
     },
     multi: true
@@ -177,7 +177,7 @@ const providers: Provider[] = [
     useValue: {
       name: 'importExport',
       title: 'igo.integration.tools.importExport',
-      icon: 'file-move',
+      icon: 'swap_vert',
       component: ImportExportToolComponent
     },
     multi: true
@@ -197,7 +197,7 @@ const providers: Provider[] = [
     useValue: {
       name: 'mapLegend',
       title: 'igo.integration.tools.legend',
-      icon: 'format-list-bulleted-type',
+      icon: 'list_alt',
       component: MapLegendToolComponent
     },
     multi: true
@@ -227,7 +227,7 @@ const providers: Provider[] = [
     useValue: {
       name: 'measurer',
       title: 'igo.integration.tools.measurer',
-      icon: 'ruler',
+      icon: 'straighten',
       component: MeasurerToolComponent
     },
     multi: true
@@ -237,7 +237,7 @@ const providers: Provider[] = [
     useValue: {
       name: 'searchResults',
       title: 'igo.integration.tools.searchResults',
-      icon: 'magnify',
+      icon: 'search',
       component: SearchResultsToolComponent
     },
     multi: true
@@ -247,7 +247,7 @@ const providers: Provider[] = [
     useValue: {
       name: 'advancedMap',
       title: 'igo.integration.tools.advancedMap',
-      icon: 'toolbox',
+      icon: 'service_toolbox',
       component: AdvancedMapToolComponent
     },
     multi: true

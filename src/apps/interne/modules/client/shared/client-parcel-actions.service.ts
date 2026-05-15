@@ -51,7 +51,7 @@ export class ClientParcelActionsService {
     return [
       {
         id: 'activate-parcel-eLements',
-        icon: 'square-edit-outline',
+        icon: 'edit_square',
         title: 'client.parcelTx.start',
         tooltip: 'client.parcelTx.start.tooltip',
         args: [controller, this.clientParcelTxStartTxWidget],
@@ -77,7 +77,7 @@ export class ClientParcelActionsService {
       },
       {
         id: 'zoom-to-features',
-        icon: 'feature-search-outline',
+        icon: 'feature_search',
         title: 'map.moveToFeatures.title',
         tooltip: 'map.moveToFeatures.tooltip',
         args: [controller],
@@ -90,7 +90,7 @@ export class ClientParcelActionsService {
       },
       {
         id: 'filterSelection',
-        icon: 'selection',
+        icon: 'select',
         title: 'map.filterSelection.title',
         tooltip: 'map.filterSelection.tooltip',
         args: [controller],
@@ -115,7 +115,7 @@ export class ClientParcelActionsService {
       },
       {
         id: 'filterNotOwned',
-        icon: 'account-check',
+        icon: 'how_to_reg',
         title: 'client.parcel.filterNotOwned.title',
         tooltip: 'client.parcel.filterNotOwned.tooltip',
         args: [controller],
@@ -141,7 +141,7 @@ export class ClientParcelActionsService {
       },
       {
         id: 'export',
-        icon: 'file-download',
+        icon: 'download',
         title: 'client.parcel.exportToCSV',
         tooltip: 'client.parcel.exportToCSV.tooltip',
         args: [controller],

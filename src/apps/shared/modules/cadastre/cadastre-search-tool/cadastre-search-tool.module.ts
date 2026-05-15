@@ -26,7 +26,7 @@ import { CadastreSearchToolComponent } from './cadastre-search-tool.component';
       useValue: {
         name: 'cadastre',
         title: 'tools.cadastre',
-        icon: 'view-quilt',
+        icon: 'view_quilt',
         component: CadastreSearchToolComponent
       },
       multi: true

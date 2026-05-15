@@ -52,7 +52,7 @@ export class ClientSchemaActionsService {
     return [
       {
         id: 'create',
-        icon: 'plus',
+        icon: 'add_box',
         title: 'client.schema.create',
         tooltip: 'client.schema.create.tooltip',
         args: [controller, this.clientSchemaCreateWidget],
@@ -67,7 +67,7 @@ export class ClientSchemaActionsService {
       },
       {
         id: 'update',
-        icon: 'pencil',
+        icon: 'edit_square',
         title: 'client.schema.update',
         tooltip: 'client.schema.update.tooltip',
         args: [controller, this.clientSchemaUpdateWidget],
@@ -103,7 +103,7 @@ export class ClientSchemaActionsService {
       },
       {
         id: 'duplicate',
-        icon: 'content-copy',
+        icon: 'content_copy',
         title: 'client.schema.duplicate',
         tooltip: 'client.schema.duplicate.tooltip',
         args: [controller, this.clientSchemaDuplicateWidget],
@@ -121,7 +121,7 @@ export class ClientSchemaActionsService {
       },
       {
         id: 'manageFiles',
-        icon: 'paperclip',
+        icon: 'attach_file_add',
         title: 'client.schema.manageFiles',
         tooltip: 'client.schema.manageFiles.tooltip',
         args: [controller, this.clientSchemaFileManagerWidget],
@@ -139,7 +139,7 @@ export class ClientSchemaActionsService {
       },
       {
         id: 'transfer',
-        icon: 'account-switch',
+        icon: 'switch_account',
         title: 'client.schema.transfer',
         tooltip: 'client.schema.transfer.tooltip',
         args: [controller, this.clientSchemaTransferWidget],
