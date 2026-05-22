@@ -9,15 +9,34 @@ import {
   OnDestroy
 } from '@angular/core';
 
-import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import {
+  BehaviorSubject,
+  Observable,
+  Subscription,
+  of
+} from 'rxjs';
+
+import {
+  delay,
+  map,
+  switchMap
+} from 'rxjs/operators';
 
 import { EntityTransaction } from '@igo2/common/entity';
-import { Form, FormField, FormFieldSelectInputs, getAllFormFields } from '@igo2/common/form';
+
+import {
+  Form,
+  FormField,
+  FormFieldSelectChoice,
+  FormFieldSelectInputs,
+  getAllFormFields
+} from '@igo2/common/form';
+
 import { WidgetComponent } from '@igo2/common/widget';
 import { OnUpdateInputs } from '@igo2/common/dynamic-component';
 
 import { LanguageService } from '@igo2/core/language';
+
 import {
   FeatureStore,
   IgoMap,
@@ -26,22 +45,27 @@ import {
 } from '@igo2/geo';
 
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
+
 import { getAnneeImageFromMap } from '../../shared/client.utils';
+
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
+
 import {
   ClientSchemaElement,
   ClientSchemaElementType
 } from '../shared/client-schema-element.interfaces';
+
 import { ClientSchemaElementService } from '../shared/client-schema-element.service';
+
 import { ClientSchemaElementFormService } from '../shared/client-schema-element-form.service';
 
 import {
   generateSchemaElementOperationTitle,
   getSchemaElementValidationMessage,
   updateElementTypeChoices,
-  getAnneeImageField,
   processAnneeImageField
 } from '../shared/client-schema-element.utils';
+import { isBehaviorSubject } from '@lib/utils/rxjs.utils';
 
 @Component({
   selector: 'fadq-client-schema-element-create',
@@ -50,67 +74,27 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientSchemaElementCreateComponent
-    implements OnInit, OnDestroy, OnUpdateInputs, WidgetComponent {
+  implements OnInit, OnDestroy, OnUpdateInputs, WidgetComponent {
 
-  /**
-   * Create form
-   * @internal
-   */
-  form$ = new BehaviorSubject<Form>(undefined);
+  form$ = new BehaviorSubject<Form | undefined>(undefined);
 
-  /**
-   * Create form
-   * @internal
-   */
   groupIndex$ = new BehaviorSubject<number>(0);
 
-  /**
-   * Subscription to the geometry changes event
-   */
-  private geometry$$: Subscription;
+  private geometry$$?: Subscription;
 
-  /**
-   * Subscription to the type changes event
-   */
-  private elementType$$: Subscription;
+  private elementType$$?: Subscription;
 
-  /**
-   * Map to draw elements on
-   */
   @Input() map: IgoMap;
 
-  /**
-   * Schema element store
-   */
   @Input() store: FeatureStore<ClientSchemaElement>;
 
-  /**
-   * Schema element transaction
-   */
   @Input() transaction: EntityTransaction;
 
-  /**
-   * Schema
-   */
   @Input() schema: ClientSchema;
 
-  /**
-   * Event emitted on complete
-   */
   @Output() complete = new EventEmitter<void>();
 
-  /**
-   * Event emitted on cancel
-   */
   @Output() cancel = new EventEmitter<void>();
-
-  get getOperationTitle(): (data: ClientSchemaElement, languageService: LanguageService) => string {
-    return generateSchemaElementOperationTitle;
-  }
-
-  get processData(): (data: ClientSchemaElement) => Observable<EditionResult> {
-    return (data: ClientSchemaElement): Observable<EditionResult> => this.processSchemaElement(data);
-  }
 
   constructor(
     private clientSchemaElementService: ClientSchemaElementService,
@@ -119,129 +103,276 @@ export class ClientSchemaElementCreateComponent
     private cdRef: ChangeDetectorRef
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
+
     this.clientSchemaElementFormService
-      .buildCreateForm(this.schema, this.map, this.store)
-      .subscribe((form: Form) => this.setForm(form));
+      .buildCreateForm(
+        this.schema,
+        this.map,
+        this.store
+      )
+      .subscribe({
+        next: (form: Form) => {
+          this.setForm(form);
+        },
+        error: (error: unknown) => {
+          console.error('Error building create form', error);
+        }
+      });
   }
 
-  ngOnDestroy() {
-    if (this.geometry$$ !== undefined) {
-      this.geometry$$.unsubscribe();
-      this.geometry$$ = undefined;
-    }
-    if (this.elementType$$ !== undefined) {
-      this.elementType$$.unsubscribe();
-      this.elementType$$ = undefined;
-    }
+  ngOnDestroy(): void {
+
+    this.geometry$$?.unsubscribe();
+    this.elementType$$?.unsubscribe();
   }
 
-  /**
-   * Implemented as part of OnUpdateInputs
-   */
-  onUpdateInputs() {
-    this.cdRef.detectChanges();
+  onUpdateInputs(): void {
+    this.cdRef.markForCheck();
   }
 
-  onComplete(schemaElement: ClientSchemaElement) {
+  onComplete(schemaElement: ClientSchemaElement): void {
     this.complete.emit();
   }
 
-  onCancel() {
+  onCancel(): void {
     this.cancel.emit();
   }
 
-  /**
-   * Process a schema element
-   * @param data The client schema element to process
-   * @returns The schema element processed
-   */
-  private processSchemaElement(data: ClientSchemaElement): Observable<EditionResult> {
-    return this.clientSchemaElementService.createSchemaElement(this.schema, data)
+  get getOperationTitle():
+    (data: ClientSchemaElement, languageService: LanguageService) => string {
+
+    return generateSchemaElementOperationTitle;
+  }
+
+  get processData():
+    (data: ClientSchemaElement) => Observable<EditionResult> {
+
+    return (data: ClientSchemaElement): Observable<EditionResult> => {
+      return this.processSchemaElement(data);
+    };
+  }
+
+  private processSchemaElement(
+    data: ClientSchemaElement
+  ): Observable<EditionResult> {
+
+    return this.clientSchemaElementService
+      .createSchemaElement(this.schema, data)
       .pipe(
-        map((schemaElement: ClientSchemaElement): EditionResult => {
-          processAnneeImageField(schemaElement, this.clientSchemaElementService,this.map,getAnneeImageField(this.form$));
-          return {
-            feature: schemaElement,
-            error: getSchemaElementValidationMessage(schemaElement, this.languageService)
-          };
-        })
+        switchMap((schemaElement: ClientSchemaElement) =>
+
+          processAnneeImageField(
+            schemaElement,
+            this.clientSchemaElementService,
+            this.map
+          ).pipe(
+
+            map((updatedSchemaElement: ClientSchemaElement): EditionResult => ({
+              feature: updatedSchemaElement,
+              error: getSchemaElementValidationMessage(
+                updatedSchemaElement,
+                this.languageService
+              )
+            }))
+          )
+        )
       );
   }
 
-  private setForm(form: Form) {
+
+  private setForm(form: Form): void {
+
+    console.log('FORM', form);
+
     this.form$.next(form);
 
-    const anneeImageField = this.getAnneeImageField();
-    anneeImageField.control.value;
-    if (anneeImageField !== undefined) {
-      let imageYear = getAnneeImageFromMap(this.map);
-      if (imageYear !== undefined) {
+    const fields = getAllFormFields(form);
+
+    const anneeImageField = fields.find(
+      (field: FormField) => field.name === 'properties.anneeImage'
+    );
+
+    const geometryField = fields.find(
+      (field: FormField) => field.name === 'geometry'
+    ) as FormField<GeometryFormFieldInputs>;
+
+    const elementTypeField = fields.find(
+      (field: FormField) => field.name === 'properties.typeElement'
+    ) as FormField<FormFieldSelectInputs>;
+
+    console.log('anneeImageField', anneeImageField);
+    console.log('geometryField', geometryField);
+    console.log('elementTypeField', elementTypeField);
+
+    // ---------------------------------------------------------------------
+    // Année image
+    // ---------------------------------------------------------------------
+
+    if (anneeImageField?.control) {
+
+      const imageYear = getAnneeImageFromMap(this.map);
+
+      if (imageYear !== undefined && imageYear !== null) {
+
         anneeImageField.control.setValue(imageYear);
+        anneeImageField.control.updateValueAndValidity();
+
+      } else {
+
+        // ✅ attendre que la géométrie soit dessinée
+        geometryField?.control?.valueChanges.subscribe((geometry) => {
+
+          if (!geometry) {
+            return;
+          }
+
+          this.clientSchemaElementService
+            .getMostRecentImageYear(geometry)
+            .subscribe((response: any) => {
+
+              const year = response?.data;
+
+              if (year) {
+                anneeImageField.control.setValue(year);
+                anneeImageField.control.updateValueAndValidity();
+                this.cdRef.markForCheck();
+              }
+            });
+        });
       }
     }
 
-    const geometryField = this.getGeometryField();
+
+    console.log('CONTROL READY ?', anneeImageField.control);
+    console.log('VALUE AFTER SET', anneeImageField.control.value);
+
+    // ---------------------------------------------------------------------
+    // Validation défensive
+    // ---------------------------------------------------------------------
+
+    if (!geometryField?.control) {
+      console.error('Geometry field missing');
+      return;
+    }
+
+    if (!elementTypeField?.control) {
+      console.error('Element type field missing');
+      return;
+    }
+
+    // ---------------------------------------------------------------------
+    // Cleanup anciennes subscriptions
+    // ---------------------------------------------------------------------
+
+    this.geometry$$?.unsubscribe();
+    this.elementType$$?.unsubscribe();
+
+    // ---------------------------------------------------------------------
+    // Geometry changes
+    // ---------------------------------------------------------------------
+
     this.geometry$$ = geometryField.control.valueChanges
-      .subscribe((geometry: GeoJSONGeometry) => {
+      .subscribe((geometry: GeoJSONGeometry | null) => {
+
+        console.log('Geometry changed', geometry);
+
+        if (!geometry?.type) {
+          return;
+        }
+
         updateElementTypeChoices(
           geometry.type as any,
           this.clientSchemaElementService,
           this.schema,
-          this.getElementTypeField()
+          elementTypeField
         );
       });
 
-    const elementTypeField = this.getElementTypeField();
+    // ---------------------------------------------------------------------
+    // Element type changes
+    // ---------------------------------------------------------------------
+
     this.elementType$$ = elementTypeField.control.valueChanges
-      .subscribe((elementType: string) => this.updateGeometryType(elementType));
+      .subscribe((elementType: string | null) => {
+
+        console.log('Element type changed', elementType);
+
+        if (!elementType) {
+          return;
+        }
+
+        this.updateGeometryType(elementType);
+      });
+
+    this.cdRef.markForCheck();
   }
 
-  private getAnneeImageField(): FormField {
+  private getElementTypeField():
+    FormField<FormFieldSelectInputs> | undefined {
+
     const fields = getAllFormFields(this.form$.value);
-    return fields.find((field: FormField) => {
-      return field.name === 'properties.anneeImage';
-    });
+
+    return fields.find(
+      (field: FormField) => field.name === 'properties.typeElement'
+    ) as FormField<FormFieldSelectInputs>;
   }
 
-  private getElementTypeField(): FormField<FormFieldSelectInputs> {
+  private getGeometryField():
+    FormField<GeometryFormFieldInputs> | undefined {
+
     const fields = getAllFormFields(this.form$.value);
-    return fields.find((field: FormField) => {
-      return field.name === 'properties.typeElement';
-    }) as FormField<FormFieldSelectInputs>;
+
+    return fields.find(
+      (field: FormField) => field.name === 'geometry'
+    ) as FormField<GeometryFormFieldInputs>;
   }
 
-  private getGeometryField(): FormField<GeometryFormFieldInputs> {
-    const fields = getAllFormFields(this.form$.value);
-    return fields.find((field: FormField) => {
-      return field.name === 'geometry';
-    }) as FormField<GeometryFormFieldInputs>;
-  }
+  private updateGeometryType(elementTypeValue: string): void {
 
-  private updateGeometryType(elementTypeValue: string) {
     const elementTypeField = this.getElementTypeField();
     const geometryField = this.getGeometryField();
 
-    const elementTypes = (
-      elementTypeField.inputs.choices as unknown as BehaviorSubject<ClientSchemaElementType[]>
+    if (!elementTypeField || !geometryField) {
+      return;
+    }
+
+    const choices = (
+      elementTypeField.inputs.choices as BehaviorSubject<FormFieldSelectChoice[]>
     ).value;
-    const elementType = elementTypes.find((_elementType: ClientSchemaElementType) => {
-      return _elementType.value === elementTypeValue;
-    });
 
-    // TODO: See why we need to cast as unknown
-    const geometryType$ = geometryField.inputs.geometryType as unknown as BehaviorSubject<string>;
-    geometryType$.next(elementType.geometryType);
-
-    // Blur the active element to allow the use of the spacebar shortcut
-    // We need to wrap this up in a delay otherwise, material will
-    // focus the drop list after we blur the selected option
-    of(null).pipe(
-      delay(50)
-    ).subscribe(() => {
-      if ('activeElement' in document) {
-        (document.activeElement as HTMLElement).blur();
+    const elementTypes = choices.filter(
+      (choice): choice is ClientSchemaElementType => {
+        return 'geometryType' in choice;
       }
-    });
+    );
+
+    const elementType = elementTypes.find(
+      (_elementType: ClientSchemaElementType) => {
+        return _elementType.value === elementTypeValue;
+      }
+    );
+
+    if (!elementType) {
+      return;
+    }
+
+    const geometryTypeInput = geometryField.inputs.geometryType;
+
+    if (isBehaviorSubject<string>(geometryTypeInput)) {
+
+      geometryTypeInput.next(
+        elementType.geometryType
+      );
+    }
+
+    of(null)
+      .pipe(delay(50))
+      .subscribe(() => {
+
+        if ('activeElement' in document) {
+          (document.activeElement as HTMLElement)?.blur();
+        }
+      });
   }
 }

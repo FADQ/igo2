@@ -76,7 +76,7 @@ export class ClientSchemaCreateComponent implements OnInit, OnUpdateInputs, Widg
    * Implemented as part of OnUpdateInputs
    */
   onUpdateInputs() {
-    this.cdRef.detectChanges();
+    this.cdRef.markForCheck();
   }
 
   onSubmit(data: {[key: string]: any}) {

@@ -8,28 +8,73 @@ import {
   OnInit
 } from '@angular/core';
 
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {
+  BehaviorSubject,
+  Observable
+} from 'rxjs';
 
-import { EntityTransaction } from '@igo2/common/entity';
-import { Form, FormField, FormFieldSelectInputs, getAllFormFields } from '@igo2/common/form';
-import { WidgetComponent } from '@igo2/common/widget';
-import { OnUpdateInputs } from '@igo2/common/dynamic-component';
+import {
+  map
+} from 'rxjs/operators';
 
-import { LanguageService } from '@igo2/core/language';
-import { FeatureStore, IgoMap } from '@igo2/geo';
+import {
+  EntityTransaction
+} from '@igo2/common/entity';
 
-import { EditionResult } from '../../../edition/shared/edition.interfaces';
-import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
-import { ClientSchemaElement, ClientSchemaElementTypes } from '../shared/client-schema-element.interfaces';
-import { ClientSchemaElementService } from '../shared/client-schema-element.service';
-import { ClientSchemaElementFormService } from '../shared/client-schema-element-form.service';
+import {
+  Form,
+  FormField,
+  FormFieldSelectInputs,
+  getAllFormFields
+} from '@igo2/common/form';
+
+import {
+  WidgetComponent
+} from '@igo2/common/widget';
+
+import {
+  OnUpdateInputs
+} from '@igo2/common/dynamic-component';
+
+import {
+  LanguageService
+} from '@igo2/core/language';
+
+import {
+  FeatureStore,
+  IgoMap
+} from '@igo2/geo';
+
+import {
+  EditionResult
+} from '../../../edition/shared/edition.interfaces';
+
+import {
+  ClientSchema
+} from '../../schema/shared/client-schema.interfaces';
+
+import {
+  ClientSchemaElement,
+  ClientSchemaElementTypes
+} from '../shared/client-schema-element.interfaces';
+
+import {
+  ClientSchemaElementService
+} from '../shared/client-schema-element.service';
+
+import {
+  ClientSchemaElementFormService
+} from '../shared/client-schema-element-form.service';
 
 import {
   generateSchemaElementOperationTitle,
   getSchemaElementValidationMessage,
   updateElementTypeChoices
 } from '../shared/client-schema-element.utils';
+
+import {
+  isBehaviorSubject
+} from '../../../utils/rxjs.utils';
 
 @Component({
   selector: 'fadq-client-schema-element-update-batch',
@@ -38,13 +83,13 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientSchemaElementUpdateBatchComponent
-    implements OnInit, OnUpdateInputs, WidgetComponent {
+  implements OnInit, OnUpdateInputs, WidgetComponent {
 
   /**
    * Update form
    * @internal
    */
-  form$ = new BehaviorSubject<Form>(undefined);
+  form$ = new BehaviorSubject<Form | undefined>(undefined);
 
   /**
    * Map to draw elements on
@@ -81,14 +126,6 @@ export class ClientSchemaElementUpdateBatchComponent
    */
   @Output() cancel = new EventEmitter<void>();
 
-  get getOperationTitle(): (data: ClientSchemaElement, languageService: LanguageService) => string {
-    return generateSchemaElementOperationTitle;
-  }
-
-  get processData(): (data: ClientSchemaElement) => Observable<EditionResult> {
-    return (data: ClientSchemaElement): Observable<EditionResult> => this.processSchemaElement(data);
-  }
-
   constructor(
     private clientSchemaElementService: ClientSchemaElementService,
     private clientSchemaElementFormService: ClientSchemaElementFormService,
@@ -96,58 +133,165 @@ export class ClientSchemaElementUpdateBatchComponent
     private cdRef: ChangeDetectorRef
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
+
     this.clientSchemaElementFormService
-      .buildUpdateBatchForm(this.map, this.schema, this.store)
-      .subscribe((form: Form) => this.setForm(form));
+      .buildUpdateBatchForm(
+        this.map,
+        this.schema,
+        this.store
+      )
+      .subscribe({
+        next: (form: Form) => {
+          this.setForm(form);
+        },
+
+        error: (error: unknown) => {
+          console.error(
+            'Error building update batch form',
+            error
+          );
+        }
+      });
   }
 
   /**
    * Implemented as part of OnUpdateInputs
    */
-  onUpdateInputs() {
-    this.cdRef.detectChanges();
+  onUpdateInputs(): void {
+    this.cdRef.markForCheck();
   }
 
-  onComplete(schemaElement: ClientSchemaElement) {
+  onComplete(schemaElement: ClientSchemaElement): void {
     this.complete.emit();
   }
 
-  onCancel() {
+  onCancel(): void {
     this.cancel.emit();
   }
 
-  private processSchemaElement(data: ClientSchemaElement): Observable<EditionResult> {
-    return this.clientSchemaElementService.createSchemaElement(this.schema, data)
+  get getOperationTitle():
+    (data: ClientSchemaElement, languageService: LanguageService) => string {
+
+    return generateSchemaElementOperationTitle;
+  }
+
+  get processData():
+    (data: ClientSchemaElement) => Observable<EditionResult> {
+
+    return (data: ClientSchemaElement): Observable<EditionResult> => {
+      return this.processSchemaElement(data);
+    };
+  }
+
+  private processSchemaElement(
+    data: ClientSchemaElement
+  ): Observable<EditionResult> {
+
+    return this.clientSchemaElementService
+      .createSchemaElement(this.schema, data)
       .pipe(
         map((schemaElement: ClientSchemaElement): EditionResult => {
+
           return {
             feature: schemaElement,
-            error: getSchemaElementValidationMessage(schemaElement, this.languageService)
+
+            error: getSchemaElementValidationMessage(
+              schemaElement,
+              this.languageService
+            )
           };
         })
       );
   }
 
-  private setForm(form: Form) {
+  private setForm(form: Form): void {
+
+    console.log('UPDATE BATCH FORM', form);
+
     this.form$.next(form);
 
+    if (
+      !this.schemaElements ||
+      this.schemaElements.length === 0
+    ) {
+
+      console.error(
+        'No schema elements available'
+      );
+
+      return;
+    }
+
+    const geometry = this.schemaElements[0]?.geometry;
+
+    if (!geometry?.type) {
+
+      console.error(
+        'Schema element geometry type missing'
+      );
+
+      return;
+    }
+
     const geometryType =
-      this.schemaElements[0].geometry.type as keyof ClientSchemaElementTypes;
+      geometry.type as keyof ClientSchemaElementTypes;
+
+    const elementTypeField =
+      this.getElementTypeField();
+
+    if (!elementTypeField) {
+
+      console.error(
+        'Element type field missing'
+      );
+
+      return;
+    }
 
     updateElementTypeChoices(
       geometryType,
       this.clientSchemaElementService,
       this.schema,
-      this.getElementTypeField()
+      elementTypeField
     );
+
+    // -------------------------------------------------------------------
+    // Validation runtime du choices observable
+    // -------------------------------------------------------------------
+
+    const choicesInput =
+      elementTypeField.inputs?.choices;
+
+    if (
+      choicesInput &&
+      isBehaviorSubject(choicesInput)
+    ) {
+
+      console.log(
+        'Element type choices updated',
+        choicesInput.value
+      );
+    }
+
+    this.cdRef.markForCheck();
   }
 
-  private getElementTypeField(): FormField<FormFieldSelectInputs> {
-    const fields = getAllFormFields(this.form$.value);
-    return fields.find((field: FormField) => {
-      return field.name === 'properties.typeElement';
-    }) as FormField<FormFieldSelectInputs>;
-  }
+  private getElementTypeField():
+    FormField<FormFieldSelectInputs> | undefined {
 
+    const form = this.form$.value;
+
+    if (!form) {
+      return undefined;
+    }
+
+    const fields = getAllFormFields(form);
+
+    return fields.find(
+      (field: FormField) => {
+        return field.name === 'properties.typeElement';
+      }
+    ) as FormField<FormFieldSelectInputs> | undefined;
+  }
 }

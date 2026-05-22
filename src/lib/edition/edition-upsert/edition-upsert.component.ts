@@ -86,7 +86,19 @@ export class EditionUpsertComponent implements OnInit, OnDestroy, OnUpdateInputs
   /**
    * Create form
    */
-  @Input() form: Form;
+  private _form: Form;
+
+  @Input()
+  set form(value: Form) {
+    this._form = value;
+
+    if (value) {
+      this.onFormReady();
+    }
+  }
+  get form(): Form {
+    return this._form;
+  }
 
   /**
    * Base feature, if any (for example when updating an existing feature)
@@ -150,10 +162,6 @@ export class EditionUpsertComponent implements OnInit, OnDestroy, OnUpdateInputs
       this.selectedOlFeatureStyle = this.selectedOlFeature.getStyle();
       this.hideSelectedFeature();
     }
-
-    if (this.addContinueButton) {
-      this.observeGeometry();
-    }
   }
 
   /**
@@ -168,7 +176,7 @@ export class EditionUpsertComponent implements OnInit, OnDestroy, OnUpdateInputs
    * Implemented as part of OnUpdateInputs
    */
   onUpdateInputs() {
-    this.cdRef.detectChanges();
+    this.cdRef.markForCheck();
   }
 
   /**
@@ -434,4 +442,16 @@ export class EditionUpsertComponent implements OnInit, OnDestroy, OnUpdateInputs
     });
   }
 
+  private onFormReady(): void {
+
+    // ✅ IMPORTANT : attendre que Angular ait rendu
+    Promise.resolve().then(() => {
+
+      if (this.addContinueButton) {
+        this.observeGeometry();
+      }
+
+      this.cdRef.markForCheck();
+    });
+  }
 }

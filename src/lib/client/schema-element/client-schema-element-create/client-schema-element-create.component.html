@@ -1,11 +1,13 @@
-<fadq-edition-upsert
-  *ngIf="form$ | async as form"
-  [form]="form"
-  [store]="store"
-  [transaction]="transaction"
-  [groupIndex]="groupIndex$ | async"
-  [processData]="processData"
-  [getOperationTitle]="getOperationTitle"
-  (complete)="onComplete($event)"
-  (cancel)="onCancel()">
-</fadq-edition-upsert>
+<ng-container *ngIf="form$ | async as form">
+  <fadq-edition-upsert
+    *ngIf="form"
+    [form]="form"
+    [store]="store"
+    [transaction]="transaction"
+    [groupIndex]="groupIndex$ | async"
+    [processData]="processData"
+    [getOperationTitle]="getOperationTitle"
+    (complete)="onComplete($event)"
+    (cancel)="onCancel()">
+  </fadq-edition-upsert>
+</ng-container>
