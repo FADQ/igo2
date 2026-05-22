@@ -26,7 +26,7 @@ import { ClientSchemaElementPointService } from './client-schema-element-point.s
 import { ClientSchemaElementLineService } from './client-schema-element-line.service';
 import { ClientSchemaElementSurfaceService } from './client-schema-element-surface.service';
 import { computeSchemaElementArea } from './client-schema-element.utils';
-import { Geometry as GeoJSONGeometry } from 'geojson';
+import { GeoJSONGeometry } from '@igo2/geo';
 
 @Injectable()
 export class ClientSchemaElementService {

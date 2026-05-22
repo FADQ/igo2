@@ -30,7 +30,6 @@ import {
   generateSchemaElementOperationTitle,
   getSchemaElementValidationMessage,
   updateElementTypeChoices,
-  getAnneeImageField,
   processAnneeImageField
 } from '../shared/client-schema-element.utils';
 
@@ -129,7 +128,7 @@ export class ClientSchemaElementUpdateComponent
     return this.clientSchemaElementService.createSchemaElement(this.schema, data)
       .pipe(
         map((schemaElement: ClientSchemaElement): EditionResult => {
-          processAnneeImageField(schemaElement, this.clientSchemaElementService,this.map,getAnneeImageField(this.form$));
+          processAnneeImageField(schemaElement, this.clientSchemaElementService,this.map);
           return {
             feature: schemaElement,
             error: getSchemaElementValidationMessage(schemaElement, this.languageService)

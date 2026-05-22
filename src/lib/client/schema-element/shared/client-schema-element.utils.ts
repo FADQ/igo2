@@ -1,11 +1,11 @@
-import { BehaviorSubject} from 'rxjs';
+import { BehaviorSubject, Observable, of} from 'rxjs';
+import { switchMap, map as rxMap } from 'rxjs/operators';
 
 import * as olstyle from 'ol/style';
 import OlPolygon from 'ol/geom/Polygon';
 import OlSimpleGeometry from 'ol/geom/SimpleGeometry';
 import OlFeature, { FeatureLike } from 'ol/Feature';
 import OlGeoJSON from 'ol/format/GeoJSON';
-import * as olFormat from 'ol/format';
 
 import { LanguageService } from '@igo2/core/language';
 import {
@@ -275,29 +275,50 @@ export function getAnneeImageField(form$: BehaviorSubject<Form>): FormField {
  * @param anneeImageField The field to contain the year of the image used to do the schema element
  * @param clientSchemaElementService Access to all the services related to a client element schema
  */
-export function processAnneeImageField (
+export function processAnneeImageField(
   schemaElement: ClientSchemaElement,
   clientSchemaElementService: ClientSchemaElementService,
-  map: IgoMap,
-  anneeImageField?: FormField) {
-  let imageYear = getAnneeImageFromMap(map);
-  if (imageYear !== undefined) {
-    schemaElement.properties.anneeImage = imageYear;
-    if (anneeImageField !== undefined) {
-      anneeImageField.control.setValue(imageYear);
-    }
-  }
-  else {
-    const olFormatGeoJson = new olFormat.GeoJSON();
-    const olGeometry = new OlGeoJSON().readGeometry(schemaElement.geometry);
-    const olGeometryGeoJson = olFormatGeoJson.writeGeometryObject(olGeometry);
+  igoMap: IgoMap // ✅ renommé pour éviter conflit
+): Observable<ClientSchemaElement> {
 
-    clientSchemaElementService.getMostRecentImageYear(olGeometryGeoJson)
-    .subscribe((reponse: any) => {
-      schemaElement.properties.anneeImage = reponse.data;
-      if (anneeImageField !== undefined) {
-        anneeImageField.control.setValue(reponse.data);
-      }
-    });
+  if (schemaElement.properties?.anneeImage) {
+    return of(schemaElement);
   }
+
+  const imageYear = getAnneeImageFromMap(igoMap);
+
+  // ✅ CAS 1 : année trouvée directement
+  if (imageYear !== undefined && imageYear !== null) {
+    schemaElement.properties.anneeImage = imageYear;
+    return of(schemaElement);
+  }
+
+  // ✅ CAS 2 : fallback via service
+  return of(schemaElement).pipe(
+
+    switchMap((element) => {
+
+      if (!element.geometry) {
+        return of(element);
+      }
+
+      // ✅ cast propre vers GeoJSON (ce que ton service attend)
+      const geometry = element.geometry as any;
+
+      return clientSchemaElementService
+        .getMostRecentImageYear(geometry)
+        .pipe(
+          rxMap((response: any) => {
+
+            const year = response?.data;
+
+            if (year !== undefined && year !== null) {
+              element.properties.anneeImage = year;
+            }
+
+            return element;
+          })
+        );
+    })
+  );
 }
