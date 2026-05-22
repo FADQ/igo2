@@ -511,8 +511,10 @@ export class PortalComponent implements OnInit, OnDestroy {
   private updateSearchLayers(result: SearchResult) {
     const map = this.mapState.map;
 
-    // ✅ PROTECTION CRITIQUE
-    if (!map || !(map as any).layerController) return;
+    // ✅ MAP PAS ENCORE PRÊTE
+    if (!map?.ol) {
+      return;
+    }
 
     if (result === undefined) {
       this.clearAllSearchLayers();
