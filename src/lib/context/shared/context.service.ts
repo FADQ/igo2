@@ -41,7 +41,7 @@ export class CustomContextService {
       tools: [] as any[]
     };
 
-    const layers = (igoMap as any).layerController.all.sort((a: any, b: any) => a.zIndex - b.zIndex);
+    const layers = igoMap.layers.sort((a: any, b: any) => a.zIndex - b.zIndex);
     for (let i = 0; i < layers.length; i++) {
       const layer = layers[i] as any;
       const layerOptions = layer.options;

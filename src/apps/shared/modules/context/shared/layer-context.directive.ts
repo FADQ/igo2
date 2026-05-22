@@ -72,33 +72,46 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
       return;
     }
 
+    // ✅ REMOVE CONTEXT LAYERS
     if (this.removeLayersOnContextChange === true) {
-      (this.map as any).layerController.reset();
+
+      // retirer uniquement les layers dynamiques/contextuels
+      this.contextLayers.forEach((layer: AnyLayer) => {
+        this.map.removeLayer(layer);
+      });
+
     } else {
-      this.contextLayers.forEach((layer: AnyLayer) => (this.map as any).layerController.remove(layer));
+
+      this.contextLayers.forEach((layer: AnyLayer) => {
+        this.map.removeLayer(layer);
+      });
+
     }
+
     this.contextLayers = [];
 
-    const layersAndIndex$ = zip(...context.layers.map((layerOptions: LayerOptions, index: number) => {
-      return this.layerService.createAsyncLayer(layerOptions);
-    }));
+    const layersAndIndex$ = zip(
+      ...context.layers.map((layerOptions: LayerOptions) => {
+        return this.layerService.createAsyncLayer(layerOptions);
+      })
+    );
 
     layersAndIndex$
       .subscribe((layers: (Layer | undefined)[]) => {
-        layers = layers
-          .filter((layer: Layer | undefined) => layer !== undefined)
-          .map((layer) => {
+
+        const validLayers = layers
+          .filter((layer): layer is Layer => layer !== undefined)
+          .map((layer: Layer) => {
+
             layer.visible = this.computeLayerVisibilityFromUrl(layer);
-            layer.zIndex = layer.zIndex;
 
             return layer;
           });
-        const validLayers = layers.filter(layer => layer !== undefined);
+
         this.contextLayers.push(...validLayers);
+
         validLayers.forEach((layer: Layer) => {
-          if ((this.map as any)?.layerController?.add) {
-            (this.map as any).layerController.add(layer);
-          }
+          this.map.addLayer(layer);
         });
       });
   }
@@ -159,7 +172,10 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
   }
 
   private isMapReady(): boolean {
-    return !!(this.map && (this.map as any).layerController);
+    return !!(
+      this.map?.ol &&
+      this.map.ol.getLayers
+    );
   }
 
   private waitForMapReady(callback: () => void) {

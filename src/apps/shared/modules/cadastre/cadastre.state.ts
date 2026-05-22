@@ -158,7 +158,7 @@ export class CadastreState {
   initCadastreLayer() {
     if (this._layerCadastre === undefined || this._layerCadastre === null) {
       this._layerCadastre = createPolygonLayer('rgba(255, 255, 255, 0.2)', '#6efc02', 4);
-      (this.mapState.map as any).layerController.add(this._layerCadastre );
+      this.mapState.map.addLayer(this._layerCadastre );
     }
   }
 
@@ -169,7 +169,7 @@ export class CadastreState {
   initConcessionLayer() {
     if (this._layerConcession === undefined || this._layerConcession === null) {
       this._layerConcession = createMarkerLayer('yellow');
-      (this.mapState.map as any).layerController.add(this._layerConcession );
+      this.mapState.map.addLayer(this._layerConcession );
     }
   }
 
@@ -180,7 +180,7 @@ export class CadastreState {
   initLotLayer() {
     if (this._layerLot === undefined || this._layerLot === null) {
       this._layerLot = createMarkerLayer('blue');
-      (this.mapState.map as any).layerController.add(this._layerLot );
+      this.mapState.map.addLayer(this._layerLot );
     }
   }
 }

@@ -333,7 +333,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     } else {
       this.searchAddedLayers.set(searchType, [layer]);
     }
-    (this.map as any).layerController.add(layer);
+    this.map.addLayer(layer);
   }
 
   private makeSearchLayerVisible(layerAlias: string, searchType: string) {
@@ -353,7 +353,7 @@ export class PortalComponent implements OnInit, OnDestroy {
    */
   private clearAllSearchLayers() {
     this.searchAddedLayers.forEach((layers: Layer[]) => {
-      (this.map as any).layerController.removes(layers);
+      this.map.removeLayers(layers);
     });
 
     this.searchVisibledLayers.forEach((layers: Layer[]) => {

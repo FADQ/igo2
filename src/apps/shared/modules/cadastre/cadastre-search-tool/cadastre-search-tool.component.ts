@@ -420,7 +420,7 @@ export class CadastreSearchToolComponent implements OnInit {
 
           imageLayer.visible = visibility;
           this.cadastreState.layerCadastreImage = imageLayer;
-          (this.mapState.map as any).layerController.add(imageLayer);
+          this.mapState.map.addLayer(imageLayer);
 
         });
     }
