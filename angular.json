@@ -145,7 +145,8 @@
           "defaultConfiguration": "development",
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "interne:build"
+            "browserTarget": "interne:build",
+            "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {
@@ -319,7 +320,8 @@
           "defaultConfiguration": "development",
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "pes:build"
+            "browserTarget": "pes:build",
+            "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {
@@ -477,7 +479,8 @@
           "defaultConfiguration": "development",
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "pes_interne:build"
+            "browserTarget": "pes_interne:build",
+            "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {

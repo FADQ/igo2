@@ -23,5 +23,11 @@
     "target": "http://geoservpro.fadq.qc/mapcache/wmts",
     "secure": false,
     "changeOrigin": true
+  },
+  "/app": {
+    "target": "https://danlav01-svn.fadq.qc",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
   }
 }
