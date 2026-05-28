@@ -214,18 +214,36 @@ export class PortalComponent implements OnInit, OnDestroy {
       contextLayers.forEach((layerOptions: any) => {
         const existing = map.layers.find(l => l.id === layerOptions.id);
           if (existing) {
-            // console.log('♻️ LAYER ALREADY EXISTS', layerOptions.id);
+            console.log('♻️ LAYER ALREADY EXISTS', layerOptions.id);
             return;
           }
 
         this.layerService.createAsyncLayer(layerOptions)
-          .subscribe(layer => {
-            // ✅ évite duplication
-            const existing = map.layers.find(l => l.id === layerOptions.id);
-            if (existing) return;
-            // console.log('✅ ADD LAYER (IGO)', layerOptions.id);
-            map.addLayer(layer);
+        .subscribe(layer => {
+          const existing = map.layers.find(l => l.id === layerOptions.id);
+          if (existing) return;
+
+          console.log('✅ ADD LAYER (IGO)', layerOptions.id);
+
+          // ✅ important : utiliser le olLayer interne
+          layer.ol.setVisible(layerOptions.visible === true);
+
+          map.addLayer(layer);
+
+          layer.ol.on('change:visible', () => {
+            console.log('✅ EVENT visible changé', layer.id, layer.ol.getVisible());
           });
+
+          setTimeout(() => {
+            map.layers.forEach(l => {
+              const opt = contextLayers.find(o => o.id === l.id);
+              if (opt) {
+                l.ol.setVisible(opt.visible === true);
+                console.log('🔧 FIX ALL', l.id, l.ol.getVisible());
+              }
+            });
+          }, 0);
+        });
       });
 
       this.updateViewResolutions();
@@ -268,6 +286,10 @@ export class PortalComponent implements OnInit, OnDestroy {
       } else {
         this.searchState.enableSearch();
       }
+    });
+
+    this.map.layers.forEach(l => {
+      console.log('INIT LAYER', l.id, l.alias, l.visible);
     });
   }
 
@@ -524,6 +546,8 @@ export class PortalComponent implements OnInit, OnDestroy {
     if (this.contextState.context$.value === undefined) { return; }
 
     const searchLayers = (this.contextState.context$.value as any).searchLayers || {};
+    console.log('searchLayers', searchLayers);
+
     const searchType = (result.source.constructor as typeof SearchSource).type;
     const layers = searchLayers[searchType] || [];
 
@@ -574,7 +598,10 @@ export class PortalComponent implements OnInit, OnDestroy {
       this.searchVisibledLayers.set(searchType, [layer]);
     }
 
-    layer.visible = true;
+    // Respecter config initiale
+    if (layer.options && layer.options.visible === true) {
+      layer.visible = true;
+    }
   }
 
   /**

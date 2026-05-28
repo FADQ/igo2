@@ -418,7 +418,7 @@ export class CadastreSearchToolComponent implements OnInit {
 
           const imageLayer = layer as ImageLayer;
 
-          imageLayer.visible = visibility;
+          // imageLayer.visible = visibility;
           this.cadastreState.layerCadastreImage = imageLayer;
           this.mapState.map.addLayer(imageLayer);
 

@@ -103,7 +103,11 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
           .filter((layer): layer is Layer => layer !== undefined)
           .map((layer: Layer) => {
 
-            layer.visible = this.computeLayerVisibilityFromUrl(layer);
+            const computed = this.computeLayerVisibilityFromUrl(layer);
+            // applique seulement si override explicite
+            if (computed !== layer.visible) {
+              layer.visible = computed;
+            }
 
             return layer;
           });
@@ -113,7 +117,34 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
         validLayers.forEach((layer: Layer) => {
           this.map.addLayer(layer);
         });
+
+        // ✅ ✅ ✅ AJOUT ICI
+        setTimeout(() => {
+          requestAnimationFrame(() => {
+            this.applyFinalVisibility(context);
+          });
+        }, 300);
       });
+  }
+
+  private applyFinalVisibility(context: DetailedContext) {
+    if (!context?.layers) return;
+
+    context.layers.forEach(opt => {
+      const layer = this.map.layers.find(l => l.id === opt.id);
+
+      if (layer?.ol) {
+        const visible = opt.visible === true;
+
+        // ✅ OpenLayers
+        layer.ol.setVisible(visible);
+
+        // ✅ IGO (LA CLÉ)
+        layer.visible = visible;
+
+        console.log('✅ FINAL SYNC', layer.id, visible);
+      }
+    });
   }
 
   private computeLayerVisibilityFromUrl(layer: Layer): boolean {
