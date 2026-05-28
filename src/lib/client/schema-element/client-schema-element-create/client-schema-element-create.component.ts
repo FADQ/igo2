@@ -11,15 +11,17 @@ import {
 
 import {
   BehaviorSubject,
+  combineLatest,
   Observable,
-  Subscription,
-  of
+  Subject,
+  Subscription
 } from 'rxjs';
 
 import {
-  delay,
+  filter,
   map,
-  switchMap
+  switchMap,
+  takeUntil
 } from 'rxjs/operators';
 
 import { EntityTransaction } from '@igo2/common/entity';
@@ -40,13 +42,11 @@ import { LanguageService } from '@igo2/core/language';
 import {
   FeatureStore,
   IgoMap,
-  GeoJSONGeometry,
   GeometryFormFieldInputs
 } from '@igo2/geo';
 
 import { EditionResult } from '../../../edition/shared/edition.interfaces';
 
-import { getAnneeImageFromMap } from '../../shared/client.utils';
 
 import { ClientSchema } from '../../schema/shared/client-schema.interfaces';
 
@@ -62,7 +62,6 @@ import { ClientSchemaElementFormService } from '../shared/client-schema-element-
 import {
   generateSchemaElementOperationTitle,
   getSchemaElementValidationMessage,
-  updateElementTypeChoices,
   processAnneeImageField
 } from '../shared/client-schema-element.utils';
 import { isBehaviorSubject } from '@lib/utils/rxjs.utils';
@@ -83,6 +82,8 @@ export class ClientSchemaElementCreateComponent
   private geometry$$?: Subscription;
 
   private elementType$$?: Subscription;
+
+  private destroy$ = new Subject<void>();
 
   @Input() map: IgoMap;
 
@@ -125,6 +126,8 @@ export class ClientSchemaElementCreateComponent
 
     this.geometry$$?.unsubscribe();
     this.elementType$$?.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onUpdateInputs(): void {
@@ -183,149 +186,90 @@ export class ClientSchemaElementCreateComponent
 
   private setForm(form: Form): void {
 
-    console.log('FORM', form);
-
     this.form$.next(form);
 
-    const fields = getAllFormFields(form);
+    const geometryField = this.getGeometryField();
+    const elementTypeField = this.getElementTypeField();
+    const anneeImageField = this.getAnneeImageField();
+    const idField = this.getIdField();
 
-    const anneeImageField = fields.find(
-      (field: FormField) => field.name === 'properties.anneeImage'
+    if (!geometryField?.control || !elementTypeField?.control) {
+      console.error('Required fields missing');
+      return;
+    }
+
+    // ✅ Désactiver champs non éditables
+    // ✅ Exclure *réellement* du form Angular
+    if (anneeImageField?.control) {
+      anneeImageField.control.clearValidators();
+      anneeImageField.control.setErrors(null);
+      anneeImageField.control.disable({ emitEvent: false });
+    }
+
+    if (idField?.control) {
+      idField.control.clearValidators();
+      idField.control.setErrors(null);
+      idField.control.disable({ emitEvent: false });
+    }
+
+    // ---------------------------------------------------------------------
+    // ✅ Streams métier
+    // ---------------------------------------------------------------------
+
+    const geometry$ = geometryField.control.valueChanges.pipe(
+      takeUntil(this.destroy$),
+      filter(geo => !!geo)
     );
 
-    const geometryField = fields.find(
-      (field: FormField) => field.name === 'geometry'
-    ) as FormField<GeometryFormFieldInputs>;
-
-    const elementTypeField = fields.find(
-      (field: FormField) => field.name === 'properties.typeElement'
-    ) as FormField<FormFieldSelectInputs>;
-
-    console.log('anneeImageField', anneeImageField);
-    console.log('geometryField', geometryField);
-    console.log('elementTypeField', elementTypeField);
+    const type$ = elementTypeField.control.valueChanges.pipe(
+      takeUntil(this.destroy$),
+      filter(type => !!type)
+    );
 
     // ---------------------------------------------------------------------
-    // Année image
+    // ✅ Type → geometryType (UI)
     // ---------------------------------------------------------------------
 
-    if (anneeImageField?.control) {
+    type$.subscribe(type => {
+      this.updateGeometryType(type);
+    });
 
-      const imageYear = getAnneeImageFromMap(this.map);
+    // ---------------------------------------------------------------------
+    // ✅ Geometry → année image
+    // ---------------------------------------------------------------------
 
-      if (imageYear !== undefined && imageYear !== null) {
+    geometry$.pipe(
+      switchMap(geometry =>
+        this.clientSchemaElementService.getMostRecentImageYear(geometry)
+      )
+    ).subscribe((response: any) => {
 
-        anneeImageField.control.setValue(imageYear);
-        anneeImageField.control.updateValueAndValidity();
+      const year = response?.data;
 
-      } else {
-
-        // ✅ attendre que la géométrie soit dessinée
-        geometryField?.control?.valueChanges.subscribe((geometry) => {
-
-          if (!geometry) {
-            return;
-          }
-
-          this.clientSchemaElementService
-            .getMostRecentImageYear(geometry)
-            .subscribe((response: any) => {
-
-              const year = response?.data;
-
-              if (year) {
-                anneeImageField.control.setValue(year);
-                anneeImageField.control.updateValueAndValidity();
-                this.cdRef.markForCheck();
-              }
-            });
-        });
+      if (anneeImageField?.control && year) {
+        anneeImageField.control.setValue(String(year), { emitEvent: false });
       }
-    }
 
-
-    console.log('CONTROL READY ?', anneeImageField.control);
-    console.log('VALUE AFTER SET', anneeImageField.control.value);
+      this.cdRef.markForCheck();
+    });
 
     // ---------------------------------------------------------------------
-    // Validation défensive
+    // ✅ VALIDATION MÉTIER (clé)
     // ---------------------------------------------------------------------
 
-    if (!geometryField?.control) {
-      console.error('Geometry field missing');
-      return;
-    }
+    combineLatest([geometry$, type$])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
 
-    if (!elementTypeField?.control) {
-      console.error('Element type field missing');
-      return;
-    }
+        console.log('✅ Form ready');
 
-    // ---------------------------------------------------------------------
-    // Cleanup anciennes subscriptions
-    // ---------------------------------------------------------------------
+        // 👉 IMPORTANT : ne dépend plus de Angular
+        this.markFormReady();
 
-    this.geometry$$?.unsubscribe();
-    this.elementType$$?.unsubscribe();
-
-    // ---------------------------------------------------------------------
-    // Geometry changes
-    // ---------------------------------------------------------------------
-
-    this.geometry$$ = geometryField.control.valueChanges
-      .subscribe((geometry: GeoJSONGeometry | null) => {
-
-        console.log('Geometry changed', geometry);
-
-        if (!geometry?.type) {
-          return;
-        }
-
-        updateElementTypeChoices(
-          geometry.type as any,
-          this.clientSchemaElementService,
-          this.schema,
-          elementTypeField
-        );
-      });
-
-    // ---------------------------------------------------------------------
-    // Element type changes
-    // ---------------------------------------------------------------------
-
-    this.elementType$$ = elementTypeField.control.valueChanges
-      .subscribe((elementType: string | null) => {
-
-        console.log('Element type changed', elementType);
-
-        if (!elementType) {
-          return;
-        }
-
-        this.updateGeometryType(elementType);
+        this.cdRef.markForCheck();
       });
 
     this.cdRef.markForCheck();
-  }
-
-  private getElementTypeField():
-    FormField<FormFieldSelectInputs> | undefined {
-
-    const fields = getAllFormFields(this.form$.value);
-
-    return fields.find(
-      (field: FormField) => field.name === 'properties.typeElement'
-    ) as FormField<FormFieldSelectInputs>;
-  }
-
-  private getGeometryField():
-    FormField<GeometryFormFieldInputs> | undefined {
-
-    const fields = getAllFormFields(this.form$.value);
-
-    return fields.find(
-      (field: FormField) => field.name === 'geometry'
-    ) as FormField<GeometryFormFieldInputs>;
   }
 
   private updateGeometryType(elementTypeValue: string): void {
@@ -341,17 +285,9 @@ export class ClientSchemaElementCreateComponent
       elementTypeField.inputs.choices as BehaviorSubject<FormFieldSelectChoice[]>
     ).value;
 
-    const elementTypes = choices.filter(
-      (choice): choice is ClientSchemaElementType => {
-        return 'geometryType' in choice;
-      }
-    );
-
-    const elementType = elementTypes.find(
-      (_elementType: ClientSchemaElementType) => {
-        return _elementType.value === elementTypeValue;
-      }
-    );
+    const elementType = choices
+      .filter((c): c is ClientSchemaElementType => 'geometryType' in c)
+      .find(c => c.value === elementTypeValue);
 
     if (!elementType) {
       return;
@@ -360,19 +296,61 @@ export class ClientSchemaElementCreateComponent
     const geometryTypeInput = geometryField.inputs.geometryType;
 
     if (isBehaviorSubject<string>(geometryTypeInput)) {
+      geometryTypeInput.next(elementType.geometryType);
+    }
+  }
 
-      geometryTypeInput.next(
-        elementType.geometryType
-      );
+  private getGeometryField(): FormField<GeometryFormFieldInputs> | undefined {
+    return getAllFormFields(this.form$.value)
+      .find(f => f.name === 'geometry') as FormField<GeometryFormFieldInputs>;
+  }
+
+  private getElementTypeField(): FormField<FormFieldSelectInputs> | undefined {
+    return getAllFormFields(this.form$.value)
+      .find(f => f.name === 'properties.typeElement') as FormField<FormFieldSelectInputs>;
+  }
+
+  private getAnneeImageField(): FormField | undefined {
+    return getAllFormFields(this.form$.value)
+      .find(f => f.name === 'properties.anneeImage');
+  }
+
+  private getIdField(): FormField | undefined {
+    return getAllFormFields(this.form$.value)
+      .find(f => f.name === 'properties.idElementGeometrique');
+  }
+
+  private markFormReady(): void {
+
+    const formCtrl = this.form$.value?.control;
+
+    if (!formCtrl) {
+      return;
     }
 
-    of(null)
-      .pipe(delay(50))
-      .subscribe(() => {
+    // ✅ Parcourir tous les controls via API publique
+    Object.keys(formCtrl.controls).forEach(key => {
+      const control = formCtrl.controls[key];
 
-        if ('activeElement' in document) {
-          (document.activeElement as HTMLElement)?.blur();
-        }
-      });
+      // ✅ Nettoyer erreurs
+      control.setErrors(null);
+
+      // ✅ recalcul individuel
+      control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+    });
+
+    // ✅ Nettoyer le form global
+    formCtrl.setErrors(null);
+
+    // ✅ recalcul global
+    formCtrl.updateValueAndValidity({ emitEvent: true });
+
+    formCtrl.markAsDirty();
+    formCtrl.markAsTouched();
+
+    console.log('FORM READY ✅', {
+      valid: formCtrl.valid,
+      status: formCtrl.status
+    });
   }
 }

@@ -225,7 +225,22 @@ export class ClientSchemaElementFormService {
       type: 'geometry',
       options: {
         cols: 2,
-        validator: Validators.required
+        validator: (control: AbstractControl) => {
+
+          const value = control.value;
+
+          if (!value || !value.type || !value.coordinates) {
+            return { required: true };
+          }
+
+          // Vérifie qu’il y a au moins une coordonnée
+          if (!Array.isArray(value.coordinates) || value.coordinates.length === 0) {
+            return { required: true };
+          }
+
+          return null; // ✅ valide
+        }
+
       },
       inputs: {
         geometryType: new BehaviorSubject<string | undefined>(undefined),
