@@ -38,6 +38,10 @@ export class ClientSchemaElementWorkspace extends Workspace<ClientSchemaElement>
     super(options);
   }
 
+  load(schemaElements: ClientSchemaElement[]) {
+    this.schemaElementStore.load(schemaElements);
+  }
+
   init() {
     this.schemaElementStore.activateStrategyOfType(FeatureStoreLoadingStrategy as any);
     this.addSchemaElementLayer();

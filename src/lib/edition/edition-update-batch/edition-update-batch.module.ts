@@ -5,6 +5,10 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 import { IgoLanguageModule } from '@igo2/core/language';
 import { IgoFeatureFormModule } from '@igo2/geo';
+import {
+  IgoFormFieldModule,
+  IgoFormGroupModule
+} from '@igo2/common/form';
 
 import { FadqLibMessageInlineModule } from 'src/lib/message/message-inline/message-inline.module';
 
@@ -20,6 +24,8 @@ import { EditionUpdateBatchComponent } from './edition-update-batch.component';
     MatTabsModule,
     IgoLanguageModule,
     IgoFeatureFormModule,
+    IgoFormFieldModule,
+    IgoFormGroupModule,
     FadqLibMessageInlineModule
   ],
   exports: [

@@ -105,9 +105,12 @@ export class ClientSchemaElementSaveComponent implements OnUpdateInputs, WidgetC
       }
     });
 
-    // Reload everyting. Data that hasn't been saved because of an error
-    // is also reloaded but is not obtained from the service.
-    this.store.load(schemaElementsToLoad);
+    this.store.clear();
+    this.store.insertMany(schemaElementsToLoad);
+
+    // ✅ synchronisation OL obligatoire
+    this.store.clearLayer();
+    this.store.setLayerFeatures(this.store.all());
 
     if (hasError) {
       return {
@@ -120,7 +123,7 @@ export class ClientSchemaElementSaveComponent implements OnUpdateInputs, WidgetC
       type: MessageType.SUCCESS,
       text: this.languageService.translate.instant('client.schemaElement.save.success')
     };
-
   }
+
 
 }

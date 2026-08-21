@@ -154,8 +154,6 @@ export class PortalComponent implements OnInit, OnDestroy {
       // ✅ NOUVELLE CONDITION ROBUSTE
       if (map && map.viewController && map.viewController.getOlMap()) {
 
-        // console.log('✅ MAP READY (OL OK)');
-
         this.mapReady$.next(map);
         clearInterval(waitMapReady);
 
@@ -164,7 +162,6 @@ export class PortalComponent implements OnInit, OnDestroy {
 
         // ✅ 🔥 REPLAY
         if (this.lastFocusedResult) {
-          // console.log('🔁 REPLAY LAST RESULT', this.lastFocusedResult);
 
           this.onFocusSearchResult(this.lastFocusedResult);
           this.updateSearchLayers(this.lastFocusedResult);
@@ -180,7 +177,6 @@ export class PortalComponent implements OnInit, OnDestroy {
     .subscribe((record) => {
 
       if (!record) {
-            // console.log('⚠️ NO FOCUSED RECORD');
             return;
           }
 
@@ -190,11 +186,8 @@ export class PortalComponent implements OnInit, OnDestroy {
 
           const map = this.getMap();
           if (!map) {
-            // console.log('⛔ MAP NOT READY (focus)');
             return;
           }
-
-          // console.log('🎯 FOCUS RESULT', result);
 
           this.onFocusSearchResult(result);
           this.updateSearchLayers(result);
@@ -205,7 +198,6 @@ export class PortalComponent implements OnInit, OnDestroy {
      */
     this.context$$ = this.contextState.context$.subscribe((context) => {
 
-      // console.log('📦 CONTEXT CHANGED', context);
       const map = this.getMap();
       if (!map || !context) return;
 
@@ -214,7 +206,6 @@ export class PortalComponent implements OnInit, OnDestroy {
       contextLayers.forEach((layerOptions: any) => {
         const existing = map.layers.find(l => l.id === layerOptions.id);
           if (existing) {
-            console.log('♻️ LAYER ALREADY EXISTS', layerOptions.id);
             return;
           }
 
@@ -223,23 +214,16 @@ export class PortalComponent implements OnInit, OnDestroy {
           const existing = map.layers.find(l => l.id === layerOptions.id);
           if (existing) return;
 
-          console.log('✅ ADD LAYER (IGO)', layerOptions.id);
-
           // ✅ important : utiliser le olLayer interne
           layer.ol.setVisible(layerOptions.visible === true);
 
           map.addLayer(layer);
-
-          layer.ol.on('change:visible', () => {
-            console.log('✅ EVENT visible changé', layer.id, layer.ol.getVisible());
-          });
 
           setTimeout(() => {
             map.layers.forEach(l => {
               const opt = contextLayers.find(o => o.id === l.id);
               if (opt) {
                 l.ol.setVisible(opt.visible === true);
-                console.log('🔧 FIX ALL', l.id, l.ol.getVisible());
               }
             });
           }, 0);
@@ -287,10 +271,6 @@ export class PortalComponent implements OnInit, OnDestroy {
         this.searchState.enableSearch();
       }
     });
-
-    this.map.layers.forEach(l => {
-      console.log('INIT LAYER', l.id, l.alias, l.visible);
-    });
   }
 
   ngOnDestroy() {
@@ -311,21 +291,31 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   onMapQuery(event: { features: Feature[]; event: OlMapBrowserEvent<any> }) {
     const querySearchSource = this.getQuerySearchSource();
-    if (querySearchSource === undefined) { return; }
+    if (!querySearchSource) return;
 
-    const results = event.features.map((feature: Feature) => {
-      // This patch removes the "square overlay. added after a query. IMO,
-      // there should be an alternative to that square or no square at all.
-      // Check the extractHtmlData of the QueryService for more info.
-      // feature.geometry = undefined;
-      // feature.extent = undefined;
-      return featureToSearchResult(feature, querySearchSource);
+    // ✅ FILTRE basé sur context.searchLayers
+    const filteredFeatures = event.features.filter((feature: Feature) => {
+      return this.isQueryableFeature(feature);
     });
+
+    // La sélection est déjà gérée par FeatureStoreSelectionStrategy
+    // dont l'interaction Select d'OpenLayers déclenche automatiquement
+
+    // ✅ Rien à afficher → on laisse seulement la sélection OL
+    if (filteredFeatures.length === 0) {
+      return;
+    }
+
+    const results = filteredFeatures.map((feature: Feature) =>
+      featureToSearchResult(feature, querySearchSource)
+    );
+
     const research = {
       request: of(results),
       reverse: false,
       source: querySearchSource
     };
+
     research.request.subscribe((_results: SearchResult<Feature>[]) => {
       this.onSearch({ research, results: _results });
     });
@@ -347,6 +337,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     const results = event.results;
     const searchSource = event.research.source;
     const querySearchSource = this.getQuerySearchSource();
+
     if (results.length === 0 && querySearchSource !== undefined && searchSource === querySearchSource) {
       if (this.searchResult !== undefined && this.searchResult.source === querySearchSource) {
         this.searchStore.state.update(this.searchResult, {focused: false, selected: false});
@@ -361,7 +352,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     const newResults = this.searchStore.all()
       .filter((result: SearchResult) => result.source !== searchSource)
       .concat(results.filter((result: SearchResult) => result.meta.dataType !== CLIENT));
-    this.searchStore.load(newResults);
+      this.searchStore.load(newResults);
 
     const clientResult = results.find((result: SearchResult) => result.meta.dataType === CLIENT);
     if (clientResult !== undefined) {
@@ -487,8 +478,13 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   private onSearchMap(results: SearchResult<Feature>[]) {
-    if (results.length === 0) { return; }
-    this.searchStore.state.update(results[0], {selected: true, focused: true}, true);
+    if (results.length === 0) return;
+
+    // ✅ ne pas écraser les sélections multiples
+    this.searchStore.state.update(results[0], {
+      selected: true,
+      focused: true
+    }, false); // 🔥 TRÈS IMPORTANT: false au lieu de true
   }
 
   private onFocusSearchResult(result: SearchResult) {
@@ -546,7 +542,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     if (this.contextState.context$.value === undefined) { return; }
 
     const searchLayers = (this.contextState.context$.value as any).searchLayers || {};
-    console.log('searchLayers', searchLayers);
+    // console.log('searchLayers', searchLayers);
 
     const searchType = (result.source.constructor as typeof SearchSource).type;
     const layers = searchLayers[searchType] || [];
@@ -693,4 +689,36 @@ export class PortalComponent implements OnInit, OnDestroy {
     return map;
   }
 
+  private isFeatureFromSearchLayer(feature: Feature): boolean {
+    const context = this.contextState.context$.value;
+    if (!context) return false;
+
+    const searchLayers = (context as any).searchLayers || {};
+    const layerId = feature.meta?.id;
+
+    if (!layerId) return false;
+
+    // 🔍 parcourir tous les types de recherche
+    for (const key of Object.keys(searchLayers)) {
+      const layers = searchLayers[key];
+
+      const match = layers.find((layerInfo: any) => {
+        if (typeof layerInfo === 'string') {
+          return layerInfo === layerId;
+        }
+        if (layerInfo?.id) {
+          return layerInfo.id === layerId;
+        }
+        return false;
+      });
+
+      if (match) return true;
+    }
+
+    return false;
+  }
+
+  private isQueryableFeature(feature: Feature): boolean {
+    return feature.properties?.excludeFromQuery !== true;
+  }
 }

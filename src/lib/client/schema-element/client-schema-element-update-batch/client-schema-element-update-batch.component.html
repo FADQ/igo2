@@ -1,5 +1,6 @@
 <fadq-edition-update-batch
-  *ngIf="form$ | async as form"
+  *ngIf="form$ | async as form; else loading"
+  [key]="formKey"
   [form]="form"
   [store]="store"
   [transaction]="transaction"
@@ -9,3 +10,5 @@
   (complete)="onComplete($event)"
   (cancel)="onCancel()">
 </fadq-edition-update-batch>
+
+<ng-template #loading></ng-template>

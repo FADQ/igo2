@@ -141,8 +141,6 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
 
         // ✅ IGO (LA CLÉ)
         layer.visible = visible;
-
-        console.log('✅ FINAL SYNC', layer.id, visible);
       }
     });
   }

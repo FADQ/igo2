@@ -13,6 +13,7 @@ import {
   BehaviorSubject,
   Observable,
   Subscription,
+  combineLatest,
   of,
   zip
 } from 'rxjs';
@@ -56,15 +57,38 @@ export class EditionUpdateBatchComponent
    */
   private result$$: Subscription;
 
+  private form$ = new BehaviorSubject<Form | undefined>(undefined);
+  private features$ = new BehaviorSubject<Feature[]>([]);
+
+  private _form: Form;
+
   /**
    * Create form
    */
-  @Input() form: Form;
+  get form(): Form {
+    return this._form;
+  }
+
+  @Input()
+  set form(value: Form) {
+    this._form = value;
+    this.form$.next(value);
+  }
 
   /**
    * Base features
    */
-  @Input() features: Feature[] = [];
+  private _features: Feature[] = [];
+
+  @Input()
+  set features(value: Feature[]) {
+    this._features = value || [];
+    this.features$.next(this._features);
+  }
+
+  get features(): Feature[] {
+    return this._features;
+  }
 
   /**
    * Feature store
@@ -107,7 +131,37 @@ export class EditionUpdateBatchComponent
   ) {}
 
   ngOnInit() {
-    this.baseFeature$.next(this.computeBaseFeature());
+    combineLatest([this.form$, this.features$])
+    .subscribe(([form, features]) => {
+
+      if (!form || !features.length) {
+        return;
+      }
+
+      const baseFeature = this.computeBaseFeature();
+
+      // ✅ 🔥 FIX CRITIQUE : injecter les valeurs dans le form
+      const propertiesGroup = form.control.get('properties');
+
+      if (propertiesGroup) {
+
+        Object.keys(baseFeature.properties || {}).forEach(key => {
+
+          const control = propertiesGroup.get(key);
+
+          if (control) {
+            control.setValue(baseFeature.properties[key], { emitEvent: false });
+          }
+
+        });
+
+      }
+
+      this.baseFeature$.next(baseFeature);
+
+      this.cdRef.markForCheck();
+    });
+
   }
 
   ngOnDestroy() {
@@ -230,29 +284,46 @@ export class EditionUpdateBatchComponent
    * @returns Feature
    */
   private computeBaseFeature(): Partial<Feature> {
+
+    if (!this.form || !this.features?.length) {
+      return { type: FEATURE, properties: {} };
+    }
+
     const fields = getAllFormFields(this.form);
     const fieldNames = fields.map((field: FormField) => field.name);
 
+    // ✅ normaliser les noms (retirer "properties.")
+    const normalizedFieldNames = fieldNames.map(name =>
+      name.replace('properties.', '')
+    );
+
+    // ✅ récupérer uniquement les clés utiles au form
     const keys = this.features
       .reduce((acc: string[], feature: Feature) => {
         return acc.concat(Object.keys(feature.properties));
       }, [])
-      .filter((key: string) => fieldNames.includes(`properties.${key}`));
-    const uniqueKeys = new Set(keys);
+      .filter((key: string) => normalizedFieldNames.includes(key));
 
-    const deleted: string[] = [];
-    const properties = this.features.reduce((acc: {[key: string]: any}, feature: Feature) => {
+    const uniqueKeys = Array.from(new Set(keys));
+
+    // ✅ construire les propriétés (version robuste)
+    const properties: { [key: string]: any } = {};
+
+    this.features.forEach((feature: Feature) => {
       uniqueKeys.forEach((key: string) => {
-        const value = feature.properties[key];
-        if (!(key in acc) && !deleted.includes(key)) {
-          acc[key] = value;
-        } else if (acc[key] !== value) {
-          delete acc[key];
-          deleted.push(key);
+
+        const currentValue = feature.properties[key];
+
+        if (!(key in properties)) {
+          // première occurrence
+          properties[key] = currentValue;
+        } else if (properties[key] !== currentValue) {
+          // valeurs différentes → mode batch
+          properties[key] = null;
         }
+
       });
-      return acc;
-    }, {});
+    });
 
     return {
       type: FEATURE,

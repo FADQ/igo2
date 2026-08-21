@@ -117,7 +117,7 @@ export class ClientSchemaElementCreateComponent
           this.setForm(form);
         },
         error: (error: unknown) => {
-          console.error('Error building create form', error);
+          console.error('Erreur dans l\'initialisation du formulaire', error);
         }
       });
   }
@@ -194,7 +194,7 @@ export class ClientSchemaElementCreateComponent
     const idField = this.getIdField();
 
     if (!geometryField?.control || !elementTypeField?.control) {
-      console.error('Required fields missing');
+      console.error('Champs requis manquants');
       return;
     }
 
@@ -260,8 +260,6 @@ export class ClientSchemaElementCreateComponent
     combineLatest([geometry$, type$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-
-        console.log('✅ Form ready');
 
         // 👉 IMPORTANT : ne dépend plus de Angular
         this.markFormReady();
@@ -348,9 +346,5 @@ export class ClientSchemaElementCreateComponent
     formCtrl.markAsDirty();
     formCtrl.markAsTouched();
 
-    console.log('FORM READY ✅', {
-      valid: formCtrl.valid,
-      status: formCtrl.status
-    });
   }
 }

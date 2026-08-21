@@ -38,8 +38,6 @@ export function getAnneeImageFromMap(
 
   const layers: AnyLayer[] = map.layers || [];
 
-  console.log('MAP LAYERS', layers);
-
   const years = layers.reduce(
     (acc: number[], layer: AnyLayer) => {
 
@@ -64,12 +62,6 @@ export function getAnneeImageFromMap(
         layerName = dataSource.options.params?.LAYERS;
       }
 
-      console.log({
-        layerName,
-        visible: layer.visible,
-        isImageLayer
-      });
-
       if (
         layerName &&
         layerName.startsWith('Mosaiques-orthophotos')
@@ -92,8 +84,6 @@ export function getAnneeImageFromMap(
     },
     []
   );
-
-  console.log('IMAGE YEARS', years);
 
   return years.length > 0
     ? Math.max(...years)

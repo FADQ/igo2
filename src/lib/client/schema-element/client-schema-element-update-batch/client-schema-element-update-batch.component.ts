@@ -72,9 +72,6 @@ import {
   updateElementTypeChoices
 } from '../shared/client-schema-element.utils';
 
-import {
-  isBehaviorSubject
-} from '../../../utils/rxjs.utils';
 
 @Component({
   selector: 'fadq-client-schema-element-update-batch',
@@ -90,6 +87,8 @@ export class ClientSchemaElementUpdateBatchComponent
    * @internal
    */
   form$ = new BehaviorSubject<Form | undefined>(undefined);
+
+  formKey = 0;
 
   /**
    * Map to draw elements on
@@ -148,7 +147,7 @@ export class ClientSchemaElementUpdateBatchComponent
 
         error: (error: unknown) => {
           console.error(
-            'Error building update batch form',
+            'Erreur: impossible de construire le formulaire de mise à jour par lot',
             error
           );
         }
@@ -207,8 +206,6 @@ export class ClientSchemaElementUpdateBatchComponent
 
   private setForm(form: Form): void {
 
-    console.log('UPDATE BATCH FORM', form);
-
     this.form$.next(form);
 
     if (
@@ -217,7 +214,7 @@ export class ClientSchemaElementUpdateBatchComponent
     ) {
 
       console.error(
-        'No schema elements available'
+        'Erreur: aucun élément de schéma fourni pour la mise à jour par lot'
       );
 
       return;
@@ -228,7 +225,7 @@ export class ClientSchemaElementUpdateBatchComponent
     if (!geometry?.type) {
 
       console.error(
-        'Schema element geometry type missing'
+        'Erreur: type de géométrie de l\'élément de schéma manquant'
       );
 
       return;
@@ -243,7 +240,7 @@ export class ClientSchemaElementUpdateBatchComponent
     if (!elementTypeField) {
 
       console.error(
-        'Element type field missing'
+        'Erreur: champ de type d\'élément manquant'
       );
 
       return;
@@ -263,17 +260,7 @@ export class ClientSchemaElementUpdateBatchComponent
     const choicesInput =
       elementTypeField.inputs?.choices;
 
-    if (
-      choicesInput &&
-      isBehaviorSubject(choicesInput)
-    ) {
-
-      console.log(
-        'Element type choices updated',
-        choicesInput.value
-      );
-    }
-
+    this.formKey++;
     this.cdRef.markForCheck();
   }
 

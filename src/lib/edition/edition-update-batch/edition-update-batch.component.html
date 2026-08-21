@@ -1,35 +1,53 @@
+<!-- Message d'erreur -->
 <fadq-message-inline
-  *ngIf="message$ | async as message"  
+  *ngIf="message$ | async as message"
   [message]="message">
 </fadq-message-inline>
 
-<igo-feature-form
-  class="igo-form-compact"
-  [form]="form"
-  [feature]="baseFeature$ | async"
-  (submitForm)="onSubmit($event)">
+<!-- IMPORTANT: on attend que le form ET le baseFeature soient prêts -->
+<ng-container *ngIf="form && (baseFeature$ | async) as baseFeature">
 
-  <mat-tab-group *ngIf="form.groups.length > 0" [selectedIndex]="groupIndex">
-    <mat-tab *ngFor="let group of form.groups" [label]="group.title">
-      <igo-form-group [group]="group"></igo-form-group>
-    </mat-tab>
-  </mat-tab-group>
+  <igo-feature-form
+    class="igo-form-compact"
+    [form]="form"
+    [feature]="baseFeature"
+    (submitForm)="onSubmit($event)">
 
-  <igo-form-field *ngFor="let field of form.fields" [field]="field"></igo-form-field>
+    <!-- Groupes (onglets) -->
+    <ng-container *ngIf="form.groups?.length > 0; else noGroups">
+      <mat-tab-group [selectedIndex]="groupIndex">
+        <mat-tab *ngFor="let group of form.groups" [label]="group.title">
+          <igo-form-group [group]="group"></igo-form-group>
+        </mat-tab>
+      </mat-tab-group>
+    </ng-container>
 
-  <div formButtons>
-    <button
-      mat-button
-      type="button"
-      (click)="onCancel()">
-      {{ 'cancel' | translate }}
-    </button>
-    <button
-      mat-raised-button
-      type="submit"
-      color="primary"
-      [disabled]="!form.control.valid">
-      {{ 'apply' | translate }}
-    </button>
-  </div>
-</igo-feature-form>
+    <ng-template #noGroups>
+      <!-- Champs hors groupes (fallback) -->
+      <igo-form-field
+        *ngFor="let field of form.fields"
+        [field]="field">
+      </igo-form-field>
+    </ng-template>
+
+    <!-- Boutons -->
+    <div formButtons>
+      <button
+        mat-button
+        type="button"
+        (click)="onCancel()">
+        {{ 'cancel' | translate }}
+      </button>
+
+      <button
+        mat-raised-button
+        type="submit"
+        color="primary"
+        [disabled]="!form.control?.valid">
+        {{ 'apply' | translate }}
+      </button>
+    </div>
+
+  </igo-feature-form>
+
+</ng-container>
