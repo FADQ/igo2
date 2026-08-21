@@ -55,16 +55,20 @@ export class ClientSchemaElementSurfaceService implements GetElements, SaveEleme
   }
 
   private listItemToElement(listItem: ClientSchemaElementListResponseItem): ClientSchemaElement {
-    const properties = Object.assign({}, listItem.properties);
+    const properties = Object.assign({}, listItem.properties,{excludeFromQuery: true});
+
     return {
       type: listItem.type,
       projection: 'EPSG:4326',
       geometry: listItem.geometry,
       extent: undefined,
       properties,
+
+      // ✅ clé existante IGO
       meta: {
         id: properties.idElementGeometrique
       }
-    };
+    } as ClientSchemaElement;
   }
+
 }

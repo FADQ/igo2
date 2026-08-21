@@ -56,7 +56,7 @@ export class ClientSchemaElementPointService implements GetElements, SaveElement
   }
 
   private listItemToElement(listItem: ClientSchemaElementListResponseItem): ClientSchemaElement {
-    const properties = Object.assign({}, listItem.properties);
+    const properties = Object.assign({}, listItem.properties,{excludeFromQuery: true});
     return {
       type: listItem.type,
       projection: 'EPSG:4326',
@@ -66,6 +66,6 @@ export class ClientSchemaElementPointService implements GetElements, SaveElement
       meta: {
         id: properties.idElementGeometrique
       }
-    };
+    } as ClientSchemaElement;
   }
 }

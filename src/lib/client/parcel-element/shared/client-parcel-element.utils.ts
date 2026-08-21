@@ -51,7 +51,9 @@ export function computeParcelElementArea(parcelElement: ClientParcelElement): nu
 
 export function createParcelElementLayer(client: Client): VectorLayer {
   // TODO: i18n
-  const parcelElementDataSource = new FeatureDataSource();
+  const parcelElementDataSource = new FeatureDataSource({
+    queryable: true
+  } as any);
   return new VectorLayer({
     title: `${client.info.numero} - Parcelles en édition`,
     zIndex: 102,

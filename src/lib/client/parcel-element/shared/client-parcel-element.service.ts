@@ -208,7 +208,7 @@ export class ClientParcelElementService {
   private listItemToParcel(
     listItem: ClientParcelElementListResponseItem
   ): ClientParcelElement {
-    const properties = Object.assign({}, listItem.properties);
+    const properties = Object.assign({}, listItem.properties,{excludeFromQuery: true});
     return {
       meta: {
         id: listItem.properties.idParcelle,
@@ -219,6 +219,6 @@ export class ClientParcelElementService {
       geometry: listItem.geometry,
       extent: undefined,
       properties
-    };
+    } as ClientParcelElement;
   }
 }
