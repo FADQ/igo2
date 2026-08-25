@@ -64,7 +64,7 @@ export class ClientSchemaElementPointService implements GetElements, SaveElement
       extent: undefined,
       properties,
       meta: {
-        id: properties.idElementGeometrique
+        id: String(properties.idElementGeometrique)
       }
     } as ClientSchemaElement;
   }

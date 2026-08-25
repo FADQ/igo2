@@ -66,7 +66,7 @@ export class ClientSchemaElementSurfaceService implements GetElements, SaveEleme
 
       // ✅ clé existante IGO
       meta: {
-        id: properties.idElementGeometrique
+        id: String(properties.idElementGeometrique)
       }
     } as ClientSchemaElement;
   }
