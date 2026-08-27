@@ -9,8 +9,7 @@ import {
   Layer,
   LayerService,
   LayerOptions,
-  IgoMap,
-  AnyLayer
+  IgoMap
 } from '@igo2/geo';
 
 import { ContextService, DetailedContext } from '@igo2/context';
@@ -65,84 +64,30 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
     if (context.layers === undefined) {
       return;
     }
-
-    // ✅ ATTENDRE QUE LA MAP SOIT PRÊTE
-    if (!this.isMapReady()) {
-      this.waitForMapReady(() => this.handleContextChange(context));
-      return;
-    }
-
-    // ✅ REMOVE CONTEXT LAYERS
     if (this.removeLayersOnContextChange === true) {
-
-      // retirer uniquement les layers dynamiques/contextuels
-      this.contextLayers.forEach((layer: AnyLayer) => {
-        this.map.removeLayer(layer);
-      });
-
+      this.map.removeAllLayers();
     } else {
-
-      this.contextLayers.forEach((layer: AnyLayer) => {
-        this.map.removeLayer(layer);
-      });
-
+      this.map.removeLayers(this.contextLayers);
     }
-
     this.contextLayers = [];
 
-    const layersAndIndex$ = zip(
-      ...context.layers.map((layerOptions: LayerOptions) => {
-        return this.layerService.createAsyncLayer(layerOptions);
-      })
-    );
+    const layersAndIndex$ = zip(...context.layers.map((layerOptions: LayerOptions, index: number) => {
+      return this.layerService.createAsyncLayer(layerOptions);
+    }));
 
     layersAndIndex$
-      .subscribe((layers: (Layer | undefined)[]) => {
-
-        const validLayers = layers
-          .filter((layer): layer is Layer => layer !== undefined)
-          .map((layer: Layer) => {
-
-            const computed = this.computeLayerVisibilityFromUrl(layer);
-            // applique seulement si override explicite
-            if (computed !== layer.visible) {
-              layer.visible = computed;
-            }
+      .subscribe((layers: Layer[]) => {
+        layers = layers
+          .filter((layer: Layer) => layer !== undefined)
+          .map((layer) => {
+            layer.visible = this.computeLayerVisibilityFromUrl(layer);
+            layer.zIndex = layer.zIndex;
 
             return layer;
           });
-
-        this.contextLayers.push(...validLayers);
-
-        validLayers.forEach((layer: Layer) => {
-          this.map.addLayer(layer);
-        });
-
-        // ✅ ✅ ✅ AJOUT ICI
-        setTimeout(() => {
-          requestAnimationFrame(() => {
-            this.applyFinalVisibility(context);
-          });
-        }, 300);
+        this.contextLayers.push(...layers);
+        this.map.addLayers(layers);
       });
-  }
-
-  private applyFinalVisibility(context: DetailedContext) {
-    if (!context?.layers) return;
-
-    context.layers.forEach(opt => {
-      const layer = this.map.layers.find(l => l.id === opt.id);
-
-      if (layer?.ol) {
-        const visible = opt.visible === true;
-
-        // ✅ OpenLayers
-        layer.ol.setVisible(visible);
-
-        // ✅ IGO (LA CLÉ)
-        layer.visible = visible;
-      }
-    });
   }
 
   private computeLayerVisibilityFromUrl(layer: Layer): boolean {
@@ -198,21 +143,5 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
     }
 
     return visible;
-  }
-
-  private isMapReady(): boolean {
-    return !!(
-      this.map?.ol &&
-      this.map.ol.getLayers
-    );
-  }
-
-  private waitForMapReady(callback: () => void) {
-    const interval = setInterval(() => {
-      if (this.isMapReady()) {
-        clearInterval(interval);
-        callback();
-      }
-    }, 50);
   }
 }
