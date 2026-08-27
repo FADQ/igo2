@@ -18,3 +18,9 @@ igo-layer-list ::ng-deep .mat-list-base .mat-list-item .mat-list-item-content {
 igo-layer-list ::ng-deep .igo-layer-actions-container > .igo-col {
   padding: 0 0 0 16px;
 }
+
+::ng-deep igo-layer-list-tool .actions-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+}
