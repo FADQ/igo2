@@ -106,6 +106,7 @@ export class ClientParcelElementService {
       },
       data.properties,
       {
+        excludeFromQuery: true,
         typeParcelle: 'PAC',
         noOwner: false,
         superficie: undefined,
