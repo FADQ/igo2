@@ -88,7 +88,7 @@ export class MapActionbarComponent implements OnInit, OnDestroy {
       },
       {
         id: MapAction.PreviousView,
-        icon: 'arrow_circle_left',
+        icon: 'arrow_back',
         title: 'map.actionbar.previousview.title',
         tooltip: 'map.actionbar.previousview.tooltip',
         handler: () => {
@@ -100,7 +100,7 @@ export class MapActionbarComponent implements OnInit, OnDestroy {
       },
       {
         id: MapAction.NextView,
-        icon: 'arrow_circle_right',
+        icon: 'arrow_forward',
         title: 'map.actionbar.nextview.title',
         tooltip: 'map.actionbar.nextview.tooltip',
         handler: () => {
@@ -112,7 +112,7 @@ export class MapActionbarComponent implements OnInit, OnDestroy {
       },
       {
         id: MapAction.InitialView,
-        icon: 'full_coverage', //globe
+        icon: 'home', //globe
         title: 'map.actionbar.initialview.title',
         tooltip: 'map.actionbar.initialview.tooltip',
         handler: () => {

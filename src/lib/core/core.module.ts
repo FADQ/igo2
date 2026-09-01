@@ -247,7 +247,7 @@ const providers: Provider[] = [
     useValue: {
       name: 'advancedMap',
       title: 'igo.integration.tools.advancedMap',
-      icon: 'service_toolbox',
+      icon: 'home_repair_service',
       component: AdvancedMapToolComponent
     },
     multi: true
