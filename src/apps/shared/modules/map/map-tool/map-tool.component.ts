@@ -45,7 +45,12 @@ export class MapToolComponent {
       layer: layer as ImageLayer,
       baseUrl: this.configService.getConfig('layer.infoLink')
     };
-    this.dialog.open(LayerInfoDialogComponent, {data});
+    this.dialog.open(LayerInfoDialogComponent, {
+      data,
+      width: '50vw',
+      height: '50vh',
+      maxWidth: 'none'
+    });
   }
 
   onSaveContextButtonClick() {

@@ -1,3 +1,13 @@
-<div mat-dialog-content>
+<div class="dialog-toolbar">
+  <button
+    mat-icon-button
+    class="close-button"
+    aria-label="Fermer"
+    (click)="dialogRef.close()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<div mat-dialog-content class="dialog-content">
   <iframe [src]="computeLayerInfoLink()"></iframe>
 </div>
