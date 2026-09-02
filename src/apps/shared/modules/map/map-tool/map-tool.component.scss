@@ -24,3 +24,11 @@ igo-layer-list ::ng-deep .igo-layer-actions-container > .igo-col {
   align-items: center;
   flex-wrap: nowrap;
 }
+
+/*
+ * Uniformiser les actions de couches :
+ * les icônes de visibilité demeurent bleues même lorsque la couche est masquée.
+ */
+::ng-deep igo-layer-item button:not(.mat-primary) mat-icon {
+  color: var(--igo-primary-color, #1976d2) !important;
+}

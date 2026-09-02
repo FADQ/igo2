@@ -4,6 +4,7 @@
     <div *ngIf="saveContextEnabled">
       <button
         mat-icon-button
+        color="primary"
         class="fadq-save-context-btn"
         tooltip-position="below"
         matTooltipShowDelay="500"
@@ -27,6 +28,7 @@
         <button
           *ngIf="showInfoButton(layer)"
           mat-icon-button
+          color="primary"
           tooltip-position="below"
           matTooltipShowDelay="500"
           [matTooltip]="'igo.geo.metadata.show' | translate"
