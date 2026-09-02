@@ -15,14 +15,15 @@
   font-style: normal;
 }
 
-// .mat-icon.material-icons.mat-ligature-font {
-//   font-family: 'Material Symbols Outlined';
-//   font-variation-settings:
-//     'FILL' 0,
-//     'wght' 400,
-//     'GRAD' 0,
-//     'opsz' 24;
-// }
+/*
+ * Workaround IGO 17
+ * L'icône frame_inspect appartient à Material Symbols Outlined
+ * mais est rendue avec Material Icons.
+ * À réévaluer lors de la migration vers IGO 20.x.
+ */
+.zoomLayer-button .mat-icon {
+  font-family: "Material Symbols Outlined" !important;
+}
 
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined';
@@ -164,3 +165,16 @@ igo-catalog-browser-layer {
     font-size: 12px !important;
   }
 }
+
+// Ajout pour gérer le bouton de fermeture dans la boîte de dialogue de métadonnées
+// des couches accessible via l'information  dans la liste des couches du catalogue de cartes.
+igo-metadata-abstract button.close-button {
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  width: 32px !important;
+  min-width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+}
+
