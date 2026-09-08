@@ -90,7 +90,7 @@ export class ClientParcelActionsService {
       },
       {
         id: 'filterSelection',
-        icon: 'select',
+        icon: 'filter_alt',
         title: 'map.filterSelection.title',
         tooltip: 'map.filterSelection.tooltip',
         args: [controller],

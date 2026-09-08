@@ -84,7 +84,7 @@ export class ClientSchemaElementActionsService {
       },
       {
         id: 'filterSelection',
-        icon: 'select',
+        icon: 'filter_alt',
         title: 'map.filterSelection.title',
         tooltip: 'map.filterSelection.tooltip',
         args: [controller],
@@ -152,7 +152,7 @@ export class ClientSchemaElementActionsService {
       },
       {
         id: 'translate',
-        icon: 'drag_pan',
+        icon: 'move_item',
         title: 'edition.translate',
         tooltip: 'edition.translate.tooltip',
         args: [controller, this.clientSchemaElementTranslateWidget],

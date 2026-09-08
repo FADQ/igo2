@@ -3,14 +3,11 @@
     {{client.info.numero}} - {{client.info.nom}} - {{client.tx.annee}}
   </div>
 
-  <button
-    mat-icon-button
-    (click)="onToggleClick()">
-    <mat-icon [svgIcon]="added ? 'close' : 'plus'"></mat-icon>
+  <button mat-icon-button (click)="onToggleClick()">
+    <mat-icon>{{ added ? 'close' : 'add' }}</mat-icon>
   </button>
-  <button
-    mat-icon-button
-    (click)="onDeleteClick()">
-    <mat-icon svgIcon="delete"></mat-icon>
+
+  <button mat-icon-button (click)="onDeleteClick()">
+    <mat-icon>delete</mat-icon>
   </button>
 </mat-list-item>

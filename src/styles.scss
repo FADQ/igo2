@@ -178,3 +178,15 @@ igo-metadata-abstract button.close-button {
   padding: 0 !important;
 }
 
+.mat-icon {
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+// Règle pour forcer la couleur des icônes dans les boutons d'édition de parcelles
+// .mat-mdc-icon-button .mat-icon {
+//   color: mat.get-color-from-palette($primary) !important;
+// }

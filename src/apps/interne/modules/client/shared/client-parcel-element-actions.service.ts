@@ -111,7 +111,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'filterSelection',
-        icon: 'selection',
+        icon: 'filter_alt',
         title: 'map.filterSelection.title',
         tooltip: 'map.filterSelection.tooltip',
         args: [controller],
@@ -177,7 +177,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'redraw',
-        icon: 'redo',
+        icon: 'edit_location_alt',
         title: 'edition.redraw',
         tooltip: 'edition.redraw.tooltip',
         args: [
@@ -311,7 +311,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'slice',
-        icon: 'surgical',
+        icon: 'content_cut',
         title: 'edition.slice',
         tooltip: 'edition.slice.tooltip',
         args: [controller, this.clientParcelElementSliceWidget],

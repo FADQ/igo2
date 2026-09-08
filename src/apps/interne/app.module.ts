@@ -1,12 +1,18 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatIconRegistry } from '@angular/material/icon';
 import { MatTooltipDefaultOptions, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
 
 import { provideConfig } from '@igo2/core/config';
-import { IgoGeometryModule, IgoQueryModule, IgoDirectionsModule, provideOsrmDirectionsSource } from '@igo2/geo';
+import {
+  IgoGeometryModule,
+  IgoQueryModule,
+  IgoDirectionsModule,
+  provideDirection,
+  withOsrmSource} from '@igo2/geo';
 import { SearchState } from '@igo2/integration';
 
 import { environment } from '../../environments/interne/environment';
@@ -31,6 +37,16 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
   touchendHideDelay: 0,
   disableTooltipInteractivity: true
 };
+
+export function initializeIcons(
+  iconRegistry: MatIconRegistry
+) {
+  return () => {
+    iconRegistry.setDefaultFontSetClass(
+      'material-symbols-outlined'
+    );
+  };
+}
 
 @NgModule({
   declarations: [AppComponent],
@@ -62,10 +78,11 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
       default: environment.igo,
       path: environment.configPath
     }),
-    provideOsrmDirectionsSource(),
+    provideDirection(withOsrmSource()),
     { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: defaultTooltipOptions },
     DatePipe,
-    SearchState
+    SearchState,
+    { provide: APP_INITIALIZER, useFactory: initializeIcons, deps: [MatIconRegistry], multi: true }
   ],
   bootstrap: [AppComponent]
 })
