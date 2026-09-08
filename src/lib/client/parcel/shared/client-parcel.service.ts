@@ -55,8 +55,7 @@ export class ClientParcelService {
   ): ClientParcel {
     const noClientRecherche = padClientNum(client.info.numero);
     const properties = Object.assign({}, listItem.properties, {
-      noClientRecherche,
-      excludeFromQuery: true
+      noClientRecherche
     });
     return {
       meta: {

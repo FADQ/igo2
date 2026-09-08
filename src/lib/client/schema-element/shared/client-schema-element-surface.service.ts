@@ -55,7 +55,7 @@ export class ClientSchemaElementSurfaceService implements GetElements, SaveEleme
   }
 
   private listItemToElement(listItem: ClientSchemaElementListResponseItem): ClientSchemaElement {
-    const properties = Object.assign({}, listItem.properties,{excludeFromQuery: true});
+    const properties = Object.assign({}, listItem.properties);
 
     return {
       type: listItem.type,

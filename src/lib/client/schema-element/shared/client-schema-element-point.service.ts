@@ -56,7 +56,7 @@ export class ClientSchemaElementPointService implements GetElements, SaveElement
   }
 
   private listItemToElement(listItem: ClientSchemaElementListResponseItem): ClientSchemaElement {
-    const properties = Object.assign({}, listItem.properties,{excludeFromQuery: true});
+    const properties = Object.assign({}, listItem.properties);
     return {
       type: listItem.type,
       projection: 'EPSG:4326',

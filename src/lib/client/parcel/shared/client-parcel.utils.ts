@@ -48,7 +48,7 @@ export function sortParcelsByRelation(p1: ClientParcel, p2: ClientParcel) {
 export function createParcelLayer(client: Client): VectorLayer {
   // TODO: i18n
   const parcelDataSource = new FeatureDataSource({
-    queryable: true
+    queryable: false
   } as any);
   return new VectorLayer({
     title: `${client.info.numero} - Parcelles`,

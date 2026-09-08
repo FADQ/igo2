@@ -106,7 +106,6 @@ export class ClientParcelElementService {
       },
       data.properties,
       {
-        excludeFromQuery: true,
         typeParcelle: 'PAC',
         noOwner: false,
         superficie: undefined,
@@ -209,10 +208,10 @@ export class ClientParcelElementService {
   private listItemToParcel(
     listItem: ClientParcelElementListResponseItem
   ): ClientParcelElement {
-    const properties = Object.assign({}, listItem.properties,{excludeFromQuery: true});
+    const properties = Object.assign({}, listItem.properties);
     return {
       meta: {
-        id: listItem.properties.idParcelle,
+        id: String(listItem.properties.idParcelle),
         mapTitle: listItem.properties.noParcelleAgricole
       },
       type: listItem.type,

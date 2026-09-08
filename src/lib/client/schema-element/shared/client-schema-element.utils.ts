@@ -80,7 +80,7 @@ export function generateSchemaElementOperationTitle(
 export function createSchemaElementLayer(client: Client): VectorLayer {
   // TODO: i18n
   const schemaElementDataSource = new FeatureDataSource({
-    queryable: true
+    queryable: false
   } as any);
   return new VectorLayer({
     title: `${client.info.numero} - Éléments du schéma`,

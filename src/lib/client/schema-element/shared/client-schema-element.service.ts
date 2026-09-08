@@ -149,8 +149,7 @@ export class ClientSchemaElementService {
       description: undefined,
       anneeImage: undefined,
       timbreMaj: undefined,
-      usagerMaj: undefined,
-      excludeFromQuery: true
+      usagerMaj: undefined
     }, data.properties);
 
     const partial = Object.assign({}, data, {properties}) as ClientSchemaElement;
