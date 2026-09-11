@@ -34,8 +34,8 @@ import { SubmitStep, SubmitHandler } from '../../utils';
 export class EditionSaveComponent implements WidgetComponent, OnDestroy {
 
   static operationIcons = {
-    [EntityOperationType.Insert]: 'plus',
-    [EntityOperationType.Update]: 'pencil',
+    [EntityOperationType.Insert]: 'add',
+    [EntityOperationType.Update]: 'edit',
     [EntityOperationType.Delete]: 'delete'
   };
 
