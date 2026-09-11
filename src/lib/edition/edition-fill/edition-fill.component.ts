@@ -262,7 +262,7 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
       motion: FeatureMotion.None,
       getFeatureId: getKey
     });
-    exclusionStore.addStrategy(selectionStrategy as any);
+    exclusionStore.addStrategy(selectionStrategy as any, true);
 
     const exclusionCoordinates = this.feature.geometry.coordinates.slice(1);
     const exclusions = exclusionCoordinates.map((coordinates: number[], index: number) => {
