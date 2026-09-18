@@ -171,7 +171,17 @@ export class ClientParcelElementNumberingComponent implements OnInit, OnDestroy 
   }
 
   private onSelectParcelElement(parcelElement: ClientParcelElement) {
-    if (this.lastUpdate?.meta.id === parcelElement.meta.id) return;
+
+    if (this.lastUpdate?.meta.id === parcelElement.meta.id) {
+      return;
+    }
+
+    const message = this.message$.value;
+    if (message?.type === MessageType.ERROR) {
+      return;
+    }
+
+    this.lastUpdate = parcelElement;
 
     const value = this.valueControl.value;
     const number = this.computeParcelElementNumber(value);
@@ -255,10 +265,10 @@ export class ClientParcelElementNumberingComponent implements OnInit, OnDestroy 
   }
 
   private computeOperationIndex(): number {
-    const indexes = this.subTransaction.operations.all()
-      .map(o => o.meta.index);
-
-    return indexes.length ? Math.max(...indexes) + 1 : 0;
+    const allIndexes = this.subTransaction.operations.all()
+      .map((operation: EntityOperation) => operation.meta.index);
+    const maxIndex = allIndexes.length > 0 ? Math.max(...allIndexes) : 0;
+    return maxIndex + 1;
   }
 
   private deleteOperation(operation: EntityOperation<ClientParcelElement>) {

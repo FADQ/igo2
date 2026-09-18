@@ -9,7 +9,12 @@ import { MatCardModule } from '@angular/material/card';
 
 import { IgoLanguageModule } from '@igo2/core/language';
 import { IgoEntityTableModule } from '@igo2/common/entity';
-import { IgoFormModule } from '@igo2/common/form';
+import {
+  IgoFormModule,
+  IgoFormFieldModule,
+  IgoFormGroupModule
+ } from '@igo2/common/form';
+
 
 import { FadqLibCardPanelModule } from 'src/lib/misc/card-panel/card-panel.module';
 
@@ -30,6 +35,8 @@ import { ClientParcelElementNumberingComponent } from './client-parcel-element-n
     IgoLanguageModule,
     IgoFormModule,
     IgoEntityTableModule,
+    IgoFormFieldModule,
+    IgoFormGroupModule,
     FadqLibCardPanelModule
   ],
   exports: [
