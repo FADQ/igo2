@@ -93,7 +93,7 @@ tr.text-centered th div.mat-sort-header-container {
 }
 
 igo-actionbar igo-actionbar-item mat-list-item.active-accent .mat-list-item-content {
-  color: mat.get-color-from-palette($accent);
+  color: mat.m2-get-color-from-palette($accent);
 }
 
 .mat-menu-panel:not(.fadq-expansion-panel-actionbar-overlay) go-actionbar,
@@ -119,7 +119,7 @@ fadq-expansion-panel-header igo-actionbar {
 }
 
 .fadq-edition-continue-button-overlay button {
-  background-color: mat.get-color-from-palette($primary);
+  background-color: mat.m2-get-color-from-palette($primary);
   color: white;
 }
 
@@ -188,5 +188,5 @@ igo-metadata-abstract button.close-button {
 
 // Règle pour forcer la couleur des icônes dans les boutons d'édition de parcelles
 // .mat-mdc-icon-button .mat-icon {
-//   color: mat.get-color-from-palette($primary) !important;
+//   color: mat.m2-get-color-from-palette($primary) !important;
 // }
