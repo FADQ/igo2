@@ -59,7 +59,8 @@
             "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/style/partial"
+                "src/style/partial",
+                "node_modules"
               ]
             },
             "allowedCommonJsDependencies": [
@@ -72,10 +73,6 @@
               "jszip",
               "jwt-decode",
               "@turf/helpers",
-              "@turf/line-segment",
-              "@turf/meta",
-              "@turf/invariant",
-              "@turf/line-intersect",
               "@turf/union",
               "@turf/truncate",
               "pbf",
@@ -96,7 +93,6 @@
               "moment",
               "html2canvas",
               "jszip",
-              "bowser",
               "rgbcolor",
               "rbush"
             ]
