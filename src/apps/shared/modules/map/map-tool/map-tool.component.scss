@@ -7,15 +7,11 @@ mat-tab-group ::ng-deep .mat-tab-body-content {
   flex-direction: column;
 }
 
-igo-layer-list {
-  flex: 1 1 0;
+::ng-deep igo-layer-viewer-bottom-actions {
+  flex: 0 0 130px;
 }
 
 igo-layer-list ::ng-deep .mat-list-base .mat-list-item .mat-list-item-content {
-  padding: 0 0 0 16px;
-}
-
-igo-layer-list ::ng-deep .igo-layer-actions-container > .igo-col {
   padding: 0 0 0 16px;
 }
 

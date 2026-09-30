@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { ConfigService } from '@igo2/core/config';
-import { Layer, ImageLayer, WMSDataSource, IgoMap } from '@igo2/geo';
+import { Layer, ImageLayer, WMSDataSource, IgoMap, LayerViewerOptions } from '@igo2/geo';
 import { ContextState, MapState } from '@igo2/integration';
 
 import { CustomContextService } from 'src/lib/context';
@@ -34,6 +34,20 @@ export class MapToolComponent {
 
   get saveContextEnabled(): boolean {
     return this.configService.getConfig('customContext.saveEnabled');
+  }
+
+  get layerViewerOptions(): LayerViewerOptions {
+    return {
+      queryBadge: true,
+      legend: {
+        showForVisibleLayers: false
+      },
+      group: {
+        enable: false,
+        canCreate: false,
+        canRename: false
+      }
+    };
   }
 
   showInfoButton(layer: Layer): boolean {

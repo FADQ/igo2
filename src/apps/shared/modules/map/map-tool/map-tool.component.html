@@ -14,17 +14,11 @@
       </button>
     </div>
 
-    <igo-layer-list
-      igoLayerListBinding
-      controller
-      layers
-      [excludeBaseLayers]="false"
-      [queryBadge]="true"
-      [toggleLegendOnVisibilityChange]="false"
-      [updateLegendOnResolutionChange]="true"
-      [map]="map">
-
-      <ng-template #igoLayerItemToolbar let-layer="layer">
+    <igo-layer-viewer
+      [map]="map"
+      [options]="layerViewerOptions">
+      
+      <ng-template #customBottomActions let-layer="layer">
         <button
           *ngIf="showInfoButton(layer)"
           mat-icon-button
@@ -37,7 +31,7 @@
         </button>
       </ng-template>
 
-    </igo-layer-list>
+    </igo-layer-viewer>
   </mat-tab>
 
   <mat-tab [label]="'igo.integration.tools.catalog' | translate">
