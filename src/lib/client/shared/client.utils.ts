@@ -36,7 +36,7 @@ export function getAnneeImageFromMap(
 
   const anneeRegex = /(19|20)\d{2}/;
 
-  const layers: AnyLayer[] = map.layers || [];
+  const layers: AnyLayer[] = map.layerController.all || [];
 
   const years = layers.reduce(
     (acc: number[], layer: AnyLayer) => {

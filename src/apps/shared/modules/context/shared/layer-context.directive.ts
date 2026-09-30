@@ -9,7 +9,8 @@ import {
   Layer,
   LayerService,
   LayerOptions,
-  IgoMap
+  IgoMap,
+  AnyLayer
 } from '@igo2/geo';
 
 import { ContextService, DetailedContext } from '@igo2/context';
@@ -65,9 +66,13 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
       return;
     }
     if (this.removeLayersOnContextChange === true) {
-      this.map.removeAllLayers();
+      this.map.layerController.all.forEach((layer: AnyLayer) => {
+        this.map.layerController.remove(layer as Layer);
+      });
     } else {
-      this.map.removeLayers(this.contextLayers);
+      this.contextLayers.forEach((layer: AnyLayer) => {
+        this.map.layerController.remove(layer as Layer);
+      });
     }
     this.contextLayers = [];
 
@@ -86,7 +91,9 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
             return layer;
           });
         this.contextLayers.push(...layers);
-        this.map.addLayers(layers);
+        layers.forEach((layer: AnyLayer) => {
+            this.map.layerController.add(layer as Layer);
+        });
       });
   }
 

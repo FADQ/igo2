@@ -62,19 +62,19 @@ export class ClientSchemaElementWorkspace extends Workspace<ClientSchemaElement>
 
   deactivate() {
     super.deactivate();
-    this.schemaElementStore.deactivateStrategyOfType(FeatureStoreSelectionStrategy as any);
     this.schemaElementStore.state.clear();
   }
 
   private addSchemaElementLayer() {
-    if (this.schemaElementStore.layer.map === undefined) {
-      this.map.addLayer(this.schemaElementStore.layer);
+    // Correction à conserver
+    if (!this.map.layerController.getById(this.schemaElementStore.layer.id)) {
+      this.map.layerController.add(this.schemaElementStore.layer);
     }
   }
 
   private removeSchemaElementLayer() {
-    if (this.schemaElementStore.layer.map !== undefined) {
-      this.map.removeLayer(this.schemaElementStore.layer);
+  if (this.schemaElementStore.layer.map !== undefined) {
+      this.map.layerController.remove(this.schemaElementStore.layer);
     }
   }
 }

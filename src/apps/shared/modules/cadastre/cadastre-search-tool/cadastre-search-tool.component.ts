@@ -9,7 +9,8 @@ import {
   Layer,
   ImageLayer,
   ImageLayerOptions,
-  LayerService
+  LayerService,
+  AnyLayer
 } from '@igo2/geo';
 import { MapState } from '@igo2/integration';
 
@@ -405,7 +406,9 @@ export class CadastreSearchToolComponent implements OnInit {
     if (this.layerAlias && this.layerOptions === undefined) {
 
       const layerCadastreImage: Layer =
-        (this.mapState as any).map.getLayerByAlias(this.layerAlias);
+        (this.mapState as any).map.layerController.all.find(
+          (layer: AnyLayer) => layer.alias === this.layerAlias
+        ) as Layer | undefined;
 
       if (layerCadastreImage !== undefined) {
         layerCadastreImage.visible = visibility;
@@ -420,7 +423,7 @@ export class CadastreSearchToolComponent implements OnInit {
 
           // imageLayer.visible = visibility;
           this.cadastreState.layerCadastreImage = imageLayer;
-          this.mapState.map.addLayer(imageLayer);
+          this.mapState.map.layerController.add(imageLayer);
 
         });
     }

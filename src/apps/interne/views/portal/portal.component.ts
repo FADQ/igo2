@@ -24,6 +24,7 @@ import {
   Layer,
   LayerOptions,
   LayerService,
+  AnyLayer,
 } from '@igo2/geo';
 import {
   ContextState,
@@ -450,11 +451,14 @@ export class PortalComponent implements OnInit, OnDestroy {
     } else {
       this.searchAddedLayers.set(searchType, [layer]);
     }
-    this.map.addLayer(layer);
+    this.map.layerController.add(layer);
   }
 
   private makeSearchLayerVisible(layerAlias: string, searchType: string) {
-    const layer = this.map.getLayerByAlias(layerAlias);
+    const layer = this.map.layerController.all.find(
+      (layer: AnyLayer) => layer.alias === layerAlias
+    ) as Layer | undefined;
+    
     if (layer === undefined) { return; }
 
     if (this.searchVisibledLayers.has(searchType)) {
@@ -470,7 +474,9 @@ export class PortalComponent implements OnInit, OnDestroy {
    */
   private clearAllSearchLayers() {
     this.searchAddedLayers.forEach((layers: Layer[]) => {
-      this.map.removeLayers(layers);
+      layers.forEach((layer: Layer) => {
+        this.map.layerController.remove(layer);
+      });
     });
 
     this.searchVisibledLayers.forEach((layers: Layer[]) => {

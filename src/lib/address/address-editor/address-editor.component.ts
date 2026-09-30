@@ -33,6 +33,7 @@ import {
   VectorLayer,
   WMSDataSource,
   Feature,
+  AnyLayer,
 } from '@igo2/geo';
 
 import { getMapExtentPolygon } from '../../map/shared/map.utils';
@@ -268,7 +269,9 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
           ).subscribe(() => {
             this.closeEdition(false);
             // Refresh the buildingCorrected layer
-            const layer: Layer = (this.map as any).getLayerByAlias('buildingsCorrected');
+            const layer = this.map.layerController.all.find(
+              (layer: AnyLayer) => layer.alias === 'buildingsCorrected'
+              ) as Layer | undefined;
             if (layer.dataSource instanceof WMSDataSource ) {
               (layer.dataSource as WMSDataSource).refresh();
             }
@@ -357,7 +360,9 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
    * @param layerExist Indicates if the layer already exists on the map
    */
   private showLayer(layerAlias: string, layerExist: boolean) {
-    const layer: Layer = (this.map as any).getLayerByAlias(layerAlias);
+    const layer = this.map.layerController.all.find(
+      (layer: AnyLayer) => layer.alias === layerAlias
+    ) as Layer | undefined;
     if (layerExist || layer !== undefined) {
       if (layer !== undefined) { layer.visible = true; }
     } else if (this.layerOptions !== undefined) {
@@ -366,7 +371,7 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
         this.layerService.createAsyncLayer(Object.assign({}, layerOptions, {
           visible: true,
           showInLayerList: false
-        })).subscribe((layerCreated: Layer) => this.map.addLayer(layerCreated));
+        })).subscribe((layerCreated: Layer) => this.map.layerController.add(layerCreated));
       }
     }
   }
@@ -388,9 +393,13 @@ export class AddressEditorComponent implements OnInit, OnDestroy {
   private hideLayer(layerAlias: string) {
     let layer: Layer;
     if (layerAlias !== undefined) {
-      layer = (this.map as any).getLayerByAlias(layerAlias);
+      layer = this.map.layerController.all.find(
+        (layer: AnyLayer) => layer.alias === layerAlias
+      ) as Layer | undefined;
     } else {
-      layer = (this.map as any).getLayerByAlias(this.getLayerOptions(layerAlias).alias);
+      layer = this.map.layerController.all.find(
+        (layer: AnyLayer) => layer.alias === this.getLayerOptions(layerAlias).alias
+      ) as Layer | undefined;
     }
     if (layer !== undefined) { layer.visible = false; }
   }
