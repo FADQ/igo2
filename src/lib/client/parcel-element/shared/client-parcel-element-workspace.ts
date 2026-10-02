@@ -77,18 +77,24 @@ export class ClientParcelElementWorkspace extends Workspace<any> {
 
   deactivate() {
     super.deactivate();
-    (this.parcelElementStore as any)
-      .deactivateStrategyOfType?.(FeatureStoreSelectionStrategy);
   }
 
   private addParcelElementLayer() {
-    if (this.parcelElementStore.layer.map === undefined) {
+    if (!this.map.layerController.getById(this.parcelElementStore.layer.id)) {
       this.map.layerController.add(this.parcelElementStore.layer);
+      
+      // Ajustement à faire pour la version 18.0.0.
+      // À voir ultérieurement si c'est nécessaire dans les autres versions.
+      const strategy = this.parcelElementStore.getStrategyOfType(
+        FeatureStoreSelectionStrategy as any
+      ) as any;
+
+      strategy.overlayStore.layer.options.isIgoInternalLayer = true;
     }
   }
 
   private removeParcelElementLayer() {
-    if (this.parcelElementStore.layer.map !== undefined) {
+    if (this.map.layerController.getById(this.parcelElementStore.layer.id)) {
       this.map.layerController.remove(this.parcelElementStore.layer);
     }
   }

@@ -46,7 +46,6 @@ export class ClientParcelWorkspace extends Workspace<ClientParcel> {
     this.deactivate();
     this.parcelStore.deactivateStrategyOfType(FeatureStoreLoadingStrategy as any);
     this.removeParcelLayer();
-    this.deactivate();
     this.parcelStore.layer.ol.getSource().clear();
     this.parcelStore.clear();
   }
@@ -62,18 +61,25 @@ export class ClientParcelWorkspace extends Workspace<ClientParcel> {
 
   deactivate() {
     super.deactivate();
-    this.parcelStore.deactivateStrategyOfType(FeatureStoreSelectionStrategy as any);
     this.parcelStore.state.clear();
   }
 
   private addParcelLayer() {
-    if (this.parcelStore.layer.map === undefined) {
+    if (!this.map.layerController.getById(this.parcelStore.layer.id)) {
       this.map.layerController.add(this.parcelStore.layer);
+      
+      // Ajustement à faire pour la version 18.0.0.
+      // À voir ultérieurement si c'est nécessaire dans les autres versions.
+      const strategy = this.parcelStore.getStrategyOfType(
+        FeatureStoreSelectionStrategy as any
+      ) as any;
+
+      strategy.overlayStore.layer.options.isIgoInternalLayer = true;
     }
   }
 
   private removeParcelLayer() {
-    if (this.parcelStore.layer.map !== undefined) {
+    if (this.map.layerController.getById(this.parcelStore.layer.id)) {
       this.map.layerController.remove(this.parcelStore.layer);
     }
   }
