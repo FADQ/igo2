@@ -41,10 +41,11 @@ import { asEntityStore } from '@lib/compatibility/igo2-compat';
 
 
 @Component({
-  selector: 'fadq-edition-import',
-  templateUrl: './edition-import.component.html',
-  styleUrls: ['./edition-import.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-edition-import',
+    templateUrl: './edition-import.component.html',
+    styleUrls: ['./edition-import.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class EditionImportComponent implements WidgetComponent, OnInit {
 

@@ -2,9 +2,10 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'fadq-address-editor-zoom-dialog',
-  templateUrl: 'address-editor-zoom-dialog.component.html',
-  styleUrls: ['./address-editor-zoom-dialog.component.scss']
+    selector: 'fadq-address-editor-zoom-dialog',
+    templateUrl: 'address-editor-zoom-dialog.component.html',
+    styleUrls: ['./address-editor-zoom-dialog.component.scss'],
+    standalone: false
 })
 export class AddressEditorZoomDialogComponent {
 

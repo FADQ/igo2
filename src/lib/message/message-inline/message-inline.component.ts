@@ -11,10 +11,11 @@ import { Message, MessageType } from '@igo2/core/message';
  * Inline message
  */
 @Component({
-  selector: 'fadq-message-inline',
-  templateUrl: './message-inline.component.html',
-  styleUrls: ['./message-inline.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-message-inline',
+    templateUrl: './message-inline.component.html',
+    styleUrls: ['./message-inline.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class MessageInlineComponent {
 

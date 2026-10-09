@@ -29,10 +29,11 @@ import {
 } from '../shared/client-parcel-element.utils';
 
 @Component({
-  selector: 'fadq-client-parcel-element-update-batch',
-  templateUrl: './client-parcel-element-update-batch.component.html',
-  styleUrls: ['./client-parcel-element-update-batch.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-client-parcel-element-update-batch',
+    templateUrl: './client-parcel-element-update-batch.component.html',
+    styleUrls: ['./client-parcel-element-update-batch.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientParcelElementUpdateBatchComponent
     implements OnInit, OnUpdateInputs, WidgetComponent {

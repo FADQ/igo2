@@ -22,10 +22,11 @@ import { ClientSchemaService } from '../shared/client-schema.service';
 import { ClientSchemaFormService } from '../shared/client-schema-form.service';
 
 @Component({
-  selector: 'fadq-client-schema-update',
-  templateUrl: './client-schema-update.component.html',
-  styleUrls: ['./client-schema-update.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-client-schema-update',
+    templateUrl: './client-schema-update.component.html',
+    styleUrls: ['./client-schema-update.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientSchemaUpdateComponent implements OnInit, OnUpdateInputs, WidgetComponent {
 

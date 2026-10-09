@@ -21,14 +21,15 @@ export interface MultipartNoParcel {
 }
 
 @Component({
-  selector: 'fadq-client-parcel-element-numbering-input',
-  templateUrl: './client-parcel-element-numbering-input.component.html',
-  styleUrls: ['./client-parcel-element-numbering-input.component.scss'],
-  providers: [{
-    provide: MatFormFieldControl,
-    useExisting: ClientParcelElementNumberingInputComponent
-  }],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-client-parcel-element-numbering-input',
+    templateUrl: './client-parcel-element-numbering-input.component.html',
+    styleUrls: ['./client-parcel-element-numbering-input.component.scss'],
+    providers: [{
+            provide: MatFormFieldControl,
+            useExisting: ClientParcelElementNumberingInputComponent
+        }],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientParcelElementNumberingInputComponent
     implements ControlValueAccessor, MatFormFieldControl<MultipartNoParcel>, OnDestroy {

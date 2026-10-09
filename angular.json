@@ -17,13 +17,16 @@
       "architect": {
         "build": {
           "defaultConfiguration": "development",
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "aot": true,
-            "outputPath": "dist/interne",
+            "outputPath": {
+              "base": "dist/interne"
+            },
             "index": "src/index.html",
-            "main": "src/apps/interne.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "src/polyfills.ts"
+            ],
             "tsConfig": "src/tsconfig.interne.json",
             "assets": [
               "src/favicon.ico",
@@ -94,7 +97,8 @@
               "jszip",
               "rgbcolor",
               "rbush"
-            ]
+            ],
+            "browser": "src/apps/interne.ts"
           },
           "configurations": {
             "production": {
@@ -121,15 +125,11 @@
               "sourceMap": false,
               "namedChunks": false,
               "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": true,
-              "buildOptimizer": false
+              "extractLicenses": true
             },
             "development": {
               "aot": false,
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": false,
               "namedChunks": true
@@ -140,22 +140,22 @@
           "defaultConfiguration": "development",
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "interne:build",
-            "proxyConfig": "proxy.conf.json"
+            "proxyConfig": "proxy.conf.json",
+            "buildTarget": "interne:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "interne:build:production"
+              "buildTarget": "interne:build:production"
             },
             "development": {
-              "browserTarget": "interne:build:development"
+              "buildTarget": "interne:build:development"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "interne:build"
+            "buildTarget": "interne:build"
           }
         },
         "test": {
@@ -211,13 +211,16 @@
       "architect": {
         "build": {
           "defaultConfiguration": "development",
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "aot": true,
-            "outputPath": "dist/pes",
+            "outputPath": {
+              "base": "dist/pes"
+            },
             "index": "src/index.html",
-            "main": "src/apps/pes.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "src/polyfills.ts"
+            ],
             "tsConfig": "src/tsconfig.pes.json",
             "assets": [
               "src/favicon.ico",
@@ -268,7 +271,8 @@
               "path",
               "pixelworks",
               "brace-expansion"
-            ]
+            ],
+            "browser": "src/apps/pes.ts"
           },
           "configurations": {
             "production": {
@@ -295,15 +299,11 @@
               "sourceMap": true,
               "namedChunks": false,
               "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": true,
-              "buildOptimizer": false
+              "extractLicenses": true
             },
             "development": {
               "aot": false,
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
@@ -314,22 +314,22 @@
           "defaultConfiguration": "development",
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "pes:build",
-            "proxyConfig": "proxy.conf.json"
+            "proxyConfig": "proxy.conf.json",
+            "buildTarget": "pes:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "pes:build:production"
+              "buildTarget": "pes:build:production"
             },
             "development": {
-              "browserTarget": "pes:build:development"
+              "buildTarget": "pes:build:development"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "pes:build"
+            "buildTarget": "pes:build"
           }
         },
         "test": {
@@ -369,13 +369,16 @@
       "architect": {
         "build": {
           "defaultConfiguration": "development",
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "aot": true,
-            "outputPath": "dist/pes_interne",
+            "outputPath": {
+              "base": "dist/pes_interne"
+            },
             "index": "src/index.html",
-            "main": "src/apps/pes_interne.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "src/polyfills.ts"
+            ],
             "tsConfig": "src/tsconfig.pes_interne.json",
             "assets": [
               "src/favicon.ico",
@@ -426,7 +429,8 @@
               "path",
               "pixelworks",
               "brace-expansion"
-            ]
+            ],
+            "browser": "src/apps/pes_interne.ts"
           },
           "configurations": {
             "production": {
@@ -453,15 +457,11 @@
               "sourceMap": true,
               "namedChunks": false,
               "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": true,
-              "buildOptimizer": false
+              "extractLicenses": true
             },
             "development": {
               "aot": false,
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
@@ -472,22 +472,22 @@
           "defaultConfiguration": "development",
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "pes_interne:build",
-            "proxyConfig": "proxy.conf.json"
+            "proxyConfig": "proxy.conf.json",
+            "buildTarget": "pes_interne:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "pes_interne:build:production"
+              "buildTarget": "pes_interne:build:production"
             },
             "development": {
-              "browserTarget": "pes_interne:build:development"
+              "buildTarget": "pes_interne:build:development"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "pes_interne:build"
+            "buildTarget": "pes_interne:build"
           }
         },
         "test": {

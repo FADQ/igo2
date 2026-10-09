@@ -2,9 +2,10 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'fadq-address-editor-save-dialog',
-  templateUrl: 'address-editor-save-dialog.component.html',
-  styleUrls: ['./address-editor-save-dialog.component.scss']
+    selector: 'fadq-address-editor-save-dialog',
+    templateUrl: 'address-editor-save-dialog.component.html',
+    styleUrls: ['./address-editor-save-dialog.component.scss'],
+    standalone: false
 })
 export class AddressEditorSaveDialogComponent {
 

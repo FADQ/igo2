@@ -26,10 +26,11 @@ import { ClientParcelElement } from '../../parcel-element/shared/client-parcel-e
 import { ClientParcelElementService } from '../../parcel-element/shared/client-parcel-element.service';
 
 @Component({
-  selector: 'fadq-client-parcel-element-transfer',
-  templateUrl: './client-parcel-element-transfer.component.html',
-  styleUrls: ['./client-parcel-element-transfer.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-client-parcel-element-transfer',
+    templateUrl: './client-parcel-element-transfer.component.html',
+    styleUrls: ['./client-parcel-element-transfer.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientParcelElementTransferComponent implements WidgetComponent, OnInit, OnDestroy {
 

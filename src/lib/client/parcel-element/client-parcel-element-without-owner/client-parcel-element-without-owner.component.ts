@@ -29,10 +29,11 @@ import { getParcelElementValidationMessage } from '../shared/client-parcel-eleme
 import { asEntityStore } from '@lib/compatibility/igo2-compat';
 
 @Component({
-  selector: 'fadq-client-parcel-element-without-owner',
-  templateUrl: './client-parcel-element-without-owner.component.html',
-  styleUrls: ['./client-parcel-element-without-owner.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-client-parcel-element-without-owner',
+    templateUrl: './client-parcel-element-without-owner.component.html',
+    styleUrls: ['./client-parcel-element-without-owner.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientParcelElementWithoutOwnerComponent
     implements WidgetComponent, OnUpdateInputs, OnInit, OnDestroy {

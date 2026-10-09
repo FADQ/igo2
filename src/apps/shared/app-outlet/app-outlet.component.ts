@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'fadq-app-outlet',
-  templateUrl: './app-outlet.component.html',
-  styleUrls: ['./app-outlet.component.scss']
+    selector: 'fadq-app-outlet',
+    templateUrl: './app-outlet.component.html',
+    styleUrls: ['./app-outlet.component.scss'],
+    standalone: false
 })
 export class AppOutletComponent {
   constructor() {}

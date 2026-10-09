@@ -13,10 +13,11 @@ import { getGoogleMapsUrl } from '../shared/map.utils';
  * Map actions bar
  */
 @Component({
-  selector: 'fadq-map-actionbar',
-  templateUrl: './map-actionbar.component.html',
-  styleUrls: ['./map-actionbar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-map-actionbar',
+    templateUrl: './map-actionbar.component.html',
+    styleUrls: ['./map-actionbar.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class MapActionbarComponent implements OnInit, OnDestroy {
 

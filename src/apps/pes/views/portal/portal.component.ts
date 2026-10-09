@@ -37,9 +37,10 @@ import { ClientController } from 'src/apps/pes/modules/client/shared/client-cont
 import { getOlViewResolutions } from 'src/lib/map';
 
 @Component({
-  selector: 'app-portal',
-  templateUrl: './portal.component.html',
-  styleUrls: ['./portal.component.scss']
+    selector: 'app-portal',
+    templateUrl: './portal.component.html',
+    styleUrls: ['./portal.component.scss'],
+    standalone: false
 })
 export class PortalComponent implements OnInit, OnDestroy {
 

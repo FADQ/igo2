@@ -5,10 +5,11 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'fadq-client-parcel-legend-item',
-  templateUrl: './client-parcel-legend-item.component.html',
-  styleUrls: ['./client-parcel-legend-item.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-client-parcel-legend-item',
+    templateUrl: './client-parcel-legend-item.component.html',
+    styleUrls: ['./client-parcel-legend-item.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientParcelLegendItemComponent {
 

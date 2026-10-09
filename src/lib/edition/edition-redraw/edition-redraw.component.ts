@@ -40,10 +40,11 @@ import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition
 import { EditionService } from '../shared/edition.service';
 
 @Component({
-  selector: 'fadq-edition-redraw',
-  templateUrl: './edition-redraw.component.html',
-  styleUrls: ['./edition-redraw.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-edition-redraw',
+    templateUrl: './edition-redraw.component.html',
+    styleUrls: ['./edition-redraw.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class EditionRedrawComponent implements
     OnInit, OnDestroy, OnUpdateInputs, WidgetComponent {

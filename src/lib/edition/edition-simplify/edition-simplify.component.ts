@@ -38,10 +38,11 @@ import { asEntityStore } from '@lib/compatibility/igo2-compat';
 import { asStrategy } from '@lib/compatibility/strategy.adapter';
 
 @Component({
-  selector: 'fadq-edition-simplify',
-  templateUrl: './edition-simplify.component.html',
-  styleUrls: ['./edition-simplify.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-edition-simplify',
+    templateUrl: './edition-simplify.component.html',
+    styleUrls: ['./edition-simplify.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class EditionSimplifyComponent implements OnUpdateInputs, WidgetComponent, OnInit, OnDestroy {
 

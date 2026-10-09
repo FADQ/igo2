@@ -11,10 +11,11 @@ import { IgoMap } from '@igo2/geo';
 import { Client } from '../../shared/client.interfaces';
 
 @Component({
-  selector: 'fadq-client-info-addresses',
-  templateUrl: './client-info-addresses.component.html',
-  styleUrls: ['./client-info-addresses.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-client-info-addresses',
+    templateUrl: './client-info-addresses.component.html',
+    styleUrls: ['./client-info-addresses.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientInfoAddressesComponent {
 

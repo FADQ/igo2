@@ -17,10 +17,11 @@ import { ClientState } from '../client.state';
  */
 
 @Component({
-  selector: 'fadq-client-tool',
-  templateUrl: './client-tool.component.html',
-  styleUrls: ['./client-tool.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-client-tool',
+    templateUrl: './client-tool.component.html',
+    styleUrls: ['./client-tool.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientToolComponent {
 

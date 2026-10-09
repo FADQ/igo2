@@ -10,10 +10,11 @@ import { EntityTransaction } from '@igo2/common/entity';
 import { WidgetComponent } from '@igo2/common/widget';
 
 @Component({
-  selector: 'fadq-edition-undo',
-  templateUrl: './edition-undo.component.html',
-  styleUrls: ['./edition-undo.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-edition-undo',
+    templateUrl: './edition-undo.component.html',
+    styleUrls: ['./edition-undo.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class EditionUndoComponent implements WidgetComponent {
 

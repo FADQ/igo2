@@ -35,10 +35,11 @@ import {
 import { asEntityStore } from '@lib/compatibility/igo2-compat';
 
 @Component({
-  selector: 'fadq-edition-translate',
-  templateUrl: './edition-translate.component.html',
-  styleUrls: ['./edition-translate.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-edition-translate',
+    templateUrl: './edition-translate.component.html',
+    styleUrls: ['./edition-translate.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class EditionTranslateComponent implements WidgetComponent, OnInit, OnDestroy {
 

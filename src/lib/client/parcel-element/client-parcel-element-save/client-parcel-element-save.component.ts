@@ -23,10 +23,11 @@ import { ClientParcelElement } from '../shared/client-parcel-element.interfaces'
 import { ClientParcelElementService } from '../shared/client-parcel-element.service';
 
 @Component({
-  selector: 'fadq-client-parcel-element-save',
-  templateUrl: './client-parcel-element-save.component.html',
-  styleUrls: ['./client-parcel-element-save.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-client-parcel-element-save',
+    templateUrl: './client-parcel-element-save.component.html',
+    styleUrls: ['./client-parcel-element-save.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientParcelElementSaveComponent implements OnUpdateInputs, WidgetComponent {
 

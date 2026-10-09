@@ -17,10 +17,11 @@ import {
 import { ClientController } from '../shared/client-controller';
 
 @Component({
-  selector: 'fadq-client-tool-item',
-  templateUrl: './client-tool-item.component.html',
-  styleUrls: ['./client-tool-item.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-client-tool-item',
+    templateUrl: './client-tool-item.component.html',
+    styleUrls: ['./client-tool-item.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientToolItemComponent {
 

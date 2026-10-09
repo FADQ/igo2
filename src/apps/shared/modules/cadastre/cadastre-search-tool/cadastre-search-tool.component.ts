@@ -32,10 +32,11 @@ import { CadastreState } from '../cadastre.state';
 
 
 @Component({
-  selector: 'fadq-cadastre-search-tool',
-  templateUrl: './cadastre-search-tool.component.html',
-  styleUrls: ['./cadastre-search-tool.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-cadastre-search-tool',
+    templateUrl: './cadastre-search-tool.component.html',
+    styleUrls: ['./cadastre-search-tool.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CadastreSearchToolComponent implements OnInit {
 

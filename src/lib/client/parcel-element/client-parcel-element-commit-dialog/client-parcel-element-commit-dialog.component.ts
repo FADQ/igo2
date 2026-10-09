@@ -6,9 +6,10 @@ import { ClientParcelElementService } from '../../parcel-element/shared/client-p
 import { ClientParcelElementTransactionWrapper } from '../shared/client-parcel-element.interfaces';
 
 @Component({
-  selector: 'fadq-client-parcel-element-commit-dialog',
-  templateUrl: 'client-parcel-element-commit-dialog.component.html',
-  styleUrls: ['./client-parcel-element-commit-dialog.component.scss']
+    selector: 'fadq-client-parcel-element-commit-dialog',
+    templateUrl: 'client-parcel-element-commit-dialog.component.html',
+    styleUrls: ['./client-parcel-element-commit-dialog.component.scss'],
+    standalone: false
 })
 export class ClientParcelElementCommitDialogComponent implements OnDestroy {
 

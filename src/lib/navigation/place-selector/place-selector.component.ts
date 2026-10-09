@@ -11,10 +11,11 @@ import { Place, PlaceCategory, PlaceService } from '../shared';
  * Category and place selector
  */
 @Component({
-  selector: 'fadq-place-selector',
-  templateUrl: './place-selector.component.html',
-  styleUrls: ['./place-selector.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-place-selector',
+    templateUrl: './place-selector.component.html',
+    styleUrls: ['./place-selector.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PlaceSelectorComponent implements OnInit {
 

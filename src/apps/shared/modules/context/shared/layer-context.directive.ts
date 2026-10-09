@@ -16,7 +16,8 @@ import {
 import { ContextService, DetailedContext } from '@igo2/context';
 
 @Directive({
-  selector: '[fadqLayerContext]'
+    selector: '[fadqLayerContext]',
+    standalone: false
 })
 export class FadqLayerContextDirective implements OnInit, OnDestroy {
   private context$$: Subscription;

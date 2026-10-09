@@ -18,10 +18,11 @@ import {
 } from '@igo2/core/storage';
 
 @Component({
-  selector: 'fadq-sidenav',
-  templateUrl: './sidenav.component.html',
-  styleUrls: ['./sidenav.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-sidenav',
+    templateUrl: './sidenav.component.html',
+    styleUrls: ['./sidenav.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SidenavComponent implements OnInit, OnDestroy {
 

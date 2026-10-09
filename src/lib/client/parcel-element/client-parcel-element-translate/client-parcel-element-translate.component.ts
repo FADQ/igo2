@@ -26,10 +26,11 @@ import {
 } from '../shared/client-parcel-element.utils';
 
 @Component({
-  selector: 'fadq-client-parcel-element-translate',
-  templateUrl: './client-parcel-element-translate.component.html',
-  styleUrls: ['./client-parcel-element-translate.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-client-parcel-element-translate',
+    templateUrl: './client-parcel-element-translate.component.html',
+    styleUrls: ['./client-parcel-element-translate.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientParcelElementTranslateComponent implements OnUpdateInputs, WidgetComponent {
 

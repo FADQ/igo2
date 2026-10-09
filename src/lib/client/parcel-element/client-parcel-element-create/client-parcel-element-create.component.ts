@@ -30,10 +30,11 @@ import {
 } from '../shared/client-parcel-element.utils';
 
 @Component({
-  selector: 'fadq-client-parcel-element-create-form',
-  templateUrl: './client-parcel-element-create.component.html',
-  styleUrls: ['./client-parcel-element-create.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-client-parcel-element-create-form',
+    templateUrl: './client-parcel-element-create.component.html',
+    styleUrls: ['./client-parcel-element-create.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientParcelElementCreateComponent
     implements OnInit, OnDestroy, OnUpdateInputs, WidgetComponent {

@@ -13,10 +13,11 @@ import { IgoMap } from '@igo2/geo';
  * POI selector
  */
 @Component({
-  selector: 'fadq-poi-selector',
-  templateUrl: './poi-selector.component.html',
-  styleUrls: ['./poi-selector.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-poi-selector',
+    templateUrl: './poi-selector.component.html',
+    styleUrls: ['./poi-selector.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoiSelectorComponent implements OnInit {
 

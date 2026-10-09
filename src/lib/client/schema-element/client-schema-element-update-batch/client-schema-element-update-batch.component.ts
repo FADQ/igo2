@@ -74,10 +74,11 @@ import {
 
 
 @Component({
-  selector: 'fadq-client-schema-element-update-batch',
-  templateUrl: './client-schema-element-update-batch.component.html',
-  styleUrls: ['./client-schema-element-update-batch.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-client-schema-element-update-batch',
+    templateUrl: './client-schema-element-update-batch.component.html',
+    styleUrls: ['./client-schema-element-update-batch.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientSchemaElementUpdateBatchComponent
   implements OnInit, OnUpdateInputs, WidgetComponent {

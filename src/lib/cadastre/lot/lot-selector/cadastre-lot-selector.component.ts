@@ -21,10 +21,11 @@ import {
 import { Lot, LotResponseItem, LotUnique } from 'src/lib/cadastre/lot/shared/lot.interfaces';
 
 @Component({
-  selector: 'fadq-cadastre-lot-selector',
-  templateUrl: './cadastre-lot-selector.component.html',
-  styleUrls: ['./cadastre-lot-selector.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-cadastre-lot-selector',
+    templateUrl: './cadastre-lot-selector.component.html',
+    styleUrls: ['./cadastre-lot-selector.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LotSelectorComponent implements OnInit, OnDestroy {
 

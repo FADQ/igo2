@@ -11,9 +11,10 @@ import { EntityStore } from '@igo2/common/entity';
 import { ClientParcelYear } from '../shared/client-parcel.interfaces';
 
 @Component({
-  selector: 'fadq-client-parcel-year-selector',
-  templateUrl: './client-parcel-year-selector.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-client-parcel-year-selector',
+    templateUrl: './client-parcel-year-selector.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientParcelYearSelectorComponent {
 

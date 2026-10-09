@@ -31,10 +31,11 @@ import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition
 import { asEntityStore } from '@lib/compatibility/igo2-compat';
 
 @Component({
-  selector: 'fadq-edition-update-batch',
-  templateUrl: './edition-update-batch.component.html',
-  styleUrls: ['./edition-update-batch.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-edition-update-batch',
+    templateUrl: './edition-update-batch.component.html',
+    styleUrls: ['./edition-update-batch.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class EditionUpdateBatchComponent
     implements OnUpdateInputs, WidgetComponent, OnInit, OnDestroy {

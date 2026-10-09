@@ -9,10 +9,11 @@ import { Message } from '@igo2/core/message';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
-  selector: 'fadq-card-panel-content',
-  templateUrl: './card-panel-content.component.html',
-  styleUrls: ['./card-panel-content.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-card-panel-content',
+    templateUrl: './card-panel-content.component.html',
+    styleUrls: ['./card-panel-content.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CardPanelContentComponent {
 

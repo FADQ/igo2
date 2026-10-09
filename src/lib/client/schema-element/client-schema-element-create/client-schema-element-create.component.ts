@@ -67,10 +67,11 @@ import {
 import { isBehaviorSubject } from '@lib/utils/rxjs.utils';
 
 @Component({
-  selector: 'fadq-client-schema-element-create',
-  templateUrl: './client-schema-element-create.component.html',
-  styleUrls: ['./client-schema-element-create.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-client-schema-element-create',
+    templateUrl: './client-schema-element-create.component.html',
+    styleUrls: ['./client-schema-element-create.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientSchemaElementCreateComponent
   implements OnInit, OnDestroy, OnUpdateInputs, WidgetComponent {

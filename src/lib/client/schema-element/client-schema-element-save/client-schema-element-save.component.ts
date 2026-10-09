@@ -23,10 +23,11 @@ import { ClientSchemaElement } from '../shared/client-schema-element.interfaces'
 import { ClientSchemaElementService } from '../shared/client-schema-element.service';
 
 @Component({
-  selector: 'fadq-client-schema-element-save',
-  templateUrl: './client-schema-element-save.component.html',
-  styleUrls: ['./client-schema-element-save.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-client-schema-element-save',
+    templateUrl: './client-schema-element-save.component.html',
+    styleUrls: ['./client-schema-element-save.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientSchemaElementSaveComponent implements OnUpdateInputs, WidgetComponent {
 

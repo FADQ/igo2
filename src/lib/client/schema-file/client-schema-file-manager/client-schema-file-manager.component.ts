@@ -23,10 +23,11 @@ import { ClientSchemaFile } from '../shared/client-schema-file.interfaces';
 import { ClientSchemaFileService } from '../shared/client-schema-file.service';
 
 @Component({
-  selector: 'fadq-client-schema-file-manager',
-  templateUrl: './client-schema-file-manager.component.html',
-  styleUrls: ['./client-schema-file-manager.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-client-schema-file-manager',
+    templateUrl: './client-schema-file-manager.component.html',
+    styleUrls: ['./client-schema-file-manager.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientSchemaFileManagerComponent implements OnInit, OnDestroy, WidgetComponent {
 

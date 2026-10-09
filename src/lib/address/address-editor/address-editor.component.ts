@@ -50,10 +50,11 @@ import { AddressEditorZoomDialogComponent } from '../address-editor-zoom-dialog/
  * Tool to edit addresses from Adresse Quebec.
  */
 @Component({
-  selector: 'fadq-address-editor',
-  templateUrl: './address-editor.component.html',
-  styleUrls: ['./address-editor.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-address-editor',
+    templateUrl: './address-editor.component.html',
+    styleUrls: ['./address-editor.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AddressEditorComponent implements OnInit, OnDestroy {
 

@@ -5,10 +5,11 @@ import { MapState } from '@igo2/integration';
 
 
 @Component({
-  selector: 'fadq-import-export-tool',
-  templateUrl: './import-export-tool.component.html',
-  styleUrls: ['./import-export-tool.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-import-export-tool',
+    templateUrl: './import-export-tool.component.html',
+    styleUrls: ['./import-export-tool.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ImportExportToolComponent {
   /**

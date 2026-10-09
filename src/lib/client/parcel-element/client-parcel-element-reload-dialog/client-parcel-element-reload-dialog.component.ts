@@ -4,9 +4,10 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ClientParcelElementTransactionWrapper } from '../shared/client-parcel-element.interfaces';
 
 @Component({
-  selector: 'fadq-client-parcel-element-reload-dialog',
-  templateUrl: 'client-parcel-element-reload-dialog.component.html',
-  styleUrls: ['./client-parcel-element-reload-dialog.component.scss']
+    selector: 'fadq-client-parcel-element-reload-dialog',
+    templateUrl: 'client-parcel-element-reload-dialog.component.html',
+    styleUrls: ['./client-parcel-element-reload-dialog.component.scss'],
+    standalone: false
 })
 export class ClientParcelElementReloadDialogComponent {
 

@@ -36,10 +36,11 @@ import { MultipartNoParcel } from './client-parcel-element-numbering-input.compo
 import { asEntityStore } from '@lib/compatibility/igo2-compat';
 
 @Component({
-  selector: 'fadq-client-parcel-element-numbering',
-  templateUrl: './client-parcel-element-numbering.component.html',
-  styleUrls: ['./client-parcel-element-numbering.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-client-parcel-element-numbering',
+    templateUrl: './client-parcel-element-numbering.component.html',
+    styleUrls: ['./client-parcel-element-numbering.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientParcelElementNumberingComponent implements OnInit, OnDestroy {
 

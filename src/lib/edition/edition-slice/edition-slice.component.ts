@@ -43,10 +43,11 @@ import {
 import { asEntityStore } from '@lib/compatibility/igo2-compat';
 
 @Component({
-  selector: 'fadq-edition-slice',
-  templateUrl: './edition-slice.component.html',
-  styleUrls: ['./edition-slice.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'fadq-edition-slice',
+    templateUrl: './edition-slice.component.html',
+    styleUrls: ['./edition-slice.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class EditionSliceComponent implements OnUpdateInputs, WidgetComponent, OnInit, OnDestroy {
 

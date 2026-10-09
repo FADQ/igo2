@@ -18,9 +18,10 @@ import { SubmitStep, SubmitHandler } from 'src/lib/utils';
 import { ClientController } from '../shared/client-controller';
 
 @Component({
-  selector: 'fadq-client-parcel-tx-delete-dialog',
-  templateUrl: 'client-parcel-tx-delete-dialog.component.html',
-  styleUrls: ['./client-parcel-tx-delete-dialog.component.scss']
+    selector: 'fadq-client-parcel-tx-delete-dialog',
+    templateUrl: 'client-parcel-tx-delete-dialog.component.html',
+    styleUrls: ['./client-parcel-tx-delete-dialog.component.scss'],
+    standalone: false
 })
 export class ClientParcelTxDeleteDialogComponent implements OnDestroy {
 
