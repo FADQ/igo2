@@ -57,12 +57,20 @@ export class ClientSchemaElementWorkspace extends Workspace<ClientSchemaElement>
 
   activate() {
     super.activate();
-    this.schemaElementStore.activateStrategyOfType(FeatureStoreSelectionStrategy as any);
+    this.schemaElementStore.activateStrategyOfType(
+      FeatureStoreSelectionStrategy as any
+    );
   }
 
   deactivate() {
+    const strategy = this.schemaElementStore.getStrategyOfType(
+      FeatureStoreSelectionStrategy as any
+    ) as any;
+
+    strategy.unselectAll();
+    strategy.clear();
+
     super.deactivate();
-    this.schemaElementStore.state.clear();
   }
 
   private addSchemaElementLayer() {

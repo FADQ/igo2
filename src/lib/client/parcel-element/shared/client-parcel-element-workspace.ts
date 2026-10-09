@@ -1,5 +1,5 @@
 
-import { EntityTableTemplate, EntityTransaction } from '@igo2/common/entity';
+import { EntityStore, EntityStoreStrategy, EntityTableTemplate, EntityTransaction } from '@igo2/common/entity';
 import { Workspace, WorkspaceOptions } from '@igo2/common/workspace';
 import {
   IgoMap,
@@ -39,11 +39,6 @@ export class ClientParcelElementWorkspace extends Workspace<any> {
     super(options);
   }
 
-  // init() {
-  //   this.parcelElementStore.activateStrategyOfType(FeatureStoreLoadingStrategy);
-  //   this.addParcelElementLayer();
-  // }
-
   init() {
     const store = this.parcelElementStore as any;
 
@@ -53,16 +48,8 @@ export class ClientParcelElementWorkspace extends Workspace<any> {
 
   teardown() {
     this.deactivate();
-
-    const store = this.parcelElementStore as any;
-
-    store.deactivateStrategyOfType?.(FeatureStoreLoadingStrategy);
-    store.deactivateStrategyOfType?.(FeatureStoreSelectionStrategy);
-
     this.removeParcelElementLayer();
-
-    store.layer?.ol?.getSource?.()?.clear?.();
-    store.clear?.();
+    this.parcelElementStore.clear();
   }
 
   load(parcelElements: ClientParcelElement[]) {
@@ -76,6 +63,12 @@ export class ClientParcelElementWorkspace extends Workspace<any> {
   }
 
   deactivate() {
+    const strategy = this.parcelElementStore.getStrategyOfType(
+      FeatureStoreSelectionStrategy as any
+    ) as any;
+
+    strategy.unselectAll();
+    strategy.clear();
     super.deactivate();
   }
 
