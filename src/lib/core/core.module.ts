@@ -91,7 +91,7 @@ function appInitializerFactory(
       loadTheme(document, 'blue-theme');
       const language = languageService.getLanguage();
       const promises = [
-        lastValueFrom(languageService.translate.getTranslation(language))
+        lastValueFrom(languageService.translate.use(language))
       ];
       Promise.all(promises).then(() => resolve());
     });
