@@ -37,7 +37,7 @@ export class CadastreRenoSearchSource extends SearchSource implements TextSearch
 
   getId(): string { return CadastreRenoSearchSource.id; }
 
-  protected getDefaultOptions(): SearchSourceOptions {
+  protected getEffectiveOptions(): SearchSourceOptions {
     return {
       title: 'Cadastre rénové',
       searchUrl: 'https://carto.cptaq.gouv.qc.ca/php/find_lot_v1.php'

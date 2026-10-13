@@ -35,7 +35,7 @@ export class ClientSearchSource extends SearchSource implements TextSearch {
 
   getType(): string { return CLIENT; }
 
-  protected getDefaultOptions(): SearchSourceOptions {
+  protected getEffectiveOptions(): SearchSourceOptions {
     return {
       title: 'Client (FADQ)'
     };
