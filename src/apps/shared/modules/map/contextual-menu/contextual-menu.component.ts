@@ -9,11 +9,10 @@ import { SearchState } from '@igo2/integration';
 
 
 @Component({
-    selector: 'fadq-contextual-menu',
-    templateUrl: './contextual-menu.component.html',
-    styleUrls: ['./contextual-menu.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-contextual-menu',
+  templateUrl: './contextual-menu.component.html',
+  styleUrls: ['./contextual-menu.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContextualMenuComponent implements OnInit {
 

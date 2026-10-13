@@ -26,11 +26,10 @@ import {
 } from '../shared/client-parcel-element.utils';
 
 @Component({
-    selector: 'fadq-client-parcel-element-simplify',
-    templateUrl: './client-parcel-element-simplify.component.html',
-    styleUrls: ['./client-parcel-element-simplify.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-client-parcel-element-simplify',
+  templateUrl: './client-parcel-element-simplify.component.html',
+  styleUrls: ['./client-parcel-element-simplify.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientParcelElementSimplifyComponent implements OnUpdateInputs, WidgetComponent {
 

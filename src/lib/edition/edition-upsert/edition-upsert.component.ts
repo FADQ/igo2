@@ -45,11 +45,10 @@ import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition
 import { EditionService } from '../shared/edition.service';
 
 @Component({
-    selector: 'fadq-edition-upsert',
-    templateUrl: './edition-upsert.component.html',
-    styleUrls: ['./edition-upsert.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-edition-upsert',
+  templateUrl: './edition-upsert.component.html',
+  styleUrls: ['./edition-upsert.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditionUpsertComponent implements OnInit, OnDestroy, OnUpdateInputs, WidgetComponent {
 

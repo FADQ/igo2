@@ -25,11 +25,10 @@ import { UniqueClientSchemaType } from '../shared/client-schema.enums';
 import { FormControl } from '@angular/forms';
 
 @Component({
-    selector: 'fadq-client-schema-create',
-    templateUrl: './client-schema-create.component.html',
-    styleUrls: ['./client-schema-create.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-client-schema-create',
+  templateUrl: './client-schema-create.component.html',
+  styleUrls: ['./client-schema-create.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientSchemaCreateComponent implements OnInit, OnUpdateInputs, WidgetComponent {
 

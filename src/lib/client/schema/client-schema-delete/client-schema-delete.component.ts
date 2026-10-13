@@ -16,11 +16,10 @@ import { ClientSchema } from '../shared/client-schema.interfaces';
 import { ClientSchemaService } from '../shared/client-schema.service';
 
 @Component({
-    selector: 'fadq-client-schema-delete',
-    templateUrl: './client-schema-delete.component.html',
-    styleUrls: ['./client-schema-delete.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-client-schema-delete',
+  templateUrl: './client-schema-delete.component.html',
+  styleUrls: ['./client-schema-delete.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientSchemaDeleteComponent implements OnUpdateInputs, WidgetComponent {
 

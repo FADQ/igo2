@@ -26,11 +26,10 @@ import { FeatureStore } from '@igo2/geo';
 import { SubmitStep, SubmitHandler } from '../../utils';
 
 @Component({
-    selector: 'fadq-edition-save',
-    templateUrl: './edition-save.component.html',
-    styleUrls: ['./edition-save.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-edition-save',
+  templateUrl: './edition-save.component.html',
+  styleUrls: ['./edition-save.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditionSaveComponent implements WidgetComponent, OnDestroy {
 

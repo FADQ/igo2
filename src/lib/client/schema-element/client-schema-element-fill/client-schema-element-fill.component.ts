@@ -27,11 +27,10 @@ import {
 } from '../shared/client-schema-element.utils';
 
 @Component({
-    selector: 'fadq-client-schema-element-fill',
-    templateUrl: './client-schema-element-fill.component.html',
-    styleUrls: ['./client-schema-element-fill.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-client-schema-element-fill',
+  templateUrl: './client-schema-element-fill.component.html',
+  styleUrls: ['./client-schema-element-fill.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientSchemaElementFillComponent implements OnUpdateInputs, WidgetComponent {
 

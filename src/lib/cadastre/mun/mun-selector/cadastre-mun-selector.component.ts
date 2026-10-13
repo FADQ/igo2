@@ -23,11 +23,10 @@ import {
 import { Mun, MunResponseItem } from '../shared/mun.interfaces';
 
 @Component({
-    selector: 'fadq-cadastre-mun-selector',
-    templateUrl: './cadastre-mun-selector.component.html',
-    styleUrls: ['./cadastre-mun-selector.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-cadastre-mun-selector',
+  templateUrl: './cadastre-mun-selector.component.html',
+  styleUrls: ['./cadastre-mun-selector.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MunSelectorComponent implements OnInit, OnDestroy {
 

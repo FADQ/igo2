@@ -7,11 +7,10 @@ import { ImageLayer } from '@igo2/geo';
 import { substituteProperties } from 'src/lib/utils';
 
 @Component({
-    selector: 'fadq-layer-info-dialog',
-    templateUrl: 'layer-info-dialog.component.html',
-    styleUrls: ['./layer-info-dialog.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-layer-info-dialog',
+  templateUrl: 'layer-info-dialog.component.html',
+  styleUrls: ['./layer-info-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LayerInfoDialogComponent {
 

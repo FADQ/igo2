@@ -10,11 +10,10 @@ import { HelpGuide } from '../shared/help.interfaces';
  */
 
 @Component({
-    selector: 'fadq-help-tool',
-    templateUrl: './help-tool.component.html',
-    styleUrls: ['./help-tool.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-help-tool',
+  templateUrl: './help-tool.component.html',
+  styleUrls: ['./help-tool.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HelpToolComponent implements OnInit {
 

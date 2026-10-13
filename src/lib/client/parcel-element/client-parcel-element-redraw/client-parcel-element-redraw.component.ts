@@ -29,11 +29,10 @@ import {
 } from '../shared/client-parcel-element.utils';
 
 @Component({
-    selector: 'fadq-client-parcel-element-redraw',
-    templateUrl: './client-parcel-element-redraw.component.html',
-    styleUrls: ['./client-parcel-element-redraw.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-client-parcel-element-redraw',
+  templateUrl: './client-parcel-element-redraw.component.html',
+  styleUrls: ['./client-parcel-element-redraw.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientParcelElementRedrawComponent
     implements OnInit, OnUpdateInputs, WidgetComponent {

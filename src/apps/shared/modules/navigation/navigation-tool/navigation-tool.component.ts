@@ -7,11 +7,10 @@ import { MapState } from '@igo2/integration';
 import { PlaceCategory } from 'src/lib/navigation';
 
 @Component({
-    selector: 'fadq-navigation-tool',
-    templateUrl: './navigation-tool.component.html',
-    styleUrls: ['./navigation-tool.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-navigation-tool',
+  templateUrl: './navigation-tool.component.html',
+  styleUrls: ['./navigation-tool.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavigationToolComponent {
 

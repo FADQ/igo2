@@ -37,11 +37,10 @@ import { EditionResult } from '../shared/edition.interfaces';
 import { getOperationTitle as getDefaultOperationTitle } from '../shared/edition.utils';
 
 @Component({
-    selector: 'fadq-edition-fill',
-    templateUrl: './edition-fill.component.html',
-    styleUrls: ['./edition-fill.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-edition-fill',
+  templateUrl: './edition-fill.component.html',
+  styleUrls: ['./edition-fill.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy {
 

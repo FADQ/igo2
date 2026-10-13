@@ -6,10 +6,9 @@ import { ClientSchemaElementService } from '../../schema-element/shared/client-s
 import { ClientSchemaElementTransactionWrapper } from '../shared/client-schema-element.interfaces';
 
 @Component({
-    selector: 'fadq-client-schema-element-commit-dialog',
-    templateUrl: 'client-schema-element-commit-dialog.component.html',
-    styleUrls: ['./client-schema-element-commit-dialog.component.scss'],
-    standalone: false
+  selector: 'fadq-client-schema-element-commit-dialog',
+  templateUrl: 'client-schema-element-commit-dialog.component.html',
+  styleUrls: ['./client-schema-element-commit-dialog.component.scss']
 })
 export class ClientSchemaElementCommitDialogComponent implements OnDestroy {
 

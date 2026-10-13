@@ -25,11 +25,10 @@ import { SubmitStep, SubmitHandler } from 'src/lib/utils';
 import { ClientController } from '../shared/client-controller';
 
 @Component({
-    selector: 'fadq-client-parcel-tx-start',
-    templateUrl: './client-parcel-tx-start.component.html',
-    styleUrls: ['./client-parcel-tx-start.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-client-parcel-tx-start',
+  templateUrl: './client-parcel-tx-start.component.html',
+  styleUrls: ['./client-parcel-tx-start.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientParcelTxStartComponent
     implements WidgetComponent, OnUpdateInputs, OnInit, OnDestroy {

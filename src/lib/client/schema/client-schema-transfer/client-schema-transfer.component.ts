@@ -25,11 +25,10 @@ import { ClientSchemaService } from '../shared/client-schema.service';
 import { ClientSchemaFormService } from '../shared/client-schema-form.service';
 
 @Component({
-    selector: 'fadq-client-schema-transfer',
-    templateUrl: './client-schema-transfer.component.html',
-    styleUrls: ['./client-schema-transfer.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-client-schema-transfer',
+  templateUrl: './client-schema-transfer.component.html',
+  styleUrls: ['./client-schema-transfer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientSchemaTransferComponent implements OnInit, OnUpdateInputs, WidgetComponent {
 

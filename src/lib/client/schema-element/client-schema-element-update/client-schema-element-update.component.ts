@@ -34,11 +34,10 @@ import {
 } from '../shared/client-schema-element.utils';
 
 @Component({
-    selector: 'fadq-client-schema-element-update',
-    templateUrl: './client-schema-element-update.component.html',
-    styleUrls: ['./client-schema-element-update.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-client-schema-element-update',
+  templateUrl: './client-schema-element-update.component.html',
+  styleUrls: ['./client-schema-element-update.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientSchemaElementUpdateComponent
     implements OnInit, OnUpdateInputs, WidgetComponent {

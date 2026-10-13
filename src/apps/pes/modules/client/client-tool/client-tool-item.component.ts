@@ -12,11 +12,10 @@ import { ClientController } from '../shared/client-controller';
  * Tool to display a client's info and addresses
  */
 @Component({
-    selector: 'fadq-client-tool-item',
-    templateUrl: './client-tool-item.component.html',
-    styleUrls: ['./client-tool-item.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-client-tool-item',
+  templateUrl: './client-tool-item.component.html',
+  styleUrls: ['./client-tool-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientToolItemComponent {
 

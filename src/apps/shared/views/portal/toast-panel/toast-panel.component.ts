@@ -12,12 +12,11 @@ import {
 import { showContent } from './toast-panel.animations';
 
 @Component({
-    selector: 'fadq-toast-panel',
-    templateUrl: './toast-panel.component.html',
-    styleUrls: ['./toast-panel.component.scss'],
-    animations: [showContent()],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-toast-panel',
+  templateUrl: './toast-panel.component.html',
+  styleUrls: ['./toast-panel.component.scss'],
+  animations: [showContent()],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToastPanelComponent {
 

@@ -21,11 +21,10 @@ import {
 import { Cadastre, CadastreResponseItem } from 'src/lib/cadastre/cadastre/shared/cadastre.interfaces';
 
 @Component({
-    selector: 'fadq-cadastre-cadastre-selector',
-    templateUrl: './cadastre-cadastre-selector.component.html',
-    styleUrls: ['./cadastre-cadastre-selector.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-cadastre-cadastre-selector',
+  templateUrl: './cadastre-cadastre-selector.component.html',
+  styleUrls: ['./cadastre-cadastre-selector.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CadastreSelectorComponent implements OnInit, OnDestroy {
 

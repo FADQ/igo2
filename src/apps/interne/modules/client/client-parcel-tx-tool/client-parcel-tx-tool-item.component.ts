@@ -10,11 +10,10 @@ import {
 import * as client from 'src/lib/client';
 
 @Component({
-    selector: 'fadq-client-parcel-tx-tool-item',
-    templateUrl: './client-parcel-tx-tool-item.component.html',
-    styleUrls: ['./client-parcel-tx-tool-item.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-client-parcel-tx-tool-item',
+  templateUrl: './client-parcel-tx-tool-item.component.html',
+  styleUrls: ['./client-parcel-tx-tool-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientParcelTxToolItemComponent {
 

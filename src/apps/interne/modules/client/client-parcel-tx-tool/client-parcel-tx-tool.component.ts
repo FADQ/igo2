@@ -22,11 +22,10 @@ import { entityKey } from '@lib/shared/entity/entity-key.utils';
  */
 
 @Component({
-    selector: 'fadq-client-parcel-tx-tool',
-    templateUrl: './client-parcel-tx-tool.component.html',
-    styleUrls: ['./client-parcel-tx-tool.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-client-parcel-tx-tool',
+  templateUrl: './client-parcel-tx-tool.component.html',
+  styleUrls: ['./client-parcel-tx-tool.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientParcelTxToolComponent implements OnInit, OnDestroy {
 

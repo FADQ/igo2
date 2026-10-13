@@ -11,11 +11,10 @@ import { AddressState } from '../address.state';
  * Tool to edit addresses from Adresses Quebec.
  */
 @Component({
-    selector: 'fadq-address-editor-tool',
-    templateUrl: './address-editor-tool.component.html',
-    styleUrls: ['./address-editor-tool.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-address-editor-tool',
+  templateUrl: './address-editor-tool.component.html',
+  styleUrls: ['./address-editor-tool.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddressEditorToolComponent {
 

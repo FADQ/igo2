@@ -29,11 +29,10 @@ import {
 } from '../shared/client-schema-element.utils';
 
 @Component({
-    selector: 'fadq-client-schema-element-translate',
-    templateUrl: './client-schema-element-translate.component.html',
-    styleUrls: ['./client-schema-element-translate.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-client-schema-element-translate',
+  templateUrl: './client-schema-element-translate.component.html',
+  styleUrls: ['./client-schema-element-translate.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientSchemaElementTranslateComponent implements OnUpdateInputs, WidgetComponent {
 

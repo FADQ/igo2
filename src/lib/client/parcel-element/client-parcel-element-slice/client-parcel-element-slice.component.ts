@@ -26,11 +26,10 @@ import {
 } from '../shared/client-parcel-element.utils';
 
 @Component({
-    selector: 'fadq-client-parcel-element-slice',
-    templateUrl: './client-parcel-element-slice.component.html',
-    styleUrls: ['./client-parcel-element-slice.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-client-parcel-element-slice',
+  templateUrl: './client-parcel-element-slice.component.html',
+  styleUrls: ['./client-parcel-element-slice.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientParcelElementSliceComponent implements OnUpdateInputs, WidgetComponent {
 

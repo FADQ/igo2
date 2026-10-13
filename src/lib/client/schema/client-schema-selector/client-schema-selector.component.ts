@@ -12,10 +12,9 @@ import { ClientSchema } from '../shared/client-schema.interfaces';
 import { getClientSchemaTitle } from '../shared/client-schema.utils';
 
 @Component({
-    selector: 'fadq-client-schema-selector',
-    templateUrl: './client-schema-selector.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-client-schema-selector',
+  templateUrl: './client-schema-selector.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientSchemaSelectorComponent {
 

@@ -24,11 +24,10 @@ import {
   ConcessionUnique } from 'src/lib/cadastre/concession/shared/concession.interfaces';
 
 @Component({
-    selector: 'fadq-cadastre-concession-selector',
-    templateUrl: './cadastre-concession-selector.component.html',
-    styleUrls: ['./cadastre-concession-selector.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-cadastre-concession-selector',
+  templateUrl: './cadastre-concession-selector.component.html',
+  styleUrls: ['./cadastre-concession-selector.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConcessionSelectorComponent implements OnInit, OnDestroy {
 

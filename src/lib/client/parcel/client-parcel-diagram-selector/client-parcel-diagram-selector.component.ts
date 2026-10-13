@@ -11,10 +11,9 @@ import { EntityStore } from '@igo2/common/entity';
 import { ClientParcelDiagram } from '../shared/client-parcel.interfaces';
 
 @Component({
-    selector: 'fadq-client-parcel-diagram-selector',
-    templateUrl: './client-parcel-diagram-selector.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-client-parcel-diagram-selector',
+  templateUrl: './client-parcel-diagram-selector.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientParcelDiagramSelectorComponent {
 

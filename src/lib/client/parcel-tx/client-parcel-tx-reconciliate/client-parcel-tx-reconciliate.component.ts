@@ -26,11 +26,10 @@ import { entityKey } from '@lib/shared/entity/entity-key.utils';
 import { typedRowClass } from '@lib/compatibility/typedAccessor';
 
 @Component({
-    selector: 'fadq-client-parcel-tx-reconciliate',
-    templateUrl: './client-parcel-tx-reconciliate.component.html',
-    styleUrls: ['./client-parcel-tx-reconciliate.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'fadq-client-parcel-tx-reconciliate',
+  templateUrl: './client-parcel-tx-reconciliate.component.html',
+  styleUrls: ['./client-parcel-tx-reconciliate.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientParcelTxReconciliateComponent
     implements WidgetComponent, OnUpdateInputs, OnInit, OnDestroy {
