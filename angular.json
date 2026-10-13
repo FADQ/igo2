@@ -21,7 +21,8 @@
           "options": {
             "aot": true,
             "outputPath": {
-              "base": "dist/interne"
+              "base": "dist/interne",
+              "browser": ""
             },
             "index": "src/index.html",
             "polyfills": [
@@ -63,7 +64,10 @@
               "includePaths": [
                 "src/style/partial",
                 "node_modules"
-              ]
+              ],
+              "sass": {
+                "silenceDeprecations": ["import"]
+              }
             },
             "allowedCommonJsDependencies": [
               "angular2-notifications",
@@ -96,7 +100,12 @@
               "html2canvas",
               "jszip",
               "rgbcolor",
-              "rbush"
+              "rbush",
+              "canvg",
+              "core-js",
+              "flexsearch",
+              "@turf/jsts",
+              "earcut"
             ],
             "browser": "src/apps/interne.ts"
           },
@@ -215,7 +224,8 @@
           "options": {
             "aot": true,
             "outputPath": {
-              "base": "dist/pes"
+              "base": "dist/pes",
+              "browser": ""
             },
             "index": "src/index.html",
             "polyfills": [
@@ -251,7 +261,10 @@
             "stylePreprocessorOptions": {
               "includePaths": [
                 "src/style/partial"
-              ]
+              ],
+              "sass": {
+                "silenceDeprecations": ["import"]
+              }
             },
             "allowedCommonJsDependencies": [
               "angular2-notifications",
@@ -270,7 +283,12 @@
               "minimatch",
               "path",
               "pixelworks",
-              "brace-expansion"
+              "brace-expansion",
+              "canvg",
+              "core-js",
+              "flexsearch",
+              "@turf/jsts",
+              "earcut"
             ],
             "browser": "src/apps/pes.ts"
           },
@@ -373,7 +391,8 @@
           "options": {
             "aot": true,
             "outputPath": {
-              "base": "dist/pes_interne"
+              "base": "dist/pes_interne",
+              "browser": ""
             },
             "index": "src/index.html",
             "polyfills": [
@@ -409,7 +428,10 @@
             "stylePreprocessorOptions": {
               "includePaths": [
                 "src/style/partial"
-              ]
+              ],
+              "sass": {
+                "silenceDeprecations": ["import"]
+              }
             },
             "allowedCommonJsDependencies": [
               "angular2-notifications",
@@ -428,7 +450,12 @@
               "minimatch",
               "path",
               "pixelworks",
-              "brace-expansion"
+              "brace-expansion",
+              "canvg",
+              "core-js",
+              "flexsearch",
+              "@turf/jsts",
+              "earcut"
             ],
             "browser": "src/apps/pes_interne.ts"
           },
