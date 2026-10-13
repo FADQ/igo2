@@ -2,8 +2,9 @@ import * as olstyle from 'ol/style';
 import OlFeature, { FeatureLike } from 'ol/Feature';
 import OlPolygon from 'ol/geom/Polygon';
 import OlGeoJSON from 'ol/format/GeoJSON';
-import turfUnion from '@turf/union';
-import { Feature, Polygon } from '@turf/helpers';
+import { union as turfUnion } from '@turf/union';
+import { featureCollection } from '@turf/helpers';
+import type { Feature as GeoJSONFeature, MultiPolygon, Polygon } from 'geojson';
 
 import { getEntityRevision } from '@igo2/common/entity';
 import { LanguageService } from '@igo2/core/language';
@@ -204,32 +205,43 @@ export function getParcelElementMergeBase(
   return base;
 }
 
-export function unionParcelElements(parcelElements: ClientParcelElement[]): [ClientParcelElement, ClientParcelElement] {
+export function unionParcelElements(
+  parcelElements: ClientParcelElement[]
+): [ClientParcelElement, ClientParcelElement] {
   const base = getParcelElementMergeBase(parcelElements);
-  const properties = base.properties;
-  let meta;
-  if (base.properties.idParcelle) {
-    meta = Object.assign({}, base.meta, {
-      revision: getEntityRevision(base) + 1
-    });
-  } else {
-    meta = {
-      id: uuid()
-    };
+  if (!base) {
+    throw new Error('Impossible de déterminer la parcelle de base pour la fusion.');
   }
 
-  let union = parcelElements[0];
-  for (let i = 1; i < parcelElements.length; i++) {
-    union = turfUnion(
-      union as Feature<Polygon>,
-      parcelElements[i] as Feature<Polygon>
-    );
+  const meta = base.properties.idParcelle
+    ? Object.assign({}, base.meta, { revision: getEntityRevision(base) + 1 })
+    : { id: uuid() };
+
+  const merged = turfUnion(featureCollection(parcelElements.map(toTurfFeature)));
+  if (!merged) {
+    throw new Error("L'union des parcelles a produit une géométrie vide.");
   }
-  Object.assign(union, {
-    meta,
+  if (merged.geometry.type !== 'Polygon') {
+    throw new Error("L'union des parcelles a produit une géométrie Multipolygone qui n'est pas acceptée.");
+  }
+
+  const union: ClientParcelElement = {
+    type: 'Feature',
+    geometry: merged.geometry,
     projection: 'EPSG:4326',
-    properties
-  });
+    properties: { ...base.properties },
+    meta
+  };
 
   return [union, base];
+}
+
+type ParcelGeometry = Polygon | MultiPolygon;
+
+function toTurfFeature(parcelElement: ClientParcelElement): GeoJSONFeature<ParcelGeometry> {
+  return {
+    type: 'Feature',
+    geometry: parcelElement.geometry as ParcelGeometry,
+    properties: {}
+  };
 }
