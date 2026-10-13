@@ -265,21 +265,24 @@ export class EditionFillComponent implements WidgetComponent, OnInit, OnDestroy 
     });
     exclusionStore.addStrategy(selectionStrategy as any, true);
 
-    const exclusionCoordinates = this.feature.geometry.coordinates.slice(1);
-    const exclusions = exclusionCoordinates.map((coordinates: number[], index: number) => {
-      return {
+    const exclusionCoordinates: number[][][] = this.feature.geometry.coordinates.slice(1);
+    const exclusions: Feature[] = exclusionCoordinates.map(
+      (ring: number[][], index: number) => ({
         type: FEATURE,
         geometry: {
-          type: 'Polygon',
-          coordinates: [coordinates]
+          type: 'Polygon' as const,
+          coordinates: [ring]
         },
         properties: {
           index: index + 1,
           id: index + 1,
-          title: `Exclusion #${index}`
+          title: `Exclusion #${index + 1}`
+        },
+        meta: {
+          id: index + 1
         }
-      };
-    });
+      })
+    );
 
     exclusionStore.load(exclusions);
 
