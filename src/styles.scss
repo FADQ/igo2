@@ -1,9 +1,8 @@
-@use '@angular/material' as mat;
 @use '@igo2/core/all-style';
 @use '@igo2/core/layout';
 
-// @use 'style/reset.scss';
-@import 'style/fadq.theme.scss';
+@use 'style/fadq.theme.scss';
+@use 'style/igo2-lib.override';
 
 // @include igo-all-theming($theme);
 
@@ -15,38 +14,35 @@
   font-style: normal;
 }
 
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
 /*
  * Workaround IGO 17
  * L'icône frame_inspect appartient à Material Symbols Outlined
  * mais est rendue avec Material Icons.
  * À réévaluer lors de la migration vers IGO 20.x.
  */
-.zoomLayer-button .mat-icon {
-  font-family: "Material Symbols Outlined" !important;
-}
+// .zoomLayer-button .mat-icon {
+//   font-family: "Material Symbols Outlined" !important;
+// }
 
 .material-symbols-outlined {
-  font-family: 'Material Symbols Outlined';
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
 }
 
 
 /*** Reset ***/
 
-html,
-body,
-div {
-  border: 0;
-  margin: 0;
-  padding: 0;
-}
-
 html, body {
   width: 100%;
   height: 100%;
-}
-
-* {
-  box-sizing: border-box;
 }
 
 body {
@@ -81,22 +77,7 @@ tr.text-centered th div.mat-sort-header-container {
   margin: 10px 0;
 }
 
-// Add this class to a from to reduce the spacing between mat-fields
-// See this link for more info: https://github.com/angular/material2/issues/7975
-.igo-form-compact .mat-form-field-wrapper {
-  margin-bottom: -0.75em;
-}
-
-.mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
-  line-height: 36px !important;
-  padding: 0 16px !important;
-}
-
-igo-actionbar igo-actionbar-item mat-list-item.active-accent .mat-list-item-content {
-  color: mat.m2-get-color-from-palette($accent);
-}
-
-.mat-menu-panel:not(.fadq-expansion-panel-actionbar-overlay) go-actionbar,
+.mat-mdc-menu-panel:not(.fadq-expansion-panel-actionbar-overlay) igo-actionbar,
 fadq-expansion-panel-header igo-actionbar {
   .fadq-actionbar-item-divider {
     position: relative;
@@ -119,8 +100,8 @@ fadq-expansion-panel-header igo-actionbar {
 }
 
 .fadq-edition-continue-button-overlay button {
-  background-color: mat.m2-get-color-from-palette($primary);
-  color: white;
+  background-color: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
 }
 
 // This is used to show tooltip when hovering some table cells
@@ -150,22 +131,6 @@ fadq-expansion-panel-header igo-actionbar {
   display: inline;
 }
 
-igo-catalog-browser-layer {
-  .mat-list-item {
-    height: inherit !important;
-  }
-
-  .mat-list-item .mat-list-item-content {
-    height: inherit !important;
-  }
-
-  .mat-list-item .mat-list-text>h4 {
-    max-height: none !important;
-    word-break: break-all !important;
-    font-size: 12px !important;
-  }
-}
-
 // Ajout pour gérer le bouton de fermeture dans la boîte de dialogue de métadonnées
 // des couches accessible via l'information  dans la liste des couches du catalogue de cartes.
 igo-metadata-abstract button.close-button {
@@ -178,15 +143,62 @@ igo-metadata-abstract button.close-button {
   padding: 0 !important;
 }
 
-.mat-icon {
-  font-variation-settings:
-    'FILL' 1,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24;
-}
-
 // Règle pour forcer la couleur des icônes dans les boutons d'édition de parcelles
 // .mat-mdc-icon-button .mat-icon {
-//   color: mat.m2-get-color-from-palette($primary) !important;
+//   color: var(--mat-sys-primary) !important;
+// }
+
+igo-map-browser {
+  width: 100%;
+  height: 100%;
+
+  .map-actions {
+    position: absolute;
+    display: flex;
+    transition:
+      bottom 250ms,
+      left 250ms;
+
+    .spinner-spacer {
+      height: 40px;
+    }
+
+    &.--vertical {
+      flex-direction: column;
+
+      > :not(:first-child) {
+        margin-top: 8px;
+      }
+    }
+
+    &.--horizontal {
+      > :not(:first-child) {
+        margin-right: 8px;
+      }
+    }
+
+    &.--bottom {
+      bottom: 4px;
+    }
+
+    &.--right {
+      right: 4px;
+    }
+
+    &.--top {
+      top: 4px;
+    }
+
+    &.--horizontal.--bottom.--right {
+      right: calc(40px + 4px * 2);
+    }
+
+    &.--left {
+      left: 4px;
+    }
+  }
+}
+
+// .mat-elevation-z2 {
+//   box-shadow: var(--mat-sys-level2);
 // }

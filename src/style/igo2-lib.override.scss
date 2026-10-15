@@ -1,29 +1,16 @@
-@use 'sass:map';
-@use '@angular/material' as mat;
-@use '../../node_modules/@igo2/geo/src/lib/search/search-bar/search-bar.theming' as igo2-search;
+// ============================================================
+// igo2-lib.override.scss
+// Ne garder ici que les règles propres à FADQ.
+// Les hauteurs et espacements des composants igo-* viennent des thèmes IGO 19.
+//
+// À AJOUTER dans src/styles.scss (sinon ce fichier n'est chargé nulle part) :
+// @use 'style/igo2-lib.override';
+// ============================================================
 
-@mixin theme($theme) {
-  @include color($theme);
-  @include density($theme);
-}
-
-@mixin color($theme) {
-}
-
-@mixin density($theme) {
-  $density: mat.m2-get-density-config($theme);
-
-  $theme: map.merge(
-    $theme,
-    (
-      density: $density - 2
-    )
-  );
-
-  @include igo2-search.density($theme);
-}
-
-// Override groups in the search bar
+// --- Barre de recherche : groupes de sélection (à garder, à tester) ---
+// En 19.0.1, certains overrides de la barre de recherche ont été déplacés
+// dans le composant lui-même. Si ces classes n'ont plus d'effet visible,
+// supprimez ces deux règles.
 .igo-search-selector-radio-group {
   display: flex;
   flex-direction: column;
@@ -35,80 +22,120 @@
   align-items: center;
 }
 
-// Override sarch bar height
-igo-search-bar mat-form-field .mat-mdc-text-field-wrapper {
-  height: 46px;
-}
-
-
-// Override spacing in action bar
-igo-actionbar {
-  .mat-mdc-list {
-    padding: 0 !important;
-  }
-}
-
-igo-actionbar-item {
-  .mdc-list-item {
-    padding-right: 0;
-  }
-
-  .mdc-list-item--with-leading-avatar .mdc-list-item__start {
-    margin-right: 0;
-  }
-}
-
-// Override spacing in table cells and headers
-igo-entity-table .mdc-data-table__cell,
-igo-entity-table .mdc-data-table__header-cell {
-  padding: 0;
-  line-height: 1;
-}
-
-igo-entity-table .mat-mdc-checkbox .mdc-form-field {
-  height: 30px;
-}
-
-// Override expansion panel trigger margin
+// --- Composants FADQ ---
 .fadq-expansion-panel-trigger-container button {
   margin: 0 !important;
 }
 
-// Fix display of fields with cols = 1
+// Champs avec cols = 1
 .igo-form-field-colspan-1 {
   display: inline-block;
 }
 
-// Fix field height
-.mat-form-field-appearance-fill {
-  .mat-mdc-form-field-flex {
-    height: 48px;
-  }
-
-  .mat-mdc-form-field-infix {
-    padding-top: 22px;
-    padding-bottom: 0;
-  }
-}
-
-// Fix overflow of map tool
+// Double barre de défilement dans l'outil carte FADQ.
+// À tester : si le défilement est correct sans cette règle, supprimez-la.
+// (40px = hauteur de la barre d'outils du haut)
 fadq-map-tool .mat-mdc-tab-body-content {
   overflow-y: hidden;
   igo-layer-list {
-    // This is a fix to remove the double scroll bar.
-    // A better fix would involve more CSS and potentially some reorganization of the elements.
-    // Here, 40px is the height of the top toolbar;
     height: calc(100% - 40px);
   }
 }
 
-// Fix overflow of selected search result panel
+// Panneau du résultat de recherche sélectionné
 igo-search-results-tool .igo-flexible-fill .igo-panel-content {
   overflow: hidden !important;
 }
 
-// Fix an issue with the actions not displayed on the same lien as the text
+// Actions sur la même ligne que le texte
 fadq-client-parcel-tx-tool-item .mat-mdc-list-item-unscoped-content {
   display: flex !important;
   flex-direction: row;
+}
+
+// --- Tableau d'attributs : compacité et séparateurs (FADQ) ---
+igo-entity-table {
+  // Case à cocher : supprime la zone tactile de 40px qui garde la ligne haute
+  .mat-mdc-checkbox {
+    --mdc-checkbox-state-layer-size: 28px;
+    // --mat-checkbox-state-layer-size: 28px;
+    --mat-checkbox-touch-target-display: none;
+
+    .mdc-form-field {
+      height: 28px;
+    }
+  }
+
+  // Cellules compactes (comme en 16.0.3)
+  .mdc-data-table__cell,
+  .mdc-data-table__header-cell {
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: 1.2;
+  }
+  
+  --fadq-table-separator: color-mix(in srgb, var(--mat-sys-outline-variant) 50%, transparent);
+
+  // Lignes de séparation plus pâles
+  table {
+    --mat-table-row-item-outline-color: var(--fadq-table-separator);
+  }
+
+  // Ligne entre la barre de boutons et le tableau
+  tr.mat-mdc-header-row th {
+    border-top: 1px solid var(--fadq-table-separator);
+  }
+}
+
+// ============================================================
+// Désactivé : doublonne les thèmes IGO 19
+// À réactiver SEULEMENT si le rendu diffère de 16.0.3 après test.
+// ============================================================
+
+// Hauteur de la barre de recherche (thème : champs à 48px)
+// --- Barre de recherche : même hauteur que le bouton menu (40px) ---
+igo-search-bar {
+  --mat-form-field-container-height: 40px;
+  --mat-form-field-container-vertical-padding: 8px;
+  --mat-form-field-filled-with-label-container-padding-top: 8px;
+  --mat-form-field-filled-with-label-container-padding-bottom: 8px;
+
+  .igo-search-bar-container,
+  mat-form-field,
+  .mat-mdc-text-field-wrapper {
+    height: 40px;
+  }
+
+  .mat-mdc-form-field-infix {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    min-height: 40px;
+  }
+}
+
+// Espacement de l'actionbar (thème : items à 48px)
+igo-actionbar .mat-mdc-list {
+  padding: 0 !important;
+}
+igo-actionbar-item .mdc-list-item {
+  padding-right: 0;
+}
+igo-actionbar-item .mdc-list-item--with-leading-avatar .mdc-list-item__start {
+  margin-right: 0;
+}
+
+// Cellules de tableau (thème : lignes à 48px, en-tête à 52px)
+// igo-entity-table .mdc-data-table__cell,
+// igo-entity-table .mdc-data-table__header-cell {
+//   padding: 0;
+//   line-height: 1;
+// }
+// igo-entity-table .mat-mdc-checkbox .mdc-form-field {
+//   height: 30px;
+// }
+
+// Hauteur des champs "fill" (thème : champs à 48px)
+.mat-form-field-appearance-fill {
+  .mat-mdc-form-field-flex { height: 48px; }
+  .mat-mdc-form-field-infix { padding-top: 22px; padding-bottom: 0; }
 }

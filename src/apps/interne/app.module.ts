@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatTooltipDefaultOptions, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
 
+import { provideIcon } from '@igo2/common/icon';
 import { provideConfig } from '@igo2/core/config';
 import {
   IgoGeometryModule,
@@ -82,7 +83,7 @@ export function initializeIcons(
     { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: defaultTooltipOptions },
     DatePipe,
     SearchState,
-    { provide: APP_INITIALIZER, useFactory: initializeIcons, deps: [MatIconRegistry], multi: true }
+    provideIcon()
   ],
   bootstrap: [AppComponent]
 })

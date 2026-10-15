@@ -1,43 +1,29 @@
-// fadq.theme.scss
-@use 'sass:map';
-@use '@angular/material' as mat;
-@use './igo2-lib.override' as igo2-lib;
-@use '@igo2/core/theming/prebuilt-themes/blue-theme';
+  @use '@igo2/sdg-core' as sdg;
+  @use '@igo2/core/theming/prebuilt-themes/blue-theme';
 
-/*
-* Define a default theme for styling some part of the app
-* Don't forget that we also have static theme apply
-*/
-$primary: mat.m2-define-palette(mat.$m2-blue-palette, 700, 400, 900);
-$accent: mat.m2-define-palette(mat.$m2-blue-palette, 200);
-$warn: mat.m2-define-palette(mat.$m2-red-palette);
+  html {
+    @include sdg.typo-base();
+    // Les caractères du thème sont trop grands
+    font-size: 87.5%;
+  }
 
-$theme: mat.m2-define-light-theme(
-  (
-    color: (
-      primary: $primary,
-      accent: $accent,
-      warn: $warn
-    ),
-    density: 0
-  )
-);
+  table.igo-striped tbody tr:nth-child(odd) {
+    background-color: var(--mat-sys-surface-container);
+    color: var(--mat-sys-on-surface);
+  }
 
-$background: map.get($theme, background);
-$foreground: map.get($theme, foreground);
+  .fadq-error-text,
+  .fadq-alert-text {
+    color: var(--mat-sys-error);
+  }
 
-@include igo2-lib.theme($theme);
+  .fadq-success-text {
+    color: #2e7d32;
+  }
 
-table.igo-striped tbody tr:nth-child(odd) {
-  background-color: mat.m2-get-color-from-palette($background, status-bar);
-  color: mat.m2-get-color-from-palette($foreground, text);
-}
-
-.fadq-error-text,
-.fadq-alert-text {
-  color: mat.m2-get-color-from-palette($warn);
-}
-
-.fadq-success-text {
-  color: mat.m2-get-color-from-palette(mat.$m2-green-palette);
-}
+  // Nécessaire pour que le tableau des attributs s'affiche correctement
+  igo-entity-table .mdc-data-table__cell,
+  igo-entity-table .mdc-data-table__header-cell {
+    padding: 0;
+    line-height: 1;
+  }
