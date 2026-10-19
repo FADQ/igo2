@@ -79,7 +79,7 @@ export class ClientParcelWorkspaceService {
     store.bindLayer(layer);
 
     store.addStrategy(asStrategy(this.createLoadingStrategy()), true);
-    store.addStrategy(asStrategy(this.createSelectionStrategy(client, map)), true);
+    store.addStrategy(asStrategy(this.createSelectionStrategy(client, map)), false);
 
     return store;
   }

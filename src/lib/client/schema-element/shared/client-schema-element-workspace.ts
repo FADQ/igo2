@@ -67,8 +67,10 @@ export class ClientSchemaElementWorkspace extends Workspace<ClientSchemaElement>
       FeatureStoreSelectionStrategy as any
     ) as any;
 
-    strategy.unselectAll();
-    strategy.clear();
+    strategy?.unselectAll();
+    strategy?.clear();
+
+    this.schemaElementStore.deactivateStrategyOfType(FeatureStoreSelectionStrategy as any);
 
     super.deactivate();
   }

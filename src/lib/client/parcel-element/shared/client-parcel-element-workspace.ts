@@ -58,8 +58,7 @@ export class ClientParcelElementWorkspace extends Workspace<any> {
 
   activate() {
     super.activate();
-    (this.parcelElementStore as any)
-      .activateStrategyOfType?.(FeatureStoreSelectionStrategy);
+    this.parcelElementStore.activateStrategyOfType(FeatureStoreSelectionStrategy as any);
   }
 
   deactivate() {
@@ -67,8 +66,11 @@ export class ClientParcelElementWorkspace extends Workspace<any> {
       FeatureStoreSelectionStrategy as any
     ) as any;
 
-    strategy.unselectAll();
-    strategy.clear();
+    strategy?.unselectAll();
+    strategy?.clear();
+
+    this.parcelElementStore.deactivateStrategyOfType(FeatureStoreSelectionStrategy as any);
+
     super.deactivate();
   }
 

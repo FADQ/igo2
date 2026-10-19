@@ -56,14 +56,7 @@ export class ClientParcelWorkspace extends Workspace<ClientParcel> {
 
   activate() {
     super.activate();
-
-    const strategy = this.parcelStore.getStrategyOfType(
-      FeatureStoreSelectionStrategy as any
-    ) as any;
-
-    this.parcelStore.activateStrategyOfType(
-      FeatureStoreSelectionStrategy as any
-    );
+    this.parcelStore.activateStrategyOfType(FeatureStoreSelectionStrategy as any);
   }
 
   deactivate() {
@@ -71,8 +64,10 @@ export class ClientParcelWorkspace extends Workspace<ClientParcel> {
       FeatureStoreSelectionStrategy as any
     ) as any;
 
-    strategy.unselectAll();
-    strategy.clear();
+    strategy?.unselectAll();
+    strategy?.clear();
+
+    this.parcelStore.deactivateStrategyOfType(FeatureStoreSelectionStrategy as any);
 
     super.deactivate();
   }
