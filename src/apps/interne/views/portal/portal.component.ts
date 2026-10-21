@@ -518,18 +518,27 @@ export class PortalComponent implements OnInit, OnDestroy {
    */
   private updateViewResolutions(): void {
     const map = this.map;
-    const viewController = map.viewController;
-    const olMap = viewController.getOlMap();
-    const olView = olMap.getView();
+    const olMap = map.viewController.getOlMap();
+    const oldView = olMap.getView();
 
     const context = this.contextState.context$.value;
     const mapContext = context.map;
     const viewContext = mapContext ? (mapContext.view || {}) : {};
-    const maxZoom = viewContext.maxZoom || olView.getMaxZoom();
+    const maxZoom = viewContext.maxZoom || oldView.getMaxZoom();
 
-    const resolutions = getOlViewResolutions(olView);
+    const resolutions = getOlViewResolutions(oldView);
     map.updateView({
       resolutions: resolutions.slice(0, maxZoom)
     });
+
+    /*  Contournement IGO 19.0.3 : à retirer lors de la montée vers 20.3.3
+        Le shiftDragZoom ne fonctionnait pas bien.
+        updateView recrée la vue : on resynchronise sa taille de viewport
+        avec celle de la carte (sinon elle reste à [100, 100]).
+    */
+    const size = olMap.getSize();
+    if (size) {
+      olMap.getView().setViewportSize(size);
+    }
   }
 }
