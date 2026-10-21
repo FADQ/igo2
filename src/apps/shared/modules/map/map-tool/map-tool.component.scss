@@ -1,18 +1,17 @@
+// Le groupe d'onglets occupe toute la hauteur du panneau
 mat-tab-group,
-mat-tab-group ::ng-deep .mat-tab-body-wrapper {
+mat-tab-group ::ng-deep .mat-mdc-tab-body-wrapper {
   height: 100%;
 }
-mat-tab-group ::ng-deep .mat-tab-body-content {
+
+// Le contenu de l'onglet est une colonne (bouton « enregistrer le contexte » + viewer)
+mat-tab-group ::ng-deep .mat-mdc-tab-body-content {
   display: flex;
   flex-direction: column;
 }
 
 ::ng-deep igo-layer-viewer-bottom-actions {
   flex: 0 0 130px;
-}
-
-igo-layer-list ::ng-deep .mat-list-base .mat-list-item .mat-list-item-content {
-  padding: 0 0 0 16px;
 }
 
 ::ng-deep igo-layer-list-tool .actions-container {
@@ -26,5 +25,5 @@ igo-layer-list ::ng-deep .mat-list-base .mat-list-item .mat-list-item-content {
  * les icônes de visibilité demeurent bleues même lorsque la couche est masquée.
  */
 ::ng-deep igo-layer-item button:not(.mat-primary) mat-icon {
-  color: var(--igo-primary-color, #1976d2) !important;
+  color: var(--igo-primary-color, var(--mat-sys-primary)) !important;
 }

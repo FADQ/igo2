@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { ConfigService } from '@igo2/core/config';
-import { Layer, ImageLayer, WMSDataSource, IgoMap, LayerViewerOptions } from '@igo2/geo';
+import { Layer, ImageLayer, WMSDataSource, IgoMap, LayerViewerOptions, LayerListControlsEnum } from '@igo2/geo';
 import { ContextState, MapState } from '@igo2/integration';
 
 import { CustomContextService } from 'src/lib/context';
@@ -40,13 +40,24 @@ export class MapToolComponent {
   get layerViewerOptions(): LayerViewerOptions {
     return {
       queryBadge: true,
+      filterAndSortOptions: {
+        excludeBaseLayers: true,
+        showToolbar: LayerListControlsEnum.default,
+        sortAlpha: true,
+        onlyVisible: true,
+      },
       legend: {
         showForVisibleLayers: false
       },
       group: {
-        enable: false,
-        canCreate: false,
-        canRename: false
+        enable:
+          this.configService.getConfig('layer.group.enable') ?? false,
+        maxHierarchyLevel:
+          this.configService.getConfig('layer.group.maxHierarchyLevel') ?? 3,
+        canCreate:
+          this.configService.getConfig('layer.group.canCreate') ?? false,
+        canRename:
+          this.configService.getConfig('layer.group.canRename') ?? false,
       }
     };
   }
