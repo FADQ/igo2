@@ -1,24 +1,17 @@
 import { NgModule } from '@angular/core';
 
-import { FadqSearchModule } from 'src/apps/shared/modules/search/search.module';
-import {
+import { 
   provideCoordinatesReverseSearchSource,
-  provideFadqIChercheSearchResultFormatter,
   provideIChercheSearchSource,
   provideIChercheReverseSearchSource,
+  provideDefaultIChercheSearchResultFormatter,
   provideQuerySearchSource
-} from 'src/apps/shared/modules/search/shared/sources';
+ } from '@igo2/geo';
 
 @NgModule({
-  imports: [
-    FadqSearchModule
-  ],
-  exports: [
-    FadqSearchModule
-  ],
   declarations: [],
   providers: [
-    provideFadqIChercheSearchResultFormatter(),
+    provideDefaultIChercheSearchResultFormatter(),
     provideIChercheSearchSource(),
     provideIChercheReverseSearchSource(),
     provideCoordinatesReverseSearchSource(),

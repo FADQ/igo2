@@ -16,7 +16,8 @@ import { IgoWorkspaceModule } from '@igo2/common/workspace';
 import {
   IgoFeatureModule,
   IgoImportExportModule,
-  IgoQueryModule
+  IgoQueryModule,
+  IgoSearchBarModule
 } from '@igo2/geo';
 import { IgoContextManagerModule } from '@igo2/context';
 import { IgoAppSearchModule } from '@igo2/integration';
@@ -51,6 +52,7 @@ import { PortalComponent } from './portal.component';
     IgoQueryModule,
     IgoContextManagerModule,
     IgoAppSearchModule,
+    IgoSearchBarModule,
 
     FadqContextModule,
     FadqMapModule,
