@@ -1,10 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatTooltipDefaultOptions, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
+import { provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 
 import { provideIcon } from '@igo2/common/icon';
 import { provideConfig } from '@igo2/core/config';
@@ -15,6 +16,9 @@ import {
   provideDirection,
   withOsrmSource} from '@igo2/geo';
 import { SearchState } from '@igo2/integration';
+
+import { contextUriFixInterceptor } from 'src/lib/context/shared/context-uri.interceptor'
+
 
 import { environment } from '../../environments/interne/environment';
 
@@ -79,6 +83,10 @@ export function initializeIcons(
       default: environment.igo,
       path: environment.configPath
     }),
+    provideHttpClient(
+      withInterceptors([contextUriFixInterceptor]),
+      withInterceptorsFromDi()
+    ),
     provideDirection(withOsrmSource()),
     { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: defaultTooltipOptions },
     DatePipe,
@@ -89,4 +97,3 @@ export function initializeIcons(
 })
 
 export class FadqInterneAppModule {}
-

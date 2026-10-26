@@ -1,4 +1,10 @@
-import { Directive, OnInit, OnDestroy, Optional, Input } from '@angular/core';
+import {
+  Directive,
+  OnInit,
+  OnDestroy,
+  Input,
+  inject
+} from '@angular/core';
 
 import { Subscription, zip } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -20,23 +26,20 @@ import { ContextService, DetailedContext } from '@igo2/context';
     standalone: false
 })
 export class FadqLayerContextDirective implements OnInit, OnDestroy {
-  private context$$: Subscription;
-  private queryParams: any;
+  private component = inject(MapBrowserComponent);
+  private contextService = inject(ContextService);
+  private layerService = inject(LayerService);
+  private route = inject(RouteService, { optional: true });
 
+  private context$$?: Subscription;
+  private queryParams: any;
   private contextLayers: Layer[] = [];
 
   @Input() removeLayersOnContextChange: boolean = true;
 
   get map(): IgoMap {
-    return this.component.map;
+    return this.component.map();
   }
-
-  constructor(
-    private component: MapBrowserComponent,
-    private contextService: ContextService,
-    private layerService: LayerService,
-    @Optional() private route: RouteService
-  ) {}
 
   ngOnInit() {
     this.context$$ = this.contextService.context$
@@ -59,7 +62,7 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.context$$.unsubscribe();
+    this.context$$?.unsubscribe();
   }
 
   private handleContextChange(context: DetailedContext) {
@@ -77,38 +80,39 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
     }
     this.contextLayers = [];
 
-    const layersAndIndex$ = zip(...context.layers.map((layerOptions: LayerOptions, index: number) => {
-      return this.layerService.createAsyncLayer(layerOptions);
-    }));
+    const layers$ = zip(
+      ...context.layers.map((layerOptions: LayerOptions) =>
+        this.layerService.createAsyncLayer(layerOptions)
+      )
+    );
 
-    layersAndIndex$
-      .subscribe((layers: Layer[]) => {
-        layers = layers
-          .filter((layer: Layer) => layer !== undefined)
-          .map((layer) => {
-            layer.visible = this.computeLayerVisibilityFromUrl(layer);
-            layer.zIndex = layer.zIndex;
-
-            return layer;
-          });
-        this.contextLayers.push(...layers);
-        layers.forEach((layer: AnyLayer) => {
-            this.map.layerController.add(layer as Layer);
+    layers$.subscribe((createdLayers: (Layer | undefined)[]) => {
+      const layers = createdLayers
+        .filter((layer): layer is Layer => layer !== undefined)
+        .map((layer) => {
+          layer.visible = this.computeLayerVisibilityFromUrl(layer);
+          return layer;
         });
+
+      this.contextLayers.push(...layers);
+      layers.forEach((layer) => {
+        this.map.layerController.add(layer);
       });
+    });
   }
 
   private computeLayerVisibilityFromUrl(layer: Layer): boolean {
     const params = this.queryParams;
+    const route = this.route;
     const currentContext = this.contextService.context$.value.uri;
-    const currentLayerid: string = layer.id;
 
     let visible = layer.visible;
-    if (!params || !currentLayerid) {
+    if (!params || !route || layer.id === undefined || layer.id === null) {
       return visible;
     }
+    const currentLayerid = String(layer.id);
 
-    const contextParams = params[this.route.options.contextKey as string];
+    const contextParams = params[route.options.contextKey as string];
     if (contextParams === currentContext || !contextParams) {
       let visibleOnLayersParams = '';
       let visibleOffLayersParams = '';
@@ -116,18 +120,18 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
       let invisiblelayers: string[] = [];
 
       if (
-        this.route.options.visibleOnLayersKey &&
-        params[this.route.options.visibleOnLayersKey as string]
+        route.options.visibleOnLayersKey &&
+        params[route.options.visibleOnLayersKey as string]
       ) {
         visibleOnLayersParams =
-          params[this.route.options.visibleOnLayersKey as string];
+          params[route.options.visibleOnLayersKey as string];
       }
       if (
-        this.route.options.visibleOffLayersKey &&
-        params[this.route.options.visibleOffLayersKey as string]
+        route.options.visibleOffLayersKey &&
+        params[route.options.visibleOffLayersKey as string]
       ) {
         visibleOffLayersParams =
-          params[this.route.options.visibleOffLayersKey as string];
+          params[route.options.visibleOffLayersKey as string];
       }
 
       /* This order is important because to control whichever
@@ -142,10 +146,10 @@ export class FadqLayerContextDirective implements OnInit, OnDestroy {
       // After, managing named layer by id (context.json OR id from datasource)
       visiblelayers = visibleOnLayersParams.split(',');
       invisiblelayers = visibleOffLayersParams.split(',');
-      if (visiblelayers.indexOf(currentLayerid) > -1 || visiblelayers.indexOf(currentLayerid.toString()) > -1) {
+      if (visiblelayers.includes(currentLayerid)) {
         visible = true;
       }
-      if (invisiblelayers.indexOf(currentLayerid) > -1 || invisiblelayers.indexOf(currentLayerid.toString()) > -1) {
+      if (invisiblelayers.includes(currentLayerid)) {
         visible = false;
       }
     }

@@ -22,7 +22,7 @@ import { ConfigOptions, ConfigService, CONFIG_OPTIONS } from '@igo2/core/config'
 import { RouteService } from '@igo2/core/route';
 import { LanguageService } from '@igo2/core/language';
 
-import { GeometryFormFieldComponent } from '@igo2/geo';
+import { GeometryFormFieldComponent, IgoSearchModule } from '@igo2/geo';
 
 import {
   AdvancedMapToolComponent,
@@ -88,7 +88,6 @@ function appInitializerFactory(
 ) {
   return () => new Promise<any>((resolve: any) => {
     configLoader.then(() => {
-      loadTheme(document, 'blue-theme');
       const language = languageService.getLanguage();
       const promises = [
         lastValueFrom(languageService.translate.use(language))
@@ -257,6 +256,7 @@ const providers: Provider[] = [
 @NgModule({
   imports: [
     IgoCoreModule.forRoot(),
+    IgoSearchModule.forRoot(),
     FadqLibApiModule,
     FadqLibDomainModule,
   ],

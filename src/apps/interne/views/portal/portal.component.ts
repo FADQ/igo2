@@ -24,7 +24,7 @@ import {
   Layer,
   LayerOptions,
   LayerService,
-  AnyLayer,
+  AnyLayer
 } from '@igo2/geo';
 import {
   ContextState,

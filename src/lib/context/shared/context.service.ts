@@ -26,7 +26,7 @@ export class CustomContextService {
     const center: any = new OlPoint(view.getCenter()).transform(proj, 'EPSG:4326');
 
     const context = {
-      id: '',
+      id: 0,
       uri: '',
       title: '',
       map: {

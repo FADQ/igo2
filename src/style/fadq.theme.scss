@@ -1,10 +1,10 @@
   @use '@igo2/sdg-core' as sdg;
-  @use '@igo2/core/theming/prebuilt-themes/blue-theme';
+  @use '@igo2/core/theming/prebuilt-themes/blue-theme' as *;
 
   html {
-    @include sdg.typo-base();
     // Les caractères du thème sont trop grands
     font-size: 87.5%;
+    @include sdg.typo-base();
   }
 
   table.igo-striped tbody tr:nth-child(odd) {
