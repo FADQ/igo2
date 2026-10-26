@@ -3,11 +3,21 @@ import { NgModule } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatTooltipDefaultOptions } from '@angular/material/tooltip';
+import { MatIconRegistry } from '@angular/material/icon';
+import { MatTooltipDefaultOptions, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
+import { provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 
+import { provideIcon } from '@igo2/common/icon';
 import { provideConfig } from '@igo2/core/config';
-import { IgoGeometryModule, IgoQueryModule, IgoDirectionsModule, provideOsrmDirectionsSource } from '@igo2/geo';
+import {
+  IgoGeometryModule,
+  IgoQueryModule,
+  IgoDirectionsModule,
+  provideDirection,
+  withOsrmSource} from '@igo2/geo';
+import { SearchState } from '@igo2/integration';
 
+import { contextUriFixInterceptor } from 'src/lib/context/shared/context-uri.interceptor'
 import { environment } from 'src/environments/pes_interne/environment';
 
 import { FadqCoreModule } from 'src/apps/shared/modules/core/core.module';
@@ -32,15 +42,28 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
   disableTooltipInteractivity: true
 };
 
+export function initializeIcons(
+  iconRegistry: MatIconRegistry
+) {
+  return () => {
+    iconRegistry.setDefaultFontSetClass(
+      'material-symbols-outlined'
+    );
+  };
+}
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([]),
+
+    // IGO modules (fournissent les états automatiquement)
     IgoGeometryModule,
     IgoQueryModule.forRoot(),
     IgoDirectionsModule,
+
     FadqCoreModule,
     FadqContextModule,
     FadqHelpModule,
@@ -56,13 +79,20 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
       default: environment.igo,
       path: environment.configPath
     }),
+    provideHttpClient(
+      withInterceptors([contextUriFixInterceptor]),
+      withInterceptorsFromDi()
+    ),
+    provideDirection(withOsrmSource()),
+    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: defaultTooltipOptions },
+    DatePipe,
     {
       provide: ClientLoader,
       useClass: URLClientLoader
       // deps: [ClientService]
     },
-    provideOsrmDirectionsSource(),
-    DatePipe,
+    SearchState,
+    provideIcon()
   ],
   bootstrap: [AppComponent]
 })
