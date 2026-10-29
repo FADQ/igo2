@@ -1,13 +1,14 @@
 <mat-list-item>
-  <div matLine class="fadq-client-name">
+  <span matListItemTitle class="fadq-client-name">
     {{client.info.numero}} - {{client.info.nom}} - {{client.tx.annee}}
+  </span>
+
+  <div matListItemMeta class="fadq-client-actions">
+    <button mat-icon-button (click)="onToggleClick()">
+      <mat-icon>{{ added ? 'close' : 'add' }}</mat-icon>
+    </button>
+    <button mat-icon-button (click)="onDeleteClick()">
+      <mat-icon>delete</mat-icon>
+    </button>
   </div>
-
-  <button mat-icon-button (click)="onToggleClick()">
-    <mat-icon>{{ added ? 'close' : 'add' }}</mat-icon>
-  </button>
-
-  <button mat-icon-button (click)="onDeleteClick()">
-    <mat-icon>delete</mat-icon>
-  </button>
 </mat-list-item>

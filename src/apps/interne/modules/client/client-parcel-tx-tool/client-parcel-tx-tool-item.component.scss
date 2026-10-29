@@ -1,3 +1,40 @@
-:host.fadq-client-parcel-tx-tool-item-added mat-list-item::ng-deep .mat-list-text {
-  color: rgba(0, 0, 0, 0.38);
+:host {
+  display: block;
+}
+
+mat-list-item {
+  --mdc-list-list-item-one-line-container-height: auto;
+  --mat-list-list-item-one-line-container-height: auto;
+  min-height: 40px;
+}
+
+.fadq-client-name {
+  white-space: normal;
+  padding: 6px 0;
+  line-height: 1.25;
+  font-size: 13px;
+}
+
+.fadq-client-actions {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+// Boutons plus compacts (40px au lieu de 48px)
+.fadq-client-actions button[mat-icon-button] {
+  --mdc-icon-button-state-layer-size: 36px;
+  --mat-icon-button-state-layer-size: 36px;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+}
+
+:host(.fadq-client-parcel-tx-tool-item-added) .fadq-client-name {
+  opacity: 0.38;
+}
+
+// Ajout d'une ligne de séparation entre les items
+:host:not(:last-child) mat-list-item {
+  border-bottom: 1px solid var(--mat-sys-outline-variant, rgba(128, 128, 128, 0.25));
 }
