@@ -2,8 +2,6 @@
   @use '@igo2/core/theming/prebuilt-themes/blue-theme' as *;
 
   html {
-    // Les caractères du thème sont trop grands
-    font-size: 87.5%;
     @include sdg.typo-base();
   }
 

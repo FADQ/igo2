@@ -19,16 +19,6 @@ body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
-/*
- * Workaround IGO 17
- * L'icône frame_inspect appartient à Material Symbols Outlined
- * mais est rendue avec Material Icons.
- * À réévaluer lors de la migration vers IGO 20.x.
- */
-// .zoomLayer-button .mat-icon {
-//   font-family: "Material Symbols Outlined" !important;
-// }
-
 .material-symbols-outlined {
   font-variation-settings:
     'FILL' 0,
@@ -198,10 +188,6 @@ igo-map-browser {
     }
   }
 }
-
-// .mat-elevation-z2 {
-//   box-shadow: var(--mat-sys-level2);
-// }
 
 /*  Contournement IGO 19.0.3 : à retirer lors de la montée vers 20.3.3
     L'affichage du getFeatureInfo ne se faisait pas.

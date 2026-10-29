@@ -7,6 +7,39 @@
 // @use 'style/igo2-lib.override';
 // ============================================================
 
+// --- Typographie : réduction de l'échelle SDG et Material ---
+// Les variables --sdg-* sont définies sur body.blue-theme par le thème,
+// il faut donc les redéfinir sur le même élément (pas sur html).
+html body.blue-theme {
+  --sdg-font-size-md: 0.875rem;
+  --sdg-font-size-lg: 1rem;
+  --sdg-font-size-sm: 0.75rem;
+  --sdg-font-size-xs: 0.6875rem;
+
+  --sdg-font-size-h1: 2rem;
+  --sdg-font-size-h2: 1.5rem;
+  --sdg-font-size-h3: 1.25rem;
+  --sdg-font-size-h4: 1rem;
+  --sdg-font-size-h5: 0.875rem;
+  --sdg-font-size-h6: 0.8125rem;
+
+  --mat-sys-body-large-size: 0.875rem;
+  --mat-sys-body-medium-size: 0.8125rem;
+  --mat-sys-body-small-size: 0.75rem;
+  --mat-sys-label-large-size: 0.8125rem;
+}
+
+html:root {
+  p, ul, ol, li, u, .text {
+    line-height: 1.4;
+  }
+
+  li {
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+}
+
 // --- Barre de recherche : groupes de sélection (à garder, à tester) ---
 // En 19.0.1, certains overrides de la barre de recherche ont été déplacés
 // dans le composant lui-même. Si ces classes n'ont plus d'effet visible,
