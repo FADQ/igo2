@@ -6,26 +6,36 @@ mat-card {
   display: flex;
   flex-direction: column;
   height: 100%;
+
+  /* Titre : tokens du thème, plus de font-size en dur */
+  --mat-card-title-text-size: var(--mat-sys-title-medium-size);
+  --mat-card-title-text-line-height: var(--mat-sys-title-medium-line-height);
+  --mat-card-title-text-weight: var(--mat-sys-title-medium-weight);
 }
 
 mat-card-header {
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;   /* corrige l'ascenseur horizontal */
   width: 100%;
+  min-height: $header-height;
   margin-bottom: $header-margin-bottom;
-  height: $header-height;
+  padding: 8px 16px;        /* remplace le 16px 16px 0 de Material */
 
-  ::ng-deep .mat-card-header-text {
+  ::ng-deep .mat-mdc-card-header-text {
     margin: 0;
+    min-width: 0;           /* permet au texte flex de rétrécir */
   }
 
-  .mat-card-title {
-    font-size: 16px;
-    margin-bottom: 0px;
+  ::ng-deep .mat-mdc-card-title {
+    text-align: center;
+    white-space: normal;    /* retour à la ligne si le titre est long */
+    overflow-wrap: anywhere;
+    margin: 0;
   }
 }
 
 mat-card-content {
-  height: calc(100% - #{$header-height});
+  flex: 1 1 auto;
+  min-height: 0;
 }
-

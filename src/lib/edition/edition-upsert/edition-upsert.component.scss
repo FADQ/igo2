@@ -2,12 +2,12 @@ igo-feature-form {
   height: 100%;
 }
 
-igo-feature-form ::ng-deep igo-form {
-  padding-bottom: 10px;
-}
-
 mat-tab-group {
   width: 100%;
+
+  // Agrandir l'entête du formulaire
+  --mat-tab-label-text-size: var(--mat-sys-title-medium-size);
+  --mat-tab-label-text-line-height: var(--mat-sys-title-medium-line-height);
 
   ::ng-deep .mat-tab-body-wrapper,
   ::ng-deep .mat-tab-body-content {

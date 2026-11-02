@@ -172,3 +172,15 @@ igo-actionbar-item .mdc-list-item--with-leading-avatar .mdc-list-item__start {
   .mat-mdc-form-field-flex { height: 48px; }
   .mat-mdc-form-field-infix { padding-top: 22px; padding-bottom: 0; }
 }
+
+ 
+igo-entity-table table {
+  /* Rapetisser la fonte des caractères de l'entête du tableau des attributs */
+  --mat-table-header-headline-size: var(--mat-sys-label-medium-size);
+  --mat-table-header-headline-line-height: var(--mat-sys-label-medium-line-height);
+  --mat-table-header-headline-weight: var(--mat-sys-label-medium-weight);
+
+  /* Rapetisser la fonte des caractères des lignes de données */
+  --mat-table-row-item-label-text-size: var(--mat-sys-body-small-size);
+  --mat-table-row-item-label-text-line-height: var(--mat-sys-body-small-line-height);
+}
