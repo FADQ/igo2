@@ -324,8 +324,8 @@
       "tooltip": "Déplacer la carte sur les entités"
     },
     "filterSelection": {
-      "title": "Afficher les entités sélectionnés",
-      "tooltip": "Afficher les entités sélectionné"
+      "title": "Afficher les entités sélectionnées",
+      "tooltip": "Afficher les entités sélectionnées"
     }
   },
 
