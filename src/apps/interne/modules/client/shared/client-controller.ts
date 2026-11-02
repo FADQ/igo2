@@ -244,8 +244,14 @@ export class ClientController {
   destroy() {
     this.message$.next(undefined);
     this.teardownDiagrams();
-    this.teardownParcels();
-    this.teardownParcelElements();
+
+    if (this.parcelElementsActive) {
+      // Mode édition : le workspace des parcelles est déjà démonté
+      this.teardownParcelElements();
+    } else {
+      this.teardownParcels();
+    }
+
     this.teardownSchemas();
   }
 
@@ -548,11 +554,12 @@ export class ClientController {
     }
 
     this.parcelElementWorkspace.teardown();
-    this.schemaElementTransaction.clear();
+    this.parcelElementTransaction.clear();
     if (this.workspaces.activeWorkspace$.value === this.parcelElementWorkspace) {
       this.workspaces.deactivateWorkspace();
     }
     this.workspaces.delete(asWorkspaceObject(this.parcelElementWorkspace));
+    this.parcelsReloaded$$?.unsubscribe();
   }
 
   /**
