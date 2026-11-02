@@ -4,7 +4,7 @@ $thumbnail-size: 20px;
 
 :host {
   display: block;
-  width: 100%;
+  box-sizing: border-box;
   padding: $igo-padding;
 }
 
@@ -17,6 +17,8 @@ $thumbnail-size: 20px;
   margin-left: 10px;
   font-size: 14px;
   vertical-align: middle;
+  max-width: calc(100% - #{$thumbnail-size} - 10px - 4px); // vignette + marge + bordures
+  overflow-wrap: anywhere;
 }
 
 .fadq-client-parcel-legend-item-thumbnail {
