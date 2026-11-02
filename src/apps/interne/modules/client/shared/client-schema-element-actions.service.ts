@@ -68,6 +68,8 @@ export class ClientSchemaElementActionsService {
    * @returns Actions
    */
   private buildActions(controller: ClientController): Action[] {
+    const filterSelectionStrategy = controller.schemaElementStore
+    .getStrategyOfType(EntityStoreFilterSelectionStrategy);
     return [
       {
         id: 'zoom-to-features',
@@ -84,7 +86,9 @@ export class ClientSchemaElementActionsService {
       },
       {
         id: 'filterSelection',
-        icon: 'filter_alt',
+        icon: filterSelectionStrategy.active$.pipe(
+          map((active: boolean) => active ? 'filter_alt' : 'filter_alt_off')
+        ),
         title: 'map.filterSelection.title',
         tooltip: 'map.filterSelection.tooltip',
         args: [controller],
@@ -103,7 +107,7 @@ export class ClientSchemaElementActionsService {
           return filterStrategy.active$.pipe(
             map((active: boolean) => ({
               'fadq-actionbar-item-divider': true,
-              'active-accent': active
+              'fadq-filter-selection-active': active
             }))
           );
         }
