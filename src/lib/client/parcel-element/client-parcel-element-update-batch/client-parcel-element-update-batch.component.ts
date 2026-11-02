@@ -111,7 +111,12 @@ export class ClientParcelElementUpdateBatchComponent
   }
 
   private processParcelElement(data: ClientParcelElement): Observable<EditionResult> {
-    return this.clientParcelElementService.createParcelElement(data)
+    const previous = this.parcelElements.find(
+      (p) => this.store.getKey(p) === this.store.getKey(data)
+    );
+    const parcel = this.clientParcelElementFormService.syncDescSource(data, previous);
+
+    return this.clientParcelElementService.createParcelElement(parcel)
       .pipe(
         map((parcelElement: ClientParcelElement): EditionResult => {
           return {

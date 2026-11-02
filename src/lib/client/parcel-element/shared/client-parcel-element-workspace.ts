@@ -39,17 +39,24 @@ export class ClientParcelElementWorkspace extends Workspace<any> {
     super(options);
   }
 
-  init() {
-    const store = this.parcelElementStore as any;
+  private initialized = false;
 
-    store.activateStrategyOfType(FeatureStoreLoadingStrategy);
-    this.addParcelElementLayer();
-  }
+  init() {
+    if (this.initialized) { return; }
+
+      const store = this.parcelElementStore as any;
+      store.activateStrategyOfType(FeatureStoreLoadingStrategy);
+      this.addParcelElementLayer();
+      this.initialized = true;
+    }
 
   teardown() {
+    if (!this.initialized) { return; }
+
     this.deactivate();
     this.removeParcelElementLayer();
     this.parcelElementStore.clear();
+    this.initialized = false;
   }
 
   load(parcelElements: ClientParcelElement[]) {
@@ -66,10 +73,11 @@ export class ClientParcelElementWorkspace extends Workspace<any> {
       FeatureStoreSelectionStrategy as any
     ) as any;
 
-    strategy?.unselectAll();
-    strategy?.clear();
-
-    this.parcelElementStore.deactivateStrategyOfType(FeatureStoreSelectionStrategy as any);
+    if (strategy?.active) {
+      strategy.unselectAll();
+      strategy.clear();
+      this.parcelElementStore.deactivateStrategyOfType(FeatureStoreSelectionStrategy as any);
+    }
 
     super.deactivate();
   }

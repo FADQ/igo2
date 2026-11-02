@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Validators } from '@angular/forms';
 
 import { Observable, of, zip } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { LanguageService } from '@igo2/core/language';
 import {
@@ -20,10 +20,12 @@ import { DomainService } from '../../../core/domain/domain.service';
 import { createOlEditionStyle } from '../../../edition/shared/edition.utils';
 
 import { getParcelDraineeChoices } from '../../parcel/shared/client-parcel.utils';
-import { ClientParcelElementApiConfig } from './client-parcel-element.interfaces';
+import { ClientParcelElement, ClientParcelElementApiConfig } from './client-parcel-element.interfaces';
 
 @Injectable()
 export class ClientParcelElementFormService {
+
+  private sourceChoices: FormFieldSelectChoice[] = [];
 
   constructor(
     private formService: FormService,
@@ -212,8 +214,32 @@ export class ClientParcelElementFormService {
   private getSourceChoices(): Observable<FormFieldSelectChoice[]> {
     const url = this.apiService.buildUrl(this.apiConfig.domains.source);
     return this.domainService.getChoices(url).pipe(
+      tap((choices: FormFieldSelectChoice[]) => this.sourceChoices = choices),
       map((choices: FormFieldSelectChoice[]) => [{value: null, title: ''}].concat(choices))
     );
+  }
+
+  /**
+   * Synchronise la description avec le code de la source.
+   * Si la source n'a pas changé par rapport à la parcelle d'origine, rien n'est modifié.
+   */
+  syncDescSource(
+    parcel: ClientParcelElement,
+    previous?: ClientParcelElement
+  ): ClientParcelElement {
+    const code = parcel.properties.sourceParcelleAgricole;
+    if (previous && previous.properties.sourceParcelleAgricole === code) {
+      return parcel;
+    }
+
+    const desc = code
+      ? this.sourceChoices.find((choice) => choice.value === code)?.title ?? null
+      : null;
+
+    return {
+      ...parcel,
+      properties: { ...parcel.properties, descSourceParcelleAgricole: desc }
+    };
   }
 
   private getStatutAugmChoices(): Observable<FormFieldSelectChoice[]> {

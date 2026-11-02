@@ -111,7 +111,9 @@ export class ClientParcelElementUpdateComponent
   }
 
   private processParcelElement(data: ClientParcelElement): Observable<EditionResult> {
-    return this.clientParcelElementService.createParcelElement(data)
+    const parcel = this.clientParcelElementFormService.syncDescSource(data, this.parcelElement);
+
+    return this.clientParcelElementService.createParcelElement(parcel)
       .pipe(
         map((parcelElement: ClientParcelElement): EditionResult => {
           return {
