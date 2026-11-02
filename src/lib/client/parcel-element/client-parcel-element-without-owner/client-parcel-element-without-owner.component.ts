@@ -38,7 +38,7 @@ import { asEntityStore } from '@lib/compatibility/igo2-compat';
 export class ClientParcelElementWithoutOwnerComponent
     implements WidgetComponent, OnUpdateInputs, OnInit, OnDestroy {
 
-  static minZoomLevel = 11;
+  static minZoomLevel = 16;
 
   /**
    * Message
