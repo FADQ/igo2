@@ -74,7 +74,7 @@ export class ClientParcelWorkspaceService {
     const context = this.contextState.context$.value;
     store.addStrategy(
       asStrategy(this.createFilterNotOwnedStrategy()),
-      parcelElementsEnabledInContext(context)
+      false
     );
 
     return store;
