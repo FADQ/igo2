@@ -193,6 +193,7 @@ export class ClientController {
       });
 
     this.parcelWorkspace.init();
+    this.parcelWorkspace.activate();
   }
 
   /**
