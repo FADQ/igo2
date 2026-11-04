@@ -357,16 +357,13 @@ export class PortalComponent implements OnInit, OnDestroy {
    * Clears all search layers
    */
   private clearAllSearchLayers() {
-    this.searchVisibledLayers.forEach((layers: Layer[]) => {
-      layers.forEach((layer: Layer) => {
-        this.map.layerController.remove(layer);
-      });
+    this.searchAddedLayers.forEach((layers: Layer[]) => {
+      layers.forEach((layer: Layer) => this.map.layerController.remove(layer));
     });
+    this.searchAddedLayers.clear();
 
     this.searchVisibledLayers.forEach((layers: Layer[]) => {
-      layers.forEach((layer: Layer) => {
-        layer.visible = false;
-      });
+      layers.forEach((layer: Layer) => { layer.visible = false; });
     });
   }
 
