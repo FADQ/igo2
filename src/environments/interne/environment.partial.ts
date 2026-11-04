@@ -59,10 +59,24 @@ export interface IgoEnvironment {
   edition: {
     validGeometry: string;
   };
+  directionsSources?: {
+    osrm?: {
+      name?: string;
+      baseUrl: string;
+      profiles: { name: string; authorization?: boolean }[];
+    };
+  };
 }
 
 /* tslint:disable */
 export const igoEnvironment: IgoEnvironment = {
+  directionsSources: {
+    osrm: {
+      name: 'OSRM Québec',
+      baseUrl: 'https://geoegl.msp.gouv.qc.ca/apis/itineraire/route/v1/',
+      profiles: [{ name: 'driving' }]
+    }
+  },
   searchSources: {
     nominatim: {
       enabled: false,

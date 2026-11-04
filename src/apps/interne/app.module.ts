@@ -12,10 +12,9 @@ import { provideConfig } from '@igo2/core/config';
 import {
   IgoGeometryModule,
   IgoQueryModule,
-  IgoDirectionsModule,
   provideDirection,
   withOsrmSource} from '@igo2/geo';
-import { SearchState } from '@igo2/integration';
+import { DirectionsToolComponent, SearchState } from '@igo2/integration';
 
 import { contextUriFixInterceptor } from 'src/lib/context/shared/context-uri.interceptor'
 
@@ -63,7 +62,7 @@ export function initializeIcons(
     // IGO modules (fournissent les états automatiquement)
     IgoGeometryModule,
     IgoQueryModule.forRoot(),
-    IgoDirectionsModule,
+    DirectionsToolComponent,
 
     FadqCoreModule,
     FadqContextModule,
