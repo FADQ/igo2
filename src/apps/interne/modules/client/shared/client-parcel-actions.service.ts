@@ -50,10 +50,12 @@ export class ClientParcelActionsService {
   private buildActions(controller: ClientController): Action[] {
     const filterSelectionStrategy = controller.parcelStore
     .getStrategyOfType(EntityStoreFilterSelectionStrategy);
+    const filterNotOwnedStrategy = controller.parcelStore
+    .getStrategyOfType(asStrategy(FeatureStoreFilterNotOwnedStrategy));
     return [
       {
         id: 'activate-parcel-eLements',
-        icon: 'edit_square',
+        icon: 'edit',
         title: 'client.parcelTx.start',
         tooltip: 'client.parcelTx.start.tooltip',
         args: [controller, this.clientParcelTxStartTxWidget],
@@ -119,7 +121,9 @@ export class ClientParcelActionsService {
       },
       {
         id: 'filterNotOwned',
-        icon: 'how_to_reg',
+        icon: filterNotOwnedStrategy.active$.pipe(
+          map((active: boolean) => active ? 'person' : 'person_off')
+        ),
         title: 'client.parcel.filterNotOwned.title',
         tooltip: 'client.parcel.filterNotOwned.tooltip',
         args: [controller],

@@ -19,7 +19,7 @@
           *ngIf="controller.parcelTxOngoing | async"
           class="fadq-client-header-badge"
           [color]="controller.parcelYear.current ? 'default' : 'warn'">
-          edit_square
+          edit
         </mat-icon>
         <mat-icon
           *ngIf="(controller.parcelElementTransaction.empty$ | async) === false || (controller.schemaElementTransaction.empty$ | async) === false"

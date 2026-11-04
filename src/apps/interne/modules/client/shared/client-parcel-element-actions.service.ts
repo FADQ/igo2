@@ -86,7 +86,7 @@ export class ClientParcelElementActionsService {
     return [
       {
         id: 'deactivate-parcel-elements',
-        icon: 'disabled_by_default',
+        icon: 'edit_off',
         title: 'client.parcelTx.stop',
         tooltip: 'client.parcelTx.stop.tooltip',
         args: [controller],
@@ -141,7 +141,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'createUpdate',
-        icon: 'edit',
+        icon: 'edit_note',
         title: 'edition.createUpdate',
         tooltip: 'edition.createUpdate.tooltip',
         args: [
@@ -181,7 +181,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'redraw',
-        icon: 'edit_location_alt',
+        icon: 'draw',
         title: 'edition.redraw',
         tooltip: 'edition.redraw.tooltip',
         args: [
@@ -372,7 +372,7 @@ export class ClientParcelElementActionsService {
       },
       {
         id: 'delete',
-        icon: 'person_off',
+        icon: 'person_remove',
         title: 'client.parcelElement.delete',
         tooltip: 'client.parcelElement.delete',
         args: [controller],

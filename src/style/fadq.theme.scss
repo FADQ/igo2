@@ -26,12 +26,3 @@
     padding: 0;
     line-height: 1;
   }
-
-  .fadq-filter-selection-active {
-    color: var(--sdg-color-red-normal);; // ou une variable de thème, ex. mat.get-color-from-palette($warn)
-
-    mat-icon,
-    .mat-icon {
-      color: var(--sdg-color-red-normal);;
-    }
-  }

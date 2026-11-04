@@ -114,7 +114,7 @@ export class ClientSchemaElementActionsService {
       },
       {
         id: 'createUpdate',
-        icon: 'edit',
+        icon: 'edit_note',
         title: 'edition.createUpdate',
         tooltip: 'edition.createUpdate.tooltip',
         args: [

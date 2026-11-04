@@ -67,7 +67,7 @@ export class ClientSchemaActionsService {
       },
       {
         id: 'update',
-        icon: 'edit_square',
+        icon: 'edit_note',
         title: 'client.schema.update',
         tooltip: 'client.schema.update.tooltip',
         args: [controller, this.clientSchemaUpdateWidget],
